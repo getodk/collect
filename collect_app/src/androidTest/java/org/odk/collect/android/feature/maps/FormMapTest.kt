@@ -15,7 +15,6 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.geo.MapProvider
 import org.odk.collect.android.support.FakeClickableMapFragment
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -25,13 +24,14 @@ import org.odk.collect.externalapp.ExternalAppUtils.getReturnIntent
 import org.odk.collect.geo.GeoUtils
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
 class FormMapTest {
 
     private val mapFragment = FakeClickableMapFragment()
     private val testDependencies = object : TestDependencies() {
-        override fun providesMapFragmentFactory(mapProvider: MapProvider): MapFragmentFactory {
+        override fun providesMapFragmentFactory(settingsProvider: SettingsProvider): MapFragmentFactory {
             return object : MapFragmentFactory {
                 override fun createMapFragment(context: Context): MapFragment {
                     return mapFragment

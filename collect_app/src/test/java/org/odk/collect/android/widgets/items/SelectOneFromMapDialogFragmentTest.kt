@@ -25,7 +25,6 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
-import org.odk.collect.android.geo.MapProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -44,6 +43,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.material.MaterialAlertDialogFragment
 import org.odk.collect.material.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers
 
@@ -87,7 +87,7 @@ class SelectOneFromMapDialogFragmentTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesMapFragmentFactory(mapProvider: MapProvider): MapFragmentFactory {
+            override fun providesMapFragmentFactory(settingsProvider: SettingsProvider): MapFragmentFactory {
                 return object : MapFragmentFactory {
                     override fun createMapFragment(context: Context): MapFragment? {
                         return null

@@ -2,24 +2,20 @@ package org.odk.collect.android.geo;
 
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
-import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
-import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.maps.MapFragment;
@@ -84,17 +80,17 @@ public class MapProvider {
                     new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
                 )
             ),
-            new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
-                new MapboxMapConfigurator(
-                    KEY_MAPBOX_MAP_STYLE, R.string.basemap_source_mapbox,
-                    new MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
-                    new MapboxUrlOption(Style.LIGHT, R.string.light),
-                    new MapboxUrlOption(Style.DARK, R.string.dark),
-                    new MapboxUrlOption(Style.SATELLITE, R.string.satellite),
-                    new MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
-                    new MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
-                )
-            ),
+//            new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
+//                new MapboxMapConfigurator(
+//                    KEY_MAPBOX_MAP_STYLE, R.string.basemap_source_mapbox,
+//                    new MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
+//                    new MapboxUrlOption(Style.LIGHT, R.string.light),
+//                    new MapboxUrlOption(Style.DARK, R.string.dark),
+//                    new MapboxUrlOption(Style.SATELLITE, R.string.satellite),
+//                    new MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
+//                    new MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
+//                )
+//            ),
             new SourceOption(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
                 new OsmDroidMapConfigurator(
                     new WebMapService(

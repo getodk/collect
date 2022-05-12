@@ -5,7 +5,7 @@ Unless required by applicable law or agreed to in writing, software distributed
 under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
 OR CONDITIONS OF ANY KIND, either express or implied. See the License for
 the specific language governing permissions and limitations under the License. -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- strings that should not be translated -->
     <string name="collect_app_name" translatable="false">ODK Collect</string>
     <string name="app_url" translatable="false">https://getodk.org</string>
@@ -25,7 +25,7 @@ the specific language governing permissions and limitations under the License. -
 
     <!-- For consistency, we don't translate these brand/organization names. -->
     <string name="basemap_source_google" translatable="false">Google</string>
-    <string name="basemap_source_mapbox" translatable="false">Mapbox</string>
+    <string name="basemap_source_mapbox" translatable="false" tools:ignore="UnusedResources">Mapbox</string>
     <string name="basemap_source_osm" translatable="false">OpenStreetMap</string>
     <string name="basemap_source_usgs" translatable="false">USGS</string>
     <string name="basemap_source_stamen" translatable="false">Stamen</string>
