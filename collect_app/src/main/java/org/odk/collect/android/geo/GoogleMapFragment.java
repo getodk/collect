@@ -26,7 +26,6 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.LocationListener;
@@ -115,10 +114,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     private MapFragmentDelegate mapFragmentDelegate;
 
-    // During Robolectric tests, Google Play Services is unavailable; sadly, the
-    // "map" field will be null and many operations will need to be stubbed out.
-    @VisibleForTesting public static boolean testMode;
-
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     @Override public void addTo(
             FragmentManager fragmentManager, int containerId,
@@ -160,13 +155,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 readyListener.onReady(this);
             }
         });
-
-        // In Robolectric tests, getMapAsync() never gets around to calling its
-        // callback; we have to invoke the ready listener directly.
-        if (testMode && readyListener != null) {
-            MapFragmentUtils.onMapReady(this, previousState);
-            readyListener.onReady(this);
-        }
     }
 
     @Override
