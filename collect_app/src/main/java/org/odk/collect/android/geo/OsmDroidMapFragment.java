@@ -128,7 +128,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
-    private org.odk.collect.shared.settings.Settings.OnSettingChangeListener onSettingChangeListener;
+    private MapFragmentDelegate mapFragmentDelegate;
 
     @Override
     public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
@@ -165,28 +165,21 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+
+        mapFragmentDelegate = new MapFragmentDelegate(createConfigurator(), settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        org.odk.collect.shared.settings.Settings settings = settingsProvider.getUnprotectedSettings();
-        String basemap = settings.getString(KEY_BASEMAP_SOURCE);
-        MapConfigurator cftor = createConfigurator(basemap);
-
-        onSettingChangeListener = key -> {
-            if (cftor.getPrefKeys().contains(key)) {
-                applyConfig(cftor.buildConfig(settings));
-            }
-        };
-
-        applyConfig(cftor.buildConfig(settings));
-        settings.registerOnSettingChangeListener(onSettingChangeListener);
+        mapFragmentDelegate.onStart();
     }
 
     @NonNull
-    private MapConfigurator createConfigurator(String basemap) {
+    private MapConfigurator createConfigurator() {
+        org.odk.collect.shared.settings.Settings settings = settingsProvider.getUnprotectedSettings();
+        String basemap = settings.getString(KEY_BASEMAP_SOURCE);
+
         MapConfigurator cftor = new OsmDroidMapConfigurator(
                 new WebMapService(
                         "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
@@ -250,17 +243,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onStop() {
         super.onStop();
-        settingsProvider.getUnprotectedSettings().unregisterOnSettingChangeListener(onSettingChangeListener);
+        mapFragmentDelegate.onStop();
     }
 
     @Override
     public void applyConfig(Bundle config) {
-        webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
-        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
-        if (map != null) {
-            map.setTileSource(webMapService.asOnlineTileSource());
-            loadReferenceOverlay();
-        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -764,6 +752,15 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private void addAttributionAndMapEventsOverlays() {
         map.getOverlays().add(new AttributionOverlay(getContext()));
         map.getOverlays().add(new MapEventsOverlay(this));
+    }
+
+    private void onConfigChanged(Bundle config) {
+        webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
+        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
+        if (map != null) {
+            map.setTileSource(webMapService.asOnlineTileSource());
+            loadReferenceOverlay();
+        }
     }
 
     /**

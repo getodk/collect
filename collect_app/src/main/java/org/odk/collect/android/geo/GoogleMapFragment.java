@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.TileOverlayOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
@@ -107,7 +108,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
-    private org.odk.collect.shared.settings.Settings.OnSettingChangeListener onSettingChangeListener;
+
+    private MapFragmentDelegate mapFragmentDelegate;
 
     // During Robolectric tests, Google Play Services is unavailable; sadly, the
     // "map" field will be null and many operations will need to be stubbed out.
@@ -164,28 +166,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+
+        GoogleMapConfigurator configurator = new GoogleMapConfigurator(
+                KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
+        );
+
+        mapFragmentDelegate = new MapFragmentDelegate(configurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override public void onStart() {
         super.onStart();
-
-        org.odk.collect.shared.settings.Settings settings = settingsProvider.getUnprotectedSettings();
-        MapConfigurator cftor = new GoogleMapConfigurator(
-                KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
-                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
-                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
-                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
-                new GoogleMapConfigurator.GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
-        );
-
-        onSettingChangeListener = key -> {
-            if (cftor.getPrefKeys().contains(key)) {
-                applyConfig(cftor.buildConfig(settings));
-            }
-        };
-
-        applyConfig(cftor.buildConfig(settings));
-        settings.registerOnSettingChangeListener(onSettingChangeListener);
+        mapFragmentDelegate.onStart();
     }
 
     @Override public void onResume() {
@@ -200,7 +195,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onStop() {
         super.onStop();
-        settingsProvider.getUnprotectedSettings().unregisterOnSettingChangeListener(onSettingChangeListener);
+        mapFragmentDelegate.onStop();
     }
 
     @Override public void onDestroy() {
@@ -209,12 +204,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void applyConfig(Bundle config) {
-        mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
-        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
-        if (map != null) {
-            map.setMapType(mapType);
-            loadReferenceOverlay();
-        }
+        throw new UnsupportedOperationException();
     }
 
     @Override public @NonNull MapPoint getCenter() {
@@ -673,6 +663,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 (dialog, id) -> dialog.cancel())
             .create()
             .show();
+    }
+
+    private void onConfigChanged(Bundle config) {
+        mapType = config.getInt(KEY_MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL);
+        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
+        if (map != null) {
+            map.setMapType(mapType);
+            loadReferenceOverlay();
+        }
     }
 
     /**
