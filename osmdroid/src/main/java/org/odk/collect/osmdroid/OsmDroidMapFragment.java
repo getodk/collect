@@ -47,7 +47,6 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
-import org.odk.collect.maps.MapFragmentUtils;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
@@ -100,6 +99,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Inject
     SettingsProvider settingsProvider;
 
+    private final MapFragmentDelegate mapFragmentDelegate = new MapFragmentDelegate(
+            this,
+            () -> mapConfigurator,
+            () -> settingsProvider.getUnprotectedSettings(),
+            this::onConfigChanged
+    );
+
     private MapView map;
     private ReadyListener readyListener;
     private PointListener clickListener;
@@ -116,8 +122,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
-    private Bundle previousState;
-    private MapFragmentDelegate mapFragmentDelegate;
 
     @Override
     public void addTo(
@@ -140,7 +144,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        previousState = savedInstanceState;
+        mapFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Override
@@ -148,8 +152,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         super.onAttach(context);
         OsmDroidDependencyComponent component = ((OsmDroidDependencyComponentProvider) context.getApplicationContext()).getOsmDroidDependencyComponent();
         component.inject(this);
-
-        mapFragmentDelegate = new MapFragmentDelegate(mapConfigurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override
@@ -179,7 +181,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        MapFragmentUtils.onSaveInstanceState(this, outState);
+        mapFragmentDelegate.onSaveInstanceState(outState);
     }
 
     @Override
@@ -223,7 +225,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
-                MapFragmentUtils.onMapReady(this, previousState);
+                mapFragmentDelegate.onReady();
                 readyListener.onReady(this);
             }
         }, 100);

@@ -187,8 +187,9 @@ class MapboxMapFragment :
         val configurator = MapboxMapConfigurator()
 
         mapFragmentDelegate = MapFragmentDelegate(
-            configurator,
-            settingsProvider.getUnprotectedSettings(),
+            this,
+            { configurator },
+            { settingsProvider.getUnprotectedSettings() },
             this::onConfigChanged
         )
     }

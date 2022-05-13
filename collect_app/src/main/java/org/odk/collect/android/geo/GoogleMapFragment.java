@@ -54,8 +54,8 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.MapFragmentUtils;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MapsMarkerCache;
@@ -91,6 +91,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Inject
     SettingsProvider settingsProvider;
 
+    private final MapFragmentDelegate mapFragmentDelegate = new MapFragmentDelegate(
+            this,
+            this::createConfigurator,
+            () -> {
+                return settingsProvider.getUnprotectedSettings();
+            },
+            this::onConfigChanged
+    );
+
     private GoogleMap map;
     private Marker locationCrosshairs;
     private Circle accuracyCircle;
@@ -110,11 +119,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
-    private Bundle previousState;
 
-    private MapFragmentDelegate mapFragmentDelegate;
-
-    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     @Override public void addTo(
             FragmentManager fragmentManager, int containerId,
             @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -124,6 +129,16 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // to linger, so the following line calls .replace() instead of .add().
         fragmentManager
             .beginTransaction().replace(containerId, this).commitNow();
+        setupMap(readyListener, errorListener);
+    }
+
+    @Override
+    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        setupMap(readyListener, errorListener);
+    }
+
+    @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
+    private void setupMap(@Nullable ReadyListener readyListener, @NonNull ErrorListener errorListener) {
         getMapAsync((GoogleMap map) -> {
             if (map == null) {
                 ToastUtils.showShortToast(requireContext(), R.string.google_play_services_error_occured);
@@ -151,36 +166,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
-                MapFragmentUtils.onMapReady(this, previousState);
+                mapFragmentDelegate.onReady();
                 readyListener.onReady(this);
             }
         });
     }
 
     @Override
-    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        previousState = savedInstanceState;
+        mapFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Override public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-
-        GoogleMapConfigurator configurator = new GoogleMapConfigurator(
-                KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
-        );
-
-        mapFragmentDelegate = new MapFragmentDelegate(configurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override public void onStart() {
@@ -206,7 +206,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        MapFragmentUtils.onSaveInstanceState(this, outState);
+        mapFragmentDelegate.onSaveInstanceState(outState);
     }
 
     @Override public void onDestroy() {
@@ -679,6 +679,16 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.setMapType(mapType);
             loadReferenceOverlay();
         }
+    }
+
+    private MapConfigurator createConfigurator() {
+        return new GoogleMapConfigurator(
+                KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
+        );
     }
 
     /**
