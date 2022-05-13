@@ -1,4 +1,4 @@
-package org.odk.collect.location
+package org.odk.collect.location.satellites
 
 import android.annotation.SuppressLint
 import android.location.GnssStatus
@@ -7,7 +7,6 @@ import android.location.LocationManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import org.odk.collect.androidshared.livedata.NonNullLiveData
-import org.odk.collect.location.satellites.SatelliteInfoClient
 
 class GpsStatusSatelliteInfoClient(private val locationManager: LocationManager) :
     SatelliteInfoClient {

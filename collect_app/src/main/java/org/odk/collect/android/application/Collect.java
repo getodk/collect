@@ -51,7 +51,7 @@ import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.maps.MapFragmentFactory;
-import org.odk.collect.location.GpsStatusSatelliteInfoClient;
+import org.odk.collect.location.satellites.GpsStatusSatelliteInfoClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.satellites.SatelliteInfoClient;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
