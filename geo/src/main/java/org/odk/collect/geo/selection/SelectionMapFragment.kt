@@ -16,13 +16,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.R
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.MapFragment
-import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.material.BottomSheetBehavior
@@ -71,6 +71,12 @@ class SelectionMapFragment(
     private var previousState: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(MapFragment::class.java) {
+                mapFragmentFactory.createMapFragment(requireContext().applicationContext) as Fragment
+            }
+            .build()
+
         super.onCreate(savedInstanceState)
         previousState = savedInstanceState
         viewportInitialized = savedInstanceState != null
@@ -114,6 +120,12 @@ class SelectionMapFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = SelectionMapLayoutBinding.bind(view)
 
+        val mapFragment = binding.mapContainer.getFragment<Fragment?>() as MapFragment
+        mapFragment.init(
+            { newMapFragment -> initMap(newMapFragment, binding) },
+            { requireActivity().finish() }
+        )
+
         selectionMapData.getMapTitle().observe(viewLifecycleOwner) {
             binding.title.text = it
         }
@@ -121,30 +133,6 @@ class SelectionMapFragment(
         selectionMapData.getItemCount().observe(viewLifecycleOwner) {
             itemCount = it
             updateCounts(binding)
-        }
-
-        val existingFragment = binding.mapContainer.getFragment<Fragment?>() as MapFragment?
-        if (existingFragment != null) {
-            existingFragment.recreate(
-                ReadyListener { newMapFragment ->
-                    initMap(newMapFragment, binding)
-                },
-                MapFragment.ErrorListener { requireActivity().finish() }
-            )
-        } else {
-            val mapToAdd = mapFragmentFactory.createMapFragment(requireContext().applicationContext)
-            if (mapToAdd != null) {
-                mapToAdd.addTo(
-                    childFragmentManager,
-                    R.id.map_container,
-                    ReadyListener { newMapFragment ->
-                        initMap(newMapFragment, binding)
-                    },
-                    MapFragment.ErrorListener { requireActivity().finish() }
-                )
-            } else {
-                requireActivity().finish() // The configured map provider is not available
-            }
         }
 
         setUpSummarySheet(binding)

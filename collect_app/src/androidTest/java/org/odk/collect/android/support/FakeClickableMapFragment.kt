@@ -2,11 +2,12 @@ package org.odk.collect.android.support
 
 import android.os.Handler
 import android.os.Looper
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 
-class FakeClickableMapFragment : MapFragment {
+class FakeClickableMapFragment : Fragment(), MapFragment {
 
     private var idCounter = 1
     private var featureClickListener: MapFragment.FeatureListener? = null
@@ -20,7 +21,7 @@ class FakeClickableMapFragment : MapFragment {
         readyListener?.onReady(this)
     }
 
-    override fun recreate(
+    override fun init(
         readyListener: MapFragment.ReadyListener?,
         errorListener: MapFragment.ErrorListener?,
     ) {

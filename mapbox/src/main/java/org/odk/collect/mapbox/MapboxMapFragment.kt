@@ -136,7 +136,7 @@ class MapboxMapFragment :
             .commitNow()
     }
 
-    override fun recreate(readyListener: ReadyListener?, errorListener: ErrorListener?) {
+    override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
         TODO("Not yet implemented")
     }
 

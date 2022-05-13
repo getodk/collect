@@ -137,7 +137,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+    public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         this.readyListener = readyListener;
     }
 

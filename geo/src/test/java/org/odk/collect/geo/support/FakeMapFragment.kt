@@ -1,5 +1,6 @@
 package org.odk.collect.geo.support
 
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -7,7 +8,7 @@ import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
 
-class FakeMapFragment : MapFragment {
+class FakeMapFragment : Fragment(), MapFragment {
 
     private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
@@ -31,11 +32,11 @@ class FakeMapFragment : MapFragment {
         this.readyListener = readyListener
     }
 
-    override fun recreate(
+    override fun init(
         readyListener: ReadyListener?,
         errorListener: MapFragment.ErrorListener?,
     ) {
-        TODO("Not yet implemented")
+        this.readyListener = readyListener
     }
 
     fun ready() {

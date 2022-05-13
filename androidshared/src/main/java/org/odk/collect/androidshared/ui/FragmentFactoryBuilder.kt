@@ -9,10 +9,10 @@ import androidx.fragment.app.FragmentFactory
  */
 class FragmentFactoryBuilder {
 
-    private val classFactories = mutableMapOf<Class<out Fragment>, () -> Fragment>()
+    private val classesAndFactories = mutableListOf<Pair<Class<*>, () -> Fragment>>()
 
-    fun forClass(fragmentClass: Class<out Fragment>, factory: () -> Fragment): FragmentFactoryBuilder {
-        classFactories[fragmentClass] = factory
+    fun forClass(fragmentClass: Class<*>, factory: () -> Fragment): FragmentFactoryBuilder {
+        classesAndFactories.add(Pair(fragmentClass, factory))
         return this
     }
 
@@ -20,7 +20,10 @@ class FragmentFactoryBuilder {
         return object : androidx.fragment.app.FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
                 val fragmentClass = loadFragmentClass(classLoader, className)
-                val factory = classFactories[fragmentClass]
+
+                val factory =
+                    classesAndFactories.find { it.first.isAssignableFrom(fragmentClass) }?.second
+
                 return if (factory != null) {
                     factory()
                 } else {

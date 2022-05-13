@@ -80,7 +80,7 @@ public class TestMapFragment implements MapFragment {
     }
 
     @Override
-    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+    public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         throw new UnsupportedOperationException();
     }
 

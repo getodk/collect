@@ -133,7 +133,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override
-    public void recreate(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+    public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         setupMap(readyListener, errorListener);
     }
 
