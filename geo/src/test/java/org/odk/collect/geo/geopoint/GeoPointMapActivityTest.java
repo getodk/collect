@@ -52,7 +52,7 @@ public class GeoPointMapActivityTest {
                     @NonNull
                     @Override
                     public MapFragmentFactory providesMapFragmentFactory() {
-                        return context -> mapFragment;
+                        return () -> mapFragment;
                     }
 
                     @NonNull

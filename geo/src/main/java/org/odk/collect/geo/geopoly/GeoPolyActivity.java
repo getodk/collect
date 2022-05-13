@@ -18,7 +18,6 @@ import static org.odk.collect.androidshared.system.ContextUtils.getThemeAttribut
 import static org.odk.collect.geo.Constants.EXTRA_READ_ONLY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,10 +27,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.Constants;
@@ -39,11 +40,11 @@ import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoUtils;
 import org.odk.collect.geo.R;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
+import org.odk.collect.location.Location;
+import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
-import org.odk.collect.location.Location;
-import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
@@ -126,6 +127,12 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
+                .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
+                .build()
+        );
+
         requireLocationPermissions(this);
 
         previousState = savedInstanceState;
@@ -152,9 +159,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             R.string.geotrace_title : R.string.geoshape_title));
         setContentView(R.layout.geopoly_layout);
 
-        Context context = getApplicationContext();
-        mapFragmentFactory.createMapFragment(context)
-            .addTo(this.getSupportFragmentManager(), R.id.map_container, this::initMap, this::finish);
+        ((MapFragment) findViewById(R.id.map_container)).init(this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {

@@ -17,7 +17,6 @@ package org.odk.collect.maps;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
-import androidx.fragment.app.FragmentManager;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -56,17 +55,6 @@ public interface MapFragment {
 
     String CENTER = "center";
     String BOTTOM = "bottom";
-
-    /**
-     * Adds the map Fragment to an activity.  The containerId should be the
-     * resource ID of a View, into which the map view will be placed.  The
-     * readyListener will be invoked on the UI thread with this MapFragment when
-     * the map is ready, or the errorListener will be invoked if there is a
-     * problem initializing the map.
-     */
-    void addTo(
-            FragmentManager fragmentManager, int containerId,
-            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 
     void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 

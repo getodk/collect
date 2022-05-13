@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.items
 
 import android.app.Application
-import android.content.Context
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
@@ -90,7 +89,7 @@ class SelectOneFromMapDialogFragmentTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesMapFragmentFactory(settingsProvider: SettingsProvider): MapFragmentFactory {
                 return object : MapFragmentFactory {
-                    override fun createMapFragment(context: Context): MapFragment? {
+                    override fun createMapFragment(): MapFragment? {
                         return null
                     }
                 }

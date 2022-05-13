@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.LocationListener
 import com.mapbox.android.core.location.LocationEngineProvider
@@ -109,12 +108,7 @@ class MapboxMapFragment :
         (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(ReferenceLayerRepository::class.java)
     }
 
-    override fun addTo(
-        fragmentManager: FragmentManager,
-        containerId: Int,
-        readyListener: ReadyListener?,
-        errorListener: ErrorListener?
-    ) {
+    override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
         mapReadyListener = readyListener
 
         // Mapbox SDK only knows how to fetch tiles via HTTP. If we want it to
@@ -126,18 +120,6 @@ class MapboxMapFragment :
         } catch (e: IOException) {
             Timber.e(e, "Could not start the TileHttpServer")
         }
-
-        // If the containing activity is being re-created upon screen rotation, the FragmentManager
-        // will have also re-created a copy of the previous fragment. We don't want these useless
-        // copies of old fragments to linger, so the following line calls .replace() instead of .add().
-        fragmentManager
-            .beginTransaction()
-            .replace(containerId, this)
-            .commitNow()
-    }
-
-    override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
-        TODO("Not yet implemented")
     }
 
     override fun onCreateView(

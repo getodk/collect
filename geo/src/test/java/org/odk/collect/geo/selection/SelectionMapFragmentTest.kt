@@ -81,7 +81,7 @@ class SelectionMapFragmentTest {
             .geoDependencyModule(object : GeoDependencyModule() {
                 override fun providesMapFragmentFactory(): MapFragmentFactory {
                     return object : MapFragmentFactory {
-                        override fun createMapFragment(context: Context): MapFragment {
+                        override fun createMapFragment(): MapFragment {
                             return FakeMapFragment().also {
                                 map = it
                             }

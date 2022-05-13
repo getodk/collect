@@ -20,7 +20,6 @@ import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +29,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.Fragment;
 
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
@@ -122,6 +123,12 @@ public class GeoPointMapActivity extends LocalizedActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
+                .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
+                .build()
+        );
+
         requireLocationPermissions(this);
 
         previousState = savedInstanceState;
@@ -143,9 +150,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
         placeMarkerButton = findViewById(R.id.place_marker);
         zoomButton = findViewById(R.id.zoom);
 
-        Context context = getApplicationContext();
-        mapFragmentFactory.createMapFragment(context)
-            .addTo(this.getSupportFragmentManager(), R.id.map_container, this::initMap, this::finish);
+        ((MapFragment) findViewById(R.id.map_container)).init(this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {

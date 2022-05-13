@@ -69,7 +69,7 @@ public class GeoPolyActivityTest {
                     @NonNull
                     @Override
                     public MapFragmentFactory providesMapFragmentFactory() {
-                        return (context) -> mapFragment;
+                        return () -> mapFragment;
                     }
 
                     @NonNull

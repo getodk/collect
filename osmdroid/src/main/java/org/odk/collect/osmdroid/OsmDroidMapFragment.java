@@ -37,7 +37,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -122,19 +121,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
-
-    @Override
-    public void addTo(
-            FragmentManager fragmentManager, int containerId,
-            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
-        this.readyListener = readyListener;
-        // If the containing activity is being re-created upon screen rotation,
-        // the FragmentManager will have also re-created a copy of the previous
-        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
-        // to linger, so the following line calls .replace() instead of .add().
-        fragmentManager
-                .beginTransaction().replace(containerId, this).commit();
-    }
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {

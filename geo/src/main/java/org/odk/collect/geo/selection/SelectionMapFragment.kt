@@ -73,7 +73,7 @@ class SelectionMapFragment(
     override fun onCreate(savedInstanceState: Bundle?) {
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MapFragment::class.java) {
-                mapFragmentFactory.createMapFragment(requireContext().applicationContext) as Fragment
+                mapFragmentFactory.createMapFragment() as Fragment
             }
             .build()
 

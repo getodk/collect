@@ -26,7 +26,6 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -120,45 +119,29 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
 
-    @Override public void addTo(
-            FragmentManager fragmentManager, int containerId,
-            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
-        // If the containing activity is being re-created upon screen rotation,
-        // the FragmentManager will have also re-created a copy of the previous
-        // GoogleMapFragment.  We don't want these useless copies of old fragments
-        // to linger, so the following line calls .replace() instead of .add().
-        fragmentManager
-            .beginTransaction().replace(containerId, this).commitNow();
-        setupMap(readyListener, errorListener);
-    }
-
     @Override
-    public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
-        setupMap(readyListener, errorListener);
-    }
-
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
-    private void setupMap(@Nullable ReadyListener readyListener, @NonNull ErrorListener errorListener) {
-        getMapAsync((GoogleMap map) -> {
-            if (map == null) {
+    public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        getMapAsync((GoogleMap map1) -> {
+            if (map1 == null) {
                 ToastUtils.showShortToast(requireContext(), R.string.google_play_services_error_occured);
                 if (errorListener != null) {
                     errorListener.onError();
                 }
                 return;
             }
-            this.map = map;
-            map.setMapType(mapType);
-            map.setOnMapClickListener(this);
-            map.setOnMapLongClickListener(this);
-            map.setOnMarkerClickListener(this);
-            map.setOnPolylineClickListener(this);
-            map.setOnMarkerDragListener(this);
-            map.getUiSettings().setCompassEnabled(true);
+            this.map = map1;
+            map1.setMapType(mapType);
+            map1.setOnMapClickListener(this);
+            map1.setOnMapLongClickListener(this);
+            map1.setOnMarkerClickListener(this);
+            map1.setOnPolylineClickListener(this);
+            map1.setOnMarkerDragListener(this);
+            map1.getUiSettings().setCompassEnabled(true);
             // Don't show the blue dot on the map; we'll draw crosshairs instead.
-            map.setMyLocationEnabled(false);
-            map.setMinZoomPreference(1);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+            map1.setMyLocationEnabled(false);
+            map1.setMinZoomPreference(1);
+            map1.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             loadReferenceOverlay();
 

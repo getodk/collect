@@ -1,7 +1,6 @@
 package org.odk.collect.geo.support
 
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
@@ -22,15 +21,6 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var featureClickListener: FeatureListener? = null
     private val markers: MutableList<MapPoint> = ArrayList()
     private val markerIcons: MutableList<Int?> = ArrayList()
-
-    override fun addTo(
-        fragmentManager: FragmentManager,
-        containerId: Int,
-        readyListener: ReadyListener?,
-        errorListener: MapFragment.ErrorListener?,
-    ) {
-        this.readyListener = readyListener
-    }
 
     override fun init(
         readyListener: ReadyListener?,
