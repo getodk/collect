@@ -173,13 +173,6 @@ android {
         pickFirst 'draftv4/schema'
         pickFirst 'draftv3/schema'
 
-        // To ensure that ODK Collect is installable on all devices, we don't use
-        // abiFilters to exclude any ABIs; but to keep the APK slim, we include
-        // the Mapbox native library only for 32-bit and 64-bit ARM devices and
-        // omit it for all X86 devices.
-        exclude 'lib/x86/libmapbox-gl.so'
-        exclude 'lib/x86_64/libmapbox-gl.so'
-
         // These library licenses will be referenced in-app
         exclude 'META-INF/ASL-2.0.txt'
         exclude 'META-INF/LGPL-3.0.txt'
