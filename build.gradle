@@ -26,6 +26,16 @@ buildscript {
 }
 
 allprojects {
+    ext.getSecrets = { ->
+        def secretsFile = file('secrets.properties')
+        def secrets = new Properties()
+        if (secretsFile.exists()) {
+            secrets.load(new FileInputStream(secretsFile))
+        }
+
+        return secrets
+    }
+
     repositories {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()
@@ -37,6 +47,17 @@ allprojects {
         maven {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
+        }
+
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '')
+            }
         }
 
         // Local repo for dependencies that only existed in the defunct JCenter repo

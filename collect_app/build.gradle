@@ -60,13 +60,9 @@ def getVersionName = { ->
     }
 }
 
-def secretsFile = file('secrets.properties')
-def secrets = new Properties()
-if (secretsFile.exists()) {
-    secrets.load(new FileInputStream(secretsFile))
-}
+def secrets = getSecrets()
 def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
-def mapboxToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
+def mapboxAccessToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
     compileSdkVersion Versions.android_compile_sdk
@@ -115,7 +111,7 @@ android {
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
-            buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+            resValue("string", "mapbox_access_token", mapboxAccessToken)
         }
 
         // Release build for the official ODK Collect app
@@ -126,7 +122,7 @@ android {
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
-            buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+            resValue("string", "mapbox_access_token", mapboxAccessToken)
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
         }
@@ -137,7 +133,7 @@ android {
             minifyEnabled(true)
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
-            buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+            resValue("string", "mapbox_access_token", mapboxAccessToken)
 
             matchingFallbacks = ['release'] // So other modules use release build type for this
         }
@@ -146,7 +142,7 @@ android {
             debuggable(true)
             testCoverageEnabled((findProperty("enableJacoco") ?: "false").toBoolean())
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
-            buildConfigField 'String', "MAPBOX_ACCESS_TOKEN", '"' + mapboxToken + '"'
+            resValue("string", "mapbox_access_token", mapboxAccessToken)
         }
     }
 
@@ -296,8 +292,6 @@ dependencies {
     implementation Dependencies.firebase_crashlytics
 
     implementation Dependencies.mapbox_android_sdk
-    implementation Dependencies.mapbox_android_telemetry
-    implementation Dependencies.mapbox_android_plugin_annotation
 
     implementation Dependencies.guava
 
