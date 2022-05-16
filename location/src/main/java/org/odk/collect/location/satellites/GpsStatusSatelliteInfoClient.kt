@@ -51,14 +51,12 @@ private class GnssStatusSatellitesLiveData(private val locationManager: Location
 
     private val gnssStatusCallback = object : GnssStatus.Callback() {
         override fun onSatelliteStatusChanged(status: GnssStatus) {
-            super.onSatelliteStatusChanged(status)
-            var usedInFix = 0
-            for (index in 0 until status.satelliteCount) {
-                if (status.usedInFix(index)) {
-                    usedInFix++
+            value = (0 until status.satelliteCount).fold(0) { count, index ->
+                when {
+                    status.usedInFix(index) -> count + 1
+                    else -> count
                 }
             }
-            value = usedInFix
         }
     }
 
