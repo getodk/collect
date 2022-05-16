@@ -16,7 +16,6 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer
-import org.odk.collect.android.geo.MapboxUtils
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.osmdroid.OsmDroidInitializer
@@ -108,7 +107,6 @@ class ApplicationInitializer(
                 MapView(context).onCreate(null)
             }
             OsmDroidInitializer.initialize(userAgentProvider.userAgent)
-            MapboxUtils.initMapbox()
         } catch (ignore: Exception) {
             // ignored
         } catch (ignore: Error) {
