@@ -43,6 +43,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -181,7 +182,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
                 // build text label. Don't assign the text to the built in label to he
                 // button because it aligns horizontally, and we want the label on top
                 TextView label = new TextView(getContext());
-                label.setText(questionDetails.getPrompt().getSelectChoiceText(items.get(i)));
+                label.setText(HtmlUtils.textToHtml(questionDetails.getPrompt().getSelectChoiceText(items.get(i))));
                 label.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
                 label.setGravity(Gravity.CENTER_HORIZONTAL);
                 if (!displayLabel) {

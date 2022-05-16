@@ -222,7 +222,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
         if (setting.equals(GuidanceHint.YES)) {
             guidanceTextLayout.setVisibility(VISIBLE);
-            guidanceTextView.setText(guidanceHint);
         } else if (setting.equals(GuidanceHint.YES_COLLAPSED)) {
             guidanceTextLayout.setVisibility(expanded.get() ? VISIBLE : GONE);
 

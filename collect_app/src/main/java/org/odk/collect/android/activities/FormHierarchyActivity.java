@@ -385,7 +385,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
      * Returns a string representing the 'path' of the current screen.
      * Each level is separated by `>`.
      */
-    private String getCurrentPath() {
+    private CharSequence getCurrentPath() {
         FormController formController = Collect.getInstance().getFormController();
         FormIndex index = formController.getFormIndex();
 
