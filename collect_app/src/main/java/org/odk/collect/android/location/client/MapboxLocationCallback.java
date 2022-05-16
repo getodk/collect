@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineResult;
 
-import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.location.LocationUtils;
 
 import java.lang.ref.WeakReference;
