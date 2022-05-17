@@ -22,7 +22,7 @@ internal class RecordingForegroundServiceNotification(private val service: Servi
         .setContentTitle(service.getLocalizedString(R.string.recording))
         .setContentText(formatLength(0))
         .setSmallIcon(R.drawable.ic_baseline_mic_24)
-        .setContentIntent(PendingIntent.getActivity(service, 0, notificationIntent, 0))
+        .setContentIntent(PendingIntent.getActivity(service, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE))
         .setPriority(NotificationCompat.PRIORITY_LOW)
 
     private val notificationManager = (service.getSystemService(NOTIFICATION_SERVICE) as NotificationManager)

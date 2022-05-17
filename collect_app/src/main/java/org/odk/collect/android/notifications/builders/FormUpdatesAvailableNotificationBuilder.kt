@@ -13,6 +13,7 @@ import org.odk.collect.strings.localization.getLocalizedString
 
 object FormUpdatesAvailableNotificationBuilder {
 
+    @JvmStatic
     fun build(application: Application, projectName: String): Notification {
         val intent = Intent(application, FormDownloadListActivity::class.java).apply {
             putExtra(FormDownloadListActivity.DISPLAY_ONLY_UPDATED_FORMS, true)
@@ -22,7 +23,7 @@ object FormUpdatesAvailableNotificationBuilder {
             application,
             RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         return NotificationCompat.Builder(

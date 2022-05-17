@@ -107,4 +107,20 @@ class FakeLocation(provider: String?) : Location(provider) {
     override fun setAccuracy(horizontalAccuracy: Float) {
         _accuracy = horizontalAccuracy
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        if (other == null || javaClass != other.javaClass) {
+            return false
+        }
+
+        val location = other as FakeLocation
+        return this._latitude == location._latitude &&
+            this._longitude == location._longitude &&
+            this._altitude == location._altitude &&
+            this._accuracy == location._accuracy &&
+            this._provider == location._provider
+    }
 }

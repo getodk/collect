@@ -114,7 +114,7 @@ class LocationTrackerService : Service() {
     }
 
     private fun createNotificationIntent() =
-        PendingIntent.getActivity(this, 0, Intent(this, ReturnToAppActivity::class.java), 0)
+        PendingIntent.getActivity(this, 0, Intent(this, ReturnToAppActivity::class.java), PendingIntent.FLAG_IMMUTABLE)
 
     private fun setupNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

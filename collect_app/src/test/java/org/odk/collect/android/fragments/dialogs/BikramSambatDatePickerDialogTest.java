@@ -45,7 +45,7 @@ public class BikramSambatDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDate(2077, 0, 30, "30 बैशाख 2077 (2020May12)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDate(2077, 0, 30, "30 बैशाख 2077 (May 12, 2020)");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class BikramSambatDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(2077, 0, "चैत 2076 (2020Apr)");
+        DialogFragmentHelpers.assertDialogShowsCorrectDateForMonthMode(2077, 0, "चैत 2076 (Apr 2020)");
     }
 
     @Test
@@ -75,12 +75,12 @@ public class BikramSambatDatePickerDialogTest {
         dialogFragment.show(fragmentManager, "TAG");
         RobolectricHelpers.runLooper();
 
-        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("30 बैशाख 2077 (2020May12)");
+        DialogFragmentHelpers.assertDialogTextViewUpdatesDate("30 बैशाख 2077 (May 12, 2020)");
     }
 
     @Test
     public void whenScreenIsRotated_dialogShouldRetainDateInDatePickerAndTextView() {
-        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "12 असोज 2020 (1963Sep28)");
+        DialogFragmentHelpers.assertDialogRetainsDateOnScreenRotation(dialogFragment, "12 असोज 2020 (Sep 28, 1963)");
     }
 
     @Test
