@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -43,6 +44,7 @@ class SelectionMapFragment(
     val skipSummary: Boolean = false,
     val showNewItemButton: Boolean = true,
     val zoomToFitItems: Boolean = true,
+    private val onBackPressedDispatcher: OnBackPressedDispatcher
 ) : Fragment() {
 
     @Inject
@@ -224,7 +226,7 @@ class SelectionMapFragment(
             }
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
+        onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             onBackPressedCallback
         )

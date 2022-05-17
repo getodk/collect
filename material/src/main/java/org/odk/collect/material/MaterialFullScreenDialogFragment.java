@@ -1,16 +1,15 @@
 package org.odk.collect.material;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import androidx.activity.ComponentDialog;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
-
-import org.odk.collect.androidshared.ui.OnBackPressedKeyListener;
 
 /**
  * Provides an implementation of Material's "Full Screen Dialog"
@@ -29,7 +28,7 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
 
-        Dialog dialog = getDialog();
+        ComponentDialog dialog = (ComponentDialog) getDialog();
         if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -41,10 +40,12 @@ public abstract class MaterialFullScreenDialogFragment extends DialogFragment {
             }
 
             setCancelable(false);
-            dialog.setOnKeyListener(new OnBackPressedKeyListener(() -> {
-                onBackPressed();
-                return null;
-            }));
+            dialog.getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    onBackPressed();
+                }
+            });
         }
     }
 
