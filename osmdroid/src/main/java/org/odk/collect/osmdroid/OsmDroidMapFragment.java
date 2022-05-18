@@ -52,7 +52,6 @@ import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.settings.SettingsProvider;
 import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -83,7 +82,6 @@ import timber.log.Timber;
  * A MapFragment drawn by OSMDroid.
  */
 public class OsmDroidMapFragment extends Fragment implements MapFragment,
-        MapEventsReceiver, IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
     // Bundle keys understood by applyConfig().
@@ -123,24 +121,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
     private MapFragmentDelegate mapFragmentDelegate;
-
-    @Override
-    public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-        Context context = getActivity();
-        return context != null ? context.registerReceiver(receiver, filter) : null;
-    }
-
-    @Override
-    public void unregisterReceiver(BroadcastReceiver receiver) {
-        Context context = getActivity();
-        if (context != null) {
-            context.unregisterReceiver(receiver);
-        }
-    }
-
-    @Override
-    public void destroy() {
-    }
 
     @Override
     public void addTo(
@@ -232,24 +212,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             }
         }, 100);
         return view;
-    }
-
-    @Override
-    public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
-        if (clickListener != null) {
-            clickListener.onPoint(fromGeoPoint(geoPoint));
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean longPressHelper(GeoPoint geoPoint) {
-        if (longPressListener != null) {
-            longPressListener.onPoint(fromGeoPoint(geoPoint));
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -549,7 +511,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             referenceOverlay = null;
         }
         if (referenceLayerFile != null) {
-            OsmMBTileProvider mbprovider = new OsmMBTileProvider(this, referenceLayerFile);
+            OsmMBTileProvider mbprovider = new OsmMBTileProvider(new RegisterReceiver(requireActivity()), referenceLayerFile);
             referenceOverlay = new TilesOverlay(mbprovider, getContext());
             referenceOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
             map.getOverlays().add(0, referenceOverlay);
@@ -693,7 +655,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private void addAttributionAndMapEventsOverlays() {
         map.getOverlays().add(new AttributionOverlay(getContext()));
-        map.getOverlays().add(new MapEventsOverlay(this));
+        map.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver(clickListener, longPressListener)));
     }
 
     private void onConfigChanged(Bundle config) {
@@ -923,6 +885,60 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         public void destroy() {
             locationClient.stop();
             locationClient = null;
+        }
+    }
+
+    private static class RegisterReceiver implements IRegisterReceiver {
+
+        private final Context context;
+
+        RegisterReceiver(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+            return context != null ? context.registerReceiver(receiver, filter) : null;
+        }
+
+        @Override
+        public void unregisterReceiver(BroadcastReceiver receiver) {
+            if (context != null) {
+                context.unregisterReceiver(receiver);
+            }
+        }
+
+        @Override
+        public void destroy() {
+        }
+    }
+
+    private static class MapEventsReceiver implements org.osmdroid.events.MapEventsReceiver {
+
+        private final PointListener clickListener;
+        private final PointListener longPressListener;
+
+        MapEventsReceiver(PointListener clickListener, PointListener longPressListener) {
+            this.clickListener = clickListener;
+            this.longPressListener = longPressListener;
+        }
+
+        @Override
+        public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
+            if (clickListener != null) {
+                clickListener.onPoint(fromGeoPoint(geoPoint));
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean longPressHelper(GeoPoint geoPoint) {
+            if (longPressListener != null) {
+                longPressListener.onPoint(fromGeoPoint(geoPoint));
+                return true;
+            }
+            return false;
         }
     }
 }
