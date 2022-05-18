@@ -122,8 +122,12 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
         }
 
         viewModel.formsToDisplay.observe(this) { forms ->
-            findViewById<RecyclerView>(R.id.formList).visibility = if (forms.isEmpty()) View.GONE else View.VISIBLE
-            findViewById<TextView>(R.id.empty_list_message).visibility = if (forms.isEmpty()) View.VISIBLE else View.GONE
+            findViewById<RecyclerView>(R.id.formList).visibility =
+                if (forms.isEmpty()) View.GONE else View.VISIBLE
+
+            findViewById<TextView>(R.id.empty_list_message).visibility =
+                if (forms.isEmpty()) View.VISIBLE else View.GONE
+
             adapter.setData(forms)
         }
 
