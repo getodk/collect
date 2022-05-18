@@ -13,7 +13,6 @@ import com.google.common.collect.ImmutableSet;
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.maps.MapFragment;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -40,10 +39,6 @@ class MapboxMapConfigurator implements MapConfigurator {
     @Override public void showUnavailableMessage(Context context) {
         ToastUtils.showLongToast(context, context.getString(
             R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
-    }
-
-    @Override public MapFragment createMapFragment(Context context) {
-        return MapboxUtils.initMapbox() != null ? new MapboxMapFragment() : null;
     }
 
     @Override public List<Preference> createPrefs(Context context) {

@@ -11,7 +11,6 @@ import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.maps.MapFragment;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -47,10 +46,6 @@ class OsmDroidMapConfigurator implements MapConfigurator {
     }
 
     @Override public void showUnavailableMessage(Context context) { }
-
-    @Override public MapFragment createMapFragment(Context context) {
-        return new OsmDroidMapFragment();
-    }
 
     @Override public List<Preference> createPrefs(Context context) {
         if (options.length > 1) {

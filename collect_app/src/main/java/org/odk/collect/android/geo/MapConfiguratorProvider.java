@@ -22,25 +22,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.maps.MapFragment;
 
-import javax.inject.Singleton;
+public class MapConfiguratorProvider {
 
-/**
- * Obtains a MapFragment according to the user's preferences.
- * This is the top-level class that should be used by the rest of the application.
- * The available options on the Maps preferences screen are also defined here.
- *
- * This needs to be used as a singleton for maps to work (Google Maps appears as blank otherwise)
- * but it's not clear if that's intentional or not.
- *
- * @deprecated this currently blocks creating modules for different {@link MapFragment}
- * implementations as they all rely on {@link MapProvider}. This class should be reworked to allow
- * that reorg to go ahead.
- */
-@Deprecated
-@Singleton
-public class MapProvider {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
@@ -50,8 +34,8 @@ public class MapProvider {
     private static final String STAMEN_ATTRIBUTION = "Map tiles by Stamen Design, under CC BY 3.0.\nData by OpenStreetMap, under ODbL.";
     private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey,\nNational Geospatial Program.";
 
-    private MapProvider() {
-        
+    private MapConfiguratorProvider() {
+
     }
 
     /**

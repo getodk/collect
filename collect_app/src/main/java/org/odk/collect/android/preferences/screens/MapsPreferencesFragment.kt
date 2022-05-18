@@ -22,7 +22,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import org.odk.collect.android.R
 import org.odk.collect.android.geo.MapConfigurator
-import org.odk.collect.android.geo.MapProvider
+import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.CaptionedListPreference
 import org.odk.collect.android.preferences.PrefUtils
@@ -101,12 +101,12 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
     private fun initBasemapSourcePref() {
         basemapSourcePref = PrefUtils.createListPref(
             context, KEY_BASEMAP_SOURCE, getString(R.string.basemap_source),
-            MapProvider.getLabelIds(), MapProvider.getIds()
+            MapConfiguratorProvider.getLabelIds(), MapConfiguratorProvider.getIds()
         )
         basemapSourcePref.setIconSpaceReserved(false)
-        onBasemapSourceChanged(MapProvider.getConfigurator())
+        onBasemapSourceChanged(MapConfiguratorProvider.getConfigurator())
         basemapSourcePref.setOnPreferenceChangeListener { _: Preference?, value: Any ->
-            val cftor = MapProvider.getConfigurator(value.toString())
+            val cftor = MapConfiguratorProvider.getConfigurator(value.toString())
             if (!cftor.isAvailable(context)) {
                 cftor.showUnavailableMessage(context)
                 false
@@ -176,7 +176,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
 
                 if (referenceLayer != null) {
                     val path = referenceLayer.file.absolutePath
-                    val cftor = MapProvider.getConfigurator()
+                    val cftor = MapConfiguratorProvider.getConfigurator()
                     cftor.getDisplayName(File(path))
                 } else {
                     getString(R.string.none)

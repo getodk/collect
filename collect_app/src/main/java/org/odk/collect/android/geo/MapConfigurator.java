@@ -3,10 +3,8 @@ package org.odk.collect.android.geo;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
-import org.odk.collect.maps.MapFragment;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -34,14 +32,6 @@ public interface MapConfigurator {
      * createMapFragment(context) returns null.
      */
     void showUnavailableMessage(Context context);
-
-    /**
-     * Creates an unconfigured map fragment (of the type configurable by this
-     * MapConfigurator).  This method may return null to indicate that there is
-     * no suitable MapFragment implementation available.
-     */
-    @Nullable
-    MapFragment createMapFragment(Context context);
 
     /** Constructs any preference widgets that are specific to this map implementation. */
     List<Preference> createPrefs(Context context);

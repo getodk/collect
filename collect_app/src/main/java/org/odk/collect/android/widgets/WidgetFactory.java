@@ -29,7 +29,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -158,7 +158,7 @@ public class WidgetFactory {
                         break;
                     case Constants.DATATYPE_GEOTRACE:
                         questionWidget = new GeoTraceWidget(activity, questionDetails, waitingForDataRegistry,
-                                MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity));
+                                MapConfiguratorProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider, activity));
                         break;
                     case Constants.DATATYPE_BARCODE:
                         questionWidget = new BarcodeWidget(activity, questionDetails, waitingForDataRegistry, new CameraUtils());

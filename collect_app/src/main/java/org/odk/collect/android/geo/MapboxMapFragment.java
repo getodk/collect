@@ -139,7 +139,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         Context context = getContext();
         mapReadyListener = readyListener;
         if (MapboxUtils.initMapbox() == null) {
-            MapProvider.getConfigurator().showUnavailableMessage(context);
+            MapConfiguratorProvider.getConfigurator().showUnavailableMessage(context);
             if (errorListener != null) {
                 errorListener.onError();
             }

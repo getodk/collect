@@ -17,7 +17,6 @@ import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.maps.MapFragment;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -60,10 +59,6 @@ class GoogleMapConfigurator implements MapConfigurator {
 
     private boolean isGooglePlayServicesAvailable(Context context) {
         return new PlayServicesChecker().isGooglePlayServicesAvailable(context);
-    }
-
-    @Override public MapFragment createMapFragment(Context context) {
-        return new GoogleMapFragment();
     }
 
     @Override public List<Preference> createPrefs(Context context) {
