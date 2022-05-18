@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.androidshared.ui.PrefUtils;
+import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;

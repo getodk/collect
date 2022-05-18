@@ -2,10 +2,10 @@ package org.odk.collect.android.preferences.screens
 
 import android.content.Context
 import org.odk.collect.android.R
-import org.odk.collect.android.geo.MapConfigurator
 import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.android.preferences.CaptionedListPreference
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.ReferenceLayer
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import java.io.File

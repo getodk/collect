@@ -21,7 +21,6 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import org.odk.collect.android.R
-import org.odk.collect.android.geo.MapConfigurator
 import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.CaptionedListPreference
@@ -29,6 +28,7 @@ import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialo
 import org.odk.collect.android.preferences.screens.ReferenceLayerPreferenceUtils.populateReferenceLayerPref
 import org.odk.collect.androidshared.ui.PrefUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
+import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.keys.ProjectKeys.CATEGORY_BASEMAP
 import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE

@@ -1,6 +1,7 @@
 package org.odk.collect.android.geo
 
 import android.os.Bundle
+import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.settings.Settings.OnSettingChangeListener
 import java.util.function.Consumer

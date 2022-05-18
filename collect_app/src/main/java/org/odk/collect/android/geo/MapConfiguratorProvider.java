@@ -23,6 +23,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.maps.MapConfigurator;
 
 public class MapConfiguratorProvider {
 
@@ -118,7 +119,8 @@ public class MapConfiguratorProvider {
     }
 
     /** Gets the currently selected MapConfigurator. */
-    public static @NonNull MapConfigurator getConfigurator() {
+    public static @NonNull
+    MapConfigurator getConfigurator() {
         return getOption(null).cftor;
     }
 
