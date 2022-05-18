@@ -12,9 +12,11 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class FormListAdapter : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
+class FormListAdapter(
+    val listener: OnFormItemClickListener
+) : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
+
     private var formItems = emptyList<BlankFormListItem>()
-    lateinit var listener: OnFormItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = BlankFormListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
