@@ -44,7 +44,11 @@ dependencies {
     implementation project(':location')
     implementation project(':settings')
 
-    implementation Dependencies.osmdroid
+    /**
+     * There seems to a weird dependency resolution problem if we don't use `api` here.
+     */
+    api Dependencies.osmdroid
+
     implementation Dependencies.androidx_fragment_ktx
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.android_material
