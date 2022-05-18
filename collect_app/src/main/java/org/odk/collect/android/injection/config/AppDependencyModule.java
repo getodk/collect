@@ -58,8 +58,6 @@ import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsUpdater;
 import org.odk.collect.android.formmanagement.InstancesAppState;
-import org.odk.collect.android.geo.MapFragmentFactoryImpl;
-import org.odk.collect.android.projects.ProjectDependencyProviderFactory;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
@@ -67,7 +65,7 @@ import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
-import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
@@ -89,6 +87,7 @@ import org.odk.collect.android.preferences.source.SharedPreferencesSettingsProvi
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.projects.ProjectCreator;
 import org.odk.collect.android.projects.ProjectDeleter;
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.AdminPasswordProvider;
@@ -126,8 +125,8 @@ import org.odk.collect.imageloader.GlideImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
-import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.MapFragmentFactory;
+import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -242,12 +241,6 @@ public class AppDependencyModule {
     @Provides
     public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
         return new StaticCachingDeviceDetailsProvider(installIDProvider, context);
-    }
-
-    @Provides
-    @Singleton
-    public MapProvider providesMapProvider() {
-        return new MapProvider();
     }
 
     @Provides

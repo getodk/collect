@@ -1,28 +1,28 @@
 package org.odk.collect.android.geo;
 
+import static org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
+import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.preferences.PrefUtils;
 import org.odk.collect.maps.MapFragment;
-import org.odk.collect.shared.settings.Settings;
-
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import javax.inject.Singleton;
 
@@ -50,19 +50,9 @@ public class MapProvider {
     private static final String STAMEN_ATTRIBUTION = "Map tiles by Stamen Design, under CC BY 3.0.\nData by OpenStreetMap, under ODbL.";
     private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey,\nNational Geospatial Program.";
 
-    // In general, there will only be one MapFragment, and thus one entry, in
-    // each of these two Maps at any given time.  Nonetheless, it's a little
-    // tidier and less error-prone to use a Map than to track the key and value
-    // in separate fields, and the WeakHashMap will conveniently drop the key
-    // automatically when it's no longer needed.
-
-    /** Keeps track of the listener associated with a given MapFragment. */
-    private final Map<MapFragment, Settings.OnSettingChangeListener>
-        listenersByMap = new WeakHashMap<>();
-
-    /** Keeps track of the configurator associated with a given MapFragment. */
-    private final Map<MapFragment, MapConfigurator>
-        configuratorsByMap = new WeakHashMap<>();
+    private MapProvider() {
+        
+    }
 
     /**
      * In the preference UI, the available basemaps are organized into "sources"
@@ -80,17 +70,17 @@ public class MapProvider {
                     new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
                 )
             ),
-//            new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
-//                new MapboxMapConfigurator(
-//                    KEY_MAPBOX_MAP_STYLE, R.string.basemap_source_mapbox,
-//                    new MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
-//                    new MapboxUrlOption(Style.LIGHT, R.string.light),
-//                    new MapboxUrlOption(Style.DARK, R.string.dark),
-//                    new MapboxUrlOption(Style.SATELLITE, R.string.satellite),
-//                    new MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
-//                    new MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
-//                )
-//            ),
+            new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
+                new MapboxMapConfigurator(
+                    KEY_MAPBOX_MAP_STYLE, R.string.basemap_source_mapbox,
+                    new MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
+                    new MapboxUrlOption(Style.LIGHT, R.string.light),
+                    new MapboxUrlOption(Style.DARK, R.string.dark),
+                    new MapboxUrlOption(Style.SATELLITE, R.string.satellite),
+                    new MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
+                    new MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
+                )
+            ),
             new SourceOption(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
@@ -187,30 +177,6 @@ public class MapProvider {
             }
         }
         return SOURCE_OPTIONS[0];
-    }
-
-    void onMapFragmentStart(MapFragment map) {
-        MapConfigurator cftor = configuratorsByMap.get(map);
-        if (cftor != null) {
-            Settings generalSettings = PrefUtils.getSharedPrefs();
-            Settings.OnSettingChangeListener listener = key -> {
-                if (cftor.getPrefKeys().contains(key)) {
-                    map.applyConfig(cftor.buildConfig(generalSettings));
-                }
-            };
-            map.applyConfig(cftor.buildConfig(generalSettings));
-            generalSettings.registerOnSettingChangeListener(listener);
-            listenersByMap.put(map, listener);
-        }
-    }
-
-    void onMapFragmentStop(MapFragment map) {
-        Settings.OnSettingChangeListener listener = listenersByMap.get(map);
-        if (listener != null) {
-            Settings prefs = PrefUtils.getSharedPrefs();
-            prefs.unregisterOnSettingChangeListener(listener);
-            listenersByMap.remove(map);
-        }
     }
 
     private static class SourceOption {
