@@ -20,6 +20,18 @@ class BlankFormListMenuDelegate(
     private var outOfSync = false
     private var syncing = false
 
+    init {
+        viewModel.isSyncingWithServer().observe(activity) { syncing: Boolean ->
+            this.syncing = syncing
+            activity.invalidateOptionsMenu()
+        }
+
+        viewModel.isOutOfSyncWithServer().observe(activity) { outOfSync: Boolean ->
+            this.outOfSync = outOfSync
+            activity.invalidateOptionsMenu()
+        }
+    }
+
     override fun onCreateOptionsMenu(menuInflater: MenuInflater, menu: Menu) {
         menuInflater.inflate(R.menu.form_list_menu, menu)
 
@@ -100,18 +112,6 @@ class BlankFormListMenuDelegate(
                 true
             }
             else -> false
-        }
-    }
-
-    init {
-        viewModel.isSyncingWithServer().observe(activity) { syncing: Boolean ->
-            this.syncing = syncing
-            activity.invalidateOptionsMenu()
-        }
-
-        viewModel.isOutOfSyncWithServer().observe(activity) { outOfSync: Boolean ->
-            this.outOfSync = outOfSync
-            activity.invalidateOptionsMenu()
         }
     }
 }
