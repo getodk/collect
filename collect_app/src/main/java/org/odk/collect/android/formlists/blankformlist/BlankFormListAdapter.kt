@@ -57,7 +57,7 @@ class FormListAdapter(
 
     override fun getItemCount() = formItems.size
 
-    inner class ViewHolder(val binding: BlankFormListItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: BlankFormListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     fun setData(blankFormItems: List<BlankFormListItem>) {
         this.formItems = blankFormItems.toList()
