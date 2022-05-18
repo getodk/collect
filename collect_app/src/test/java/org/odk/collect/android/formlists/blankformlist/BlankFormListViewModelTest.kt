@@ -22,7 +22,7 @@ import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
-import org.odk.collect.androidtest.LiveDataTester
+import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.formstest.FormUtils
@@ -216,10 +216,10 @@ class BlankFormListViewModelTest {
         val liveData = MutableLiveData(true)
         whenever(syncRepository.isSyncing(projectId)).thenReturn(liveData)
 
-        val isSyncing = LiveDataTester().activate(viewModel.isSyncingWithServer())
-        assertThat(isSyncing.value, `is`(true))
+        val isSyncing = viewModel.isSyncingWithServer()
+        assertThat(isSyncing.getOrAwaitValue(), `is`(true))
         liveData.value = false
-        assertThat(isSyncing.value, `is`(false))
+        assertThat(isSyncing.getOrAwaitValue(), `is`(false))
     }
 
     @Test
@@ -227,10 +227,10 @@ class BlankFormListViewModelTest {
         val liveData = MutableLiveData<FormSourceException?>(FormSourceException.FetchError())
         whenever(syncRepository.getSyncError(projectId)).thenReturn(liveData)
 
-        val outOfSync = LiveDataTester().activate(viewModel.isOutOfSyncWithServer())
-        assertThat(outOfSync.value, `is`(true))
+        val outOfSync = viewModel.isOutOfSyncWithServer()
+        assertThat(outOfSync.getOrAwaitValue(), `is`(true))
         liveData.value = null
-        assertThat(outOfSync.value, `is`(false))
+        assertThat(outOfSync.getOrAwaitValue(), `is`(false))
     }
 
     @Test
@@ -238,12 +238,12 @@ class BlankFormListViewModelTest {
         val liveData = MutableLiveData<FormSourceException?>(FormSourceException.FetchError())
         whenever(syncRepository.getSyncError(projectId)).thenReturn(liveData)
 
-        val authenticationRequired = LiveDataTester().activate(viewModel.isAuthenticationRequired())
-        assertThat(authenticationRequired.value, `is`(false))
+        val authenticationRequired = viewModel.isAuthenticationRequired()
+        assertThat(authenticationRequired.getOrAwaitValue(), `is`(false))
         liveData.value = FormSourceException.AuthRequired()
-        assertThat(authenticationRequired.value, `is`(true))
+        assertThat(authenticationRequired.getOrAwaitValue(), `is`(true))
         liveData.value = null
-        assertThat(authenticationRequired.value, `is`(false))
+        assertThat(authenticationRequired.getOrAwaitValue(), `is`(false))
     }
 
     @Test
