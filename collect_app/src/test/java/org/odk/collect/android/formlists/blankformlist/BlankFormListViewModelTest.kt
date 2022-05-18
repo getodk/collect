@@ -166,7 +166,7 @@ class BlankFormListViewModelTest {
     }
 
     @Test
-    fun `syncWithStorage should not be triggered when viewModel is initialized if another process operates on forms database`() {
+    fun `syncWithStorage should not be triggered when viewModel is initialized if forms lock is locked`() {
         changeLock.lock()
         val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer = mock()
 
