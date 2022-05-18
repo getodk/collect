@@ -52,7 +52,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
         menuDelegate = BlankFormListMenuDelegate(this, viewModel, networkStateProvider)
 
-        findViewById<RecyclerView>(R.id.formList).adapter = adapter
+        findViewById<RecyclerView>(R.id.form_list).adapter = adapter
 
         initObservers()
     }
@@ -117,12 +117,12 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
         viewModel.syncResult.observe(this) { result ->
             if (!result.isConsumed()) {
-                SnackbarUtils.showShortSnackbar(findViewById(R.id.formList), result.value)
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.form_list), result.value)
             }
         }
 
         viewModel.formsToDisplay.observe(this) { forms ->
-            findViewById<RecyclerView>(R.id.formList).visibility =
+            findViewById<RecyclerView>(R.id.form_list).visibility =
                 if (forms.isEmpty()) View.GONE else View.VISIBLE
 
             findViewById<TextView>(R.id.empty_list_message).visibility =

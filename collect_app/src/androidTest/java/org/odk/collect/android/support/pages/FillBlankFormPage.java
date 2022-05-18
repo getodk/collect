@@ -58,21 +58,21 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage checkMapIconDisplayedForForm(String formName) {
-        onView(withId(R.id.formList))
+        onView(withId(R.id.form_list))
                 .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()))
                 .check(matches(hasDescendant(allOf(withId(R.id.map_button), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))));
         return this;
     }
 
     public FillBlankFormPage checkMapIconNotDisplayedForForm(String formName) {
-        onView(withId(R.id.formList))
+        onView(withId(R.id.form_list))
                 .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()))
                 .check(matches(hasDescendant(allOf(withId(R.id.map_button), withEffectiveVisibility(ViewMatchers.Visibility.GONE)))));
         return this;
     }
 
     public FormMapPage clickOnMapIconForForm(String formName) {
-        onView(withId(R.id.formList))
+        onView(withId(R.id.form_list))
                 .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), clickOnViewChild(R.id.map_button)));
 
         return new FormMapPage(formName).assertOnPage();
@@ -85,7 +85,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     private void clickOnFormButton(String formName) {
         assertFormExists(formName);
-        onView(withId(R.id.formList))
+        onView(withId(R.id.form_list))
                 .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), click()));
     }
 
@@ -114,7 +114,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
         return WaitFor.waitFor(() -> {
             assertTextNotDisplayed(R.string.no_items_display_forms);
 
-            onView(withId(R.id.formList))
+            onView(withId(R.id.form_list))
                     .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()));
             return this;
         });
