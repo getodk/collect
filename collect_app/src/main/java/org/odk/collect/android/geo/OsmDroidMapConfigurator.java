@@ -1,13 +1,12 @@
 package org.odk.collect.android.geo;
 
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER;
+import static kotlin.collections.SetsKt.setOf;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
-
-import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
 import org.odk.collect.androidshared.ui.PrefUtils;
@@ -69,8 +68,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
     }
 
     @Override public Collection<String> getPrefKeys() {
-        return prefKey.isEmpty() ? ImmutableSet.of(KEY_REFERENCE_LAYER) :
-            ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? setOf(KEY_REFERENCE_LAYER) : setOf(prefKey, KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {

@@ -45,3 +45,4 @@ and update this document as the code evolves.
 * Replacing Rx (and other async work such as `AsyncTask`) with `LiveData` + `Scheduler` abstraction
 * Gradually removing use of `CursorLoader` (all remaining uses are in `CursorLoaderFactory`)
 * Using AndroidX Test in new local tests and migrating other local tests as we touch them (from classic Robolectric)
+* Replacing uses of Google Guava with similar helpers in Kotlin Standard Library
