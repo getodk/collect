@@ -13,7 +13,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MbtilesFile.LayerType;
+import org.odk.collect.maps.layers.MbtilesFile;
+import org.odk.collect.maps.layers.MbtilesFile.LayerType;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.PrefUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;

@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.externaldata.ExternalDataManager;
+import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
@@ -50,12 +51,18 @@ import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
+import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.location.satellites.GpsStatusSatelliteInfoClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.satellites.SatelliteInfoClient;
 import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
+import org.odk.collect.osmdroid.OsmDroidDependencyComponent;
+import org.odk.collect.osmdroid.OsmDroidDependencyComponentProvider;
+import org.odk.collect.osmdroid.OsmDroidDependencyModule;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
@@ -63,6 +70,7 @@ import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.projects.ProjectsDependencyModule;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedApplication;
@@ -75,11 +83,13 @@ import javax.inject.Inject;
 
 import dagger.Provides;
 
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class Collect extends Application implements
         LocalizedApplication,
         AudioRecorderDependencyComponentProvider,
         ProjectsDependencyComponentProvider,
         GeoDependencyComponentProvider,
+        OsmDroidDependencyComponentProvider,
         StateStore {
     public static String defaultSysLanguage;
     private static Collect singleton;
@@ -100,6 +110,7 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
     private GeoDependencyComponent geoDependencyComponent;
+    private OsmDroidDependencyComponent osmDroidDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -321,5 +332,41 @@ public class Collect extends Application implements
         }
 
         return geoDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public OsmDroidDependencyComponent getOsmDroidDependencyComponent() {
+        if (osmDroidDependencyComponent == null) {
+            osmDroidDependencyComponent = DaggerOsmDroidDependencyComponent.builder()
+                    .osmDroidDependencyModule(new OsmDroidDependencyModule() {
+                        @NonNull
+                        @Override
+                        public ReferenceLayerRepository providesReferenceLayerRepository() {
+                            return applicationComponent.referenceLayerRepository();
+                        }
+
+                        @NonNull
+                        @Override
+                        public LocationClient providesLocationClient() {
+                            return applicationComponent.locationClient();
+                        }
+
+                        @NonNull
+                        @Override
+                        public MapConfigurator providesMapConfigurator() {
+                            return MapConfiguratorProvider.getConfigurator(settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE));
+                        }
+
+                        @NonNull
+                        @Override
+                        public SettingsProvider providesSettingsProvider() {
+                            return settingsProvider;
+                        }
+                    })
+                    .build();
+        }
+
+        return osmDroidDependencyComponent;
     }
 }

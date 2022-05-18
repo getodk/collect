@@ -16,7 +16,7 @@
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.osmdroid;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,7 +32,7 @@ import java.io.InputStream;
 
 import timber.log.Timber;
 
-public class OsmMBTileSource extends BitmapTileSourceBase {
+class OsmMBTileSource extends BitmapTileSourceBase {
 
     // Log log log log ...
     // private static final Logger logger = LoggerFactory.getLogger(MBTileSource.class);

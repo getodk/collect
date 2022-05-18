@@ -270,6 +270,7 @@ dependencies {
     }
     implementation project(':externalapp')
     implementation project(':maps')
+    implementation project(':osmdroid')
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support

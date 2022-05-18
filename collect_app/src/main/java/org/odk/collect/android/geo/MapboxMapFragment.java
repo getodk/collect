@@ -58,8 +58,10 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MbtilesFile.LayerType;
-import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
+import org.odk.collect.maps.MapFragmentDelegate;
+import org.odk.collect.maps.layers.MbtilesFile;
+import org.odk.collect.maps.layers.MbtilesFile.LayerType;
+import org.odk.collect.maps.layers.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.maps.MapFragment;

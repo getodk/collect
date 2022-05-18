@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
 
@@ -42,12 +42,11 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
@@ -88,7 +87,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         LocationListener, LocationClient.LocationClientListener {
 
     // Bundle keys understood by applyConfig().
-    static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
+    public static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
 
     @Inject
     ReferenceLayerRepository referenceLayerRepository;
@@ -159,7 +158,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
+        OsmDroidDependencyComponent component = ((OsmDroidDependencyComponentProvider) context.getApplicationContext()).getOsmDroidDependencyComponent();
+        component.inject(this);
 
         mapFragmentDelegate = new MapFragmentDelegate(mapConfigurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }

@@ -35,29 +35,20 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
-
-    buildFeatures {
-        viewBinding true
-    }
 }
 
 dependencies {
-    coreLibraryDesugaring Dependencies.desugar
-
     implementation project(':shared')
-    implementation Dependencies.kotlin_stdlib
-    implementation Dependencies.androidx_fragment
-    implementation Dependencies.androidx_annotations
-    implementation Dependencies.androidx_preference_ktx
-    implementation Dependencies.timber
+    implementation project(':androidshared')
+    implementation project(':maps')
+    implementation project(':location')
+    implementation project(':settings')
 
-    testImplementation Dependencies.junit
-    testImplementation Dependencies.hamcrest
-    testImplementation Dependencies.robolectric
+    implementation Dependencies.osmdroid
+    implementation Dependencies.androidx_fragment_ktx
+    implementation Dependencies.android_material
+    implementation Dependencies.timber
+    implementation Dependencies.play_services_location
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
 }

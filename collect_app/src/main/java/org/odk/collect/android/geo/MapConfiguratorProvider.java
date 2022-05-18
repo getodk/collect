@@ -12,6 +12,7 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import androidx.annotation.NonNull;
 
@@ -24,6 +25,7 @@ import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.osmdroid.WebMapService;
 
 public class MapConfiguratorProvider {
 
@@ -81,15 +83,15 @@ public class MapConfiguratorProvider {
                 new OsmDroidMapConfigurator(
                     KEY_USGS_MAP_STYLE, R.string.basemap_source_usgs,
                     new WmsOption("topographic", R.string.topographic, new WebMapService(
-                        R.string.openmap_usgs_topo, 0, 18, 256, USGS_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_usgs_topo), 0, 18, 256, USGS_ATTRIBUTION,
                         USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
                     )),
                     new WmsOption("hybrid", R.string.hybrid, new WebMapService(
-                        R.string.openmap_usgs_sat, 0, 18, 256, USGS_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_usgs_sat), 0, 18, 256, USGS_ATTRIBUTION,
                         USGS_URL_BASE + "/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
                     )),
                     new WmsOption("satellite", R.string.satellite, new WebMapService(
-                        R.string.openmap_usgs_img, 0, 18, 256, USGS_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_usgs_img), 0, 18, 256, USGS_ATTRIBUTION,
                         USGS_URL_BASE + "/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
                     ))
                 )
@@ -97,7 +99,7 @@ public class MapConfiguratorProvider {
             new SourceOption(BASEMAP_SOURCE_STAMEN, R.string.basemap_source_stamen,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
-                        R.string.openmap_stamen_terrain, 0, 18, 256, STAMEN_ATTRIBUTION,
+                         getLocalizedString(getApplication(), R.string.openmap_stamen_terrain), 0, 18, 256, STAMEN_ATTRIBUTION,
                         "http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg"
                     )
                 )
@@ -106,11 +108,11 @@ public class MapConfiguratorProvider {
                 new OsmDroidMapConfigurator(
                     KEY_CARTO_MAP_STYLE, R.string.basemap_source_carto,
                     new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
-                        R.string.openmap_cartodb_positron, 0, 18, 256, CARTO_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_cartodb_positron), 0, 18, 256, CARTO_ATTRIBUTION,
                         "http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
                     )),
                     new WmsOption("dark_matter", R.string.carto_map_style_dark_matter, new WebMapService(
-                        R.string.openmap_cartodb_darkmatter, 0, 18, 256, CARTO_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_cartodb_darkmatter), 0, 18, 256, CARTO_ATTRIBUTION,
                         "http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
                     ))
                 )
@@ -156,7 +158,7 @@ public class MapConfiguratorProvider {
      */
     private static @NonNull SourceOption getOption(String id) {
         if (id == null) {
-            id = DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getUnprotectedSettings().getString(KEY_BASEMAP_SOURCE);
+            id = DaggerUtils.getComponent(getApplication()).settingsProvider().getUnprotectedSettings().getString(KEY_BASEMAP_SOURCE);
         }
         for (SourceOption option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
@@ -164,6 +166,10 @@ public class MapConfiguratorProvider {
             }
         }
         return SOURCE_OPTIONS[0];
+    }
+
+    private static Collect getApplication() {
+        return Collect.getInstance();
     }
 
     private static class SourceOption {

@@ -1,6 +1,6 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.maps.layers;
 
-interface TileSource {
+public interface TileSource {
     byte[] getTileBlob(int zoom, int x, int y);
 
     String getContentType();  // a MIME type such as "image/jpeg"
