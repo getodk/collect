@@ -34,7 +34,7 @@ public interface MapConfigurator {
     void showUnavailableMessage(Context context);
 
     /** Constructs any preference widgets that are specific to this map implementation. */
-    List<Preference> createPrefs(Context context);
+    List<Preference> createPrefs(Context context, Settings settings);
 
     /** Gets the set of keys for preferences that should be watched for changes. */
     Collection<String> getPrefKeys();

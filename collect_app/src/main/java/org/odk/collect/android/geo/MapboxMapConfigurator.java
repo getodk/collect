@@ -11,7 +11,7 @@ import androidx.preference.Preference;
 import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.androidshared.ui.PrefUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.shared.settings.Settings;
 
@@ -41,7 +41,7 @@ class MapboxMapConfigurator implements MapConfigurator {
             R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
     }
 
-    @Override public List<Preference> createPrefs(Context context) {
+    @Override public List<Preference> createPrefs(Context context, Settings settings) {
         int[] labelIds = new int[options.length];
         String[] values = new String[options.length];
         for (int i = 0; i < options.length; i++) {
@@ -51,7 +51,7 @@ class MapboxMapConfigurator implements MapConfigurator {
         String prefTitle = context.getString(
             R.string.map_style_label, context.getString(sourceLabelId));
         return Collections.singletonList(PrefUtils.createListPref(
-            context, prefKey, prefTitle, labelIds, values
+            context, prefKey, prefTitle, labelIds, values, settings
         ));
     }
 

@@ -10,7 +10,7 @@ import androidx.preference.Preference;
 import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.androidshared.ui.PrefUtils;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -47,7 +47,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
 
     @Override public void showUnavailableMessage(Context context) { }
 
-    @Override public List<Preference> createPrefs(Context context) {
+    @Override public List<Preference> createPrefs(Context context, Settings settings) {
         if (options.length > 1) {
             int[] labelIds = new int[options.length];
             String[] values = new String[options.length];
@@ -58,7 +58,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
             String prefTitle = context.getString(
                 R.string.map_style_label, context.getString(sourceLabelId));
             return Collections.singletonList(PrefUtils.createListPref(
-                context, prefKey, prefTitle, labelIds, values
+                context, prefKey, prefTitle, labelIds, values, settings
             ));
         }
         return Collections.emptyList();

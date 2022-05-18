@@ -19,9 +19,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
-import org.odk.collect.android.preferences.PrefUtils;
+import org.odk.collect.android.injection.DaggerUtils;
 
 public class MapConfiguratorProvider {
 
@@ -153,7 +154,7 @@ public class MapConfiguratorProvider {
      */
     private static @NonNull SourceOption getOption(String id) {
         if (id == null) {
-            id = PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE);
+            id = DaggerUtils.getComponent(Collect.getInstance()).settingsProvider().getUnprotectedSettings().getString(KEY_BASEMAP_SOURCE);
         }
         for (SourceOption option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
