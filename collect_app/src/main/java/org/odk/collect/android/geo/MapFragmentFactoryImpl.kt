@@ -15,12 +15,10 @@ import org.odk.collect.shared.settings.Settings
 class MapFragmentFactoryImpl(private val settings: Settings) : MapFragmentFactory {
 
     override fun createMapFragment(context: Context): MapFragment {
-        return if (isBasemapOSM(settings.getString(KEY_BASEMAP_SOURCE))) {
-            OsmDroidMapFragment()
-        } else if (settings.getString(KEY_BASEMAP_SOURCE) == BASEMAP_SOURCE_MAPBOX) {
-            MapboxMapFragment()
-        } else {
-            GoogleMapFragment()
+        return when {
+            isBasemapOSM(settings.getString(KEY_BASEMAP_SOURCE)) -> OsmDroidMapFragment()
+            settings.getString(KEY_BASEMAP_SOURCE) == BASEMAP_SOURCE_MAPBOX -> MapboxMapFragment()
+            else -> GoogleMapFragment()
         }
     }
 
