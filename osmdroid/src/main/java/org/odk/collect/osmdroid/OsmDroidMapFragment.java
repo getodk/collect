@@ -96,11 +96,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Inject
     MapConfigurator mapConfigurator;
 
-    /**
-     * @deprecated {@link MapConfigurator} should encapsulate integration with
-     * {@link org.odk.collect.shared.settings.Settings}.
-     */
-    @Deprecated
     @Inject
     SettingsProvider settingsProvider;
 
