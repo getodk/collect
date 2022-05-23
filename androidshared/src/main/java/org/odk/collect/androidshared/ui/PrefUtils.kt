@@ -3,7 +3,6 @@ package org.odk.collect.androidshared.ui
 import android.content.Context
 import androidx.preference.ListPreference
 import org.odk.collect.shared.settings.Settings
-import java.util.Arrays
 
 object PrefUtils {
 
@@ -16,21 +15,18 @@ object PrefUtils {
         values: Array<String>,
         settings: Settings,
     ): ListPreference {
-        val labels = arrayOfNulls<String>(labelIds.size)
-        for (i in labels.indices) {
-            labels[i] = context.getString(labelIds[i])
-        }
+        val labels: Array<String?> = labelIds.map { context.getString(it) }.toTypedArray()
         return createListPref(context, key, title, labels, values, settings)
     }
 
     /**
-     * Gets an integer value from the shared preferences.  If the preference has
-     * a string value, attempts to convert it to an integer.  If the preference
+     * Gets a integer value from the shared preferences. If the preference has
+     * a string value, attempts to convert it to an integer. If the preference
      * is not found or is not a valid integer, returns the defaultValue.
      */
     @JvmStatic
     fun getInt(key: String?, defaultValue: Int, settings: Settings): Int {
-        val value: Any? = settings.getAll().get(key)
+        val value: Any? = settings.getAll()[key]
         if (value is Int) {
             return value
         }
@@ -55,15 +51,15 @@ object PrefUtils {
         settings: Settings,
     ): ListPreference {
         ensurePrefHasValidValue(key, values, settings)
-        val pref = ListPreference(context)
-        pref.key = key
-        pref.isPersistent = true
-        pref.title = title
-        pref.dialogTitle = title
-        pref.entries = labels
-        pref.entryValues = values
-        pref.summary = "%s"
-        return pref
+        return ListPreference(context).also {
+            it.key = key
+            it.isPersistent = true
+            it.title = title
+            it.dialogTitle = title
+            it.entries = labels
+            it.entryValues = values
+            it.summary = "%s"
+        }
     }
 
     private fun ensurePrefHasValidValue(
@@ -72,8 +68,8 @@ object PrefUtils {
         settings: Settings,
     ) {
         val value = settings.getString(key)
-        if (Arrays.asList(*validValues).indexOf(value) < 0) {
-            if (validValues.size > 0) {
+        if (validValues.indexOf(value) < 0) {
+            if (validValues.isNotEmpty()) {
                 settings.save(key, validValues[0])
             } else {
                 settings.remove(key)
