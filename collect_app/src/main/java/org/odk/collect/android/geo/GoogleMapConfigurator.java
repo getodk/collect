@@ -1,5 +1,7 @@
 package org.odk.collect.android.geo;
 
+import static org.odk.collect.androidshared.ui.PrefUtils.createListPref;
+import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER;
 
@@ -13,12 +15,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.common.collect.ImmutableSet;
 
 import org.odk.collect.android.R;
-import org.odk.collect.maps.layers.MbtilesFile;
-import org.odk.collect.maps.layers.MbtilesFile.LayerType;
 import org.odk.collect.android.utilities.PlayServicesChecker;
-import org.odk.collect.androidshared.ui.PrefUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.maps.layers.MbtilesFile;
+import org.odk.collect.maps.layers.MbtilesFile.LayerType;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -72,7 +73,7 @@ class GoogleMapConfigurator implements MapConfigurator {
         }
         String prefTitle = context.getString(
             R.string.map_style_label, context.getString(sourceLabelId));
-        return Collections.singletonList(org.odk.collect.androidshared.ui.PrefUtils.createListPref(
+        return Collections.singletonList(createListPref(
             context, prefKey, prefTitle, labelIds, values, settings
         ));
     }
@@ -85,7 +86,7 @@ class GoogleMapConfigurator implements MapConfigurator {
     @Override public Bundle buildConfig(Settings prefs) {
         Bundle config = new Bundle();
         config.putInt(GoogleMapFragment.KEY_MAP_TYPE,
-            PrefUtils.getInt(KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, prefs));
+            getInt(KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, prefs));
         config.putString(GoogleMapFragment.KEY_REFERENCE_LAYER,
             prefs.getString(KEY_REFERENCE_LAYER));
         return config;
