@@ -1,7 +1,5 @@
 package org.odk.collect.android.geo;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
@@ -74,11 +72,6 @@ public class TestMapFragment implements MapFragment {
         locationListener = null;
         lastFeatureId = 0;
         mappedPoints.clear();
-    }
-
-    @Override
-    public void applyConfig(Bundle config) {
-
     }
 
     @Override

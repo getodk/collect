@@ -278,10 +278,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         super.onDestroy();
     }
 
-    @Override public void applyConfig(Bundle config) {
-        throw new UnsupportedOperationException();
-    }
-
     /**
      * Reset the location component so that it is not tied to the placeholder layer.
      * We need to do this before re-setting map style to avoid exceptions.

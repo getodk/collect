@@ -204,10 +204,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
         super.onDestroy();
     }
 
-    @Override public void applyConfig(Bundle config) {
-        throw new UnsupportedOperationException();
-    }
-
     @Override public @NonNull MapPoint getCenter() {
         if (map == null) {  // during Robolectric tests, map will be null
             return INITIAL_CENTER;
