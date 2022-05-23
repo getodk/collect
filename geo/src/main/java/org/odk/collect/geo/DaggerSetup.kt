@@ -112,4 +112,12 @@ open class GeoDependencyModule {
             }
         }
     }
+
+    open fun providesSatelliteInfoClient(context: Context): SatelliteInfoClient {
+        TODO("Not yet implemented")
+    }
+
+    open fun providesLocationTracker(application: Application): LocationTracker {
+        TODO("Not yet implemented")
+    }
 }
