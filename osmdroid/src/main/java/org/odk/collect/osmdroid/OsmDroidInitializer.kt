@@ -2,9 +2,9 @@ package org.odk.collect.osmdroid
 
 import org.osmdroid.config.Configuration
 
-class OsmDroidInitializer(private val userAgent: String) {
+object OsmDroidInitializer {
 
-    fun initialize() {
+    fun initialize(userAgent: String) {
         Configuration.getInstance().userAgentValue = userAgent
     }
 }

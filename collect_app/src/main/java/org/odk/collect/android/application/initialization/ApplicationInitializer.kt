@@ -107,7 +107,7 @@ class ApplicationInitializer(
                 // This has to happen on the main thread but we might call `initialize` from tests
                 MapView(context).onCreate(null)
             }
-            OsmDroidInitializer(userAgentProvider.userAgent).initialize()
+            OsmDroidInitializer.initialize(userAgentProvider.userAgent)
             MapboxUtils.initMapbox()
         } catch (ignore: Exception) {
             // ignored
