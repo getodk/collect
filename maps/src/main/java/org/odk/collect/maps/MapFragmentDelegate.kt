@@ -9,8 +9,7 @@ class MapFragmentDelegate(
     private val configurator: MapConfigurator,
     private val settings: Settings,
     private val onConfigChanged: Consumer<Bundle>,
-) :
-    OnSettingChangeListener {
+) : OnSettingChangeListener {
 
     fun onStart() {
         onConfigChanged.accept(configurator.buildConfig(settings))
