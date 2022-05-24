@@ -20,7 +20,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
-import org.odk.collect.android.formlists.FormListSortingDialog
+import org.odk.collect.android.formlists.FormListSortingBottomSheetDialog
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.robolectric.Shadows
@@ -141,7 +141,7 @@ class BlankFormListMenuDelegateTest {
         val menuDelegate = createMenuDelegate()
         menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_sort))
 
-        assertThat(ShadowDialog.getLatestDialog(), instanceOf(FormListSortingDialog::class.java))
+        assertThat(ShadowDialog.getLatestDialog(), instanceOf(FormListSortingBottomSheetDialog::class.java))
     }
 
     @Test

@@ -10,7 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.odk.collect.android.R
 import org.odk.collect.android.adapters.SortDialogAdapter
 
-class FormListSortingDialog(
+class FormListSortingBottomSheetDialog(
     context: Context,
     private val options: IntArray,
     private val selectedOption: Int,

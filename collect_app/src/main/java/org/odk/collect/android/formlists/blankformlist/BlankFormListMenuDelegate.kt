@@ -6,7 +6,7 @@ import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.SearchView
 import org.odk.collect.android.R
-import org.odk.collect.android.formlists.FormListSortingDialog
+import org.odk.collect.android.formlists.FormListSortingBottomSheetDialog
 import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.utilities.MenuDelegate
 import org.odk.collect.androidshared.ui.ToastUtils
@@ -96,7 +96,7 @@ class BlankFormListMenuDelegate(
                 true
             }
             R.id.menu_sort -> {
-                FormListSortingDialog(
+                FormListSortingBottomSheetDialog(
                     activity,
                     intArrayOf(
                         R.string.sort_by_name_asc,
