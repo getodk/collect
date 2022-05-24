@@ -20,7 +20,7 @@ object PrefUtils {
     }
 
     /**
-     * Gets a integer value from the shared preferences. If the preference has
+     * Gets an integer value from the shared preferences. If the preference has
      * a string value, attempts to convert it to an integer. If the preference
      * is not found or is not a valid integer, returns the defaultValue.
      */
