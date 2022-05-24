@@ -456,6 +456,8 @@ public final class ExternalDataUtil {
                     } else {
                         s = XPathFuncExpr.toString(o);
                     }
+                } else if(s.startsWith("#{") && s.endsWith("}")) {
+                    s = s.substring(2, s.length() - 1); // Convert to column name
                 }
                 if(expression.length() > 0) {
                     expression.append(" ");
