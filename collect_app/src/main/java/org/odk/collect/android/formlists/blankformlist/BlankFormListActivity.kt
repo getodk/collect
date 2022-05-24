@@ -107,10 +107,9 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
     }
 
     private fun initObservers() {
-        viewModel.backgroundTasksObserver.observe(this) {
+        viewModel.isLoading.observe(this) { isLoading ->
             findViewById<ProgressBar>(R.id.progressBar).visibility =
-                if (it.first || it.second || it.third) View.VISIBLE
-                else View.GONE
+                if (isLoading) View.VISIBLE else View.GONE
         }
 
         viewModel.syncResult.observe(this) { result ->

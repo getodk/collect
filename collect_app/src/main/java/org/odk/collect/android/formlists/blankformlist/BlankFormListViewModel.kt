@@ -52,11 +52,13 @@ class BlankFormListViewModel(
     private val isSyncingWithStorageRunning = MutableNonNullLiveData(false)
     private val isSyncingWithServerRunning = MutableNonNullLiveData(false)
 
-    val backgroundTasksObserver: LiveData<Triple<Boolean, Boolean, Boolean>> = LiveDataUtils.zip3(
-        isFormLoadingRunning,
-        isSyncingWithStorageRunning,
-        isSyncingWithServerRunning,
-    )
+    val isLoading: LiveData<Boolean> = Transformations.map(
+        LiveDataUtils.zip3(
+            isFormLoadingRunning,
+            isSyncingWithStorageRunning,
+            isSyncingWithServerRunning,
+        )
+    ) { (one, two, three) -> one || two || three }
 
     var sortingOrder: Int = generalSettings.getInt("formChooserListSortingOrder")
         get() { return generalSettings.getInt("formChooserListSortingOrder") }
