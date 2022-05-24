@@ -42,8 +42,8 @@ class BlankFormListViewModel(
 ) : ViewModel() {
 
     private val _allForms: MutableNonNullLiveData<List<BlankFormListItem>> = MutableNonNullLiveData(emptyList())
-    private val _formsToDisplay: MutableLiveData<List<BlankFormListItem>> = MutableLiveData()
-    val formsToDisplay: LiveData<List<BlankFormListItem>> = _formsToDisplay
+    private val _formsToDisplay: MutableLiveData<List<BlankFormListItem>?> = MutableLiveData()
+    val formsToDisplay: LiveData<List<BlankFormListItem>?> = _formsToDisplay
 
     private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
     val syncResult: LiveData<Consumable<String>> = _syncResult
