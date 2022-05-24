@@ -8,13 +8,15 @@ import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
-import static org.odk.collect.testshared.ViewActions.clickOnViewChild;
+import static org.odk.collect.testshared.ViewActions.clickOnViewContentDescription;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 
@@ -59,21 +61,21 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public FillBlankFormPage checkMapIconDisplayedForForm(String formName) {
         onView(withId(R.id.form_list))
-                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()))
-                .check(matches(hasDescendant(allOf(withId(R.id.map_button), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))));
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()))
+                .check(matches(hasDescendant(allOf(withContentDescription(R.string.open_form_map), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))));
         return this;
     }
 
     public FillBlankFormPage checkMapIconNotDisplayedForForm(String formName) {
         onView(withId(R.id.form_list))
-                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()))
-                .check(matches(hasDescendant(allOf(withId(R.id.map_button), withEffectiveVisibility(ViewMatchers.Visibility.GONE)))));
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()))
+                .check(matches(hasDescendant(allOf(withContentDescription(R.string.open_form_map), withEffectiveVisibility(ViewMatchers.Visibility.GONE)))));
         return this;
     }
 
     public FormMapPage clickOnMapIconForForm(String formName) {
         onView(withId(R.id.form_list))
-                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), clickOnViewChild(R.id.map_button)));
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), clickOnViewContentDescription(R.string.open_form_map, ApplicationProvider.getApplicationContext())));
 
         return new FormMapPage(formName).assertOnPage();
     }
@@ -86,7 +88,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     private void clickOnFormButton(String formName) {
         assertFormExists(formName);
         onView(withId(R.id.form_list))
-                .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), click()));
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), click()));
     }
 
     public FormEndPage clickOnEmptyForm(String formName) {
@@ -115,7 +117,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
             assertTextNotDisplayed(R.string.no_items_display_forms);
 
             onView(withId(R.id.form_list))
-                    .perform(RecyclerViewActions.actionOnItem(hasDescendant(allOf(withId(R.id.form_title), withText(formName))), scrollTo()));
+                    .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()));
             return this;
         });
     }

@@ -65,6 +65,7 @@
         android:insetRight="0sp"
         android:insetBottom="0sp"
         android:padding="8sp"
+        android:contentDescription="@string/open_form_map"
         app:icon="@drawable/ic_map"
         app:iconTint="?attr/colorOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
