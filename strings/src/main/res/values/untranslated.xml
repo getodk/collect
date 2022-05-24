@@ -25,7 +25,7 @@ the specific language governing permissions and limitations under the License. -
 
     <!-- For consistency, we don't translate these brand/organization names. -->
     <string name="basemap_source_google" translatable="false">Google</string>
-    <string name="basemap_source_mapbox" translatable="false" tools:ignore="UnusedResources">Mapbox</string>
+    <string name="basemap_source_mapbox" translatable="false">Mapbox</string>
     <string name="basemap_source_osm" translatable="false">OpenStreetMap</string>
     <string name="basemap_source_usgs" translatable="false">USGS</string>
     <string name="basemap_source_stamen" translatable="false">Stamen</string>
