@@ -67,12 +67,8 @@ internal class SettingsImporter(
         loadDefaults(generalSettings, generalDefaults)
         loadDefaults(adminSettings, adminDefaults)
 
-        for ((key, value) in generalSettings.getAll()) {
-            settingsChangedHandler.onSettingChanged(project.uuid, value, key)
-        }
-        for ((key, value) in adminSettings.getAll()) {
-            settingsChangedHandler.onSettingChanged(project.uuid, value, key)
-        }
+        settingsChangedHandler.onSettingsChanged(project.uuid)
+
         return true
     }
 
@@ -137,8 +133,10 @@ internal fun interface SettingsValidator {
     fun isValid(json: String): Boolean
 }
 
-fun interface SettingsChangeHandler {
+interface SettingsChangeHandler {
     fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String)
+
+    fun onSettingsChanged(projectId: String)
 }
 
 internal fun interface SettingsMigrator {

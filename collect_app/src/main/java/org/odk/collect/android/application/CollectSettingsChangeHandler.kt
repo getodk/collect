@@ -27,4 +27,9 @@ class CollectSettingsChangeHandler(
             AnalyticsUtils.logServerConfiguration(analytics, newValue.toString())
         }
     }
+
+    override fun onSettingsChanged(projectId: String) {
+        propertyManager.reload()
+        formUpdateScheduler.scheduleUpdates(projectId)
+    }
 }

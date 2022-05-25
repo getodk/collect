@@ -3,6 +3,7 @@ package org.odk.collect.settings
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
+import org.mockito.kotlin.mock
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.support.SettingsUtils.assertSettingsEmpty
@@ -17,8 +18,9 @@ class ODKAppSettingsImporterTest {
         settingsProvider,
         emptyMap(),
         emptyMap(),
-        emptyList()
-    ) { _, _, _ -> }
+        emptyList(),
+        mock()
+    )
 
     @Test
     fun `rejects JSON without general object`() {
