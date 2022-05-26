@@ -14,15 +14,9 @@ class CollectSettingsChangeHandlerTest {
     private var handler = CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, mock())
 
     @Test
-    fun `updates PropertyManager`() {
+    fun `updates PropertyManager when a single setting is changed`() {
         handler.onSettingChanged("projectId", "anything", "blah")
         verify(propertyManager).reload()
-    }
-
-    @Test
-    fun `does not do anything else`() {
-        handler.onSettingChanged("projectId", "anything", "blah")
-        verifyNoInteractions(formUpdateScheduler)
     }
 
     @Test
@@ -44,6 +38,24 @@ class CollectSettingsChangeHandlerTest {
     @Test
     fun `when changed key is PROTOCOL schedules updates`() {
         handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_PROTOCOL)
+        verify(formUpdateScheduler).scheduleUpdates("projectId")
+    }
+
+    @Test
+    fun `do not schedule updates if other single settings are changed`() {
+        handler.onSettingChanged("projectId", "anything", "blah")
+        verifyNoInteractions(formUpdateScheduler)
+    }
+
+    @Test
+    fun `updates PropertyManager when multiple settings are changed`() {
+        handler.onSettingsChanged("projectId")
+        verify(propertyManager).reload()
+    }
+
+    @Test
+    fun `schedule updates when multiple settings are changes`() {
+        handler.onSettingsChanged("projectId")
         verify(formUpdateScheduler).scheduleUpdates("projectId")
     }
 }
