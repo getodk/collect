@@ -141,6 +141,17 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
+    public void save_multipleFormsWithTheSameHashIgnoresDuplicates() {
+        FormsRepository formsRepository = buildSubject();
+        Form form = FormUtils.buildForm("id", "version", getFormFilesPath()).build();
+
+        formsRepository.save(form);
+        formsRepository.save(form);
+
+        assertThat(formsRepository.getAll().size(), is(1));
+    }
+
+    @Test
     public void save_addsId() {
         FormsRepository formsRepository = buildSubject();
         Form form = FormUtils.buildForm("id", "version", getFormFilesPath()).build();
