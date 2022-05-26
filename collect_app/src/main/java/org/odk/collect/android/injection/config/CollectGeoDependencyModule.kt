@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import androidx.fragment.app.FragmentActivity
-import dagger.Provides
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyModule
@@ -24,7 +23,6 @@ class CollectGeoDependencyModule(
     private val permissionChecker: PermissionsChecker,
 ) : GeoDependencyModule() {
 
-    @Provides
     override fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
         return object : ReferenceLayerSettingsNavigator {
             override fun navigateToReferenceLayerSettings(activity: FragmentActivity) {
@@ -33,7 +31,6 @@ class CollectGeoDependencyModule(
         }
     }
 
-    @Provides
     override fun providesMapFragmentFactory(): MapFragmentFactory {
         return mapFragmentFactory
     }
