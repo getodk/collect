@@ -28,8 +28,9 @@ object FormUtils {
     }
 
     @JvmStatic
-    fun createXFormFile(formId: String, version: String?): File {
-        val body = createXFormBody(formId, version)
+    @JvmOverloads
+    fun createXFormFile(formId: String, version: String?, title: String = "Form"): File {
+        val body = createXFormBody(formId, version, title)
         return try {
             val file = File.createTempFile("$formId-$version", ".xml")
             FileUtils.writeStringToFile(file, body, Charset.defaultCharset())
