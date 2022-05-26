@@ -24,8 +24,7 @@
             android:id="@+id/recording_icon"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_mic_24"
-            app:tint="?colorOnSurface" />
+            android:src="@drawable/ic_baseline_mic_24" />
 
         <TextView
             android:id="@+id/time_code"
@@ -75,6 +74,5 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="@dimen/margin_standard"
         android:src="@drawable/ic_baseline_help_outline_24"
-        android:visibility="gone"
-        app:tint="?colorOnPrimary" />
+        android:visibility="gone" />
 </LinearLayout>
