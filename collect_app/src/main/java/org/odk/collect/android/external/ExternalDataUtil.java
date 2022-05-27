@@ -429,7 +429,8 @@ public final class ExternalDataUtil {
     }
 
     /*
-     * Convert placeholders for quesions into the answers of those questions
+     * Convert placeholders for questions into the answers of those questions
+     * Otherwise leave tokens unchanged
      */
     public static String evaluateExpressionNodes(String in, EvaluationContext ec) {
         StringBuilder expression = new StringBuilder("");
@@ -456,9 +457,7 @@ public final class ExternalDataUtil {
                     } else {
                         s = XPathFuncExpr.toString(o);
                     }
-                } else if(s.startsWith("#{") && s.endsWith("}")) {
-                    s = s.substring(2, s.length() - 1); // Convert to column name
-                }
+                } 
                 if(expression.length() > 0) {
                     expression.append(" ");
                 }
