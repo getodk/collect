@@ -17,6 +17,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.formstest.FormUtils.createXFormBody;
@@ -142,14 +144,17 @@ public abstract class FormsRepositoryTest {
     }
 
     @Test
-    public void save_multipleFormsWithTheSameHashIgnoresDuplicates() {
+    public void save_multipleFormsWithTheSameHashIgnoresDuplicatesAndReturnsTheExistingForm() {
         FormsRepository formsRepository = buildSubject();
         Form form = FormUtils.buildForm("id", "version", getFormFilesPath()).build();
 
-        formsRepository.save(form);
-        formsRepository.save(form);
+        Form form1 = formsRepository.save(form);
+        Form form2 = formsRepository.save(form);
 
         assertThat(formsRepository.getAll().size(), is(1));
+        assertNotNull(form1);
+        assertNotNull(form2);
+        assertEquals(form1, form2);
     }
 
     @Test
