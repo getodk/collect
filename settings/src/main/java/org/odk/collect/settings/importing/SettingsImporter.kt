@@ -33,12 +33,10 @@ internal class SettingsImporter(
         val jsonObject = JSONObject(json)
 
         // Import unprotected settings
-        val general = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
-        importToPrefs(general, generalSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings)
 
         // Import protected settings
-        val admin = jsonObject.getJSONObject(AppConfigurationKeys.ADMIN)
-        importToPrefs(admin, adminSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings)
 
         // Import project details
         val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
@@ -72,9 +70,14 @@ internal class SettingsImporter(
         return true
     }
 
-    private fun importToPrefs(jsonObject: JSONObject, preferences: Settings) {
-        jsonObject.keys().forEach {
-            preferences.save(it, jsonObject[it])
+    private fun importToPrefs(mainJsonObject: JSONObject, childJsonObjectName: String, preferences: Settings) {
+        val childJsonObject = mainJsonObject.getJSONObject(childJsonObjectName)
+
+        childJsonObject.keys().forEach {
+            val value = childJsonObject[it]
+            if (settingsValidator.isValueSupported(childJsonObjectName, it, value)) {
+                preferences.save(it, value)
+            }
         }
     }
 
@@ -129,8 +132,10 @@ internal class SettingsImporter(
     }
 }
 
-internal fun interface SettingsValidator {
+internal interface SettingsValidator {
     fun isValid(json: String): Boolean
+
+    fun isValueSupported(parentJsonObjectName: String, key: String, value: Any): Boolean
 }
 
 interface SettingsChangeHandler {

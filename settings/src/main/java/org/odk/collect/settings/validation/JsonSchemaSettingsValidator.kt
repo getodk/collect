@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 import com.networknt.schema.ValidatorTypeCode
+import org.apache.commons.io.IOUtils
+import org.json.JSONObject
 import org.odk.collect.settings.importing.SettingsValidator
 import java.io.InputStream
+import java.nio.charset.Charset
 
 internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> InputStream) :
     SettingsValidator {
@@ -18,6 +21,37 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
                 val schema = schemaFactory.getSchema(schemaStream)
                 val errors = schema.validate(ObjectMapper().readTree(json))
                 errors.none { it.type != ValidatorTypeCode.ENUM.value }
+            }
+        } catch (e: JsonParseException) {
+            false
+        }
+    }
+
+    override fun isValueSupported(parentJsonObjectName: String, key: String, value: Any): Boolean {
+        return try {
+            schemaProvider().use { schemaStream ->
+                val schemaJsonObject = JSONObject(
+                    IOUtils.toString(schemaStream, Charset.defaultCharset())
+                )
+
+                val settingJsonObject = schemaJsonObject
+                    .getJSONObject("properties")
+                    .getJSONObject(parentJsonObjectName)
+                    .getJSONObject("properties")
+                    .getJSONObject(key)
+
+                return if (settingJsonObject.has("enum")) {
+                    val supportedValues = settingJsonObject.getJSONArray("enum")
+
+                    for (i in 0 until supportedValues.length()) {
+                        if (supportedValues[i] == value) {
+                            return true
+                        }
+                    }
+                    false
+                } else {
+                    true
+                }
             }
         } catch (e: JsonParseException) {
             false
