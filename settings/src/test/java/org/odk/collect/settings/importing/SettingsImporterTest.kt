@@ -32,6 +32,7 @@ class SettingsImporterTest {
     private val projectsRepository = mock<ProjectsRepository> {}
     private var settingsValidator = mock<SettingsValidator> {
         on { isValid(any()) } doReturn true
+        on { isKeySupported(any(), any()) } doReturn true
         on { isValueSupported(any(), any(), any()) } doReturn true
     }
     private val projectDetailsCreator = mock<ProjectDetailsCreator> {
@@ -70,7 +71,28 @@ class SettingsImporterTest {
     }
 
     @Test
-    fun forSettingsKeysNotInJSON_savesDefaults() {
+    fun `unsupported settings should be ignored`() {
+        whenever(settingsValidator.isKeySupported(AppConfigurationKeys.GENERAL, "key3")).thenReturn(false)
+        whenever(settingsValidator.isKeySupported(AppConfigurationKeys.ADMIN, "key3")).thenReturn(false)
+
+        val json = emptySettingsObject()
+            .put(
+                AppConfigurationKeys.GENERAL,
+                JSONObject().put("key3", "foo")
+            )
+            .put(
+                AppConfigurationKeys.ADMIN,
+                JSONObject().put("key3", 5)
+            )
+
+        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
+
+        assertThat(generalSettings.contains("key3"), `is`(false))
+        assertThat(adminSettings.contains("key3"), `is`(false))
+    }
+
+    @Test
+    fun `for supported settings that do not exist in json save defaults`() {
         assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
         assertSettings(
             generalSettings,

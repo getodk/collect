@@ -78,6 +78,30 @@ class JsonSchemaSettingsValidatorTest {
     }
 
     @Test
+    fun `isKeySupported returns true for keys allowed by the scheme`() {
+        val validator = JsonSchemaSettingsValidator {
+            SCHEMA.byteInputStream()
+        }
+
+        assertThat(
+            validator.isKeySupported("general", "foo"),
+            equalTo(true)
+        )
+    }
+
+    @Test
+    fun `isKeySupported returns false for keys not allowed by the scheme`() {
+        val validator = JsonSchemaSettingsValidator {
+            SCHEMA.byteInputStream()
+        }
+
+        assertThat(
+            validator.isKeySupported("general", "baz"),
+            equalTo(false)
+        )
+    }
+
+    @Test
     fun `isValueSupported returns true for values allowed by the scheme`() {
         val validator = JsonSchemaSettingsValidator {
             SCHEMA.byteInputStream()
