@@ -59,9 +59,6 @@ internal class SettingsImporter(
 
         settingsMigrator.migrate(generalSettings, adminSettings)
 
-        clearUnknownKeys(generalSettings, generalDefaults)
-        clearUnknownKeys(adminSettings, adminDefaults)
-
         loadDefaults(generalSettings, generalDefaults)
         loadDefaults(adminSettings, adminDefaults)
 
@@ -88,20 +85,6 @@ internal class SettingsImporter(
             if (!preferences.contains(key)) {
                 preferences.save(key, value)
             }
-        }
-    }
-
-    private fun clearUnknownKeys(preferences: Settings, defaults: Map<String, Any>) {
-        val toRemove = ArrayList<String>()
-
-        preferences.getAll().forEach { (key, _) ->
-            if (!defaults.containsKey(key)) {
-                toRemove.add(key)
-            }
-        }
-
-        toRemove.forEach { key ->
-            preferences.remove(key)
         }
     }
 

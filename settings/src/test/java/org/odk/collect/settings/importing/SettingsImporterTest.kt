@@ -155,17 +155,6 @@ class SettingsImporterTest {
         )
     }
 
-    @Test
-    fun removesUnknownKeys() {
-        val json = emptySettingsObject()
-            .put(
-                AppConfigurationKeys.GENERAL,
-                JSONObject().put("unknown_key", "value")
-            )
-        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
-        assertThat(generalSettings.contains("unknown_key"), `is`(false))
-    }
-
     @Test // Migrations might add/rename/move keys
     fun migratesPreferences_beforeLoadingDefaults() {
         val migrator =
