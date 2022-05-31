@@ -74,9 +74,11 @@ internal class SettingsImporter(
         val childJsonObject = mainJsonObject.getJSONObject(childJsonObjectName)
 
         childJsonObject.keys().forEach {
-            val value = childJsonObject[it]
-            if (settingsValidator.isValueSupported(childJsonObjectName, it, value)) {
-                preferences.save(it, value)
+            if (settingsValidator.isKeySupported(childJsonObjectName, it)) {
+                val value = childJsonObject[it]
+                if (settingsValidator.isValueSupported(childJsonObjectName, it, value)) {
+                    preferences.save(it, value)
+                }
             }
         }
     }
@@ -134,6 +136,8 @@ internal class SettingsImporter(
 
 internal interface SettingsValidator {
     fun isValid(json: String): Boolean
+
+    fun isKeySupported(parentJsonObjectName: String, key: String): Boolean
 
     fun isValueSupported(parentJsonObjectName: String, key: String, value: Any): Boolean
 }

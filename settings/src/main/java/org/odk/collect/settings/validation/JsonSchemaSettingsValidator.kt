@@ -27,6 +27,24 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
         }
     }
 
+    override fun isKeySupported(parentJsonObjectName: String, key: String): Boolean {
+        return try {
+            schemaProvider().use { schemaStream ->
+                val schemaJsonObject = JSONObject(
+                    IOUtils.toString(schemaStream, Charset.defaultCharset())
+                )
+
+                return schemaJsonObject
+                    .getJSONObject("properties")
+                    .getJSONObject(parentJsonObjectName)
+                    .getJSONObject("properties")
+                    .has(key)
+            }
+        } catch (e: JsonParseException) {
+            false
+        }
+    }
+
     override fun isValueSupported(parentJsonObjectName: String, key: String, value: Any): Boolean {
         return try {
             schemaProvider().use { schemaStream ->
