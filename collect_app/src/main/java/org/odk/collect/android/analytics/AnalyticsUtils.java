@@ -2,11 +2,9 @@ package org.odk.collect.android.analytics;
 
 import static org.odk.collect.android.analytics.AnalyticsEvents.INVALID_FORM_HASH;
 import static org.odk.collect.android.analytics.AnalyticsEvents.SET_SERVER;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_SERVER_URL;
 
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.ByteArrayInputStream;
@@ -16,22 +14,6 @@ public final class AnalyticsUtils {
 
     private AnalyticsUtils() {
 
-    }
-
-    public static void setForm(FormController formController) {
-        Analytics.setParam("form", getFormHash(formController));
-    }
-
-    public static void logFormEvent(String event) {
-        Analytics.log(event, "form");
-    }
-
-    public static void logFormEvent(String event, String formId, String formTitle) {
-        Analytics.log(event, "form", getFormHash(formId, formTitle));
-    }
-
-    public static void logServerEvent(String event, Settings generalSettings) {
-        Analytics.log(event, "server", getServerHash(generalSettings));
     }
 
     public static void logServerConfiguration(Analytics analytics, String url) {
@@ -67,10 +49,6 @@ public final class AnalyticsUtils {
         return host;
     }
 
-    public static String getFormHash(String formId, String formTitle) {
-        return Md5.getMd5Hash(new ByteArrayInputStream((formTitle + " " + formId).getBytes()));
-    }
-
     public static String getFormHash(FormController formController) {
         if (formController != null) {
             String formID = formController.getFormDef().getMainInstance().getRoot().getAttributeValue("", "id");
@@ -80,8 +58,7 @@ public final class AnalyticsUtils {
         }
     }
 
-    private static String getServerHash(Settings generalSettings) {
-        String currentServerUrl = generalSettings.getString(KEY_SERVER_URL);
-        return Md5.getMd5Hash(new ByteArrayInputStream(currentServerUrl.getBytes()));
+    private static String getFormHash(String formId, String formTitle) {
+        return Md5.getMd5Hash(new ByteArrayInputStream((formTitle + " " + formId).getBytes()));
     }
 }

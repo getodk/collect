@@ -32,9 +32,9 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstancesRepository;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -47,7 +47,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.settings.SettingsProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,9 +74,6 @@ public class InstanceProvider extends ContentProvider {
     @Inject
     ProjectsRepository projectsRepository;
 
-    @Inject
-    SettingsProvider settingsProvider;
-
     @Override
     public boolean onCreate() {
         return true;
@@ -92,7 +88,7 @@ public class InstanceProvider extends ContentProvider {
 
         // We only want to log external calls to the content provider
         if (uri.getQueryParameter(CursorLoaderFactory.INTERNAL_QUERY_PARAM) == null) {
-            logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_QUERY);
+            logServerEvent(AnalyticsEvents.INSTANCE_PROVIDER_QUERY);
         }
 
         Cursor c;
@@ -138,7 +134,7 @@ public class InstanceProvider extends ContentProvider {
         DaggerUtils.getComponent(getContext()).inject(this);
 
         String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_INSERT);
+        logServerEvent(AnalyticsEvents.INSTANCE_PROVIDER_INSERT);
 
         // Validate the requested uri
         if (URI_MATCHER.match(uri) != INSTANCES) {
@@ -191,7 +187,7 @@ public class InstanceProvider extends ContentProvider {
         DaggerUtils.getComponent(getContext()).inject(this);
 
         String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_DELETE);
+        logServerEvent(AnalyticsEvents.INSTANCE_PROVIDER_DELETE);
 
         int count;
 
@@ -241,7 +237,7 @@ public class InstanceProvider extends ContentProvider {
         DaggerUtils.getComponent(getContext()).inject(this);
 
         String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.INSTANCE_PROVIDER_UPDATE);
+        logServerEvent(AnalyticsEvents.INSTANCE_PROVIDER_UPDATE);
 
         InstancesRepository instancesRepository = instancesRepositoryProvider.get(projectId);
         String instancesPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId);
@@ -311,8 +307,8 @@ public class InstanceProvider extends ContentProvider {
         }
     }
 
-    private void logServerEvent(String projectId, String event) {
-        AnalyticsUtils.logServerEvent(event, settingsProvider.getUnprotectedSettings(projectId));
+    private void logServerEvent(String event) {
+        Analytics.log(event);
     }
 
     static {

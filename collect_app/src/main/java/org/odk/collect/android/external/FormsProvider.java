@@ -44,8 +44,8 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
 import org.odk.collect.android.formmanagement.FormDeleter;
@@ -59,7 +59,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.projects.ProjectsRepository;
-import org.odk.collect.settings.SettingsProvider;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -92,9 +91,6 @@ public class FormsProvider extends ContentProvider {
     @Inject
     ProjectsRepository projectsRepository;
 
-    @Inject
-    SettingsProvider settingsProvider;
-
     // Do not call it in onCreate() https://stackoverflow.com/questions/23521083/inject-database-in-a-contentprovider-with-dagger
     private void deferDaggerInit() {
         DaggerUtils.getComponent(getContext()).inject(this);
@@ -113,7 +109,7 @@ public class FormsProvider extends ContentProvider {
 
         // We only want to log external calls to the content provider
         if (uri.getQueryParameter(CursorLoaderFactory.INTERNAL_QUERY_PARAM) == null) {
-            logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_QUERY);
+            logServerEvent(AnalyticsEvents.FORMS_PROVIDER_QUERY);
         }
 
         Cursor cursor;
@@ -196,7 +192,7 @@ public class FormsProvider extends ContentProvider {
         }
 
         String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_INSERT);
+        logServerEvent(AnalyticsEvents.FORMS_PROVIDER_INSERT);
 
         String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
         String cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId);
@@ -216,7 +212,7 @@ public class FormsProvider extends ContentProvider {
         int count;
 
         String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_DELETE);
+        logServerEvent(AnalyticsEvents.FORMS_PROVIDER_DELETE);
 
         FormDeleter formDeleter = new FormDeleter(getFormsRepository(projectId), instancesRepositoryProvider.get(projectId));
 
@@ -249,7 +245,7 @@ public class FormsProvider extends ContentProvider {
         deferDaggerInit();
 
         String projectId = getProjectId(uri);
-        logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_UPDATE);
+        logServerEvent(AnalyticsEvents.FORMS_PROVIDER_UPDATE);
 
         FormsRepository formsRepository = getFormsRepository(projectId);
         String formsPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS, projectId);
@@ -314,8 +310,8 @@ public class FormsProvider extends ContentProvider {
         return ((DatabaseFormsRepository) getFormsRepository(projectId)).rawQuery(projectionMap, projection, selection, selectionArgs, sortOrder, groupBy);
     }
 
-    private void logServerEvent(String projectId, String event) {
-        AnalyticsUtils.logServerEvent(event, settingsProvider.getUnprotectedSettings(projectId));
+    private void logServerEvent(String event) {
+        Analytics.log(event);
     }
 
     static {

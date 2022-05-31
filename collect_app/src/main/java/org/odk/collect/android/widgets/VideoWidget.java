@@ -32,9 +32,9 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CaptureSelfieVideoActivity;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
@@ -232,9 +232,9 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         boolean highResolution = settingsProvider.getUnprotectedSettings().getBoolean(ProjectKeys.KEY_HIGH_RESOLUTION);
         if (highResolution) {
             i.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-            AnalyticsUtils.logFormEvent(REQUEST_HIGH_RES_VIDEO);
+            Analytics.log(REQUEST_HIGH_RES_VIDEO);
         } else {
-            AnalyticsUtils.logFormEvent(REQUEST_VIDEO_NOT_HIGH_RES);
+            Analytics.log(REQUEST_VIDEO_NOT_HIGH_RES);
         }
         try {
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());

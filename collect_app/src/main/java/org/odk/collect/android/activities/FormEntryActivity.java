@@ -520,8 +520,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     // Precondition: the instance directory must be ready so that the audit file can be created
     private void formControllerAvailable(@NonNull FormController formController) {
-        AnalyticsUtils.setForm(formController);
-
         menuDelegate.formLoaded(formController);
 
         identityPromptViewModel.formLoaded(formController);
@@ -822,7 +820,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (requestCode) {
             case RequestCodes.OSM_CAPTURE:
-                AnalyticsUtils.logFormEvent(OPEN_MAP_KIT_RESPONSE);
+                Analytics.log(OPEN_MAP_KIT_RESPONSE);
                 setWidgetData(intent.getStringExtra("OSM_FILE_NAME"));
                 break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:

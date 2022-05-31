@@ -24,9 +24,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel;
 import org.odk.collect.android.formmanagement.BlankFormsListViewModel.BlankForm;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -64,7 +64,7 @@ public class AndroidShortcutsActivity extends AppCompatActivity {
         new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.select_odk_shortcut)
                 .setItems(forms.stream().map(BlankForm::getName).toArray(String[]::new), (dialog, item) -> {
-                    AnalyticsUtils.logServerEvent(AnalyticsEvents.CREATE_SHORTCUT, settingsProvider.getUnprotectedSettings());
+                    Analytics.log(AnalyticsEvents.CREATE_SHORTCUT);
 
                     Intent intent = getShortcutIntent(forms, item);
                     setResult(RESULT_OK, intent);
