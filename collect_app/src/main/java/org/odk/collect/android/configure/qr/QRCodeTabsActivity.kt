@@ -7,7 +7,6 @@ import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
@@ -41,9 +40,6 @@ class QRCodeTabsActivity : LocalizedActivity() {
 
     @Inject
     lateinit var settingsImporter: ODKAppSettingsImporter
-
-    @Inject
-    lateinit var analytics: Analytics
 
     @Inject
     lateinit var appConfigurationGenerator: AppConfigurationGenerator
