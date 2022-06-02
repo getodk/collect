@@ -25,8 +25,9 @@ import org.hamcrest.Matcher;
 /**
  * Required for scrolling to items within a {@link NestedScrollView}.
  * Code is copied from {@link ScrollToAction} as for some reason that class is final.
+ *
+ * There is an issue tracking this at https://github.com/android/android-test/issues/1239.
  */
-
 public class NestedScrollToAction implements ViewAction {
 
     public static NestedScrollToAction nestedScrollTo() {
