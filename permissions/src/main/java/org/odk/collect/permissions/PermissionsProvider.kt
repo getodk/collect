@@ -8,9 +8,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
-import android.os.Bundle
 import android.provider.Settings
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.location.LocationManagerCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.karumi.dexter.Dexter
@@ -22,7 +20,6 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import timber.log.Timber
 
 /**
@@ -261,16 +258,22 @@ open class PermissionsProvider internal constructor(
         drawable: Int,
         action: PermissionListener
     ) {
-        action.denied()
-        val args = Bundle()
-        args.putInt(PermissionDeniedDialog.TITLE, title)
-        args.putInt(PermissionDeniedDialog.MESSAGE, message)
-        args.putInt(PermissionDeniedDialog.ICON, drawable)
-        showIfNotShowing(
-            PermissionDeniedDialog::class.java,
-            args,
-            (activity as AppCompatActivity).supportFragmentManager
-        )
+        MaterialAlertDialogBuilder(activity)
+            .setIcon(drawable)
+            .setTitle(title)
+            .setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                action.denied()
+            }
+            .setNeutralButton(R.string.open_settings) { _, _ ->
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", activity.packageName, null)
+                    activity.startActivity(this)
+                }
+            }
+            .create()
+            .show()
     }
 
     fun requestReadUriPermission(
