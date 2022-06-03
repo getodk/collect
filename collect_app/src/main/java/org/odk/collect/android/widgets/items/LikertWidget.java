@@ -31,6 +31,7 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -128,7 +129,7 @@ public class LikertWidget extends QuestionWidget {
                 optionView.addView(imgView);
             }
             TextView choice = getTextView();
-            choice.setText(getFormEntryPrompt().getSelectChoiceText(items.get(i)));
+            choice.setText(HtmlUtils.textToHtml(getFormEntryPrompt().getSelectChoiceText(items.get(i))));
 
             optionView.addView(choice);
 
