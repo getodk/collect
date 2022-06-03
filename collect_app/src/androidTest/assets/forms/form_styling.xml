@@ -20,15 +20,16 @@
                         <q4>one</q4>
                         <q5 />
                         <q6 />
+                        <q7 />
                     </selectOneQuestions>
                     <selectMultipleQuestions>
-                        <q7 />
-                        <q8>one</q8>
+                        <q8 />
                         <q9>one</q9>
-                        <q10 />
+                        <q10>one</q10>
                         <q11 />
+                        <q12 />
                     </selectMultipleQuestions>
-                    <q12>three, two, one</q12>
+                    <q13>three, two, one</q13>
                     <meta>
                         <instanceID />
                     </meta>
@@ -40,12 +41,13 @@
             <bind nodeset="/data/selectOneQuestions/q4" type="string" />
             <bind nodeset="/data/selectOneQuestions/q5" type="string" />
             <bind nodeset="/data/selectOneQuestions/q6" type="string" />
-            <bind nodeset="/data/selectMultipleQuestions/q7" type="string" />
+            <bind nodeset="/data/selectOneQuestions/q7" type="string" />
             <bind nodeset="/data/selectMultipleQuestions/q8" type="string" />
             <bind nodeset="/data/selectMultipleQuestions/q9" type="string" />
             <bind nodeset="/data/selectMultipleQuestions/q10" type="string" />
             <bind nodeset="/data/selectMultipleQuestions/q11" type="string" />
-            <bind nodeset="/data/q12" type="odk:rank" />
+            <bind nodeset="/data/selectMultipleQuestions/q12" type="string" />
+            <bind nodeset="/data/q13" type="odk:rank" />
             <bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string" />
         </model>
     </h:head>
@@ -131,10 +133,25 @@
                     <value>three</value>
                 </item>
             </select1>
+            <select1 appearance="likert" ref="/data/selectOneQuestions/q7">
+                <label>Select one likert widget</label>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
+                    <value>one</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Two&lt;/span&gt;</label>
+                    <value>two</value>
+                </item>
+                <item>
+                    <label>&lt;span style="color:blue"&gt;Three&lt;/span&gt;</label>
+                    <value>three</value>
+                </item>
+            </select1>
         </group>
         <group ref="/data/selectMultipleQuestions">
             <label>&lt;span style="color:blue"&gt;selectMultipleQuestions&lt;/span&gt;</label>
-            <select ref="/data/selectMultipleQuestions/q7">
+            <select ref="/data/selectMultipleQuestions/q8">
                 <label>Select multiple widget</label>
                 <item>
                     <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
@@ -149,7 +166,7 @@
                     <value>three</value>
                 </item>
             </select>
-            <select appearance="minimal" ref="/data/selectMultipleQuestions/q8">
+            <select appearance="minimal" ref="/data/selectMultipleQuestions/q9">
                 <label>Select multiple minimal widget</label>
                 <item>
                     <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
@@ -164,7 +181,7 @@
                     <value>three</value>
                 </item>
             </select>
-            <select appearance="Image-map" ref="/data/selectMultipleQuestions/q9">
+            <select appearance="Image-map" ref="/data/selectMultipleQuestions/q10">
                 <label>Select multiple image-map widget</label>
                 <item>
                     <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
@@ -179,7 +196,7 @@
                     <value>three</value>
                 </item>
             </select>
-            <select appearance="label" ref="/data/selectMultipleQuestions/q10">
+            <select appearance="label" ref="/data/selectMultipleQuestions/q11">
                 <label>Select multiple label widget</label>
                 <item>
                     <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
@@ -194,7 +211,7 @@
                     <value>three</value>
                 </item>
             </select>
-            <select appearance="list" ref="/data/selectMultipleQuestions/q11">
+            <select appearance="list" ref="/data/selectMultipleQuestions/q12">
                 <label>Select multiple list widget</label>
                 <item>
                     <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>
@@ -210,7 +227,7 @@
                 </item>
             </select>
         </group>
-        <odk:rank ref="/data/q12">
+        <odk:rank ref="/data/q13">
             <label>Rank widget</label>
             <item>
                 <label>&lt;span style="color:blue"&gt;One&lt;/span&gt;</label>

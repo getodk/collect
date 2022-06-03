@@ -118,6 +118,17 @@ class FormStylingTest {
     }
 
     @Test
+    fun selectOneLikertWidgetTest() {
+        rule.startAtMainMenu()
+            .copyForm(FORM_FILE_NAME)
+            .startBlankForm(FORM_NAME)
+            .clickGoToArrow()
+            .clickOnGroup("selectOneQuestions")
+            .clickOnQuestion("Select one likert widget")
+            .assertText("One", "Two", "Three")
+    }
+
+    @Test
     fun selectMultipleWidgetTest() {
         rule.startAtMainMenu()
             .copyForm(FORM_FILE_NAME)
