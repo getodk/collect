@@ -17,6 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidshared.ColorPickerDialog
+import org.odk.collect.androidshared.R
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.testshared.RobolectricHelpers
 
@@ -29,7 +30,8 @@ class ColorPickerDialogTest {
     }
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
@@ -141,13 +143,14 @@ class ColorPickerDialogTest {
     }
 
     private fun launchFragment(): FragmentScenario<ColorPickerDialog> {
-        return launcherRule.launchDialogFragment(ColorPickerDialog::class.java, args)
+        return launcherRule.launch(ColorPickerDialog::class.java, args)
     }
 
     private fun assertCurrentColor(fragment: ColorPickerDialog, color: String) {
         assertThat(fragment.binding.hexColor.text.toString(), equalToIgnoringCase(color))
 
-        val currentColor = (fragment.binding.currentColor.background as GradientDrawable).color!!.defaultColor
+        val currentColor =
+            (fragment.binding.currentColor.background as GradientDrawable).color!!.defaultColor
 
         assertThat(currentColor, `is`(Color.parseColor("#$color")))
     }

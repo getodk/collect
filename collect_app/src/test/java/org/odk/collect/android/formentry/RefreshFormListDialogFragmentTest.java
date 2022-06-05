@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 import org.odk.collect.testshared.RobolectricHelpers;
 
@@ -21,11 +22,13 @@ import org.odk.collect.testshared.RobolectricHelpers;
 public class RefreshFormListDialogFragmentTest {
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
+            R.style.Theme_MaterialComponents
+    );
 
     @Test
     public void dialogIsNotCancellable() {
-        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(RefreshFormListDialogFragment.class);
+        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = launcherRule.launch(RefreshFormListDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             assertThat(fragment.isCancelable(), equalTo(false));
         });
@@ -33,7 +36,7 @@ public class RefreshFormListDialogFragmentTest {
 
     @Test
     public void clickingCancel_calls_onCancelFormLoading() {
-        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(RefreshFormListDialogFragment.class);
+        FragmentScenario<RefreshFormListDialogFragment> fragmentScenario = launcherRule.launch(RefreshFormListDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             fragment.listener = mock(RefreshFormListDialogFragment.RefreshFormListDialogFragmentListener.class);
 

@@ -42,7 +42,9 @@ public class QuitFormDialogFragmentTest {
     private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
+            R.style.Theme_MaterialComponents
+    );
 
     @Before
     public void setup() {
@@ -63,7 +65,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void shouldShowCorrectButtons() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launch(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) ShadowDialog.getLatestDialog();
             assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).getVisibility(), equalTo(GONE));
@@ -74,7 +76,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void shouldShowCorrectTitle_whenNoFormIsLoaded() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launch(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
             TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
@@ -86,7 +88,7 @@ public class QuitFormDialogFragmentTest {
     public void shouldShowCorrectTitle_whenFormIsLoaded() {
         when(formSaveViewModel.getFormName()).thenReturn("blah");
 
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launch(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
             TextView dialogTitle = dialog.findViewById(R.id.alertTitle);
@@ -96,7 +98,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void dialogIsCancellable() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launch(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             assertThat(fragment.isCancelable(), equalTo(true));
         });
@@ -104,7 +106,7 @@ public class QuitFormDialogFragmentTest {
 
     @Test
     public void clickingCancel_shouldDismissTheDialog() {
-        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(QuitFormDialogFragment.class);
+        FragmentScenario<QuitFormDialogFragment> fragmentScenario = launcherRule.launch(QuitFormDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             AlertDialog dialog = (AlertDialog) fragment.getDialog();
             assertTrue(dialog.isShowing());

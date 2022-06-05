@@ -46,7 +46,8 @@ class GeoPointDialogFragmentTest {
     }
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {
@@ -63,7 +64,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `disables save until location is available`() {
-        launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launcherRule.launch(GeoPointDialogFragment::class.java)
         onViewInDialog(withText(R.string.save)).check(matches(not(isEnabled())))
 
         currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
@@ -73,7 +74,7 @@ class GeoPointDialogFragmentTest {
     @Test
     fun `shows accuracy threshold`() {
         whenever(viewModel.accuracyThreshold).thenReturn(5.0f)
-        launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launcherRule.launch(GeoPointDialogFragment::class.java)
 
         onViewInDialog(
             withText(
@@ -89,7 +90,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates current accuracy`() {
-        val scenario = launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        val scenario = launcherRule.launch(GeoPointDialogFragment::class.java)
 
         currentAccuracyLiveData.value = GeoPointAccuracy.Improving(50.2f)
         scenario.onFragment {
@@ -105,7 +106,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates time elapsed`() {
-        launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launcherRule.launch(GeoPointDialogFragment::class.java)
 
         timeElapsedLiveData.value = 0
         onViewInDialog(
@@ -134,7 +135,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `shows and updates satellites`() {
-        launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launcherRule.launch(GeoPointDialogFragment::class.java)
 
         onViewInDialog(withText(application.getLocalizedString(R.string.satellites, 0)))
             .perform(nestedScrollTo())
@@ -149,7 +150,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `clicking cancel calls listener`() {
-        val scenario = launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        val scenario = launcherRule.launch(GeoPointDialogFragment::class.java)
 
         val listener = mock<GeoPointDialogFragment.Listener>()
         scenario.onFragment {
@@ -162,7 +163,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `pressing back calls listener`() {
-        val scenario = launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        val scenario = launcherRule.launch(GeoPointDialogFragment::class.java)
 
         val listener = mock<GeoPointDialogFragment.Listener>()
         scenario.onFragment {
@@ -175,7 +176,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `clicking save calls forceLocation() on view model`() {
-        launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java)
+        launcherRule.launch(GeoPointDialogFragment::class.java)
         currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
 
         onViewInDialog(withText(R.string.save)).perform(click())
@@ -184,7 +185,7 @@ class GeoPointDialogFragmentTest {
 
     @Test
     fun `dialog is not cancellable`() {
-        launcherRule.launchDialogFragment(GeoPointDialogFragment::class.java).onFragment {
+        launcherRule.launch(GeoPointDialogFragment::class.java).onFragment {
             assertThat(it.isCancelable, equalTo(false))
         }
     }

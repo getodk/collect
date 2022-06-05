@@ -32,7 +32,9 @@ public class AudioRecordingFormErrorDialogFragmentTest {
     private StubAudioRecorder audioRecorder;
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
+            R.style.Theme_MaterialComponents
+    );
 
     @Before
     public void setup() throws Exception {
@@ -49,7 +51,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
 
     @Test
     public void clickingOK_dismissesDialog() {
-        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
+        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = launcherRule.launch(AudioRecordingErrorDialogFragment.class);
         scenario.onFragment(f -> {
             AlertDialog dialog = (AlertDialog) f.getDialog();
 
@@ -64,7 +66,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
 
     @Test
     public void onDismiss_consumesConsumable() {
-        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = launcherRule.launchDialogFragment(AudioRecordingErrorDialogFragment.class);
+        FragmentScenario<AudioRecordingErrorDialogFragment> scenario = launcherRule.launch(AudioRecordingErrorDialogFragment.class);
         scenario.onFragment(DialogFragment::dismiss);
         assertThat(audioRecorder.failedToStart().getValue().isConsumed(), is(true));
     }

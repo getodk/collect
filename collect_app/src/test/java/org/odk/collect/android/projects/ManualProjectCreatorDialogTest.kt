@@ -42,11 +42,12 @@ import org.robolectric.shadows.ShadowToast
 class ManualProjectCreatorDialogTest {
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Test
     fun `Password should be protected`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("123456789"))
             onViewInDialog(withHint(R.string.server_url)).check(matches(not(isPasswordHidden())))
@@ -61,7 +62,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onViewInDialog(withText(R.string.cancel)).perform(click())
@@ -71,7 +72,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -81,7 +82,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `The 'Add' button should be disabled when url is blank`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
 
@@ -96,7 +97,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `When URL has no protocol, a toast is displayed`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("demo.getodk.org"))
             onViewInDialog(withText(R.string.add)).perform(click())
@@ -132,7 +133,7 @@ class ManualProjectCreatorDialogTest {
             }
         })
 
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
             onViewInDialog(withHint(R.string.username)).perform(replaceText("adam"))
@@ -145,7 +146,7 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `Server project creation goes to main menu`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
 
@@ -164,7 +165,7 @@ class ManualProjectCreatorDialogTest {
             }
         })
 
-        launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        launcherRule.launch(ManualProjectCreatorDialog::class.java)
         onViewInDialog(withText(R.string.gdrive_configure)).perform(scrollTo(), click())
         val context = ApplicationProvider.getApplicationContext<Context>()
         assertThat(ShadowToast.getTextOfLatestToast(), `is`(context.getString(R.string.activity_not_found, context.getString(R.string.choose_account))))

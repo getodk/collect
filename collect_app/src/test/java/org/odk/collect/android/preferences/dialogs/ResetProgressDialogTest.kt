@@ -18,11 +18,12 @@ class ResetProgressDialogTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Test
     fun `The dialog should not be dismissed after clicking out of its area or on device back button`() {
-        val scenario = launcherRule.launchDialogFragment(ResetProgressDialog::class.java)
+        val scenario = launcherRule.launch(ResetProgressDialog::class.java)
         scenario.onFragment {
             assertThat(it.isCancelable, `is`(false))
         }
@@ -30,7 +31,7 @@ class ResetProgressDialogTest {
 
     @Test
     fun `The dialog should display proper content`() {
-        val scenario = launcherRule.launchDialogFragment(ResetProgressDialog::class.java)
+        val scenario = launcherRule.launch(ResetProgressDialog::class.java)
         scenario.onFragment {
             // Title
             assertThat(it.title, `is`(context.getLocalizedString(R.string.please_wait)))

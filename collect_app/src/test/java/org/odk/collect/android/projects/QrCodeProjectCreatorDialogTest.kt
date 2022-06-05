@@ -46,7 +46,8 @@ class QrCodeProjectCreatorDialogTest {
     private val permissionsProvider = FakePermissionsProvider()
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {
@@ -66,7 +67,7 @@ class QrCodeProjectCreatorDialogTest {
     @Test
     fun `If camera permission is not granted the dialog should not be dismissed`() {
         permissionsProvider.setPermissionGranted(false)
-        val scenario = launcherRule.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
         }
@@ -74,7 +75,7 @@ class QrCodeProjectCreatorDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        val scenario = launcherRule.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onViewInDialog(withText(R.string.cancel)).perform(click())
@@ -84,7 +85,7 @@ class QrCodeProjectCreatorDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = launcherRule.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -94,7 +95,7 @@ class QrCodeProjectCreatorDialogTest {
 
     @Test
     fun `The ManualProjectCreatorDialog should be displayed after switching to the manual mode`() {
-        val scenario = launcherRule.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             onViewInDialog(withText(R.string.configure_manually)).perform(scrollTo(), click())
             assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name), `is`(notNullValue()))
@@ -126,7 +127,7 @@ class QrCodeProjectCreatorDialogTest {
         })
 
         Intents.init()
-        val scenario = launcherRule.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
 
         scenario.onFragment {
             Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
@@ -158,7 +159,7 @@ class QrCodeProjectCreatorDialogTest {
             }
         })
 
-        launcherRule.launchDialogFragment(QrCodeProjectCreatorDialog::class.java)
+        launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         assertThat(ShadowToast.getTextOfLatestToast(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.invalid_qrcode)))
         verifyNoInteractions(projectCreator)
     }

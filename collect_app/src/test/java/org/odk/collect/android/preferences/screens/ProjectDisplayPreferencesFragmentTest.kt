@@ -32,7 +32,8 @@ class ProjectDisplayPreferencesFragmentTest {
     lateinit var projectsRepository: ProjectsRepository
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {
@@ -55,7 +56,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should be visible`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.isVisible,
@@ -66,7 +67,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should have proper title`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.title,
@@ -81,7 +82,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Name preference should have proper summary`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.summary,
@@ -92,7 +93,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should be visible`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.isVisible,
@@ -103,7 +104,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should have proper title`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.title,
@@ -119,7 +120,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Icon preference should have proper summary`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_ICON_KEY)!!.summary,
@@ -130,7 +131,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should be visible`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.isVisible,
@@ -141,7 +142,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should have proper title`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.title,
@@ -156,7 +157,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Test
     fun `Project Color preference should have proper summary`() {
-        val scenario = launcherRule.launchDialogFragment(ProjectDisplayPreferencesFragment::class.java)
+        val scenario = launcherRule.launch(ProjectDisplayPreferencesFragment::class.java)
         scenario.onFragment {
             assertThat(
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.summary.toString(),
