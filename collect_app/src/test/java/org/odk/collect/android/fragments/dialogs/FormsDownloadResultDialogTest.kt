@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,7 +22,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
-import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.testshared.RobolectricHelpers
 import org.robolectric.Shadows
@@ -131,7 +132,8 @@ class FormsDownloadResultDialogTest {
         )
 
         launcherRule.launch(FormsDownloadResultDialog::class.java, args)
-        onViewInDialog(withText(R.string.all_downloads_succeeded)).check(matches(isDisplayed()))
+        onView(withText(R.string.all_downloads_succeeded)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
     }
 
     @Test
@@ -161,12 +163,12 @@ class FormsDownloadResultDialogTest {
         )
 
         launcherRule.launch(FormsDownloadResultDialog::class.java, args)
-        onViewInDialog(
+        onView(
             withText(
                 ApplicationProvider.getApplicationContext<Collect>()
                     .getString(R.string.some_downloads_failed, "1", "1")
             )
-        ).check(matches(isDisplayed()))
+        ).inRoot(isDialog()).check(matches(isDisplayed()))
     }
 
     @Test

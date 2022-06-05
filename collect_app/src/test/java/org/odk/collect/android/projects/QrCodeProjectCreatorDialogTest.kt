@@ -9,6 +9,7 @@ import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -31,7 +32,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
 import org.odk.collect.android.views.BarcodeViewDecoder
-import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
@@ -78,7 +78,7 @@ class QrCodeProjectCreatorDialogTest {
         val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onViewInDialog(withText(R.string.cancel)).perform(click())
+            onView(withText(R.string.cancel)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(false))
         }
     }
@@ -97,7 +97,8 @@ class QrCodeProjectCreatorDialogTest {
     fun `The ManualProjectCreatorDialog should be displayed after switching to the manual mode`() {
         val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onViewInDialog(withText(R.string.configure_manually)).perform(scrollTo(), click())
+            onView(withText(R.string.configure_manually)).inRoot(isDialog())
+                .perform(scrollTo(), click())
             assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name), `is`(notNullValue()))
         }
     }
