@@ -45,6 +45,7 @@ public class ManageForm {
 	     public String formPath = null;
 	     public String submissionUri = null;
 	     public String formMediaPath = null;
+	     public String version = null;
 	     public boolean exists = false;
 	}
 	
@@ -54,16 +55,26 @@ public class ManageForm {
    	 	Cursor c = null;
         
 		try {
-        	
-        	String selectionClause = FormsColumns.JR_FORM_ID + "=? AND "
-					+ FormsColumns.JR_VERSION + "=? AND "
-                    + FormsColumns.SOURCE + "=?";
-        	
-        	String [] selectionArgs = new String[] { formId, formVersionString, source };
-        	//String [] selectionArgs = new String [1];
-        	//selectionArgs[0] = formId;
+
+			/*
+			 * If the version is not set then get any version
+			 */
+			String selectionClause = null;
+			String [] selectionArgs = null;
+			if(formVersionString != null) {
+				selectionClause = FormsColumns.JR_FORM_ID + "=? AND "
+						+ FormsColumns.JR_VERSION + "=? AND "
+						+ FormsColumns.SOURCE + "=?";
+				selectionArgs = new String[] { formId, formVersionString, source };
+			} else {
+				selectionClause = FormsColumns.JR_FORM_ID + "=? AND "
+						+ FormsColumns.SOURCE + "=?";
+				selectionArgs = new String[] { formId, source };
+			}
+
         	String [] proj = {FormsColumns._ID, FormsColumns.DISPLAY_NAME, FormsColumns.JR_FORM_ID,
-        			FormsColumns.SUBMISSION_URI,FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_MEDIA_PATH};
+        			FormsColumns.SUBMISSION_URI,FormsColumns.FORM_FILE_PATH, FormsColumns.FORM_MEDIA_PATH,
+					FormsColumns.JR_VERSION};
         	
         	final ContentResolver resolver = Collect.getInstance().getContentResolver();
         	c = resolver.query(FormsColumns.CONTENT_URI, proj, selectionClause, selectionArgs, null);
@@ -77,13 +88,14 @@ public class ManageForm {
 	             fd.submissionUri = c.getString(c.getColumnIndex(FormsColumns.SUBMISSION_URI));
 	             fd.formPath = c.getString(c.getColumnIndex(FormsColumns.FORM_FILE_PATH));
                  fd.formMediaPath = getAbsoluteFilePath(new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS), c.getString(c.getColumnIndex(FormsColumns.FORM_MEDIA_PATH)));
+                 fd.version = c.getString(c.getColumnIndex(FormsColumns.JR_VERSION));
 	             fd.exists = true;
              
         	} else {
         		fd.exists = false;
         	}
 		 } catch (Throwable e) {
-       		 Timber.e("ManageForm: " + e.getMessage());
+       		 Timber.e("ManageForm: %s", e.getMessage());
     	 } finally {
 		    if(c != null) {
                 c.close();
@@ -126,7 +138,7 @@ public class ManageForm {
                 fd.exists = false;
             }
         } catch (Throwable e) {
-            Timber.e("ManageForm: " + e.getMessage());
+            Timber.e("ManageForm: %s", e.getMessage());
         }
         c.close();
 
@@ -149,7 +161,7 @@ public class ManageForm {
 
 
         } catch (Throwable e) {
-            Timber.e("ManageForm: " + e.getMessage());
+            Timber.e("ManageForm: %s", e.getMessage());
         }
 
     }
@@ -201,7 +213,7 @@ public class ManageForm {
              
         	} 
 		 } catch (Exception e) {
-       		 Timber.e("isIncompleteInstance Error: " + e.getMessage());
+       		 Timber.e("isIncompleteInstance Error: %s", e.getMessage());
     	 }
 		c.close();
 		
@@ -267,7 +279,7 @@ public class ManageForm {
              
         	} 
 		 } catch (Throwable e) {
-       		 Timber.e("ManageForm Error: " + e.getMessage());
+       		 Timber.e("ManageForm Error: %s", e.getMessage());
     	 }
 		c.close();
          
@@ -290,11 +302,8 @@ public class ManageForm {
         String initialDataURL = ta.task.initial_data;
 
         String instancePath = null;
-        String formVersionString = String.valueOf(formVersion);	
-        
         ManageFormResponse mfResponse = new ManageFormResponse();
-        
-    	ManageFormDetails fd = getFormDetails(ta.task.form_id, formVersionString, source);    // Get the form details
+    	ManageFormDetails fd = getFormDetails(ta.task.form_id, null, source);    // Get the form details
 		
     	if(fd.exists) {
          
@@ -321,7 +330,7 @@ public class ManageForm {
 			    
 	         // Write the new instance entry into the instance content provider
 	         try {
-	        	 mfResponse.mUri = writeInstanceDatabase(ta.task.form_id, formVersionString, fd.formName, fd.submissionUri,
+	        	 mfResponse.mUri = writeInstanceDatabase(ta.task.form_id, fd.version, fd.formName, fd.submissionUri,
                          instancePath, ta, fd.formPath);
 	         } catch (Throwable e) {
 	        	 e.printStackTrace();
