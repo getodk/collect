@@ -2,7 +2,6 @@ package org.odk.collect.settings.importing
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
-import org.hamcrest.Matchers.containsInAnyOrder
 import org.json.JSONObject
 import org.junit.Before
 import org.junit.Test
@@ -10,6 +9,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -28,6 +28,7 @@ class SettingsImporterTest {
     private val generalSettings = settingsProvider.getUnprotectedSettings(currentProject.uuid)
     private val adminSettings = settingsProvider.getProtectedSettings(currentProject.uuid)
 
+    private val settingsChangeHandler = mock<SettingsChangeHandler>()
     private val projectsRepository = mock<ProjectsRepository> {}
     private var settingsValidator = mock<SettingsValidator> {
         on { isValid(any()) } doReturn true
@@ -55,7 +56,7 @@ class SettingsImporterTest {
             settingsValidator,
             generalDefaults,
             adminDefaults,
-            { _: String?, _: Any?, _: String? -> },
+            settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator
         )
@@ -129,7 +130,7 @@ class SettingsImporterTest {
             settingsValidator,
             generalDefaults,
             adminDefaults,
-            { _: String?, _: Any?, _: String? -> },
+            settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator
         )
@@ -155,7 +156,7 @@ class SettingsImporterTest {
             settingsValidator,
             generalDefaults,
             adminDefaults,
-            { _: String?, _: Any?, _: String? -> },
+            settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator
         )
@@ -163,27 +164,20 @@ class SettingsImporterTest {
     }
 
     @Test
-    fun afterSettingsImportedAndMigrated_runsSettingsChangeHandlerForEveryKey() {
-        val handler = RecordingSettingsChangeHandler()
+    fun afterSettingsImportedAndMigrated_runsSettingsChangeHandler() {
         importer = SettingsImporter(
             settingsProvider,
             { _: Settings?, _: Settings? -> },
             settingsValidator,
             generalDefaults,
             adminDefaults,
-            handler,
+            settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator
         )
         assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
-        assertThat<List<Pair<String, Any?>>>(
-            handler.changes,
-            containsInAnyOrder(
-                Pair("key1", "default"),
-                Pair("key2", true),
-                Pair("key1", 5)
-            )
-        )
+        verify(settingsChangeHandler).onSettingsChanged("1")
+        verifyNoMoreInteractions(settingsChangeHandler)
     }
 
     @Test
@@ -272,13 +266,5 @@ class SettingsImporterTest {
         return JSONObject()
             .put(AppConfigurationKeys.GENERAL, JSONObject())
             .put(AppConfigurationKeys.ADMIN, JSONObject())
-    }
-
-    private class RecordingSettingsChangeHandler :
-        SettingsChangeHandler {
-        var changes: MutableList<Pair<String, Any?>> = ArrayList()
-        override fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String) {
-            changes.add(Pair(changedKey, newValue))
-        }
     }
 }

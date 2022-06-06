@@ -17,8 +17,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.formstest.FormUtils.createXFormBody;
 
 public abstract class FormsRepositoryTest {
 
@@ -45,11 +48,11 @@ public abstract class FormsRepositoryTest {
         when(mockClock.get()).thenReturn(2L, 3L, 1L);
 
         FormsRepository formsRepository = buildSubject(mockClock);
-        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath(), createXFormBody("1", "1", "Form1"))
                 .build());
-        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath(), createXFormBody("1", "1", "Form2"))
                 .build());
-        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("1", "1", getFormFilesPath(), createXFormBody("1", "1", "Form3"))
                 .build());
 
         Form form = formsRepository.getLatestByFormIdAndVersion("1", "1");
@@ -60,13 +63,13 @@ public abstract class FormsRepositoryTest {
     @Test
     public void getAllByFormIdAndVersion_whenFormHasNullVersion_returnsAllMatchingForms() {
         FormsRepository formsRepository = buildSubject();
-        formsRepository.save(FormUtils.buildForm("1", null, getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("1", null, getFormFilesPath(), createXFormBody("1", null, "Form1"))
                 .build());
 
-        formsRepository.save(FormUtils.buildForm("1", null, getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("1", null, getFormFilesPath(), createXFormBody("1", null, "Form2"))
                 .build());
 
-        formsRepository.save(FormUtils.buildForm("1", "7", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("1", "7", getFormFilesPath(), createXFormBody("1", "7", "Form3"))
                 .build());
 
         List<Form> forms = formsRepository.getAllByFormIdAndVersion("1", null);
@@ -96,20 +99,20 @@ public abstract class FormsRepositoryTest {
     @Test
     public void getAllNotDeletedByFormIdAndVersion_onlyReturnsNotDeletedFormsThatMatchVersion() {
         FormsRepository formsRepository = buildSubject();
-        formsRepository.save(FormUtils.buildForm("id", "1", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("id", "1", getFormFilesPath(), createXFormBody("id", "1", "Form1"))
                 .deleted(true)
                 .build()
         );
-        formsRepository.save(FormUtils.buildForm("id", "1", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("id", "1", getFormFilesPath(), createXFormBody("id", "1", "Form2"))
                 .deleted(false)
                 .build()
         );
 
-        formsRepository.save(FormUtils.buildForm("id", "2", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("id", "2", getFormFilesPath(), createXFormBody("id", "2", "Form3"))
                 .deleted(true)
                 .build()
         );
-        formsRepository.save(FormUtils.buildForm("id", "2", getFormFilesPath())
+        formsRepository.save(FormUtils.buildForm("id", "2", getFormFilesPath(), createXFormBody("id", "2", "Form4"))
                 .deleted(false)
                 .build()
         );
@@ -138,6 +141,20 @@ public abstract class FormsRepositoryTest {
 
         formsRepository.restore(1L);
         assertThat(formsRepository.get(1L).isDeleted(), is(false));
+    }
+
+    @Test
+    public void save_multipleFormsWithTheSameHashIgnoresDuplicatesAndReturnsTheExistingForm() {
+        FormsRepository formsRepository = buildSubject();
+        Form form = FormUtils.buildForm("id", "version", getFormFilesPath()).build();
+
+        Form form1 = formsRepository.save(form);
+        Form form2 = formsRepository.save(form);
+
+        assertThat(formsRepository.getAll().size(), is(1));
+        assertNotNull(form1);
+        assertNotNull(form2);
+        assertEquals(form1, form2);
     }
 
     @Test
@@ -276,15 +293,12 @@ public abstract class FormsRepositoryTest {
     @Test
     public void deleteByMd5Hash_deletesFormsWithMatchingHash() {
         FormsRepository formsRepository = buildSubject();
-        formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
-        formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath()).build());
-        formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath()).build());
+        formsRepository.save(FormUtils.buildForm("id1", "version", getFormFilesPath(), createXFormBody("id1", "version", "Form1")).build());
+        formsRepository.save(FormUtils.buildForm("id2", "version", getFormFilesPath(), createXFormBody("id2", "version", "Form2")).build());
 
         List<Form> id1Forms = formsRepository.getAllByFormIdAndVersion("id1", "version");
-        assertThat(id1Forms.size(), is(2));
-        assertThat(id1Forms.get(0).getMD5Hash(), is(id1Forms.get(1).getMD5Hash()));
-
         formsRepository.deleteByMd5Hash(id1Forms.get(0).getMD5Hash());
+
         assertThat(formsRepository.getAll().size(), is(1));
         assertThat(formsRepository.getAll().get(0).getFormId(), is("id2"));
     }

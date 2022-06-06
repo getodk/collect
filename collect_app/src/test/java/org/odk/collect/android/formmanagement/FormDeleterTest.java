@@ -14,7 +14,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.formstest.InstanceUtils.buildInstance;
 
-
 public class FormDeleterTest {
 
     private final InMemFormsRepository formsRepository = new InMemFormsRepository();
@@ -110,7 +109,7 @@ public class FormDeleterTest {
         Form formToDelete = formsRepository.save(new Form.Builder()
                 .formId("id")
                 .version("version")
-                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
+                .formFilePath(FormUtils.createXFormFile("id", "version", "Form1").getAbsolutePath())
                 .build());
 
         instancesRepository.save(new Instance.Builder()
@@ -121,7 +120,7 @@ public class FormDeleterTest {
         formsRepository.save(new Form.Builder()
                 .formId("id")
                 .version("version")
-                .formFilePath(FormUtils.createXFormFile("id", "version").getAbsolutePath())
+                .formFilePath(FormUtils.createXFormFile("id", "version", "Form2").getAbsolutePath())
                 .build());
 
         formDeleter.delete(formToDelete.getDbId());
