@@ -149,6 +149,9 @@ public class DatabaseFormsRepository implements FormsRepository {
             values.put(DATE, clock.get());
 
             Long idFromUri = insertForm(values);
+            if (idFromUri == -1) {
+                return getOneByMd5Hash(md5Hash);
+            }
             return get(idFromUri);
         } else {
             updateForm(form.getDbId(), values);

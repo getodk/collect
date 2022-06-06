@@ -122,6 +122,11 @@ public class InMemFormsRepository implements FormsRepository {
                 hash = form.getMD5Hash();
             }
 
+            Form existingFormWithSameHash = forms.stream().filter(f -> f.getMD5Hash().equals(hash)).findFirst().orElse(null);
+            if (existingFormWithSameHash != null) {
+                return existingFormWithSameHash;
+            }
+
             if (form.getJrCacheFilePath() == null) {
                 builder.jrCacheFilePath(TempFiles.getPathInTempDir(hash, ".formdef"));
             }
