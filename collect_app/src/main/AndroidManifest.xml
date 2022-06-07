@@ -43,6 +43,13 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
+    <!--
+        Since we use Scoped Storage, we should not need this permission. However, we discovered that
+        this might be required in some rare cases, probably due to bugs in Android OS.
+        See: https://github.com/getodk/collect/issues/5145
+     -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <!-- Removed in API 23 -->
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
