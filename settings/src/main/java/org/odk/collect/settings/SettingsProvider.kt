@@ -14,5 +14,5 @@ interface SettingsProvider {
 
     fun getProtectedSettings(): Settings = getProtectedSettings(null)
 
-    fun clearAll()
+    fun clearAll(projectIds: List<String>)
 }

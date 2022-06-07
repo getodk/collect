@@ -32,8 +32,13 @@ class SharedPreferencesSettingsProvider(private val context: Context) : Settings
         }
     }
 
-    override fun clearAll() {
-        settings.values.forEach { it.clear() }
+    override fun clearAll(projectIds: List<String>) {
+        projectIds.forEach {
+            getUnprotectedSettings(it).clear()
+            getProtectedSettings(it).clear()
+        }
+
+        getMetaSettings().clear()
         settings.clear()
     }
 
