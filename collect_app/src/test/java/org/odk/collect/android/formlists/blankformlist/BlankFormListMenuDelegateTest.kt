@@ -195,6 +195,11 @@ class BlankFormListMenuDelegateTest {
         assertThat(menu.findItem(R.id.menu_refresh).isVisible, `is`(false))
     }
 
+    /**
+     * SearchView is closed automatically after screen recreation. We think that filtering is not
+     * crucial enough to restore its state, so we do not reopen the view, and we clear filterText to
+     * display all available forms.
+     */
     @Test
     fun `filterText should be cleared when menu is created`() {
         whenever(viewModel.isMatchExactlyEnabled()).thenReturn(false)
