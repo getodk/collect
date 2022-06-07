@@ -333,25 +333,7 @@ public class InstanceProvider extends ContentProvider {
 
                     count = Collect.getInstance().getContentResolver().update(uri, cv, null, null);
                 }
-                /* smap
-                } else {
-                        String[] newWhereArgs;
-                        if (whereArgs == null || whereArgs.length == 0) {
-                            newWhereArgs = new String[] {instanceId};
-                        } else {
-                            newWhereArgs = new String[(whereArgs.length + 1)];
-                            newWhereArgs[0] = instanceId;
-                            System.arraycopy(whereArgs, 0, newWhereArgs, 1, whereArgs.length);
-                        }
 
-                    count =
-                            db.delete(INSTANCES_TABLE_NAME,
-                                        InstanceColumns._ID
-                                                + "=?"
-                                                + (!TextUtils.isEmpty(where) ? " AND ("
-                                                + where + ')' : ""), newWhereArgs);
-                }
-                */
                 break;
 
             default:
@@ -461,6 +443,7 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.T_IS_SYNC, InstanceColumns.T_IS_SYNC);          // smap
         sInstancesProjectionMap.put(InstanceColumns.T_ASS_ID, InstanceColumns.T_ASS_ID);            // smap
         sInstancesProjectionMap.put(InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_STATUS);  // smap
+        sInstancesProjectionMap.put(InstanceColumns.T_TASK_TYPE, InstanceColumns.T_TASK_TYPE);  // smap
         sInstancesProjectionMap.put(InstanceColumns.T_TASK_COMMENT, InstanceColumns.T_TASK_COMMENT);  // smap
         sInstancesProjectionMap.put(InstanceColumns.T_SHOW_DIST, InstanceColumns.T_SHOW_DIST);      // smap
         sInstancesProjectionMap.put(InstanceColumns.T_HIDE, InstanceColumns.T_HIDE);                // smap

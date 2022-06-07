@@ -65,6 +65,7 @@ public final class InstanceProviderAPI {
         public static final String T_IS_SYNC = "tIsSync";           // Set if the instance has been synced
         public static final String T_ASS_ID = "tTaskId";            // Task Id
         public static final String T_TASK_STATUS = "tAssStatus";    // Assignment Status
+        public static final String T_TASK_TYPE = "tTaskType";    // Task type case || task
         public static final String T_TASK_COMMENT = "tComment";    // Task comment
         public static final String T_REPEAT = "tRepeat";            // Task can be completed multiple times
         public static final String T_UPDATEID = "tUpdateId";          // The unique identifier of the instance to be updated

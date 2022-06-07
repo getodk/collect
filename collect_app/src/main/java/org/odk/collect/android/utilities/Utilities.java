@@ -126,6 +126,7 @@ public class Utilities {
                 InstanceColumns._ID,
                 InstanceColumns.T_TITLE,
                 InstanceColumns.T_TASK_STATUS,
+                InstanceColumns.T_TASK_TYPE,
                 InstanceColumns.T_REPEAT,
                 InstanceColumns.T_SCHED_START,
                 InstanceColumns.T_SCHED_FINISH,
@@ -161,6 +162,7 @@ public class Utilities {
             entry = new TaskEntry();
 
             entry.type = "task";
+            entry.taskType = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_TYPE));
             entry.id = c.getLong(c.getColumnIndex(InstanceColumns._ID));
             entry.name = c.getString(c.getColumnIndex(InstanceColumns.T_TITLE));
             entry.taskStatus = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_STATUS));
@@ -205,6 +207,7 @@ public class Utilities {
             values.put(InstanceColumns.T_TITLE, entry.name);
             values.put(InstanceColumns.DISPLAY_NAME, entry.displayName);
             values.put(InstanceColumns.T_TASK_STATUS, entry.taskStatus);
+            values.put(InstanceColumns.T_TASK_TYPE, entry.taskType);
             values.put(InstanceColumns.STATUS, entry.taskStatus);
             values.put(InstanceColumns.T_REPEAT, true);     // Duplicated task should also be a repeat
             values.put(InstanceColumns.T_SCHED_START, entry.taskStart);
@@ -367,7 +370,7 @@ public class Utilities {
                 }
             }
         } catch (Exception e) {
-            Log.e(t, e.toString());
+            Timber.e(e.toString());
             // silently retry unless this is the last attempt,
             // in which case we rethrow the exception.
 
@@ -398,6 +401,7 @@ public class Utilities {
                 InstanceColumns.T_TITLE,
                 InstanceColumns.DISPLAY_NAME,
                 InstanceColumns.T_TASK_STATUS,
+                InstanceColumns.T_TASK_TYPE,
                 InstanceColumns.T_TASK_COMMENT,
                 InstanceColumns.T_REPEAT,
                 InstanceColumns.T_SCHED_START,
@@ -481,6 +485,7 @@ public class Utilities {
                 TaskEntry entry = new TaskEntry();
 
                 entry.type = "task";
+                entry.taskType = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_TYPE));
                 entry.name = c.getString(c.getColumnIndex(InstanceColumns.T_TITLE));
                 entry.displayName = c.getString(c.getColumnIndex(InstanceColumns.DISPLAY_NAME));
                 entry.taskStatus = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_STATUS));

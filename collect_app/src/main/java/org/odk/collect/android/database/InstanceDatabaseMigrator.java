@@ -43,6 +43,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_COMMENT;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TITLE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_TYPE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_UPDATED;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_UPDATEID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.UUID;
@@ -89,6 +90,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_ACT_START, "long");
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_ACT_FINISH, "long");
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_ADDRESS, "text");
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_TASK_TYPE, "text");
     }
 
 
@@ -112,6 +114,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + SCHED_LON + " double, "		// smap
                 + SCHED_LAT + " double, "		// smap
                 + T_TITLE + " text, "		    // smap
+                + T_TASK_TYPE + " text, "		    // smap
                 + T_SCHED_START + " long, "		// smap
                 + T_SCHED_FINISH + " long, "	// smap
                 + T_ACT_START + " long, "		// smap

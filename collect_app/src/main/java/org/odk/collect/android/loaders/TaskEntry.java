@@ -8,6 +8,7 @@ import org.javarosa.core.model.FormIndex;
 public class TaskEntry {
     public long id;
     public String type;    // form or task
+    public String taskType;    // case or task
     public String taskStatus;
     public String taskComment;  // Comment added by a user
     public boolean repeat;  // A task that can be repeated multiple times
