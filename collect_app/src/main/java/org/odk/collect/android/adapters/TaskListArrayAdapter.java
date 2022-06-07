@@ -19,6 +19,7 @@
  */
 package org.odk.collect.android.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 	}
 
     
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -72,7 +74,10 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     	if(item.type.equals("form")) {
             Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank_circle);
             icon.setImageDrawable(d);
-    	} else if (item.taskStatus != null) {
+    	} else if (item.taskType != null && item.taskType.equals("case")) {
+            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.case_open);
+            icon.setImageDrawable(d);
+        } else if (item.taskStatus != null) {
     		if(item.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
 				if(item.locationTrigger != null && !item.repeat) {
                     Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_triggered);
