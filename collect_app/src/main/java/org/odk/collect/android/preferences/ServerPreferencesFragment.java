@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -192,23 +193,8 @@ public class ServerPreferencesFragment extends BasePreferenceFragment implements
 
         passwordPreference.setOnBindEditTextListener(editText -> {
             editText.setFilters(new InputFilter[]{new ControlCharacterFilter()});
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         });
-
-        /* smap don't need this
-        findPreference("custom_server_paths").setOnPreferenceClickListener(preference -> {
-            if (MultiClickGuard.allowClick(getClass().getName())) {
-                Fragment fragment = new CustomServerPathsFragment();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.preferences_fragment_container, fragment)
-                        .addToBackStack(null)
-                        .commit();
-                return true;
-            } else {
-                return false;
-            }
-        });
-        */
 
     }
 
