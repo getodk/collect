@@ -13,6 +13,8 @@ import java.util.function.Consumer
 /**
  * Mimics [ActivityScenario]/[FragmentScenario] to provide a way to test [Service] in a similar
  * manner. This should allow a [Service] to be tested without explicitly depending on Robolectric.
+ * AndroidX only provides a way to test [Service] components in instrumentation tests via
+ * [ServiceTestRule] (discussed [here](https://github.com/android/android-test/issues/935)).
  *
  * This only works in Robolectric/local tests currently.
  */

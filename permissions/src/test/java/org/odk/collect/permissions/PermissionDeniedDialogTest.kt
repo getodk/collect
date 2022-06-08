@@ -31,7 +31,8 @@ class PermissionDeniedDialogTest {
     val activityRule = RecordedIntentsRule()
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     private val args = Bundle().apply {
         putInt(PermissionDeniedDialog.TITLE, R.string.camera_runtime_permission_denied_title)
@@ -41,7 +42,7 @@ class PermissionDeniedDialogTest {
 
     @Test
     fun `The dialog should display proper content`() {
-        val scenario = launcherRule.launchDialogFragment(PermissionDeniedDialog::class.java, args)
+        val scenario = launcherRule.launch(PermissionDeniedDialog::class.java, args)
         scenario.onFragment {
             // Button positive
             assertThat((it.dialog!! as AlertDialog).getButton((AlertDialog.BUTTON_POSITIVE)).visibility, `is`(View.VISIBLE))
@@ -65,7 +66,7 @@ class PermissionDeniedDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = launcherRule.launchDialogFragment(PermissionDeniedDialog::class.java, args)
+        val scenario = launcherRule.launch(PermissionDeniedDialog::class.java, args)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -75,7 +76,7 @@ class PermissionDeniedDialogTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the POSITIVE button`() {
-        val scenario = launcherRule.launchDialogFragment(PermissionDeniedDialog::class.java, args)
+        val scenario = launcherRule.launch(PermissionDeniedDialog::class.java, args)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog!! as AlertDialog).getButton((AlertDialog.BUTTON_POSITIVE)).performClick()
@@ -86,7 +87,7 @@ class PermissionDeniedDialogTest {
 
     @Test
     fun `System settings should be opened after clicking on the NEUTRAL button`() {
-        val scenario = launcherRule.launchDialogFragment(PermissionDeniedDialog::class.java, args)
+        val scenario = launcherRule.launch(PermissionDeniedDialog::class.java, args)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog!! as AlertDialog).getButton((AlertDialog.BUTTON_NEUTRAL)).performClick()

@@ -39,7 +39,9 @@ public class BackgroundAudioPermissionDialogFragmentTest {
     private FakePermissionsProvider fakePermissionsProvider;
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
+            R.style.Theme_MaterialComponents
+    );
 
     @Before
     public void setup() {
@@ -68,7 +70,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
 
     @Test
     public void isNotCancellable() {
-        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = launcherRule.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
+        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = launcherRule.launch(BackgroundAudioPermissionDialogFragment.class);
         scenario.onFragment(f -> {
             assertThat(f.isCancelable(), is(false));
         });
@@ -76,7 +78,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
 
     @Test
     public void clickingOk_andGrantingPermissions_callsGrantPermission() {
-        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = launcherRule.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
+        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = launcherRule.launch(BackgroundAudioPermissionDialogFragment.class);
         scenario.onFragment(f -> {
             AlertDialog dialog = (AlertDialog) f.getDialog();
 
@@ -95,7 +97,7 @@ public class BackgroundAudioPermissionDialogFragmentTest {
     public void clickingOk_andGrantingPermissions_whenGrantPermissionsThrowsIllegalStateException_finishesActivity() {
         doThrow(IllegalStateException.class).when(backgroundAudioViewModel).grantAudioPermission();
 
-        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = launcherRule.launchDialogFragment(BackgroundAudioPermissionDialogFragment.class);
+        FragmentScenario<BackgroundAudioPermissionDialogFragment> scenario = launcherRule.launch(BackgroundAudioPermissionDialogFragment.class);
         scenario.onFragment(f -> {
             FragmentActivity activity = f.getActivity(); // Need to grab this here as `getActivity()` will return null later
 

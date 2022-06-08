@@ -2,7 +2,9 @@ package org.odk.collect.android.draw
 
 import android.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
@@ -17,7 +19,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.fragmentstest.DialogFragmentTest
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
@@ -27,11 +28,11 @@ import org.odk.collect.shared.settings.Settings
 class PenColorPickerDialogTest {
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule = FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Test
     fun `dialog should be cancelable`() {
-        val scenario = launcherRule.launchDialogFragment(PenColorPickerDialog::class.java)
+        val scenario = launcherRule.launch(PenColorPickerDialog::class.java)
         scenario.onFragment {
             assertThat(it.isCancelable, `is`(true))
         }
@@ -49,9 +50,9 @@ class PenColorPickerDialogTest {
             }
         })
 
-        launcherRule.launchDialogFragment(PenColorPickerDialog::class.java)
+        launcherRule.launch(PenColorPickerDialog::class.java)
 
-        DialogFragmentTest.onViewInDialog(withText(R.string.ok)).perform(click())
+        onView(withText(R.string.ok)).inRoot(isDialog()).perform(click())
 
         verify(viewModel).setPenColor(Color.BLACK)
     }

@@ -3,7 +3,7 @@ package org.odk.collect.androidtest
 import android.app.Activity
 import androidx.test.core.app.ActivityScenario
 
-object Extensions {
+object ActivityScenarioExtensions {
 
     /**
      * Calling finish() doesn't seem to move an Activity to the DESTROYED state when using

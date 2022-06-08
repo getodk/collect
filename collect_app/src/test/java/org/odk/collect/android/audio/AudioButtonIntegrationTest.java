@@ -1,19 +1,24 @@
 package org.odk.collect.android.audio;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
+import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
+import static org.robolectric.Shadows.shadowOf;
+
 import android.media.MediaPlayer;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.audioclips.Clip;
 import org.odk.collect.androidtest.FakeLifecycleOwner;
+import org.odk.collect.audioclips.Clip;
 import org.odk.collect.testshared.FakeScheduler;
-import org.odk.collect.androidtest.LiveDataTester;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 import org.robolectric.shadows.ShadowMediaPlayer;
@@ -21,17 +26,10 @@ import org.robolectric.shadows.util.DataSource;
 
 import java.io.File;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.odk.collect.testshared.RobolectricHelpers.setupMediaPlayerDataSource;
-import static org.robolectric.Shadows.shadowOf;
-
 @RunWith(AndroidJUnit4.class)
 public class AudioButtonIntegrationTest {
 
     private final MediaPlayer mediaPlayer = new MediaPlayer();
-    private final LiveDataTester liveDataTester = new LiveDataTester();
 
     private FragmentActivity activity;
     private ActivityController<FragmentActivity> activityController;
@@ -48,11 +46,6 @@ public class AudioButtonIntegrationTest {
         fakeLifecycleOwner = new FakeLifecycleOwner();
         fakeScheduler = new FakeScheduler();
         audioHelper = new AudioHelper(activity, fakeLifecycleOwner, fakeScheduler, () -> mediaPlayer);
-    }
-
-    @After
-    public void teardown() {
-        liveDataTester.teardown();
     }
 
     @Test
@@ -167,14 +160,14 @@ public class AudioButtonIntegrationTest {
         setupMediaPlayerDataSource(testFile1);
 
         AudioButton button1 = new AudioButton(activity);
-        LiveData<Boolean> isPlaying = liveDataTester.activate(audioHelper.setAudio(button1, new Clip("clip1", testFile1)));
+        LiveData<Boolean> isPlaying = audioHelper.setAudio(button1, new Clip("clip1", testFile1));
 
-        assertThat(isPlaying.getValue(), equalTo(false));
-
-        button1.performClick();
-        assertThat(isPlaying.getValue(), equalTo(true));
+        assertThat(getOrAwaitValue(isPlaying), equalTo(false));
 
         button1.performClick();
-        assertThat(isPlaying.getValue(), equalTo(false));
+        assertThat(getOrAwaitValue(isPlaying), equalTo(true));
+
+        button1.performClick();
+        assertThat(getOrAwaitValue(isPlaying), equalTo(false));
     }
 }

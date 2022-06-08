@@ -82,7 +82,8 @@ class SelectOneFromMapDialogFragmentTest {
     private val scheduler = FakeScheduler()
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {
@@ -112,7 +113,7 @@ class SelectOneFromMapDialogFragmentTest {
 
     @Test
     fun `pressing back dismisses dialog`() {
-        val scenario = launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launch(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
@@ -129,7 +130,7 @@ class SelectOneFromMapDialogFragmentTest {
 
     @Test
     fun `contains SelectionMapFragment with correct data`() {
-        val scenario = launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launch(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
@@ -185,7 +186,7 @@ class SelectOneFromMapDialogFragmentTest {
 
     @Test
     fun `contains SelectionMapFragment with correct data with selected index`() {
-        val scenario = launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launch(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
@@ -214,7 +215,7 @@ class SelectOneFromMapDialogFragmentTest {
             .build()
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
 
-        val scenario = launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launch(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
@@ -232,7 +233,7 @@ class SelectOneFromMapDialogFragmentTest {
 
     @Test
     fun `selecting a choice on the map answers question and dismisses`() {
-        val scenario = launcherRule.launchDialogFragment(
+        val scenario = launcherRule.launch(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
@@ -276,7 +277,7 @@ class SelectOneFromMapDialogFragmentTest {
 
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
 
-        launcherRule.launchDialogFragment(
+        launcherRule.launch(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)

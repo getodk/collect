@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
@@ -106,7 +105,7 @@ public class DialogFragmentHelpers {
      */
     @Deprecated
     public static <T extends DialogFragment> void assertDialogRetainsDateOnScreenRotation(T dialogFragment, String date) {
-        ActivityController<DialogFragmentTestActivity> activityController = Robolectric.buildActivity(DialogFragmentTestActivity.class);
+        ActivityController<FragmentActivity> activityController = Robolectric.buildActivity(FragmentActivity.class);
         activityController.setup();
 
         dialogFragment.show(activityController.get().getSupportFragmentManager(), "TAG");
@@ -141,15 +140,6 @@ public class DialogFragmentHelpers {
         @Override
         public void onDateChanged(LocalDateTime selectedDate) {
             this.selectedDate = selectedDate;
-        }
-    }
-
-    public static class DialogFragmentTestActivity extends FragmentActivity {
-
-        @Override
-        protected void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setTheme(R.style.Theme_DialogFragmentTest);  // Needed for androidx.appcompat.app.AlertDialog
         }
     }
 }

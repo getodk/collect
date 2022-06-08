@@ -10,6 +10,7 @@ import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
+import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -29,7 +30,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
 import org.odk.collect.androidshared.system.IntentLauncher
-import org.odk.collect.fragmentstest.DialogFragmentTest.onViewInDialog
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -42,36 +42,41 @@ import org.robolectric.shadows.ShadowToast
 class ManualProjectCreatorDialogTest {
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Test
     fun `Password should be protected`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onViewInDialog(withHint(R.string.server_url)).perform(replaceText("123456789"))
-            onViewInDialog(withHint(R.string.server_url)).check(matches(not(isPasswordHidden())))
+            onView(withHint(R.string.server_url)).inRoot(isDialog())
+                .perform(replaceText("123456789"))
+            onView(withHint(R.string.server_url)).inRoot(isDialog())
+                .check(matches(not(isPasswordHidden())))
 
-            onViewInDialog(withHint(R.string.username)).perform(replaceText("123456789"))
-            onViewInDialog(withHint(R.string.username)).check(matches(not(isPasswordHidden())))
+            onView(withHint(R.string.username)).inRoot(isDialog()).perform(replaceText("123456789"))
+            onView(withHint(R.string.username)).inRoot(isDialog())
+                .check(matches(not(isPasswordHidden())))
 
-            onViewInDialog(withHint(R.string.password)).perform(replaceText("123456789"))
-            onViewInDialog(withHint(R.string.password)).check(matches(isPasswordHidden()))
+            onView(withHint(R.string.password)).inRoot(isDialog()).perform(replaceText("123456789"))
+            onView(withHint(R.string.password)).inRoot(isDialog())
+                .check(matches(isPasswordHidden()))
         }
     }
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'Cancel' button`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onViewInDialog(withText(R.string.cancel)).perform(click())
+            onView(withText(R.string.cancel)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(false))
         }
     }
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
             onView(isRoot()).perform(pressBack())
@@ -81,25 +86,26 @@ class ManualProjectCreatorDialogTest {
 
     @Test
     fun `The 'Add' button should be disabled when url is blank`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
 
-            onViewInDialog(withText(R.string.add)).perform(click())
+            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(true))
 
-            onViewInDialog(withHint(R.string.server_url)).perform(replaceText(" "))
-            onViewInDialog(withText(R.string.add)).perform(click())
+            onView(withHint(R.string.server_url)).inRoot(isDialog()).perform(replaceText(" "))
+            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(true))
         }
     }
 
     @Test
     fun `When URL has no protocol, a toast is displayed`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onViewInDialog(withHint(R.string.server_url)).perform(replaceText("demo.getodk.org"))
-            onViewInDialog(withText(R.string.add)).perform(click())
+            onView(withHint(R.string.server_url)).inRoot(isDialog())
+                .perform(replaceText("demo.getodk.org"))
+            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(true))
 
             val toastText = ShadowToast.getTextOfLatestToast()
@@ -132,25 +138,27 @@ class ManualProjectCreatorDialogTest {
             }
         })
 
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
-            onViewInDialog(withHint(R.string.username)).perform(replaceText("adam"))
-            onViewInDialog(withHint(R.string.password)).perform(replaceText("1234"))
+            onView(withHint(R.string.server_url)).inRoot(isDialog())
+                .perform(replaceText("https://my-server.com"))
+            onView(withHint(R.string.username)).inRoot(isDialog()).perform(replaceText("adam"))
+            onView(withHint(R.string.password)).inRoot(isDialog()).perform(replaceText("1234"))
 
-            onViewInDialog(withText(R.string.add)).perform(click())
+            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
             verify(projectCreator).createNewProject("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{},\"project\":{}}")
         }
     }
 
     @Test
     fun `Server project creation goes to main menu`() {
-        val scenario = launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onViewInDialog(withHint(R.string.server_url)).perform(replaceText("https://my-server.com"))
+            onView(withHint(R.string.server_url)).inRoot(isDialog())
+                .perform(replaceText("https://my-server.com"))
 
             Intents.init()
-            onViewInDialog(withText(R.string.add)).perform(click())
+            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
             Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
         }
@@ -164,8 +172,8 @@ class ManualProjectCreatorDialogTest {
             }
         })
 
-        launcherRule.launchDialogFragment(ManualProjectCreatorDialog::class.java)
-        onViewInDialog(withText(R.string.gdrive_configure)).perform(scrollTo(), click())
+        launcherRule.launch(ManualProjectCreatorDialog::class.java)
+        onView(withText(R.string.gdrive_configure)).inRoot(isDialog()).perform(scrollTo(), click())
         val context = ApplicationProvider.getApplicationContext<Context>()
         assertThat(ShadowToast.getTextOfLatestToast(), `is`(context.getString(R.string.activity_not_found, context.getString(R.string.choose_account))))
     }

@@ -24,11 +24,12 @@ class MaterialAlertDialogFragmentTest {
     }
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule()
+    val launcherRule =
+        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
 
     @Test
     fun `dialog should be cancelable`() {
-        val scenario = launcherRule.launchDialogFragment(MaterialAlertDialogFragment::class.java, args)
+        val scenario = launcherRule.launch(MaterialAlertDialogFragment::class.java, args)
         scenario.onFragment {
             assertThat(it.isCancelable, `is`(true))
         }
@@ -36,7 +37,7 @@ class MaterialAlertDialogFragmentTest {
 
     @Test
     fun `The title of the 'POSITIVE BUTTON' should be 'OK'`() {
-        val scenario = launcherRule.launchDialogFragment(MaterialAlertDialogFragment::class.java, args)
+        val scenario = launcherRule.launch(MaterialAlertDialogFragment::class.java, args)
         scenario.onFragment {
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
@@ -47,7 +48,7 @@ class MaterialAlertDialogFragmentTest {
 
     @Test
     fun `The dialog should be dismissed after clicking on the 'POSITIVE BUTTON' button`() {
-        val scenario = launcherRule.launchDialogFragment(MaterialAlertDialogFragment::class.java, args)
+        val scenario = launcherRule.launch(MaterialAlertDialogFragment::class.java, args)
         scenario.onFragment {
             assertThat(it.dialog!!.isShowing, `is`(true))
             (it.dialog!! as AlertDialog).getButton((AlertDialog.BUTTON_POSITIVE)).performClick()
@@ -58,7 +59,7 @@ class MaterialAlertDialogFragmentTest {
 
     @Test
     fun `The dialog should have no title`() {
-        val scenario = launcherRule.launchDialogFragment(MaterialAlertDialogFragment::class.java, args)
+        val scenario = launcherRule.launch(MaterialAlertDialogFragment::class.java, args)
         scenario.onFragment {
             assertThat(Shadows.shadowOf(it.dialog).title, `is`(""))
         }
@@ -66,7 +67,7 @@ class MaterialAlertDialogFragmentTest {
 
     @Test
     fun `The dialog should display proper message`() {
-        val scenario = launcherRule.launchDialogFragment(MaterialAlertDialogFragment::class.java, args)
+        val scenario = launcherRule.launch(MaterialAlertDialogFragment::class.java, args)
         scenario.onFragment {
             assertThat((it.dialog!!.findViewById(android.R.id.message) as TextView).text, `is`("blah"))
         }

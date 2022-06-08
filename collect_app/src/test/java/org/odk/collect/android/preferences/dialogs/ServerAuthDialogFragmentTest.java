@@ -25,14 +25,16 @@ public class ServerAuthDialogFragmentTest {
     private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
+            R.style.Theme_MaterialComponents
+    );
 
     @Test
     public void prefillsUsernameAndPassword() {
         generalSettings.save(ProjectKeys.KEY_USERNAME, "Alpen");
         generalSettings.save(ProjectKeys.KEY_PASSWORD, "swiss");
 
-        FragmentScenario<ServerAuthDialogFragment> scenario = launcherRule.launchDialogFragment(ServerAuthDialogFragment.class);
+        FragmentScenario<ServerAuthDialogFragment> scenario = launcherRule.launch(ServerAuthDialogFragment.class);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);
@@ -45,7 +47,7 @@ public class ServerAuthDialogFragmentTest {
 
     @Test
     public void clickingOK_savesUsernameAndPasswordToGeneralPrefs() {
-        FragmentScenario<ServerAuthDialogFragment> scenario = launcherRule.launchDialogFragment(ServerAuthDialogFragment.class);
+        FragmentScenario<ServerAuthDialogFragment> scenario = launcherRule.launch(ServerAuthDialogFragment.class);
 
         scenario.onFragment(fragment -> {
             EditText username = fragment.getDialogView().findViewById(R.id.username_edit);

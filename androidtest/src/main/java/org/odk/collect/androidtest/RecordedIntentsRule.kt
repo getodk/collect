@@ -11,6 +11,8 @@ import org.junit.runners.model.Statement
 /**
  * Like [IntentsTestRule] but doesn't extend [ActivityTestRule] (and therefore works with
  * [ActivityScenario]/[FragmentScenario]
+ *
+ * Discussed in issue [here](https://github.com/android/android-test/issues/174).
  */
 class RecordedIntentsRule : TestRule {
     override fun apply(base: Statement, description: Description): Statement {

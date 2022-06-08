@@ -20,12 +20,6 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
 
     private val scenarios = mutableListOf<FragmentScenario<*>>()
 
-    fun <F : Fragment> launch(fragmentClass: Class<F>): FragmentScenario<F> {
-        return FragmentScenario.launch(fragmentClass).also {
-            scenarios.add(it)
-        }
-    }
-
     @JvmOverloads
     fun <F : Fragment> launchInContainer(
         fragmentClass: Class<F>,
@@ -57,11 +51,26 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
     }
 
     @JvmOverloads
-    fun <F : Fragment> launchDialogFragment(
+    fun <F : Fragment> launch(
         fragmentClass: Class<F>,
         fragmentArgs: Bundle? = null
     ): FragmentScenario<F> {
-        return DialogFragmentTest.launchDialogFragment(fragmentClass, fragmentArgs).also {
+        val scenario = if (defaultThemeResId != null) {
+            FragmentScenario.launch(
+                fragmentClass,
+                fragmentArgs,
+                defaultThemeResId,
+                null
+            )
+        } else {
+            FragmentScenario.launch(
+                fragmentClass,
+                fragmentArgs,
+                null
+            )
+        }
+
+        return scenario.also {
             scenarios.add(it)
         }
     }

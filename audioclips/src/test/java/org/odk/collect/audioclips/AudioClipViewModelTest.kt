@@ -4,7 +4,6 @@ import android.media.MediaPlayer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -16,7 +15,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
-import org.odk.collect.androidtest.LiveDataTester
+import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.testshared.FakeScheduler
 import java.io.File
 import java.io.IOException
@@ -29,13 +28,7 @@ class AudioClipViewModelTest {
 
     private val mediaPlayer = mock(MediaPlayer::class.java)
     private val fakeScheduler = FakeScheduler()
-    private val liveDataTester = LiveDataTester()
     private var viewModel: AudioClipViewModel = AudioClipViewModel(Supplier { mediaPlayer }, fakeScheduler)
-
-    @After
-    fun teardown() {
-        liveDataTester.teardown()
-    }
 
     @Test
     fun play_resetsAndPreparesAndStartsMediaPlayer() {
@@ -134,40 +127,40 @@ class AudioClipViewModelTest {
 
     @Test
     fun isPlaying_whenNothingPlaying_is_false() {
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"))
-        assertThat(isPlaying.value, equalTo(false))
+        val isPlaying = viewModel.isPlaying("clip1")
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(false))
     }
 
     @Test
     fun isPlaying_whenClipIDPlaying_is_PLAYING() {
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"))
+        val isPlaying = viewModel.isPlaying("clip1")
         viewModel.play(Clip("clip1", "file://audio.mp3"))
-        assertThat(isPlaying.value, equalTo(true))
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(true))
     }
 
     @Test
     fun isPlaying_whenDifferentClipIDPlaying_is_false() {
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip2"))
+        val isPlaying = viewModel.isPlaying("clip2")
         viewModel.play(Clip("clip1", "file://other.mp3"))
-        assertThat(isPlaying.value, equalTo(false))
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(false))
     }
 
     @Test
     fun isPlaying_whenClipIDPlaying_thenCompleted_is_false() {
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"))
+        val isPlaying = viewModel.isPlaying("clip1")
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         val captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener::class.java)
         verify(mediaPlayer).setOnCompletionListener(captor.capture())
         captor.value.onCompletion(mediaPlayer)
-        assertThat(isPlaying.value, equalTo(false))
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(false))
     }
 
     @Test
     fun isPlaying_whenPlaybackFails_is_false() {
         doThrow(IOException::class.java).`when`(mediaPlayer).setDataSource("file://missing.mp3")
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"))
+        val isPlaying = viewModel.isPlaying("clip1")
         viewModel.play(Clip("clip1", "file://missing.mp3"))
-        assertThat(isPlaying.value, equalTo(false))
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(false))
     }
 
     @Test
@@ -185,12 +178,12 @@ class AudioClipViewModelTest {
 
     @Test
     fun stop_resetsPosition() {
-        val position = liveDataTester.activate(viewModel.getPosition("clip1"))
+        val position = viewModel.getPosition("clip1")
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(1000)
         fakeScheduler.runForeground()
         viewModel.stop()
-        assertThat(position.value, equalTo(0))
+        assertThat(position.getOrAwaitValue(), equalTo(0))
     }
 
     @Test
@@ -208,10 +201,10 @@ class AudioClipViewModelTest {
 
     @Test
     fun isPlaying_whenPlayingAndThenBackgrounding_is_false() {
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"))
+        val isPlaying = viewModel.isPlaying("clip1")
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.background()
-        assertThat(isPlaying.value, equalTo(false))
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(false))
     }
 
     @Test
@@ -235,26 +228,26 @@ class AudioClipViewModelTest {
 
     @Test
     fun isPlaying_afterPause_is_false() {
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"))
+        val isPlaying = viewModel.isPlaying("clip1")
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.pause()
-        assertThat(isPlaying.value, equalTo(false))
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(false))
     }
 
     @Test
     fun isPlaying_afterPause_andThenPlay_is_true() {
-        val isPlaying = liveDataTester.activate(viewModel.isPlaying("clip1"))
+        val isPlaying = viewModel.isPlaying("clip1")
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.pause()
         viewModel.play(Clip("clip1", "file://audio.mp3"))
-        assertThat(isPlaying.value, equalTo(true))
+        assertThat(isPlaying.getOrAwaitValue(), equalTo(true))
     }
 
     @Test
     fun position_returnsMediaPlayerPositionInMilliseconds() {
         `when`(mediaPlayer.currentPosition).thenReturn(0)
-        val position = liveDataTester.activate(viewModel.getPosition("clip1"))
-        assertThat(position.value, equalTo(0))
+        val position = viewModel.getPosition("clip1")
+        assertThat(position.getOrAwaitValue(), equalTo(0))
 
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(1000)
@@ -269,20 +262,20 @@ class AudioClipViewModelTest {
     @Test
     fun position_worksWhenMultipleClipsArePlayed() {
         `when`(mediaPlayer.currentPosition).thenReturn(0)
-        val position1 = liveDataTester.activate(viewModel.getPosition("clip1"))
-        val position2 = liveDataTester.activate(viewModel.getPosition("clip2"))
+        val position1 = viewModel.getPosition("clip1")
+        val position2 = viewModel.getPosition("clip2")
 
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(1000)
         fakeScheduler.runForeground()
-        assertThat(position1.value, equalTo(1000))
-        assertThat(position2.value, equalTo(0))
+        assertThat(position1.getOrAwaitValue(), equalTo(1000))
+        assertThat(position2.getOrAwaitValue(), equalTo(0))
 
         viewModel.play(Clip("clip2", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(2500)
         fakeScheduler.runForeground()
-        assertThat(position1.value, equalTo(1000))
-        assertThat(position2.value, equalTo(2500))
+        assertThat(position1.getOrAwaitValue(), equalTo(1000))
+        assertThat(position2.getOrAwaitValue(), equalTo(2500))
     }
 
     @Test
@@ -301,9 +294,9 @@ class AudioClipViewModelTest {
 
     @Test
     fun setPosition_updatesPosition() {
-        val duration = liveDataTester.activate(viewModel.getPosition("clip1"))
+        val duration = viewModel.getPosition("clip1")
         viewModel.setPosition("clip1", 54321)
-        assertThat(duration.value, equalTo(54321))
+        assertThat(duration.getOrAwaitValue(), equalTo(54321))
     }
 
     @Test
@@ -330,40 +323,40 @@ class AudioClipViewModelTest {
 
     @Test
     fun whenPlaybackCompletes_resetsPosition() {
-        val position = liveDataTester.activate(viewModel.getPosition("clip1"))
+        val position = viewModel.getPosition("clip1")
         viewModel.play(Clip("clip1", "file://audio.mp3"))
         `when`(mediaPlayer.currentPosition).thenReturn(1000)
         fakeScheduler.runForeground()
         val captor = ArgumentCaptor.forClass(MediaPlayer.OnCompletionListener::class.java)
         verify(mediaPlayer).setOnCompletionListener(captor.capture())
         captor.value.onCompletion(mediaPlayer)
-        assertThat(position.value, equalTo(0))
+        assertThat(position.getOrAwaitValue(), equalTo(0))
     }
 
     @Test
     fun error_whenPlaybackFailsBecauseOfMissingFile_is_PlaybackFailed() {
-        val error = liveDataTester.activate(viewModel.getError())
+        val error = viewModel.getError()
         doThrow(IOException::class.java).`when`(mediaPlayer).setDataSource("file://missing.mp3")
         viewModel.play(Clip("clip1", "file://missing.mp3"))
-        assertThat(error.value, equalTo<Exception?>(PlaybackFailedException("file://missing.mp3", 0)))
+        assertThat(error.getOrAwaitValue(), equalTo<Exception?>(PlaybackFailedException("file://missing.mp3", 0)))
     }
 
     @Test
     fun error_whenPlaybackFailsBecauseOfInvalidFile_is_PlaybackFailed() {
-        val error = liveDataTester.activate(viewModel.getError())
+        val error = viewModel.getError()
         val invalid = File.createTempFile("invalid", ".mp3")
         doThrow(IOException::class.java).`when`(mediaPlayer).setDataSource(invalid.absolutePath)
         viewModel.play(Clip("clip1", invalid.absolutePath))
-        assertThat(error.value, equalTo<Exception?>(PlaybackFailedException(invalid.absolutePath, 1)))
+        assertThat(error.getOrAwaitValue(), equalTo<Exception?>(PlaybackFailedException(invalid.absolutePath, 1)))
     }
 
     @Test
     fun dismissError_removesErrorValue() {
-        val error = liveDataTester.activate(viewModel.getError())
+        val error = viewModel.getError()
         doThrow(IOException::class.java).`when`(mediaPlayer).setDataSource("file://missing.mp3")
         viewModel.play(Clip("clip1", "file://missing.mp3"))
         viewModel.errorDisplayed()
-        assertThat(error.value, equalTo<Exception?>(null))
+        assertThat(error.getOrAwaitValue(), equalTo<Exception?>(null))
     }
 
     private class RecordingMockMediaPlayerFactory : Supplier<MediaPlayer> {

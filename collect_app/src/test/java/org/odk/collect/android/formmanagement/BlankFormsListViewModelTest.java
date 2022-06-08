@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
 
 import android.app.Application;
 
@@ -13,7 +14,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,15 +27,12 @@ import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.projects.Project;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.testshared.FakeScheduler;
-import org.odk.collect.androidtest.LiveDataTester;
 
 @RunWith(AndroidJUnit4.class)
 public class BlankFormsListViewModelTest {
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
-
-    private final LiveDataTester liveDataTester = new LiveDataTester();
 
     private final SyncStatusAppState syncRepository = mock(SyncStatusAppState.class);
     private final Analytics analytics = mock(Analytics.class);
@@ -45,11 +42,6 @@ public class BlankFormsListViewModelTest {
     @Before
     public void setup() {
         when(currentProjectProvider.getCurrentProject()).thenReturn(new Project.Saved("testProject", "Test Project", "T", "#ffffff"));
-    }
-
-    @After
-    public void teardown() {
-        liveDataTester.teardown();
     }
 
     @Test
@@ -70,12 +62,12 @@ public class BlankFormsListViewModelTest {
         when(syncRepository.getSyncError("testProject")).thenReturn(liveData);
 
         BlankFormsListViewModel viewModel = new BlankFormsListViewModel(mock(Application.class), mock(Scheduler.class), syncRepository, settingsProvider, analytics, mock(FormsUpdater.class), currentProjectProvider, null);
-        LiveData<Boolean> outOfSync = liveDataTester.activate(viewModel.isOutOfSync());
+        LiveData<Boolean> outOfSync = viewModel.isOutOfSync();
 
-        assertThat(outOfSync.getValue(), is(true));
+        assertThat(getOrAwaitValue(outOfSync), is(true));
 
         liveData.setValue(null);
-        assertThat(outOfSync.getValue(), is(false));
+        assertThat(getOrAwaitValue(outOfSync), is(false));
     }
 
     @Test

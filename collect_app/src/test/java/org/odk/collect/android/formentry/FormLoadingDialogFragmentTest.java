@@ -9,17 +9,20 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 
 @RunWith(AndroidJUnit4.class)
 public class FormLoadingDialogFragmentTest {
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
+            R.style.Theme_MaterialComponents
+    );
 
     @Test
     public void dialogIsNotCancellable() {
-        FragmentScenario<FormLoadingDialogFragment> fragmentScenario = launcherRule.launchDialogFragment(FormLoadingDialogFragment.class);
+        FragmentScenario<FormLoadingDialogFragment> fragmentScenario = launcherRule.launch(FormLoadingDialogFragment.class);
         fragmentScenario.onFragment(fragment -> {
             assertThat(fragment.isCancelable(), equalTo(false));
         });
