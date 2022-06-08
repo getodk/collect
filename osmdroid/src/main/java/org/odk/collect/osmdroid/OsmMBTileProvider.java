@@ -16,7 +16,7 @@
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.osmdroid;
 
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.MapTileProviderArray;
@@ -29,9 +29,9 @@ import java.util.Collections;
  * This class is a simplification of the the MapTileProviderArray: it only
  * allows a single provider.
  */
-public class OsmMBTileProvider extends MapTileProviderArray {
+class OsmMBTileProvider extends MapTileProviderArray {
 
-    public OsmMBTileProvider(IRegisterReceiver receiverRegistrar, File file) {
+    OsmMBTileProvider(IRegisterReceiver receiverRegistrar, File file) {
 
         /**
          * Call the super-constructor.

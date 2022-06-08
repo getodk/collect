@@ -19,7 +19,6 @@ import static org.odk.collect.settings.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FI
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.location.LocationManager;
 import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
@@ -32,15 +31,16 @@ import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
+import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
+import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.preferences.screens.MapsPreferencesFragment;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
-import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
@@ -48,20 +48,12 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
-import org.odk.collect.geo.GeoDependencyModule;
-import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
-import org.odk.collect.maps.MapFragmentFactory;
-import org.odk.collect.location.satellites.GpsStatusSatelliteInfoClient;
-import org.odk.collect.location.LocationClient;
-import org.odk.collect.location.satellites.SatelliteInfoClient;
-import org.odk.collect.location.tracker.ForegroundServiceLocationTracker;
-import org.odk.collect.location.tracker.LocationTracker;
-import org.odk.collect.permissions.PermissionsChecker;
+import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
+import org.odk.collect.osmdroid.OsmDroidDependencyComponent;
+import org.odk.collect.osmdroid.OsmDroidDependencyComponentProvider;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
-import org.odk.collect.projects.ProjectsDependencyModule;
-import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
@@ -73,13 +65,13 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import dagger.Provides;
-
+@SuppressWarnings("PMD.CouplingBetweenObjects")
 public class Collect extends Application implements
         LocalizedApplication,
         AudioRecorderDependencyComponentProvider,
         ProjectsDependencyComponentProvider,
         GeoDependencyComponentProvider,
+        OsmDroidDependencyComponentProvider,
         StateStore {
     public static String defaultSysLanguage;
     private static Collect singleton;
@@ -100,6 +92,7 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
     private GeoDependencyComponent geoDependencyComponent;
+    private OsmDroidDependencyComponent osmDroidDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -180,13 +173,7 @@ public class Collect extends Application implements
                 .build();
 
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
-                .projectsDependencyModule(new ProjectsDependencyModule() {
-                    @NotNull
-                    @Override
-                    public ProjectsRepository providesProjectsRepository() {
-                        return applicationComponent.projectsRepository();
-                    }
-                })
+                .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent.projectsRepository()))
                 .build();
     }
 
@@ -271,55 +258,31 @@ public class Collect extends Application implements
         if (geoDependencyComponent == null) {
             geoDependencyComponent = DaggerGeoDependencyComponent.builder()
                     .application(this)
-                    .geoDependencyModule(new GeoDependencyModule() {
-                        @NonNull
-                        @Provides
-                        @Override
-                        public ReferenceLayerSettingsNavigator providesReferenceLayerSettingsNavigator() {
-                            return MapsPreferencesFragment::showReferenceLayerDialog;
-                        }
-
-                        @NonNull
-                        @Provides
-                        @Override
-                        public MapFragmentFactory providesMapFragmentFactory() {
-                            return applicationComponent.mapFragmentFactory();
-                        }
-
-                        @NonNull
-                        @Override
-                        public LocationTracker providesLocationTracker() {
-                            return new ForegroundServiceLocationTracker(Collect.this);
-                        }
-
-                        @NonNull
-                        @Override
-                        public LocationClient providesLocationClient() {
-                            return applicationComponent.locationClient();
-                        }
-
-                        @NonNull
-                        @Override
-                        public Scheduler providesScheduler() {
-                            return applicationComponent.scheduler();
-                        }
-
-                        @NonNull
-                        @Override
-                        public SatelliteInfoClient providesSatelliteInfoClient() {
-                            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                            return new GpsStatusSatelliteInfoClient(locationManager);
-                        }
-
-                        @NonNull
-                        @Override
-                        public PermissionsChecker providesPermissionChecker(@NonNull Context context) {
-                            return applicationComponent.permissionsChecker();
-                        }
-                    })
+                    .geoDependencyModule(new CollectGeoDependencyModule(
+                            applicationComponent.mapFragmentFactory(),
+                            applicationComponent.locationClient(),
+                            applicationComponent.scheduler(),
+                            applicationComponent.permissionsChecker()
+                    ))
                     .build();
         }
 
         return geoDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public OsmDroidDependencyComponent getOsmDroidDependencyComponent() {
+        if (osmDroidDependencyComponent == null) {
+            osmDroidDependencyComponent = DaggerOsmDroidDependencyComponent.builder()
+                    .osmDroidDependencyModule(new CollectOsmDroidDependencyModule(
+                            applicationComponent.referenceLayerRepository(),
+                            applicationComponent.locationClient(),
+                            settingsProvider
+                    ))
+                    .build();
+        }
+
+        return osmDroidDependencyComponent;
     }
 }

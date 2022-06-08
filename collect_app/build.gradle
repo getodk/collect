@@ -270,6 +270,7 @@ dependencies {
     }
     implementation project(':externalapp')
     implementation project(':maps')
+    implementation project(':osmdroid')
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support
@@ -317,7 +318,6 @@ dependencies {
         exclude group: 'org.slf4j'
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
     }
-    implementation Dependencies.osmdroid
     implementation(Dependencies.google_api_client_android) {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'com.google.guava'

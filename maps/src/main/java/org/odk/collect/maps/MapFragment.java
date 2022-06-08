@@ -14,8 +14,6 @@
 
 package org.odk.collect.maps;
 
-import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
@@ -58,16 +56,6 @@ public interface MapFragment {
 
     String CENTER = "center";
     String BOTTOM = "bottom";
-
-    /**
-     * Configures the map according to settings such as styling preferences and
-     * layer data sources.  For now, this means anything that is configurable
-     * in the Maps preferences; the intention is to anticipate the possibility
-     * of a map configuration delivered with a form.  MapFragment implementations
-     * do not interact directly with the preferences; instead, they receive a
-     * config bundle, which may be derived from the preferences or another source.
-     */
-    void applyConfig(Bundle config);
 
     /**
      * Adds the map Fragment to an activity.  The containerId should be the

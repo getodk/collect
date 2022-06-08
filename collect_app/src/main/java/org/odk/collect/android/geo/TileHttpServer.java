@@ -1,5 +1,7 @@
 package org.odk.collect.android.geo;
 
+import org.odk.collect.maps.layers.TileSource;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;

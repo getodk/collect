@@ -21,14 +21,14 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import org.odk.collect.android.R
-import org.odk.collect.android.geo.MapConfigurator
-import org.odk.collect.android.geo.MapProvider
+import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.CaptionedListPreference
-import org.odk.collect.android.preferences.PrefUtils
 import org.odk.collect.android.preferences.dialogs.ReferenceLayerPreferenceDialog
 import org.odk.collect.android.preferences.screens.ReferenceLayerPreferenceUtils.populateReferenceLayerPref
+import org.odk.collect.androidshared.ui.PrefUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
+import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.keys.ProjectKeys.CATEGORY_BASEMAP
 import org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE
@@ -100,13 +100,14 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
      */
     private fun initBasemapSourcePref() {
         basemapSourcePref = PrefUtils.createListPref(
-            context, KEY_BASEMAP_SOURCE, getString(R.string.basemap_source),
-            MapProvider.getLabelIds(), MapProvider.getIds()
+            requireContext(), KEY_BASEMAP_SOURCE, getString(R.string.basemap_source),
+            MapConfiguratorProvider.getLabelIds(), MapConfiguratorProvider.getIds(),
+            settingsProvider.getUnprotectedSettings()
         )
         basemapSourcePref.setIconSpaceReserved(false)
-        onBasemapSourceChanged(MapProvider.getConfigurator())
+        onBasemapSourceChanged(MapConfiguratorProvider.getConfigurator())
         basemapSourcePref.setOnPreferenceChangeListener { _: Preference?, value: Any ->
-            val cftor = MapProvider.getConfigurator(value.toString())
+            val cftor = MapConfiguratorProvider.getConfigurator(value.toString())
             if (!cftor.isAvailable(context)) {
                 cftor.showUnavailableMessage(context)
                 false
@@ -123,7 +124,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
         val baseCategory = findPreference<PreferenceCategory>(CATEGORY_BASEMAP)
         baseCategory!!.removeAll()
         baseCategory.addPreference(basemapSourcePref)
-        for (pref in cftor.createPrefs(context)) {
+        for (pref in cftor.createPrefs(context, settingsProvider.getUnprotectedSettings())) {
             pref.isIconSpaceReserved = false
             baseCategory.addPreference(pref)
         }
@@ -176,7 +177,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
 
                 if (referenceLayer != null) {
                     val path = referenceLayer.file.absolutePath
-                    val cftor = MapProvider.getConfigurator()
+                    val cftor = MapConfiguratorProvider.getConfigurator()
                     cftor.getDisplayName(File(path))
                 } else {
                     getString(R.string.none)

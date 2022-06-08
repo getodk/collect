@@ -1,17 +1,16 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.osmdroid;
 
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER;
+import static kotlin.collections.SetsKt.setOf;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
 
-import com.google.common.collect.ImmutableSet;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.maps.MapFragment;
+import org.odk.collect.androidshared.ui.PrefUtils;
+import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.maps.layers.MbtilesFile;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -19,13 +18,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-class OsmDroidMapConfigurator implements MapConfigurator {
+public class OsmDroidMapConfigurator implements MapConfigurator {
     private final String prefKey;
     private final int sourceLabelId;
     private final WmsOption[] options;
 
     /** Constructs a configurator that renders just one Web Map Service. */
-    OsmDroidMapConfigurator(WebMapService service) {
+    public OsmDroidMapConfigurator(WebMapService service) {
         prefKey = "";
         sourceLabelId = 0;
         options = new WmsOption[] {new WmsOption("", 0, service)};
@@ -35,7 +34,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
      * Constructs a configurator that offers a few Web Map Services to choose from.
      * The choice of which Web Map Service will be stored in a string preference.
      */
-    OsmDroidMapConfigurator(String prefKey, int sourceLabelId, WmsOption... options) {
+    public OsmDroidMapConfigurator(String prefKey, int sourceLabelId, WmsOption... options) {
         this.prefKey = prefKey;
         this.sourceLabelId = sourceLabelId;
         this.options = options;
@@ -48,11 +47,7 @@ class OsmDroidMapConfigurator implements MapConfigurator {
 
     @Override public void showUnavailableMessage(Context context) { }
 
-    @Override public MapFragment createMapFragment(Context context) {
-        return new OsmDroidMapFragment();
-    }
-
-    @Override public List<Preference> createPrefs(Context context) {
+    @Override public List<Preference> createPrefs(Context context, Settings settings) {
         if (options.length > 1) {
             int[] labelIds = new int[options.length];
             String[] values = new String[options.length];
@@ -63,15 +58,14 @@ class OsmDroidMapConfigurator implements MapConfigurator {
             String prefTitle = context.getString(
                 R.string.map_style_label, context.getString(sourceLabelId));
             return Collections.singletonList(PrefUtils.createListPref(
-                context, prefKey, prefTitle, labelIds, values
+                context, prefKey, prefTitle, labelIds, values, settings
             ));
         }
         return Collections.emptyList();
     }
 
     @Override public Collection<String> getPrefKeys() {
-        return prefKey.isEmpty() ? ImmutableSet.of(KEY_REFERENCE_LAYER) :
-            ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? setOf(KEY_REFERENCE_LAYER) : setOf(prefKey, KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {
@@ -101,12 +95,12 @@ class OsmDroidMapConfigurator implements MapConfigurator {
         return name != null ? name : file.getName();
     }
 
-    static class WmsOption {
+    public static class WmsOption {
         final String id;
         final int labelId;
         final WebMapService service;
 
-        WmsOption(String id, int labelId, WebMapService service) {
+        public WmsOption(String id, int labelId, WebMapService service) {
             this.id = id;
             this.labelId = labelId;
             this.service = service;

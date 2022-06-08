@@ -4,6 +4,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.backgroundColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineOpacity;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
+import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -57,14 +58,17 @@ import com.mapbox.mapboxsdk.utils.ColorUtils;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.geo.MbtilesFile.LayerType;
-import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
+import org.odk.collect.maps.MapFragmentDelegate;
+import org.odk.collect.maps.layers.MbtilesFile;
+import org.odk.collect.maps.layers.MbtilesFile.LayerType;
+import org.odk.collect.maps.layers.MbtilesFile.MbtilesException;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,10 +97,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     static final String KEY_STYLE_URL = "STYLE_URL";
 
     @Inject
-    MapProvider mapProvider;
+    ReferenceLayerRepository referenceLayerRepository;
 
     @Inject
-    ReferenceLayerRepository referenceLayerRepository;
+    SettingsProvider settingsProvider;
 
     private MapboxMap map;
     private ReadyListener mapReadyListener;
@@ -121,6 +125,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private final List<Source> overlaySources = new ArrayList<>();
     private final MapboxLocationCallback locationCallback = new MapboxLocationCallback(this);
     private static String lastLocationProvider;
+    private MapFragmentDelegate mapFragmentDelegate;
 
     private TileHttpServer tileServer;
 
@@ -136,7 +141,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         Context context = getContext();
         mapReadyListener = readyListener;
         if (MapboxUtils.initMapbox() == null) {
-            MapProvider.getConfigurator().showUnavailableMessage(context);
+            MapConfiguratorProvider.getConfigurator().showUnavailableMessage(context);
             if (errorListener != null) {
                 errorListener.onError();
             }
@@ -212,6 +217,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     @Override public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
+
+        MapboxMapConfigurator configurator = new MapboxMapConfigurator(
+                KEY_MAPBOX_MAP_STYLE, R.string.basemap_source_mapbox,
+                new MapboxMapConfigurator.MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
+                new MapboxMapConfigurator.MapboxUrlOption(Style.LIGHT, R.string.light),
+                new MapboxMapConfigurator.MapboxUrlOption(Style.DARK, R.string.dark),
+                new MapboxMapConfigurator.MapboxUrlOption(Style.SATELLITE, R.string.satellite),
+                new MapboxMapConfigurator.MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
+                new MapboxMapConfigurator.MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
+        );
+
+        mapFragmentDelegate = new MapFragmentDelegate(configurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override
@@ -235,7 +252,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void onStart() {
         super.onStart();
-        mapProvider.onMapFragmentStart(this);
+        mapFragmentDelegate.onStart();
     }
 
     @Override public void onResume() {
@@ -249,7 +266,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     }
 
     @Override public void onStop() {
-        mapProvider.onMapFragmentStop(this);
+        mapFragmentDelegate.onStop();
         super.onStop();
     }
 
@@ -259,29 +276,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
         MapsMarkerCache.clearCache();
         super.onDestroy();
-    }
-
-    @Override public void applyConfig(Bundle config) {
-        styleUrl = config.getString(KEY_STYLE_URL);
-        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
-        if (map != null) {
-            resetLocationComponent();
-
-            map.setStyle(getStyleBuilder(), style -> {
-                // See addTo() above for why we add this placeholder layer.
-                style.addLayer(new BackgroundLayer(PLACEHOLDER_LAYER_ID)
-                    .withProperties(backgroundColor("rgba(0, 0, 0, 0)")));
-                lineManager = createLineManager();
-                symbolManager = createSymbolManager();
-
-                loadReferenceOverlay();
-                initLocationComponent();
-
-                if (mapReadyListener != null && getActivity() != null) {
-                    mapReadyListener.onReady(this);
-                }
-            });
-        }
     }
 
     /**
@@ -485,6 +479,29 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public @Nullable MapPoint getGpsLocation() {
         return lastLocationFix;
+    }
+
+    private void onConfigChanged(Bundle config) {
+        styleUrl = config.getString(KEY_STYLE_URL);
+        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
+        if (map != null) {
+            resetLocationComponent();
+
+            map.setStyle(getStyleBuilder(), style -> {
+                // See addTo() above for why we add this placeholder layer.
+                style.addLayer(new BackgroundLayer(PLACEHOLDER_LAYER_ID)
+                        .withProperties(backgroundColor("rgba(0, 0, 0, 0)")));
+                lineManager = createLineManager();
+                symbolManager = createSymbolManager();
+
+                loadReferenceOverlay();
+                initLocationComponent();
+
+                if (mapReadyListener != null && getActivity() != null) {
+                    mapReadyListener.onReady(this);
+                }
+            });
+        }
     }
 
     private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {

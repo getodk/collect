@@ -1,5 +1,6 @@
 package org.odk.collect.android.geo;
 
+import static org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_GOOGLE;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_MAPBOX;
@@ -11,8 +12,7 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
-
-import android.content.Context;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import androidx.annotation.NonNull;
 
@@ -20,34 +20,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
-import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption;
-import org.odk.collect.android.geo.OsmDroidMapConfigurator.WmsOption;
-import org.odk.collect.android.preferences.PrefUtils;
-import org.odk.collect.maps.MapFragment;
-import org.odk.collect.maps.MapFragmentFactory;
-import org.odk.collect.shared.settings.Settings;
+import org.odk.collect.osmdroid.OsmDroidMapConfigurator;
+import org.odk.collect.osmdroid.OsmDroidMapConfigurator.WmsOption;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.osmdroid.WebMapService;
 
-import java.util.Map;
-import java.util.WeakHashMap;
+public class MapConfiguratorProvider {
 
-import javax.inject.Singleton;
-
-/**
- * Obtains a MapFragment according to the user's preferences.
- * This is the top-level class that should be used by the rest of the application.
- * The available options on the Maps preferences screen are also defined here.
- *
- * This needs to be used as a singleton for maps to work (Google Maps appears as blank otherwise)
- * but it's not clear if that's intentional or not.
- *
- * @deprecated this currently blocks creating modules for different {@link MapFragment}
- * implementations as they all rely on {@link MapProvider}. This class should be reworked to allow
- * that reorg to go ahead.
- */
-@Deprecated
-@Singleton
-public class MapProvider implements MapFragmentFactory {
     private static final SourceOption[] SOURCE_OPTIONS = initOptions();
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
@@ -57,19 +39,9 @@ public class MapProvider implements MapFragmentFactory {
     private static final String STAMEN_ATTRIBUTION = "Map tiles by Stamen Design, under CC BY 3.0.\nData by OpenStreetMap, under ODbL.";
     private static final String USGS_ATTRIBUTION = "Map services and data available from U.S. Geological Survey,\nNational Geospatial Program.";
 
-    // In general, there will only be one MapFragment, and thus one entry, in
-    // each of these two Maps at any given time.  Nonetheless, it's a little
-    // tidier and less error-prone to use a Map than to track the key and value
-    // in separate fields, and the WeakHashMap will conveniently drop the key
-    // automatically when it's no longer needed.
+    private MapConfiguratorProvider() {
 
-    /** Keeps track of the listener associated with a given MapFragment. */
-    private final Map<MapFragment, Settings.OnSettingChangeListener>
-        listenersByMap = new WeakHashMap<>();
-
-    /** Keeps track of the configurator associated with a given MapFragment. */
-    private final Map<MapFragment, MapConfigurator>
-        configuratorsByMap = new WeakHashMap<>();
+    }
 
     /**
      * In the preference UI, the available basemaps are organized into "sources"
@@ -112,15 +84,15 @@ public class MapProvider implements MapFragmentFactory {
                 new OsmDroidMapConfigurator(
                     KEY_USGS_MAP_STYLE, R.string.basemap_source_usgs,
                     new WmsOption("topographic", R.string.topographic, new WebMapService(
-                        R.string.openmap_usgs_topo, 0, 18, 256, USGS_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_usgs_topo), 0, 18, 256, USGS_ATTRIBUTION,
                         USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
                     )),
                     new WmsOption("hybrid", R.string.hybrid, new WebMapService(
-                        R.string.openmap_usgs_sat, 0, 18, 256, USGS_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_usgs_sat), 0, 18, 256, USGS_ATTRIBUTION,
                         USGS_URL_BASE + "/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
                     )),
                     new WmsOption("satellite", R.string.satellite, new WebMapService(
-                        R.string.openmap_usgs_img, 0, 18, 256, USGS_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_usgs_img), 0, 18, 256, USGS_ATTRIBUTION,
                         USGS_URL_BASE + "/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
                     ))
                 )
@@ -128,7 +100,7 @@ public class MapProvider implements MapFragmentFactory {
             new SourceOption(BASEMAP_SOURCE_STAMEN, R.string.basemap_source_stamen,
                 new OsmDroidMapConfigurator(
                     new WebMapService(
-                        R.string.openmap_stamen_terrain, 0, 18, 256, STAMEN_ATTRIBUTION,
+                         getLocalizedString(getApplication(), R.string.openmap_stamen_terrain), 0, 18, 256, STAMEN_ATTRIBUTION,
                         "http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg"
                     )
                 )
@@ -137,11 +109,11 @@ public class MapProvider implements MapFragmentFactory {
                 new OsmDroidMapConfigurator(
                     KEY_CARTO_MAP_STYLE, R.string.basemap_source_carto,
                     new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
-                        R.string.openmap_cartodb_positron, 0, 18, 256, CARTO_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_cartodb_positron), 0, 18, 256, CARTO_ATTRIBUTION,
                         "http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
                     )),
                     new WmsOption("dark_matter", R.string.carto_map_style_dark_matter, new WebMapService(
-                        R.string.openmap_cartodb_darkmatter, 0, 18, 256, CARTO_ATTRIBUTION,
+                        getLocalizedString(getApplication(), R.string.openmap_cartodb_darkmatter), 0, 18, 256, CARTO_ATTRIBUTION,
                         "http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
                     ))
                 )
@@ -149,21 +121,9 @@ public class MapProvider implements MapFragmentFactory {
         };
     }
 
-    /** Gets a new MapFragment from the selected MapConfigurator. */
-    @Override
-    public MapFragment createMapFragment(@NonNull Context context) {
-        MapConfigurator cftor = getConfigurator();
-        MapFragment map = cftor.createMapFragment(context);
-        if (map != null) {
-            configuratorsByMap.put(map, cftor);
-            return map;
-        }
-        cftor.showUnavailableMessage(context);
-        return null;
-    }
-
     /** Gets the currently selected MapConfigurator. */
-    public static @NonNull MapConfigurator getConfigurator() {
+    public static @NonNull
+    MapConfigurator getConfigurator() {
         return getOption(null).cftor;
     }
 
@@ -173,11 +133,6 @@ public class MapProvider implements MapFragmentFactory {
      */
     public static @NonNull MapConfigurator getConfigurator(String id) {
         return getOption(id).cftor;
-    }
-
-    /** Gets the currently selected SourceOption's label string resource ID. */
-    public static int getSourceLabelId() {
-        return getOption(null).labelId;
     }
 
     /** Gets a list of the IDs of the basemap sources, in order. */
@@ -204,7 +159,7 @@ public class MapProvider implements MapFragmentFactory {
      */
     private static @NonNull SourceOption getOption(String id) {
         if (id == null) {
-            id = PrefUtils.getSharedPrefs().getString(KEY_BASEMAP_SOURCE);
+            id = DaggerUtils.getComponent(getApplication()).settingsProvider().getUnprotectedSettings().getString(KEY_BASEMAP_SOURCE);
         }
         for (SourceOption option : SOURCE_OPTIONS) {
             if (option.id.equals(id)) {
@@ -214,28 +169,8 @@ public class MapProvider implements MapFragmentFactory {
         return SOURCE_OPTIONS[0];
     }
 
-    void onMapFragmentStart(MapFragment map) {
-        MapConfigurator cftor = configuratorsByMap.get(map);
-        if (cftor != null) {
-            Settings generalSettings = PrefUtils.getSharedPrefs();
-            Settings.OnSettingChangeListener listener = key -> {
-                if (cftor.getPrefKeys().contains(key)) {
-                    map.applyConfig(cftor.buildConfig(generalSettings));
-                }
-            };
-            map.applyConfig(cftor.buildConfig(generalSettings));
-            generalSettings.registerOnSettingChangeListener(listener);
-            listenersByMap.put(map, listener);
-        }
-    }
-
-    void onMapFragmentStop(MapFragment map) {
-        Settings.OnSettingChangeListener listener = listenersByMap.get(map);
-        if (listener != null) {
-            Settings prefs = PrefUtils.getSharedPrefs();
-            prefs.unregisterOnSettingChangeListener(listener);
-            listenersByMap.remove(map);
-        }
+    private static Collect getApplication() {
+        return Collect.getInstance();
     }
 
     private static class SourceOption {

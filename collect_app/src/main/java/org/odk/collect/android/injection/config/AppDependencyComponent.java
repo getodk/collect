@@ -54,7 +54,6 @@ import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
 import org.odk.collect.android.geo.MapboxMapFragment;
-import org.odk.collect.android.geo.OsmDroidMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.CaptionedListPreference;
@@ -93,8 +92,9 @@ import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.MapFragmentFactory;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
@@ -181,8 +181,6 @@ public interface AppDependencyComponent {
     void inject(FormMetadataPreferencesFragment formMetadataPreferencesFragment);
 
     void inject(FormMapActivity formMapActivity);
-
-    void inject(OsmDroidMapFragment mapFragment);
 
     void inject(GoogleMapFragment mapFragment);
 
@@ -337,4 +335,6 @@ public interface AppDependencyComponent {
     PermissionsProvider permissionsProvider();
 
     PermissionsChecker permissionsChecker();
+
+    ReferenceLayerRepository referenceLayerRepository();
 }

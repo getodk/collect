@@ -1,6 +1,5 @@
 package org.odk.collect.android.support
 
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentManager
@@ -11,8 +10,6 @@ class FakeClickableMapFragment : MapFragment {
 
     private var idCounter = 1
     private var featureClickListener: MapFragment.FeatureListener? = null
-
-    override fun applyConfig(config: Bundle?) { }
 
     override fun addTo(
         fragmentManager: FragmentManager,

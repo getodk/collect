@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.osmdroid;
 
 import static androidx.core.graphics.drawable.DrawableKt.toBitmap;
 
@@ -42,16 +42,16 @@ import androidx.fragment.app.FragmentManager;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
+import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.settings.SettingsProvider;
 import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.events.MapListener;
 import org.osmdroid.events.ScrollEvent;
 import org.osmdroid.events.ZoomEvent;
@@ -82,20 +82,22 @@ import timber.log.Timber;
  * A MapFragment drawn by OSMDroid.
  */
 public class OsmDroidMapFragment extends Fragment implements MapFragment,
-        MapEventsReceiver, IRegisterReceiver,
         LocationListener, LocationClient.LocationClientListener {
 
     // Bundle keys understood by applyConfig().
-    static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
-
-    @Inject
-    MapProvider mapProvider;
+    public static final String KEY_WEB_MAP_SERVICE = "WEB_MAP_SERVICE";
 
     @Inject
     ReferenceLayerRepository referenceLayerRepository;
 
     @Inject
     LocationClient locationClient;
+
+    @Inject
+    MapConfigurator mapConfigurator;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     private MapView map;
     private ReadyListener readyListener;
@@ -113,24 +115,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
-
-    @Override
-    public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-        Context context = getActivity();
-        return context != null ? context.registerReceiver(receiver, filter) : null;
-    }
-
-    @Override
-    public void unregisterReceiver(BroadcastReceiver receiver) {
-        Context context = getActivity();
-        if (context != null) {
-            context.unregisterReceiver(receiver);
-        }
-    }
-
-    @Override
-    public void destroy() {
-    }
+    private MapFragmentDelegate mapFragmentDelegate;
 
     @Override
     public void addTo(
@@ -148,13 +133,16 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
+        OsmDroidDependencyComponent component = ((OsmDroidDependencyComponentProvider) context.getApplicationContext()).getOsmDroidDependencyComponent();
+        component.inject(this);
+
+        mapFragmentDelegate = new MapFragmentDelegate(mapConfigurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mapProvider.onMapFragmentStart(this);
+        mapFragmentDelegate.onStart();
     }
 
     @Override
@@ -171,18 +159,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void onStop() {
-        mapProvider.onMapFragmentStop(this);
         super.onStop();
-    }
-
-    @Override
-    public void applyConfig(Bundle config) {
-        webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
-        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
-        if (map != null) {
-            map.setTileSource(webMapService.asOnlineTileSource());
-            loadReferenceOverlay();
-        }
+        mapFragmentDelegate.onStop();
     }
 
     @Override
@@ -224,24 +202,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             }
         }, 100);
         return view;
-    }
-
-    @Override
-    public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
-        if (clickListener != null) {
-            clickListener.onPoint(fromGeoPoint(geoPoint));
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean longPressHelper(GeoPoint geoPoint) {
-        if (longPressListener != null) {
-            longPressListener.onPoint(fromGeoPoint(geoPoint));
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -541,7 +501,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             referenceOverlay = null;
         }
         if (referenceLayerFile != null) {
-            OsmMBTileProvider mbprovider = new OsmMBTileProvider(this, referenceLayerFile);
+            OsmMBTileProvider mbprovider = new OsmMBTileProvider(new RegisterReceiver(requireActivity()), referenceLayerFile);
             referenceOverlay = new TilesOverlay(mbprovider, getContext());
             referenceOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);
             map.getOverlays().add(0, referenceOverlay);
@@ -685,7 +645,16 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private void addAttributionAndMapEventsOverlays() {
         map.getOverlays().add(new AttributionOverlay(getContext()));
-        map.getOverlays().add(new MapEventsOverlay(this));
+        map.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver(clickListener, longPressListener)));
+    }
+
+    private void onConfigChanged(Bundle config) {
+        webMapService = (WebMapService) config.getSerializable(KEY_WEB_MAP_SERVICE);
+        referenceLayerFile = MapFragmentReferenceLayerUtils.getReferenceLayerFile(config, referenceLayerRepository);
+        if (map != null) {
+            map.setTileSource(webMapService.asOnlineTileSource());
+            loadReferenceOverlay();
+        }
     }
 
     /**
@@ -906,6 +875,60 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         public void destroy() {
             locationClient.stop();
             locationClient = null;
+        }
+    }
+
+    private static class RegisterReceiver implements IRegisterReceiver {
+
+        private final Context context;
+
+        RegisterReceiver(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+            return context != null ? context.registerReceiver(receiver, filter) : null;
+        }
+
+        @Override
+        public void unregisterReceiver(BroadcastReceiver receiver) {
+            if (context != null) {
+                context.unregisterReceiver(receiver);
+            }
+        }
+
+        @Override
+        public void destroy() {
+        }
+    }
+
+    private static class MapEventsReceiver implements org.osmdroid.events.MapEventsReceiver {
+
+        private final PointListener clickListener;
+        private final PointListener longPressListener;
+
+        MapEventsReceiver(PointListener clickListener, PointListener longPressListener) {
+            this.clickListener = clickListener;
+            this.longPressListener = longPressListener;
+        }
+
+        @Override
+        public boolean singleTapConfirmedHelper(GeoPoint geoPoint) {
+            if (clickListener != null) {
+                clickListener.onPoint(fromGeoPoint(geoPoint));
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean longPressHelper(GeoPoint geoPoint) {
+            if (longPressListener != null) {
+                longPressListener.onPoint(fromGeoPoint(geoPoint));
+                return true;
+            }
+            return false;
         }
     }
 }

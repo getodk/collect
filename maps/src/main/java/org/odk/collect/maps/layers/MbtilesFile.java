@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.maps.layers;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,7 +27,7 @@ import static android.database.sqlite.SQLiteDatabase.OPEN_READONLY;
  * columns, including tiles that may contain raster images or vector geometry.
  * See https://github.com/mapbox/mbtiles-spec for the detailed specification.
  */
-class MbtilesFile implements Closeable, TileSource {
+public class MbtilesFile implements Closeable, TileSource {
     public enum LayerType { RASTER, VECTOR }
 
     private final File file;
@@ -36,7 +36,7 @@ class MbtilesFile implements Closeable, TileSource {
     private final String contentEncoding;
     private SQLiteDatabase db;  // see getTileBlob for why this is not final
 
-    MbtilesFile(File file) throws MbtilesException {
+    public MbtilesFile(File file) throws MbtilesException {
         this(file, detectContentType(file));
     }
 
@@ -119,7 +119,7 @@ class MbtilesFile implements Closeable, TileSource {
     }
 
     /** Returns information about the vector layers available in the tiles. */
-    List<VectorLayer> getVectorLayers() {
+    public List<VectorLayer> getVectorLayers() {
         List<VectorLayer> layers = new ArrayList<>();
         JSONArray jsonLayers;
         try {
@@ -235,7 +235,7 @@ class MbtilesFile implements Closeable, TileSource {
         }
     }
 
-    static class MbtilesException extends IOException {
+    public static class MbtilesException extends IOException {
         MbtilesException(Throwable cause) {
             this(cause.getMessage());
             initCause(cause);

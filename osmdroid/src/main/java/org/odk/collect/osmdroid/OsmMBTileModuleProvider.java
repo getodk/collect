@@ -16,7 +16,7 @@
  * @author Jon Nordling (jonnordling@gmail.com)
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.osmdroid;
 
 import android.graphics.drawable.Drawable;
 
@@ -31,11 +31,11 @@ import java.io.InputStream;
 
 import timber.log.Timber;
 
-public class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
+class OsmMBTileModuleProvider extends MapTileFileStorageProviderBase {
 
     protected OsmMBTileSource tileSource;
 
-    public OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar, OsmMBTileSource tileSource) {
+    OsmMBTileModuleProvider(IRegisterReceiver receiverRegistrar, OsmMBTileSource tileSource) {
 
         // Call the super constructor
         super(receiverRegistrar,

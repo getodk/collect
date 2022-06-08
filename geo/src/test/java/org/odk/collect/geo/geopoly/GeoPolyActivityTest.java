@@ -80,7 +80,7 @@ public class GeoPolyActivityTest {
 
                     @NonNull
                     @Override
-                    public LocationTracker providesLocationTracker() {
+                    public LocationTracker providesLocationTracker(@NonNull Application application) {
                         return locationTracker;
                     }
                 })

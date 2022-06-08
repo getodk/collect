@@ -72,7 +72,7 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesLocationTracker(): LocationTracker {
+    open fun providesLocationTracker(application: Application): LocationTracker {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 
@@ -87,7 +87,7 @@ open class GeoDependencyModule {
     }
 
     @Provides
-    open fun providesSatelliteInfoClient(): SatelliteInfoClient {
+    open fun providesSatelliteInfoClient(context: Context): SatelliteInfoClient {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 

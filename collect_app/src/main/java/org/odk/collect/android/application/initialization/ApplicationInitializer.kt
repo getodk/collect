@@ -19,10 +19,10 @@ import org.odk.collect.android.application.initialization.upgrade.UpgradeInitial
 import org.odk.collect.android.geo.MapboxUtils
 import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
+import org.odk.collect.osmdroid.OsmDroidInitializer
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.utilities.UserAgentProvider
-import org.osmdroid.config.Configuration
 import timber.log.Timber
 import java.util.Locale
 
@@ -107,7 +107,7 @@ class ApplicationInitializer(
                 // This has to happen on the main thread but we might call `initialize` from tests
                 MapView(context).onCreate(null)
             }
-            Configuration.getInstance().userAgentValue = userAgentProvider.userAgent
+            OsmDroidInitializer.initialize(userAgentProvider.userAgent)
             MapboxUtils.initMapbox()
         } catch (ignore: Exception) {
             // ignored

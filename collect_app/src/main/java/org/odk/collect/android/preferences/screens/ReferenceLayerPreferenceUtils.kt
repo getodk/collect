@@ -2,10 +2,10 @@ package org.odk.collect.android.preferences.screens
 
 import android.content.Context
 import org.odk.collect.android.R
-import org.odk.collect.android.geo.MapConfigurator
-import org.odk.collect.android.geo.MapProvider
+import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.android.preferences.CaptionedListPreference
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.layers.ReferenceLayer
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import java.io.File
@@ -19,7 +19,7 @@ object ReferenceLayerPreferenceUtils {
         referenceLayerRepository: ReferenceLayerRepository,
         referenceLayerPref: CaptionedListPreference
     ) {
-        val cftor = MapProvider.getConfigurator()
+        val cftor = MapConfiguratorProvider.getConfigurator()
         val items: MutableList<CaptionedListPreference.Item> = ArrayList()
         items.add(CaptionedListPreference.Item(null, context.getString(R.string.none), ""))
         val supportedLayerFiles = getSupportedLayerFiles(cftor, referenceLayerRepository)
