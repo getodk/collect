@@ -220,9 +220,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
         CustomTimePickerDialog.TimeChangeListener {
 
-    private static final boolean EVALUATE_CONSTRAINTS = true;
-    public static final boolean DO_NOT_EVALUATE_CONSTRAINTS = false;
-
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
@@ -996,7 +993,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    private boolean saveAnswersForCurrentScreen(boolean evaluateConstraints) {
+    private boolean evaluateConstraintsAndSaveAnswersForCurrentScreen() {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -1005,8 +1002,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 && getCurrentViewIfODKView() != null) {
             HashMap<FormIndex, IAnswerData> answers = getAnswers();
             try {
-                FailedConstraint constraint = formController.saveAllScreenAnswers(answers,
-                        evaluateConstraints);
+                FailedConstraint constraint = formController.saveAllScreenAnswers(answers, true);
                 if (constraint != null) {
                     createConstraintToast(constraint.index, constraint.status);
                     if (formController.indexIsInFieldList() && formController.getQuestionPrompts().length > 1) {
@@ -1027,7 +1023,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     // The method saves questions one by one in order to support calculations in field-list groups
-    private void saveAnswersForCurrentScreen(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
+    private void saveAnswersForFieldList(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
         FormController formController = getFormController();
         ODKView currentView = getCurrentViewIfODKView();
         if (formController == null || currentView == null) {
@@ -1116,7 +1112,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // mFormEntryController is static so we don't need to pass it.
         if (formController != null && formController.currentPromptIsQuestion()) {
-            saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+            formSaveViewModel.saveAnswersForScreen(getAnswers());
         }
         return null;
     }
@@ -1338,19 +1334,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onSwipeForward() {
-        if (!moveScreen(FORWARDS)) {
-            swipeHandler.setBeenSwiped(false);
-        }
+        moveScreen(FORWARDS);
     }
 
     @Override
     public void onSwipeBackward() {
-        if (!moveScreen(BACKWARDS)) {
-            swipeHandler.setBeenSwiped(false);
-        }
+        moveScreen(BACKWARDS);
     }
 
-    private boolean moveScreen(Direction direction) {
+    private void moveScreen(Direction direction) {
         if (currentView != null) {
             currentView.cancelPendingInputEvents();
         }
@@ -1359,40 +1351,43 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
         if (formController == null) {
             Timber.d("FormController has a null value");
-            return false;
+            swipeHandler.setBeenSwiped(false);
+            return;
         }
 
         if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
             // We want the user to stop recording before changing screens
             DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
-            return false;
+            swipeHandler.setBeenSwiped(false);
+            return;
         }
 
         if (direction == FORWARDS) {
             if (formController.getEvent() == FormEntryController.EVENT_END_OF_FORM) {
-                return false;
+                swipeHandler.setBeenSwiped(false);
+                return;
             }
 
-            if (!saveBeforeNextView(formController)) {
+            boolean saveError = saveBeforeNextView(formController);
+            if (saveError) {
+                swipeHandler.setBeenSwiped(false);
+            } else {
                 formEntryViewModel.moveForward();
                 formIndexAnimationHandler.handle(formController.getFormIndex());
-                return true;
-            } else {
-                return false;
             }
         } else {
             if (formController.isCurrentQuestionFirstInForm() || !allowMovingBackwards) {
-                return false;
+                swipeHandler.setBeenSwiped(false);
+                return;
             }
 
             // The answer is saved on a back swipe, but question constraints are ignored.
             if (formController.currentPromptIsQuestion()) {
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                formSaveViewModel.saveAnswersForScreen(getAnswers());
             }
 
             formEntryViewModel.moveBackward();
             formIndexAnimationHandler.handle(formController.getFormIndex());
-            return true;
         }
     }
 
@@ -1469,7 +1464,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             // if constraint behavior says we should validate on swipe, do so
             if (constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                if (!saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS)) {
+                if (!evaluateConstraintsAndSaveAnswersForCurrentScreen()) {
                     // A constraint was violated so a dialog should be showing.
                     swipeHandler.setBeenSwiped(false);
                     return true;
@@ -1478,7 +1473,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // otherwise, just save without validating (constraints will be validated on
                 // finalize)
             } else {
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                formSaveViewModel.saveAnswersForScreen(getAnswers());
             }
         }
 
@@ -1725,7 +1720,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                              boolean current) {
         // save current answer
         if (current) {
-            if (!saveAnswersForCurrentScreen(complete)) {
+            if (!evaluateConstraintsAndSaveAnswersForCurrentScreen()) {
                 showShortToast(this, R.string.data_saved_error);
                 return false;
             }
@@ -1810,7 +1805,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     next();
                 } else {
                     // otherwise, we can get the proper toast(s) by saving with constraint check
-                    saveAnswersForCurrentScreen(EVALUATE_CONSTRAINTS);
+                    evaluateConstraintsAndSaveAnswersForCurrentScreen();
                 }
                 formSaveViewModel.resumeFormEntry();
                 break;
@@ -1854,7 +1849,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
                         clearAnswer(qw);
-                        saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                        formSaveViewModel.saveAnswersForScreen(getAnswers());
                         break;
                 }
             }
@@ -1897,7 +1892,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             getFormController().setLanguage(languages[whichButton]);
                             dialog.dismiss();
                             if (getFormController().currentPromptIsQuestion()) {
-                                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                                formSaveViewModel.saveAnswersForScreen(getAnswers());
                             }
                             onScreenRefresh();
                         })
@@ -1953,7 +1948,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (!formSaveViewModel.isSaving()) {
             if (currentView != null && formController != null
                     && formController.currentPromptIsQuestion()) {
-                saveAnswersForCurrentScreen(DO_NOT_EVALUATE_CONSTRAINTS);
+                formSaveViewModel.saveAnswersForScreen(getAnswers());
             }
         }
 
@@ -2594,7 +2589,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             immutableQuestionsBeforeSave.add(new ImmutableDisplayableQuestion(questionBeforeSave));
         }
 
-        saveAnswersForCurrentScreen(questionsBeforeSave, immutableQuestionsBeforeSave);
+        saveAnswersForFieldList(questionsBeforeSave, immutableQuestionsBeforeSave);
 
         FormEntryPrompt[] questionsAfterSave = getFormController().getQuestionPrompts();
 
