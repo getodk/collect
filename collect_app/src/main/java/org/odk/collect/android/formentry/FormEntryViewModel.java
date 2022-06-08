@@ -32,6 +32,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
+    private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
 
     @Nullable
     private FormController formController;
@@ -60,12 +61,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     @Nullable
-    public FormIndex getCurrentIndex() {
-        if (formController != null) {
-            return formController.getFormIndex();
-        } else {
-            return null;
-        }
+    public LiveData<FormIndex> getCurrentIndex() {
+        return currentIndex;
     }
 
     public LiveData<FormError> getError() {
@@ -80,6 +77,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         jumpBackIndex = formController.getFormIndex();
         jumpToNewRepeat();
+        updateIndex();
     }
 
     public void jumpToNewRepeat() {
@@ -106,6 +104,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
                 error.setValue(new NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
             }
         }
+
+        updateIndex();
     }
 
     public void cancelRepeatPrompt() {
@@ -123,6 +123,8 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
                 error.setValue(new NonFatal(exception.getCause().getMessage()));
             }
         }
+
+        updateIndex();
     }
 
     public void errorDisplayed() {
@@ -148,6 +150,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
 
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+        updateIndex();
     }
 
     public void moveBackward() {
@@ -164,6 +167,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
 
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+        updateIndex();
     }
 
     public void openHierarchy() {
@@ -191,6 +195,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     @Override
     protected void onCleared() {
         this.answerListener = null;
+    }
+
+    private void updateIndex() {
+        currentIndex.setValue(formController.getFormIndex());
     }
 
     public static class Factory implements ViewModelProvider.Factory {

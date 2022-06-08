@@ -408,7 +408,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menuDelegate = new FormEntryMenuDelegate(
                 this,
                 () -> getAnswers(),
-                formIndexAnimationHandler,
                 formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
@@ -468,6 +467,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
+
+        formEntryViewModel.getCurrentIndex().observe(this, index -> {
+            formIndexAnimationHandler.handle(index);
+        });
 
         formEntryViewModel.setAnswerListener(this::onAnswer);
 
@@ -1373,7 +1376,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 swipeHandler.setBeenSwiped(false);
             } else {
                 formEntryViewModel.moveForward();
-                formIndexAnimationHandler.handle(formController.getFormIndex());
             }
         } else {
             if (formController.isCurrentQuestionFirstInForm() || !allowMovingBackwards) {
@@ -1387,7 +1389,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             formEntryViewModel.moveBackward();
-            formIndexAnimationHandler.handle(formController.getFormIndex());
         }
     }
 
@@ -1446,15 +1447,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 Timber.d("JavaRosa added a new EVENT type and didn't tell us... shame on them.");
                 break;
         }
-
-        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
     private void animateToPreviousView(int event) {
         SwipeHandler.View next = createView(event, false);
         showView(next, AnimationType.LEFT);
-
-        formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
 
     private boolean saveBeforeNextView(FormController formController) {
@@ -1639,7 +1636,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 swipeHandler.setBeenSwiped(false);
                 shownAlertDialogIsGroupRepeat = false;
                 formEntryViewModel.addRepeat();
-                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
             }
 
             @Override
@@ -1669,7 +1665,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             }
 
                             formEntryViewModel.cancelRepeatPrompt();
-                            formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
                         });
                     }
                 }.start();

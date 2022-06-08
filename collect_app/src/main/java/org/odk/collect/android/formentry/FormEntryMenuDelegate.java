@@ -32,7 +32,6 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
     private final AppCompatActivity activity;
     private final AnswersProvider answersProvider;
-    private final FormIndexAnimationHandler formIndexAnimationHandler;
     private final FormEntryViewModel formEntryViewModel;
     private final FormSaveViewModel formSaveViewModel;
     private final BackgroundLocationViewModel backgroundLocationViewModel;
@@ -44,13 +43,12 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final SettingsProvider settingsProvider;
 
     public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
-                                 FormIndexAnimationHandler formIndexAnimationHandler, FormSaveViewModel formSaveViewModel,
+                                 FormSaveViewModel formSaveViewModel,
                                  FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
                                  BackgroundLocationViewModel backgroundLocationViewModel,
                                  BackgroundAudioViewModel backgroundAudioViewModel, SettingsProvider settingsProvider) {
         this.activity = activity;
         this.answersProvider = answersProvider;
-        this.formIndexAnimationHandler = formIndexAnimationHandler;
 
         this.audioRecorder = audioRecorder;
         this.formEntryViewModel = formEntryViewModel;
@@ -116,7 +114,6 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             } else {
                 formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
                 formEntryViewModel.promptForNewRepeat();
-                formIndexAnimationHandler.handle(formEntryViewModel.getCurrentIndex());
             }
 
             return true;
