@@ -14,7 +14,7 @@ class FakeScheduler : Scheduler {
     private var repeatTasks = ArrayList<RepeatTask>()
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
-        backgroundTasks.push(Runnable { foreground.accept(background.get()) })
+        backgroundTasks.addLast(Runnable { foreground.accept(background.get()) })
     }
 
     override fun immediate(foreground: Runnable) {
@@ -73,8 +73,8 @@ class FakeScheduler : Scheduler {
 
     fun runBackground() {
         if (backgroundTasks.isNotEmpty()) {
-            backgroundTasks[0].run()
-            backgroundTasks.removeAt(0)
+            backgroundTasks.first().run()
+            backgroundTasks.removeFirst()
         }
     }
 

@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -61,7 +63,6 @@ class BlankFormListViewModelTest {
     @Test
     fun `syncWithStorage should not be triggered when viewModel is initialized if forms lock is locked`() {
         changeLock.lock()
-        val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer = mock()
         createViewModel()
 
         verifyNoInteractions(formsDirDiskFormsSynchronizer)
@@ -139,6 +140,25 @@ class BlankFormListViewModelTest {
         assertThat(authenticationRequired.getOrAwaitValue(), `is`(true))
         liveData.value = null
         assertThat(authenticationRequired.getOrAwaitValue(), `is`(false))
+    }
+
+    @Test
+    fun `first forms should be loaded from database and then synced with storage`() {
+        saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2)
+        createViewModel(false)
+        scheduler.runBackground()
+
+        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(2))
+
+        doAnswer {
+            saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2, BlankFormFixtures.blankForm3)
+            "Result text"
+        }.whenever(formsDirDiskFormsSynchronizer).synchronizeAndReturnError()
+
+        scheduler.runBackground()
+        scheduler.runBackground()
+
+        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(3))
     }
 
     @Test
@@ -243,7 +263,7 @@ class BlankFormListViewModelTest {
         }
     }
 
-    private fun createViewModel() {
+    private fun createViewModel(runAllBackgroundTasks: Boolean = true) {
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
 
         viewModel = BlankFormListViewModel(
@@ -259,8 +279,10 @@ class BlankFormListViewModelTest {
             projectId
         )
 
-        scheduler.runBackground()
-        scheduler.runBackground()
+        if (runAllBackgroundTasks) {
+            scheduler.runBackground()
+            scheduler.runBackground()
+        }
     }
 
     private fun assertFormItem(blankFormListItem: BlankFormListItem, form: Form) {
