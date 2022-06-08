@@ -133,9 +133,11 @@ class BlankFormListViewModel(
                     background = {
                         formsDirDiskFormsSynchronizer.synchronizeAndReturnError()
                     },
-                    foreground = { result ->
-                        loadFromDatabase()
-                        _syncResult.value = Consumable(result)
+                    foreground = { result: String? ->
+                        result?.let {
+                            loadFromDatabase()
+                            _syncResult.value = Consumable(result)
+                        }
                         isSyncingWithStorageRunning.value = false
                     }
                 )

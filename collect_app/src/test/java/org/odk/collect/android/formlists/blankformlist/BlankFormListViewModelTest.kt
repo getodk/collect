@@ -27,7 +27,7 @@ import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.BooleanChangeLock
-import org.odk.collect.testshared.TestScheduler
+import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
 class BlankFormListViewModelTest {
@@ -35,7 +35,7 @@ class BlankFormListViewModelTest {
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val syncRepository: SyncStatusAppState = mock()
     private val formsUpdater: FormsUpdater = mock()
-    private val scheduler = TestScheduler()
+    private val scheduler = FakeScheduler()
     private val generalSettings = InMemSettings()
     private val analytics: Analytics = mock()
     private val changeLockProvider: ChangeLockProvider = mock()
@@ -73,6 +73,7 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(true).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
+        scheduler.runBackground()
         assertThat(result.value, `is`(true))
     }
 
@@ -82,6 +83,7 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(false).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
+        scheduler.runBackground()
         assertThat(result.value, `is`(false))
     }
 
@@ -256,6 +258,9 @@ class BlankFormListViewModelTest {
             formsDirDiskFormsSynchronizer,
             projectId
         )
+
+        scheduler.runBackground()
+        scheduler.runBackground()
     }
 
     private fun assertFormItem(blankFormListItem: BlankFormListItem, form: Form) {
