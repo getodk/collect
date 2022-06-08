@@ -70,50 +70,43 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     
     	TaskEntry item = getItem(position);
 
-    	ImageView icon = (ImageView) view.findViewById(R.id.icon);
+    	/*
+    	 * Get icon drawable
+    	 */
+        Drawable d = null;
     	if(item.type.equals("form")) {
-            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank_circle);
-            icon.setImageDrawable(d);
-    	} else if (item.taskType != null && item.taskType.equals("case")) {
-            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.case_open);
-            icon.setImageDrawable(d);
-        } else if (item.taskStatus != null) {
+            d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank_circle);
+    	} else if (item.taskStatus != null) {
     		if(item.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
 				if(item.locationTrigger != null && !item.repeat) {
-                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_triggered);
-                    icon.setImageDrawable(d);
+                    d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_triggered);
                 } else if (item.locationTrigger != null && item.repeat) {
-                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_triggered_repeat);
-                    icon.setImageDrawable(d);
+                    d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_triggered_repeat);
                 } else if(item.repeat) {
-                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_repeat);
-                    icon.setImageDrawable(d);
+                    d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_repeat);
 				} else if(item.taskFinish != 0 && item.taskFinish < (new Date()).getTime()) {
-                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_late);
-                    icon.setImageDrawable(d);
+                    d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_late);
                 } else {
-                    Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_saved_circle);
-                    icon.setImageDrawable(d);
+                    if (item.taskType != null && item.taskType.equals("case")) {
+                        d = ContextCompat.getDrawable(getContext(), R.drawable.case_open);
+                    } else {
+                        d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_saved_circle);
+                    }
 				}
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_COMPLETE)) {
-                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized_circle);
-                icon.setImageDrawable(d);
+                d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized_circle);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_REJECTED) || item.taskStatus.equals(Utilities.STATUS_T_CANCELLED)) {
-                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_rejected);
-                icon.setImageDrawable(d);
+                d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_rejected);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {
-                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_submitted_circle);
-                icon.setImageDrawable(d);
+                d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_submitted_circle);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_NEW)) {
-                Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_new);
-                icon.setImageDrawable(d);
+                d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_new);
             }
     	}
-
-    	// mqp
-        //View mapIconView = view.findViewById(R.id.map_view);
-        //mapIconView.setVisibility(item.geometryXPath != null ? View.VISIBLE : View.GONE);  disable
-        //mapIconView.setVisibility(View.GONE);       // disable
+    	if(d != null) {
+            ImageView icon = (ImageView) view.findViewById(R.id.icon);
+            icon.setImageDrawable(d);
+        }
 
     	TextView taskNameText = view.findViewById(R.id.toptext);
     	if (taskNameText != null) {
