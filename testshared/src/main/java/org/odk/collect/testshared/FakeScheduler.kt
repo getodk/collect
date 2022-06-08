@@ -10,11 +10,11 @@ import java.util.function.Supplier
 class FakeScheduler : Scheduler {
 
     private var foregroundTasks = LinkedList<Runnable>()
-    private var backgroundTask: Runnable? = null
+    private var backgroundTasks = LinkedList<Runnable>()
     private var repeatTasks = ArrayList<RepeatTask>()
 
-    override fun <T> immediate(foreground: Supplier<T>, background: Consumer<T>) {
-        backgroundTask = Runnable { background.accept(foreground.get()) }
+    override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
+        backgroundTasks.push(Runnable { foreground.accept(background.get()) })
     }
 
     override fun immediate(foreground: Runnable) {
@@ -72,9 +72,9 @@ class FakeScheduler : Scheduler {
     }
 
     fun runBackground() {
-        if (backgroundTask != null) {
-            backgroundTask!!.run()
-            backgroundTask = null
+        if (backgroundTasks.isNotEmpty()) {
+            backgroundTasks[0].run()
+            backgroundTasks.removeAt(0)
         }
     }
 
