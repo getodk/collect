@@ -227,6 +227,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
+    private static final String TAG_LOADING_FRAGMENT = "loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -469,6 +470,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             formIndexAnimationHandler.handle(index);
+        });
+
+        formEntryViewModel.isLoading().observe(this, isLoading -> {
+            if (isLoading) {
+                MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+                dialog.setMessage(getString(R.string.please_wait));
+                showIfNotShowing(dialog, TAG_LOADING_FRAGMENT, getSupportFragmentManager());
+            } else {
+                DialogFragmentUtils.dismissDialog(TAG_LOADING_FRAGMENT, getSupportFragmentManager());
+            }
         });
 
         formEntryViewModel.setAnswerListener(this::onAnswer);

@@ -20,9 +20,11 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
+import org.odk.collect.async.Scheduler;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
@@ -30,10 +32,12 @@ import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGr
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Supplier<Long> clock;
+    private final Scheduler scheduler;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
+    private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
 
     @Nullable
     private FormController formController;
@@ -45,8 +49,9 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private AnswerListener answerListener;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Supplier<Long> clock) {
+    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler) {
         this.clock = clock;
+        this.scheduler = scheduler;
     }
 
     @Override
@@ -68,6 +73,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public LiveData<FormError> getError() {
         return error;
+    }
+
+    public NonNullLiveData<Boolean> isLoading() {
+        return isLoading;
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -155,29 +164,43 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void moveForward(HashMap<FormIndex, IAnswerData> answers) {
-        updateAnswersForScreen(answers);
-        moveForward();
+        isLoading.setValue(true);
+
+        scheduler.immediate((Supplier<Void>) () -> {
+            updateAnswersForScreen(answers);
+            return null;
+        }, unused -> {
+            isLoading.setValue(false);
+            moveForward();
+        });
     }
 
     public void moveBackward(HashMap<FormIndex, IAnswerData> answers) {
-        if (formController.currentPromptIsQuestion()) {
-            updateAnswersForScreen(answers);
-        }
+        isLoading.setValue(true);
 
-        try {
-            int event = formController.stepToPreviousScreenEvent();
-
-            // If we are the beginning of the form we need to move back to the first actual screen
-            if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                formController.stepToNextScreenEvent();
+        scheduler.immediate((Supplier<Void>) () -> {
+            if (formController.currentPromptIsQuestion()) {
+                updateAnswersForScreen(answers);
             }
-        } catch (JavaRosaException e) {
-            error.setValue(new NonFatal(e.getCause().getMessage()));
-            return;
-        }
+            return null;
+        }, unused -> {
+            isLoading.setValue(false);
 
-        formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-        updateIndex();
+            try {
+                int event = formController.stepToPreviousScreenEvent();
+
+                // If we are the beginning of the form we need to move back to the first actual screen
+                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                    formController.stepToNextScreenEvent();
+                }
+            } catch (JavaRosaException e) {
+                error.setValue(new NonFatal(e.getCause().getMessage()));
+                return;
+            }
+
+            formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+            updateIndex();
+        });
     }
 
     public void updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
@@ -228,16 +251,18 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     public static class Factory implements ViewModelProvider.Factory {
 
         private final Supplier<Long> clock;
+        private final Scheduler scheduler;
 
-        public Factory(Supplier<Long> clock) {
+        public Factory(Supplier<Long> clock, Scheduler scheduler) {
             this.clock = clock;
+            this.scheduler = scheduler;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock);
+            return (T) new FormEntryViewModel(clock, scheduler);
         }
     }
 
