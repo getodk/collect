@@ -408,7 +408,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         menuDelegate = new FormEntryMenuDelegate(
                 this,
                 () -> getAnswers(),
-                formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
                 backgroundLocationViewModel,
@@ -1115,7 +1114,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // mFormEntryController is static so we don't need to pass it.
         if (formController != null && formController.currentPromptIsQuestion()) {
-            formSaveViewModel.saveAnswersForScreen(getAnswers());
+            formEntryViewModel.updateAnswersForScreen(getAnswers());
         }
         return null;
     }
@@ -1371,9 +1370,23 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            boolean saveError = saveBeforeNextView(formController);
-            if (saveError) {
-                swipeHandler.setBeenSwiped(false);
+            if (formController.currentPromptIsQuestion()) {
+                // get constraint behavior preference value with appropriate default
+                String constraintBehavior = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR);
+
+                // if constraint behavior says we should validate on swipe, do so
+                if (constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
+                    if (!evaluateConstraintsAndSaveAnswersForCurrentScreen()) {
+                        // A constraint was violated so a dialog should be showing.
+                        swipeHandler.setBeenSwiped(false);
+                    } else {
+                        formEntryViewModel.moveForward();
+                    }
+
+                // otherwise, just save without validating (constraints will be validated on finalize)
+                } else {
+                    formEntryViewModel.moveForward(getAnswers());
+                }
             } else {
                 formEntryViewModel.moveForward();
             }
@@ -1383,12 +1396,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return;
             }
 
-            // The answer is saved on a back swipe, but question constraints are ignored.
-            if (formController.currentPromptIsQuestion()) {
-                formSaveViewModel.saveAnswersForScreen(getAnswers());
-            }
-
-            formEntryViewModel.moveBackward();
+            formEntryViewModel.moveBackward(getAnswers());
         }
     }
 
@@ -1452,29 +1460,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void animateToPreviousView(int event) {
         SwipeHandler.View next = createView(event, false);
         showView(next, AnimationType.LEFT);
-    }
-
-    private boolean saveBeforeNextView(FormController formController) {
-        if (formController.currentPromptIsQuestion()) {
-            // get constraint behavior preference value with appropriate default
-            String constraintBehavior = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-            // if constraint behavior says we should validate on swipe, do so
-            if (constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                if (!evaluateConstraintsAndSaveAnswersForCurrentScreen()) {
-                    // A constraint was violated so a dialog should be showing.
-                    swipeHandler.setBeenSwiped(false);
-                    return true;
-                }
-
-                // otherwise, just save without validating (constraints will be validated on
-                // finalize)
-            } else {
-                formSaveViewModel.saveAnswersForScreen(getAnswers());
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -1844,7 +1829,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
                         clearAnswer(qw);
-                        formSaveViewModel.saveAnswersForScreen(getAnswers());
+                        formEntryViewModel.updateAnswersForScreen(getAnswers());
                         break;
                 }
             }
@@ -1887,7 +1872,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             getFormController().setLanguage(languages[whichButton]);
                             dialog.dismiss();
                             if (getFormController().currentPromptIsQuestion()) {
-                                formSaveViewModel.saveAnswersForScreen(getAnswers());
+                                formEntryViewModel.updateAnswersForScreen(getAnswers());
                             }
                             onScreenRefresh();
                         })
@@ -1943,7 +1928,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (!formSaveViewModel.isSaving()) {
             if (currentView != null && formController != null
                     && formController.currentPromptIsQuestion()) {
-                formSaveViewModel.saveAnswersForScreen(getAnswers());
+                formEntryViewModel.updateAnswersForScreen(getAnswers());
             }
         }
 

@@ -21,6 +21,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
 
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.Supplier;
 
@@ -153,7 +154,16 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         updateIndex();
     }
 
-    public void moveBackward() {
+    public void moveForward(HashMap<FormIndex, IAnswerData> answers) {
+        updateAnswersForScreen(answers);
+        moveForward();
+    }
+
+    public void moveBackward(HashMap<FormIndex, IAnswerData> answers) {
+        if (formController.currentPromptIsQuestion()) {
+            updateAnswersForScreen(answers);
+        }
+
         try {
             int event = formController.stepToPreviousScreenEvent();
 
@@ -168,6 +178,20 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time
         updateIndex();
+    }
+
+    public void updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
+        if (formController == null) {
+            return;
+        }
+
+        try {
+            formController.saveAllScreenAnswers(answers, false);
+        } catch (JavaRosaException ignored) {
+            // ignored
+        }
+
+        formController.getAuditEventLogger().flush();
     }
 
     public void openHierarchy() {

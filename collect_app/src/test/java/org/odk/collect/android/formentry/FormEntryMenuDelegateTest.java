@@ -1,5 +1,18 @@
 package org.odk.collect.android.formentry;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass;
+import static org.robolectric.Shadows.shadowOf;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -12,7 +25,6 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -27,19 +39,6 @@ import org.robolectric.shadows.ShadowActivity;
 
 import java.util.HashMap;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass;
-import static org.robolectric.Shadows.shadowOf;
-
 @RunWith(AndroidJUnit4.class)
 @LooperMode(LooperMode.Mode.PAUSED)
 public class FormEntryMenuDelegateTest {
@@ -48,7 +47,6 @@ public class FormEntryMenuDelegateTest {
     private AppCompatActivity activity;
     private FormEntryViewModel formEntryViewModel;
     private AnswersProvider answersProvider;
-    private FormSaveViewModel formSaveViewModel;
     private AudioRecorder audioRecorder;
     private BackgroundAudioViewModel backgroundAudioViewModel;
 
@@ -57,7 +55,6 @@ public class FormEntryMenuDelegateTest {
         activity = RobolectricHelpers.createThemedActivity(AppCompatActivity.class, R.style.Theme_MaterialComponents);
         FormController formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
-        formSaveViewModel = mock(FormSaveViewModel.class);
 
         audioRecorder = mock(AudioRecorder.class);
         when(audioRecorder.isRecording()).thenReturn(false);
@@ -72,8 +69,6 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate = new FormEntryMenuDelegate(
                 activity,
                 answersProvider,
-                mock(FormIndexAnimationHandler.class),
-                formSaveViewModel,
                 formEntryViewModel,
                 audioRecorder,
                 backgroundLocationViewModel,
@@ -179,7 +174,7 @@ public class FormEntryMenuDelegateTest {
         HashMap answers = new HashMap();
         when(answersProvider.getAnswers()).thenReturn(answers);
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
-        verify(formSaveViewModel).saveAnswersForScreen(answers);
+        verify(formEntryViewModel).updateAnswersForScreen(answers);
     }
 
     @Test
@@ -265,7 +260,7 @@ public class FormEntryMenuDelegateTest {
         HashMap answers = new HashMap();
         when(answersProvider.getAnswers()).thenReturn(answers);
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
-        verify(formSaveViewModel).saveAnswersForScreen(answers);
+        verify(formEntryViewModel).updateAnswersForScreen(answers);
     }
 
     @Test

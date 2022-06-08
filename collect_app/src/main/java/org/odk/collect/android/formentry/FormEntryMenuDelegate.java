@@ -17,7 +17,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.questions.AnswersProvider;
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -33,7 +32,6 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final AppCompatActivity activity;
     private final AnswersProvider answersProvider;
     private final FormEntryViewModel formEntryViewModel;
-    private final FormSaveViewModel formSaveViewModel;
     private final BackgroundLocationViewModel backgroundLocationViewModel;
     private final BackgroundAudioViewModel backgroundAudioViewModel;
 
@@ -43,7 +41,6 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
     private final SettingsProvider settingsProvider;
 
     public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
-                                 FormSaveViewModel formSaveViewModel,
                                  FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
                                  BackgroundLocationViewModel backgroundLocationViewModel,
                                  BackgroundAudioViewModel backgroundAudioViewModel, SettingsProvider settingsProvider) {
@@ -52,7 +49,6 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
         this.audioRecorder = audioRecorder;
         this.formEntryViewModel = formEntryViewModel;
-        this.formSaveViewModel = formSaveViewModel;
         this.backgroundLocationViewModel = backgroundLocationViewModel;
         this.backgroundAudioViewModel = backgroundAudioViewModel;
         this.settingsProvider = settingsProvider;
@@ -112,7 +108,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
-                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
+                formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers());
                 formEntryViewModel.promptForNewRepeat();
             }
 
@@ -133,8 +129,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
-                formSaveViewModel.saveAnswersForScreen(answersProvider.getAnswers());
-
+                formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers());
                 formEntryViewModel.openHierarchy();
                 Intent i = new Intent(activity, FormHierarchyActivity.class);
                 activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);

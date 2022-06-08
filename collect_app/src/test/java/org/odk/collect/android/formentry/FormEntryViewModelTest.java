@@ -4,8 +4,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.atMostOnce;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -22,12 +24,14 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.function.Supplier;
 
 @RunWith(AndroidJUnit4.class)
@@ -37,6 +41,7 @@ public class FormEntryViewModelTest {
     private FormEntryViewModel viewModel;
     private FormController formController;
     private FormIndex startingIndex;
+    private AuditEventLogger auditEventLogger;
 
     @Before
     public void setup() {
@@ -45,7 +50,7 @@ public class FormEntryViewModelTest {
         when(formController.getFormIndex()).thenReturn(startingIndex);
         when(formController.getFormDef()).thenReturn(new FormDef());
 
-        AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
+        auditEventLogger = mock(AuditEventLogger.class);
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
 
         viewModel = new FormEntryViewModel(mock(Supplier.class));
@@ -157,5 +162,14 @@ public class FormEntryViewModelTest {
                 new StringData("42")
         );
         verify(answerListener, never()).onAnswer(any(), any());
+    }
+
+    @Test
+    public void updateAnswersForScreen_flushesAuditLoggerAfterSaving() throws Exception {
+        viewModel.updateAnswersForScreen(new HashMap<>());
+
+        InOrder verifier = inOrder(formController, auditEventLogger);
+        verifier.verify(formController).saveAllScreenAnswers(any(), anyBoolean());
+        verifier.verify(auditEventLogger).flush();
     }
 }

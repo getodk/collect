@@ -1,5 +1,24 @@
 package org.odk.collect.android.formentry.audit;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
+import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
+import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVED;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.WAITING_TO_SAVE;
+
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
@@ -34,28 +53,6 @@ import org.robolectric.annotation.LooperMode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
-import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
-import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CONSTRAINT_ERROR;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.FINALIZE_ERROR;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVED;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVE_ERROR;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.WAITING_TO_SAVE;
 
 @RunWith(AndroidJUnit4.class)
 @LooperMode(LooperMode.Mode.LEGACY)
@@ -92,15 +89,6 @@ public class FormSaveViewModelTest {
 
         viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider);
         viewModel.formLoaded(formController);
-    }
-
-    @Test
-    public void saveAnswersForScreen_flushesAuditLoggerAfterSaving() throws Exception {
-        viewModel.saveAnswersForScreen(new HashMap<>());
-
-        InOrder verifier = inOrder(formController, logger);
-        verifier.verify(formController).saveAllScreenAnswers(any(), anyBoolean());
-        verifier.verify(logger).flush();
     }
 
     @Test
