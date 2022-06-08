@@ -49,7 +49,7 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.android.R
-import org.odk.collect.android.geo.MbtilesFile.MbtilesException
+import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption
 import org.odk.collect.android.geo.mapboxsdk.MapFeature
 import org.odk.collect.android.geo.mapboxsdk.MarkerFeature
 import org.odk.collect.android.geo.mapboxsdk.PolyFeature
@@ -61,9 +61,13 @@ import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
+import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
+import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -101,9 +105,10 @@ class MapboxMapFragment :
     private var clientWantsLocationUpdates = false
     private var offlineLayerPosition = -1
     private val locationCallback = MapboxLocationCallback(this)
+    private var mapFragmentDelegate: MapFragmentDelegate? = null
 
     @Inject
-    lateinit var mapProvider: MapProvider
+    lateinit var settingsProvider: SettingsProvider
 
     @Inject
     lateinit var referenceLayerRepository: ReferenceLayerRepository
@@ -179,11 +184,27 @@ class MapboxMapFragment :
     override fun onAttach(context: Context) {
         super.onAttach(context)
         DaggerUtils.getComponent(context).inject(this)
+
+        val configurator = MapboxMapConfigurator(
+            KEY_MAPBOX_MAP_STYLE, R.string.basemap_source_mapbox,
+            MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
+            MapboxUrlOption(Style.LIGHT, R.string.light),
+            MapboxUrlOption(Style.DARK, R.string.dark),
+            MapboxUrlOption(Style.SATELLITE, R.string.satellite),
+            MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
+            MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
+        )
+
+        mapFragmentDelegate = MapFragmentDelegate(
+            configurator,
+            settingsProvider.getUnprotectedSettings(),
+            this::onConfigChanged
+        )
     }
 
     override fun onStart() {
         super.onStart()
-        mapProvider.onMapFragmentStart(this)
+        mapFragmentDelegate?.onStart()
     }
 
     override fun onResume() {
@@ -197,7 +218,7 @@ class MapboxMapFragment :
     }
 
     override fun onStop() {
-        mapProvider.onMapFragmentStop(this)
+        mapFragmentDelegate?.onStop()
         super.onStop()
     }
 
@@ -207,7 +228,7 @@ class MapboxMapFragment :
         super.onDestroy()
     }
 
-    override fun applyConfig(config: Bundle) {
+    private fun onConfigChanged(config: Bundle) {
         val styleUrl = config.getString(KEY_STYLE_URL) ?: Style.MAPBOX_STREETS
         referenceLayerFile = getReferenceLayerFile(config, referenceLayerRepository)
         mapboxMap.loadStyleUri(styleUrl) {
@@ -494,7 +515,7 @@ class MapboxMapFragment :
         tileServer?.let {
             val mbtiles: MbtilesFile = try {
                 MbtilesFile(file)
-            } catch (e: MbtilesException) {
+            } catch (e: MbtilesFile.MbtilesException) {
                 Timber.w(e.message)
                 return
             }
@@ -569,7 +590,7 @@ class MapboxMapFragment :
                     /* ignore */
                 }
             }
-        } catch (e: MbtilesException) {
+        } catch (e: MbtilesFile.MbtilesException) {
             Timber.w(e.message)
         }
         return tileSet.build()
