@@ -1,5 +1,7 @@
 package org.odk.collect.android.formentry;
 
+import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -24,10 +26,7 @@ import org.odk.collect.async.Scheduler;
 
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
@@ -60,13 +59,13 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
         boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
         this.hasBackgroundRecording.setValue(hasBackgroundRecording);
+        updateIndex();
     }
 
     public boolean isFormControllerSet() {
         return formController != null;
     }
 
-    @Nullable
     public LiveData<FormIndex> getCurrentIndex() {
         return currentIndex;
     }
@@ -156,7 +155,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             formController.stepToNextScreenEvent();
         } catch (JavaRosaException e) {
             error.setValue(new NonFatal(e.getCause().getMessage()));
-            return;
         }
 
         formController.getAuditEventLogger().flush(); // Close events waiting for an end time

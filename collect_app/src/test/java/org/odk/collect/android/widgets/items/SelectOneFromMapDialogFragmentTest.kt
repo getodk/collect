@@ -20,7 +20,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
@@ -96,8 +95,8 @@ class SelectOneFromMapDialogFragmentTest {
                 }
             }
 
-            override fun providesFormEntryViewModelFactory(analytics: Analytics): FormEntryViewModel.Factory {
-                return object : FormEntryViewModel.Factory(System::currentTimeMillis) {
+            override fun providesFormEntryViewModelFactory(scheduler: Scheduler): FormEntryViewModel.Factory {
+                return object : FormEntryViewModel.Factory(System::currentTimeMillis, scheduler) {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return formEntryViewModel as T

@@ -15,7 +15,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
@@ -29,6 +28,7 @@ import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
+import org.odk.collect.async.Scheduler
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.permissions.PermissionsChecker
@@ -57,8 +57,8 @@ class SelectOneFromMapWidgetTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesFormEntryViewModelFactory(analytics: Analytics?): FormEntryViewModel.Factory {
-                return object : FormEntryViewModel.Factory(System::currentTimeMillis) {
+            override fun providesFormEntryViewModelFactory(scheduler: Scheduler): FormEntryViewModel.Factory {
+                return object : FormEntryViewModel.Factory(System::currentTimeMillis, scheduler) {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return formEntryViewModel as T

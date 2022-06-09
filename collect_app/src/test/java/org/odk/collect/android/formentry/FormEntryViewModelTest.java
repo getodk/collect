@@ -13,11 +13,13 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.FormEntryViewModel.NonFatal;
+import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -25,10 +27,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.mockito.stubbing.Answer;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,6 +46,7 @@ public class FormEntryViewModelTest {
     private FormController formController;
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
+    private FakeScheduler scheduler;
 
     @Before
     public void setup() {
@@ -53,7 +58,9 @@ public class FormEntryViewModelTest {
         auditEventLogger = mock(AuditEventLogger.class);
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
 
-        viewModel = new FormEntryViewModel(mock(Supplier.class));
+        scheduler = new FakeScheduler();
+
+        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler);
         viewModel.formLoaded(formController);
     }
 
@@ -171,5 +178,54 @@ public class FormEntryViewModelTest {
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(any(), anyBoolean());
         verifier.verify(auditEventLogger).flush();
+    }
+
+    @Test
+    public void moveForward_savesAnswersToFormController_andThenStepsToNextEvent_andFlushesLogger() throws Exception {
+        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
+        viewModel.moveForward(answers);
+
+        scheduler.runBackground();
+        InOrder verifier = inOrder(formController, auditEventLogger);
+        verifier.verify(formController).saveAllScreenAnswers(answers, false);
+        verifier.verify(auditEventLogger).flush();
+        verifier.verify(formController).stepToNextScreenEvent();
+        verifier.verify(auditEventLogger).flush();
+    }
+
+    @Test
+    public void moveForward_updatesIndexAfterSteppingToNextEvent() throws Exception {
+        FormIndex nextIndex = new FormIndex(null, 1, 1, new TreeReference());
+        when(formController.stepToNextScreenEvent()).thenAnswer((Answer<Integer>) invocation -> {
+            when(formController.getFormIndex()).thenReturn(nextIndex);
+            return 0;
+        });
+
+        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(nextIndex));
+    }
+
+    @Test
+    public void moveForward_whenThereIsAnErrorSteppingToNextEvent_setErrorWithMessage() throws Exception {
+        when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+
+        assertThat(viewModel.getError().getValue(), equalTo(new NonFatal("OH NO")));
+    }
+
+    @Test
+    public void moveForward_setsLoadingToTrueWhileBackgroundWorkHappens() throws Exception {
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
+
+        viewModel.moveForward(new HashMap<>());
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(true));
+
+        scheduler.runBackground();
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
     }
 }
