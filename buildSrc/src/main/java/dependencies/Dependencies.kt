@@ -30,7 +30,7 @@ object Dependencies {
     const val play_services_auth = "com.google.android.gms:play-services-auth:20.1.0"
     const val play_services_maps = "com.google.android.gms:play-services-maps:18.0.2"
     const val play_services_location = "com.google.android.gms:play-services-location:19.0.1"
-    const val mapbox_android_sdk = "com.mapbox.maps:android:10.4.4"
+    const val mapbox_android_sdk = "com.mapbox.maps:android:10.5.0"
     const val osmdroid = "org.osmdroid:osmdroid-android:6.1.11"
     const val guava = "com.google.guava:guava:31.1-android"
     const val squareup_okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
