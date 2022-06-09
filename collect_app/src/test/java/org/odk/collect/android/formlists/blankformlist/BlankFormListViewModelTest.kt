@@ -25,6 +25,7 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
@@ -96,7 +97,10 @@ class BlankFormListViewModelTest {
 
         assertThat(viewModel.isMatchExactlyEnabled(), `is`(false))
 
-        generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
+        generalSettings.save(
+            ProjectKeys.KEY_FORM_UPDATE_MODE,
+            FormUpdateMode.MATCH_EXACTLY.getValue(context)
+        )
 
         assertThat(viewModel.isMatchExactlyEnabled(), `is`(true))
     }
@@ -144,14 +148,22 @@ class BlankFormListViewModelTest {
 
     @Test
     fun `first forms should be loaded from database and then synced with storage`() {
-        saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2)
+        saveForms(
+            form(dbId = 1, formId = "1"),
+            form(dbId = 2, formId = "2")
+        )
+
         createViewModel(false)
         scheduler.runBackground()
 
         assertThat(viewModel.formsToDisplay.value!!.size, equalTo(2))
 
         doAnswer {
-            saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2, BlankFormFixtures.blankForm3)
+            saveForms(
+                form(dbId = 1, formId = "1"),
+                form(dbId = 2, formId = "2"),
+                form(dbId = 3, formId = "3")
+            )
             "Result text"
         }.whenever(formsDirDiskFormsSynchronizer).synchronizeAndReturnError()
 
@@ -163,96 +175,145 @@ class BlankFormListViewModelTest {
 
     @Test
     fun `original list of forms should be fetched from database initially and sorted by name ASC`() {
-        saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2)
+        saveForms(
+            form(dbId = 1, formId = "1"),
+            form(dbId = 2, formId = "2")
+        )
+
         createViewModel()
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm1)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm2)
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
     }
 
     @Test
     fun `deleted forms should be ignored`() {
-        saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm4)
+        saveForms(
+            form(dbId = 1, formId = "1"),
+            form(dbId = 2, formId = "2", deleted = true)
+        )
+
         createViewModel()
 
         assertThat(viewModel.formsToDisplay.value!!.size, `is`(1))
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm1)
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
     }
 
     @Test
     fun `list of forms should be sorted when sorting order is changed`() {
-        saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2, BlankFormFixtures.blankForm5)
+        saveForms(
+            form(dbId = 1, formId = "1"),
+            form(dbId = 2, formId = "2"),
+            form(dbId = 3, formId = "3", formName = "Form 03")
+        )
+
         createViewModel()
 
         // Sort by name DESC
         viewModel.sortingOrder = 1
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm2)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm1)
-        assertFormItem(viewModel.formsToDisplay.value!![2], BlankFormFixtures.blankForm5)
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 1, formId = "1"))
+        assertFormItem(
+            viewModel.formsToDisplay.value!![2],
+            form(dbId = 3, formId = "3", formName = "Form 03")
+        )
 
         // Sort by date ASC
         viewModel.sortingOrder = 2
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm1)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm2)
-        assertFormItem(viewModel.formsToDisplay.value!![2], BlankFormFixtures.blankForm5)
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
+        assertFormItem(
+            viewModel.formsToDisplay.value!![2],
+            form(dbId = 3, formId = "3", formName = "Form 03")
+        )
 
         // Sort by date DESC
         viewModel.sortingOrder = 3
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm5)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm2)
-        assertFormItem(viewModel.formsToDisplay.value!![2], BlankFormFixtures.blankForm1)
+        assertFormItem(
+            viewModel.formsToDisplay.value!![0],
+            form(dbId = 3, formId = "3", formName = "Form 03")
+        )
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 1, formId = "1"))
 
         // Sort by name ASC
         viewModel.sortingOrder = 0
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm5)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm1)
-        assertFormItem(viewModel.formsToDisplay.value!![2], BlankFormFixtures.blankForm2)
+        assertFormItem(
+            viewModel.formsToDisplay.value!![0],
+            form(dbId = 3, formId = "3", formName = "Form 03")
+        )
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 2, formId = "2"))
     }
 
     @Test
     fun `list of forms should be filtered when filterText is changed`() {
-        saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2, BlankFormFixtures.blankForm3)
+        saveForms(
+            form(dbId = 1, formId = "1"),
+            form(dbId = 2, formId = "2", formName = "Form 2"),
+            form(dbId = 3, formId = "3", formName = "Form 2x")
+        )
+
         createViewModel()
 
         viewModel.filterText = "2"
 
         assertThat(viewModel.formsToDisplay.value?.size, `is`(2))
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm2)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm3)
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2"))
+        assertFormItem(
+            viewModel.formsToDisplay.value!![1],
+            form(dbId = 3, formId = "3", formName = "Form 2x")
+        )
 
         viewModel.filterText = "2x"
 
         assertThat(viewModel.formsToDisplay.value?.size, `is`(1))
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm3)
+        assertFormItem(
+            viewModel.formsToDisplay.value!![0],
+            form(dbId = 3, formId = "3", formName = "Form 2x")
+        )
 
         viewModel.filterText = ""
 
         assertThat(viewModel.formsToDisplay.value?.size, `is`(3))
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm1)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm2)
-        assertFormItem(viewModel.formsToDisplay.value!![2], BlankFormFixtures.blankForm3)
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
+        assertFormItem(
+            viewModel.formsToDisplay.value!![2],
+            form(dbId = 3, formId = "3", formName = "Form 2x")
+        )
     }
 
     @Test
     fun `filtering and sorting should work together`() {
-        saveForms(BlankFormFixtures.blankForm1, BlankFormFixtures.blankForm2, BlankFormFixtures.blankForm3)
+        saveForms(
+            form(dbId = 1, formId = "1"),
+            form(dbId = 2, formId = "2"),
+            form(dbId = 3, formId = "3", formName = "Form 2x")
+        )
         createViewModel()
 
         viewModel.filterText = "2"
 
         assertThat(viewModel.formsToDisplay.value?.size, `is`(2))
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm2)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm3)
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2"))
+        assertFormItem(
+            viewModel.formsToDisplay.value!![1],
+            form(dbId = 3, formId = "3", formName = "Form 2x")
+        )
 
         viewModel.sortingOrder = 1
 
         assertThat(viewModel.formsToDisplay.value?.size, `is`(2))
-        assertFormItem(viewModel.formsToDisplay.value!![0], BlankFormFixtures.blankForm3)
-        assertFormItem(viewModel.formsToDisplay.value!![1], BlankFormFixtures.blankForm2)
+        assertFormItem(
+            viewModel.formsToDisplay.value!![0],
+            form(dbId = 3, formId = "3", formName = "Form 2x")
+        )
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
     }
 
     private fun saveForms(vararg forms: Form) {
@@ -302,4 +363,20 @@ class BlankFormListViewModelTest {
             )
         )
     }
+
+    private fun form(
+        dbId: Long,
+        formId: String = "1",
+        version: String = "1",
+        formName: String = "Form $formId",
+        deleted: Boolean = false
+    ) = Form.Builder()
+        .dbId(dbId)
+        .formId(formId)
+        .version(version)
+        .displayName(formName)
+        .date(dbId)
+        .deleted(deleted)
+        .formFilePath(FormUtils.createXFormFile(formId, version).absolutePath)
+        .build()
 }
