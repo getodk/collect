@@ -12,4 +12,5 @@ upgrade:testDebug
 permissions:testDebug
 settings:testDebug
 maps:testDebug
+mapbox:testDebug
 errors:testDebug

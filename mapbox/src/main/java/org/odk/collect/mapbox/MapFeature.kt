@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo.mapboxsdk
+package org.odk.collect.mapbox
 
 /**
  * A MapFeature is a physical feature on a map, such as a point, a road,

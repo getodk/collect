@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo.mapboxsdk
+package org.odk.collect.mapbox
 
 import android.content.Context
 import com.mapbox.geojson.Point
@@ -6,9 +6,9 @@ import com.mapbox.maps.extension.style.layers.properties.generated.IconAnchor
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import org.odk.collect.android.geo.MapsMarkerCache
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.MapsMarkerCache
 
 object MapUtils {
     fun createPointAnnotation(

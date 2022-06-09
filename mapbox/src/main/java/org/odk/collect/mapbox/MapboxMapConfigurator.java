@@ -1,7 +1,6 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.mapbox;
 
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,12 +8,13 @@ import android.os.Bundle;
 import androidx.preference.Preference;
 
 import com.google.common.collect.ImmutableSet;
+import com.mapbox.maps.Style;
 
-import org.odk.collect.android.R;
 import org.odk.collect.androidshared.ui.PrefUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.layers.MbtilesFile;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -22,16 +22,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-class MapboxMapConfigurator implements MapConfigurator {
+public class MapboxMapConfigurator implements MapConfigurator {
+    public static final String DEFAULT_MAP_STYLE = Style.MAPBOX_STREETS;
+
     private final String prefKey;
     private final int sourceLabelId;
     private final MapboxUrlOption[] options;
 
     /** Constructs a configurator with a few Mapbox style URL options to choose from. */
-    MapboxMapConfigurator(String prefKey, int sourceLabelId, MapboxUrlOption... options) {
-        this.prefKey = prefKey;
-        this.sourceLabelId = sourceLabelId;
-        this.options = options;
+    public MapboxMapConfigurator() {
+        this.prefKey = KEY_MAPBOX_MAP_STYLE;
+        this.sourceLabelId = R.string.basemap_source_mapbox;
+        this.options = new MapboxUrlOption[]{
+                new MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
+                new MapboxUrlOption(Style.LIGHT, R.string.light),
+                new MapboxUrlOption(Style.DARK, R.string.dark),
+                new MapboxUrlOption(Style.SATELLITE, R.string.satellite),
+                new MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
+                new MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
+        };
     }
 
     @Override public boolean isAvailable(Context context) {
@@ -59,16 +68,16 @@ class MapboxMapConfigurator implements MapConfigurator {
     }
 
     @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? ImmutableSet.of(KEY_REFERENCE_LAYER) :
-            ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? ImmutableSet.of(ProjectKeys.KEY_REFERENCE_LAYER) :
+            ImmutableSet.of(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {
         Bundle config = new Bundle();
         config.putString(MapboxMapFragment.KEY_STYLE_URL,
-            prefs.getString(KEY_MAPBOX_MAP_STYLE));
+            prefs.getString(ProjectKeys.KEY_MAPBOX_MAP_STYLE));
         config.putString(MapboxMapFragment.KEY_REFERENCE_LAYER,
-            prefs.getString(KEY_REFERENCE_LAYER));
+            prefs.getString(ProjectKeys.KEY_REFERENCE_LAYER));
         return config;
     }
 

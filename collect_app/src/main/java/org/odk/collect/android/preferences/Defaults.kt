@@ -1,10 +1,10 @@
 package org.odk.collect.android.preferences
 
 import com.google.android.gms.maps.GoogleMap
-import com.mapbox.maps.Style
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.utilities.QuestionFontSizeUtils
+import org.odk.collect.mapbox.MapboxMapConfigurator
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
@@ -55,7 +55,7 @@ object Defaults {
             hashMap[ProjectKeys.KEY_CARTO_MAP_STYLE] = "positron"
             hashMap[ProjectKeys.KEY_USGS_MAP_STYLE] = "topographic"
             hashMap[ProjectKeys.KEY_GOOGLE_MAP_STYLE] = GoogleMap.MAP_TYPE_NORMAL.toString()
-            hashMap[ProjectKeys.KEY_MAPBOX_MAP_STYLE] = Style.MAPBOX_STREETS
+            hashMap[ProjectKeys.KEY_MAPBOX_MAP_STYLE] = MapboxMapConfigurator.DEFAULT_MAP_STYLE
             return hashMap
         }
 

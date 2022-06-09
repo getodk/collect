@@ -1,8 +1,7 @@
-package org.odk.collect.android.location.client
+package org.odk.collect.mapbox
 
 import com.mapbox.android.core.location.LocationEngineCallback
 import com.mapbox.android.core.location.LocationEngineResult
-import org.odk.collect.android.geo.MapboxMapFragment
 import org.odk.collect.location.LocationUtils.sanitizeAccuracy
 import java.lang.Exception
 import java.lang.ref.WeakReference

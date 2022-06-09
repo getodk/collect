@@ -21,6 +21,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL;

@@ -1,4 +1,4 @@
-package org.odk.collect.android.fragments
+package org.odk.collect.mapbox
 
 import android.content.Context
 import android.os.Bundle
@@ -9,9 +9,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
-import org.odk.collect.android.R
-import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.network.NetworkStateProvider
+import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
 import javax.inject.Inject
@@ -25,7 +23,8 @@ class MapBoxInitializationFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        DaggerUtils.getComponent(context).inject(this)
+        val component = (context.applicationContext as MapboxDependencyComponentProvider).mapboxDependencyComponent
+        component.inject(this)
     }
 
     override fun onCreateView(

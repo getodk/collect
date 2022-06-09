@@ -9,7 +9,7 @@ import androidx.core.widget.NestedScrollView;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.utilities.FlingRegister;
-import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
@@ -96,8 +96,8 @@ public class SwipeHandler {
                 // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 
                 // For all screens a swipe is left/right of at least .25" and up/down of less than .25" OR left/right of > .5"
-                int xpixellimit = (int) (ScreenUtils.xdpi() * .25);
-                int ypixellimit = (int) (ScreenUtils.ydpi() * .25);
+                int xpixellimit = (int) (ScreenUtils.xdpi(odkView.getContext()) * .25);
+                int ypixellimit = (int) (ScreenUtils.ydpi(odkView.getContext()) * .25);
 
                 if (odkView != null && odkView.suppressFlingGesture(e1, e2, velocityX, velocityY)) {
                     return false;

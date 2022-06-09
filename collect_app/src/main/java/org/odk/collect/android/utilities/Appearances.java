@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.externaldata.ExternalDataUtil;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 
 import java.util.Locale;
 

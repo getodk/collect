@@ -1,6 +1,7 @@
 package org.odk.collect.android.geo
 
 import android.content.Context
+import org.odk.collect.mapbox.MapboxMapFragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.osmdroid.OsmDroidMapFragment

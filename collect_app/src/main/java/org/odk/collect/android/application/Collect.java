@@ -32,6 +32,7 @@ import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
+import org.odk.collect.android.injection.config.CollectMapboxDependencyModule;
 import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
 import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
@@ -48,6 +49,9 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
+import org.odk.collect.mapbox.DaggerMapboxDependencyComponent;
+import org.odk.collect.mapbox.MapboxDependencyComponent;
+import org.odk.collect.mapbox.MapboxDependencyComponentProvider;
 import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
 import org.odk.collect.osmdroid.OsmDroidDependencyComponent;
 import org.odk.collect.osmdroid.OsmDroidDependencyComponentProvider;
@@ -71,6 +75,7 @@ public class Collect extends Application implements
         AudioRecorderDependencyComponentProvider,
         ProjectsDependencyComponentProvider,
         GeoDependencyComponentProvider,
+        MapboxDependencyComponentProvider,
         OsmDroidDependencyComponentProvider,
         StateStore {
     public static String defaultSysLanguage;
@@ -92,6 +97,7 @@ public class Collect extends Application implements
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
     private GeoDependencyComponent geoDependencyComponent;
+    private MapboxDependencyComponent mapboxDependencyComponent;
     private OsmDroidDependencyComponent osmDroidDependencyComponent;
 
     /**
@@ -268,6 +274,22 @@ public class Collect extends Application implements
         }
 
         return geoDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public MapboxDependencyComponent getMapboxDependencyComponent() {
+        if (mapboxDependencyComponent == null) {
+            mapboxDependencyComponent = DaggerMapboxDependencyComponent.builder()
+                    .mapboxDependencyModule(new CollectMapboxDependencyModule(
+                            applicationComponent.settingsProvider(),
+                            applicationComponent.networkStateProvider(),
+                            applicationComponent.referenceLayerRepository()
+                    ))
+                    .build();
+        }
+
+        return mapboxDependencyComponent;
     }
 
     @NonNull

@@ -1,9 +1,8 @@
-package org.odk.collect.android.geo.mapboxsdk
+package org.odk.collect.mapbox
 
 import android.content.Context
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.utils.ColorUtils
-import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
@@ -11,7 +10,6 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
-import org.odk.collect.android.R
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 
@@ -126,9 +124,9 @@ internal class PolyFeature(
     }
 
     private inner class DragListener : OnPointAnnotationDragListener {
-        override fun onAnnotationDragStarted(annotation: Annotation<*>) = Unit
+        override fun onAnnotationDragStarted(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) = Unit
 
-        override fun onAnnotationDrag(annotation: Annotation<*>) {
+        override fun onAnnotationDrag(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) {
             pointAnnotations.forEachIndexed { index, pointAnnotation ->
                 if (annotation.id == pointAnnotation.id) {
                     mapPoints[index] = MapUtils.mapPointFromPointAnnotation(pointAnnotation)
@@ -137,7 +135,7 @@ internal class PolyFeature(
             updateLine()
         }
 
-        override fun onAnnotationDragFinished(annotation: Annotation<*>) {
+        override fun onAnnotationDragFinished(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) {
             onAnnotationDrag(annotation)
             if (featureDragEndListener != null) {
                 for (pointAnnotation in pointAnnotations) {

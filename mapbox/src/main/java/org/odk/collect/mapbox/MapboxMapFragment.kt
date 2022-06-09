@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo
+package org.odk.collect.mapbox
 
 import android.content.Context
 import android.graphics.Color
@@ -48,14 +48,7 @@ import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.odk.collect.android.R
-import org.odk.collect.android.geo.MapboxMapConfigurator.MapboxUrlOption
-import org.odk.collect.android.geo.mapboxsdk.MapFeature
-import org.odk.collect.android.geo.mapboxsdk.MarkerFeature
-import org.odk.collect.android.geo.mapboxsdk.PolyFeature
-import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.location.client.MapboxLocationCallback
-import org.odk.collect.android.utilities.ScreenUtils
+import org.odk.collect.androidshared.utils.ScreenUtils
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -63,11 +56,11 @@ import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.MapsMarkerCache
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys.KEY_MAPBOX_MAP_STYLE
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -79,6 +72,7 @@ class MapboxMapFragment :
     OnMapClickListener,
     OnMapLongClickListener,
     LocationListener {
+
     private lateinit var mapView: MapView
     private lateinit var mapboxMap: MapboxMap
 
@@ -183,17 +177,10 @@ class MapboxMapFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        DaggerUtils.getComponent(context).inject(this)
+        val component = (context.applicationContext as MapboxDependencyComponentProvider).mapboxDependencyComponent
+        component.inject(this)
 
-        val configurator = MapboxMapConfigurator(
-            KEY_MAPBOX_MAP_STYLE, R.string.basemap_source_mapbox,
-            MapboxUrlOption(Style.MAPBOX_STREETS, R.string.streets),
-            MapboxUrlOption(Style.LIGHT, R.string.light),
-            MapboxUrlOption(Style.DARK, R.string.dark),
-            MapboxUrlOption(Style.SATELLITE, R.string.satellite),
-            MapboxUrlOption(Style.SATELLITE_STREETS, R.string.hybrid),
-            MapboxUrlOption(Style.OUTDOORS, R.string.outdoors)
-        )
+        val configurator = MapboxMapConfigurator()
 
         mapFragmentDelegate = MapFragmentDelegate(
             configurator,
@@ -275,8 +262,8 @@ class MapboxMapFragment :
                 Point.fromLngLat(it.lon, it.lat, it.alt)
             }
 
-            val screenWidth = ScreenUtils.getScreenWidth()
-            val screenHeight = ScreenUtils.getScreenHeight()
+            val screenWidth = ScreenUtils.getScreenWidth(context)
+            val screenHeight = ScreenUtils.getScreenHeight(context)
 
             lifecycleScope.launch {
                 delay(100L)
@@ -302,7 +289,7 @@ class MapboxMapFragment :
         iconDrawableId: Int
     ): Int {
         val featureId = nextFeatureId++
-        features[featureId] = MarkerFeature(
+        features[featureId] = org.odk.collect.mapbox.MarkerFeature(
             requireContext(),
             pointAnnotationManager,
             featureId,
@@ -318,14 +305,14 @@ class MapboxMapFragment :
 
     override fun setMarkerIcon(featureId: Int, drawableId: Int) {
         val feature = features[featureId]
-        if (feature is MarkerFeature) {
+        if (feature is org.odk.collect.mapbox.MarkerFeature) {
             feature.setIcon(drawableId)
         }
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint? {
         val feature = features[featureId]
-        return if (feature is MarkerFeature) {
+        return if (feature is org.odk.collect.mapbox.MarkerFeature) {
             feature.point
         } else {
             null
@@ -334,7 +321,7 @@ class MapboxMapFragment :
 
     override fun addDraggablePoly(points: MutableIterable<MapPoint>, closedPolygon: Boolean): Int {
         val featureId = nextFeatureId++
-        features[featureId] = PolyFeature(
+        features[featureId] = org.odk.collect.mapbox.PolyFeature(
             requireContext(),
             pointAnnotationManager,
             polylineAnnotationManager,
@@ -349,21 +336,21 @@ class MapboxMapFragment :
 
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {
         val feature = features[featureId]
-        if (feature is PolyFeature) {
+        if (feature is org.odk.collect.mapbox.PolyFeature) {
             feature.appendPoint(point)
         }
     }
 
     override fun removePolyLastPoint(featureId: Int) {
         val feature = features[featureId]
-        if (feature is PolyFeature) {
+        if (feature is org.odk.collect.mapbox.PolyFeature) {
             feature.removeLastPoint()
         }
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
-        return if (feature is PolyFeature) {
+        return if (feature is org.odk.collect.mapbox.PolyFeature) {
             feature.mapPoints
         } else {
             emptyList()

@@ -16,7 +16,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
-import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 public class ChoicesRecyclerView extends RecyclerView {
@@ -74,7 +74,7 @@ public class ChoicesRecyclerView extends RecyclerView {
     private void adjustRecyclerViewSize() {
         if (getAdapter().getItemCount() > MAX_ITEMS_WITHOUT_SCREEN_BOUND) {
             // Only let the RecyclerView take up 90% of the screen height in order to speed up loading if there are many items
-            getLayoutParams().height = (int) (ScreenUtils.getScreenHeight() * 0.9);
+            getLayoutParams().height = (int) (ScreenUtils.getScreenHeight(getContext()) * 0.9);
         } else {
             setNestedScrollingEnabled(false);
         }

@@ -1,14 +1,13 @@
-package org.odk.collect.android.geo.mapboxsdk
+package org.odk.collect.mapbox
 
 import android.content.Context
-import com.mapbox.maps.plugin.annotation.Annotation
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationClickListener
 import com.mapbox.maps.plugin.annotation.generated.OnPointAnnotationDragListener
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import org.odk.collect.android.geo.MapsMarkerCache
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.MapsMarkerCache
 
 /** A point annotation that can optionally be dragged by the user. */
 class MarkerFeature(
@@ -24,7 +23,14 @@ class MarkerFeature(
 ) : MapFeature {
     private val clickListener = ClickListener()
     private val dragListener = DragListener()
-    private var pointAnnotation = MapUtils.createPointAnnotation(pointAnnotationManager, point, draggable, iconAnchor, iconDrawableId, context)
+    private var pointAnnotation = MapUtils.createPointAnnotation(
+        pointAnnotationManager,
+        point,
+        draggable,
+        iconAnchor,
+        iconDrawableId,
+        context
+    )
 
     init {
         pointAnnotationManager.apply {
@@ -56,15 +62,15 @@ class MarkerFeature(
     }
 
     private inner class DragListener : OnPointAnnotationDragListener {
-        override fun onAnnotationDragStarted(annotation: Annotation<*>) = Unit
+        override fun onAnnotationDragStarted(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) = Unit
 
-        override fun onAnnotationDrag(annotation: Annotation<*>) {
+        override fun onAnnotationDrag(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) {
             if (annotation.id == pointAnnotation.id) {
                 point = MapUtils.mapPointFromPointAnnotation(annotation as PointAnnotation)
             }
         }
 
-        override fun onAnnotationDragFinished(annotation: Annotation<*>) {
+        override fun onAnnotationDragFinished(annotation: com.mapbox.maps.plugin.annotation.Annotation<*>) {
             onAnnotationDrag(annotation)
             if (annotation.id == pointAnnotation.id && featureDragEndListener != null) {
                 featureDragEndListener.onFeature(featureId)

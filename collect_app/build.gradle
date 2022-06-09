@@ -260,6 +260,7 @@ dependencies {
     implementation project(':externalapp')
     implementation project(':maps')
     implementation project(':osmdroid')
+    implementation project(':mapbox')
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support
@@ -283,8 +284,6 @@ dependencies {
 
     implementation Dependencies.firebase_analytics
     implementation Dependencies.firebase_crashlytics
-
-    implementation Dependencies.mapbox_android_sdk
 
     implementation Dependencies.guava
 

@@ -1,12 +1,16 @@
-package org.odk.collect.android.network;
+package org.odk.collect.androidshared.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.odk.collect.android.application.Collect;
-
 public class ConnectivityProvider implements NetworkStateProvider {
+
+    private final Context context;
+
+    public ConnectivityProvider(Context context) {
+        this.context = context;
+    }
 
     public boolean isDeviceOnline() {
         NetworkInfo networkInfo = getNetworkInfo();
@@ -18,6 +22,6 @@ public class ConnectivityProvider implements NetworkStateProvider {
     }
 
     private ConnectivityManager getConnectivityManager() {
-        return (ConnectivityManager) Collect.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 }

@@ -39,4 +39,24 @@ android {
 
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
+
+    implementation project(':androidshared')
+    implementation project(':location')
+    implementation project(':maps')
+    implementation project(':settings')
+    implementation project(':shared')
+
+    implementation Dependencies.play_services_location
+    implementation Dependencies.androidx_preference_ktx
+    implementation Dependencies.guava
+    api Dependencies.mapbox_android_sdk
+    implementation Dependencies.timber
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
+
+    testImplementation project(':testshared')
+
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockito_inline
+    testImplementation Dependencies.hamcrest
 }

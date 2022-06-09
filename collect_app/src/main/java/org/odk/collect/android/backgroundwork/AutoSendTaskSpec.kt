@@ -21,9 +21,9 @@ import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
-import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.WorkerAdapter
 import org.odk.collect.forms.Form

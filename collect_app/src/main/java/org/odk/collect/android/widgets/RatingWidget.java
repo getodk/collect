@@ -28,7 +28,7 @@ import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.RatingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.android.utilities.UiUtils;
 
 import java.lang.reflect.Field;
@@ -146,7 +146,7 @@ public class RatingWidget extends QuestionWidget {
     }
 
     private int calculateMaximumStarsInOneLine() {
-        return (int) ((ScreenUtils.getScreenWidth() - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET)
+        return (int) ((ScreenUtils.getScreenWidth(getContext()) - ASSUMED_TOTAL_MARGIN_AROUND_WIDGET)
                 / UiUtils.convertDpToPixel(STANDARD_WIDTH_OF_STAR, getContext()));
     }
 
