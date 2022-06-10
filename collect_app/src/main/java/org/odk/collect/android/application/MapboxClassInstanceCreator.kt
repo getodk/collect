@@ -6,34 +6,22 @@ import org.odk.collect.maps.MapFragment
 
 object MapboxClassInstanceCreator {
     fun createMapboxMapFragment(): MapFragment? {
-        return try {
-            Class.forName("org.odk.collect.mapbox.MapboxMapFragment").newInstance() as MapFragment
-        } catch (e: ClassNotFoundException) {
-            null
-        } catch (e: IllegalAccessException) {
-            null
-        } catch (e: InstantiationException) {
-            null
-        }
+        return createClassInstance<MapFragment>("org.odk.collect.mapbox.MapboxMapFragment")
     }
 
     @JvmStatic
     fun createMapBoxInitializationFragment(): Fragment? {
-        return try {
-            Class.forName("org.odk.collect.mapbox.MapBoxInitializationFragment").newInstance() as Fragment
-        } catch (e: ClassNotFoundException) {
-            null
-        } catch (e: IllegalAccessException) {
-            null
-        } catch (e: InstantiationException) {
-            null
-        }
+        return createClassInstance<Fragment>("org.odk.collect.mapbox.MapBoxInitializationFragment")
     }
 
     @JvmStatic
     fun createMapboxMapConfigurator(): MapConfigurator? {
+        return createClassInstance<MapConfigurator>("org.odk.collect.mapbox.MapboxMapConfigurator")
+    }
+
+    private fun <T> createClassInstance(className: String): T? {
         return try {
-            Class.forName("org.odk.collect.mapbox.MapboxMapConfigurator").newInstance() as MapConfigurator
+            Class.forName(className).newInstance() as T
         } catch (e: ClassNotFoundException) {
             null
         } catch (e: IllegalAccessException) {
