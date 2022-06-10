@@ -18,8 +18,8 @@ import com.google.android.gms.maps.GoogleMap;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
-import org.odk.collect.mapbox.MapboxMapConfigurator;
 import org.odk.collect.osmdroid.OsmDroidMapConfigurator;
 import org.odk.collect.osmdroid.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -58,7 +58,7 @@ public class MapConfiguratorProvider {
                 )
             ),
             new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
-                new MapboxMapConfigurator()
+                    MapboxClassInstanceCreator.createMapboxMapConfigurator()
             ),
             new SourceOption(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
                 new OsmDroidMapConfigurator(
