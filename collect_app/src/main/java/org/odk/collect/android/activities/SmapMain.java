@@ -723,7 +723,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             String status = entry.taskStatus;
 
             // set the adhoc location
-            boolean canUpdate = Utilities.canComplete(status);
+            boolean canUpdate = Utilities.canComplete(status, entry.taskType);
             boolean isSubmitted = Utilities.isSubmitted(status);
             boolean isSelfAssigned = Utilities.isSelfAssigned(status);
 

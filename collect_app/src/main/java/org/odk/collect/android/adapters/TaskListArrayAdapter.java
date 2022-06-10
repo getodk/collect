@@ -94,7 +94,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                     }
 				}
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_COMPLETE)) {
-                d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized_circle);
+                if (item.taskType != null && item.taskType.equals("case")) {
+                    d = ContextCompat.getDrawable(getContext(), R.drawable.case_updated);
+                } else {
+                    d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized_circle);
+                }
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_REJECTED) || item.taskStatus.equals(Utilities.STATUS_T_CANCELLED)) {
                 d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_rejected);
     		} else if(item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {

@@ -137,7 +137,7 @@ public class InstanceChooserList extends InstanceListActivity implements
                 } else {
                     // the form can be edited if it is incomplete or if, when it was
                     // marked as complete, it was determined that it could be edited
-                    // later.
+                    // later, or it is a case.
                     String status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
                     String strCanEditWhenComplete =
                             c.getString(c.getColumnIndex(InstanceColumns.CAN_EDIT_WHEN_COMPLETE));

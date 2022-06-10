@@ -115,7 +115,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
     	        buttons.addView(b);
     		}
 
-    		if(!triggeredTask && Utilities.canComplete(taskEntry.taskStatus)) {
+    		if(!triggeredTask && Utilities.canComplete(taskEntry.taskStatus, taskEntry.taskType)) {
     	        Button b = new Button(this);
     	        b.setText(R.string.smap_complete_task);
     	        b.setId(R.id.complete_button);
@@ -157,7 +157,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
             case R.id.complete_button:
                 try {
 
-                    boolean canComplete = Utilities.canComplete(taskEntry.taskStatus);
+                    boolean canComplete = Utilities.canComplete(taskEntry.taskStatus, taskEntry.taskType);
                     String taskForm = taskEntry.taskForm;
                     String formPath = new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + taskForm;
                     String instancePath = taskEntry.instancePath;

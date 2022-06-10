@@ -813,10 +813,12 @@ public class Utilities {
     /*
      * Return true if the current task status allows it to be completed
      */
-    public static boolean canComplete(String currentStatus) {
+    public static boolean canComplete(String currentStatus, String taskType) {
 
         boolean valid = false;
         if (currentStatus != null && currentStatus.equals(STATUS_T_ACCEPTED)) {
+            valid = true;
+        } else if(taskType != null && taskType.equals("case")) {
             valid = true;
         }
 
