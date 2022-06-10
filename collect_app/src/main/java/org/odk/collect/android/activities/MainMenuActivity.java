@@ -26,11 +26,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
+import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -92,6 +94,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         });
 
         initToolbar();
+        initMapbox();
 
         Button enterDataButtonNew = findViewById(R.id.enter_data);
         enterDataButtonNew.setOnClickListener(v -> {
@@ -260,5 +263,15 @@ public class MainMenuActivity extends CollectAbstractActivity {
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    private void initMapbox() {
+        Fragment mapBoxInitializationFragment = MapboxClassInstanceCreator.createMapBoxInitializationFragment();
+        if (mapBoxInitializationFragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.map_box_initialization_fragment, mapBoxInitializationFragment)
+                    .commit();
+        }
     }
 }
