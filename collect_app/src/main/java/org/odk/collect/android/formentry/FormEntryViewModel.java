@@ -37,6 +37,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
+    private final MutableLiveData<FormController.FailedConstraint> failedConstraint = new MutableLiveData<>(null);
 
     @Nullable
     private FormController formController;
@@ -72,6 +73,10 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
 
     public LiveData<FormError> getError() {
         return error;
+    }
+
+    public LiveData<FormController.FailedConstraint> getFailedConstraint() {
+        return failedConstraint;
     }
 
     public NonNullLiveData<Boolean> isLoading() {
@@ -162,14 +167,20 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void moveForward(HashMap<FormIndex, IAnswerData> answers) {
+        moveForward(answers, false);
+    }
+
+    public void moveForward(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
         isLoading.setValue(true);
 
-        scheduler.immediate((Supplier<Void>) () -> {
-            updateAnswersForScreen(answers);
-            return null;
-        }, unused -> {
+        scheduler.immediate((Supplier<Boolean>) () -> {
+            return updateAnswersForScreen(answers, evaluateConstraints);
+        }, updateSuccess -> {
             isLoading.setValue(false);
-            moveForward();
+
+            if (updateSuccess) {
+                moveForward();
+            }
         });
     }
 
@@ -202,17 +213,27 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public void updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
+        updateAnswersForScreen(answers, false);
+    }
+
+    private boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
         if (formController == null) {
-            return;
+            return false;
         }
 
         try {
-            formController.saveAllScreenAnswers(answers, false);
-        } catch (JavaRosaException ignored) {
-            // ignored
+            FormController.FailedConstraint result = formController.saveAllScreenAnswers(answers, evaluateConstraints);
+            if (result != null) {
+                failedConstraint.postValue(result);
+                return false;
+            }
+        } catch (JavaRosaException e) {
+            error.postValue(new NonFatal(e.getMessage()));
+            return false;
         }
 
         formController.getAuditEventLogger().flush();
+        return true;
     }
 
     public void openHierarchy() {

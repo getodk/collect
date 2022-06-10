@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.FormEntryViewModel.NonFatal;
 import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.FormDef;
@@ -24,6 +25,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
@@ -47,6 +49,9 @@ public class FormEntryViewModelTest {
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
+
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     @Before
     public void setup() {
@@ -219,6 +224,48 @@ public class FormEntryViewModelTest {
     }
 
     @Test
+    public void moveForward_whenThereIsAFailedConstraint_setsFailedConstraint() throws Exception {
+        FormController.FailedConstraint failedConstraint = new FormController.FailedConstraint(startingIndex, 0);
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedConstraint);
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+
+        assertThat(getOrAwaitValue(viewModel.getFailedConstraint()), equalTo(failedConstraint));
+    }
+
+    @Test
+    public void moveForward_whenThereIsAFailedConstraint_doesNotStepToNextEvent() throws Exception {
+        FormController.FailedConstraint failedConstraint = new FormController.FailedConstraint(startingIndex, 0);
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedConstraint);
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+
+        verify(formController, never()).stepToNextScreenEvent();
+    }
+
+    @Test
+    public void moveForward_whenThereIsAnErrorSaving_setsErrorWithMessage() throws Exception {
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+
+        assertThat(viewModel.getError().getValue(), equalTo(new NonFatal("OH NO")));
+    }
+
+    @Test
+    public void moveForward_whenThereIsAnErrorSaving_doesNotStepToNextEvent() throws Exception {
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+
+        verify(formController, never()).stepToNextScreenEvent();
+    }
+
+    @Test
     public void moveForward_setsLoadingToTrueWhileBackgroundWorkHappens() throws Exception {
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
 
@@ -227,5 +274,14 @@ public class FormEntryViewModelTest {
 
         scheduler.runBackground();
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
+    }
+
+    @Test
+    public void moveForward_whenEvaluateConstraintsIsTrue_savesAnswersWithEvaluateConstraintsTrue() throws Exception {
+        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
+        viewModel.moveForward(answers, true);
+
+        scheduler.runBackground();
+        verify(formController).saveAllScreenAnswers(answers, true);
     }
 }

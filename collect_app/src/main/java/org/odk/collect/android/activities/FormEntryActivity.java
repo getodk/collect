@@ -491,6 +491,21 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
+        formEntryViewModel.getFailedConstraint().observe(this, failedConstraint -> {
+            if (failedConstraint != null) {
+                try {
+                    createConstraintToast(failedConstraint.index, failedConstraint.status);
+                    if (getFormController().indexIsInFieldList() && getFormController().getQuestionPrompts().length > 1) {
+                        getCurrentViewIfODKView().highlightWidget(failedConstraint.index);
+                    }
+                } catch (RepeatsInFieldListException e) {
+                    createErrorDialog(e.getMessage(), false);
+                }
+
+                swipeHandler.setBeenSwiped(false);
+            }
+        });
+
         formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
@@ -1384,20 +1399,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             if (formController.currentPromptIsQuestion()) {
                 // get constraint behavior preference value with appropriate default
                 String constraintBehavior = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR);
-
-                // if constraint behavior says we should validate on swipe, do so
-                if (constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)) {
-                    if (!evaluateConstraintsAndSaveAnswersForCurrentScreen()) {
-                        // A constraint was violated so a dialog should be showing.
-                        swipeHandler.setBeenSwiped(false);
-                    } else {
-                        formEntryViewModel.moveForward();
-                    }
-
-                // otherwise, just save without validating (constraints will be validated on finalize)
-                } else {
-                    formEntryViewModel.moveForward(getAnswers());
-                }
+                formEntryViewModel.moveForward(getAnswers(), constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE));
             } else {
                 formEntryViewModel.moveForward();
             }
