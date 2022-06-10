@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 public class MapboxMapConfigurator implements MapConfigurator {
-    public static final String DEFAULT_MAP_STYLE = Style.MAPBOX_STREETS;
-
     private final String prefKey;
     private final int sourceLabelId;
     private final MapboxUrlOption[] options;
