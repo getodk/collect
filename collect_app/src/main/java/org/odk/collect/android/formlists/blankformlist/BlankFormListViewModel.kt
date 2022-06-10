@@ -85,6 +85,23 @@ class BlankFormListViewModel(
         syncWithStorage()
     }
 
+    fun getAllForms(): List<BlankFormListItem> {
+        return formsRepository
+            .all
+            .map { form ->
+                BlankFormListItem(
+                    databaseId = form.dbId,
+                    formId = form.formId,
+                    formName = form.displayName,
+                    formVersion = form.version ?: "",
+                    geometryPath = form.geometryXpath ?: "",
+                    dateOfCreation = form.date,
+                    dateOfLastUsage = 0,
+                    contentUri = FormsContract.getUri(projectId, form.dbId)
+                )
+            }
+    }
+
     private fun loadFromDatabase() {
         isFormLoadingRunning.value = true
         scheduler.immediate(
