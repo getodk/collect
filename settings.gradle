@@ -26,4 +26,7 @@ include ':settings'
 include ':servicetest'
 include ':maps'
 include ':osmdroid'
-include ':mapbox'
+
+if (hasProperty("includeMapbox") && getProperty('includeMapbox') == 'true') {
+    include ':mapbox'
+}

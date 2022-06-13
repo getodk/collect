@@ -260,7 +260,10 @@ dependencies {
     implementation project(':externalapp')
     implementation project(':maps')
     implementation project(':osmdroid')
-    implementation project(':mapbox')
+
+    if (hasProperty("includeMapbox") && getProperty('includeMapbox') == 'true') {
+        implementation project(':mapbox')
+    }
 
     implementation Dependencies.androidx_startup
     implementation Dependencies.androidx_legacy_support
