@@ -261,7 +261,7 @@ dependencies {
     implementation project(':maps')
     implementation project(':osmdroid')
 
-    if (hasProperty("includeMapbox") && getProperty('includeMapbox') == 'true') {
+    if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
     }
 

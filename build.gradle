@@ -1,4 +1,5 @@
 import dependencies.Versions
+apply from: 'secrets.gradle'
 
 // Plugin for detecting outdated dependencies. Run './gradlew dependencyUpdates' to generate a report.
 apply plugin: "com.github.ben-manes.versions"
@@ -26,16 +27,6 @@ buildscript {
 }
 
 allprojects {
-    ext.getSecrets = { ->
-        def secretsFile = file('secrets.properties')
-        def secrets = new Properties()
-        if (secretsFile.exists()) {
-            secrets.load(new FileInputStream(secretsFile))
-        }
-
-        return secrets
-    }
-
     repositories {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()

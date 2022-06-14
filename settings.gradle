@@ -27,6 +27,7 @@ include ':servicetest'
 include ':maps'
 include ':osmdroid'
 
-if (hasProperty("includeMapbox") && getProperty('includeMapbox') == 'true') {
+apply from: 'secrets.gradle'
+if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
     include ':mapbox'
 }
