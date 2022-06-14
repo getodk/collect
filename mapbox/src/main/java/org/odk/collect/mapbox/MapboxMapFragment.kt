@@ -61,10 +61,10 @@ import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLa
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.shared.injection.ObjectProviderHost
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import javax.inject.Inject
 
 class MapboxMapFragment :
     Fragment(),
@@ -101,11 +101,13 @@ class MapboxMapFragment :
     private val locationCallback = MapboxLocationCallback(this)
     private var mapFragmentDelegate: MapFragmentDelegate? = null
 
-    @Inject
-    lateinit var settingsProvider: SettingsProvider
+    private val settingsProvider: SettingsProvider by lazy {
+        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(SettingsProvider::class.java)
+    }
 
-    @Inject
-    lateinit var referenceLayerRepository: ReferenceLayerRepository
+    private val referenceLayerRepository: ReferenceLayerRepository by lazy {
+        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(ReferenceLayerRepository::class.java)
+    }
 
     override fun addTo(
         fragmentManager: FragmentManager,
@@ -177,8 +179,6 @@ class MapboxMapFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val component = (context.applicationContext as MapboxDependencyComponentProvider).mapboxDependencyComponent
-        component.inject(this)
 
         val configurator = MapboxMapConfigurator()
 

@@ -49,10 +49,8 @@ dependencies {
     implementation Dependencies.play_services_location
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.guava
-    api Dependencies.mapbox_android_sdk
+    implementation Dependencies.mapbox_android_sdk
     implementation Dependencies.timber
-    implementation Dependencies.dagger
-    kapt Dependencies.dagger_compiler
 
     testImplementation project(':testshared')
 

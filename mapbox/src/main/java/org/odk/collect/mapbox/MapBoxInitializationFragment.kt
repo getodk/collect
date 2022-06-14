@@ -1,6 +1,5 @@
 package org.odk.collect.mapbox
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,19 +11,16 @@ import com.mapbox.maps.Style
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
-import javax.inject.Inject
+import org.odk.collect.shared.injection.ObjectProviderHost
 
 class MapBoxInitializationFragment : Fragment() {
-    @Inject
-    lateinit var settingsProvider: SettingsProvider
 
-    @Inject
-    lateinit var connectivityProvider: NetworkStateProvider
+    private val settingsProvider: SettingsProvider by lazy {
+        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(SettingsProvider::class.java)
+    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        val component = (context.applicationContext as MapboxDependencyComponentProvider).mapboxDependencyComponent
-        component.inject(this)
+    private val connectivityProvider: NetworkStateProvider by lazy {
+        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(NetworkStateProvider::class.java)
     }
 
     override fun onCreateView(
