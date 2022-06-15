@@ -296,8 +296,8 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
      *
      * @return true if the fling gesture should be suppressed
      */
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
-                                        float velocityY) {
+    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
+                                              float velocityY) {
         return false;
     }
 

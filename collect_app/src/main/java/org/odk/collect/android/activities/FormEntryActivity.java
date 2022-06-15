@@ -63,6 +63,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
@@ -263,7 +264,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private Animation outAnimation;
 
     private FrameLayout questionHolder;
-    private View currentView;
+    private SwipeHandler.View currentView;
 
     private AlertDialog alertDialog;
     private String errorMessage;
@@ -1128,7 +1129,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @param advancingPage -- true if this results from advancing through the form
      * @return newly created View
      */
-    private View createView(int event, boolean advancingPage) {
+    private SwipeHandler.View createView(int event, boolean advancingPage) {
         releaseOdkView();
 
         FormController formController = getFormController();
@@ -1181,6 +1182,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (showNavigationButtons) {
                     updateNavigationButtonVisibility();
                 }
+
                 return odkView;
 
             case EVENT_PROMPT_NEW_REPEAT:
@@ -1235,7 +1237,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * Steps to the next screen and creates a view for it. Always sets {@code advancingPage} to true
      * to auto-play media.
      */
-    private View createViewForFormBeginning(FormController formController) {
+    private SwipeHandler.View createViewForFormBeginning(FormController formController) {
         int event = FormEntryController.EVENT_BEGINNING_OF_FORM;
         try {
             event = formController.stepToNextScreenEvent();
@@ -1256,7 +1258,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * name for the instance and to decide whether the form should be finalized or not. Presents
      * a button for saving and exiting.
      */
-    private View createViewForFormEnd(FormController formController) {
+    private SwipeHandler.View createViewForFormEnd(FormController formController) {
         if (formController.getSubmissionMetadata().instanceName != null) {
             saveName = formController.getSubmissionMetadata().instanceName;
         } else {
@@ -1422,7 +1424,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public void onScreenRefresh() {
         int event = getFormController().getEvent();
 
-        View current = createView(event, false);
+        SwipeHandler.View current = createView(event, false);
         showView(current, AnimationType.FADE);
 
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
@@ -1454,7 +1456,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void animateToPreviousView(int event) {
-        View next = createView(event, false);
+        SwipeHandler.View next = createView(event, false);
         showView(next, AnimationType.LEFT);
 
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
@@ -1488,7 +1490,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * current view and next appropriately given the AnimationType. Also updates
      * the progress bar.
      */
-    public void showView(View next, AnimationType from) {
+    public void showView(SwipeHandler.View next, AnimationType from) {
         invalidateOptionsMenu();
 
         // disable notifications...
@@ -1542,9 +1544,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         // adjust which view is in the layout container...
-        View staleView = currentView;
+        SwipeHandler.View staleView = currentView;
         currentView = next;
-        swipeHandler.setOdkView(getCurrentViewIfODKView());
+        swipeHandler.setView(currentView);
         questionHolder.addView(currentView, lp);
         animationCompletionSet = 0;
 
@@ -2469,10 +2471,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     /**
      * Used whenever we need to show empty view and be able to recognize it from the code
      */
-    static class EmptyView extends View {
-
+    static class EmptyView extends SwipeHandler.View {
         EmptyView(Context context) {
             super(context);
+        }
+
+        @Override
+        public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return false;
+        }
+
+        @Nullable
+        @Override
+        public NestedScrollView getVerticalScrollView() {
+            return null;
         }
     }
 

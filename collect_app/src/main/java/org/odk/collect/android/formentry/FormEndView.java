@@ -4,15 +4,19 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.utilities.FormNameUtils;
 
-public class FormEndView extends FrameLayout {
+public class FormEndView extends SwipeHandler.View {
 
     private final Listener listener;
     private final String formTitle;
@@ -59,6 +63,17 @@ public class FormEndView extends FrameLayout {
         findViewById(R.id.save_exit_button).setOnClickListener(v -> {
             listener.onSaveClicked(markAsFinalized.isChecked());
         });
+    }
+
+    @Override
+    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public NestedScrollView getVerticalScrollView() {
+        return findViewById(R.id.scroll_view);
     }
 
     public interface Listener {

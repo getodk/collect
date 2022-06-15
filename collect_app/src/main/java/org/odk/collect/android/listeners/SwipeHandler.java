@@ -3,11 +3,12 @@ package org.odk.collect.android.listeners;
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.utilities.FlingRegister;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -19,7 +20,7 @@ public class SwipeHandler {
 
     private final GestureDetector gestureDetector;
     private final OnSwipeListener onSwipe;
-    private ODKView odkView;
+    private View view;
     private boolean allowSwiping = true;
     private boolean beenSwiped;
     private final Settings generalSettings;
@@ -35,8 +36,8 @@ public class SwipeHandler {
         this.generalSettings = generalSettings;
     }
 
-    public void setOdkView(ODKView odkView) {
-        this.odkView = odkView;
+    public void setView(View view) {
+        this.view = view;
     }
 
     public void setAllowSwiping(boolean allowSwiping) {
@@ -70,8 +71,8 @@ public class SwipeHandler {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             // The onFling() captures the 'up' event so our view thinks it gets long pressed. We don't want that, so cancel it.
-            if (odkView != null) {
-                odkView.cancelLongPress();
+            if (view != null) {
+                view.cancelLongPress();
             }
             return false;
         }
@@ -96,10 +97,10 @@ public class SwipeHandler {
                 // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 
                 // For all screens a swipe is left/right of at least .25" and up/down of less than .25" OR left/right of > .5"
-                int xpixellimit = (int) (ScreenUtils.xdpi(odkView.getContext()) * .25);
-                int ypixellimit = (int) (ScreenUtils.ydpi(odkView.getContext()) * .25);
+                int xpixellimit = (int) (ScreenUtils.xdpi(view.getContext()) * .25);
+                int ypixellimit = (int) (ScreenUtils.ydpi(view.getContext()) * .25);
 
-                if (odkView != null && odkView.suppressFlingGesture(e1, e2, velocityX, velocityY)) {
+                if (view != null && view.shouldSuppressFlingGesture(e1, e2, velocityX, velocityY)) {
                     return false;
                 }
 
@@ -110,7 +111,7 @@ public class SwipeHandler {
                 float diffX = Math.abs(e1.getX() - e2.getX());
                 float diffY = Math.abs(e1.getY() - e2.getY());
 
-                if (odkView != null && canScrollVertically() && getGestureAngle(diffX, diffY) > 30) {
+                if (view != null && canScrollVertically() && getGestureAngle(diffX, diffY) > 30) {
                     return false;
                 }
 
@@ -143,10 +144,26 @@ public class SwipeHandler {
         }
 
         public boolean canScrollVertically() {
-            NestedScrollView scrollView = odkView.findViewById(R.id.odk_view_container);
-            int screenHeight = scrollView.getHeight();
-            int viewHeight = scrollView.getChildAt(0).getHeight();
-            return viewHeight > screenHeight;
+            NestedScrollView scrollView = view.getVerticalScrollView();
+
+            if (scrollView != null) {
+                int screenHeight = scrollView.getHeight();
+                int viewHeight = scrollView.getChildAt(0).getHeight();
+                return viewHeight > screenHeight;
+            } else {
+                return false;
+            }
         }
+    }
+
+    public abstract static class View extends FrameLayout {
+        public View(@NonNull Context context) {
+            super(context);
+        }
+
+        public abstract boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
+
+        @Nullable
+        public abstract NestedScrollView getVerticalScrollView();
     }
 }

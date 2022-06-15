@@ -72,7 +72,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
     }
 
     @Override
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return slider.isTrackingTouch();
     }
 
