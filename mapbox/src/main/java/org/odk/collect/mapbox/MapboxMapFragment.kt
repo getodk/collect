@@ -12,6 +12,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
+import androidx.startup.AppInitializer
 import com.google.android.gms.location.LocationListener
 import com.mapbox.android.core.location.LocationEngineProvider
 import com.mapbox.android.core.location.LocationEngineRequest
@@ -31,6 +32,7 @@ import com.mapbox.maps.extension.style.sources.addSource
 import com.mapbox.maps.extension.style.sources.generated.RasterSource
 import com.mapbox.maps.extension.style.sources.generated.VectorSource
 import com.mapbox.maps.extension.style.sources.getSource
+import com.mapbox.maps.loader.MapboxMapsInitializer
 import com.mapbox.maps.plugin.LocationPuck2D
 import com.mapbox.maps.plugin.animation.MapAnimationOptions.Companion.mapAnimationOptions
 import com.mapbox.maps.plugin.animation.flyTo
@@ -48,6 +50,7 @@ import com.mapbox.maps.plugin.locationcomponent.location
 import com.mapbox.maps.plugin.scalebar.scalebar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.utils.ScreenUtils
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
@@ -115,6 +118,7 @@ class MapboxMapFragment :
         readyListener: ReadyListener?,
         errorListener: ErrorListener?
     ) {
+
         mapReadyListener = readyListener
 
         // Mapbox SDK only knows how to fetch tiles via HTTP. If we want it to
@@ -179,6 +183,7 @@ class MapboxMapFragment :
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        initializeMapbox(context)
 
         val configurator = MapboxMapConfigurator()
 
@@ -187,6 +192,17 @@ class MapboxMapFragment :
             settingsProvider.getUnprotectedSettings(),
             this::onConfigChanged
         )
+    }
+
+    private fun initializeMapbox(context: Context) {
+        // Auto initialization is disabled to stop x86 devices from crashing so we do this manually
+        context.getState().let {
+            if (!it.get(KEY_MAPBOX_INITIALIZED, false)) {
+                AppInitializer.getInstance(context)
+                    .initializeComponent(MapboxMapsInitializer::class.java)
+                it.set(KEY_MAPBOX_INITIALIZED, true)
+            }
+        }
     }
 
     override fun onStart() {
@@ -596,5 +612,7 @@ class MapboxMapFragment :
     companion object {
         const val KEY_STYLE_URL = "STYLE_URL"
         const val OFFLINE_LAYER_ID = "offline_layer_id"
+
+        private const val KEY_MAPBOX_INITIALIZED = "mapbox_initialized"
     }
 }

@@ -51,6 +51,7 @@ dependencies {
     implementation Dependencies.guava
     implementation Dependencies.mapbox_android_sdk
     implementation Dependencies.timber
+    implementation Dependencies.androidx_startup
 
     testImplementation project(':testshared')
 

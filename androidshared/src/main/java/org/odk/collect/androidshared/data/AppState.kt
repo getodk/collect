@@ -3,6 +3,7 @@ package org.odk.collect.androidshared.data
 import android.app.Activity
 import android.app.Application
 import android.app.Service
+import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 
@@ -58,4 +59,8 @@ interface StateStore {
 fun Application.getState(): AppState {
     val stateStore = this as StateStore
     return stateStore.getState()
+}
+
+fun Context.getState(): AppState {
+    return (applicationContext as Application).getState()
 }
