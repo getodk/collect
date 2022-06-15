@@ -5,6 +5,17 @@ import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.MapFragment
 
 object MapboxClassInstanceCreator {
+
+    @JvmStatic
+    fun isMapboxAvailable(): Boolean {
+        return try {
+            Class.forName("org.odk.collect.mapbox.MapboxMapFragment")
+            true
+        } catch (e: ClassNotFoundException) {
+            false
+        }
+    }
+
     fun createMapboxMapFragment(): MapFragment? {
         return createClassInstance<MapFragment>("org.odk.collect.mapbox.MapboxMapFragment")
     }

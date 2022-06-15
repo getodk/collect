@@ -161,7 +161,8 @@ public class MapConfiguratorProvider {
                 "armeabi-v7a"
         );
 
-        return stream(Build.SUPPORTED_ABIS).anyMatch(abi -> mapboxAbis.contains(abi));
+        return MapboxClassInstanceCreator.isMapboxAvailable()
+                && stream(Build.SUPPORTED_ABIS).anyMatch(abi -> mapboxAbis.contains(abi));
     }
 
     /**
