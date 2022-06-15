@@ -11,6 +11,9 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+import static java.util.Arrays.stream;
+
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -20,11 +23,15 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
-import org.odk.collect.osmdroid.OsmDroidMapConfigurator;
-import org.odk.collect.osmdroid.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.maps.MapConfigurator;
+import org.odk.collect.osmdroid.OsmDroidMapConfigurator;
+import org.odk.collect.osmdroid.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.osmdroid.WebMapService;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MapConfiguratorProvider {
 
@@ -47,68 +54,73 @@ public class MapConfiguratorProvider {
      * basemap options available under each one, in their order of appearance.
      */
     private static SourceOption[] initOptions() {
-        return new SourceOption[] {
-            new SourceOption(BASEMAP_SOURCE_GOOGLE, R.string.basemap_source_google,
+        ArrayList<SourceOption> sourceOptions = new ArrayList<>();
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_GOOGLE, R.string.basemap_source_google,
                 new GoogleMapConfigurator(
-                    KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
-                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
-                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
-                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
-                    new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
+                        KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
+                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
+                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
+                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
+                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
                 )
-            ),
-            new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
+        ));
+
+        if (isMapboxSupported()) {
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, R.string.basemap_source_mapbox,
                     MapboxClassInstanceCreator.createMapboxMapConfigurator()
-            ),
-            new SourceOption(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
+            ));
+        }
+
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_OSM, R.string.basemap_source_osm,
                 new OsmDroidMapConfigurator(
-                    new WebMapService(
-                        "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
-                        "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                        "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    )
+                        new WebMapService(
+                                "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
+                                "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        )
                 )
-            ),
-            new SourceOption(BASEMAP_SOURCE_USGS, R.string.basemap_source_usgs,
+        ));
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_USGS, R.string.basemap_source_usgs,
                 new OsmDroidMapConfigurator(
-                    KEY_USGS_MAP_STYLE, R.string.basemap_source_usgs,
-                    new WmsOption("topographic", R.string.topographic, new WebMapService(
-                        getLocalizedString(getApplication(), R.string.openmap_usgs_topo), 0, 18, 256, USGS_ATTRIBUTION,
-                        USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
-                    )),
-                    new WmsOption("hybrid", R.string.hybrid, new WebMapService(
-                        getLocalizedString(getApplication(), R.string.openmap_usgs_sat), 0, 18, 256, USGS_ATTRIBUTION,
-                        USGS_URL_BASE + "/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
-                    )),
-                    new WmsOption("satellite", R.string.satellite, new WebMapService(
-                        getLocalizedString(getApplication(), R.string.openmap_usgs_img), 0, 18, 256, USGS_ATTRIBUTION,
-                        USGS_URL_BASE + "/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
-                    ))
+                        KEY_USGS_MAP_STYLE, R.string.basemap_source_usgs,
+                        new WmsOption("topographic", R.string.topographic, new WebMapService(
+                                getLocalizedString(getApplication(), R.string.openmap_usgs_topo), 0, 18, 256, USGS_ATTRIBUTION,
+                                USGS_URL_BASE + "/USGSTopo/MapServer/tile/{z}/{y}/{x}"
+                        )),
+                        new WmsOption("hybrid", R.string.hybrid, new WebMapService(
+                                getLocalizedString(getApplication(), R.string.openmap_usgs_sat), 0, 18, 256, USGS_ATTRIBUTION,
+                                USGS_URL_BASE + "/USGSImageryTopo/MapServer/tile/{z}/{y}/{x}"
+                        )),
+                        new WmsOption("satellite", R.string.satellite, new WebMapService(
+                                getLocalizedString(getApplication(), R.string.openmap_usgs_img), 0, 18, 256, USGS_ATTRIBUTION,
+                                USGS_URL_BASE + "/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}"
+                        ))
                 )
-            ),
-            new SourceOption(BASEMAP_SOURCE_STAMEN, R.string.basemap_source_stamen,
+        ));
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_STAMEN, R.string.basemap_source_stamen,
                 new OsmDroidMapConfigurator(
-                    new WebMapService(
-                         getLocalizedString(getApplication(), R.string.openmap_stamen_terrain), 0, 18, 256, STAMEN_ATTRIBUTION,
-                        "http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg"
-                    )
+                        new WebMapService(
+                                getLocalizedString(getApplication(), R.string.openmap_stamen_terrain), 0, 18, 256, STAMEN_ATTRIBUTION,
+                                "http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg"
+                        )
                 )
-            ),
-            new SourceOption(BASEMAP_SOURCE_CARTO, R.string.basemap_source_carto,
+        ));
+        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_CARTO, R.string.basemap_source_carto,
                 new OsmDroidMapConfigurator(
-                    KEY_CARTO_MAP_STYLE, R.string.basemap_source_carto,
-                    new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
-                        getLocalizedString(getApplication(), R.string.openmap_cartodb_positron), 0, 18, 256, CARTO_ATTRIBUTION,
-                        "http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-                    )),
-                    new WmsOption("dark_matter", R.string.carto_map_style_dark_matter, new WebMapService(
-                        getLocalizedString(getApplication(), R.string.openmap_cartodb_darkmatter), 0, 18, 256, CARTO_ATTRIBUTION,
-                        "http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
-                    ))
+                        KEY_CARTO_MAP_STYLE, R.string.basemap_source_carto,
+                        new WmsOption("positron", R.string.carto_map_style_positron, new WebMapService(
+                                getLocalizedString(getApplication(), R.string.openmap_cartodb_positron), 0, 18, 256, CARTO_ATTRIBUTION,
+                                "http://1.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                        )),
+                        new WmsOption("dark_matter", R.string.carto_map_style_dark_matter, new WebMapService(
+                                getLocalizedString(getApplication(), R.string.openmap_cartodb_darkmatter), 0, 18, 256, CARTO_ATTRIBUTION,
+                                "http://1.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png"
+                        ))
                 )
-            )
-        };
+        ));
+
+        return sourceOptions.toArray(new SourceOption[]{});
     }
 
     /** Gets the currently selected MapConfigurator. */
@@ -141,6 +153,15 @@ public class MapConfiguratorProvider {
             labelIds[i] = SOURCE_OPTIONS[i].labelId;
         }
         return labelIds;
+    }
+
+    private static boolean isMapboxSupported() {
+        List<String> mapboxAbis = Arrays.asList(
+                "arm64-v8a",
+                "armeabi-v7a"
+        );
+
+        return stream(Build.SUPPORTED_ABIS).anyMatch(abi -> mapboxAbis.contains(abi));
     }
 
     /**
