@@ -121,7 +121,9 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     	if(taskStartText != null) {
 	    	if(item.type.equals("form")) {
                 taskStartText.setText(getContext().getString(R.string.smap_project) + ": " + item.project);
-	    	} else {
+            } else if(item.taskType != null && item.taskType.equals("case")) {
+                taskStartText.setText(item.displayName);
+            } else {
                 String line2 = Utilities.getTaskTime(item.taskStatus, item.actFinish, item.taskStart);
                 if(item.taskFinish > 0 && !item.taskStatus.equals(Utilities.STATUS_T_COMPLETE) &&
                         !item.taskStatus.equals(Utilities.STATUS_T_SUBMITTED)) {
