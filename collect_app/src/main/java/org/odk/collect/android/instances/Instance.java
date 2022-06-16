@@ -46,6 +46,7 @@ public final class Instance {
     private final String updateid;          // smap
     private final String location_trigger;  // smap
     private final String survey_notes;      // smap
+    private final boolean isCase;           // smap
     private final String assignment_id;     // smap
     private final String geometryType;
     private final String geometry;
@@ -67,6 +68,7 @@ public final class Instance {
         location_trigger = builder.location_trigger;    // smap
         survey_notes = builder.survey_notes;            // smap
         assignment_id = builder.assignment_id;          // smap
+        isCase = builder.isCase;                        // smap
         geometryType = builder.geometryType;
         geometry = builder.geometry;
 
@@ -88,6 +90,7 @@ public final class Instance {
         private String location_trigger;    // smap
         private String survey_notes;        // smap
         private String assignment_id;       // smap
+        private boolean isCase;             // smap
         private String geometryType;
         private String geometry;
 
@@ -163,6 +166,11 @@ public final class Instance {
         // smap
         public Builder assignment_id(String assignment_id) {
             this.assignment_id = assignment_id;
+            return this;
+        }
+        // smap
+        public Builder isCase(boolean isCase) {
+            this.isCase = isCase;
             return this;
         }
 
@@ -250,6 +258,11 @@ public final class Instance {
     public String getAssignmentId() {
         return assignment_id;
    }
+
+    // smap
+    public boolean isCase() {
+        return isCase;
+    }
 
     public String getGeometryType() {
         return geometryType;

@@ -378,6 +378,7 @@ public class InstancesDao {
                     int locationTriggerColumnIndex = cursor.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER);     // smap
                     int surveyNotesColumnIndex = cursor.getColumnIndex(InstanceColumns.T_SURVEY_NOTES);             // smap
                     int assignmentIdColumnIndex = cursor.getColumnIndex(InstanceColumns.T_ASS_ID);                  // smap
+                    int taskTypeColumnIndex = cursor.getColumnIndex(InstanceColumns.T_TASK_TYPE);                  // smap
                     int geometryTypeColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY_TYPE);
                     int geometryColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY);
 
@@ -400,6 +401,7 @@ public class InstancesDao {
                             .location_trigger(cursor.getString(locationTriggerColumnIndex))     // smap
                             .survey_notes(cursor.getString(surveyNotesColumnIndex))             // smap
                             .assignment_id(cursor.getString(assignmentIdColumnIndex))           // smap
+                            .isCase(cursor.getString(taskTypeColumnIndex) != null && cursor.getString(taskTypeColumnIndex).equals("case"))           // smap
                             .id(cursor.getLong(databaseIdIndex))
                             .build();
 

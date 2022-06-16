@@ -26,6 +26,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,9 +89,15 @@ public abstract class InstanceUploader {
                 instance.getId().toString());
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMITTED);
-        contentValues.put(InstanceColumns.T_TASK_STATUS, Instance.STATUS_SUBMITTED);     // smap
-        Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+        if(!instance.isCase()) {    // smap
+            contentValues.put(InstanceColumns.STATUS, Instance.STATUS_SUBMITTED);
+            contentValues.put(InstanceColumns.T_TASK_STATUS, Instance.STATUS_SUBMITTED);     // smap
+            Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+        } else {    // smap reset the status back to incomplete
+            contentValues.put(InstanceColumns.STATUS, Instance.STATUS_INCOMPLETE);
+            contentValues.put(InstanceColumns.T_TASK_STATUS, Utilities.STATUS_T_ACCEPTED);     // smap
+            Collect.getInstance().getContentResolver().update(instanceDatabaseUri, contentValues, null, null);
+        }
     }
 
     public void saveFailedStatusToDatabase(Instance instance) {
