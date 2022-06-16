@@ -421,7 +421,8 @@ public class Utilities {
                 InstanceColumns.T_ASS_ID,
                 InstanceColumns.UUID,
                 InstanceColumns.SOURCE,
-                InstanceColumns.T_LOCATION_TRIGGER
+                InstanceColumns.T_LOCATION_TRIGGER,
+                InstanceColumns.T_UPDATEID
         };
 
         String selectClause = null;
@@ -510,6 +511,7 @@ public class Utilities {
                 entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
                 entry.source = c.getString(c.getColumnIndex(InstanceColumns.SOURCE));
                 entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
+                entry.updateId = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
 
                 if(useGeofenceFilter && location != null) {
                     if(entry.showDist > 0 && entry.schedLat != 0.0 && entry.schedLon != 0.0) {

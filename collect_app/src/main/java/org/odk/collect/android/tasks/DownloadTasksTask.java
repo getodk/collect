@@ -101,7 +101,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	HashMap<String, String> results = null;
     SharedPreferences sharedPreferences = null;
     ArrayList<TaskEntry> tasks = new ArrayList<TaskEntry>();
-    HashMap<Long, TaskStatus> taskMap = new HashMap<Long, TaskStatus>();
+    HashMap<String, TaskStatus> taskMap = new HashMap<>();
     Gson gson = null;
     TaskResponse tr = null;                         // Data returned from the server
     String serverUrl = null;                        // Current server
@@ -124,26 +124,18 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     @Inject
     FormsRepository formsRepository;
     private FormsDao formsDao;
-	
-	/*
-	 * class used to store status of existing tasks in the database and their database id
-	 * A hash is created of the data stored in these object to uniquely identify the task
-	 */
-	
-	private class TaskStatus {
-		@SuppressWarnings("unused")
-		public long tid;
-		@SuppressWarnings("unused")
-		public String status;
-		@SuppressWarnings("unused")
-		public boolean keep;
-		
-		public TaskStatus(long tid, String status) {
-			this.tid = tid;
-			this.status = status;
-			keep = false;
-		}
-	}
+
+    private class TaskStatus {
+        public long tid;
+        public String status;
+        public boolean keep;
+
+        public TaskStatus(long tid, String status) {
+            this.tid = tid;
+            this.status = status;
+            keep = false;
+        }
+    }
 
 	public DownloadTasksTask(){Collect.getInstance().getComponent().inject(this);}
     /*
@@ -302,8 +294,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  */
                 Utilities.getTasks(tasks, false, "", "", true, false, true);
                 for(TaskEntry t : tasks) {
-                    TaskStatus ts = new TaskStatus(t.assId, t.taskStatus);
-                    taskMap.put(t.assId, ts);
+                    taskMap.put(getTaskCaseString(t.taskType, t.assId, t.updateId), new TaskStatus(t.id, t.taskStatus));
                 }
 
                 /*
@@ -608,7 +599,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
 
                 // Find out if this task is already on the phone
-                TaskStatus ts = taskMap.get(Long.valueOf((long) assignment.assignment_id));
+                TaskStatus ts = getExistingTaskStatus(ta.task.type, assignment.assignment_id, ta.task.update_id);
                 if(ts == null) {
                     Timber.i("New task: %s", assignment.assignment_id);
                     // New task
@@ -1033,6 +1024,22 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         // 2. Delete all shared media except the current organisation
         Utilities.deleteRecursive(new File(sharedMediaPath + File.separator + source), currentOrg);
+    }
+
+    /*
+     * Get a string which uniquely identifies a task or a case
+     */
+    private String getTaskCaseString(String taskType, long assId, String updateId) {
+        taskType = (taskType == null) ? "xform" : taskType;
+        updateId = (updateId == null) ? "none" : updateId;
+        return taskType + "-" + assId + "-" + updateId;
+    }
+
+    /*
+     * Return true if the task is already in the taskMap, that is it is present on the device
+     */
+    private TaskStatus getExistingTaskStatus(String taskType, long assId, String updateId) {
+        return taskMap.get(getTaskCaseString(taskType, assId, updateId));
     }
     
 }
