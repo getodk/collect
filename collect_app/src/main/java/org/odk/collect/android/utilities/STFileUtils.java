@@ -138,36 +138,5 @@ public final class STFileUtils {
         }
         return source.trim().toLowerCase();
     }
-    
-    /*
-     * Create a new instance file
-     */
-    public static String createInstanceFile(String formName, String contents) {
-    	String instanceFile = null;
 
-    	if(formName != null) {
-	        String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").
-	        		format(Calendar.getInstance().getTime());
-	        String formBase = formName.substring(0, formName.lastIndexOf('.'));
-	        String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + formBase + "_" + time;
-	        if (FileUtils.createFolder(path)) {
-	            instanceFile = path + "/" + formBase + "_" + time + ".xml";
-	            if(contents != null) {
-	            	try {	// TODO write in background task
-	                    
-	                    BufferedWriter bw = new BufferedWriter(new FileWriter(instanceFile));
-	                    bw.write(contents);
-	                    bw.flush();
-	                    bw.close();
-
-	                } catch (IOException e) {
-	                    Log.e(t, "Error writing XML file");
-	                    e.printStackTrace();
-	                }
-	            }
-	        }
-    	}
-        
-        return instanceFile;
-    }
 }

@@ -714,6 +714,25 @@ public class Utilities {
     }
 
     /*
+     * Delete the previous copy of a case that has been replaced
+     */
+    public static void deleteOldCase(String updateId) {
+
+        Uri dbUri = InstanceColumns.CONTENT_URI;
+
+        String selectClause = InstanceColumns.T_TASK_TYPE + " = 'case' and "
+                + InstanceColumns.T_UPDATEID + " = ? and "
+                + InstanceColumns.SOURCE + " = ?";
+
+        ArrayList<String> selectArgsList = new ArrayList<>();
+        selectArgsList.add(updateId);
+        selectArgsList.add(Utilities.getSource());
+        String[] selectArgs = new String[selectArgsList.size()];
+        selectArgs = selectArgsList.toArray(selectArgs);
+        Collect.getInstance().getContentResolver().delete(dbUri, selectClause, selectArgs);
+    }
+
+    /*
     * Set the status for the provided assignment id
     */
     public static void setStatusForAssignment(long assId, String status) {

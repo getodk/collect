@@ -600,7 +600,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
                 // Find out if this task is already on the phone
                 TaskStatus ts = getExistingTaskStatus(ta.task.type, assignment.assignment_id, ta.task.update_id);
-                if(ts == null) {
+                /*
+                 * If this is a new task or a case then get it from the server
+                 */
+                if(ts == null || ta.task.type != null && ta.task.type.equals("case")) {
                     Timber.i("New task: %s", assignment.assignment_id);
                     // New task
                     if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED) ||
@@ -643,13 +646,13 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 } else {        	// Existing task
                     Timber.i("Existing Task: " + assignment.assignment_id + " : " + assignment.assignment_status);
 
+                    // Update the task if its status is not incomplete
                     if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)) {
                         Utilities.setStatusForAssignment(assignment.assignment_id, assignment.assignment_status);
                         results.put(ta.task.title, assignment.assignment_status);
                     }
-
-                    // Update the task if its status is not incomplete
                     Utilities.updateParametersForAssignment(assignment.assignment_id, ta);
+
                 }
             }// end tasks loop
     	}

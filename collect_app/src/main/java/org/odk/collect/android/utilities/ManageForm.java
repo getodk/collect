@@ -288,7 +288,6 @@ public class ManageForm {
     /*
 	 * Parameters
 	 *   formId:  	Stored as jrFormId in the forms database.
-	 *   			Extracted by odk from the id attribute on top level data element in the downloaded xml
 	 *   formURL:	URL to download the form
 	 *   			Not stored
 	 *   instanceDataURL:
@@ -306,9 +305,14 @@ public class ManageForm {
     	ManageFormDetails fd = getFormDetails(ta.task.form_id, null, source);    // Get the form details
 		
     	if(fd.exists) {
-         
+
+			// If this is a case delete the existing case first
+			if(ta.task.type != null && ta.task.type.equals("case")) {
+				Utilities.deleteOldCase(ta.task.update_id);
+			}
+
 	  		 // Get the instance path
-	         instancePath = getInstancePath(fd.formPath, assignmentId);
+	         instancePath = getInstancePath(fd.formPath, assignmentId, ta.task.update_id);
 	         if(instancePath != null && initialDataURL != null) {
 	        	 File f = new File(instancePath);
                  try {
@@ -415,17 +419,18 @@ public class ManageForm {
      *  formPath:   Used to obtain the filename
      *  assignment_id:	    Used to guarantee uniqueness when multiple tasks for the same form are assigned
      */
-    public String getInstancePath(String formPath, long assignmentId) {
+    public String getInstancePath(String formPath, long assignmentId, String updateId) {
         String instancePath = null;
+        updateId = (updateId == null) ? "" : "_" + updateId;
         
         if(formPath != null) {
 	    	String time = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss")
 	                        .format(Calendar.getInstance().getTime());
-            String file =
+            String formFileName =
                 formPath.substring(formPath.lastIndexOf('/') + 1, formPath.lastIndexOf('.'));
-            String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + "/" + file + "_" + time + "_" + assignmentId;
+            String path = new StoragePathProvider().getDirPath(StorageSubdirectory.INSTANCES) + "/" + formFileName + time + "_" + assignmentId + updateId;
             if (FileUtils.createFolder(path)) {
-                instancePath = path + "/" + file + "_" + time + "_" + assignmentId + ".xml";
+                instancePath = path + "/instance.xml";
             }
         }
             
