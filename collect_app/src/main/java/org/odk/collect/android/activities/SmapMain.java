@@ -891,7 +891,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         // 1. Get a new instance path
         ManageForm mf = new ManageForm();
-        newPath = mf.getInstancePath(formPath, entry.assId);
+        newPath = mf.getInstancePath(formPath, entry.assId, null);
 
         // 2. Duplicate the instance entry and get the new path
         Utilities.duplicateTask(originalPath, newPath, entry);
