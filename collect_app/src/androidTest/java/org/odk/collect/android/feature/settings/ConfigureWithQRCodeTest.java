@@ -18,7 +18,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.support.rules.CallbackCountingTaskExecutorRule;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;
 import org.odk.collect.android.support.rules.IdlingResourceRule;
@@ -46,7 +45,7 @@ public class ConfigureWithQRCodeTest {
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
     private final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
     private final TestScheduler testScheduler = new TestScheduler();
-    private final CallbackCountingTaskExecutorRule countingTaskExecutorRule = new CallbackCountingTaskExecutorRule();
+    private final CountingTaskExecutorIdlingResource countingTaskExecutorIdlingResource = new CountingTaskExecutorIdlingResource();
 
     @Rule
     public RuleChain copyFormChain = RuleChain
@@ -71,9 +70,9 @@ public class ConfigureWithQRCodeTest {
                     return testScheduler;
                 }
             }))
-            .around(countingTaskExecutorRule)
+            .around(countingTaskExecutorIdlingResource)
             .around(new IdlingResourceRule(new SchedulerIdlingResource(testScheduler)))
-            .around(new IdlingResourceRule(new CountingTaskExecutorIdlingResource(countingTaskExecutorRule)))
+            .around(new IdlingResourceRule(countingTaskExecutorIdlingResource))
             .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
 
