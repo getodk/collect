@@ -1,6 +1,5 @@
 package org.odk.collect.mapbox
 
-import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -98,7 +97,12 @@ class MapboxMapFragment :
     private var clientWantsLocationUpdates = false
     private var offlineLayerPosition = -1
     private val locationCallback = MapboxLocationCallback(this)
-    private var mapFragmentDelegate: MapFragmentDelegate? = null
+    private var mapFragmentDelegate = MapFragmentDelegate(
+        this,
+        { MapboxMapConfigurator() },
+        { settingsProvider.getUnprotectedSettings() },
+        this::onConfigChanged
+    )
 
     private val settingsProvider: SettingsProvider by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(SettingsProvider::class.java)
@@ -122,10 +126,15 @@ class MapboxMapFragment :
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mapFragmentDelegate.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mapView = MapView(inflater.context).apply {
             scalebar.enabled = false
@@ -157,28 +166,16 @@ class MapboxMapFragment :
         // If the screen is rotated before the map is ready, this fragment could already be detached,
         // which makes it unsafe to use. Only call the ReadyListener if this fragment is still attached.
         if (mapReadyListener != null && activity != null) {
+            mapFragmentDelegate.onReady()
             mapReadyListener!!.onReady(this)
         }
 
         return mapView
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        val configurator = MapboxMapConfigurator()
-
-        mapFragmentDelegate = MapFragmentDelegate(
-            this,
-            { configurator },
-            { settingsProvider.getUnprotectedSettings() },
-            this::onConfigChanged
-        )
-    }
-
     override fun onStart() {
         super.onStart()
-        mapFragmentDelegate?.onStart()
+        mapFragmentDelegate.onStart()
     }
 
     override fun onResume() {
@@ -192,8 +189,13 @@ class MapboxMapFragment :
     }
 
     override fun onStop() {
-        mapFragmentDelegate?.onStop()
+        mapFragmentDelegate.onStop()
         super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapFragmentDelegate.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
@@ -242,7 +244,7 @@ class MapboxMapFragment :
     override fun zoomToBoundingBox(
         mapPoints: Iterable<MapPoint>?,
         scaleFactor: Double,
-        animate: Boolean
+        animate: Boolean,
     ) {
         mapPoints?.let {
             val points = mapPoints.map {
@@ -273,7 +275,7 @@ class MapboxMapFragment :
         point: MapPoint,
         draggable: Boolean,
         iconAnchor: String,
-        iconDrawableId: Int
+        iconDrawableId: Int,
     ): Int {
         val featureId = nextFeatureId++
         features[featureId] = MarkerFeature(
