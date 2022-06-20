@@ -71,6 +71,7 @@ public class InstanceProvider extends ContentProvider {
         try {
             new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
+            Timber.e(e);
             return null;
         }
 
@@ -110,6 +111,7 @@ public class InstanceProvider extends ContentProvider {
                         String sortOrder) {
         deferDaggerInit();
         if (!permissionsProvider.areStoragePermissionsGranted()) {
+            Timber.i("Storage permissions not granted");
             return null;
         }
 
@@ -160,6 +162,7 @@ public class InstanceProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, ContentValues initialValues) {
         deferDaggerInit();
         if (!permissionsProvider.areStoragePermissionsGranted()) {
+            Timber.i("Storage permissions not granted");
             return null;
         }
 

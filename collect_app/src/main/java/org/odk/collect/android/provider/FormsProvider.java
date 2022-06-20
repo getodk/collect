@@ -73,6 +73,7 @@ public class FormsProvider extends ContentProvider {
         try {
             new StorageInitializer().createOdkDirsOnStorage();
         } catch (RuntimeException e) {
+            Timber.e(e);
             return null;
         }
         if (dbHelper == null) {
