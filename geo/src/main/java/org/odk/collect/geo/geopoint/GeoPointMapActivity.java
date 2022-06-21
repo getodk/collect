@@ -30,6 +30,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
@@ -150,7 +151,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
         placeMarkerButton = findViewById(R.id.place_marker);
         zoomButton = findViewById(R.id.zoom);
 
-        ((MapFragment) findViewById(R.id.map_container)).init(this::initMap, this::finish);
+        MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
+        mapFragment.init(this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {

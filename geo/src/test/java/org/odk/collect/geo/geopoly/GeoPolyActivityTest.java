@@ -41,10 +41,10 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.R;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
-import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.location.tracker.LocationTracker;
+import org.odk.collect.maps.MapFragmentFactory;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
@@ -90,6 +90,7 @@ public class GeoPolyActivityTest {
     @Test
     public void testLocationTrackerLifecycle() {
         ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
+        mapFragment.ready();
 
         // Stopping the activity should stop the location tracker
         scenario.moveToState(Lifecycle.State.DESTROYED);
@@ -99,6 +100,7 @@ public class GeoPolyActivityTest {
     @Test
     public void recordButton_should_beHiddenForAutomaticMode() {
         ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
+        mapFragment.ready();
 
         scenario.onActivity((activity -> {
             activity.updateRecordingMode(R.id.automatic_mode);
@@ -110,6 +112,7 @@ public class GeoPolyActivityTest {
     @Test
     public void recordButton_should_beVisibleForManualMode() {
         ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
+        mapFragment.ready();
 
         scenario.onActivity((activity -> {
             activity.updateRecordingMode(R.id.manual_mode);
@@ -124,6 +127,7 @@ public class GeoPolyActivityTest {
 
         intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, true);
         launcherRule.<GeoPolyActivity>launch(intent).onActivity(activity -> {
+            mapFragment.ready();
             activity.updateRecordingMode(R.id.automatic_mode);
             activity.startInput();
             verify(locationTracker).start(true);
@@ -133,6 +137,7 @@ public class GeoPolyActivityTest {
 
         intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
         launcherRule.<GeoPolyActivity>launch(intent).onActivity(activity -> {
+            mapFragment.ready();
             activity.updateRecordingMode(R.id.automatic_mode);
             activity.startInput();
             verify(locationTracker).start(false);

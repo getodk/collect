@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -159,7 +160,8 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             R.string.geotrace_title : R.string.geoshape_title));
         setContentView(R.layout.geopoly_layout);
 
-        ((MapFragment) findViewById(R.id.map_container)).init(this::initMap, this::finish);
+        MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
+        mapFragment.init(this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
