@@ -53,8 +53,6 @@ class SelectionMapFragment(
     private val selectedFeatureViewModel by viewModels<SelectedFeatureViewModel>()
 
     private lateinit var map: MapFragment
-    private var viewportInitialized = false
-
     private lateinit var summarySheetBehavior: BottomSheetBehavior<*>
     private lateinit var summarySheet: SelectionSummarySheet
     private lateinit var bottomSheetCallback: BottomSheetCallback
@@ -79,7 +77,6 @@ class SelectionMapFragment(
 
         super.onCreate(savedInstanceState)
         previousState = savedInstanceState
-        viewportInitialized = savedInstanceState != null
     }
 
     override fun onAttach(context: Context) {
@@ -309,7 +306,7 @@ class SelectionMapFragment(
             onFeatureClicked(selectedFeatureId)
         } else if (previouslySelectedItem != null) {
             onFeatureClicked(previouslySelectedItem, maintainZoom = false)
-        } else if (!viewportInitialized) {
+        } else if (!map.hasCenter()) {
             if (zoomToFitItems && points.isNotEmpty()) {
                 map.zoomToBoundingBox(points, 0.8, false)
             } else {
@@ -319,8 +316,6 @@ class SelectionMapFragment(
                 }
             }
         }
-
-        viewportInitialized = true
     }
 
     private fun removeEnlargedMarkerIfExist(itemId: Int) {

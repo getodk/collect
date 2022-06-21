@@ -174,7 +174,6 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
         val points = items.map { it.toMapPoint() }
         assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
     }
@@ -198,24 +197,17 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `does not zoom to fit all items again after they change after recreating`() {
+    fun `does not zoom to fit all items if map already has center`() {
         val items = listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0))
         val itemsLiveData: MutableLiveData<List<MappableSelectItem>?> =
             MutableLiveData(items)
         whenever(data.getMappableItems()).thenReturn(itemsLiveData)
 
-        val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
-        map.ready()
-        map.zoomToPoint(MapPoint(12.3, 45.6), false)
-
-        scenario.recreate()
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.setCenter(MapPoint(12.3, 45.6), false)
         map.ready()
 
-        itemsLiveData.value =
-            listOf(Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 52.0))
-
-        assertThat(map.getZoomBoundingBox(), equalTo(null))
-        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+        assertThat(map.center, equalTo(MapPoint(12.3, 45.6)))
     }
 
     @Test
@@ -235,7 +227,7 @@ class SelectionMapFragmentTest {
         )
         map.ready()
 
-        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+        assertThat(map.hasCenter(), equalTo(false))
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
@@ -248,7 +240,7 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+        assertThat(map.hasCenter(), equalTo(false))
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
@@ -262,7 +254,7 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+        assertThat(map.hasCenter(), equalTo(false))
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
@@ -315,7 +307,6 @@ class SelectionMapFragmentTest {
 
         onView(withId(R.id.zoom_to_bounds)).perform(click())
 
-        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
         val points = items.map { it.toMapPoint() }
         assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
     }

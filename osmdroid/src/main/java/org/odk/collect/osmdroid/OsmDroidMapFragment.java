@@ -121,6 +121,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
+    private boolean hasCenter;
 
     @Override
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
@@ -233,6 +234,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 map.getController().setCenter(toGeoPoint(center));
             }
         }
+
+        hasCenter = true;
     }
 
     @Override
@@ -254,6 +257,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             map.getController().setZoom((int) Math.round(zoom));
             map.getController().setCenter(toGeoPoint(center));
         }
+
+        hasCenter = true;
     }
 
     @Override
@@ -282,6 +287,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 new Handler().postDelayed(() -> map.zoomToBoundingBox(box, animate), 100);
             }
         }
+
+        hasCenter = true;
     }
 
     @Override
@@ -377,6 +384,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void setRetainMockAccuracy(boolean retainMockAccuracy) {
         locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
+    @Override
+    public boolean hasCenter() {
+        return hasCenter;
     }
 
     @Override

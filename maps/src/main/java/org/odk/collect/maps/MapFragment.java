@@ -177,6 +177,11 @@ public interface MapFragment {
 
     void setRetainMockAccuracy(boolean retainMockAccuracy);
 
+    /**
+     * @return true if the {@link MapFragment} center has already been set (by {@link MapFragment#zoomToPoint(MapPoint, boolean)} for instance).
+     */
+    boolean hasCenter();
+
     interface ErrorListener {
         void onError();
     }

@@ -118,6 +118,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
+    private boolean hasCenter;
 
     @Override
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
@@ -212,6 +213,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (center != null) {
             moveOrAnimateCamera(CameraUpdateFactory.newLatLng(toLatLng(center)), animate);
         }
+
+        hasCenter = true;
     }
 
     @Override public double getZoom() {
@@ -233,6 +236,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             moveOrAnimateCamera(
                 CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
         }
+        hasCenter = true;
     }
 
     @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
@@ -257,6 +261,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 }, 100);
             }
         }
+
+        hasCenter = true;
     }
 
     @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
@@ -338,6 +344,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override
     public void setRetainMockAccuracy(boolean retainMockAccuracy) {
         locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
+    @Override
+    public boolean hasCenter() {
+        return hasCenter;
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {

@@ -21,6 +21,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var featureClickListener: FeatureListener? = null
     private val markers: MutableList<MapPoint> = ArrayList()
     private val markerIcons: MutableList<Int?> = ArrayList()
+    private var hasCenter = false
 
     override fun init(
         readyListener: ReadyListener?,
@@ -43,18 +44,21 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun setCenter(center: MapPoint?, animate: Boolean) {
         this.center = center
+        hasCenter = true
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center
         this.zoom = DEFAULT_POINT_ZOOM
+        hasCenter = true
     }
 
     override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center
         this.zoom = zoom
+        hasCenter = true
     }
 
     override fun zoomToBoundingBox(
@@ -68,6 +72,7 @@ class FakeMapFragment : Fragment(), MapFragment {
             points.toList(), // Clone list to prevent original changing captured values
             scaleFactor
         )
+        hasCenter = true
     }
 
     override fun addMarker(
@@ -139,6 +144,10 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
         this.retainMockAccuracy = retainMockAccuracy
+    }
+
+    override fun hasCenter(): Boolean {
+        return hasCenter
     }
 
     fun setLocation(mapPoint: MapPoint?) {

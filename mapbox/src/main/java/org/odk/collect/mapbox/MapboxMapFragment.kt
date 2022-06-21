@@ -104,6 +104,8 @@ class MapboxMapFragment :
         this::onConfigChanged
     )
 
+    private var hasCenter = false
+
     private val settingsProvider: SettingsProvider by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(SettingsProvider::class.java)
     }
@@ -229,6 +231,8 @@ class MapboxMapFragment :
         center?.let {
             moveOrAnimateCamera(it, animate)
         }
+
+        hasCenter = true
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
@@ -239,6 +243,8 @@ class MapboxMapFragment :
         center?.let {
             moveOrAnimateCamera(it, animate, zoom)
         }
+
+        hasCenter = true
     }
 
     override fun zoomToBoundingBox(
@@ -269,6 +275,8 @@ class MapboxMapFragment :
                 )
             }
         }
+
+        hasCenter = true
     }
 
     override fun addMarker(
@@ -400,6 +408,10 @@ class MapboxMapFragment :
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
         locationCallback.setRetainMockAccuracy(retainMockAccuracy)
+    }
+
+    override fun hasCenter(): Boolean {
+        return hasCenter
     }
 
     override fun onMapClick(point: Point): Boolean {
