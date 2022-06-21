@@ -57,8 +57,6 @@ import timber.log.Timber;
  */
 public class GeoPointMapActivity extends LocalizedActivity {
 
-    public static final String MAP_CENTER_KEY = "map_center";
-    public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINT_KEY = "point";
 
     public static final String IS_DRAGGED_KEY = "is_dragged";
@@ -166,8 +164,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             }
             return;
         }
-        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
-        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
+
         state.putParcelable(POINT_KEY, map.getMarkerPoint(featureId));
 
         // Flags
@@ -317,13 +314,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
         intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false);
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false);
-
-        // Restore the rest of the UI state.
-        MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
-        Double mapZoom = state.getDouble(MAP_ZOOM_KEY);
-        if (mapCenter != null) {
-            map.zoomToPoint(mapCenter, mapZoom, false);
-        }
 
         placeMarkerButton.setEnabled(state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false));
         zoomButton.setEnabled(state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false));
