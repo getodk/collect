@@ -32,6 +32,7 @@ import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Comp
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
+import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.selection.MappableSelectItem
@@ -89,8 +90,8 @@ class SelectOneFromMapDialogFragmentTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesMapFragmentFactory(settingsProvider: SettingsProvider): MapFragmentFactory {
                 return object : MapFragmentFactory {
-                    override fun createMapFragment(): MapFragment? {
-                        return null
+                    override fun createMapFragment(): MapFragment {
+                        return NoOpMapFragment()
                     }
                 }
             }

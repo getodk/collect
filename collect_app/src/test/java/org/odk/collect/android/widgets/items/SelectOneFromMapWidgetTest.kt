@@ -26,8 +26,11 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
+import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
+import org.odk.collect.maps.MapFragment
+import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.InMemSettingsProvider
@@ -68,6 +71,14 @@ class SelectOneFromMapWidgetTest {
 
             override fun providesSettingsProvider(context: Context): SettingsProvider =
                 settingsProvider
+
+            override fun providesMapFragmentFactory(settingsProvider: SettingsProvider?): MapFragmentFactory {
+                return object : MapFragmentFactory {
+                    override fun createMapFragment(): MapFragment {
+                        return NoOpMapFragment()
+                    }
+                }
+            }
         })
     }
 
