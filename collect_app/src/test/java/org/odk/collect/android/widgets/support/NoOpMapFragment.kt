@@ -100,4 +100,8 @@ class NoOpMapFragment : Fragment(), MapFragment {
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
     }
+
+    override fun hasCenter(): Boolean {
+        return false
+    }
 }
