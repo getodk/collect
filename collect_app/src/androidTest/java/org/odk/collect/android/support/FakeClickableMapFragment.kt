@@ -89,6 +89,10 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {}
 
+    override fun hasCenter(): Boolean {
+        return false
+    }
+
     fun clickOnFeature(featureId: Int) {
         var done = false
 

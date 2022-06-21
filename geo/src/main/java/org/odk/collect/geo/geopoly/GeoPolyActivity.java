@@ -60,8 +60,6 @@ import javax.inject.Inject;
 public class GeoPolyActivity extends LocalizedActivity implements GeoPolySettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
-    public static final String MAP_CENTER_KEY = "map_center";
-    public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINTS_KEY = "points";
     public static final String INPUT_ACTIVE_KEY = "input_active";
     public static final String RECORDING_ENABLED_KEY = "recording_enabled";
@@ -122,8 +120,6 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     private int accuracyThresholdIndex = DEFAULT_ACCURACY_THRESHOLD_INDEX;
 
     // restored from savedInstanceState
-    private MapPoint restoredMapCenter;
-    private Double restoredMapZoom;
     private List<MapPoint> restoredPoints;
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -141,8 +137,6 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         ((GeoDependencyComponentProvider) getApplication()).getGeoDependencyComponent().inject(this);
 
         if (savedInstanceState != null) {
-            restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
-            restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
             inputActive = savedInstanceState.getBoolean(INPUT_ACTIVE_KEY, false);
             recordingEnabled = savedInstanceState.getBoolean(RECORDING_ENABLED_KEY, false);
@@ -175,8 +169,6 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             }
             return;
         }
-        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
-        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
         state.putBoolean(INPUT_ACTIVE_KEY, inputActive);
         state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled);
@@ -270,13 +262,15 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         map.setLongPressListener(this::onClick);
         map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
-        if (restoredMapCenter != null && restoredMapZoom != null) {
-            map.zoomToPoint(restoredMapCenter, restoredMapZoom, false);
-        } else if (!points.isEmpty()) {
-            map.zoomToBoundingBox(points, 0.6, false);
-        } else {
-            map.runOnGpsLocationReady(this::onGpsLocationReady);
+        
+        if (!map.hasCenter()) {
+            if (!points.isEmpty()) {
+                map.zoomToBoundingBox(points, 0.6, false);
+            } else {
+                map.runOnGpsLocationReady(this::onGpsLocationReady);
+            }
         }
+
         updateUi();
     }
 
