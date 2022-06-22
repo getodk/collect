@@ -3,6 +3,7 @@ package org.odk.collect.geo.selection
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.Lifecycle
@@ -65,12 +66,14 @@ class SelectionMapFragmentTest {
         on { getMappableItems() } doReturn MutableLiveData(emptyList())
     }
 
+    private val onBackPressedDispatcher = OnBackPressedDispatcher()
+
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
         R.style.Theme_MaterialComponents,
         object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-                return SelectionMapFragment(data)
+                return SelectionMapFragment(data, onBackPressedDispatcher)
             }
         }
     )
@@ -114,13 +117,12 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `pressing back closes host Activity`() {
+    fun `does not have enabled back callbacks`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
         scenario.onFragment {
-            it.requireActivity().onBackPressedDispatcher.onBackPressed()
-            assertThat(it.requireActivity().isFinishing, equalTo(true))
+            assertThat(onBackPressedDispatcher.hasEnabledCallbacks(), equalTo(false))
         }
     }
 
@@ -223,7 +225,7 @@ class SelectionMapFragmentTest {
             SelectionMapFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(SelectionMapFragment::class.java) {
-                    SelectionMapFragment(data, zoomToFitItems = false)
+                    SelectionMapFragment(data, onBackPressedDispatcher, zoomToFitItems = false)
                 }.build()
         )
         map.ready()
@@ -443,7 +445,7 @@ class SelectionMapFragmentTest {
             SelectionMapFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(SelectionMapFragment::class.java) {
-                    SelectionMapFragment(data, skipSummary = true)
+                    SelectionMapFragment(data, onBackPressedDispatcher, skipSummary = true)
                 }.build()
         )
         map.ready()
@@ -492,7 +494,7 @@ class SelectionMapFragmentTest {
 
         map.clickOnFeature(0)
         scenario.onFragment {
-            it.requireActivity().onBackPressedDispatcher.onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
@@ -504,7 +506,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `pressing back after deselecting item closes host Activity`() {
+    fun `pressing back after deselecting item disables back callbacks`() {
         val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(listOf(item)))
 
@@ -513,9 +515,8 @@ class SelectionMapFragmentTest {
 
         map.clickOnFeature(0)
         scenario.onFragment {
-            it.requireActivity().onBackPressedDispatcher.onBackPressed()
-            it.requireActivity().onBackPressedDispatcher.onBackPressed()
-            assertThat(it.requireActivity().isFinishing, equalTo(true))
+            onBackPressedDispatcher.onBackPressed()
+            assertThat(onBackPressedDispatcher.hasEnabledCallbacks(), equalTo(false))
         }
     }
 
@@ -529,7 +530,7 @@ class SelectionMapFragmentTest {
 
         map.clickOnFeature(0)
         scenario.onFragment {
-            it.requireActivity().onBackPressedDispatcher.onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         scenario.recreate()
@@ -594,7 +595,7 @@ class SelectionMapFragmentTest {
             SelectionMapFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(SelectionMapFragment::class.java) {
-                    SelectionMapFragment(data, showNewItemButton = false)
+                    SelectionMapFragment(data, onBackPressedDispatcher, showNewItemButton = false)
                 }.build()
         )
         map.ready()

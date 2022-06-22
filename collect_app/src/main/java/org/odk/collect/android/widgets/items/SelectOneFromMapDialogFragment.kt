@@ -81,10 +81,10 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
             .forClass(SelectionMapFragment::class.java) {
                 SelectionMapFragment(
                     selectionMapData,
+                    onBackPressedDispatcher = (requireDialog() as ComponentDialog).onBackPressedDispatcher,
                     skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
                     showNewItemButton = false,
-                    zoomToFitItems = false,
-                    onBackPressedDispatcher = (requireDialog() as ComponentDialog).onBackPressedDispatcher
+                    zoomToFitItems = false
                 )
             }
             .build()

@@ -41,10 +41,10 @@ import javax.inject.Inject
  */
 class SelectionMapFragment(
     val selectionMapData: SelectionMapData,
+    private val onBackPressedDispatcher: OnBackPressedDispatcher,
     val skipSummary: Boolean = false,
     val showNewItemButton: Boolean = true,
-    val zoomToFitItems: Boolean = true,
-    private val onBackPressedDispatcher: OnBackPressedDispatcher
+    val zoomToFitItems: Boolean = true
 ) : Fragment() {
 
     @Inject
@@ -220,7 +220,7 @@ class SelectionMapFragment(
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
         summarySheetBehavior.state = STATE_HIDDEN
 
-        val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        val closeSummarySheet = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
                 summarySheetBehavior.state = STATE_HIDDEN
             }
@@ -228,7 +228,7 @@ class SelectionMapFragment(
 
         onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
-            onBackPressedCallback
+            closeSummarySheet
         )
 
         bottomSheetCallback = object : BottomSheetCallback() {
@@ -238,9 +238,9 @@ class SelectionMapFragment(
                     selectedFeatureViewModel.setSelectedFeatureId(null)
                     resetIcon(selectedFeatureId)
 
-                    onBackPressedCallback.isEnabled = false
+                    closeSummarySheet.isEnabled = false
                 } else {
-                    onBackPressedCallback.isEnabled = true
+                    closeSummarySheet.isEnabled = true
                 }
             }
 
