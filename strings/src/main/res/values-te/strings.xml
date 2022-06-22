@@ -43,8 +43,8 @@
   <string name="sort_by">క్రమబద్ధీకరణ </string>
   <string name="sort_by_name_asc">పేరు, A-Z</string>
   <string name="sort_by_name_desc">పేరు, Z-A</string>
-  <string name="sort_by_date_asc">తేదీ, కొత్తది ముందు</string>
-  <string name="sort_by_date_desc">తేదీ, పాతది ముందు</string>
+  <string name="sort_by_date_desc">తేదీ, కొత్తది ముందు</string>
+  <string name="sort_by_date_asc">తేదీ, పాతది ముందు</string>
   <string name="sort_by_status_asc">స్టేటస్, మొదట ఖరారు చేయబడింది</string>
   <string name="sort_by_status_desc">స్టేటస్, మొదట అన్‌ఫైనలైజ్ చేయబడింది</string>
   <string name="filter_the_list">జాబితాను ఫిల్టర్ చేయండి</string>

@@ -43,8 +43,8 @@
   <string name="sort_by">ترتيب حسب</string>
   <string name="sort_by_name_asc">ترتيب حسب الاسم تصاعدياً</string>
   <string name="sort_by_name_desc">ترتيب حسب الاسم تنازلياً</string>
-  <string name="sort_by_date_asc">ترتيب حسب التاريخ تصاعدياً</string>
-  <string name="sort_by_date_desc">ترتيب حسب التاريخ تنازلياً</string>
+  <string name="sort_by_date_desc">ترتيب حسب التاريخ تصاعدياً</string>
+  <string name="sort_by_date_asc">ترتيب حسب التاريخ تنازلياً</string>
   <string name="sort_by_status_asc">ترتيب حسب الحالة تصاعدياً</string>
   <string name="sort_by_status_desc">ترتيب حسب الحالة تنازلياً</string>
   <string name="filter_the_list">فرز القائمة</string>

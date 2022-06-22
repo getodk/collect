@@ -209,9 +209,17 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
+        // Sort by name ASC
+        viewModel.sortingOrder = 0
+        assertFormItem(
+            viewModel.formsToDisplay.value!![0],
+            form(dbId = 3, formId = "3", formName = "Form 03")
+        )
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 2, formId = "2"))
+
         // Sort by name DESC
         viewModel.sortingOrder = 1
-
         assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2"))
         assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 1, formId = "1"))
         assertFormItem(
@@ -219,19 +227,8 @@ class BlankFormListViewModelTest {
             form(dbId = 3, formId = "3", formName = "Form 03")
         )
 
-        // Sort by date ASC
-        viewModel.sortingOrder = 2
-
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
-        assertFormItem(
-            viewModel.formsToDisplay.value!![2],
-            form(dbId = 3, formId = "3", formName = "Form 03")
-        )
-
         // Sort by date DESC
-        viewModel.sortingOrder = 3
-
+        viewModel.sortingOrder = 2
         assertFormItem(
             viewModel.formsToDisplay.value!![0],
             form(dbId = 3, formId = "3", formName = "Form 03")
@@ -239,15 +236,14 @@ class BlankFormListViewModelTest {
         assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
         assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 1, formId = "1"))
 
-        // Sort by name ASC
-        viewModel.sortingOrder = 0
-
+        // Sort by date DESC
+        viewModel.sortingOrder = 3
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
         assertFormItem(
-            viewModel.formsToDisplay.value!![0],
+            viewModel.formsToDisplay.value!![2],
             form(dbId = 3, formId = "3", formName = "Form 03")
         )
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 1, formId = "1"))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 2, formId = "2"))
     }
 
     @Test

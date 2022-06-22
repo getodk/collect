@@ -42,8 +42,8 @@
   <string name="sort_by">بہ ترتیب</string>
   <string name="sort_by_name_asc">نام، اے-زیڈ </string>
   <string name="sort_by_name_desc">نام، زیڈ-اے </string>
-  <string name="sort_by_date_asc">تاریخ، سب سے پہلےنئی</string>
-  <string name="sort_by_date_desc">تاریخ، سب سے پہلے پرانی </string>
+  <string name="sort_by_date_desc">تاریخ، سب سے پہلےنئی</string>
+  <string name="sort_by_date_asc">تاریخ، سب سے پہلے پرانی </string>
   <string name="sort_by_status_asc">سٹیٹس، پہلے سے طے شدہ</string>
   <string name="sort_by_status_desc">سٹیٹس، پہلے سے غیر طے شدہ </string>
   <string name="filter_the_list">فہرست فلٹر کریں</string>

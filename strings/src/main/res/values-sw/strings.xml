@@ -43,8 +43,8 @@
   <string name="sort_by">Panga kwa</string>
   <string name="sort_by_name_asc">Jina, A-Z</string>
   <string name="sort_by_name_desc">Jina, Z-A</string>
-  <string name="sort_by_date_asc">Tarehe, mpya zaidi kwanza</string>
-  <string name="sort_by_date_desc">Tarehe, zamani kwanza</string>
+  <string name="sort_by_date_desc">Tarehe, mpya zaidi kwanza</string>
+  <string name="sort_by_date_asc">Tarehe, zamani kwanza</string>
   <string name="sort_by_status_asc">Hadhi, malizia kwanza</string>
   <string name="sort_by_status_desc">Hadhi, ambayo haijamaliziwa kwanza</string>
   <string name="filter_the_list">Chuja orodha</string>

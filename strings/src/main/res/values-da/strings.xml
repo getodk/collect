@@ -37,8 +37,8 @@
   <string name="sort_the_list">Sortér liste</string>
   <string name="sort_by_name_asc">Navn, A-Z</string>
   <string name="sort_by_name_desc">Navn, A-Z</string>
-  <string name="sort_by_date_asc">Dato - nyeste først</string>
-  <string name="sort_by_date_desc">Dato - ældste først</string>
+  <string name="sort_by_date_desc">Dato - nyeste først</string>
+  <string name="sort_by_date_asc">Dato - ældste først</string>
   <string name="sort_by_status_asc">Status - færdiggjorte først</string>
   <string name="sort_by_status_desc">Status - ikke-færdiggjorte først</string>
   <string name="filter_the_list">Filtrér liste</string>

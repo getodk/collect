@@ -43,8 +43,8 @@
   <string name="sort_by">Ordina per</string>
   <string name="sort_by_name_asc">Nome, A-Z</string>
   <string name="sort_by_name_desc">Nome, Z-A</string>
-  <string name="sort_by_date_asc">Per data, prima i più recenti</string>
-  <string name="sort_by_date_desc">Per data, prima i meno recenti</string>
+  <string name="sort_by_date_desc">Per data, prima i più recenti</string>
+  <string name="sort_by_date_asc">Per data, prima i meno recenti</string>
   <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
   <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
   <string name="filter_the_list">Filtra la lista</string>

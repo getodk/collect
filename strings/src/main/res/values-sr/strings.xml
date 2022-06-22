@@ -43,8 +43,8 @@
   <string name="sort_by">Sortiraj na osnovu</string>
   <string name="sort_by_name_asc">Ime, A-Z</string>
   <string name="sort_by_name_desc">Ime, Z-A</string>
-  <string name="sort_by_date_asc">Datum, prvo najskoriji</string>
-  <string name="sort_by_date_desc">Datum, prvo najstariji</string>
+  <string name="sort_by_date_desc">Datum, prvo najskoriji</string>
+  <string name="sort_by_date_asc">Datum, prvo najstariji</string>
   <string name="sort_by_status_asc">Status, prvo finalizirani</string>
   <string name="sort_by_status_desc">Status, prvo nedovršeni </string>
   <string name="filter_the_list">Filtriraj listu</string>

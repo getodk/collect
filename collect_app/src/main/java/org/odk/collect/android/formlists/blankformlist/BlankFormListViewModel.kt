@@ -222,8 +222,8 @@ class BlankFormListViewModel(
         _formsToDisplay.value = when (sortingOrder) {
             0 -> _allForms.value.sortedBy { it.formName }
             1 -> _allForms.value.sortedByDescending { it.formName }
-            2 -> _allForms.value.sortedBy { it.dateOfCreation }
-            3 -> _allForms.value.sortedByDescending { it.dateOfCreation }
+            2 -> _allForms.value.sortedByDescending { it.dateOfCreation }
+            3 -> _allForms.value.sortedBy { it.dateOfCreation }
             else -> { _allForms.value }
         }.filter {
             filterText.isBlank() || it.formName.contains(filterText, true)

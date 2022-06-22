@@ -41,8 +41,8 @@
   <string name="sort_by">Sorteer op</string>
   <string name="sort_by_name_asc">Naam, A-Z</string>
   <string name="sort_by_name_desc">Naam, Z-A</string>
-  <string name="sort_by_date_asc">Datum, nieuwste eerst</string>
-  <string name="sort_by_date_desc">Datum, oudste eerst</string>
+  <string name="sort_by_date_desc">Datum, nieuwste eerst</string>
+  <string name="sort_by_date_asc">Datum, oudste eerst</string>
   <string name="sort_by_status_asc">Status, afgeronde eerst</string>
   <string name="sort_by_status_desc">Status, niet-afgeronde eerst</string>
   <string name="filter_the_list">Lijst filteren</string>

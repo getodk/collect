@@ -27,8 +27,8 @@
   <string name="deleted_form">ഫോം ഡിലീറ്റ് ചെയ്യുക </string>
   <string name="sort_the_list">പട്ടിക ക്രമീകരിക്കുക</string>
   <string name="sort_by_name_asc">പേര്, A - Z </string>
-  <string name="sort_by_date_asc">തിയതി, പുതിയത് ആദ്യം </string>
-  <string name="sort_by_date_desc">തിയതി, പഴയത് ആദ്യം</string>
+  <string name="sort_by_date_desc">തിയതി, പുതിയത് ആദ്യം </string>
+  <string name="sort_by_date_asc">തിയതി, പഴയത് ആദ്യം</string>
   <string name="sort_by_status_asc">സ്റ്റാറ്റസ് , അവസാനിപ്പിച്ചത് ആദ്യം </string>
   <string name="sort_by_status_desc">സ്റ്റാറ്റസ്, അവസാനിപ്പിക്കാത്തത് ആദ്യം </string>
   <!--Displayed in search boxes for form lists or question types that involve search-->

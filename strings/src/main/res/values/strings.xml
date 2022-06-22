@@ -57,8 +57,8 @@
     <string name="sort_by">Sort by</string>
     <string name="sort_by_name_asc">Name, A-Z</string>
     <string name="sort_by_name_desc">Name, Z-A</string>
-    <string name="sort_by_date_asc">Date, newest first</string>
-    <string name="sort_by_date_desc">Date, oldest first</string>
+    <string name="sort_by_date_desc">Date, newest first</string>
+    <string name="sort_by_date_asc">Date, oldest first</string>
     <string name="sort_by_status_asc">Status, finalized first</string>
     <string name="sort_by_status_desc">Status, unfinalized first</string>
     <string name="filter_the_list">Filter the list</string>

@@ -37,8 +37,8 @@
   <string name="sort_by">Sırala</string>
   <string name="sort_by_name_asc">İsim, A-Z</string>
   <string name="sort_by_name_desc">İsim, Z-A</string>
-  <string name="sort_by_date_asc">Tarih, en yeni üstte</string>
-  <string name="sort_by_date_desc">Tarih, en eski üstte</string>
+  <string name="sort_by_date_desc">Tarih, en yeni üstte</string>
+  <string name="sort_by_date_asc">Tarih, en eski üstte</string>
   <string name="sort_by_status_asc">Durum, bitirilene göre</string>
   <string name="sort_by_status_desc">Durum, bitirilmeyene göre</string>
   <string name="filter_the_list">Listeyi filtrele</string>

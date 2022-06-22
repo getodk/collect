@@ -43,8 +43,8 @@
   <string name="sort_by">Sortuj według</string>
   <string name="sort_by_name_asc">Nazwa, A-Z</string>
   <string name="sort_by_name_desc">Nazwa, Z-A</string>
-  <string name="sort_by_date_asc">Data, najpierw najnowsze</string>
-  <string name="sort_by_date_desc">Data, najpierw najstarsze</string>
+  <string name="sort_by_date_desc">Data, najpierw najnowsze</string>
+  <string name="sort_by_date_asc">Data, najpierw najstarsze</string>
   <string name="sort_by_status_asc">Status, najpierw ukończone</string>
   <string name="sort_by_status_desc">Status, najpierw nieukończone</string>
   <string name="filter_the_list">Filtruj listę</string>

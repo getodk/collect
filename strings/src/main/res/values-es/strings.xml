@@ -44,8 +44,8 @@
   <string name="sort_by">Ordenar por</string>
   <string name="sort_by_name_asc">Ascendente por Nombre, A-Z</string>
   <string name="sort_by_name_desc">Descendente por Nombre, Z-A</string>
-  <string name="sort_by_date_asc">Fecha, más reciente de primero</string>
-  <string name="sort_by_date_desc">Fecha, más antiguo de primero</string>
+  <string name="sort_by_date_desc">Fecha, más reciente de primero</string>
+  <string name="sort_by_date_asc">Fecha, más antiguo de primero</string>
   <string name="sort_by_status_asc">Por status, primero los finalizados</string>
   <string name="sort_by_status_desc">Por Status, primero los no finalizados</string>
   <string name="filter_the_list">Filtrar la lista</string>
