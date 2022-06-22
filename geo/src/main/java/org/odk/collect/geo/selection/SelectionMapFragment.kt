@@ -41,10 +41,10 @@ import javax.inject.Inject
  */
 class SelectionMapFragment(
     val selectionMapData: SelectionMapData,
-    private val onBackPressedDispatcher: OnBackPressedDispatcher,
+    val onBackPressedDispatcher: OnBackPressedDispatcher,
     val skipSummary: Boolean = false,
     val showNewItemButton: Boolean = true,
-    val zoomToFitItems: Boolean = true
+    val zoomToFitItems: Boolean = true,
 ) : Fragment() {
 
     @Inject
