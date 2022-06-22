@@ -1,17 +1,11 @@
 package org.odk.collect.android.support;
 
+import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 import androidx.test.espresso.IdlingResource;
 
-import org.odk.collect.android.support.rules.CallbackCountingTaskExecutorRule;
+public class CountingTaskExecutorIdlingResource extends CountingTaskExecutorRule implements IdlingResource {
 
-public class CountingTaskExecutorIdlingResource implements IdlingResource {
-
-    private final CallbackCountingTaskExecutorRule rule;
-    private ResourceCallback resourceCallback;
-
-    public CountingTaskExecutorIdlingResource(CallbackCountingTaskExecutorRule rule) {
-        this.rule = rule;
-    }
+    private IdlingResource.ResourceCallback resourceCallback;
 
     @Override
     public String getName() {
@@ -20,21 +14,16 @@ public class CountingTaskExecutorIdlingResource implements IdlingResource {
 
     @Override
     public boolean isIdleNow() {
-        boolean idle = rule.isIdle();
-
-        if (idle && resourceCallback != null) {
-            resourceCallback.onTransitionToIdle();
-        } else {
-            rule.setFinishedCallback(() -> {
-                resourceCallback.onTransitionToIdle();
-            });
-        }
-
-        return idle;
+        return isIdle();
     }
 
     @Override
-    public void registerIdleTransitionCallback(ResourceCallback resourceCallback) {
+    public void registerIdleTransitionCallback(IdlingResource.ResourceCallback resourceCallback) {
         this.resourceCallback = resourceCallback;
+    }
+
+    @Override
+    protected void onIdle() {
+        resourceCallback.onTransitionToIdle();
     }
 }
