@@ -162,7 +162,7 @@ public class MapConfiguratorProvider {
         );
 
         return MapboxClassInstanceCreator.isMapboxAvailable()
-                && stream(Build.SUPPORTED_ABIS).anyMatch(abi -> mapboxAbis.contains(abi));
+                && stream(Build.SUPPORTED_ABIS).anyMatch(mapboxAbis::contains);
     }
 
     /**

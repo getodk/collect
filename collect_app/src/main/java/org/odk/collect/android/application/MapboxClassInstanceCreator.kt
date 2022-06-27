@@ -8,12 +8,7 @@ object MapboxClassInstanceCreator {
 
     @JvmStatic
     fun isMapboxAvailable(): Boolean {
-        return try {
-            Class.forName("org.odk.collect.mapbox.MapboxMapFragment")
-            true
-        } catch (e: ClassNotFoundException) {
-            false
-        }
+        return createMapboxMapFragment() != null
     }
 
     fun createMapboxMapFragment(): MapFragment? {
