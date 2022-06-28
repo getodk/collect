@@ -44,8 +44,8 @@
   <string name="sort_by">Seřazeno podle</string>
   <string name="sort_by_name_asc">Název, A-Z</string>
   <string name="sort_by_name_desc">Název, Z-A</string>
-  <string name="sort_by_date_asc">Datum, nejnovější první</string>
-  <string name="sort_by_date_desc">Datum, nejstarší první</string>
+  <string name="sort_by_date_desc">Datum, nejnovější první</string>
+  <string name="sort_by_date_asc">Datum, nejstarší první</string>
   <string name="sort_by_status_asc">Stav, dokončen první</string>
   <string name="sort_by_status_desc">Stav, nedokončen první</string>
   <string name="filter_the_list">Filtrovat výpis</string>

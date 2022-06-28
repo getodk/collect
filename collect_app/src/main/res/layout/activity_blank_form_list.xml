@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/app_bar_with_progress_bar_layout" />
+
+    <org.odk.collect.android.formlists.FormListRecyclerView
+        android:id="@+id/form_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/empty_list_message"
+        style="@style/Widget.Collect.TextView.Empty"
+        android:text="@string/no_items_display_forms"/>
+</LinearLayout>

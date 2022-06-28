@@ -43,8 +43,8 @@
   <string name="sort_by">Urutkan dengan</string>
   <string name="sort_by_name_asc">Nama, A-Z</string>
   <string name="sort_by_name_desc">Nama, Z-A</string>
-  <string name="sort_by_date_asc">Tanggal, baru ke lama</string>
-  <string name="sort_by_date_desc">Tanggal, lama ke baru</string>
+  <string name="sort_by_date_desc">Tanggal, baru ke lama</string>
+  <string name="sort_by_date_asc">Tanggal, lama ke baru</string>
   <string name="sort_by_status_asc">Status, terfinalisasi paling atas</string>
   <string name="sort_by_status_desc">Status, belum terfinalisasi paling atas</string>
   <string name="filter_the_list">Pilah daftar</string>

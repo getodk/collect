@@ -40,8 +40,8 @@
   <string name="sort_the_list">सूची को सॉर्ट करें</string>
   <string name="sort_by_name_asc">नाम, A-Z</string>
   <string name="sort_by_name_desc">नाम, Z-A</string>
-  <string name="sort_by_date_asc">दिनांक, नयी पहले </string>
-  <string name="sort_by_date_desc">दिनांक, सबसे पुराना पहले</string>
+  <string name="sort_by_date_desc">दिनांक, नयी पहले </string>
+  <string name="sort_by_date_asc">दिनांक, सबसे पुराना पहले</string>
   <string name="sort_by_status_desc">अवस्था, बिना फाइनल हुए शब्द</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->

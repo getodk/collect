@@ -43,8 +43,8 @@
   <string name="sort_by">並び順</string>
   <string name="sort_by_name_asc">名前順、A-Z</string>
   <string name="sort_by_name_desc">名前順、Z-A</string>
-  <string name="sort_by_date_asc">日付順、新しいものが最初</string>
-  <string name="sort_by_date_desc">日付順、古いものが最初</string>
+  <string name="sort_by_date_desc">日付順、新しいものが最初</string>
+  <string name="sort_by_date_asc">日付順、古いものが最初</string>
   <string name="sort_by_status_asc">ステータス順、確定済が最初</string>
   <string name="sort_by_status_desc">ステータス順、未確定が最初</string>
   <string name="filter_the_list">一覧をフィルター</string>

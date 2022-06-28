@@ -7,7 +7,6 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.DeleteSavedFormActivity;
-import org.odk.collect.android.activities.FillBlankFormActivity;
 import org.odk.collect.android.activities.FirstLaunchActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -40,6 +39,7 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
@@ -216,8 +216,6 @@ public interface AppDependencyComponent {
 
     void inject(ResetDialogPreferenceFragmentCompat resetDialogPreferenceFragmentCompat);
 
-    void inject(FillBlankFormActivity fillBlankFormActivity);
-
     void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
     void inject(SyncFormsTaskSpec syncWork);
@@ -293,6 +291,8 @@ public interface AppDependencyComponent {
     void inject(DrawActivity drawActivity);
 
     void inject(PenColorPickerDialog colorPickerDialog);
+
+    void inject(BlankFormListActivity blankFormListActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

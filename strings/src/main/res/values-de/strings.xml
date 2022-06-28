@@ -44,8 +44,8 @@
   <string name="sort_by">Sortieren nach</string>
   <string name="sort_by_name_asc">Name, A-Z</string>
   <string name="sort_by_name_desc">Name, Z-A</string>
-  <string name="sort_by_date_asc">Datum, neuestes zuerst</string>
-  <string name="sort_by_date_desc">Datum, ältestes zuerst</string>
+  <string name="sort_by_date_desc">Datum, neuestes zuerst</string>
+  <string name="sort_by_date_asc">Datum, ältestes zuerst</string>
   <string name="sort_by_status_asc">Status, vollständig zuerst</string>
   <string name="sort_by_status_desc">Status, unvollständig zuerst</string>
   <string name="filter_the_list">Liste filtern</string>

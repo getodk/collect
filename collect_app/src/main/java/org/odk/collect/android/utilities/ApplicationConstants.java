@@ -41,8 +41,8 @@ public class ApplicationConstants {
         HashMap<Integer, Integer> hashMap = new HashMap<>();
         hashMap.put(R.string.sort_by_name_asc, R.drawable.ic_sort_by_alpha);
         hashMap.put(R.string.sort_by_name_desc, R.drawable.ic_sort_by_alpha);
-        hashMap.put(R.string.sort_by_date_asc, R.drawable.ic_access_time);
         hashMap.put(R.string.sort_by_date_desc, R.drawable.ic_access_time);
+        hashMap.put(R.string.sort_by_date_asc, R.drawable.ic_access_time);
         hashMap.put(R.string.sort_by_status_asc, R.drawable.ic_assignment_turned_in);
         hashMap.put(R.string.sort_by_status_desc, R.drawable.ic_assignment_late);
         return hashMap;

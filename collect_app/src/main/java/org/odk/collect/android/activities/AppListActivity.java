@@ -171,7 +171,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.list_menu, menu);
+        getMenuInflater().inflate(R.menu.form_list_menu, menu);
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);

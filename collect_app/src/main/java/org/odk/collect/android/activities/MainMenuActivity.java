@@ -31,6 +31,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
+import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.ProjectIconView;
@@ -92,16 +93,10 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         initToolbar();
 
-        // enter data button. expects a result.
-        Button enterDataButton = findViewById(R.id.enter_data);
-        enterDataButton.setText(getString(R.string.enter_data_button));
-        enterDataButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(),
-                        FillBlankFormActivity.class);
-                startActivity(i);
-            }
+        Button enterDataButtonNew = findViewById(R.id.enter_data);
+        enterDataButtonNew.setOnClickListener(v -> {
+            Intent intent = new Intent(this, BlankFormListActivity.class);
+            startActivity(intent);
         });
 
         // review data button. expects a result.

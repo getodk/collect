@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/form_state_blank_circle" />
+
+    <TextView
+        android:id="@+id/form_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
+        app:layout_constraintEnd_toStartOf="@+id/map_button"
+        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintTop_toTopOf="@+id/image"
+        tools:text="All widgets" />
+
+    <TextView
+        android:id="@+id/form_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
+        app:layout_constraintEnd_toEndOf="@+id/form_title"
+        app:layout_constraintStart_toStartOf="@+id/form_title"
+        app:layout_constraintTop_toBottomOf="@+id/form_title"
+        tools:text="Version: 2019051301" />
+
+    <TextView
+        android:id="@+id/form_subtitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/form_title"
+        app:layout_constraintStart_toStartOf="@+id/form_title"
+        app:layout_constraintTop_toBottomOf="@+id/form_subtitle"
+        tools:text="Added on Thu, Jul 11, 2019 at 15:35" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/map_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:clickable="false"
+        android:focusable="false"
+        android:insetLeft="0sp"
+        android:insetTop="0sp"
+        android:insetRight="0sp"
+        android:insetBottom="0sp"
+        android:padding="8sp"
+        android:contentDescription="@string/open_form_map"
+        app:icon="@drawable/ic_map"
+        app:iconTint="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

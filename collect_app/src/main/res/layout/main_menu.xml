@@ -48,7 +48,8 @@
                     android:layout_marginTop="@dimen/margin_extra_small"
                     android:layout_marginStart="@dimen/margin_standard"
                     android:layout_marginEnd="@dimen/margin_standard"
-                    tools:text="@string/enter_data" />
+                    android:text="@string/enter_data_button"
+                    tools:text="@string/enter_data_button"/>
 
                 <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
                     android:id="@+id/review_data"

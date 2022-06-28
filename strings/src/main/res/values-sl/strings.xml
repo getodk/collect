@@ -35,8 +35,8 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="modified_on_date_at_time">\'Spremenjeno\' EEE, MMM dd,  yyyy \'ob\' HH:mm</string>
   <string name="encrypted_form">Šifriran obrazec</string>
-  <string name="sort_by_date_asc">Datum, najprej najnovejši</string>
-  <string name="sort_by_date_desc">Datum, najprej najstarejši</string>
+  <string name="sort_by_date_desc">Datum, najprej najnovejši</string>
+  <string name="sort_by_date_asc">Datum, najprej najstarejši</string>
   <string name="sort_by_status_asc">Status, najprej zaključeni</string>
   <string name="sort_by_status_desc">Status, najprej ne-zaključeni</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->

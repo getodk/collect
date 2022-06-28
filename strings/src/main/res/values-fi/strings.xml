@@ -44,8 +44,8 @@
   <string name="sort_by">Lajitteluperuste</string>
   <string name="sort_by_name_asc">Nimi, A-Ö</string>
   <string name="sort_by_name_desc">Nimi, Ö-A</string>
-  <string name="sort_by_date_asc">Päivämäärä, uusin ensin</string>
-  <string name="sort_by_date_desc">Päivämäärä, vanhin ensin</string>
+  <string name="sort_by_date_desc">Päivämäärä, uusin ensin</string>
+  <string name="sort_by_date_asc">Päivämäärä, vanhin ensin</string>
   <string name="sort_by_status_asc">Tila, viimeistellyt ensin</string>
   <string name="sort_by_status_desc">Tila, viimeistelemättömät ensin</string>
   <string name="filter_the_list">Suodata listaa</string>

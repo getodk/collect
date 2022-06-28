@@ -57,8 +57,8 @@
     <string name="sort_by">Sort by</string>
     <string name="sort_by_name_asc">Name, A-Z</string>
     <string name="sort_by_name_desc">Name, Z-A</string>
-    <string name="sort_by_date_asc">Date, newest first</string>
-    <string name="sort_by_date_desc">Date, oldest first</string>
+    <string name="sort_by_date_desc">Date, newest first</string>
+    <string name="sort_by_date_asc">Date, oldest first</string>
     <string name="sort_by_status_asc">Status, finalized first</string>
     <string name="sort_by_status_desc">Status, unfinalized first</string>
     <string name="filter_the_list">Filter the list</string>
@@ -89,6 +89,7 @@
     # FILL BLANK FORM
     ##############################################
     -->
+    <string name="open_form_map">Open form map</string>
     <string name="instance_scan_count">%1$d forms added.</string>
     <string name="finished_disk_scan">Finished scanning. All forms loaded.</string>
     <string name="xform_parse_error">XForm parse error for %1$s: %2$s is missing or invalid.</string>

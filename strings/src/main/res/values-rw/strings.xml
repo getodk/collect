@@ -43,8 +43,8 @@
   <string name="sort_by">Shyira ku rutonde</string>
   <string name="sort_by_name_asc">Urutonde rwamazina, uva kuri A ujya kuri Z</string>
   <string name="sort_by_name_desc">Urutonde rwamazina, uva kuri Z ujya kuri A </string>
-  <string name="sort_by_date_asc">Itariki yanyuma iheruka </string>
-  <string name="sort_by_date_desc">Itariki, yabanjirije iyanyuma iheruka.</string>
+  <string name="sort_by_date_desc">Itariki yanyuma iheruka </string>
+  <string name="sort_by_date_asc">Itariki, yabanjirije iyanyuma iheruka.</string>
   <string name="sort_by_status_asc">Ukobimeze, byarangiye bwambere</string>
   <string name="sort_by_status_desc">Aho bigeze, ntibyarangiye</string>
   <string name="filter_the_list">Hisha urutonde</string>

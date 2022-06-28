@@ -74,7 +74,7 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
             editMode = true;
             sortingOptions = new int[]{
                     R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                    R.string.sort_by_date_asc, R.string.sort_by_date_desc,
+                    R.string.sort_by_date_desc, R.string.sort_by_date_asc,
                     R.string.sort_by_status_asc, R.string.sort_by_status_desc
             };
         } else {
@@ -82,7 +82,7 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
 
             sortingOptions = new int[]{
                     R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                    R.string.sort_by_date_asc, R.string.sort_by_date_desc
+                    R.string.sort_by_date_desc, R.string.sort_by_date_asc
             };
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }

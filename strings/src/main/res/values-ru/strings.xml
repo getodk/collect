@@ -43,8 +43,8 @@
   <string name="sort_by">Сортировать по</string>
   <string name="sort_by_name_asc">А-Я</string>
   <string name="sort_by_name_desc">Я-А</string>
-  <string name="sort_by_date_asc">Дате изменения</string>
-  <string name="sort_by_date_desc">Дате добавления</string>
+  <string name="sort_by_date_desc">Дате изменения</string>
+  <string name="sort_by_date_asc">Дате добавления</string>
   <string name="sort_by_status_asc">По статусу, финализированные сначала</string>
   <string name="sort_by_status_desc">По статусу, \"в работе\" сначала</string>
   <string name="filter_the_list">Фильтровать список</string>

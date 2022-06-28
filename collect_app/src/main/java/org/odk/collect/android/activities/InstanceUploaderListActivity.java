@@ -169,7 +169,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
         sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                R.string.sort_by_date_asc, R.string.sort_by_date_desc
+                R.string.sort_by_date_desc, R.string.sort_by_date_asc
         };
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
