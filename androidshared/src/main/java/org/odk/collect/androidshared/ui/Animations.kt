@@ -15,6 +15,7 @@ object Animations {
 
     var DISABLE_ANIMATIONS = false
 
+    @JvmStatic
     fun createAlphaAnimation(
         view: View,
         startValue: Float,

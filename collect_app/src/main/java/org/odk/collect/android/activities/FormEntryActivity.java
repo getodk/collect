@@ -169,6 +169,7 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.ui.Animations;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
@@ -227,7 +228,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
-    private static final String TAG_LOADING_FRAGMENT = "loading_fragment";
 
     // Identifies the gp of the form used to launch form entry
     public static final String KEY_FORMPATH = "formpath";
@@ -473,12 +473,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel.isLoading().observe(this, isLoading -> {
+            View loadingScreen = findViewById(R.id.loading_screen);
+
             if (isLoading) {
-                MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
-                dialog.setMessage(getString(R.string.please_wait));
-                showIfNotShowing(dialog, TAG_LOADING_FRAGMENT, getSupportFragmentManager());
+                loadingScreen.setAlpha(0);
+                loadingScreen.setVisibility(View.VISIBLE);
+                Animations.createAlphaAnimation(loadingScreen, 0, 1, 60).start();
             } else {
-                DialogFragmentUtils.dismissDialog(TAG_LOADING_FRAGMENT, getSupportFragmentManager());
+                loadingScreen.setVisibility(View.GONE);
             }
         });
 

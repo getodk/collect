@@ -40,11 +40,34 @@ the License.
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
-        android:id="@+id/questionholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonholder"
-        android:layout_below="@id/appBarLayout" />
+        android:layout_below="@id/appBarLayout">
+
+        <FrameLayout
+            android:id="@+id/questionholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/loading_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_on_surface_low_emphasis"
+            android:visibility="gone"
+            android:focusable="true"
+            android:clickable="true">
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:indeterminate="true"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+
 
     <LinearLayout
         android:id="@+id/buttonholder"
