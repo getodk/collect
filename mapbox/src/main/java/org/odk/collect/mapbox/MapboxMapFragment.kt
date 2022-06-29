@@ -305,7 +305,7 @@ class MapboxMapFragment :
         iconDrawableId: Int
     ): Int {
         val featureId = nextFeatureId++
-        features[featureId] = org.odk.collect.mapbox.MarkerFeature(
+        features[featureId] = MarkerFeature(
             requireContext(),
             pointAnnotationManager,
             featureId,
@@ -321,14 +321,14 @@ class MapboxMapFragment :
 
     override fun setMarkerIcon(featureId: Int, drawableId: Int) {
         val feature = features[featureId]
-        if (feature is org.odk.collect.mapbox.MarkerFeature) {
+        if (feature is MarkerFeature) {
             feature.setIcon(drawableId)
         }
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint? {
         val feature = features[featureId]
-        return if (feature is org.odk.collect.mapbox.MarkerFeature) {
+        return if (feature is MarkerFeature) {
             feature.point
         } else {
             null
@@ -337,7 +337,7 @@ class MapboxMapFragment :
 
     override fun addDraggablePoly(points: MutableIterable<MapPoint>, closedPolygon: Boolean): Int {
         val featureId = nextFeatureId++
-        features[featureId] = org.odk.collect.mapbox.PolyFeature(
+        features[featureId] = PolyFeature(
             requireContext(),
             pointAnnotationManager,
             polylineAnnotationManager,
@@ -352,21 +352,21 @@ class MapboxMapFragment :
 
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {
         val feature = features[featureId]
-        if (feature is org.odk.collect.mapbox.PolyFeature) {
+        if (feature is PolyFeature) {
             feature.appendPoint(point)
         }
     }
 
     override fun removePolyLastPoint(featureId: Int) {
         val feature = features[featureId]
-        if (feature is org.odk.collect.mapbox.PolyFeature) {
+        if (feature is PolyFeature) {
             feature.removeLastPoint()
         }
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
-        return if (feature is org.odk.collect.mapbox.PolyFeature) {
+        return if (feature is PolyFeature) {
             feature.mapPoints
         } else {
             emptyList()
