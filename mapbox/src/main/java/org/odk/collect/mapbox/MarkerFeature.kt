@@ -56,8 +56,9 @@ class MarkerFeature(
         override fun onAnnotationClick(annotation: PointAnnotation): Boolean {
             if (annotation.id == pointAnnotation.id && featureClickListener != null) {
                 featureClickListener.onFeature(featureId)
+                return true
             }
-            return true
+            return false
         }
     }
 

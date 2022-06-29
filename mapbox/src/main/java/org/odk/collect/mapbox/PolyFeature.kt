@@ -116,10 +116,10 @@ internal class PolyFeature(
             for (pointAnnotation in pointAnnotations) {
                 if (annotation.id == pointAnnotation.id && featureClickListener != null) {
                     featureClickListener.onFeature(featureId)
-                    break
+                    return true
                 }
             }
-            return true
+            return false
         }
     }
 
