@@ -14,10 +14,10 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.activities.FormMapActivity
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.SnackbarUtils
+import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
