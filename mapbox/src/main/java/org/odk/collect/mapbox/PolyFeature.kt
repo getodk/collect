@@ -28,7 +28,7 @@ internal class PolyFeature(
     private val pointAnnotations = mutableListOf<PointAnnotation>()
     private val pointAnnotationClickListener = ClickListener()
     private val pointAnnotationDragListener = DragListener()
-    private var polylineAnnotation: PolylineAnnotation
+    private var polylineAnnotation: PolylineAnnotation? = null
 
     init {
         initMapPoints.forEach {
@@ -45,13 +45,6 @@ internal class PolyFeature(
             )
         }
 
-        polylineAnnotation = polylineAnnotationManager.create(
-            PolylineAnnotationOptions()
-                .withPoints(emptyList())
-                .withLineColor(ColorUtils.colorToRgbaString(context.resources.getColor(R.color.mapLineColor)))
-                .withLineWidth(5.0)
-        )
-
         updateLine()
 
         pointAnnotationManager.addClickListener(pointAnnotationClickListener)
@@ -65,8 +58,8 @@ internal class PolyFeature(
             delete(pointAnnotations)
         }
 
-        polylineAnnotationManager.apply {
-            delete(polylineAnnotation)
+        polylineAnnotation?.let {
+            polylineAnnotationManager.delete(it)
         }
 
         pointAnnotations.clear()
@@ -98,7 +91,7 @@ internal class PolyFeature(
     }
 
     private fun updateLine() {
-        polylineAnnotation.points = mapPoints
+        val points = mapPoints
             .map {
                 Point.fromLngLat(it.lon, it.lat, it.alt)
             }
@@ -108,7 +101,21 @@ internal class PolyFeature(
                     it.add(it.first())
                 }
             }
-        polylineAnnotationManager.update(polylineAnnotation)
+
+        polylineAnnotation?.let {
+            polylineAnnotationManager.delete(it)
+        }
+
+        if (points.size > 1) {
+            polylineAnnotation = polylineAnnotationManager.create(
+                PolylineAnnotationOptions()
+                    .withPoints(points)
+                    .withLineColor(ColorUtils.colorToRgbaString(context.resources.getColor(R.color.mapLineColor)))
+                    .withLineWidth(5.0)
+            ).also {
+                polylineAnnotationManager.update(it)
+            }
+        }
     }
 
     private inner class ClickListener : OnPointAnnotationClickListener {
