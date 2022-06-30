@@ -1,13 +1,17 @@
 package org.odk.collect.mapbox
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
+import androidx.startup.AppInitializer
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.loader.MapboxMapsInitializer
+import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
@@ -21,6 +25,11 @@ class MapBoxInitializationFragment : Fragment() {
 
     private val connectivityProvider: NetworkStateProvider by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(NetworkStateProvider::class.java)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        initializeMapbox(context)
     }
 
     override fun onCreateView(
@@ -54,5 +63,20 @@ class MapBoxInitializationFragment : Fragment() {
                 // This will crash on devices where the arch for MapBox is not included
             }
         }
+    }
+
+    private fun initializeMapbox(context: Context) {
+        // Auto initialization is disabled to stop x86 devices from crashing so we do this manually
+        context.getState().let {
+            if (!it.get(KEY_MAPBOX_INITIALIZED, false)) {
+                AppInitializer.getInstance(context)
+                    .initializeComponent(MapboxMapsInitializer::class.java)
+                it.set(KEY_MAPBOX_INITIALIZED, true)
+            }
+        }
+    }
+
+    companion object {
+        private const val KEY_MAPBOX_INITIALIZED = "mapbox_initialized"
     }
 }
