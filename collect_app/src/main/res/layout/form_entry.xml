@@ -50,21 +50,11 @@ the License.
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <RelativeLayout
+        <org.odk.collect.android.views.TransparentProgressScreen
             android:id="@+id/loading_screen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/color_on_surface_low_emphasis"
-            android:visibility="gone"
-            android:focusable="true"
-            android:clickable="true">
-
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:indeterminate="true"/>
-        </RelativeLayout>
+            android:visibility="gone" />
     </FrameLayout>
 
 
