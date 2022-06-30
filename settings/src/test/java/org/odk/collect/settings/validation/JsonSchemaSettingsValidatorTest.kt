@@ -26,7 +26,7 @@ class JsonSchemaSettingsValidatorTest {
     }
 
     @Test
-    fun `isValidreturns false when json is invalid based on schema`() {
+    fun `isValid returns false when json is invalid based on schema`() {
         val validator = JsonSchemaSettingsValidator {
             SCHEMA.byteInputStream()
         }
