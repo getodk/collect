@@ -508,7 +508,6 @@ class MapboxMapFragment :
     }
 
     private fun loadReferenceOverlay() {
-        mapboxMap.getStyle()?.removeStyleLayer(OFFLINE_LAYER_ID)
         referenceLayerFile?.let {
             addMbtiles(it.name, referenceLayerFile!!)
         }
@@ -528,15 +527,14 @@ class MapboxMapFragment :
 
             if (mbtiles.layerType == MbtilesFile.LayerType.VECTOR) {
                 addOverlaySource(VectorSource.Builder(id).tileSet(tileSet).build())
-                val layers = mbtiles.vectorLayers
-                for (layer in layers) {
+                for (layer in mbtiles.vectorLayers) {
                     // Pick a colour that's a function of the filename and layer name.
                     // The colour will appear essentially random; the only purpose here
                     // is to try to assign different colours to different layers, such
                     // that each individual layer appears in its own consistent colour.
                     val hue = ((id + "." + layer.name).hashCode() and 0x7fffffff) % 360
                     addOverlayLayer(
-                        LineLayer(OFFLINE_LAYER_ID, id)
+                        LineLayer(id + "." + layer.name, id)
                             .lineColor(Color.HSVToColor(floatArrayOf(hue.toFloat(), 0.7f, 1f)))
                             .lineWidth(1.0)
                             .lineOpacity(0.7)
@@ -546,7 +544,7 @@ class MapboxMapFragment :
             }
             if (mbtiles.layerType == MbtilesFile.LayerType.RASTER) {
                 addOverlaySource(RasterSource.Builder(id).tileSet(tileSet).build())
-                addOverlayLayer(RasterLayer(OFFLINE_LAYER_ID, id))
+                addOverlayLayer(RasterLayer(id + ".raster", id))
             }
             Timber.i("Added %s as a %s layer at /%s", file, mbtiles.layerType, id)
         }
@@ -611,7 +609,6 @@ class MapboxMapFragment :
 
     companion object {
         const val KEY_STYLE_URL = "STYLE_URL"
-        const val OFFLINE_LAYER_ID = "offline_layer_id"
 
         private const val KEY_MAPBOX_INITIALIZED = "mapbox_initialized"
     }
