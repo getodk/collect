@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersion
 import com.networknt.schema.ValidatorTypeCode
-import org.apache.commons.io.IOUtils
 import org.json.JSONObject
 import org.odk.collect.settings.importing.SettingsValidator
 import java.io.InputStream
@@ -31,7 +30,7 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
         return try {
             schemaProvider().use { schemaStream ->
                 val schemaJsonObject = JSONObject(
-                    IOUtils.toString(schemaStream, Charset.defaultCharset())
+                    schemaStream.readBytes().toString(Charset.defaultCharset())
                 )
 
                 return schemaJsonObject
@@ -49,7 +48,7 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
         return try {
             schemaProvider().use { schemaStream ->
                 val schemaJsonObject = JSONObject(
-                    IOUtils.toString(schemaStream, Charset.defaultCharset())
+                    schemaStream.readBytes().toString(Charset.defaultCharset())
                 )
 
                 val settingJsonObject = schemaJsonObject
