@@ -14,7 +14,6 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.exception.JavaRosaException;
@@ -187,33 +186,27 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     public void moveBackward(HashMap<FormIndex, IAnswerData> answers) {
         isLoading.setValue(true);
 
-        scheduler.immediate((Supplier<Void>) () -> {
-            if (formController.currentPromptIsQuestion()) {
-                updateAnswersForScreen(answers);
-            }
-            return null;
-        }, unused -> {
+        scheduler.immediate((Supplier<Boolean>) () -> {
+            return updateAnswersForScreen(answers);
+        }, updateSuccess -> {
             isLoading.setValue(false);
 
-            try {
-                int event = formController.stepToPreviousScreenEvent();
-
-                // If we are the beginning of the form we need to move back to the first actual screen
-                if (event == FormEntryController.EVENT_BEGINNING_OF_FORM) {
-                    formController.stepToNextScreenEvent();
+            if (updateSuccess) {
+                try {
+                    formController.stepToPreviousScreenEvent();
+                } catch (JavaRosaException e) {
+                    error.setValue(new NonFatal(e.getCause().getMessage()));
+                    return;
                 }
-            } catch (JavaRosaException e) {
-                error.setValue(new NonFatal(e.getCause().getMessage()));
-                return;
-            }
 
-            formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-            updateIndex();
+                formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+                updateIndex();
+            }
         });
     }
 
-    public void updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
-        updateAnswersForScreen(answers, false);
+    public boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
+        return updateAnswersForScreen(answers, false);
     }
 
     private boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {

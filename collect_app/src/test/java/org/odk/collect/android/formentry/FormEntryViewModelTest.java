@@ -284,4 +284,73 @@ public class FormEntryViewModelTest {
         scheduler.runBackground();
         verify(formController).saveAllScreenAnswers(answers, true);
     }
+
+    @Test
+    public void moveBackward_savesAnswersToFormController_andThenStepsToPreviousEvent_andFlushesLogger() throws Exception {
+        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
+        viewModel.moveBackward(answers);
+
+        scheduler.runBackground();
+        InOrder verifier = inOrder(formController, auditEventLogger);
+        verifier.verify(formController).saveAllScreenAnswers(answers, false);
+        verifier.verify(auditEventLogger).flush();
+        verifier.verify(formController).stepToPreviousScreenEvent();
+        verifier.verify(auditEventLogger).flush();
+    }
+
+    @Test
+    public void moveBackward_updatesIndexAfterSteppingToPreviousEvent() throws Exception {
+        FormIndex nextIndex = new FormIndex(null, 1, 1, new TreeReference());
+        when(formController.stepToPreviousScreenEvent()).thenAnswer((Answer<Integer>) invocation -> {
+            when(formController.getFormIndex()).thenReturn(nextIndex);
+            return 0;
+        });
+
+        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
+
+        viewModel.moveBackward(new HashMap<>());
+        scheduler.runBackground();
+        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(nextIndex));
+    }
+
+    @Test
+    public void moveBackward_whenThereIsAnErrorSteppingToPreviousEvent_setErrorWithMessage() throws Exception {
+        when(formController.stepToPreviousScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.moveBackward(new HashMap<>());
+        scheduler.runBackground();
+
+        assertThat(viewModel.getError().getValue(), equalTo(new NonFatal("OH NO")));
+    }
+
+    @Test
+    public void moveBackward_whenThereIsAnErrorSaving_setsErrorWithMessage() throws Exception {
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.moveBackward(new HashMap<>());
+        scheduler.runBackground();
+
+        assertThat(viewModel.getError().getValue(), equalTo(new NonFatal("OH NO")));
+    }
+
+    @Test
+    public void moveBackward_whenThereIsAnErrorSaving_doesNotStepToPreviousEvent() throws Exception {
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.moveBackward(new HashMap<>());
+        scheduler.runBackground();
+
+        verify(formController, never()).stepToPreviousScreenEvent();
+    }
+
+    @Test
+    public void moveBackward_setsLoadingToTrueWhileBackgroundWorkHappens() throws Exception {
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
+
+        viewModel.moveBackward(new HashMap<>());
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(true));
+
+        scheduler.runBackground();
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
+    }
 }
