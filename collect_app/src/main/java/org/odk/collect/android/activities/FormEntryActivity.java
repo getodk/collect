@@ -1403,7 +1403,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 String constraintBehavior = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR);
                 formEntryViewModel.moveForward(getAnswers(), constraintBehavior.equals(ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE));
             } else {
-                formEntryViewModel.moveForward();
+                formEntryViewModel.moveForward(getAnswers());
             }
         } else {
             if (formController.isCurrentQuestionFirstInForm() || !allowMovingBackwards) {

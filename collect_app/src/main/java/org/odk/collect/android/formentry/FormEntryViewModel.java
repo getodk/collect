@@ -154,17 +154,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         }
     }
 
-    public void moveForward() {
-        try {
-            formController.stepToNextScreenEvent();
-        } catch (JavaRosaException e) {
-            error.setValue(new NonFatal(e.getCause().getMessage()));
-        }
-
-        formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-        updateIndex();
-    }
-
     public void moveForward(HashMap<FormIndex, IAnswerData> answers) {
         moveForward(answers, false);
     }
@@ -178,7 +167,14 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             isLoading.setValue(false);
 
             if (updateSuccess) {
-                moveForward();
+                try {
+                    formController.stepToNextScreenEvent();
+                } catch (JavaRosaException e) {
+                    error.setValue(new NonFatal(e.getCause().getMessage()));
+                }
+
+                formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+                updateIndex();
             }
         });
     }
