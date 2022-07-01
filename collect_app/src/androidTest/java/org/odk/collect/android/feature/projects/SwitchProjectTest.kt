@@ -1,5 +1,7 @@
 package org.odk.collect.android.feature.projects
 
+import android.Manifest
+import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -17,6 +19,7 @@ class SwitchProjectTest {
 
     @get:Rule
     var chain: RuleChain = TestRuleChain.chain(testDependencies)
+        .around(GrantPermissionRule.grant(Manifest.permission.CAMERA))
         .around(rule)
 
     @Test
