@@ -193,7 +193,6 @@ class SelectionMapFragment(
         }
 
         map.setGpsLocationEnabled(true)
-        map.setGpsLocationListener { point -> onLocationChanged(point) }
 
         previousState?.let { restoreZoomFromPreviousState(it) }
 
@@ -205,6 +204,12 @@ class SelectionMapFragment(
         selectionMapData.getMappableItems().observe(viewLifecycleOwner) {
             updateItems(it)
             updateCounts(binding)
+        }
+
+        selectionMapData.isLoadingItemsFinished().observe(viewLifecycleOwner) { isLoadingItemsFinished ->
+            if (isLoadingItemsFinished) {
+                map.setGpsLocationListener { point -> onLocationChanged(point) }
+            }
         }
     }
 
@@ -405,6 +410,7 @@ internal class SelectedFeatureViewModel : ViewModel() {
 
 interface SelectionMapData {
     fun isLoading(): NonNullLiveData<Boolean>
+    fun isLoadingItemsFinished(): NonNullLiveData<Boolean>
     fun getMapTitle(): LiveData<String?>
     fun getItemType(): String
     fun getItemCount(): NonNullLiveData<Int>

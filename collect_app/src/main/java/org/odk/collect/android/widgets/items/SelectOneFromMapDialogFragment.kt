@@ -137,6 +137,7 @@ internal class SelectChoicesMapData(
     private val itemCount = MutableNonNullLiveData(0)
     private val items = MutableNonNullLiveData(emptyList<MappableSelectItem>())
     private val isLoading = MutableNonNullLiveData(true)
+    private val isLoadingItemsFinished = MutableNonNullLiveData(false)
     private val invalidGeometry = MutableLiveData<InvalidGeometry?>(null)
 
     init {
@@ -152,6 +153,7 @@ internal class SelectChoicesMapData(
                         itemCount.value = prompt.selectChoices.size
                         items.value = it.value
                         isLoading.value = false
+                        isLoadingItemsFinished.value = true
                     }
 
                     is Result.Error -> {
@@ -214,6 +216,10 @@ internal class SelectChoicesMapData(
 
     override fun isLoading(): NonNullLiveData<Boolean> {
         return isLoading
+    }
+
+    override fun isLoadingItemsFinished(): NonNullLiveData<Boolean> {
+        return isLoadingItemsFinished
     }
 
     override fun getMapTitle(): LiveData<String?> {

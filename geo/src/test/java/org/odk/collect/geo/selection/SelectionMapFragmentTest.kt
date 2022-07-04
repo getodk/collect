@@ -56,6 +56,7 @@ class SelectionMapFragmentTest {
     private val referenceLayerSettingsNavigator: ReferenceLayerSettingsNavigator = mock()
     private val data = mock<SelectionMapData> {
         on { isLoading() } doReturn MutableNonNullLiveData(false)
+        on { isLoadingItemsFinished() } doReturn MutableNonNullLiveData(false)
         on { getMapTitle() } doReturn MutableLiveData("")
         on { getItemType() } doReturn "Things"
         on { getItemCount() } doReturn MutableNonNullLiveData(0)
@@ -151,6 +152,9 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `zooms to current location when zoomToFitItems is false`() {
+        val isLoadingItemsFinishedLiveData = MutableNonNullLiveData(false)
+        whenever(data.isLoadingItemsFinished()).thenReturn(isLoadingItemsFinishedLiveData)
+
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, latitude = 40.0),
             Fixtures.actionMappableSelectItem().copy(id = 1, latitude = 41.0)
@@ -167,16 +171,23 @@ class SelectionMapFragmentTest {
 
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
 
+        isLoadingItemsFinishedLiveData.value = true
+
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
     }
 
     @Test
     fun `zooms to current location when there are no items`() {
+        val isLoadingItemsFinishedLiveData = MutableNonNullLiveData(false)
+        whenever(data.isLoadingItemsFinished()).thenReturn(isLoadingItemsFinishedLiveData)
+
         whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+
+        isLoadingItemsFinishedLiveData.value = true
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
@@ -185,16 +196,35 @@ class SelectionMapFragmentTest {
 
     @Test
     fun `does not zoom to current location when it changes`() {
+        val isLoadingItemsFinishedLiveData = MutableNonNullLiveData(false)
+        whenever(data.isLoadingItemsFinished()).thenReturn(isLoadingItemsFinishedLiveData)
+
         whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
 
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+
+        isLoadingItemsFinishedLiveData.value = true
 
         map.setLocation(MapPoint(1.0, 2.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
 
         map.setLocation(MapPoint(3.0, 4.0))
         assertThat(map.center, equalTo(MapPoint(1.0, 2.0)))
+    }
+
+    @Test
+    fun `does not zoom to current location when items are not loaded yet`() {
+        val isLoadingItemsFinishedLiveData = MutableNonNullLiveData(false)
+        whenever(data.isLoadingItemsFinished()).thenReturn(isLoadingItemsFinishedLiveData)
+
+        whenever(data.getMappableItems()).doReturn(MutableNonNullLiveData(emptyList()))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
+
+        map.setLocation(MapPoint(1.0, 2.0))
+        assertThat(map.center, equalTo(FakeMapFragment.DEFAULT_CENTER))
     }
 
     @Test
