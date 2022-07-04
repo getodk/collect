@@ -1,5 +1,6 @@
 package org.odk.collect.android.application
 
+import android.os.Build
 import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapConfigurator
 import org.odk.collect.maps.MapFragment
@@ -8,7 +9,12 @@ object MapboxClassInstanceCreator {
 
     @JvmStatic
     fun isMapboxAvailable(): Boolean {
-        return createMapboxMapFragment() != null
+        val mapboxAbis = listOf(
+            "arm64-v8a",
+            "armeabi-v7a"
+        )
+
+        return createMapboxMapFragment() != null && Build.SUPPORTED_ABIS.any(mapboxAbis::contains)
     }
 
     fun createMapboxMapFragment(): MapFragment? {

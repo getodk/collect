@@ -11,9 +11,6 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-import static java.util.Arrays.stream;
-
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 
@@ -30,8 +27,6 @@ import org.odk.collect.osmdroid.OsmDroidMapConfigurator.WmsOption;
 import org.odk.collect.osmdroid.WebMapService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MapConfiguratorProvider {
 
@@ -156,13 +151,7 @@ public class MapConfiguratorProvider {
     }
 
     private static boolean isMapboxSupported() {
-        List<String> mapboxAbis = Arrays.asList(
-                "arm64-v8a",
-                "armeabi-v7a"
-        );
-
-        return MapboxClassInstanceCreator.isMapboxAvailable()
-                && stream(Build.SUPPORTED_ABIS).anyMatch(mapboxAbis::contains);
+        return MapboxClassInstanceCreator.isMapboxAvailable();
     }
 
     /**

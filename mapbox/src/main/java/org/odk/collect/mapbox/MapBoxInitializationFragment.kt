@@ -66,17 +66,13 @@ class MapBoxInitializationFragment : Fragment() {
     }
 
     private fun initializeMapbox(context: Context) {
-        try {
-            // Auto initialization is disabled to stop x86 devices from crashing so we do this manually
-            context.getState().let {
-                if (!it.get(KEY_MAPBOX_INITIALIZED, false)) {
-                    AppInitializer.getInstance(context)
-                        .initializeComponent(MapboxMapsInitializer::class.java)
-                    it.set(KEY_MAPBOX_INITIALIZED, true)
-                }
+        // Auto initialization is disabled to stop x86 devices from crashing so we do this manually
+        context.getState().let {
+            if (!it.get(KEY_MAPBOX_INITIALIZED, false)) {
+                AppInitializer.getInstance(context)
+                    .initializeComponent(MapboxMapsInitializer::class.java)
+                it.set(KEY_MAPBOX_INITIALIZED, true)
             }
-        } catch (ignored: Throwable) {
-            // This will crash on devices where the arch for MapBox is not included
         }
     }
 

@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
@@ -266,11 +265,10 @@ public class MainMenuActivity extends CollectAbstractActivity {
     }
 
     private void initMapbox() {
-        Fragment mapBoxInitializationFragment = MapboxClassInstanceCreator.createMapBoxInitializationFragment();
-        if (mapBoxInitializationFragment != null) {
+        if (MapboxClassInstanceCreator.isMapboxAvailable()) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.map_box_initialization_fragment, mapBoxInitializationFragment)
+                    .add(R.id.map_box_initialization_fragment, MapboxClassInstanceCreator.createMapBoxInitializationFragment())
                     .commit();
         }
     }
