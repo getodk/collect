@@ -39,7 +39,6 @@ class FormMapViewModel(
     private var mappableItems = MutableNonNullLiveData<List<MappableSelectItem>>(emptyList())
     private var itemCount = MutableNonNullLiveData(0)
     private val isLoading = MutableNonNullLiveData(false)
-    private val isLoadingItemsFinished = MutableNonNullLiveData(false)
 
     override fun getMapTitle(): LiveData<String?> {
         return mapTitle
@@ -59,10 +58,6 @@ class FormMapViewModel(
 
     override fun isLoading(): NonNullLiveData<Boolean> {
         return isLoading
-    }
-
-    override fun isLoadingItemsFinished(): NonNullLiveData<Boolean> {
-        return isLoadingItemsFinished
     }
 
     fun load() {
@@ -98,7 +93,6 @@ class FormMapViewModel(
                 mappableItems.value = it.second as List<MappableSelectItem>
                 itemCount.value = it.third
                 isLoading.value = false
-                isLoadingItemsFinished.value = true
             }
         )
     }
