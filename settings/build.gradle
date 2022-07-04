@@ -51,7 +51,6 @@ dependencies {
     implementation project(':projects')
 
     implementation Dependencies.json_schema_validator
-    implementation Dependencies.commons_io
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
