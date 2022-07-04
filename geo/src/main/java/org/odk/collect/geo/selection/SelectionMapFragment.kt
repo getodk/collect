@@ -196,9 +196,7 @@ class SelectionMapFragment(
 
         previousState?.let { restoreZoomFromPreviousState(it) }
 
-        map.setFeatureClickListener { featureId ->
-            toggleFeature(featureId)
-        }
+        map.setFeatureClickListener(::onFeatureClicked)
         map.setClickListener { onClick() }
 
         selectionMapData.getMappableItems().observe(viewLifecycleOwner) {
@@ -291,37 +289,32 @@ class SelectionMapFragment(
         }
     }
 
-    private fun toggleFeature(featureId: Int, maintainZoom: Boolean = true) {
+    private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
+        summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         if (!isSummaryForFeatureDisplayed(featureId)) {
-            selectFeature(featureId, maintainZoom)
-        } else {
-            summarySheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        }
-    }
+            removeEnlargedMarkerIfExist(featureId)
 
-    private fun selectFeature(featureId: Int, maintainZoom: Boolean = true) {
-        removeEnlargedMarkerIfExist(featureId)
-
-        val item = itemsByFeatureId[featureId]
-        if (item != null) {
-            if (!skipSummary) {
-                if (maintainZoom) {
-                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
-                } else {
-                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
-                }
-
-                map.setMarkerIcon(featureId, item.largeIcon)
-                summarySheet.setItem(item)
-                summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                selectedFeatureViewModel.setSelectedFeatureId(featureId)
-            } else {
-                parentFragmentManager.setFragmentResult(
-                    REQUEST_SELECT_ITEM,
-                    Bundle().also {
-                        it.putLong(RESULT_SELECTED_ITEM, item.id)
+            val item = itemsByFeatureId[featureId]
+            if (item != null) {
+                if (!skipSummary) {
+                    if (maintainZoom) {
+                        map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
+                    } else {
+                        map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
                     }
-                )
+
+                    map.setMarkerIcon(featureId, item.largeIcon)
+                    summarySheet.setItem(item)
+                    summarySheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                    selectedFeatureViewModel.setSelectedFeatureId(featureId)
+                } else {
+                    parentFragmentManager.setFragmentResult(
+                        REQUEST_SELECT_ITEM,
+                        Bundle().also {
+                            it.putLong(RESULT_SELECTED_ITEM, item.id)
+                        }
+                    )
+                }
             }
         }
     }
@@ -344,10 +337,10 @@ class SelectionMapFragment(
         val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
 
         if (selectedFeatureId != null) {
-            selectFeature(selectedFeatureId)
+            onFeatureClicked(selectedFeatureId)
             viewportInitialized = true
         } else if (previouslySelectedId != null) {
-            selectFeature(previouslySelectedId, maintainZoom = false)
+            onFeatureClicked(previouslySelectedId, maintainZoom = false)
             viewportInitialized = true
         } else if (zoomToFitItems && !viewportInitialized && points.isNotEmpty()) {
             map.zoomToBoundingBox(points, 0.8, false)
