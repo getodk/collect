@@ -10,9 +10,7 @@ import java.util.regex.Pattern
 class ProjectDetailsCreatorImpl(private val colors: List<String>, private val defaults: Map<String, Any>) : ProjectDetailsCreator {
 
     override fun createProjectFromDetails(name: String, icon: String, color: String, connectionIdentifier: String): Project {
-        val projectName = if (name.isNotBlank()) {
-            name
-        } else {
+        val projectName = name.ifBlank {
             getProjectNameFromConnectionIdentifier(connectionIdentifier)
         }
 

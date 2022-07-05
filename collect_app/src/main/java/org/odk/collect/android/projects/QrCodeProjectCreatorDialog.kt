@@ -230,22 +230,21 @@ class QrCodeProjectCreatorDialog :
         )
 
         barcodeViewDecoder.waitForBarcode(binding.barcodeView).observe(
-            viewLifecycleOwner,
-            { barcodeResult: BarcodeResult ->
-                try {
-                    beepManager.playBeepSoundAndVibrate()
-                } catch (e: Exception) {
-                    // ignore because beeping isn't essential and this can crash the whole app
-                }
-
-                try {
-                    val settingsJson = CompressionUtils.decompress(barcodeResult.text)
-                    createProjectOrError(settingsJson)
-                } catch (e: Exception) {
-                    showShortToast(requireContext(), getString(R.string.invalid_qrcode))
-                }
+            viewLifecycleOwner
+        ) { barcodeResult: BarcodeResult ->
+            try {
+                beepManager.playBeepSoundAndVibrate()
+            } catch (e: Exception) {
+                // ignore because beeping isn't essential and this can crash the whole app
             }
-        )
+
+            try {
+                val settingsJson = CompressionUtils.decompress(barcodeResult.text)
+                createProjectOrError(settingsJson)
+            } catch (e: Exception) {
+                showShortToast(requireContext(), getString(R.string.invalid_qrcode))
+            }
+        }
     }
 
     private fun createProjectOrError(settingsJson: String) {
