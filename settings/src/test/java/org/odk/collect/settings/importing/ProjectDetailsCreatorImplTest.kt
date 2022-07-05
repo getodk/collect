@@ -32,6 +32,7 @@ class ProjectDetailsCreatorImplTest {
 
     @Test
     fun `When no project name is specified and the connection identifier is not a valid URL, the project name is the connection identifier`() {
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https:/\\/kc.humanitarianresponse.info").name, `is`("https:/\\/kc.humanitarianresponse.info"))
         assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "foo@bar.baz").name, `is`("foo@bar.baz"))
         assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "something").name, `is`("something"))
     }
@@ -40,6 +41,7 @@ class ProjectDetailsCreatorImplTest {
     fun `When no project name is specified and the connection identifier is the demo project explicitly or by default, the project name is 'Demo project'`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "http://default.example.com").name, `is`(Project.DEMO_PROJECT_NAME))
         assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "").name, `is`(Project.DEMO_PROJECT_NAME))
+        assertThat(projectDetailsCreator.createProjectFromDetails().name, `is`(Project.DEMO_PROJECT_NAME))
     }
 
     @Test
@@ -65,6 +67,16 @@ class ProjectDetailsCreatorImplTest {
     @Test
     fun `If project icon is empty should be generated based on project name`() {
         assertThat(projectDetailsCreator.createProjectFromDetails(name = "My Project X", icon = " ").icon, `is`("M"))
+    }
+
+    @Test
+    fun `If project icon is not included in project details and there is no project name should be generated based on the connection identifier`() {
+        assertThat(projectDetailsCreator.createProjectFromDetails(connectionIdentifier = "https://my-server.com").icon, `is`("M"))
+    }
+
+    @Test
+    fun `If project icon is not included in project details and there is no project and no connection identifier should be generated based on demo name`() {
+        assertThat(projectDetailsCreator.createProjectFromDetails().icon, `is`("D"))
     }
 
     @Test
