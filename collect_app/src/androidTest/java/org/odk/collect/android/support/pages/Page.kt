@@ -184,18 +184,24 @@ abstract class Page<T : Page<T>> {
 
     fun clickOKOnDialog(): T {
         closeSoftKeyboard() // Make sure to avoid issues with keyboard being up
-        clickOnId(android.R.id.button1)
+        waitForDialogToSettle()
+        onView(withId(android.R.id.button1))
+            .inRoot(isDialog())
+            .perform(click())
         return this as T
     }
 
     fun <D : Page<D>?> clickOKOnDialog(destination: D): D {
         closeSoftKeyboard() // Make sure to avoid issues with keyboard being up
-        clickOnId(android.R.id.button1)
+        waitForDialogToSettle()
+        onView(withId(android.R.id.button1))
+            .inRoot(isDialog())
+            .perform(click())
         return destination!!.assertOnPage()
     }
 
     fun <D : Page<D>?> clickOnButtonInDialog(buttonText: Int, destination: D): D {
-        wait250ms() // https://github.com/android/android-test/issues/444
+        waitForDialogToSettle()
         onView(withText(getTranslatedString(buttonText)))
             .inRoot(isDialog())
             .perform(click())
@@ -341,6 +347,10 @@ abstract class Page<T : Page<T>> {
             }
         }
         throw RuntimeException("tryAgainOnFail failed", failure)
+    }
+
+    private fun waitForDialogToSettle() {
+        wait250ms() // https://github.com/android/android-test/issues/444
     }
 
     protected fun waitForText(text: String?) {
