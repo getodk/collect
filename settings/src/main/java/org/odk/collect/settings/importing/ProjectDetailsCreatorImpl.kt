@@ -38,7 +38,10 @@ class ProjectDetailsCreatorImpl(private val colors: List<String>, private val de
             Project.DEMO_PROJECT_NAME
         } else {
             try {
-                URL(connectionIdentifier).host
+                val projectName = URL(connectionIdentifier).host
+                projectName?.ifBlank {
+                    connectionIdentifier
+                } ?: connectionIdentifier
             } catch (e: Exception) {
                 connectionIdentifier
             }
