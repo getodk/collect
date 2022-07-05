@@ -1,4 +1,4 @@
-package org.odk.collect.android.network;
+package org.odk.collect.androidshared.network;
 
 import android.net.NetworkInfo;
 

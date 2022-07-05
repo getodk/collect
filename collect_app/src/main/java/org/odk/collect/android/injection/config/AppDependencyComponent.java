@@ -46,14 +46,12 @@ import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.BlankFormListFragment;
-import org.odk.collect.android.fragments.MapBoxInitializationFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
-import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.CaptionedListPreference;
@@ -91,6 +89,7 @@ import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.ExStringWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
+import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapFragmentFactory;
@@ -184,8 +183,6 @@ public interface AppDependencyComponent {
 
     void inject(GoogleMapFragment mapFragment);
 
-    void inject(MapboxMapFragment mapFragment);
-
     void inject(MainMenuActivity mainMenuActivity);
 
     void inject(QRCodeTabsActivity qrCodeTabsActivity);
@@ -215,8 +212,6 @@ public interface AppDependencyComponent {
     void inject(ProjectPreferencesActivity projectPreferencesActivity);
 
     void inject(ResetDialogPreferenceFragmentCompat resetDialogPreferenceFragmentCompat);
-
-    void inject(MapBoxInitializationFragment mapBoxInitializationFragment);
 
     void inject(SyncFormsTaskSpec syncWork);
 
@@ -337,4 +332,6 @@ public interface AppDependencyComponent {
     PermissionsChecker permissionsChecker();
 
     ReferenceLayerRepository referenceLayerRepository();
+
+    NetworkStateProvider networkStateProvider();
 }

@@ -40,6 +40,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.data.StateStore;
+import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
@@ -48,6 +49,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
 import org.odk.collect.osmdroid.OsmDroidDependencyComponent;
 import org.odk.collect.osmdroid.OsmDroidDependencyComponentProvider;
@@ -55,6 +57,9 @@ import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.shared.injection.ObjectProvider;
+import org.odk.collect.shared.injection.ObjectProviderHost;
+import org.odk.collect.shared.injection.SupplierObjectProvider;
 import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedApplication;
@@ -72,11 +77,14 @@ public class Collect extends Application implements
         ProjectsDependencyComponentProvider,
         GeoDependencyComponentProvider,
         OsmDroidDependencyComponentProvider,
-        StateStore {
+        StateStore,
+        ObjectProviderHost {
+
     public static String defaultSysLanguage;
     private static Collect singleton;
 
     private final AppState appState = new AppState();
+    private final SupplierObjectProvider mapboxDependencies = new SupplierObjectProvider();
 
     @Nullable
     private FormController formController;
@@ -175,6 +183,10 @@ public class Collect extends Application implements
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
                 .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent.projectsRepository()))
                 .build();
+
+        mapboxDependencies.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
+        mapboxDependencies.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
+        mapboxDependencies.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
     }
 
     @NotNull
@@ -284,5 +296,11 @@ public class Collect extends Application implements
         }
 
         return osmDroidDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public ObjectProvider getMultiClassProvider() {
+        return mapboxDependencies;
     }
 }

@@ -21,8 +21,8 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.FormListSortingBottomSheetDialog
-import org.odk.collect.android.network.NetworkStateProvider
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.robolectric.Shadows
 import org.robolectric.fakes.RoboMenuItem
 import org.robolectric.shadows.ShadowDialog

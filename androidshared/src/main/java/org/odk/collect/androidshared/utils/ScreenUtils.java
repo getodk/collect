@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.androidshared.utils;
 
 import android.content.Context;
 import android.content.res.Configuration;
 import android.util.DisplayMetrics;
-
-import org.odk.collect.android.application.Collect;
 
 public class ScreenUtils {
 
@@ -30,24 +28,24 @@ public class ScreenUtils {
         this.context = context;
     }
 
-    public static int getScreenWidth() {
-        return getDisplayMetrics().widthPixels;
+    public static int getScreenWidth(Context context) {
+        return getDisplayMetrics(context).widthPixels;
     }
 
-    public static int getScreenHeight() {
-        return getDisplayMetrics().heightPixels;
+    public static int getScreenHeight(Context context) {
+        return getDisplayMetrics(context).heightPixels;
     }
 
-    public static float xdpi() {
-        return getDisplayMetrics().xdpi;
+    public static float xdpi(Context context) {
+        return getDisplayMetrics(context).xdpi;
     }
 
-    public static float ydpi() {
-        return getDisplayMetrics().ydpi;
+    public static float ydpi(Context context) {
+        return getDisplayMetrics(context).ydpi;
     }
 
-    private static DisplayMetrics getDisplayMetrics() {
-        return Collect.getInstance().getResources().getDisplayMetrics();
+    private static DisplayMetrics getDisplayMetrics(Context context) {
+        return context.getResources().getDisplayMetrics();
     }
 
     public int getScreenSizeConfiguration() {

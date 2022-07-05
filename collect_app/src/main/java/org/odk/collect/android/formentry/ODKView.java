@@ -34,7 +34,6 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +41,7 @@ import android.widget.Toast;
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.google.android.material.button.MaterialButton;
@@ -65,6 +65,7 @@ import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
@@ -110,7 +111,7 @@ import timber.log.Timber;
  * {@code field-list} appearance.
  */
 @SuppressLint("ViewConstructor")
-public class ODKView extends FrameLayout implements OnLongClickListener, WidgetValueChangedListener {
+public class ODKView extends SwipeHandler.View implements OnLongClickListener, WidgetValueChangedListener {
 
     private final LinearLayout widgetsList;
     private final LinearLayout.LayoutParams layout;
@@ -563,14 +564,21 @@ public class ODKView extends FrameLayout implements OnLongClickListener, WidgetV
         }
     }
 
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
-                                        float velocityY) {
+    @Override
+    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
+                                              float velocityY) {
         for (QuestionWidget q : widgets) {
-            if (q.suppressFlingGesture(e1, e2, velocityX, velocityY)) {
+            if (q.shouldSuppressFlingGesture(e1, e2, velocityX, velocityY)) {
                 return true;
             }
         }
         return false;
+    }
+
+    @Nullable
+    @Override
+    public NestedScrollView getVerticalScrollView() {
+        return findViewById(R.id.odk_view_container);
     }
 
     /**

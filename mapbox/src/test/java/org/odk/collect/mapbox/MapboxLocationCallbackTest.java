@@ -1,4 +1,4 @@
-package org.odk.collect.android.location.client;
+package org.odk.collect.mapbox;
 
 import android.location.Location;
 
@@ -7,7 +7,6 @@ import com.mapbox.android.core.location.LocationEngineResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.odk.collect.android.geo.MapboxMapFragment;
 import org.odk.collect.testshared.LocationTestUtils;
 
 import static android.location.LocationManager.GPS_PROVIDER;
@@ -55,7 +54,6 @@ public class MapboxLocationCallbackTest {
         ArgumentCaptor<Location> acLocation = ArgumentCaptor.forClass(Location.class);
         verify(mapFragment).onLocationChanged(acLocation.capture());
         assertThat(acLocation.getValue().getAccuracy(), is(0.0f));
-
     }
 
     @Test

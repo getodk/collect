@@ -51,7 +51,7 @@ import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
@@ -296,8 +296,8 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
      *
      * @return true if the fling gesture should be suppressed
      */
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
-                                        float velocityY) {
+    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
+                                              float velocityY) {
         return false;
     }
 

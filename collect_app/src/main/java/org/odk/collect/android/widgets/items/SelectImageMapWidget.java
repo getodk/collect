@@ -114,7 +114,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
     }
 
     @Override
-    public boolean suppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return binding.imageMap.suppressFlingGesture();
     }
 

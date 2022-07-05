@@ -41,7 +41,7 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
-import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.android.utilities.ArrayUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;

@@ -1,4 +1,5 @@
 import dependencies.Versions
+apply from: 'secrets.gradle'
 
 // Plugin for detecting outdated dependencies. Run './gradlew dependencyUpdates' to generate a report.
 apply plugin: "com.github.ben-manes.versions"
@@ -37,6 +38,17 @@ allprojects {
         maven {
             url 'https://staging.dev.medicmobile.org/_couch/maven-repo'
             metadataSources { artifact() }
+        }
+
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '')
+            }
         }
 
         // Local repo for dependencies that only existed in the defunct JCenter repo

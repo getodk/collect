@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.mapbox;
 
 import org.odk.collect.maps.layers.TileSource;
 

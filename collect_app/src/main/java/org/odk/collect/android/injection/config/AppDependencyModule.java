@@ -72,8 +72,8 @@ import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
-import org.odk.collect.android.network.ConnectivityProvider;
-import org.odk.collect.android.network.NetworkStateProvider;
+import org.odk.collect.androidshared.network.ConnectivityProvider;
+import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
@@ -105,7 +105,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
-import org.odk.collect.android.utilities.ScreenUtils;
+import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
@@ -271,8 +271,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public NetworkStateProvider providesConnectivityProvider() {
-        return new ConnectivityProvider();
+    public NetworkStateProvider providesNetworkStateProvider(Context context) {
+        return new ConnectivityProvider(context);
     }
 
     @Provides

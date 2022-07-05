@@ -26,3 +26,8 @@ include ':settings'
 include ':servicetest'
 include ':maps'
 include ':osmdroid'
+
+apply from: 'secrets.gradle'
+if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
+    include ':mapbox'
+}
