@@ -92,20 +92,22 @@ class QrCodeProjectCreatorDialog :
                             // Do not call from a fragment that does not exist anymore https://github.com/getodk/collect/issues/4741
                             if (isAdded) {
                                 requireActivity().contentResolver.openInputStream(imageUri).use {
-                                    try {
-                                        val settingsJson = qrCodeDecoder.decode(it)
-                                        createProjectOrError(settingsJson)
+                                    val settingsJson = try {
+                                        qrCodeDecoder.decode(it)
                                     } catch (e: QRCodeDecoder.InvalidException) {
                                         showShortToast(
                                             requireContext(),
                                             R.string.invalid_qrcode
                                         )
+                                        ""
                                     } catch (e: QRCodeDecoder.NotFoundException) {
                                         showShortToast(
                                             requireContext(),
                                             R.string.qr_code_not_found
                                         )
+                                        ""
                                     }
+                                    createProjectOrError(settingsJson)
                                 }
                             }
                         }
@@ -238,34 +240,31 @@ class QrCodeProjectCreatorDialog :
                 // ignore because beeping isn't essential and this can crash the whole app
             }
 
-            try {
-                val settingsJson = CompressionUtils.decompress(barcodeResult.text)
-                createProjectOrError(settingsJson)
+            val settingsJson = try {
+                CompressionUtils.decompress(barcodeResult.text)
             } catch (e: Exception) {
                 showShortToast(requireContext(), getString(R.string.invalid_qrcode))
+                ""
             }
+            createProjectOrError(settingsJson)
         }
     }
 
     private fun createProjectOrError(settingsJson: String) {
-        try {
-            settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
-                val confirmationArgs = Bundle()
-                confirmationArgs.putString(
-                    DuplicateProjectConfirmationKeys.SETTINGS_JSON,
-                    settingsJson
-                )
-                confirmationArgs.putString(DuplicateProjectConfirmationKeys.MATCHING_PROJECT, uuid)
-                DialogFragmentUtils.showIfNotShowing(
-                    DuplicateProjectConfirmationDialog::class.java,
-                    confirmationArgs,
-                    childFragmentManager
-                )
-            } ?: run {
-                createProject(settingsJson)
-            }
-        } catch (e: Exception) {
-            showShortToast(requireContext(), getString(R.string.invalid_qrcode))
+        settingsConnectionMatcher.getProjectWithMatchingConnection(settingsJson)?.let { uuid ->
+            val confirmationArgs = Bundle()
+            confirmationArgs.putString(
+                DuplicateProjectConfirmationKeys.SETTINGS_JSON,
+                settingsJson
+            )
+            confirmationArgs.putString(DuplicateProjectConfirmationKeys.MATCHING_PROJECT, uuid)
+            DialogFragmentUtils.showIfNotShowing(
+                DuplicateProjectConfirmationDialog::class.java,
+                confirmationArgs,
+                childFragmentManager
+            )
+        } ?: run {
+            createProject(settingsJson)
         }
     }
 
