@@ -13,24 +13,21 @@ class TransparentProgressScreen(context: Context, attrs: AttributeSet?) :
         inflate(context, R.layout.transparent_progress_screen, this)
     }
 
-    var visible: Boolean = false
-        set(value) {
-            if (value) {
-                show()
-            } else {
-                hide()
+    override fun setVisibility(visibility: Int) {
+        when (visibility) {
+            GONE -> {
+                super.setVisibility(visibility)
             }
 
-            field = value
+            INVISIBLE -> {
+                super.setVisibility(visibility)
+            }
+
+            VISIBLE -> {
+                alpha = 0f
+                super.setVisibility(VISIBLE)
+                createAlphaAnimation(0f, 1f, 60).start()
+            }
         }
-
-    fun show() {
-        alpha = 0f
-        visibility = VISIBLE
-        createAlphaAnimation(0f, 1f, 60).start()
-    }
-
-    fun hide() {
-        visibility = GONE
     }
 }

@@ -158,7 +158,6 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
-import org.odk.collect.android.views.TransparentProgressScreen;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.RangePickerDecimalWidget;
@@ -473,7 +472,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
         formEntryViewModel.isLoading().observe(this, isLoading -> {
-            this.<TransparentProgressScreen>findViewById(R.id.loading_screen).setVisible(isLoading);
+            findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
 
         formEntryViewModel.setAnswerListener(this::onAnswer);
