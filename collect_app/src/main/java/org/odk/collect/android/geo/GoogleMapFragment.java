@@ -123,26 +123,26 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
     public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
-        getMapAsync((GoogleMap map1) -> {
-            if (map1 == null) {
+        getMapAsync((GoogleMap googleMap) -> {
+            if (googleMap == null) {
                 ToastUtils.showShortToast(requireContext(), R.string.google_play_services_error_occured);
                 if (errorListener != null) {
                     errorListener.onError();
                 }
                 return;
             }
-            this.map = map1;
-            map1.setMapType(mapType);
-            map1.setOnMapClickListener(this);
-            map1.setOnMapLongClickListener(this);
-            map1.setOnMarkerClickListener(this);
-            map1.setOnPolylineClickListener(this);
-            map1.setOnMarkerDragListener(this);
-            map1.getUiSettings().setCompassEnabled(true);
+            this.map = googleMap;
+            googleMap.setMapType(mapType);
+            googleMap.setOnMapClickListener(this);
+            googleMap.setOnMapLongClickListener(this);
+            googleMap.setOnMarkerClickListener(this);
+            googleMap.setOnPolylineClickListener(this);
+            googleMap.setOnMarkerDragListener(this);
+            googleMap.getUiSettings().setCompassEnabled(true);
             // Don't show the blue dot on the map; we'll draw crosshairs instead.
-            map1.setMyLocationEnabled(false);
-            map1.setMinZoomPreference(1);
-            map1.moveCamera(CameraUpdateFactory.newLatLngZoom(
+            googleMap.setMyLocationEnabled(false);
+            googleMap.setMinZoomPreference(1);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             loadReferenceOverlay();
 
