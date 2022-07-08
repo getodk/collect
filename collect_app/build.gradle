@@ -314,6 +314,7 @@ dependencies {
         exclude group: 'commons-logging'
     }
     implementation(Dependencies.javarosa) {
+        exclude group: 'commons-io'
         exclude group: 'joda-time'
         exclude group: 'org.slf4j'
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
