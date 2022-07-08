@@ -6,10 +6,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 @RunWith(AndroidJUnit4.class)
 public class QuickSaveTest {
@@ -21,81 +21,21 @@ public class QuickSaveTest {
             .around(rule);
 
     @Test
-    public void whenFillingOutNewForm_clickingSaveIcon_andIgnoringChanges_savesLatestAnswer() {
+    public void whenFillingForm_clickingSaveIcon_savesCurrentAnswers() {
         rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
+                .copyForm("two-question.xml")
+                .startBlankForm("Two Question")
+                .answerQuestion("What is your name?", "Reuben")
+                .swipeToNextQuestion("What is your age?")
+                .answerQuestion("What is your age?", "32")
                 .clickSave()
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
+
+                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
                 .clickIgnoreChanges()
 
                 .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("123");
-    }
-
-    @Test
-    public void whenFillingOutNewForm_clickingSaveIcon_makingChangesAndSaveAndExiting_savesLatestAnswer() {
-        rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
-                .clickSave()
-                .inputText("456")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
-
-                .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("456");
-    }
-
-    @Test
-    public void whenEditingForm_clickingSaveIcon_andIgnoringChanges_savesLatestAnswers() {
-        rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
-
-                .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .clickGoToStart()
-                .inputText("456")
-                .clickSave()
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
-                .clickIgnoreChanges()
-
-                .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("456");
-    }
-
-    @Test
-    public void whenEditingForm_clickingSaveIcon_andMakingChanges_andIgnoringChanges_savesFirstEdits() {
-        rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
-
-                .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .clickGoToStart()
-                .inputText("456")
-                .clickSave()
-                .inputText("789")
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
-                .clickIgnoreChanges()
-
-                .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("456");
+                .clickOnForm("Two Question")
+                .assertText("Reuben")
+                .assertText("32");
     }
 }
