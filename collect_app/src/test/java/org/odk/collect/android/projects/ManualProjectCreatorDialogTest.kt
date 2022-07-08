@@ -125,8 +125,8 @@ class ManualProjectCreatorDialogTest {
                 projectsRepository: ProjectsRepository,
                 currentProjectProvider: CurrentProjectProvider,
                 settingsImporter: ODKAppSettingsImporter,
-                context: Context
-            ): ProjectCreator? {
+                settingsProvider: SettingsProvider
+            ): ProjectCreator {
                 return projectCreator
             }
 

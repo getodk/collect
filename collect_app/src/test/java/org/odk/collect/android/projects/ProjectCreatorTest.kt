@@ -11,6 +11,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.ODKAppSettingsImporter
+import org.odk.collect.settings.SettingsProvider
 
 class ProjectCreatorTest {
     private val json = "{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}"
@@ -26,6 +27,7 @@ class ProjectCreatorTest {
         on { getCurrentProject() } doReturn savedProject
     }
     private var settingsImporter = mock<ODKAppSettingsImporter> {}
+    private var settingsProvider = mock<SettingsProvider> {}
 
     private lateinit var projectCreator: ProjectCreator
 
@@ -34,7 +36,8 @@ class ProjectCreatorTest {
         projectCreator = ProjectCreator(
             projectsRepository,
             currentProjectProvider,
-            settingsImporter
+            settingsImporter,
+            settingsProvider
         )
     }
 
