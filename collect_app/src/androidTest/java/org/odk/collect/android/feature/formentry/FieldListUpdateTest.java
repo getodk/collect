@@ -149,7 +149,7 @@ public class FieldListUpdateTest {
                 .answerQuestion(0, "A")
                 .assertText("Target3")
 
-                .longPressOnView("Source3")
+                .longPressOnQuestion("Source3")
                 .removeResponse()
                 .assertTextDoesNotExist("A")
                 .assertTextDoesNotExist("Target3");

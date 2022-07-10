@@ -186,13 +186,23 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new AddNewRepeatDialog(repeatName).assertOnPage();
     }
 
-    public FormEntryPage longPressOnView(int id, int index) {
+    public FormEntryPage longPressOnQuestion(int id, int index) {
         onView(withIndex(withId(id), index)).perform(longClick());
         return this;
     }
 
-    public FormEntryPage longPressOnView(String text) {
-        onView(withText(text)).perform(longClick());
+    public FormEntryPage longPressOnQuestion(String question) {
+        longPressOnQuestion(question, false);
+        return this;
+    }
+
+    public FormEntryPage longPressOnQuestion(String question, boolean isRequired) {
+        if (isRequired) {
+            onView(withText("* " + question)).perform(longClick());
+        } else {
+            onView(withText(question)).perform(longClick());
+        }
+
         return this;
     }
 
@@ -213,7 +223,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage answerQuestion(String question, String answer) {
-        assertText(question);
+        answerQuestion(question, false, answer);
+        return this;
+    }
+
+    public FormEntryPage answerQuestion(String question, boolean isRequired, String answer) {
+        if (isRequired) {
+            assertQuestionText("* " + question);
+        } else {
+            assertQuestionText(question);
+        }
+
         inputText(answer);
         closeSoftKeyboard();
         return this;

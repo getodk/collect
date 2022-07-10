@@ -23,13 +23,13 @@ public class ContextMenuTest {
                 .answerQuestion(1, "1234")
                 .assertText("TestString")
                 .assertText("1234")
-                .longPressOnView("Question1")
+                .longPressOnQuestion("Question1")
                 .removeResponse()
                 .assertTextDoesNotExist("TestString")
                 .assertText("1234")
                 .answerQuestion(0, "TestString")
                 .assertText("TestString")
-                .longPressOnView("Question2")
+                .longPressOnQuestion("Question2")
                 .removeResponse()
                 .assertTextDoesNotExist("1234")
                 .assertText("TestString");
@@ -39,7 +39,7 @@ public class ContextMenuTest {
     public void whenLongPressedOnEditText_ShouldNotRemoveAnswerOptionAppear() {
         activityTestRule.startInFormEntry()
                 .assertOnPage()
-                .longPressOnView(R.id.answer_container, 0)
+                .longPressOnQuestion(R.id.answer_container, 0)
                 .assertTextDoesNotExist(R.string.clear_answer);
     }
 }
