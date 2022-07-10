@@ -78,6 +78,14 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
     }
 
     public FormEntryPage clickOnQuestion(String questionLabel) {
+        return clickOnQuestion(questionLabel, false);
+    }
+
+    public FormEntryPage clickOnQuestion(String questionLabel, boolean isRequired) {
+        if (isRequired) {
+            questionLabel = "* " + questionLabel;
+        }
+
         onView(withId(R.id.list)).perform(RecyclerViewActions.scrollTo(hasDescendant(withText(questionLabel))));
         clickOnText(questionLabel);
         return new FormEntryPage(formName);
