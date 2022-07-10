@@ -48,6 +48,28 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage fillOut(QuestionAndAnswer... questionsAndAnswers) {
+        FormEntryPage page = this;
+
+        for (int i = 0; i < questionsAndAnswers.length; i++) {
+            QuestionAndAnswer current = questionsAndAnswers[i];
+            page = page.answerQuestion(current.question, current.isRequired, current.answer);
+
+            if (i < questionsAndAnswers.length - 1) {
+                QuestionAndAnswer next = questionsAndAnswers[i + 1];
+                page = page.swipeToNextQuestion(next.question, current.isRequired);
+            }
+        }
+
+        return page;
+    }
+
+    public MainMenuPage fillOutAndSave(QuestionAndAnswer... questionsAndAnswers) {
+        return fillOut(questionsAndAnswers)
+                .swipeToEndScreen()
+                .clickSaveAndExit();
+    }
+
     public FormEntryPage swipeToNextQuestion(String questionText) {
         return swipeToNextQuestion(questionText, false);
     }
@@ -314,6 +336,29 @@ public class FormEntryPage extends Page<FormEntryPage> {
             new OkDialog().assertOnPage()
                     .assertText(constraintText)
                     .clickOK(this);
+        }
+    }
+
+    public MainMenuPage pressBackAndIgnoreChanges() {
+        return closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>(formName, new MainMenuPage()))
+                .clickIgnoreChanges();
+    }
+
+    public static class QuestionAndAnswer {
+
+        private final String question;
+        private final String answer;
+        private final boolean isRequired;
+
+        public QuestionAndAnswer(String question, String answer) {
+            this(question, answer, false);
+        }
+
+        public QuestionAndAnswer(String question, String answer, boolean isRequired) {
+            this.question = question;
+            this.answer = answer;
+            this.isRequired = isRequired;
         }
     }
 }

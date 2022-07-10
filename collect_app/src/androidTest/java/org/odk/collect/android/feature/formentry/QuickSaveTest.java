@@ -7,8 +7,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -26,13 +25,12 @@ public class QuickSaveTest {
         rule.startAtMainMenu()
                 .copyForm("two-question.xml")
                 .startBlankForm("Two Question")
-                .answerQuestion("What is your name?", "Reuben")
-                .swipeToNextQuestion("What is your age?")
-                .answerQuestion("What is your age?", "32")
+                .fillOut(
+                        new QuestionAndAnswer("What is your name?", "Reuben"),
+                        new QuestionAndAnswer("What is your age?", "32")
+                )
                 .clickSave()
-
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question")
@@ -46,12 +44,8 @@ public class QuickSaveTest {
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
                 .answerQuestion("What is your name?", "Reuben")
-                .swipeToNextQuestion("What is your age?", true)
                 .clickSave()
-
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -65,18 +59,14 @@ public class QuickSaveTest {
                 .startBlankForm("Two Question Required")
                 .answerQuestion("What is your name?", "Reuben")
                 .clickSave()
-
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
                 .clickGoToStart()
                 .answerQuestion("What is your name?", "Another Reuben")
                 .clickSave()
-
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -88,11 +78,10 @@ public class QuickSaveTest {
         rule.startAtMainMenu()
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
-                .answerQuestion("What is your name?", "Reuben")
-                .swipeToNextQuestion("What is your age?", true)
-                .answerQuestion("What is your age?", "32")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
+                .fillOutAndSave(
+                        new QuestionAndAnswer("What is your name?", "Reuben"),
+                        new QuestionAndAnswer("What is your age?", "32", true)
+                )
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -104,9 +93,7 @@ public class QuickSaveTest {
                 .clickSave()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_error)
 
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
