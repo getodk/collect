@@ -1014,7 +1014,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * @return false if any error occurs while saving (constraint violated,
      * etc...), true otherwise.
      */
-    private boolean evaluateConstraintsAndSaveAnswersForCurrentScreen() {
+    private boolean updateAnswersForCurrentScreen(boolean evaluateConstraints) {
         FormController formController = getFormController();
         // only try to save if the current event is a question or a field-list group
         // and current view is an ODKView (occasionally we show blank views that do not have any
@@ -1023,7 +1023,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 && getCurrentViewIfODKView() != null) {
             HashMap<FormIndex, IAnswerData> answers = getAnswers();
             try {
-                FailedConstraint constraint = formController.saveAllScreenAnswers(answers, true);
+                FailedConstraint constraint = formController.saveAllScreenAnswers(answers, evaluateConstraints);
                 if (constraint != null) {
                     createConstraintToast(constraint.index, constraint.status);
                     if (formController.indexIsInFieldList() && formController.getQuestionPrompts().length > 1) {
@@ -1706,7 +1706,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                              boolean current) {
         // save current answer
         if (current) {
-            if (!evaluateConstraintsAndSaveAnswersForCurrentScreen()) {
+            if (!updateAnswersForCurrentScreen(complete)) {
                 showShortToast(this, R.string.data_saved_error);
                 return false;
             }
@@ -1791,7 +1791,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     next();
                 } else {
                     // otherwise, we can get the proper toast(s) by saving with constraint check
-                    evaluateConstraintsAndSaveAnswersForCurrentScreen();
+                    updateAnswersForCurrentScreen(true);
                 }
                 formSaveViewModel.resumeFormEntry();
                 break;
