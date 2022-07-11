@@ -267,7 +267,16 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage assertQuestion(String text) {
-        waitForText(text);
+        return assertQuestion(text, false);
+    }
+
+    public FormEntryPage assertQuestion(String text, boolean isRequired) {
+        if (isRequired) {
+            waitForText("* " + text);
+        } else {
+            waitForText(text);
+        }
+
         return this;
     }
 
@@ -328,7 +337,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new CancelRecordingDialog(formName);
     }
 
-    public void assertConstraintDisplayed(String constraintText) {
+    public FormEntryPage assertConstraintDisplayed(String constraintText) {
         // Constraints warnings show as dialogs in Android 11+
         if (Build.VERSION.SDK_INT < 30) {
             checkIsToastWithMessageDisplayed(constraintText);
@@ -337,6 +346,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
                     .assertText(constraintText)
                     .clickOK(this);
         }
+
+        return this;
     }
 
     public MainMenuPage pressBackAndIgnoreChanges() {

@@ -39,11 +39,12 @@ public class QuickSaveTest {
     }
 
     @Test
-    public void whenFillingForm_withViolatedConstraints_clickingSaveIcon_savesCurrentAnswers() {
+    public void whenFillingForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_savesCurrentAnswers() {
         rule.startAtMainMenu()
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
                 .answerQuestion("What is your name?", "Reuben")
+                .swipeToNextQuestion("What is your age?", true)
                 .clickSave()
                 .pressBackAndIgnoreChanges()
 
@@ -53,7 +54,7 @@ public class QuickSaveTest {
     }
 
     @Test
-    public void whenEditingAnANonFinalizedForm_withViolatedConstraints_clickingSaveIcon_savesCurrentAnswers() {
+    public void whenEditingAnANonFinalizedForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_savesCurrentAnswers() {
         rule.startAtMainMenu()
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
@@ -65,6 +66,7 @@ public class QuickSaveTest {
                 .clickOnForm("Two Question Required")
                 .clickGoToStart()
                 .answerQuestion("What is your name?", "Another Reuben")
+                .swipeToNextQuestion("What is your age?", true)
                 .clickSave()
                 .pressBackAndIgnoreChanges()
 
@@ -74,7 +76,7 @@ public class QuickSaveTest {
     }
 
     @Test
-    public void whenEditingAFinalizedForm_withViolatedConstraints_clickingSaveIcon_showsError() {
+    public void whenEditingAFinalizedForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_showsError() {
         rule.startAtMainMenu()
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
@@ -93,6 +95,34 @@ public class QuickSaveTest {
                 .clickSave()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_error)
 
+                .pressBackAndIgnoreChanges()
+
+                .clickEditSavedForm(1)
+                .clickOnForm("Two Question Required")
+                .assertText("Reuben");
+    }
+
+    @Test
+    public void whenEditingAFinalizedForm_withViolatedConstraintsOnAnotherScreen_clickingSaveIcon_showsConstraintViolation() {
+        rule.startAtMainMenu()
+                .copyForm("two-question-required.xml")
+                .startBlankForm("Two Question Required")
+                .fillOutAndSave(
+                        new QuestionAndAnswer("What is your name?", "Reuben"),
+                        new QuestionAndAnswer("What is your age?", "32", true)
+                )
+
+                .clickEditSavedForm(1)
+                .clickOnForm("Two Question Required")
+                .clickGoToStart()
+                .answerQuestion("What is your name?", "Another Reuben")
+                .swipeToNextQuestion("What is your age?", true)
+                .longPressOnQuestion("What is your age?", true)
+                .removeResponse()
+                .swipeToPreviousQuestion("What is your name?")
+                .clickSave()
+                .assertConstraintDisplayed("Sorry, this response is required!")
+                .assertQuestion("What is your age?", true)
                 .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
