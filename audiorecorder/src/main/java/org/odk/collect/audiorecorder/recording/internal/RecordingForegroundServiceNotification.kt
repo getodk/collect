@@ -21,7 +21,7 @@ internal class RecordingForegroundServiceNotification(private val service: Servi
     private val notificationBuilder = NotificationCompat.Builder(service, NOTIFICATION_CHANNEL)
         .setContentTitle(service.getLocalizedString(R.string.recording))
         .setContentText(formatLength(0))
-        .setSmallIcon(R.drawable.ic_baseline_mic_24)
+        .setSmallIcon(R.drawable.ic_notification_small)
         .setContentIntent(PendingIntent.getActivity(service, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE))
         .setPriority(NotificationCompat.PRIORITY_LOW)
 
