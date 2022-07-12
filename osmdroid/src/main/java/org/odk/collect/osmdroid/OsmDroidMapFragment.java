@@ -805,7 +805,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 map.getOverlays().remove(marker);
             }
             markers.clear();
-            update();
         }
 
         public List<MapPoint> getPoints() {
