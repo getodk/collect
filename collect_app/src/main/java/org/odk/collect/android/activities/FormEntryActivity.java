@@ -133,7 +133,6 @@ import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.javarosawrapper.FormController.FailedConstraint;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -1007,42 +1006,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Attempt to save the answer(s) in the current screen to into the data
-     * model.
-     *
-     * @return false if any error occurs while saving (constraint violated,
-     * etc...), true otherwise.
-     */
-    private boolean updateAnswersForCurrentScreen(boolean evaluateConstraints) {
-        FormController formController = getFormController();
-        // only try to save if the current event is a question or a field-list group
-        // and current view is an ODKView (occasionally we show blank views that do not have any
-        // controls to save data from)
-        if (formController != null && formController.currentPromptIsQuestion()
-                && getCurrentViewIfODKView() != null) {
-            HashMap<FormIndex, IAnswerData> answers = getAnswers();
-            try {
-                FailedConstraint constraint = formController.saveAllScreenAnswers(answers, evaluateConstraints);
-                if (constraint != null) {
-                    createConstraintToast(constraint.index, constraint.status);
-                    if (formController.indexIsInFieldList() && formController.getQuestionPrompts().length > 1) {
-                        getCurrentViewIfODKView().highlightWidget(constraint.index);
-                    }
-                    return false;
-                }
-            } catch (JavaRosaException | RepeatsInFieldListException e) {
-                if (e instanceof JavaRosaException) {
-                    Timber.e(e);
-                }
-                createErrorDialog(e.getMessage(), false);
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     // The method saves questions one by one in order to support calculations in field-list groups
     private void saveAnswersForFieldList(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
         FormController formController = getFormController();
@@ -1706,7 +1669,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                              boolean current) {
         // save current answer
         if (current) {
-            if (!updateAnswersForCurrentScreen(complete)) {
+            if (!formEntryViewModel.updateAnswersForScreen(getAnswers(), complete)) {
                 showShortToast(this, R.string.data_saved_error);
                 return false;
             }
@@ -1791,7 +1754,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     next();
                 } else {
                     // otherwise, we can get the proper toast(s) by saving with constraint check
-                    updateAnswersForCurrentScreen(true);
+                    formEntryViewModel.updateAnswersForScreen(getAnswers(), true);
                 }
                 formSaveViewModel.resumeFormEntry();
                 break;

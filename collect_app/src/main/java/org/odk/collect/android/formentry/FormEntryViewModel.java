@@ -205,7 +205,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         return updateAnswersForScreen(answers, false);
     }
 
-    private boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
+    public boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
         if (formController == null) {
             return false;
         }
