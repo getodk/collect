@@ -98,5 +98,6 @@ class ValidatorTest {
         assertFalse(Validator.isUrlValid("1964thetribute.com"))
         assertFalse(Validator.isUrlValid("http:/www.example.com"))
         assertFalse(Validator.isUrlValid("http:www.example.com"))
+        assertFalse(Validator.isUrlValid("https:///."))
     }
 }
