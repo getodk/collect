@@ -15,10 +15,13 @@
  */
 package org.odk.collect.androidshared.utils
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class ValidatorTest {
     @Test
     fun emailValidationTestCase() {
@@ -65,7 +68,6 @@ class ValidatorTest {
         assertTrue(Validator.isUrlValid("https://example.com/foo/bar"))
         assertTrue(Validator.isUrlValid("http://example.com/foo/bar"))
         assertTrue(Validator.isUrlValid("http://www.example.com?foo=BaR"))
-        assertTrue(Validator.isUrlValid("http://www.example.com#fooBaR"))
         assertTrue(Validator.isUrlValid("http://www.example.com"))
         assertTrue(Validator.isUrlValid("http://www.example.com:8080"))
         assertTrue(Validator.isUrlValid("http://www.example.com:8080/foo/bar"))
@@ -78,6 +80,7 @@ class ValidatorTest {
         assertTrue(Validator.isUrlValid("https://example.com/foo/bar"))
         assertTrue(Validator.isUrlValid("http://عمان.icom.museum"))
         assertTrue(Validator.isUrlValid("http://www.example.com/foo/bar?a=b&c=d"))
+        assertFalse(Validator.isUrlValid("http://www.example.com#fooBaR"))
         assertFalse(Validator.isUrlValid("http://"))
         assertFalse(Validator.isUrlValid("example.com"))
         assertFalse(Validator.isUrlValid("EXAMPLE.COM"))
