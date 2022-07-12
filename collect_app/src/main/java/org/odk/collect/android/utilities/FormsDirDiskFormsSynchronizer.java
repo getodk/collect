@@ -7,10 +7,10 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.shared.strings.Md5;
-import org.odk.collect.shared.strings.Validator;
 
 import java.io.File;
 import java.util.ArrayList;

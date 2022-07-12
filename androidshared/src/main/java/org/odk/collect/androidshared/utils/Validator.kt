@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.shared.strings
+package org.odk.collect.androidshared.utils
 
 import java.util.regex.Pattern
 

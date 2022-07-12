@@ -19,9 +19,9 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.shared.strings.Validator;
 
 import javax.inject.Inject;
 

@@ -48,11 +48,11 @@ import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.Md5;
-import org.odk.collect.shared.strings.Validator;
 
 import java.io.ByteArrayInputStream;
 

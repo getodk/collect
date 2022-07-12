@@ -27,12 +27,12 @@ import org.odk.collect.android.utilities.SoftKeyboardController
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.androidshared.utils.Validator
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.shared.strings.Validator
 import javax.inject.Inject
 
 class ManualProjectCreatorDialog :
