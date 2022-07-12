@@ -32,6 +32,8 @@ class SettingsImporterTest {
     private val projectsRepository = mock<ProjectsRepository> {}
     private var settingsValidator = mock<SettingsValidator> {
         on { isValid(any()) } doReturn true
+        on { isKeySupported(any(), any()) } doReturn true
+        on { isValueSupported(any(), any(), any()) } doReturn true
     }
     private val projectDetailsCreator = mock<ProjectDetailsCreator> {
         on { createProjectFromDetails() } doReturn Project.DEMO_PROJECT
@@ -69,8 +71,56 @@ class SettingsImporterTest {
     }
 
     @Test
-    fun forSettingsKeysNotINJSON_savesDefaults() {
+    fun `unsupported settings should be ignored`() {
+        whenever(settingsValidator.isKeySupported(AppConfigurationKeys.GENERAL, "key3")).thenReturn(false)
+        whenever(settingsValidator.isKeySupported(AppConfigurationKeys.ADMIN, "key3")).thenReturn(false)
+
+        val json = emptySettingsObject()
+            .put(
+                AppConfigurationKeys.GENERAL,
+                JSONObject().put("key3", "foo")
+            )
+            .put(
+                AppConfigurationKeys.ADMIN,
+                JSONObject().put("key3", 5)
+            )
+
+        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
+
+        assertThat(generalSettings.contains("key3"), `is`(false))
+        assertThat(adminSettings.contains("key3"), `is`(false))
+    }
+
+    @Test
+    fun `for supported settings that do not exist in json save defaults`() {
         assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
+        assertSettings(
+            generalSettings,
+            "key1", "default",
+            "key2", true
+        )
+        assertSettings(
+            adminSettings,
+            "key1", 5
+        )
+    }
+
+    @Test
+    fun forSettingsNotSupported_savesDefaults() {
+        whenever(settingsValidator.isValueSupported(AppConfigurationKeys.GENERAL, "key1", "unsupported_value")).thenReturn(false)
+        whenever(settingsValidator.isValueSupported(AppConfigurationKeys.ADMIN, "key1", 6)).thenReturn(false)
+
+        val json = emptySettingsObject()
+            .put(
+                AppConfigurationKeys.GENERAL,
+                JSONObject().put("key1", "unsupported_value")
+            )
+            .put(
+                AppConfigurationKeys.ADMIN,
+                JSONObject().put("key1", 6)
+            )
+
+        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
         assertSettings(
             generalSettings,
             "key1", "default",
@@ -103,17 +153,6 @@ class SettingsImporterTest {
             adminSettings,
             "key1", 5
         )
-    }
-
-    @Test
-    fun removesUnknownKeys() {
-        val json = emptySettingsObject()
-            .put(
-                AppConfigurationKeys.GENERAL,
-                JSONObject().put("unknown_key", "value")
-            )
-        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
-        assertThat(generalSettings.contains("unknown_key"), `is`(false))
     }
 
     @Test // Migrations might add/rename/move keys
@@ -258,8 +297,7 @@ class SettingsImporterTest {
     }
 
     private fun emptySettings(): String {
-        return emptySettingsObject()
-            .toString()
+        return emptySettingsObject().toString()
     }
 
     private fun emptySettingsObject(): JSONObject {

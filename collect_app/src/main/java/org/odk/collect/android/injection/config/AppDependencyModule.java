@@ -450,10 +450,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ProjectCreator providesProjectCreator(ProjectsRepository projectsRepository,
-                                                 CurrentProjectProvider currentProjectProvider, ODKAppSettingsImporter settingsImporter,
-                                                 Context context) {
-        return new ProjectCreator(projectsRepository, currentProjectProvider, settingsImporter);
+    public ProjectCreator providesProjectCreator(ProjectsRepository projectsRepository, CurrentProjectProvider currentProjectProvider,
+                                                 ODKAppSettingsImporter settingsImporter, SettingsProvider settingsProvider) {
+        return new ProjectCreator(projectsRepository, currentProjectProvider, settingsImporter, settingsProvider);
     }
 
     @Provides

@@ -11,6 +11,8 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.ODKAppSettingsImporter
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.shared.settings.Settings
 
 class ProjectCreatorTest {
     private val json = "{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}"
@@ -27,6 +29,13 @@ class ProjectCreatorTest {
     }
     private var settingsImporter = mock<ODKAppSettingsImporter> {}
 
+    private var unProtectedSettings = mock<Settings>()
+    private var protectedSettings = mock<Settings>()
+    private var settingsProvider = mock<SettingsProvider> {
+        on { getUnprotectedSettings("1") } doReturn unProtectedSettings
+        on { getProtectedSettings("1") } doReturn protectedSettings
+    }
+
     private lateinit var projectCreator: ProjectCreator
 
     @Before
@@ -34,7 +43,8 @@ class ProjectCreatorTest {
         projectCreator = ProjectCreator(
             projectsRepository,
             currentProjectProvider,
-            settingsImporter
+            settingsImporter,
+            settingsProvider
         )
     }
 
@@ -66,6 +76,16 @@ class ProjectCreatorTest {
 
         projectCreator.createNewProject(json)
         verify(projectsRepository).delete(savedProject.uuid)
+    }
+
+    @Test
+    fun `When importing settings failed should prefs be cleared`() {
+        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(false)
+
+        projectCreator.createNewProject(json)
+
+        verify(unProtectedSettings).clear()
+        verify(protectedSettings).clear()
     }
 
     @Test

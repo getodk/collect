@@ -31,12 +31,11 @@ import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory
+import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
-import org.odk.collect.projects.ProjectsRepository
-import org.odk.collect.settings.ODKAppSettingsImporter
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -99,7 +98,12 @@ class QrCodeProjectCreatorDialogTest {
         scenario.onFragment {
             onView(withText(R.string.configure_manually)).inRoot(isDialog())
                 .perform(scrollTo(), click())
-            assertThat(it.activity!!.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name), `is`(notNullValue()))
+            assertThat(
+                it.activity!!.supportFragmentManager.findFragmentByTag(
+                    ManualProjectCreatorDialog::class.java.name
+                ),
+                `is`(notNullValue())
+            )
         }
     }
 
@@ -108,21 +112,20 @@ class QrCodeProjectCreatorDialogTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
                 val barcodeResult = mock<BarcodeResult> {
-                    `when`(it.text).thenReturn("eJxLy88HAAKCAUU=")
+                    `when`(it.text).thenReturn(
+                        CompressionUtils.compress(
+                            "{\n" +
+                                "  \"general\": {\n" +
+                                "  },\n" +
+                                "  \"admin\": {\n" +
+                                "  }\n" +
+                                "}"
+                        )
+                    )
                 }
 
                 return mock {
                     `when`(it.waitForBarcode(any())).thenReturn(MutableLiveData(barcodeResult))
-                }
-            }
-            override fun providesProjectCreator(
-                projectsRepository: ProjectsRepository,
-                currentProjectProvider: CurrentProjectProvider,
-                settingsImporter: ODKAppSettingsImporter,
-                context: Context
-            ): ProjectCreator? {
-                return mock {
-                    `when`(it.createNewProject("foo")).thenReturn(true)
                 }
             }
         })
@@ -143,25 +146,23 @@ class QrCodeProjectCreatorDialogTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
                 val barcodeResult = mock<BarcodeResult> {
-                    `when`(it.text).thenReturn("%")
+                    `when`(it.text).thenReturn(CompressionUtils.compress("{*}"))
                 }
 
                 return mock {
                     `when`(it.waitForBarcode(any())).thenReturn(MutableLiveData(barcodeResult))
                 }
             }
-            override fun providesProjectCreator(
-                projectsRepository: ProjectsRepository,
-                currentProjectProvider: CurrentProjectProvider,
-                settingsImporter: ODKAppSettingsImporter,
-                context: Context
-            ): ProjectCreator? {
-                return projectCreator
-            }
         })
 
         launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
-        assertThat(ShadowToast.getTextOfLatestToast(), `is`(ApplicationProvider.getApplicationContext<Context>().getString(R.string.invalid_qrcode)))
+        assertThat(
+            ShadowToast.getTextOfLatestToast(),
+            `is`(
+                ApplicationProvider.getApplicationContext<Context>()
+                    .getString(R.string.invalid_qrcode)
+            )
+        )
         verifyNoInteractions(projectCreator)
     }
 }
