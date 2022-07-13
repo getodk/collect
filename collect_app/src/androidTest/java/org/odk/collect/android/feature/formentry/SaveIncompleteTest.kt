@@ -47,7 +47,7 @@ class SaveIncompleteTest {
     }
 
     @Test
-    fun whenEditingAFinalizedForm_viewingSaveIncompleteQuestion_whenConstrainsAreViolated_savesCurrentAnswers() {
+    fun whenEditingAFinalizedForm_viewingSaveIncompleteQuestion_savesCurrentAnswers_andUnfinalizesForm() {
         rule.startAtMainMenu()
             .copyForm("two-question-save-incomplete-required.xml")
             .startBlankForm("Two Question Save Incomplete Required")
@@ -55,6 +55,32 @@ class SaveIncompleteTest {
                 QuestionAndAnswer("What is your name?", "Dez"),
                 QuestionAndAnswer("[saveIncomplete] What is your age?", "56", true)
             )
+            .assertNumberOfFinalizedForms(1)
+
+            .clickEditSavedForm(1)
+            .clickOnForm("Two Question Save Incomplete Required")
+            .clickGoToStart()
+            .answerQuestion("What is your name?", "Meg")
+            .swipeToNextQuestion("[saveIncomplete] What is your age?", true)
+            .pressBackAndIgnoreChanges()
+
+            .assertNumberOfFinalizedForms(0)
+            .clickEditSavedForm(1)
+            .clickOnForm("Two Question Save Incomplete Required")
+            .assertText("Meg")
+            .assertText("56")
+    }
+
+    @Test
+    fun whenEditingAFinalizedForm_viewingSaveIncompleteQuestion_whenConstrainsAreViolated_savesCurrentAnswers_andUnfinalizesForm() {
+        rule.startAtMainMenu()
+            .copyForm("two-question-save-incomplete-required.xml")
+            .startBlankForm("Two Question Save Incomplete Required")
+            .fillOutAndSave(
+                QuestionAndAnswer("What is your name?", "Dez"),
+                QuestionAndAnswer("[saveIncomplete] What is your age?", "56", true)
+            )
+            .assertNumberOfFinalizedForms(1)
 
             .clickEditSavedForm(1)
             .clickOnForm("Two Question Save Incomplete Required")
@@ -66,6 +92,7 @@ class SaveIncompleteTest {
             .swipeToNextQuestion("[saveIncomplete] What is your age?")
             .pressBackAndIgnoreChanges()
 
+            .assertNumberOfFinalizedForms(0)
             .clickEditSavedForm(1)
             .clickOnForm("Two Question Save Incomplete Required")
             .assertText("Bradley")
