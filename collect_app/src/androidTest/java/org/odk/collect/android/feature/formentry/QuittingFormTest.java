@@ -135,7 +135,8 @@ public class QuittingFormTest {
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben");
+                .assertText("Reuben")
+                .assertText("32");
     }
 
     @Test
@@ -165,6 +166,7 @@ public class QuittingFormTest {
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
-                .assertText("Reuben");
+                .assertText("Reuben")
+                .assertText("32");
     }
 }
