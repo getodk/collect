@@ -37,56 +37,52 @@
         app:layout_constraintTop_toBottomOf="@id/guideline_top"
         tools:text="Name" />
 
-    <FrameLayout
-        android:id="@id/action_container"
+    <TextView
+        android:id="@+id/info"
+        style="?textAppearanceBody2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/color_on_surface_medium_emphasis"
         app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/name">
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tools:text="Info" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?colorOnPrimary"
-            app:chipBackgroundColor="?colorSecondary"
-            app:chipEndPadding="@dimen/margin_small"
-            app:chipIconTint="?colorOnPrimary"
-            app:iconStartPadding="@dimen/margin_small"
-            tools:text="Action"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/info"
-            style="?textAppearanceBody2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginVertical="@dimen/margin_small"
-            android:textColor="?colorOnSurface"
-            tools:text="Info"
-            tools:visibility="gone" />
-
-    </FrameLayout>
+    <com.google.android.material.chip.Chip
+        android:id="@+id/action"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:textColor="?colorOnPrimary"
+        app:chipBackgroundColor="?colorSecondary"
+        app:chipEndPadding="@dimen/margin_large"
+        app:chipIconSize="20dp"
+        app:chipIconTint="?colorOnPrimary"
+        app:iconStartPadding="@dimen/margin_standard"
+        app:layout_constraintStart_toEndOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/info"
+        app:textStartPadding="@dimen/margin_small"
+        tools:chipIcon="@drawable/ic_delete"
+        tools:text="Action"
+        tools:visibility="visible" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_small"
-        android:background="?colorPrimary"
-        app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/action_container" />
+        android:alpha="0.12"
+        android:background="?colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/action" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/properties"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/action_container" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

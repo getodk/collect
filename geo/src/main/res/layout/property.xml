@@ -11,9 +11,11 @@
         android:id="@+id/icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginStart="@dimen/margin_standard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorPrimary" />
 
     <TextView
         android:id="@+id/text"
