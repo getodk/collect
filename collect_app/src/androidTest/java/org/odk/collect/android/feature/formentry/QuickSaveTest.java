@@ -54,7 +54,7 @@ public class QuickSaveTest {
     }
 
     @Test
-    public void whenEditingAnANonFinalizedForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_savesCurrentAnswers() {
+    public void whenEditingANonFinalizedForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_savesCurrentAnswers() {
         rule.startAtMainMenu()
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
