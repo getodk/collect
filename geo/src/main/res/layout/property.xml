@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_goneMarginStart="0dp"
+        app:layout_goneMarginStart="@dimen/margin_standard"
         tools:text="Status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
