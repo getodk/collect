@@ -20,7 +20,6 @@ import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
 import static org.odk.collect.geo.GeoActivityUtils.requireLocationPermissions;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +29,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
@@ -55,8 +57,6 @@ import timber.log.Timber;
  */
 public class GeoPointMapActivity extends LocalizedActivity {
 
-    public static final String MAP_CENTER_KEY = "map_center";
-    public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINT_KEY = "point";
 
     public static final String IS_DRAGGED_KEY = "is_dragged";
@@ -122,6 +122,12 @@ public class GeoPointMapActivity extends LocalizedActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
+                .forClass(MapFragment.class, () -> (Fragment) mapFragmentFactory.createMapFragment())
+                .build()
+        );
+
         requireLocationPermissions(this);
 
         previousState = savedInstanceState;
@@ -143,9 +149,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
         placeMarkerButton = findViewById(R.id.place_marker);
         zoomButton = findViewById(R.id.zoom);
 
-        Context context = getApplicationContext();
-        mapFragmentFactory.createMapFragment(context)
-            .addTo(this.getSupportFragmentManager(), R.id.map_container, this::initMap, this::finish);
+        MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
+        mapFragment.init(this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -159,8 +164,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             }
             return;
         }
-        state.putParcelable(MAP_CENTER_KEY, map.getCenter());
-        state.putDouble(MAP_ZOOM_KEY, map.getZoom());
+
         state.putParcelable(POINT_KEY, map.getMarkerPoint(featureId));
 
         // Flags
@@ -310,13 +314,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
         intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
         intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false);
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false);
-
-        // Restore the rest of the UI state.
-        MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
-        Double mapZoom = state.getDouble(MAP_ZOOM_KEY);
-        if (mapCenter != null) {
-            map.zoomToPoint(mapCenter, mapZoom, false);
-        }
 
         placeMarkerButton.setEnabled(state.getBoolean(PLACE_MARKER_BUTTON_ENABLED_KEY, false));
         zoomButton.setEnabled(state.getBoolean(ZOOM_BUTTON_ENABLED_KEY, false));

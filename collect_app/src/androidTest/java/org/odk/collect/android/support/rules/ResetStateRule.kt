@@ -13,8 +13,9 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.views.DecoratedBarcodeView
 import org.odk.collect.androidshared.data.getState
-import org.odk.collect.androidshared.ui.ToastUtils.recordToasts
+import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.material.BottomSheetBehavior
 import java.io.File
 import java.io.IOException
 
@@ -47,7 +48,8 @@ private class ResetStateStatement(
     private fun setTestState() {
         MultiClickGuard.test = true
         DecoratedBarcodeView.test = true
-        recordToasts = true
+        ToastUtils.recordToasts = true
+        BottomSheetBehavior.DRAGGING_ENABLED = false
     }
 
     private fun clearDisk(component: AppDependencyComponent) {

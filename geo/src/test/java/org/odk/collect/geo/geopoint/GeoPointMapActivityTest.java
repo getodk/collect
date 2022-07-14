@@ -25,10 +25,10 @@ import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyModule;
 import org.odk.collect.geo.R;
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
-import org.odk.collect.maps.MapFragmentFactory;
-import org.odk.collect.maps.MapPoint;
 import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.geo.support.RobolectricApplication;
+import org.odk.collect.maps.MapFragmentFactory;
+import org.odk.collect.maps.MapPoint;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
@@ -52,7 +52,7 @@ public class GeoPointMapActivityTest {
                     @NonNull
                     @Override
                     public MapFragmentFactory providesMapFragmentFactory() {
-                        return context -> mapFragment;
+                        return () -> mapFragment;
                     }
 
                     @NonNull
@@ -67,6 +67,7 @@ public class GeoPointMapActivityTest {
     @Test
     public void shouldReturnPointFromSecondLocationFix() {
         ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launch(GeoPointMapActivity.class);
+        mapFragment.ready();
 
         // The very first fix is ignored.
         mapFragment.setLocationProvider("GPS");
@@ -97,6 +98,8 @@ public class GeoPointMapActivityTest {
     @Test
     public void mapFragmentRetainMockAccuracy_isFalse() {
         launcherRule.launch(GeoPointMapActivity.class);
+        mapFragment.ready();
+
         assertThat(mapFragment.isRetainMockAccuracy(), is(false));
     }
 
@@ -105,10 +108,14 @@ public class GeoPointMapActivityTest {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointMapActivity.class);
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true);
         launcherRule.launch(intent);
+        mapFragment.ready();
+
         assertThat(mapFragment.isRetainMockAccuracy(), is(true));
 
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, false);
         launcherRule.launch(intent);
+        mapFragment.ready();
+
         assertThat(mapFragment.isRetainMockAccuracy(), is(false));
     }
 }

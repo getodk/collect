@@ -37,7 +37,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -99,6 +98,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Inject
     SettingsProvider settingsProvider;
 
+    private final MapFragmentDelegate mapFragmentDelegate = new MapFragmentDelegate(
+            this,
+            () -> mapConfigurator,
+            () -> settingsProvider.getUnprotectedSettings(),
+            this::onConfigChanged
+    );
+
     private MapView map;
     private ReadyListener readyListener;
     private PointListener clickListener;
@@ -115,19 +121,17 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private WebMapService webMapService;
     private File referenceLayerFile;
     private TilesOverlay referenceOverlay;
-    private MapFragmentDelegate mapFragmentDelegate;
+    private boolean hasCenter;
 
     @Override
-    public void addTo(
-            FragmentManager fragmentManager, int containerId,
-            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+    public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         this.readyListener = readyListener;
-        // If the containing activity is being re-created upon screen rotation,
-        // the FragmentManager will have also re-created a copy of the previous
-        // OsmDroidMapFragment.  We don't want these useless copies of old fragments
-        // to linger, so the following line calls .replace() instead of .add().
-        fragmentManager
-                .beginTransaction().replace(containerId, this).commit();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mapFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Override
@@ -135,8 +139,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         super.onAttach(context);
         OsmDroidDependencyComponent component = ((OsmDroidDependencyComponentProvider) context.getApplicationContext()).getOsmDroidDependencyComponent();
         component.inject(this);
-
-        mapFragmentDelegate = new MapFragmentDelegate(mapConfigurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override
@@ -161,6 +163,18 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     public void onStop() {
         super.onStop();
         mapFragmentDelegate.onStop();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapFragmentDelegate.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onDestroy() {
+        clearFeatures();  // prevent a memory leak due to refs held by markers
+        super.onDestroy();
     }
 
     @Override
@@ -198,6 +212,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
+                mapFragmentDelegate.onReady();
                 readyListener.onReady(this);
             }
         }, 100);
@@ -219,6 +234,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 map.getController().setCenter(toGeoPoint(center));
             }
         }
+
+        hasCenter = true;
     }
 
     @Override
@@ -240,6 +257,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             map.getController().setZoom((int) Math.round(zoom));
             map.getController().setCenter(toGeoPoint(center));
         }
+
+        hasCenter = true;
     }
 
     @Override
@@ -268,6 +287,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 new Handler().postDelayed(() -> map.zoomToBoundingBox(box, animate), 100);
             }
         }
+
+        hasCenter = true;
     }
 
     @Override
@@ -363,6 +384,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void setRetainMockAccuracy(boolean retainMockAccuracy) {
         locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
+    @Override
+    public boolean hasCenter() {
+        return hasCenter;
     }
 
     @Override
@@ -779,7 +805,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 map.getOverlays().remove(marker);
             }
             markers.clear();
-            update();
         }
 
         public List<MapPoint> getPoints() {

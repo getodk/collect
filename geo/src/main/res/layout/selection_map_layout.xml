@@ -27,12 +27,13 @@
             android:padding="4dp"
             android:textColor="#FFFFFF" />
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/geometry_status"
-            android:layout_below="@id/title" />
+            android:layout_below="@id/title"
+            android:name="org.odk.collect.maps.MapFragment"/>
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
             android:id="@+id/new_item"

@@ -1,6 +1,5 @@
 package org.odk.collect.mapbox
 
-import android.content.Context
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.location.LocationListener
 import com.mapbox.android.core.location.LocationEngineProvider
@@ -99,7 +97,14 @@ class MapboxMapFragment :
     private var clientWantsLocationUpdates = false
     private var offlineLayerPosition = -1
     private val locationCallback = MapboxLocationCallback(this)
-    private var mapFragmentDelegate: MapFragmentDelegate? = null
+    private var mapFragmentDelegate = MapFragmentDelegate(
+        this,
+        { MapboxMapConfigurator() },
+        { settingsProvider.getUnprotectedSettings() },
+        this::onConfigChanged
+    )
+
+    private var hasCenter = false
 
     private val settingsProvider: SettingsProvider by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(SettingsProvider::class.java)
@@ -109,13 +114,7 @@ class MapboxMapFragment :
         (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(ReferenceLayerRepository::class.java)
     }
 
-    override fun addTo(
-        fragmentManager: FragmentManager,
-        containerId: Int,
-        readyListener: ReadyListener?,
-        errorListener: ErrorListener?
-    ) {
-
+    override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
         mapReadyListener = readyListener
 
         // Mapbox SDK only knows how to fetch tiles via HTTP. If we want it to
@@ -127,20 +126,17 @@ class MapboxMapFragment :
         } catch (e: IOException) {
             Timber.e(e, "Could not start the TileHttpServer")
         }
+    }
 
-        // If the containing activity is being re-created upon screen rotation, the FragmentManager
-        // will have also re-created a copy of the previous fragment. We don't want these useless
-        // copies of old fragments to linger, so the following line calls .replace() instead of .add().
-        fragmentManager
-            .beginTransaction()
-            .replace(containerId, this)
-            .commitNow()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mapFragmentDelegate.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         mapView = MapView(inflater.context).apply {
             scalebar.enabled = false
@@ -172,27 +168,16 @@ class MapboxMapFragment :
         // If the screen is rotated before the map is ready, this fragment could already be detached,
         // which makes it unsafe to use. Only call the ReadyListener if this fragment is still attached.
         if (mapReadyListener != null && activity != null) {
+            mapFragmentDelegate.onReady()
             mapReadyListener!!.onReady(this)
         }
 
         return mapView
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-        val configurator = MapboxMapConfigurator()
-
-        mapFragmentDelegate = MapFragmentDelegate(
-            configurator,
-            settingsProvider.getUnprotectedSettings(),
-            this::onConfigChanged
-        )
-    }
-
     override fun onStart() {
         super.onStart()
-        mapFragmentDelegate?.onStart()
+        mapFragmentDelegate.onStart()
     }
 
     override fun onResume() {
@@ -206,8 +191,13 @@ class MapboxMapFragment :
     }
 
     override fun onStop() {
-        mapFragmentDelegate?.onStop()
+        mapFragmentDelegate.onStop()
         super.onStop()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapFragmentDelegate.onSaveInstanceState(outState)
     }
 
     override fun onDestroy() {
@@ -241,6 +231,8 @@ class MapboxMapFragment :
         center?.let {
             moveOrAnimateCamera(it, animate)
         }
+
+        hasCenter = true
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
@@ -251,12 +243,14 @@ class MapboxMapFragment :
         center?.let {
             moveOrAnimateCamera(it, animate, zoom)
         }
+
+        hasCenter = true
     }
 
     override fun zoomToBoundingBox(
         mapPoints: Iterable<MapPoint>?,
         scaleFactor: Double,
-        animate: Boolean
+        animate: Boolean,
     ) {
         mapPoints?.let {
             val points = mapPoints.map {
@@ -281,13 +275,15 @@ class MapboxMapFragment :
                 )
             }
         }
+
+        hasCenter = true
     }
 
     override fun addMarker(
         point: MapPoint,
         draggable: Boolean,
         iconAnchor: String,
-        iconDrawableId: Int
+        iconDrawableId: Int,
     ): Int {
         val featureId = nextFeatureId++
         features[featureId] = MarkerFeature(
@@ -412,6 +408,10 @@ class MapboxMapFragment :
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
         locationCallback.setRetainMockAccuracy(retainMockAccuracy)
+    }
+
+    override fun hasCenter(): Boolean {
+        return hasCenter
     }
 
     override fun onMapClick(point: Point): Boolean {

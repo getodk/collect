@@ -1,6 +1,5 @@
 package org.odk.collect.android.geo
 
-import android.content.Context
 import org.odk.collect.android.application.MapboxClassInstanceCreator
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
@@ -15,7 +14,7 @@ import org.odk.collect.shared.settings.Settings
 
 class MapFragmentFactoryImpl(private val settings: Settings) : MapFragmentFactory {
 
-    override fun createMapFragment(context: Context): MapFragment {
+    override fun createMapFragment(): MapFragment {
         return when {
             isBasemapOSM(settings.getString(KEY_BASEMAP_SOURCE)) -> OsmDroidMapFragment()
             settings.getString(KEY_BASEMAP_SOURCE) == BASEMAP_SOURCE_MAPBOX -> MapboxClassInstanceCreator.createMapboxMapFragment() ?: GoogleMapFragment()

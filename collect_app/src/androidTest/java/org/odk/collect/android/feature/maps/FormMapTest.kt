@@ -33,7 +33,7 @@ class FormMapTest {
     private val testDependencies = object : TestDependencies() {
         override fun providesMapFragmentFactory(settingsProvider: SettingsProvider): MapFragmentFactory {
             return object : MapFragmentFactory {
-                override fun createMapFragment(context: Context): MapFragment {
+                override fun createMapFragment(): MapFragment {
                     return mapFragment
                 }
             }

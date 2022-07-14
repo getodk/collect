@@ -25,8 +25,6 @@ public class FormMapPage extends Page<FormMapPage> {
 
     public FormMapPage selectForm(FakeClickableMapFragment mapFragment, int index) {
         mapFragment.clickOnFeature(index);
-
-        waitForText(getTranslatedString(R.string.review_data)); // Wait for animation to end
         return this;
     }
 

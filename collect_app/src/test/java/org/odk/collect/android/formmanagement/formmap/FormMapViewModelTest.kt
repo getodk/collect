@@ -100,7 +100,7 @@ class FormMapViewModelTest {
         )
 
         val viewModel = createAndLoadViewModel(form)
-        assertThat(viewModel.getMappableItems().value.size, equalTo(1))
+        assertThat(viewModel.getMappableItems().value!!.size, equalTo(1))
 
         val expectedItem = MappableSelectItem.WithAction(
             instanceWithPoint.dbId,
@@ -123,7 +123,7 @@ class FormMapViewModelTest {
                 application.getString(R.string.review_data)
             )
         )
-        assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
 
     @Test
@@ -167,7 +167,7 @@ class FormMapViewModelTest {
                 application.getString(R.string.review_data)
             )
         )
-        assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
 
     @Test
@@ -213,7 +213,7 @@ class FormMapViewModelTest {
                 application.getString(R.string.view_data)
             )
         )
-        assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
 
     @Test
@@ -254,7 +254,7 @@ class FormMapViewModelTest {
             ),
             info = formatDate(R.string.deleted_on_date_at_time, 123L),
         )
-        assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
 
     @Test
@@ -298,7 +298,7 @@ class FormMapViewModelTest {
                 application.getString(R.string.view_data)
             )
         )
-        assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
 
     @Test
@@ -342,7 +342,7 @@ class FormMapViewModelTest {
                 application.getString(R.string.view_data)
             )
         )
-        assertThat(viewModel.getMappableItems().value[0], equalTo(expectedItem))
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
 
     @Test
@@ -392,7 +392,7 @@ class FormMapViewModelTest {
         val items = viewModel.getMappableItems().value
 
         assertThat(
-            (items[0] as MappableSelectItem.WithInfo).info,
+            (items!![0] as MappableSelectItem.WithInfo).info,
             equalTo(application.getString(R.string.cannot_edit_completed_form))
         )
 
@@ -408,7 +408,7 @@ class FormMapViewModelTest {
     }
 
     @Test
-    fun `is loading is true while forms and instances are being fetched`() {
+    fun `is loading is true and items is null while forms and instances are being fetched`() {
         val form = formsRepository.save(
             FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
                 .build()
@@ -416,9 +416,11 @@ class FormMapViewModelTest {
 
         val viewModel = createViewModel(form)
         assertThat(viewModel.isLoading().value, equalTo(false))
+        assertThat(viewModel.getMappableItems().value, equalTo(null))
 
         viewModel.load()
         assertThat(viewModel.isLoading().value, equalTo(true))
+        assertThat(viewModel.getMappableItems().value, equalTo(null))
 
         scheduler.runBackground()
         assertThat(viewModel.isLoading().value, equalTo(false))

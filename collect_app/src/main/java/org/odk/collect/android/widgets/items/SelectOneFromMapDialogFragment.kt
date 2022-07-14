@@ -93,7 +93,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         val binding = SelectOneFromMapDialogLayoutBinding.inflate(inflater)
         return binding.root
@@ -130,12 +130,12 @@ internal class SelectChoicesMapData(
     private val resources: Resources,
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
-    private val selectedIndex: Int?
+    private val selectedIndex: Int?,
 ) : SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
     private val itemCount = MutableNonNullLiveData(0)
-    private val items = MutableNonNullLiveData(emptyList<MappableSelectItem>())
+    private val items = MutableLiveData<List<MappableSelectItem>?>(null)
     private val isLoading = MutableNonNullLiveData(true)
     private val invalidGeometry = MutableLiveData<InvalidGeometry?>(null)
 
@@ -164,7 +164,7 @@ internal class SelectChoicesMapData(
 
     private fun loadItemsFromChoices(
         selectChoices: MutableList<SelectChoice>,
-        prompt: FormEntryPrompt
+        prompt: FormEntryPrompt,
     ): Result<List<MappableSelectItem>, InvalidGeometry> {
         return selectChoices.foldIndexed(emptyList<MappableSelectItem>()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild("geometry")
@@ -228,7 +228,7 @@ internal class SelectChoicesMapData(
         return itemCount
     }
 
-    override fun getMappableItems(): NonNullLiveData<List<MappableSelectItem>> {
+    override fun getMappableItems(): LiveData<List<MappableSelectItem>?> {
         return items
     }
 

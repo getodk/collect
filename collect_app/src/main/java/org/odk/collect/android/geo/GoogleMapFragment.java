@@ -26,8 +26,6 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
-import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -55,6 +53,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.location.LocationClient;
+import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
@@ -91,6 +90,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Inject
     SettingsProvider settingsProvider;
 
+    private final MapFragmentDelegate mapFragmentDelegate = new MapFragmentDelegate(
+            this,
+            this::createConfigurator,
+            () -> {
+                return settingsProvider.getUnprotectedSettings();
+            },
+            this::onConfigChanged
+    );
+
     private GoogleMap map;
     private Marker locationCrosshairs;
     private Circle accuracyCircle;
@@ -110,43 +118,31 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private int mapType;
     private File referenceLayerFile;
     private TileOverlay referenceOverlay;
+    private boolean hasCenter;
 
-    private MapFragmentDelegate mapFragmentDelegate;
-
-    // During Robolectric tests, Google Play Services is unavailable; sadly, the
-    // "map" field will be null and many operations will need to be stubbed out.
-    @VisibleForTesting public static boolean testMode;
-
+    @Override
     @SuppressLint("MissingPermission") // Permission checks for location services handled in widgets
-    @Override public void addTo(
-            FragmentManager fragmentManager, int containerId,
-            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
-        // If the containing activity is being re-created upon screen rotation,
-        // the FragmentManager will have also re-created a copy of the previous
-        // GoogleMapFragment.  We don't want these useless copies of old fragments
-        // to linger, so the following line calls .replace() instead of .add().
-        fragmentManager
-            .beginTransaction().replace(containerId, this).commitNow();
-        getMapAsync((GoogleMap map) -> {
-            if (map == null) {
+    public void init(@Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+        getMapAsync((GoogleMap googleMap) -> {
+            if (googleMap == null) {
                 ToastUtils.showShortToast(requireContext(), R.string.google_play_services_error_occured);
                 if (errorListener != null) {
                     errorListener.onError();
                 }
                 return;
             }
-            this.map = map;
-            map.setMapType(mapType);
-            map.setOnMapClickListener(this);
-            map.setOnMapLongClickListener(this);
-            map.setOnMarkerClickListener(this);
-            map.setOnPolylineClickListener(this);
-            map.setOnMarkerDragListener(this);
-            map.getUiSettings().setCompassEnabled(true);
+            this.map = googleMap;
+            googleMap.setMapType(mapType);
+            googleMap.setOnMapClickListener(this);
+            googleMap.setOnMapLongClickListener(this);
+            googleMap.setOnMarkerClickListener(this);
+            googleMap.setOnPolylineClickListener(this);
+            googleMap.setOnMarkerDragListener(this);
+            googleMap.getUiSettings().setCompassEnabled(true);
             // Don't show the blue dot on the map; we'll draw crosshairs instead.
-            map.setMyLocationEnabled(false);
-            map.setMinZoomPreference(1);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+            googleMap.setMyLocationEnabled(false);
+            googleMap.setMinZoomPreference(1);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                 toLatLng(INITIAL_CENTER), INITIAL_ZOOM));
             loadReferenceOverlay();
 
@@ -154,30 +150,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
             // could already be detached, which makes it unsafe to use.  Only
             // call the ReadyListener if this fragment is still attached.
             if (readyListener != null && getActivity() != null) {
+                mapFragmentDelegate.onReady();
                 readyListener.onReady(this);
             }
         });
+    }
 
-        // In Robolectric tests, getMapAsync() never gets around to calling its
-        // callback; we have to invoke the ready listener directly.
-        if (testMode && readyListener != null) {
-            readyListener.onReady(this);
-        }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mapFragmentDelegate.onCreate(savedInstanceState);
     }
 
     @Override public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-
-        GoogleMapConfigurator configurator = new GoogleMapConfigurator(
-                KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
-                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
-        );
-
-        mapFragmentDelegate = new MapFragmentDelegate(configurator, settingsProvider.getUnprotectedSettings(), this::onConfigChanged);
     }
 
     @Override public void onStart() {
@@ -200,6 +187,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
         mapFragmentDelegate.onStop();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mapFragmentDelegate.onSaveInstanceState(outState);
+    }
+
     @Override public void onDestroy() {
         MapsMarkerCache.clearCache();
         super.onDestroy();
@@ -220,6 +213,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (center != null) {
             moveOrAnimateCamera(CameraUpdateFactory.newLatLng(toLatLng(center)), animate);
         }
+
+        hasCenter = true;
     }
 
     @Override public double getZoom() {
@@ -241,6 +236,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             moveOrAnimateCamera(
                 CameraUpdateFactory.newLatLngZoom(toLatLng(center), (float) zoom), animate);
         }
+        hasCenter = true;
     }
 
     @Override public void zoomToBoundingBox(Iterable<MapPoint> points, double scaleFactor, boolean animate) {
@@ -265,6 +261,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 }, 100);
             }
         }
+
+        hasCenter = true;
     }
 
     @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
@@ -346,6 +344,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override
     public void setRetainMockAccuracy(boolean retainMockAccuracy) {
         locationClient.setRetainMockAccuracy(retainMockAccuracy);
+    }
+
+    @Override
+    public boolean hasCenter() {
+        return hasCenter;
     }
 
     @Override public void setGpsLocationEnabled(boolean enable) {
@@ -670,6 +673,16 @@ public class GoogleMapFragment extends SupportMapFragment implements
             map.setMapType(mapType);
             loadReferenceOverlay();
         }
+    }
+
+    private MapConfigurator createConfigurator() {
+        return new GoogleMapConfigurator(
+                KEY_GOOGLE_MAP_STYLE, R.string.basemap_source_google,
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, R.string.streets),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, R.string.terrain),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, R.string.hybrid),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, R.string.satellite)
+        );
     }
 
     /**

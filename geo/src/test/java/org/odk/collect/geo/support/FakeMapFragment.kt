@@ -1,33 +1,37 @@
 package org.odk.collect.geo.support
 
-import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
 
-class FakeMapFragment : MapFragment {
+class FakeMapFragment : Fragment(), MapFragment {
 
+    private var clickListener: PointListener? = null
     private var gpsLocationListener: PointListener? = null
     private var locationProvider: String? = null
     private var retainMockAccuracy = false
     private var center: MapPoint? = null
     private var zoom = 0.0
     private var zoomBoundingBox: Pair<Iterable<MapPoint>, Double>? = null
-
+    private var readyListener: ReadyListener? = null
     private var gpsLocation: MapPoint? = null
     private var featureClickListener: FeatureListener? = null
     private val markers: MutableList<MapPoint> = ArrayList()
     private val markerIcons: MutableList<Int?> = ArrayList()
+    private var hasCenter = false
 
-    override fun addTo(
-        fragmentManager: FragmentManager,
-        containerId: Int,
+    override fun init(
         readyListener: ReadyListener?,
-        errorListener: MapFragment.ErrorListener?
+        errorListener: MapFragment.ErrorListener?,
     ) {
-        readyListener!!.onReady(this)
+        this.readyListener = readyListener
+    }
+
+    fun ready() {
+        readyListener?.onReady(this)
     }
 
     override fun getCenter(): MapPoint {
@@ -40,35 +44,42 @@ class FakeMapFragment : MapFragment {
 
     override fun setCenter(center: MapPoint?, animate: Boolean) {
         this.center = center
+        hasCenter = true
     }
 
     override fun zoomToPoint(center: MapPoint?, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center
         this.zoom = DEFAULT_POINT_ZOOM
+        hasCenter = true
     }
 
     override fun zoomToPoint(center: MapPoint?, zoom: Double, animate: Boolean) {
         zoomBoundingBox = null
         this.center = center
         this.zoom = zoom
+        hasCenter = true
     }
 
     override fun zoomToBoundingBox(
         points: Iterable<MapPoint>,
         scaleFactor: Double,
-        animate: Boolean
+        animate: Boolean,
     ) {
         center = null
         zoom = 0.0
-        zoomBoundingBox = Pair(points, scaleFactor)
+        zoomBoundingBox = Pair(
+            points.toList(), // Clone list to prevent original changing captured values
+            scaleFactor
+        )
+        hasCenter = true
     }
 
     override fun addMarker(
         point: MapPoint,
         draggable: Boolean,
         iconAnchor: String,
-        iconDrawableId: Int
+        iconDrawableId: Int,
     ): Int {
         markers.add(point)
         markerIcons.add(null)
@@ -99,7 +110,14 @@ class FakeMapFragment : MapFragment {
         markerIcons.clear()
     }
 
-    override fun setClickListener(listener: PointListener?) {}
+    override fun setClickListener(listener: PointListener?) {
+        this.clickListener = listener
+    }
+
+    fun click(point: MapPoint) {
+        clickListener?.onPoint(point)
+    }
+
     override fun setLongPressListener(listener: PointListener?) {}
     override fun setFeatureClickListener(listener: FeatureListener?) {
         featureClickListener = listener
@@ -126,6 +144,10 @@ class FakeMapFragment : MapFragment {
 
     override fun setRetainMockAccuracy(retainMockAccuracy: Boolean) {
         this.retainMockAccuracy = retainMockAccuracy
+    }
+
+    override fun hasCenter(): Boolean {
+        return hasCenter
     }
 
     fun setLocation(mapPoint: MapPoint?) {

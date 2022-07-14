@@ -25,10 +25,11 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <FrameLayout
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:name="org.odk.collect.maps.MapFragment"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:text="@string/record_geopoint"

@@ -31,11 +31,12 @@
 
     </LinearLayout>
 
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/linearlayout" />
+        android:layout_below="@+id/linearlayout"
+        android:name="org.odk.collect.maps.MapFragment"/>
 
     <ScrollView
         android:layout_width="wrap_content"
