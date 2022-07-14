@@ -4,7 +4,6 @@ import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +33,6 @@ public class ExternalAudioRecordingTest {
 
     @Rule
     public final RuleChain chain = TestRuleChain.chain()
-            .around(GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO))
             .around(new RecordedIntentsRule())
             .around(new RunnableRule(() -> {
                 // Return audio file when RECORD_SOUND_ACTION intent is sent

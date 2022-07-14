@@ -5,10 +5,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.Manifest;
-
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,7 +21,6 @@ public class SetGeopointActionTest {
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
-            .around(GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION))
             .around(rule);
 
     @Test

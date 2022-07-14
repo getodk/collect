@@ -1,8 +1,6 @@
 package org.odk.collect.android.feature.settings
 
-import android.Manifest
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.empty
@@ -24,7 +22,6 @@ class FormManagementSettingsTest {
 
     @get:Rule
     var ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
-        .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
         .around(RecordedIntentsRule())
         .around(rule)
 

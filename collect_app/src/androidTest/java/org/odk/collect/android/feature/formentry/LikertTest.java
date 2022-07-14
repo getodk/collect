@@ -14,16 +14,13 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.startsWith;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
-import android.Manifest;
-
-import androidx.test.rule.GrantPermissionRule;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.FormActivityTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 import java.util.Collections;
 
@@ -33,8 +30,7 @@ public class LikertTest {
     public FormActivityTestRule activityTestRule = new FormActivityTestRule(LIKERT_TEST_FORM, "All widgets likert icon", Collections.singletonList("famous.jpg"));
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.CAMERA))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new ResetStateRule())
             .around(activityTestRule);
 

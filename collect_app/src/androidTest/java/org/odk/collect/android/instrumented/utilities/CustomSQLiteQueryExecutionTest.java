@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.rules.RunnableRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.utilities.CustomSQLiteQueryExecutor;
 
 import java.io.File;
@@ -45,8 +46,8 @@ public class CustomSQLiteQueryExecutionTest {
     private SQLiteDatabase sqLiteDatabase;
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(new RunnableRule(() -> {
+    public RuleChain copyFormChain = TestRuleChain.chain()
+            .around(new RunnableRule(() -> {
                 try {
                     File dbPath = File.createTempFile("test", ".db");
                     dbPath.deleteOnExit();

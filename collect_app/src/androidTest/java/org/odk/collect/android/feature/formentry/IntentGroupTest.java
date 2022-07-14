@@ -37,7 +37,6 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 import static org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.ClipData;
@@ -48,7 +47,6 @@ import android.os.Environment;
 
 import androidx.core.content.FileProvider;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -74,7 +72,6 @@ public class IntentGroupTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new RecordedIntentsRule())
-            .around(GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE)) // Needed to write temp file
             .around(rule);
 
     // Verifies that a value given to the label text with form buttonText is used as the button text.

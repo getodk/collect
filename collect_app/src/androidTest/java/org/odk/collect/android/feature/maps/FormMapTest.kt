@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.maps
 
-import android.Manifest
 import android.app.Activity
 import android.app.Instrumentation
 import android.content.Context
@@ -9,7 +8,6 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -43,7 +41,6 @@ class FormMapTest {
 
     @get:Rule
     var copyFormChain: RuleChain = TestRuleChain.chain(testDependencies)
-        .around(GrantPermissionRule.grant(Manifest.permission.ACCESS_COARSE_LOCATION))
         .around(RecordedIntentsRule())
         .around(rule)
 
