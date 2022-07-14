@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
+import androidx.core.view.size
 import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.PropertyBinding
 import org.odk.collect.geo.databinding.SelectionSummarySheetLayoutBinding
@@ -19,6 +21,20 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
         SelectionSummarySheetLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
     var listener: Listener? = null
+
+    val peekHeight: Int
+        get() {
+            return when (binding.properties.size) {
+                0 -> binding.properties.top
+                1 -> binding.properties.top + binding.properties[0].bottom
+                else -> {
+                    val bottomOfFirstProp = binding.properties.top + binding.properties[0].bottom
+                    val secondPropHeight = binding.properties[1].bottom - binding.properties[1].top
+                    val enoughOfSecondPropToImplyMoreProps = (secondPropHeight / 12) * 7
+                    bottomOfFirstProp + enoughOfSecondPropToImplyMoreProps
+                }
+            }
+        }
 
     private var itemId: Long? = null
 

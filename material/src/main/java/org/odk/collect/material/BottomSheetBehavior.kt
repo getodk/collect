@@ -14,17 +14,17 @@ class BottomSheetBehavior<V : View> private constructor(private val view: V) {
 
     private val callbacks = mutableListOf<BottomSheetCallback>()
 
-    var fitToContents: Boolean = actual.isFitToContents
+    var peekHeight: Int = actual.peekHeight
         set(value) {
             if (DRAGGING_ENABLED) {
-                actual.isFitToContents = value
+                actual.peekHeight = value
             }
 
             field = value
         }
         get() {
             return if (DRAGGING_ENABLED) {
-                actual.isFitToContents
+                actual.peekHeight
             } else {
                 field
             }

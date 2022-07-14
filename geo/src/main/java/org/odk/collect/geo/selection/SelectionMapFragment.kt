@@ -7,13 +7,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HALF_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -212,7 +213,6 @@ class SelectionMapFragment(
     private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
         summarySheet = binding.summarySheet
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
-        summarySheetBehavior.fitToContents = false
         summarySheetBehavior.state = STATE_HIDDEN
 
         val onBackPressedCallback = object : OnBackPressedCallback(false) {
@@ -274,9 +274,15 @@ class SelectionMapFragment(
                 }
                 map.setMarkerIcon(featureId, item.largeIcon)
                 summarySheet.setItem(item)
-                selectedFeatureViewModel.setSelectedFeatureId(featureId)
+                summarySheet.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                    override fun onGlobalLayout() {
+                        summarySheet.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                        summarySheetBehavior.peekHeight = summarySheet.peekHeight
+                        summarySheetBehavior.state = STATE_COLLAPSED
+                    }
+                })
 
-                summarySheetBehavior.state = STATE_HALF_EXPANDED
+                selectedFeatureViewModel.setSelectedFeatureId(featureId)
             } else {
                 parentFragmentManager.setFragmentResult(
                     REQUEST_SELECT_ITEM,
