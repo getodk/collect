@@ -29,11 +29,11 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/map_container"
+            android:name="org.odk.collect.maps.MapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/geometry_status"
-            android:layout_below="@id/title"
-            android:name="org.odk.collect.maps.MapFragment"/>
+            android:layout_below="@id/title" />
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
             android:id="@+id/new_item"
@@ -95,7 +95,8 @@
     <org.odk.collect.geo.selection.SelectionSummarySheet
         android:id="@+id/summary_sheet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?colorSurface"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
 

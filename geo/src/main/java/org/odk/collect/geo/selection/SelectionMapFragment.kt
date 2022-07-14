@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HALF_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -212,6 +212,7 @@ class SelectionMapFragment(
     private fun setUpSummarySheet(binding: SelectionMapLayoutBinding) {
         summarySheet = binding.summarySheet
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
+        summarySheetBehavior.fitToContents = false
         summarySheetBehavior.state = STATE_HIDDEN
 
         val onBackPressedCallback = object : OnBackPressedCallback(false) {
@@ -275,7 +276,7 @@ class SelectionMapFragment(
                 summarySheet.setItem(item)
                 selectedFeatureViewModel.setSelectedFeatureId(featureId)
 
-                summarySheetBehavior.state = STATE_EXPANDED
+                summarySheetBehavior.state = STATE_HALF_EXPANDED
             } else {
                 parentFragmentManager.setFragmentResult(
                     REQUEST_SELECT_ITEM,

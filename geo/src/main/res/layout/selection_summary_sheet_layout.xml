@@ -7,7 +7,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?colorSurface"
         android:paddingBottom="@dimen/margin_standard">
 
         <androidx.constraintlayout.widget.Guideline
