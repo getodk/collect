@@ -14,6 +14,22 @@ class BottomSheetBehavior<V : View> private constructor(private val view: V) {
 
     private val callbacks = mutableListOf<BottomSheetCallback>()
 
+    var peekHeight: Int = actual.peekHeight
+        set(value) {
+            if (DRAGGING_ENABLED) {
+                actual.peekHeight = value
+            }
+
+            field = value
+        }
+        get() {
+            return if (DRAGGING_ENABLED) {
+                actual.peekHeight
+            } else {
+                field
+            }
+        }
+
     var state: Int = actual.state
         set(value) {
             if (DRAGGING_ENABLED) {

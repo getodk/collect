@@ -1,60 +1,44 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?colorSurface"
-    android:paddingBottom="@dimen/margin_standard">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_top"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="@dimen/margin_standard" />
+        android:paddingBottom="@dimen/margin_standard">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/margin_standard" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/margin_standard" />
-
-    <TextView
-        android:id="@+id/name"
-        style="?textAppearanceHeadline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?colorOnSurface"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/guideline_top"
-        tools:text="Name" />
-
-    <FrameLayout
-        android:id="@id/action_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/name">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/action"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?colorOnPrimary"
-            app:chipBackgroundColor="?colorSecondary"
-            app:chipEndPadding="@dimen/margin_small"
-            app:chipIconTint="?colorOnPrimary"
-            app:iconStartPadding="@dimen/margin_small"
-            tools:text="Action"
-            tools:visibility="visible" />
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/margin_standard" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/margin_standard" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/margin_standard" />
+
+        <TextView
+            android:id="@+id/name"
+            style="?textAppearanceHeadline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?colorOnSurface"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/guideline_top"
+            tools:text="Name" />
 
         <TextView
             android:id="@+id/info"
@@ -62,31 +46,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginVertical="@dimen/margin_small"
-            android:textColor="?colorOnSurface"
-            tools:text="Info"
-            tools:visibility="gone" />
+            android:textColor="@color/color_on_surface_medium_emphasis"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="Info" />
 
-    </FrameLayout>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/action"
+            android:layout_width="wrap_content"
+            android:layout_height="54dp"
+            android:textColor="?colorOnPrimary"
+            app:chipBackgroundColor="?colorSecondary"
+            app:chipEndPadding="@dimen/margin_large"
+            app:chipIconSize="20dp"
+            app:chipIconTint="?colorOnPrimary"
+            app:iconStartPadding="@dimen/margin_standard"
+            app:layout_constraintStart_toEndOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/info"
+            app:textStartPadding="@dimen/margin_small"
+            tools:chipIcon="@drawable/ic_delete"
+            tools:text="Action"
+            tools:visibility="visible" />
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/margin_small"
-        android:background="?colorPrimary"
-        app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/action_container" />
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/property_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/action" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/properties"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        app:layout_constraintStart_toEndOf="@id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@id/action_container" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/properties"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:divider="@drawable/property_divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider"
+            app:showDividers="middle" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.core.widget.NestedScrollView>
