@@ -274,11 +274,12 @@ class SelectionMapFragment(
                 }
                 map.setMarkerIcon(featureId, item.largeIcon)
                 summarySheet.setItem(item)
+
+                summarySheetBehavior.state = STATE_COLLAPSED
                 summarySheet.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
                         summarySheet.viewTreeObserver.removeOnGlobalLayoutListener(this)
                         summarySheetBehavior.peekHeight = summarySheet.peekHeight
-                        summarySheetBehavior.state = STATE_COLLAPSED
                     }
                 })
 
