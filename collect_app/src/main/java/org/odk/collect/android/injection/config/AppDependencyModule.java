@@ -417,8 +417,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Analytics analytics) {
-        return new FormEntryViewModel.Factory(System::currentTimeMillis);
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler) {
+        return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler);
     }
 
     @Provides

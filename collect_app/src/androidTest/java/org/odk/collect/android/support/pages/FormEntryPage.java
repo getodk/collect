@@ -48,6 +48,28 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage fillOut(QuestionAndAnswer... questionsAndAnswers) {
+        FormEntryPage page = this;
+
+        for (int i = 0; i < questionsAndAnswers.length; i++) {
+            QuestionAndAnswer current = questionsAndAnswers[i];
+            page = page.answerQuestion(current.question, current.isRequired, current.answer);
+
+            if (i < questionsAndAnswers.length - 1) {
+                QuestionAndAnswer next = questionsAndAnswers[i + 1];
+                page = page.swipeToNextQuestion(next.question, current.isRequired);
+            }
+        }
+
+        return page;
+    }
+
+    public MainMenuPage fillOutAndSave(QuestionAndAnswer... questionsAndAnswers) {
+        return fillOut(questionsAndAnswers)
+                .swipeToEndScreen()
+                .clickSaveAndExit();
+    }
+
     public FormEntryPage swipeToNextQuestion(String questionText) {
         return swipeToNextQuestion(questionText, false);
     }
@@ -186,13 +208,23 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new AddNewRepeatDialog(repeatName).assertOnPage();
     }
 
-    public FormEntryPage longPressOnView(int id, int index) {
+    public FormEntryPage longPressOnQuestion(int id, int index) {
         onView(withIndex(withId(id), index)).perform(longClick());
         return this;
     }
 
-    public FormEntryPage longPressOnView(String text) {
-        onView(withText(text)).perform(longClick());
+    public FormEntryPage longPressOnQuestion(String question) {
+        longPressOnQuestion(question, false);
+        return this;
+    }
+
+    public FormEntryPage longPressOnQuestion(String question, boolean isRequired) {
+        if (isRequired) {
+            onView(withText("* " + question)).perform(longClick());
+        } else {
+            onView(withText(question)).perform(longClick());
+        }
+
         return this;
     }
 
@@ -213,7 +245,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage answerQuestion(String question, String answer) {
-        assertText(question);
+        answerQuestion(question, false, answer);
+        return this;
+    }
+
+    public FormEntryPage answerQuestion(String question, boolean isRequired, String answer) {
+        if (isRequired) {
+            assertQuestionText("* " + question);
+        } else {
+            assertQuestionText(question);
+        }
+
         inputText(answer);
         closeSoftKeyboard();
         return this;
@@ -225,7 +267,16 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage assertQuestion(String text) {
-        waitForText(text);
+        return assertQuestion(text, false);
+    }
+
+    public FormEntryPage assertQuestion(String text, boolean isRequired) {
+        if (isRequired) {
+            waitForText("* " + text);
+        } else {
+            waitForText(text);
+        }
+
         return this;
     }
 
@@ -286,7 +337,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return new CancelRecordingDialog(formName);
     }
 
-    public void assertConstraintDisplayed(String constraintText) {
+    public FormEntryPage assertConstraintDisplayed(String constraintText) {
         // Constraints warnings show as dialogs in Android 11+
         if (Build.VERSION.SDK_INT < 30) {
             checkIsToastWithMessageDisplayed(constraintText);
@@ -294,6 +345,31 @@ public class FormEntryPage extends Page<FormEntryPage> {
             new OkDialog().assertOnPage()
                     .assertText(constraintText)
                     .clickOK(this);
+        }
+
+        return this;
+    }
+
+    public MainMenuPage pressBackAndIgnoreChanges() {
+        return closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>(formName, new MainMenuPage()))
+                .clickIgnoreChanges();
+    }
+
+    public static class QuestionAndAnswer {
+
+        private final String question;
+        private final String answer;
+        private final boolean isRequired;
+
+        public QuestionAndAnswer(String question, String answer) {
+            this(question, answer, false);
+        }
+
+        public QuestionAndAnswer(String question, String answer, boolean isRequired) {
+            this.question = question;
+            this.answer = answer;
+            this.isRequired = isRequired;
         }
     }
 }

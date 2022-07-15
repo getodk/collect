@@ -39,22 +39,25 @@ the License.
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <org.odk.collect.android.views.ObviousProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/appBarLayout"
-        android:layout_marginTop="-7dp"
-        android:indeterminate="true"
-        android:visibility="gone" />
-
     <FrameLayout
-        android:id="@+id/questionholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttonholder"
-        android:layout_below="@id/appBarLayout" />
+        android:layout_below="@id/appBarLayout">
+
+        <FrameLayout
+            android:id="@+id/questionholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <org.odk.collect.android.views.TransparentProgressScreen
+            android:id="@+id/loading_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </FrameLayout>
+
+
 
     <LinearLayout
         android:id="@+id/buttonholder"

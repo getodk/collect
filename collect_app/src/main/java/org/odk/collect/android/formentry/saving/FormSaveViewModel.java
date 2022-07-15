@@ -1,5 +1,9 @@
 package org.odk.collect.android.formentry.saving;
 
+import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
+import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
+import static org.odk.collect.shared.strings.StringUtils.isBlank;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,19 +18,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.savedstate.SavedStateRegistryOwner;
 
 import org.apache.commons.io.IOUtils;
-import org.javarosa.core.model.FormIndex;
-import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
-import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
-import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -36,6 +36,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.utilities.Result;
 
@@ -51,10 +52,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
-import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
-import static org.odk.collect.shared.strings.StringUtils.isBlank;
 
 public class FormSaveViewModel extends ViewModel implements MaterialProgressDialogFragment.OnCancelCallback, RequiresFormController, QuestionMediaManager {
 
@@ -116,20 +113,6 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         }
 
         formController.getAuditEventLogger().setEditing(true);
-    }
-
-    public void saveAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
-        if (formController == null) {
-            return;
-        }
-
-        try {
-            formController.saveAllScreenAnswers(answers, false);
-        } catch (JavaRosaException ignored) {
-            // ignored
-        }
-
-        formController.getAuditEventLogger().flush();
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {

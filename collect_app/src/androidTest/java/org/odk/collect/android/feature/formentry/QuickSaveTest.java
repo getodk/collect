@@ -6,10 +6,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
 
 @RunWith(AndroidJUnit4.class)
 public class QuickSaveTest {
@@ -21,81 +21,114 @@ public class QuickSaveTest {
             .around(rule);
 
     @Test
-    public void whenFillingOutNewForm_clickingSaveIcon_andIgnoringChanges_savesLatestAnswer() {
+    public void whenFillingForm_clickingSaveIcon_savesCurrentAnswers() {
         rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
+                .copyForm("two-question.xml")
+                .startBlankForm("Two Question")
+                .fillOut(
+                        new QuestionAndAnswer("What is your name?", "Reuben"),
+                        new QuestionAndAnswer("What is your age?", "32")
+                )
                 .clickSave()
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("123");
+                .clickOnForm("Two Question")
+                .assertText("Reuben")
+                .assertText("32");
     }
 
     @Test
-    public void whenFillingOutNewForm_clickingSaveIcon_makingChangesAndSaveAndExiting_savesLatestAnswer() {
+    public void whenFillingForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_savesCurrentAnswers() {
         rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
+                .copyForm("two-question-required.xml")
+                .startBlankForm("Two Question Required")
+                .answerQuestion("What is your name?", "Reuben")
+                .swipeToNextQuestion("What is your age?", true)
                 .clickSave()
-                .inputText("456")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("456");
+                .clickOnForm("Two Question Required")
+                .assertText("Reuben");
     }
 
     @Test
-    public void whenEditingForm_clickingSaveIcon_andIgnoringChanges_savesLatestAnswers() {
+    public void whenEditingANonFinalizedForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_savesCurrentAnswers() {
         rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
+                .copyForm("two-question-required.xml")
+                .startBlankForm("Two Question Required")
+                .answerQuestion("What is your name?", "Reuben")
+                .clickSave()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
-                .clickOnForm("One Question")
+                .clickOnForm("Two Question Required")
                 .clickGoToStart()
-                .inputText("456")
+                .answerQuestion("What is your name?", "Another Reuben")
+                .swipeToNextQuestion("What is your age?", true)
                 .clickSave()
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("456");
+                .clickOnForm("Two Question Required")
+                .assertText("Another Reuben");
     }
 
     @Test
-    public void whenEditingForm_clickingSaveIcon_andMakingChanges_andIgnoringChanges_savesFirstEdits() {
+    public void whenEditingAFinalizedForm_withViolatedConstraintsOnCurrentScreen_clickingSaveIcon_showsError() {
         rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .startBlankForm("One Question")
-                .inputText("123")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
+                .copyForm("two-question-required.xml")
+                .startBlankForm("Two Question Required")
+                .fillOutAndSave(
+                        new QuestionAndAnswer("What is your name?", "Reuben"),
+                        new QuestionAndAnswer("What is your age?", "32", true)
+                )
 
                 .clickEditSavedForm(1)
-                .clickOnForm("One Question")
+                .clickOnForm("Two Question Required")
                 .clickGoToStart()
-                .inputText("456")
+                .answerQuestion("What is your name?", "Another Reuben")
+                .swipeToNextQuestion("What is your age?", true)
+                .longPressOnQuestion("What is your age?", true)
+                .removeResponse()
                 .clickSave()
-                .inputText("789")
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .checkIsToastWithMessageDisplayed(R.string.data_saved_error)
+
+                .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
-                .clickOnForm("One Question")
-                .assertText("456");
+                .clickOnForm("Two Question Required")
+                .assertText("Reuben")
+                .assertText("32");
+    }
+
+    @Test
+    public void whenEditingAFinalizedForm_withViolatedConstraintsOnAnotherScreen_clickingSaveIcon_showsConstraintViolation() {
+        rule.startAtMainMenu()
+                .copyForm("two-question-required.xml")
+                .startBlankForm("Two Question Required")
+                .fillOutAndSave(
+                        new QuestionAndAnswer("What is your name?", "Reuben"),
+                        new QuestionAndAnswer("What is your age?", "32", true)
+                )
+
+                .clickEditSavedForm(1)
+                .clickOnForm("Two Question Required")
+                .clickGoToStart()
+                .answerQuestion("What is your name?", "Another Reuben")
+                .swipeToNextQuestion("What is your age?", true)
+                .longPressOnQuestion("What is your age?", true)
+                .removeResponse()
+                .swipeToPreviousQuestion("What is your name?")
+                .clickSave()
+                .assertConstraintDisplayed("Sorry, this response is required!")
+                .assertQuestion("What is your age?", true)
+                .pressBackAndIgnoreChanges()
+
+                .clickEditSavedForm(1)
+                .clickOnForm("Two Question Required")
+                .assertText("Reuben")
+                .assertText("32");
     }
 }

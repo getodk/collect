@@ -20,7 +20,7 @@ class InMemSettingsProvider : SettingsProvider {
         return settings.getOrPut("admin:$projectId") { InMemSettings() }
     }
 
-    override fun clearAll() {
+    override fun clearAll(projectIds: List<String>) {
         settings.values.forEach { it.clear() }
         settings.clear()
         metaSettings.clear()

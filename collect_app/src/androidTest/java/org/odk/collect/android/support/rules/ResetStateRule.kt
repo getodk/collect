@@ -21,7 +21,7 @@ import java.io.IOException
 
 private class ResetStateStatement(
     private val base: Statement,
-    private val appDependencyModule: AppDependencyModule? = null
+    private val appDependencyModule: AppDependencyModule? = null,
 ) : Statement() {
 
     override fun evaluate() {
@@ -62,12 +62,13 @@ private class ResetStateStatement(
     }
 
     private fun clearPrefs(component: AppDependencyComponent) {
-        component.settingsProvider().clearAll()
+        val projectIds = component.projectsRepository().getAll().map { it.uuid }
+        component.settingsProvider().clearAll(projectIds)
     }
 }
 
 class ResetStateRule @JvmOverloads constructor(
-    private val appDependencyModule: AppDependencyModule? = null
+    private val appDependencyModule: AppDependencyModule? = null,
 ) : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement =

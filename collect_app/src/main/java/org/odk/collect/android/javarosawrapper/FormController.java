@@ -725,7 +725,7 @@ public class FormController {
         public final FormIndex index;
         public final int status;
 
-        FailedConstraint(FormIndex index, int status) {
+        public FailedConstraint(FormIndex index, int status) {
             this.index = index;
             this.status = status;
         }

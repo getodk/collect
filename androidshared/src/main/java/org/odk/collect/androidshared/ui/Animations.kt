@@ -15,8 +15,8 @@ object Animations {
 
     var DISABLE_ANIMATIONS = false
 
-    fun createAlphaAnimation(
-        view: View,
+    @JvmStatic
+    fun View.createAlphaAnimation(
         startValue: Float,
         endValue: Float,
         duration: Long
@@ -24,7 +24,7 @@ object Animations {
         val animation = ValueAnimator.ofFloat(startValue, endValue)
         animation.duration = duration
         animation.addUpdateListener {
-            view.alpha = it.animatedValue as Float
+            this.alpha = it.animatedValue as Float
         }
 
         return DisableableAnimatorWrapper(animation)
