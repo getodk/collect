@@ -307,6 +307,7 @@
             <geopoint_widget_placementmap/>
             <geopoint_widget_maps/>
             <geotrace_widget/>
+            <geocompound_widget/>
             <geoshape_widget/>
             <osm_road/>
             <osm_building/>

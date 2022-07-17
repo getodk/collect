@@ -152,6 +152,10 @@ public class WidgetFactory {
                         questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry,
                                 MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider));
                         break;
+                    case Constants.DATATYPE_GEOCOMPOUND:
+                        questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry,
+                                MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider));
+                        break;
                     case Constants.DATATYPE_BARCODE:
                         if (appearance.contains("read_nfc")) {   // smap
                             questionWidget = new NfcWidget(context, questionDetails, waitingForDataRegistry);
