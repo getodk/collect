@@ -152,8 +152,8 @@ public class WidgetFactory {
                         questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry,
                                 MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider));
                         break;
-                    case Constants.DATATYPE_GEOCOMPOUND:
-                        questionWidget = new GeoTraceWidget(context, questionDetails, waitingForDataRegistry,
+                    case Constants.DATATYPE_GEOCOMPOUND:    // smap
+                        questionWidget = new GeoCompoundWidget(context, questionDetails, waitingForDataRegistry,
                                 MapProvider.getConfigurator(), new ActivityGeoDataRequester(permissionsProvider));
                         break;
                     case Constants.DATATYPE_BARCODE:
