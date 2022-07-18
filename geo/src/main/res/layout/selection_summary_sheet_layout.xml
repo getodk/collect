@@ -51,20 +51,15 @@
             app:layout_constraintTop_toBottomOf="@id/name"
             tools:text="Info" />
 
-        <com.google.android.material.chip.Chip
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/action"
+            style="@style/Widget.Material3.Button.Icon"
             android:layout_width="wrap_content"
-            android:layout_height="54dp"
+            android:layout_height="wrap_content"
             android:textColor="?colorOnPrimary"
-            app:chipBackgroundColor="?colorSecondary"
-            app:chipEndPadding="@dimen/margin_large"
-            app:chipIconSize="20dp"
-            app:chipIconTint="?colorOnPrimary"
-            app:iconStartPadding="@dimen/margin_standard"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/info"
-            app:textStartPadding="@dimen/margin_small"
-            tools:chipIcon="@drawable/ic_delete"
+            tools:icon="@drawable/ic_delete"
             tools:text="Action"
             tools:visibility="visible" />
 

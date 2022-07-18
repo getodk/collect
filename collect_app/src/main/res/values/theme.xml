@@ -46,6 +46,11 @@
         </item>
         <!--/Material theme attributes-->
 
+        <!-- Material3 attributes (needed for Material3 styles/components because theme is
+        Theme.MaterialComponents). These can be added on-demand for components that need them. -->
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
+        <!--/Material3 attributes-->
+
         <!-- Needed to customize the status bar color -->
         <item name="android:statusBarColor">?colorSurface</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/lightStatusBar</item>
