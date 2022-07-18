@@ -146,7 +146,7 @@ class SelectionSummarySheetTest {
         assertThat(selectionSummarySheet.binding.info.visibility, equalTo(View.GONE))
 
         assertThat(selectionSummarySheet.binding.action.text, equalTo("Come on in"))
-        val iconDrawable = selectionSummarySheet.binding.action.chipIcon
+        val iconDrawable = selectionSummarySheet.binding.action.icon
         assertThat(
             getCreatedFromResId(iconDrawable!!),
             equalTo(android.R.drawable.ic_btn_speak_now)
