@@ -72,7 +72,7 @@ internal class SelectionSummarySheet(context: Context, attrs: AttributeSet?) :
                 binding.action.text = item.action.text
 
                 if (item.action.icon != null) {
-                    binding.action.chipIcon = ContextCompat.getDrawable(context, item.action.icon)
+                    binding.action.icon = ContextCompat.getDrawable(context, item.action.icon)
                 }
 
                 binding.action.visibility = View.VISIBLE
