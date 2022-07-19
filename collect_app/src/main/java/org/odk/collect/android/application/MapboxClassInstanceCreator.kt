@@ -14,7 +14,7 @@ object MapboxClassInstanceCreator {
             "armeabi-v7a"
         )
 
-        return createMapboxMapFragment() != null && Build.SUPPORTED_ABIS.any(mapboxAbis::contains)
+        return createMapboxMapFragment() != null && mapboxAbis.contains(Build.SUPPORTED_ABIS.first())
     }
 
     fun createMapboxMapFragment(): MapFragment? {
