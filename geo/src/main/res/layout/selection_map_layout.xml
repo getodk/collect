@@ -67,6 +67,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
+                    android:contentDescription="@string/show_my_location"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_my_location" />
 
@@ -77,6 +78,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
+                    android:contentDescription="@string/zoom_to_fit_all"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_crop_frame" />
 
@@ -87,6 +89,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
+                    android:contentDescription="@string/layer_data_file"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_layers" />
             </LinearLayout>
