@@ -8,9 +8,10 @@
         android:id="@+id/status_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#BF000000"
+        android:background="?colorSurface"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:paddingVertical="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -19,17 +20,15 @@
             android:id="@+id/location_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="5dip"
             android:text="@string/geopoint_instruction"
-            android:textColor="#FFFFFF" />
+            android:textColor="?colorOnSurface" />
 
         <TextView
             android:id="@+id/location_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="3dip"
             android:text="@string/please_wait_long"
-            android:textColor="#FFFFFF" />
+            android:textColor="?colorOnSurface" />
 
     </LinearLayout>
 
