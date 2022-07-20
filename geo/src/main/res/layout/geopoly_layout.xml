@@ -50,7 +50,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/zoom"
-        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
@@ -62,7 +62,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/layers"
-        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
@@ -74,7 +74,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/play"
-        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
@@ -85,7 +85,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pause"
-        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
@@ -98,7 +98,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/backspace"
-        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
@@ -109,7 +109,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/clear"
-        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"

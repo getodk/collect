@@ -62,7 +62,7 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_location"
-                    style="@style/Widget.Material3.FloatingActionButton.Primary"
+                    style="@style/Widget.Material3.FloatingActionButton.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
@@ -72,7 +72,7 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_bounds"
-                    style="@style/Widget.Material3.FloatingActionButton.Primary"
+                    style="@style/Widget.Material3.FloatingActionButton.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
@@ -82,7 +82,7 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/layer_menu"
-                    style="@style/Widget.Material3.FloatingActionButton.Primary"
+                    style="@style/Widget.Material3.FloatingActionButton.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
