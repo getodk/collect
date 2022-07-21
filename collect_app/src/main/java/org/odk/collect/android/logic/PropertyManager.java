@@ -19,11 +19,12 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_USERNAME;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USERNAME;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
-import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
@@ -56,8 +57,7 @@ public class PropertyManager implements IPropertyManager {
 
     private final Map<String, String> properties = new HashMap<>();
 
-    @Inject
-    RxEventBus eventBus;
+    private MutableLiveData<Boolean> isPhoneNumberRequired = new MutableLiveData<>();
 
     @Inject
     DeviceDetailsProvider deviceDetailsProvider;
@@ -78,8 +78,7 @@ public class PropertyManager implements IPropertyManager {
         reload();
     }
 
-    public PropertyManager(RxEventBus rxEventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
-        this.eventBus = rxEventBus;
+    public PropertyManager(PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
         this.permissionsProvider = permissionsProvider;
         this.deviceDetailsProvider = deviceDetailsProvider;
         this.settingsProvider = settingsProvider;
@@ -134,7 +133,7 @@ public class PropertyManager implements IPropertyManager {
     @Override
     public String getSingularProperty(String propertyName) {
         if (!permissionsProvider.isReadPhoneStatePermissionGranted() && isPropertyDangerous(propertyName)) {
-            eventBus.post(new ReadPhoneStatePermissionRxEvent());
+            isPhoneNumberRequired.postValue(true);
         }
 
         // for now, all property names are in english...
@@ -166,6 +165,10 @@ public class PropertyManager implements IPropertyManager {
     @Override
     public List<IPropertyRules> getRules() {
         return null;
+    }
+
+    public LiveData<Boolean> isPhoneNumberRequired() {
+        return isPhoneNumberRequired;
     }
 
     public static String withUri(String name) {

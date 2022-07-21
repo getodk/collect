@@ -14,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.events.RxEventBus
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.logic.PropertyManager
@@ -48,7 +47,6 @@ class ProjectResetterTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesPropertyManager(
-                eventBus: RxEventBus?,
                 permissionsProvider: PermissionsProvider?,
                 deviceDetailsProvider: DeviceDetailsProvider?,
                 settingsProvider: SettingsProvider?

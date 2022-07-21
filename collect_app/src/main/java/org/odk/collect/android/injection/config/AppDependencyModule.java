@@ -46,7 +46,6 @@ import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.draw.PenColorPickerViewModel;
-import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
@@ -163,12 +162,6 @@ public class AppDependencyModule {
     @Provides
     Context context(Application application) {
         return application;
-    }
-
-    @Provides
-    @Singleton
-    RxEventBus provideRxEventBus() {
-        return new RxEventBus();
     }
 
     @Provides
@@ -308,8 +301,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public PropertyManager providesPropertyManager(RxEventBus eventBus, PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
-        return new PropertyManager(eventBus, permissionsProvider, deviceDetailsProvider, settingsProvider);
+    public PropertyManager providesPropertyManager(PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
+        return new PropertyManager(permissionsProvider, deviceDetailsProvider, settingsProvider);
     }
 
     @Provides

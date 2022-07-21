@@ -360,13 +360,6 @@ dependencies {
     implementation Dependencies.dagger_android_support
     annotationProcessor Dependencies.dagger_android_processor
 
-    // RxJava 2:
-    implementation Dependencies.rxandroid
-    implementation Dependencies.rxjava
-
-    // Better "Subjects" for Rx:
-    implementation Dependencies.rxrelay
-
     implementation Dependencies.armen101_audio_recorder_view
 
     implementation(Dependencies.mp4parser_muxer) {
