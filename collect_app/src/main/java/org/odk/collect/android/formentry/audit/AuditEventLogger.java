@@ -8,6 +8,8 @@ import android.location.Location;
 import android.os.Looper;
 import android.os.SystemClock;
 
+import androidx.annotation.Nullable;
+
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -15,7 +17,6 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
 
 /**

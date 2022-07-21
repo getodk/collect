@@ -17,24 +17,13 @@ import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 
 import java.util.Date;
 
-import io.reactivex.disposables.CompositeDisposable;
-
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED;
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
-    private final CompositeDisposable compositeDisposable;
-
     public InstanceUploaderAdapter(Context context, Cursor cursor) {
         super(context, cursor);
         Collect.getInstance().getComponent().inject(this);
-        compositeDisposable = new CompositeDisposable();
-    }
-
-    public void onDestroy() {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-        }
     }
 
     @Override
