@@ -220,8 +220,8 @@ class BlankFormListViewModel(
 
     private fun sortAndFilter() {
         _formsToDisplay.value = when (sortingOrder) {
-            0 -> _allForms.value.sortedBy { it.formName }
-            1 -> _allForms.value.sortedByDescending { it.formName }
+            0 -> _allForms.value.sortedBy { it.formName.lowercase() }
+            1 -> _allForms.value.sortedByDescending { it.formName.lowercase() }
             2 -> _allForms.value.sortedByDescending { it.dateOfCreation }
             3 -> _allForms.value.sortedBy { it.dateOfCreation }
             else -> { _allForms.value }
