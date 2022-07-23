@@ -285,19 +285,33 @@ class MapboxMapFragment :
         iconAnchor: String,
         iconDrawableId: Int,
     ): Int {
-        val featureId = nextFeatureId++
-        features[featureId] = MarkerFeature(
-            requireContext(),
-            pointAnnotationManager,
-            featureId,
-            featureClickListener,
-            featureDragEndListener,
-            point,
-            draggable,
-            iconAnchor,
-            iconDrawableId
-        )
-        return featureId
+        return addMarkers(
+            listOf(MapFragment.MarkerDescription(point, draggable, iconAnchor, iconDrawableId))
+        ).first()
+    }
+
+    override fun addMarkers(markers: List<MapFragment.MarkerDescription>): List<Int> {
+        val pointAnnotations =
+            MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
+
+        val featureIds = mutableListOf<Int>()
+        pointAnnotations.forEach {
+            val featureId = nextFeatureId++
+            val markerFeature = MarkerFeature(
+                requireContext(),
+                pointAnnotationManager,
+                it,
+                featureId,
+                featureClickListener,
+                featureDragEndListener,
+                MapPoint(it.point.latitude(), it.point.longitude())
+            )
+
+            featureIds.add(featureId)
+            features[featureId] = markerFeature
+        }
+
+        return featureIds
     }
 
     override fun setMarkerIcon(featureId: Int, drawableId: Int) {

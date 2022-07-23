@@ -43,6 +43,12 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return id
     }
 
+    override fun addMarkers(markers: List<MapFragment.MarkerDescription>): List<Int> {
+        return markers.map {
+            addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDrawableId)
+        }
+    }
+
     override fun setMarkerIcon(featureId: Int, drawableId: Int) {}
 
     override fun getMarkerPoint(featureId: Int): MapPoint {

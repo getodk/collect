@@ -344,11 +344,19 @@ class SelectionMapFragment(
         map.clearFeatures()
         itemsByFeatureId.clear()
 
-        for (item in items) {
-            val point = MapPoint(item.latitude, item.longitude)
-            val featureId = map.addMarker(point, false, MapFragment.BOTTOM, item.smallIcon)
+        val markerDescriptions = items.map {
+            MapFragment.MarkerDescription(
+                MapPoint(it.latitude, it.longitude),
+                false,
+                MapFragment.BOTTOM,
+                it.smallIcon
+            )
+        }
+
+        val featureIds = map.addMarkers(markerDescriptions)
+        items.zip(featureIds).forEach { (item, featureId) ->
             itemsByFeatureId[featureId] = item
-            points.add(point)
+            points.add(MapPoint(item.latitude, item.longitude))
         }
     }
 
