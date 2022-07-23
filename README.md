@@ -167,7 +167,7 @@ Certain functions in ODK Collect depend on cloud services that require API keys 
     ```
   4. Create a new secret token with the "DOWNLOADS:READ" secret scope and then add it to `secrets.properties` as `MAPBOX_DOWNLOADS_TOKEN`.
 
-*Note: Mapbox will not be available as an option in compiled versions of Collect unless you follow the steps above. Mapbox will also not be available on x86 devices as the native libraries are excluded to reduce the APK size.*
+*Note: Mapbox will not be available as an option in compiled versions of Collect unless you follow the steps above. Mapbox will also not be available on x86 devices as the native libraries are excluded to reduce the APK size. If you need to use an x86 device, you can force the build to include x86 libs by include the `x86Libs` Gradle parameter. For example, to build a debug APK with x86 libs: `./gradlew assembleDebug -Px86Libs`.*
 
 ## Debugging JavaRosa
 

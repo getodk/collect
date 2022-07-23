@@ -181,12 +181,14 @@ android {
         // abiFilters to exclude any ABIs; but to keep the APK slim, we include
         // the Mapbox native library only for 32-bit and 64-bit ARM devices and
         // omit it for all X86 devices.
-        exclude 'lib/x86/libmapbox-maps.so'
-        exclude 'lib/x86/libmapbox-common.so'
-        exclude 'lib/x86/libc++_shared.so'
-        exclude 'lib/x86_64/libmapbox-maps.so'
-        exclude 'lib/x86_64/libmapbox-common.so'
-        exclude 'lib/x86_64/libc++_shared.so'
+        if (!project.hasProperty("x86Libs")) {
+            exclude 'lib/x86/libmapbox-maps.so'
+            exclude 'lib/x86/libmapbox-common.so'
+            exclude 'lib/x86/libc++_shared.so'
+            exclude 'lib/x86_64/libmapbox-maps.so'
+            exclude 'lib/x86_64/libmapbox-common.so'
+            exclude 'lib/x86_64/libc++_shared.so'
+        }
     }
 
     compileOptions {
