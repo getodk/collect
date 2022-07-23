@@ -45,6 +45,10 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
+    override fun addMarkers(markers: MutableList<MapFragment.MarkerDescription>?): MutableList<Int> {
+        TODO("Not yet implemented")
+    }
+
     override fun setMarkerIcon(featureId: Int, drawableId: Int) {
     }
 
