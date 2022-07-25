@@ -13,9 +13,7 @@
  */
 package org.odk.collect.android.activities
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.widget.Toolbar
 import androidx.activity.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -42,11 +40,6 @@ class DeleteSavedFormActivity : CollectAbstractActivity() {
         setContentView(binding.root)
         setupAppBarLayout(this, getString(R.string.manage_files))
         setUpViewPager()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        findViewById<Toolbar>(R.id.toolbar).apply { setNavigationIcon(R.drawable.notes) }
     }
 
     private fun setUpViewPager() {
