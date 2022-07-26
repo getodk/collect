@@ -13,7 +13,7 @@ class RetryOnDeviceErrorRule : TestRule {
                 try {
                     base.evaluate()
                 } catch (e: Throwable) {
-                    if (e is PerformException && e.message == "Error performing 'click (after 3 attempts)' on view 'unknown'") {
+                    if (e is PerformException && e.cause?.message == "Error performing 'click (after 3 attempts)' on view 'unknown'") {
                         Timber.e("RetryOnDeviceErrorRule: Retrying due to mysterious PerformException!")
                         base.evaluate()
                     } else if (e::class.simpleName == "RootViewWithoutFocusException") {
