@@ -12,7 +12,7 @@ class RetryOnDeviceErrorRule : TestRule {
             override fun evaluate() {
                 try {
                     base.evaluate()
-                } catch (e: Throwable) {
+                } catch (e: Exception) {
                     if (e is PerformException && e.cause?.message == "Error performing 'click (after 3 attempts)' on view 'unknown'") {
                         Timber.e("RetryOnDeviceErrorRule: Retrying due to mysterious PerformException!")
                         base.evaluate()
