@@ -14,6 +14,7 @@ import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
+import org.odk.collect.android.support.pages.ServerSettingsPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.androidtest.RecordedIntentsRule;
@@ -73,7 +74,7 @@ public class ServerSettingsTest {
                 .clickSettings()
                 .clickServerSettings()
                 .clickOnServerType()
-                .clickOnString(R.string.server_platform_google_sheets)
+                .clickOnButtonInDialog(R.string.server_platform_google_sheets, new ServerSettingsPage())
                 .assertText(R.string.selected_google_account_text)
                 .assertText(R.string.google_sheets_url);
     }

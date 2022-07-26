@@ -4,6 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.pages.FormManagementPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.AccessControlPage;
@@ -146,8 +147,8 @@ public class ResetApplicationTest {
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .openFormManagement()
-                .clickOnAutoSend()
-                .clickOnString(R.string.wifi_autosend)
+                .clickAutoSend()
+                .clickOnButtonInDialog(R.string.wifi_autosend, new FormManagementPage())
                 .assertText(R.string.wifi_autosend)
                 .clickOnDefaultToFinalized()
                 .pressBack(new ProjectSettingsPage())
