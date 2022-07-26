@@ -1,12 +1,10 @@
 package org.odk.collect.android.feature.settings;
 
-import android.Manifest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 import androidx.work.WorkManager;
 
 import org.junit.After;
@@ -19,16 +17,14 @@ import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.CountingTaskExecutorIdlingResource;
-import org.odk.collect.android.support.rules.IdlingResourceRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.support.rules.RunnableRule;
-import org.odk.collect.android.support.SchedulerIdlingResource;
 import org.odk.collect.android.support.StubBarcodeViewDecoder;
 import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.QRCodePage;
+import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.Scheduler;
 
@@ -45,14 +41,9 @@ public class ConfigureWithQRCodeTest {
     private final StubQRCodeGenerator stubQRCodeGenerator = new StubQRCodeGenerator();
     private final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
     private final TestScheduler testScheduler = new TestScheduler();
-    private final CountingTaskExecutorIdlingResource countingTaskExecutorIdlingResource = new CountingTaskExecutorIdlingResource();
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(
-                    Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.CAMERA
-            ))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new ResetStateRule(new AppDependencyModule() {
 
                 @Override
@@ -70,9 +61,6 @@ public class ConfigureWithQRCodeTest {
                     return testScheduler;
                 }
             }))
-            .around(countingTaskExecutorIdlingResource)
-            .around(new IdlingResourceRule(new SchedulerIdlingResource(testScheduler)))
-            .around(new IdlingResourceRule(countingTaskExecutorIdlingResource))
             .around(new RunnableRule(stubQRCodeGenerator::setup))
             .around(rule);
 

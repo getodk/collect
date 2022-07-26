@@ -1,9 +1,6 @@
 package org.odk.collect.android.regression;
 
-import android.Manifest;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,7 +25,6 @@ public class AboutPageTest {
 
     @Rule
     public RuleChain ruleChain = TestRuleChain.chain()
-            .around(GrantPermissionRule.grant(Manifest.permission.READ_PHONE_STATE))
             .around(rule);
 
     @Test

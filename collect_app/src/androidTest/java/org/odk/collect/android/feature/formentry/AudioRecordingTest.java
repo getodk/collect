@@ -2,11 +2,9 @@ package org.odk.collect.android.feature.formentry;
 
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
-import android.Manifest;
 import android.app.Application;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,7 +51,6 @@ public class AudioRecordingTest {
 
     @Rule
     public final RuleChain chain = TestRuleChain.chain(testDependencies)
-            .around(GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO))
             .around(rule);
 
     @Test

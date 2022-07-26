@@ -1,10 +1,8 @@
 package org.odk.collect.android.feature.formmanagement
 
-import android.Manifest
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.rule.GrantPermissionRule
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
@@ -30,7 +28,6 @@ class PreviouslyDownloadedOnlyTest {
 
     @get:Rule
     var ruleChain: RuleChain = TestRuleChain.chain(testDependencies)
-        .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
         .around(notificationDrawerRule)
         .around(rule)
 

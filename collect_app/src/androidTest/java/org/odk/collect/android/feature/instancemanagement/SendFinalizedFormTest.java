@@ -1,9 +1,6 @@
 package org.odk.collect.android.feature.instancemanagement;
 
-import android.Manifest;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,7 +24,6 @@ public class SendFinalizedFormTest {
 
     @Rule
     public RuleChain chain = TestRuleChain.chain(testDependencies)
-            .around(GrantPermissionRule.grant(Manifest.permission.GET_ACCOUNTS))
             .around(new RecordedIntentsRule())
             .around(rule);
 

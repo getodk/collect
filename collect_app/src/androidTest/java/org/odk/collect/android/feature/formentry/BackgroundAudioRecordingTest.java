@@ -14,7 +14,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -89,7 +88,6 @@ public class BackgroundAudioRecordingTest {
 
     @Rule
     public final RuleChain chain = TestRuleChain.chain(testDependencies)
-            .around(GrantPermissionRule.grant(Manifest.permission.RECORD_AUDIO))
             .around(rule);
 
     @Test

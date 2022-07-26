@@ -5,10 +5,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.Manifest;
-
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.rule.GrantPermissionRule;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,6 +13,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.FormActivityTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 public class LocationAuditTest {
     private static final String LOCATION_AUDIT_FORM = "location-audit.xml";
@@ -23,8 +21,7 @@ public class LocationAuditTest {
     public FormActivityTestRule rule = new FormActivityTestRule(LOCATION_AUDIT_FORM, "Audit with Location");
 
     @Rule
-    public RuleChain copyFormChain = RuleChain
-            .outerRule(GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION))
+    public RuleChain copyFormChain = TestRuleChain.chain()
             .around(new ResetStateRule())
             .around(rule);
 
