@@ -31,6 +31,25 @@ object MapUtils {
         )
     }
 
+    fun createPointAnnotations(
+        context: Context,
+        pointAnnotationManager: PointAnnotationManager,
+        markerFeatures: List<MapFragment.MarkerDescription>,
+    ): List<PointAnnotation> {
+        val pointAnnotationOptionsList = markerFeatures.map {
+            PointAnnotationOptions()
+                .withPoint(Point.fromLngLat(it.point.lon, it.point.lat, it.point.alt))
+                .withIconImage(MapsMarkerCache.getMarkerBitmap(it.iconDrawableId, context))
+                .withIconSize(1.0)
+                .withSymbolSortKey(10.0)
+                .withDraggable(it.isDraggable)
+                .withTextOpacity(0.0)
+                .withIconAnchor(getIconAnchorValue(it.iconAnchor))
+        }
+
+        return pointAnnotationManager.create(pointAnnotationOptionsList)
+    }
+
     private fun getIconAnchorValue(@MapFragment.IconAnchor iconAnchor: String): IconAnchor {
         return when (iconAnchor) {
             MapFragment.BOTTOM -> IconAnchor.BOTTOM

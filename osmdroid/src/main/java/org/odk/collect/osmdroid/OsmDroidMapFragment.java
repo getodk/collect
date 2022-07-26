@@ -299,6 +299,17 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
+    public List<Integer> addMarkers(List<MarkerDescription> markers) {
+        List<Integer> featureIds = new ArrayList<>();
+        for (MarkerDescription markerDescription : markers) {
+            int featureId = addMarker(markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDrawableId());
+            featureIds.add(featureId);
+        }
+
+        return featureIds;
+    }
+
+    @Override
     public void setMarkerIcon(int featureId, int drawableId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {

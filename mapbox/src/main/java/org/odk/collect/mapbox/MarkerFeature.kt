@@ -11,26 +11,16 @@ import org.odk.collect.maps.MapsMarkerCache
 
 /** A point annotation that can optionally be dragged by the user. */
 class MarkerFeature(
-    private val context: Context,
+    val context: Context,
     private val pointAnnotationManager: PointAnnotationManager,
-    private val featureId: Int,
+    private val pointAnnotation: PointAnnotation,
+    val featureId: Int,
     private val featureClickListener: MapFragment.FeatureListener?,
     private val featureDragEndListener: MapFragment.FeatureListener?,
-    var point: MapPoint,
-    draggable: Boolean,
-    @MapFragment.IconAnchor iconAnchor: String,
-    iconDrawableId: Int
+    var point: MapPoint
 ) : MapFeature {
     private val clickListener = ClickListener()
     private val dragListener = DragListener()
-    private var pointAnnotation = MapUtils.createPointAnnotation(
-        pointAnnotationManager,
-        point,
-        draggable,
-        iconAnchor,
-        iconDrawableId,
-        context
-    )
 
     init {
         pointAnnotationManager.apply {
