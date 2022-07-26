@@ -230,8 +230,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage removeResponse() {
         onView(withText(R.string.clear_answer)).perform(click());
-        onView(withText(R.string.discard_answer)).perform(click());
-        return this;
+        return clickOnButtonInDialog(R.string.discard_answer, this);
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
