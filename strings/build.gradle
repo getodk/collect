@@ -33,7 +33,6 @@ android {
 
 dependencies {
     implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.kotlin_stdlib_jdk7
     implementation Dependencies.androidx_appcompat
 
     testImplementation Dependencies.junit

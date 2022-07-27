@@ -280,7 +280,6 @@ dependencies {
     }
 
     implementation Dependencies.androidx_startup
-    implementation Dependencies.androidx_legacy_support
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_browser
     implementation Dependencies.androidx_appcompat
@@ -357,7 +356,6 @@ dependencies {
 
     // Dagger Android:
     implementation Dependencies.dagger_android
-    implementation Dependencies.dagger_android_support
     annotationProcessor Dependencies.dagger_android_processor
 
     implementation Dependencies.armen101_audio_recorder_view
@@ -394,7 +392,6 @@ dependencies {
     testImplementation Dependencies.androidx_test_espresso_core
     testImplementation Dependencies.androidx_test_espresso_intents
     testImplementation Dependencies.androidx_test_core_ktx
-    testImplementation Dependencies.kotlinx_coroutines_test
 
     androidTestImplementation project(':androidtest')
 
