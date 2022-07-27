@@ -42,7 +42,7 @@ class ForegroundServiceLocationTracker(private val application: Application) : L
     }
 }
 
-class LocationTrackerService : Service() {
+class LocationTrackerService : Service(), LocationClient.LocationClientListener {
 
     private val locationClient: LocationClient by lazy {
         LocationClientProvider.getClient(application)
@@ -74,25 +74,7 @@ class LocationTrackerService : Service() {
             )
         }
 
-        locationClient.setListener(object : LocationClient.LocationClientListener {
-            override fun onClientStart() {
-                locationClient.requestLocationUpdates {
-                    application.getState().set(
-                        LOCATION_KEY,
-                        Location(it.latitude, it.longitude, it.altitude, it.accuracy)
-                    )
-                }
-            }
-
-            override fun onClientStartFailure() {
-                // Ignored
-            }
-
-            override fun onClientStop() {
-                // Ignored
-            }
-        })
-
+        locationClient.setListener(this)
         locationClient.start()
         return START_NOT_STICKY
     }
@@ -100,6 +82,23 @@ class LocationTrackerService : Service() {
     override fun onDestroy() {
         locationClient.stop()
         application.getState().clear(LOCATION_KEY)
+    }
+
+    override fun onClientStart() {
+        locationClient.requestLocationUpdates {
+            application.getState().set(
+                LOCATION_KEY,
+                Location(it.latitude, it.longitude, it.altitude, it.accuracy)
+            )
+        }
+    }
+
+    override fun onClientStartFailure() {
+        // Ignored
+    }
+
+    override fun onClientStop() {
+        // Ignored
     }
 
     private fun createNotification(): Notification {
