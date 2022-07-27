@@ -295,21 +295,23 @@ class MapboxMapFragment :
             MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
 
         val featureIds = mutableListOf<Int>()
-        pointAnnotations.forEach {
-            val featureId = nextFeatureId++
-            val markerFeature = MarkerFeature(
-                requireContext(),
-                pointAnnotationManager,
-                it,
-                featureId,
-                featureClickListener,
-                featureDragEndListener,
-                MapPoint(it.point.latitude(), it.point.longitude())
-            )
+        markers.asSequence()
+            .zip(pointAnnotations.asSequence())
+            .forEach { (marker, pointAnnotation) ->
+                val featureId = nextFeatureId++
+                val markerFeature = MarkerFeature(
+                    requireContext(),
+                    pointAnnotationManager,
+                    pointAnnotation,
+                    featureId,
+                    featureClickListener,
+                    featureDragEndListener,
+                    marker.point
+                )
 
-            featureIds.add(featureId)
-            features[featureId] = markerFeature
-        }
+                featureIds.add(featureId)
+                features[featureId] = markerFeature
+            }
 
         return featureIds
     }
