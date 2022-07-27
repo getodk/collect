@@ -46,7 +46,7 @@ object Dependencies {
     const val javarosa = "org.getodk:javarosa:3.5.0"
     const val javarosa_local = "org.getodk:javarosa:local"
     const val karumi_dexter = "com.karumi:dexter:6.2.3"
-    const val zxing_android_embedded = "com.journeyapps:zxing-android-embedded:3.6.0" // Upgrading will require minSdkVersion >=24, it uses zxing:core 3.3.2 by default
+    const val zxing_android_embedded = "com.journeyapps:zxing-android-embedded:4.3.0"
     const val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     const val dagger_compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     const val dagger_android = "com.google.dagger:dagger-android:${Versions.dagger}"
