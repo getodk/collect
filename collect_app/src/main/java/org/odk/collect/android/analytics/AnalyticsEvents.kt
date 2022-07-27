@@ -176,4 +176,9 @@ object AnalyticsEvents {
      * Tracks how often form details with invalid hashes are provided by a server
      */
     const val INVALID_FORM_HASH = "InvalidFormHash"
+
+    /**
+     * Tracks how often "cellular_only" option is used in auto send
+     */
+    const val CELLULAR_ONLY = "CellularOnly"
 }

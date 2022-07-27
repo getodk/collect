@@ -19,6 +19,8 @@ import android.net.NetworkInfo
 import android.os.Environment
 import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
@@ -103,8 +105,11 @@ class AutoSendTaskSpec : TaskSpec {
             return false
         }
         val autosend = settingsProvider.getUnprotectedSettings(projectId).getString(ProjectKeys.KEY_AUTOSEND)
+
         var sendwifi = autosend == "wifi_only"
-        var sendnetwork = autosend == "cellular_only"
+        var sendnetwork = (autosend == "cellular_only").also {
+            Analytics.log(AnalyticsEvents.CELLULAR_ONLY)
+        }
 
         if (autosend == "wifi_and_cellular") {
             sendwifi = true
