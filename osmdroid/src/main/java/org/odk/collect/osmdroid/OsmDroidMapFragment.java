@@ -682,7 +682,22 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private void addAttributionAndMapEventsOverlays() {
         map.getOverlays().add(new AttributionOverlay(getContext()));
-        map.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver(clickListener, longPressListener)));
+        map.getOverlays().add(
+                new MapEventsOverlay(
+                        new MapEventsReceiver(
+                                point -> {
+                                    if (clickListener != null) {
+                                        clickListener.onPoint(point);
+                                    }
+                                },
+                                point -> {
+                                    if (longPressListener != null) {
+                                        longPressListener.onPoint(point);
+                                    }
+                                }
+                        )
+                )
+        );
     }
 
     private void onConfigChanged(Bundle config) {
