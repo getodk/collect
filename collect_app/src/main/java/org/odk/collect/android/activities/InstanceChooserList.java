@@ -33,13 +33,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
+import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 
 import javax.inject.Inject;
@@ -60,6 +64,9 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    FormsRepositoryProvider formsRepositoryProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -132,6 +139,7 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
                     intent.setData(instanceUri);
                     String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                     if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                        logFormEdit(c);
                         intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
                     } else {
                         intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
@@ -143,6 +151,21 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
                 TextView disabledCause = view.findViewById(R.id.form_subtitle2);
                 Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    private void logFormEdit(Cursor cursor) {
+        String status = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.STATUS));
+        String formId = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.JR_FORM_ID));
+        String version = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.JR_VERSION));
+
+        Form form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(formId, version);
+        String formTitle = form != null ? form.getDisplayName() : "";
+
+        if (status.equals(Instance.STATUS_INCOMPLETE)) {
+            AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_NON_FINALIZED_FORM, formId, formTitle);
+        } else if (status.equals(Instance.STATUS_COMPLETE)) {
+            AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_FINALIZED_FORM, formId, formTitle);
         }
     }
 
