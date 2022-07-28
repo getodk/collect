@@ -23,7 +23,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Download Robolectric deps
