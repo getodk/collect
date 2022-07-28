@@ -7,7 +7,7 @@ references:
   android_config: &android_config
     working_directory: ~/work
     docker:
-      - image: cimg/android:2022.03.1
+      - image: cimg/android:2022.06.1
     resource_class: medium+
 
 jobs:
