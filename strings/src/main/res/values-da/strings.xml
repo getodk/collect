@@ -238,9 +238,9 @@
   <string name="terrain">Terræn</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellit</string>
-  <string name="light">Lys</string>
-  <string name="dark">Mørk</string>
-  <string name="outdoors">Udendørs</string>
+  <string name="light" tools:ignore="UnusedResources">Lys</string>
+  <string name="dark" tools:ignore="UnusedResources">Mørk</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Udendørs</string>
   <string name="topographic">Topografisk</string>
   <string name="carto_map_style_positron">Positron</string>
   <string name="reference_layer">Referencelag</string>

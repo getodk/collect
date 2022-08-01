@@ -238,9 +238,9 @@
   <string name="streets">Straten</string>
   <string name="terrain">Terrein</string>
   <string name="hybrid">Hybride</string>
-  <string name="light">Licht</string>
-  <string name="dark">Donker</string>
-  <string name="outdoors">Buiten</string>
+  <string name="light" tools:ignore="UnusedResources">Licht</string>
+  <string name="dark" tools:ignore="UnusedResources">Donker</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Buiten</string>
   <string name="view_change_location">Bekijk of wijzig positie</string>
   <string name="change_location">Locatie wijzigen</string>
   <string name="get_location">Positie vastleggen</string>

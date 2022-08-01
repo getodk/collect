@@ -354,9 +354,9 @@
   <string name="terrain">Teren</string>
   <string name="hybrid">Hybryda</string>
   <string name="satellite">Satelita</string>
-  <string name="light">Jasny</string>
-  <string name="dark">Ciemny</string>
-  <string name="outdoors">Na zewnątrz</string>
+  <string name="light" tools:ignore="UnusedResources">Jasny</string>
+  <string name="dark" tools:ignore="UnusedResources">Ciemny</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Na zewnątrz</string>
   <string name="topographic">Topograficzny</string>
   <string name="google_play_services_error_occured">Nie można uzyskać dostępu do Google Maps. Czy Google Play Services są zainstalowane?</string>
   <string name="carto_map_style_positron">Pozyton</string>

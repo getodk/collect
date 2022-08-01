@@ -375,9 +375,9 @@
   <string name="terrain">地形</string>
   <string name="hybrid">ハイブリッド</string>
   <string name="satellite">衛星</string>
-  <string name="light">ライト</string>
-  <string name="dark">ダーク</string>
-  <string name="outdoors">アウトドア</string>
+  <string name="light" tools:ignore="UnusedResources">ライト</string>
+  <string name="dark" tools:ignore="UnusedResources">ダーク</string>
+  <string name="outdoors" tools:ignore="UnusedResources">アウトドア</string>
   <string name="topographic">地形</string>
   <string name="google_play_services_error_occured">Google マップにアクセスできません。 Google Play サービスはインストールされていますか?</string>
   <string name="carto_map_style_positron">位置</string>

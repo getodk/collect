@@ -379,9 +379,9 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="terrain">Ubutaka</string>
   <string name="hybrid">Ibituburano</string>
   <string name="satellite">Icyogajuru.</string>
-  <string name="light">Itara</string>
-  <string name="dark">Ubwijima</string>
-  <string name="outdoors">ikirere</string>
+  <string name="light" tools:ignore="UnusedResources">Itara</string>
+  <string name="dark" tools:ignore="UnusedResources">Ubwijima</string>
+  <string name="outdoors" tools:ignore="UnusedResources">ikirere</string>
   <string name="topographic">Amakuru y\'aho uhagaze</string>
   <string name="google_play_services_error_occured">Ntibishoka ko ukoresha ikarita iranga ahantu.Reba ko waba ufite google play muri telefone yawe</string>
   <string name="carto_map_style_positron">Utunyangingo.</string>

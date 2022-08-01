@@ -96,8 +96,20 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_seconds">
+    <item quantity="one">තත්පර %d</item>
+    <item quantity="other">තත්පර %d</item>
+  </plurals>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_minutes">
+    <item quantity="one">විනාඩි %d</item>
+    <item quantity="other">විනාඩි %d</item>
+  </plurals>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <plurals name="number_of_meters">
+    <item quantity="one">මීටර %d</item>
+    <item quantity="other">මීටර %d</item>
+  </plurals>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
@@ -163,9 +175,9 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
-  <string name="every_six_hours">සෑම පැය 6 කට වරක්</string>
+  <string name="every_six_hours">පැය 6 කට වරක්</string>
   <!--Frequency for requesting blank form updates from the server-->
-  <string name="every_24_hours">සෑම පැය24 කට වරක්</string>
+  <string name="every_24_hours">දිනකට පැය24 කට වරක්</string>
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->

@@ -375,9 +375,9 @@
   <string name="terrain">التضاريس</string>
   <string name="hybrid">الكل</string>
   <string name="satellite">أقمار صناعية</string>
-  <string name="light">ضوء</string>
-  <string name="dark">داكن</string>
-  <string name="outdoors">في الخارج</string>
+  <string name="light" tools:ignore="UnusedResources">ضوء</string>
+  <string name="dark" tools:ignore="UnusedResources">داكن</string>
+  <string name="outdoors" tools:ignore="UnusedResources">في الخارج</string>
   <string name="topographic">طبوغرافي</string>
   <string name="google_play_services_error_occured">غير قادر على الوصول إلى خرائط الجوجل. هل خدمات Google Play مثبتة؟</string>
   <string name="carto_map_style_positron">بوزيترون</string>

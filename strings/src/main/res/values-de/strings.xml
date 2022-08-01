@@ -71,6 +71,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <string name="open_form_map">Formularkarte öffnen</string>
   <string name="instance_scan_count">%1$d Formular(e) hinzugefügt.</string>
   <string name="finished_disk_scan">Suche beendet. Alle Formulare wurden geladen.</string>
   <string name="xform_parse_error">XForm parse error. Bei %1$s fehlt Element %2$s oder ist ungültig.</string>
@@ -383,9 +384,9 @@
   <string name="terrain">Gelände</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellit</string>
-  <string name="light">Hell</string>
-  <string name="dark">Dunkel</string>
-  <string name="outdoors">Draußen</string>
+  <string name="light" tools:ignore="UnusedResources">Hell</string>
+  <string name="dark" tools:ignore="UnusedResources">Dunkel</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Draußen</string>
   <string name="topographic">Topographisch</string>
   <string name="google_play_services_error_occured">Zugriff auf Google Maps nicht möglich. Sind die Google Play Services installiert?</string>
   <string name="carto_map_style_positron">Positron</string>

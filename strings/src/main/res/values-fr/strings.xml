@@ -71,6 +71,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <string name="open_form_map">Voir les formulaires remplis sur une carte</string>
   <string name="instance_scan_count">%1$d formulaires ajoutés.</string>
   <string name="finished_disk_scan">Le scan est fini. Tous les formulaires sont chargés.</string>
   <string name="xform_parse_error">Erreur d\'analyse de l\'XForm %1$s: l\'élément %2$s manque ou est invalide.</string>
@@ -362,6 +363,7 @@
   <!--Button text to select a place from a list presented on a map-->
   <string name="select_place">Sélectionner un emplacement</string>
   <string name="choices">Choix</string>
+  <string name="invalid_geometry">Le choix avec le label \"%1$s\" a une géométrie invalide (\"%2$s\")</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -382,9 +384,9 @@
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybride</string>
   <string name="satellite">Satellite</string>
-  <string name="light">Clair</string>
-  <string name="dark">Foncé</string>
-  <string name="outdoors">En exterieur</string>
+  <string name="light" tools:ignore="UnusedResources">Clair</string>
+  <string name="dark" tools:ignore="UnusedResources">Foncé</string>
+  <string name="outdoors" tools:ignore="UnusedResources">En exterieur</string>
   <string name="topographic">Topographique</string>
   <string name="google_play_services_error_occured">Impossible d’accéder à Google Maps. Google Play Services est-il installé ?</string>
   <string name="carto_map_style_positron">Positron</string>
@@ -407,12 +409,12 @@
   <string name="track_location">Localisation du trajet</string>
   <string name="background_location_disabled">Ce formulaire veut suivre votre position mais le suivi est désactivé. S\'il vous plaît activer dans le %1$s menu ci-dessus.</string>
   <string name="background_location_enabled">Ce formulaire suit votre position. Vous pouvez désactiver le suivi dans le %1$s menu ci-dessus.</string>
-  <string name="get_point">Démarrer le PointGéo</string>
-  <string name="geopoint_view_read_only">Voir le PointGéo</string>
-  <string name="geoshape_view_read_only">Voir la forme</string>
-  <string name="geotrace_view_read_only">Voir le tracé</string>
-  <string name="get_shape">Démarrer la FormeGéo</string>
-  <string name="get_trace">Démarrer le TracéGéo</string>
+  <string name="get_point">Démarrer le point</string>
+  <string name="geopoint_view_read_only">Voir le point</string>
+  <string name="geoshape_view_read_only">Voir le polygone</string>
+  <string name="geotrace_view_read_only">Voir la ligne</string>
+  <string name="get_shape">Démarrer le polygone</string>
+  <string name="get_trace">Démarrer la ligne</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <string name="time_elapsed">Temps écoulé : %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -434,11 +436,11 @@
   <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">N %1$s%2$s%3$s</string>
-  <string name="geoshape_title">FormeGéo</string>
+  <string name="geoshape_title">Polygone</string>
   <string name="input_method">Méthode de saisie</string>
   <string name="start">Démarrer</string>
   <string name="enable_gps">Activer le GPS</string>
-  <string name="geotrace_title">TracéGéo</string>
+  <string name="geotrace_title">Ligne</string>
   <string name="gps_enable_message">Le GPS est désactivé sur votre appareil. Voulez vous l\'activer ?</string>
   <string name="geo_clear_warning">Objet déjà créé. Souhaitez-vous l\'effacer ?</string>
   <string name="geo_exit_warning">Abandoner les changements et retourner au formulaire?</string>
@@ -483,8 +485,8 @@
   <string name="geopoint_instruction">Appuyez longuement sur la carte pour placer un marqueur ou appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="geopoint_no_draggable_instruction">Appuyez sur le bouton \"ajouter un marqueur\".</string>
   <string name="discard">Abandoner changements</string>
-  <string name="geoshape_view_change_location">Voir ou Modifier la FormeGéo</string>
-  <string name="geotrace_view_change_location">Voir ou Modifier le TracéGéo</string>
+  <string name="geoshape_view_change_location">Voir ou modifier le polygone</string>
+  <string name="geotrace_view_change_location">Voir ou modifier la ligne</string>
   <string name="select_item_count">%s: %d (%d affichés sur la carte)</string>
   <string name="select_item">Sélectionner</string>
   <string name="new_item">Nouvel item</string>
@@ -876,6 +878,7 @@
   <string name="survey_multiple_forms_error">Vous avez téléchargé deux formulaires différents avec le même numéro d\'identification et la même version. Peut-être que le même formulaire a été téléchargés deux fois ou à deux serveurs différents. Dans tous les cas, vous devez en supprimer un.</string>
   <string name="select_odk_shortcut">Sélectionnez le raccourci ODK</string>
   <string name="background_audio_help">Ce formulaire enregistre le son du micro de votre appareil.\n\nVous pouvez utiliser l\'indicateur de volume pour vous assurer que le micro est assez proche de son que vous devez enregistrer.\n\nQuittez le formulaire pour arrêter l\'enregistrement.\n\nPour plus d\'informations contacter la personne responsable de cette collecte de données.</string>
+  <string name="loading">Chargement…</string>
   <!--##############################################
      # Projects
      ##############################################-->

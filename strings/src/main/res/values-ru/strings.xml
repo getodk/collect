@@ -320,8 +320,8 @@
   <string name="terrain">Ландшафт</string>
   <string name="hybrid">Гибридная</string>
   <string name="satellite">Спутник</string>
-  <string name="light">Светлая</string>
-  <string name="dark">Тёмная</string>
+  <string name="light" tools:ignore="UnusedResources">Светлая</string>
+  <string name="dark" tools:ignore="UnusedResources">Тёмная</string>
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
   <string name="view_change_location">Показать или изменить местоположение</string>
   <string name="change_location">Изменить местоположение</string>

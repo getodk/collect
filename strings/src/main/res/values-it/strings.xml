@@ -379,9 +379,9 @@
   <string name="terrain">Terrain - Territoriale</string>
   <string name="hybrid">Hybrid - Ibrida</string>
   <string name="satellite">Satellite - Satellitare</string>
-  <string name="light">Chiaro</string>
-  <string name="dark">Scuro</string>
-  <string name="outdoors">All\'aperto</string>
+  <string name="light" tools:ignore="UnusedResources">Chiaro</string>
+  <string name="dark" tools:ignore="UnusedResources">Scuro</string>
+  <string name="outdoors" tools:ignore="UnusedResources">All\'aperto</string>
   <string name="topographic">Topografico</string>
   <string name="google_play_services_error_occured">Impossibile accedere a Google Maps. Il Servizio di Google Play è installato?</string>
   <string name="carto_map_style_positron">Posizione</string>
@@ -449,11 +449,13 @@
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_seconds">
     <item quantity="one">%d</item>
+    <item quantity="many">%dsecondi</item>
     <item quantity="other">%dsecondi</item>
   </plurals>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <plurals name="number_of_minutes">
     <item quantity="one">%dminuti</item>
+    <item quantity="many">%dminuti</item>
     <item quantity="other">%dminuti</item>
   </plurals>
   <string name="accuracy_requirement">Requisiti di precisione:</string>
@@ -461,6 +463,7 @@
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
     <item quantity="one">%dmetri</item>
+    <item quantity="many">%d metri</item>
     <item quantity="other">%d metri</item>
   </plurals>
   <string name="location_status_searching">Sto ricercando la posizione, prego attendere…</string>
