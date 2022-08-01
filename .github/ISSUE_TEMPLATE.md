@@ -10,11 +10,11 @@ Feature suggestions should be described [in the forum Features category](https:/
 
 -->
 
-### ODK Collect version
+#### ODK Collect version
 
-### Android version
+#### Android version
 
-### Device used
+#### Device used
 
 #### Problem description
 
