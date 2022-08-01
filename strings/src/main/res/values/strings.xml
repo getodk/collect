@@ -89,6 +89,7 @@
     # FILL BLANK FORM
     ##############################################
     -->
+    <!-- Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown. -->
     <string name="open_form_map">Open form map</string>
     <string name="instance_scan_count">%1$d forms added.</string>
     <string name="finished_disk_scan">Finished scanning. All forms loaded.</string>

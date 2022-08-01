@@ -71,6 +71,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <string name="open_form_map">Avaa lomakekartta</string>
   <string name="instance_scan_count">%1$d lomaketta lisätty.</string>
   <string name="finished_disk_scan">Skannaus valmis. Kaikki lomakkeet ladattu.</string>
   <string name="xform_parse_error">XForm jäsennysvirhe %1$s: %2$s puuttuu tai ei kelpaa.</string>
@@ -362,6 +363,7 @@
   <!--Button text to select a place from a list presented on a map-->
   <string name="select_place">Valitse paikka</string>
   <string name="choices">Valinnan</string>
+  <string name="invalid_geometry">Valinnalla \"%1$s\" on epäkelpo geometria (\"%2$s\")</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -382,9 +384,9 @@
   <string name="terrain">Maasto</string>
   <string name="hybrid">Hybridi</string>
   <string name="satellite">Satelliitti</string>
-  <string name="light">Vaalea</string>
-  <string name="dark">Tumma</string>
-  <string name="outdoors">Ulkoilma</string>
+  <string name="light" tools:ignore="UnusedResources">Vaalea</string>
+  <string name="dark" tools:ignore="UnusedResources">Tumma</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Ulkoilma</string>
   <string name="topographic">Topografinen</string>
   <string name="google_play_services_error_occured">Google Maps -palveluun ei saada yhteyttä. Onko Google Play Services asennettu?</string>
   <string name="carto_map_style_positron">Positroni</string>

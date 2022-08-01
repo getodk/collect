@@ -354,9 +354,9 @@
   <string name="terrain">భుభాగము</string>
   <string name="hybrid">హైబ్రిడ్</string>
   <string name="satellite">ఉపగ్రహం</string>
-  <string name="light">Light</string>
-  <string name="dark">Dark</string>
-  <string name="outdoors">బయటి ప్రదేశాలు</string>
+  <string name="light" tools:ignore="UnusedResources">Light</string>
+  <string name="dark" tools:ignore="UnusedResources">Dark</string>
+  <string name="outdoors" tools:ignore="UnusedResources">బయటి ప్రదేశాలు</string>
   <string name="topographic">Topographic</string>
   <string name="google_play_services_error_occured">Google మ్యాప్స్‌ను యాక్సెస్ చేయడం సాధ్యం కాట్లేదు. Google Play సేవలు ఇన్‌స్టాల్ చేయబడిందా?</string>
   <string name="carto_map_style_positron">Positron</string>

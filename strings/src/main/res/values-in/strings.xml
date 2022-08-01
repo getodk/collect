@@ -378,9 +378,9 @@
   <string name="terrain">Lahan</string>
   <string name="hybrid">Hibrida</string>
   <string name="satellite">Satelit</string>
-  <string name="light">Terang</string>
-  <string name="dark">Gelap</string>
-  <string name="outdoors">Tempat terbuka</string>
+  <string name="light" tools:ignore="UnusedResources">Terang</string>
+  <string name="dark" tools:ignore="UnusedResources">Gelap</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Tempat terbuka</string>
   <string name="topographic">Topografi</string>
   <string name="google_play_services_error_occured">Tidak dapat mengakses Google Maps. Apakah Google Play Services telah terinstal?</string>
   <string name="carto_map_style_positron">Positron</string>

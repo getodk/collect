@@ -328,9 +328,9 @@
   <string name="terrain">Terrain</string>
   <string name="hybrid">Hybrid</string>
   <string name="satellite">Satellite</string>
-  <string name="light">Ljus</string>
-  <string name="dark">Mörk</string>
-  <string name="outdoors">Utomhus</string>
+  <string name="light" tools:ignore="UnusedResources">Ljus</string>
+  <string name="dark" tools:ignore="UnusedResources">Mörk</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Utomhus</string>
   <string name="topographic">Topografisk</string>
   <string name="google_play_services_error_occured">Åtkomst till Google Maps ej möjlig. Är Google Play Services installerad?</string>
   <string name="carto_map_style_positron">Positron</string>

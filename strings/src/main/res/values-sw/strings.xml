@@ -337,9 +337,9 @@
   <string name="terrain">Ardhi ya eneo</string>
   <string name="hybrid">Mseto</string>
   <string name="satellite">Satelaiti</string>
-  <string name="light">Mwanga</string>
-  <string name="dark">Giza</string>
-  <string name="outdoors">Nje</string>
+  <string name="light" tools:ignore="UnusedResources">Mwanga</string>
+  <string name="dark" tools:ignore="UnusedResources">Giza</string>
+  <string name="outdoors" tools:ignore="UnusedResources">Nje</string>
   <string name="topographic">Picha mpya</string>
   <string name="google_play_services_error_occured">Upatikanaji wa ramani za google umeshindikana. Je, huduma ya Google Play imesakinishwa kwenye simu?</string>
   <string name="carto_map_style_positron">Positron</string>
