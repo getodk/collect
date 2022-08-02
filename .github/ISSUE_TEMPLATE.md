@@ -10,8 +10,11 @@ Feature suggestions should be described [in the forum Features category](https:/
 
 -->
 
-#### Software and hardware versions 
-Collect v1.x.x, Android vx.x.x, device used...
+#### ODK Collect version
+
+#### Android version
+
+#### Device used
 
 #### Problem description
 
@@ -20,4 +23,5 @@ Collect v1.x.x, Android vx.x.x, device used...
 #### Expected behavior
 
 #### Other information 
+
 Things you tried, stack traces, related issues, suggestions on how to fix it...
