@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithQuestionDefAndAnswer;
@@ -18,7 +19,9 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.RangeQuestion;
+import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,6 +88,30 @@ public class RangeWidgetUtilsTest {
         RangeWidgetUtils.setUpRangePickerWidget(widgetTestActivity(), binding, promptWithQuestionDefAndAnswer(
                 rangeQuestion, new StringData("4")));
         assertThat(binding.widgetAnswerText.getText(), equalTo("4"));
+    }
+
+    @Test
+    public void whenPromptHasAnswerThatIsOutOfRange_sliderValueShouldNotBeSet() {
+        slider.setValue(5);
+
+        // Value bigger than rangeEnd
+        FormEntryPrompt prompt = mock(FormEntryPrompt.class);
+        IntegerData biggerAnswerValue = new IntegerData(rangeQuestion.getRangeEnd().intValue() + 1);
+        when(prompt.getAnswerValue()).thenReturn(biggerAnswerValue);
+        when(prompt.getQuestion()).thenReturn(rangeQuestion);
+
+        BigDecimal value = RangeWidgetUtils.setUpSlider(prompt, slider, true);
+        assertNull(value);
+        assertThat(slider.getValue(), equalTo(5f));
+
+        // Value smaller than rangeStart
+        IntegerData smallerAnswerValue = new IntegerData(rangeQuestion.getRangeStart().intValue() - 1);
+        when(prompt.getAnswerValue()).thenReturn(smallerAnswerValue);
+        when(prompt.getQuestion()).thenReturn(rangeQuestion);
+
+        value = RangeWidgetUtils.setUpSlider(prompt, slider, true);
+        assertNull(value);
+        assertThat(slider.getValue(), equalTo(5f));
     }
 
     @Test
