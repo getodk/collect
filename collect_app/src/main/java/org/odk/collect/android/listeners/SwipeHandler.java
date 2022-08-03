@@ -89,6 +89,10 @@ public class SwipeHandler {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (view == null) {
+                return false;
+            }
+
             FlingRegister.flingDetected();
 
             if (e1 != null && e2 != null
