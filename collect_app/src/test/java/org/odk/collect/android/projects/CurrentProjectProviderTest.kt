@@ -54,6 +54,21 @@ class CurrentProjectProviderTest {
         currentProjectProvider.getCurrentProject()
     }
 
+    @Test
+    fun `getCurrentProject returns first project when there is no current project but there are projects`() {
+        `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)
+        `when`(metaSettings.getString(MetaKeys.CURRENT_PROJECT_ID)).thenReturn(null)
+
+        val firstProject = Project.Saved("firstProject", "ProjectX", "X", "#00FF00")
+        `when`(projectsRepository.get("firstProject")).thenReturn(firstProject)
+
+        val secondProject = Project.Saved("secondProject", "ProjectY", "Y", "#00FF00")
+        `when`(projectsRepository.get("secondProject")).thenReturn(secondProject)
+
+        `when`(projectsRepository.getAll()).thenReturn(listOf(firstProject, secondProject))
+        assertThat(currentProjectProvider.getCurrentProject(), `is`(firstProject))
+    }
+
     @Test(expected = IllegalStateException::class)
     fun `getCurrentProject throws IllegalStateException when current project does not exist`() {
         `when`(settingsProvider.getMetaSettings()).thenReturn(metaSettings)

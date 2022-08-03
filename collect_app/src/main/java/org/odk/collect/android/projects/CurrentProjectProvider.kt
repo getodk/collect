@@ -22,7 +22,13 @@ class CurrentProjectProvider(
                 throw IllegalStateException("Current project does not exist!")
             }
         } else {
-            throw IllegalStateException("No current project!")
+            val projects = projectsRepository.getAll()
+
+            if (projects.isNotEmpty()) {
+                return projects[0]
+            } else {
+                throw IllegalStateException("No current project!")
+            }
         }
     }
 
