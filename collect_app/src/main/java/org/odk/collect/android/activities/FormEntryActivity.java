@@ -1395,6 +1395,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void onScreenRefresh() {
+        FormController formController = getFormController();
+        if (formController == null) {
+            Timber.w("FormController in the application class is null, FormController in formEntryViewModel is %s", (formEntryViewModel.isFormControllerSet() ? "not null" : "null"));
+        }
+
         int event = getFormController().getEvent();
 
         SwipeHandler.View current = createView(event, false);
@@ -1949,6 +1954,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     t.cancel(true);
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
+                    Timber.w("Starting MainMenuActivity because formController is null");
                     startActivity(new Intent(this, MainMenuActivity.class));
                 }
             }
