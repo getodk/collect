@@ -20,7 +20,7 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.dsl.cameraOptions
 import com.mapbox.maps.extension.style.layers.Layer
-import com.mapbox.maps.extension.style.layers.addLayerAt
+import com.mapbox.maps.extension.style.layers.addLayerAbove
 import com.mapbox.maps.extension.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.style.layers.generated.RasterLayer
 import com.mapbox.maps.extension.style.sources.Source
@@ -95,7 +95,7 @@ class MapboxMapFragment :
     private var tileServer: TileHttpServer? = null
     private var referenceLayerFile: File? = null
     private var clientWantsLocationUpdates = false
-    private var offlineLayerPosition = -1
+    private var topStyleLayerId: String? = null
     private val locationCallback = MapboxLocationCallback(this)
     private var mapFragmentDelegate = MapFragmentDelegate(
         this,
@@ -210,9 +210,9 @@ class MapboxMapFragment :
         val styleUrl = config.getString(KEY_STYLE_URL) ?: Style.MAPBOX_STREETS
         referenceLayerFile = getReferenceLayerFile(config, referenceLayerRepository)
         mapboxMap.loadStyleUri(styleUrl) {
-            if (offlineLayerPosition == -1) {
-                // remember the index of first layer above other already existing layers
-                offlineLayerPosition = it.styleLayers.size - 1
+            if (topStyleLayerId == null) {
+                // remember the id of the top style layer
+                topStyleLayerId = it.styleLayers.last().id
             }
             loadReferenceOverlay()
         }
@@ -599,7 +599,9 @@ class MapboxMapFragment :
     }
 
     private fun addOverlayLayer(layer: Layer) {
-        mapboxMap.getStyle()?.addLayerAt(layer, offlineLayerPosition)
+        topStyleLayerId?.let {
+            mapboxMap.getStyle()?.addLayerAbove(layer, topStyleLayerId)
+        }
     }
 
     private fun addOverlaySource(source: Source) {
