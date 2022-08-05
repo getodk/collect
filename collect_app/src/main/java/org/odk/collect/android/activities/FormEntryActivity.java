@@ -450,7 +450,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             if (index != null && Collect.getInstance().getFormController() == null) {
                 // https://github.com/getodk/collect/issues/5241
-                Timber.e(new Error("getCurrentIndex() firing with null getFormController(). The one stored in formEntryViewModel is " + (formEntryViewModel.isFormControllerSet() ? "not null" : "null")));
+                Timber.e(new Error("getCurrentIndex() firing with null getFormController(). The one stored in formEntryViewModel is " + (formEntryViewModel.getFormController() != null ? "not null" : "null")));
                 createErrorDialog("getFormController() is null, please email support@getodk.org with a description of what you were doing when this happened.", true);
             } else {
                 formIndexAnimationHandler.handle(index);
@@ -756,7 +756,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // This method may return null if called before form loading is finished
     @Nullable
     private FormController getFormController() {
-        return Collect.getInstance().getFormController();
+        return formEntryViewModel.getFormController();
     }
 
     @Override
@@ -805,12 +805,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
-            if (requestCode == RequestCodes.HIERARCHY_ACTIVITY && !formEntryViewModel.isFormControllerSet()) {
-                formControllerAvailable(formController);
-            } else {
-                onScreenRefresh();
-            }
-
+            onScreenRefresh();
             return;
         }
 
@@ -1499,7 +1494,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()));
+                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(getFormController()));
 
                             saveForm(false, false, null, false);
                             autoSaved = true;
@@ -1913,10 +1908,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         FormController formController = getFormController();
 
-        if (formController != null && !formEntryViewModel.isFormControllerSet()) {
-            Timber.e(new Error("FormController set in App but not ViewModel"));
-        }
-
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(this);
             if (formController == null
@@ -2208,6 +2199,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                formControllerAvailable(formController);
                                 startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });

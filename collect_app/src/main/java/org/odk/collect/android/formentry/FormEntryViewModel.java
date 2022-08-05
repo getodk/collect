@@ -62,8 +62,12 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         updateIndex();
     }
 
-    public boolean isFormControllerSet() {
-        return formController != null;
+    /**
+     * @deprecated this should not be exposed
+     */
+    @Deprecated
+    public FormController getFormController() {
+        return formController;
     }
 
     public LiveData<FormIndex> getCurrentIndex() {
