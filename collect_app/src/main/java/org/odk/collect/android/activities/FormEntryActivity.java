@@ -617,6 +617,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             // Not a restart from a screen orientation change (or other).
+            Timber.w("Setting formController to null");
             Collect.getInstance().setFormController(null);
 
             Intent intent = getIntent();
@@ -1949,6 +1950,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     t.cancel(true);
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
+                    Timber.w("Starting MainMenuActivity because formController is null");
                     startActivity(new Intent(this, MainMenuActivity.class));
                 }
             }
