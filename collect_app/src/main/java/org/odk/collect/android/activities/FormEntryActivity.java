@@ -617,7 +617,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             // Not a restart from a screen orientation change (or other).
-            Timber.w("Setting formController to null");
             Collect.getInstance().setFormController(null);
 
             Intent intent = getIntent();
@@ -1396,6 +1395,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void onScreenRefresh() {
+        FormController formController = getFormController();
+        if (formController == null) {
+            Timber.w("FormController in the application class is null, FormController in formEntryViewModel is %s", (formEntryViewModel.isFormControllerSet() ? "not null" : "null"));
+        }
+
         int event = getFormController().getEvent();
 
         SwipeHandler.View current = createView(event, false);

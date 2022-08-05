@@ -70,6 +70,8 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
+
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class Collect extends Application implements
         LocalizedApplication,
@@ -117,6 +119,7 @@ public class Collect extends Application implements
     }
 
     public void setFormController(@Nullable FormController controller) {
+        Timber.w("Setting formController to %s", (controller == null ? "null" : "not null"));
         formController = controller;
     }
 
