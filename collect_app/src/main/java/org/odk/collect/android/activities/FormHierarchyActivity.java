@@ -326,8 +326,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
     }
 
     private boolean didDeleteFirstRepeatItem() {
-        return Collect
-                .getInstance()
+        return formEntryViewModel
                 .getFormController()
                 .getFormIndex()
                 .getElementMultiplicity() == 0;

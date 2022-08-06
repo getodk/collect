@@ -17,22 +17,23 @@
 package org.odk.collect.android.adapters;
 
 import android.graphics.drawable.GradientDrawable;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView.Adapter;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
 import java.util.Collections;
