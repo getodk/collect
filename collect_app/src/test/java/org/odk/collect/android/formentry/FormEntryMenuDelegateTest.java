@@ -49,6 +49,7 @@ public class FormEntryMenuDelegateTest {
     private AnswersProvider answersProvider;
     private AudioRecorder audioRecorder;
     private BackgroundAudioViewModel backgroundAudioViewModel;
+    private final FormSessionStore formSessionStore = new InMemFormSessionStore();
 
     @Before
     public void setup() {
@@ -73,10 +74,11 @@ public class FormEntryMenuDelegateTest {
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                TestSettingsProvider.getSettingsProvider()
+                TestSettingsProvider.getSettingsProvider(),
+                formSessionStore
         );
 
-        FormSessionStore.set("blah", formController);
+        formSessionStore.set("blah", formController);
         formEntryMenuDelegate.setSession("blah");
     }
 

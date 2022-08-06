@@ -49,6 +49,7 @@ public class FormEntryViewModelTest {
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
+    private final FormSessionStore formSessionStore = new InMemFormSessionStore();
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -65,9 +66,9 @@ public class FormEntryViewModelTest {
 
         scheduler = new FakeScheduler();
 
-        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler);
+        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler, formSessionStore);
 
-        FormSessionStore.set("blah", formController);
+        formSessionStore.set("blah", formController);
         viewModel.setSession("blah");
     }
 

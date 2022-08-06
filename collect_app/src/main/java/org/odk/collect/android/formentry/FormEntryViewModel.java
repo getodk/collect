@@ -30,6 +30,7 @@ public class FormEntryViewModel extends ViewModel {
 
     private final Supplier<Long> clock;
     private final Scheduler scheduler;
+    private final FormSessionStore formSessionStore;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
@@ -47,13 +48,14 @@ public class FormEntryViewModel extends ViewModel {
     private AnswerListener answerListener;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler) {
+    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore) {
         this.clock = clock;
         this.scheduler = scheduler;
+        this.formSessionStore = formSessionStore;
     }
 
     public void setSession(String sessionId) {
-        this.formController = FormSessionStore.get(sessionId);
+        this.formController = formSessionStore.get(sessionId);
 
         boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
         this.hasBackgroundRecording.setValue(hasBackgroundRecording);
@@ -272,17 +274,19 @@ public class FormEntryViewModel extends ViewModel {
 
         private final Supplier<Long> clock;
         private final Scheduler scheduler;
+        private final FormSessionStore formSessionStore;
 
-        public Factory(Supplier<Long> clock, Scheduler scheduler) {
+        public Factory(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore) {
             this.clock = clock;
             this.scheduler = scheduler;
+            this.formSessionStore = formSessionStore;
         }
 
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, scheduler);
+            return (T) new FormEntryViewModel(clock, scheduler, formSessionStore);
         }
     }
 

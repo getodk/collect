@@ -338,6 +338,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     IntentLauncher intentLauncher;
 
+    @Inject
+    FormSessionStore formSessionStore;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -393,7 +396,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                settingsProvider
+                settingsProvider,
+                formSessionStore
         );
 
         nextButton = findViewById(R.id.form_forward_button);
@@ -2091,7 +2095,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.destroy();
 
                 Collect.getInstance().setFormController(formController);
-                FormSessionStore.set(getIntent().getData().toString(), formController);
+                formSessionStore.set(getIntent().getData().toString(), formController);
 
                 backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());

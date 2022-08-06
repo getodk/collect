@@ -39,12 +39,13 @@ public class FormEntryMenuDelegate implements MenuDelegate {
     private String sessionId;
     private final AudioRecorder audioRecorder;
     private final SettingsProvider settingsProvider;
+    private final FormSessionStore formSessionStore;
 
     public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
                                  FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
                                  BackgroundLocationViewModel backgroundLocationViewModel,
                                  BackgroundAudioViewModel backgroundAudioViewModel,
-                                 SettingsProvider settingsProvider) {
+                                 SettingsProvider settingsProvider, FormSessionStore formSessionStore) {
         this.activity = activity;
         this.answersProvider = answersProvider;
 
@@ -53,11 +54,12 @@ public class FormEntryMenuDelegate implements MenuDelegate {
         this.backgroundLocationViewModel = backgroundLocationViewModel;
         this.backgroundAudioViewModel = backgroundAudioViewModel;
         this.settingsProvider = settingsProvider;
+        this.formSessionStore = formSessionStore;
     }
 
     public void setSession(String sessionId) {
         this.sessionId = sessionId;
-        this.formController = FormSessionStore.get(sessionId);
+        this.formController = formSessionStore.get(sessionId);
     }
 
     @Override

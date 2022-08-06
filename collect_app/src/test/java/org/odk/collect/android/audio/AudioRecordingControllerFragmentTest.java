@@ -25,6 +25,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormSessionStore;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -84,8 +85,8 @@ public class AudioRecordingControllerFragmentTest {
             }
 
             @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler) {
-                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler) {
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionStore formSessionStore) {
+                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionStore) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
