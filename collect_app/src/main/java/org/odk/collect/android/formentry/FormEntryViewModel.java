@@ -15,7 +15,6 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -27,7 +26,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class FormEntryViewModel extends ViewModel implements RequiresFormController {
+public class FormEntryViewModel extends ViewModel {
 
     private final Supplier<Long> clock;
     private final Scheduler scheduler;
@@ -53,13 +52,12 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.scheduler = scheduler;
     }
 
-    @Override
-    public void formLoaded(@NotNull FormController formController) {
-        this.formController = formController;
+    public void setSession(String sessionId) {
+        this.formController = FormSessionStore.get(sessionId);
 
         boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
         this.hasBackgroundRecording.setValue(hasBackgroundRecording);
-        updateIndex();
+//        updateIndex();
     }
 
     /**
@@ -266,7 +264,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         this.answerListener = null;
     }
 
-    private void updateIndex() {
+    public void updateIndex() {
         currentIndex.setValue(formController.getFormIndex());
     }
 

@@ -75,7 +75,9 @@ public class FormEntryMenuDelegateTest {
                 backgroundAudioViewModel,
                 TestSettingsProvider.getSettingsProvider()
         );
-        formEntryMenuDelegate.formLoaded(formController);
+
+        FormSessionStore.set("blah", formController);
+        formEntryMenuDelegate.setSession("blah");
     }
 
     @Test
@@ -102,7 +104,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormControllerIsNull_hidesAddRepeat() {
-        formEntryMenuDelegate.formLoaded(null);
+        formEntryMenuDelegate.setSession("doesntExist");
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);

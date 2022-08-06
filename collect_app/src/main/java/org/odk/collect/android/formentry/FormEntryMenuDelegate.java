@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
@@ -27,7 +26,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
-public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormController {
+public class FormEntryMenuDelegate implements MenuDelegate {
 
     private final AppCompatActivity activity;
     private final AnswersProvider answersProvider;
@@ -37,13 +36,15 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
 
     @Nullable
     private FormController formController;
+    private String sessionId;
     private final AudioRecorder audioRecorder;
     private final SettingsProvider settingsProvider;
 
     public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
                                  FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
                                  BackgroundLocationViewModel backgroundLocationViewModel,
-                                 BackgroundAudioViewModel backgroundAudioViewModel, SettingsProvider settingsProvider) {
+                                 BackgroundAudioViewModel backgroundAudioViewModel,
+                                 SettingsProvider settingsProvider) {
         this.activity = activity;
         this.answersProvider = answersProvider;
 
@@ -54,9 +55,9 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
         this.settingsProvider = settingsProvider;
     }
 
-    @Override
-    public void formLoaded(@NotNull FormController formController) {
-        this.formController = formController;
+    public void setSession(String sessionId) {
+        this.sessionId = sessionId;
+        this.formController = FormSessionStore.get(sessionId);
     }
 
     @Override
@@ -132,6 +133,7 @@ public class FormEntryMenuDelegate implements MenuDelegate, RequiresFormControll
                 formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers());
                 formEntryViewModel.openHierarchy();
                 Intent i = new Intent(activity, FormHierarchyActivity.class);
+                i.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
                 activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
             }
 

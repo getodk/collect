@@ -66,7 +66,9 @@ public class FormEntryViewModelTest {
         scheduler = new FakeScheduler();
 
         viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler);
-        viewModel.formLoaded(formController);
+
+        FormSessionStore.set("blah", formController);
+        viewModel.setSession("blah");
     }
 
     @Test
@@ -206,6 +208,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
+        viewModel.updateIndex();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveForward(new HashMap<>());
@@ -306,6 +309,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
+        viewModel.updateIndex();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveBackward(new HashMap<>());
