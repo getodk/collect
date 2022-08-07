@@ -36,7 +36,7 @@ android {
         applicationId "org.smap.smapTask.android"
         minSdkVersion rootProject.androidMinSdk
         targetSdkVersion rootProject.androidTargetSdk
-        versionCode(6700)
+        versionCode(6702)
         versionName getVersionName()
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
@@ -68,67 +68,71 @@ android {
     productFlavors {
         standard {
             applicationId "org.smap.smapTask.android"
-            versionName "6.700"
+            versionName "6.702"
+        }
+        livesoil {
+            applicationId "org.smap.smapTask.android.livesoil"
+            versionName "6.702-livesoil"
         }
         plan {
             applicationId "org.smap.smapTask.android.plan"
-            versionName "6.700-plan"
+            versionName "6.702-plan"
         }
         kontrolid {
             applicationId "org.smap.smapTask.android.kontrolid"
-            versionName "6.700-kontrolid"
+            versionName "6.702-kontrolid"
         }
         kontrolid_corporate {
             applicationId "org.smap.smapTask.android.kontrolid_corporate"
-            versionName "6.700-kontrolid"
+            versionName "6.702-kontrolid"
         }
         supply {
             applicationId "org.smap.smapTask.android.supply"
-            versionName "6.700-supply"
+            versionName "6.702-supply"
         }
         seracis {
             applicationId "org.smap.smapTask.android.seracis"
-            versionName "6.700-seracis"
+            versionName "6.702-seracis"
         }
         meqa {
             applicationId "org.smap.smapTask.android.meqa"
-            versionName "6.700-meqa"
+            versionName "6.702-meqa"
         }
         atempi {
             applicationId "org.smap.smapTask.android.atempi"
-            versionName "6.700-atempi"
+            versionName "6.702-atempi"
         }
         pop {
             applicationId "org.smap.smapTask.android.pop"
-            versionName "6.700-pop"
+            versionName "6.702-pop"
         }
         tdh {
             applicationId "org.smap.smapTask.android.tdh"
-            versionName "6.700-tdh"
+            versionName "6.702-tdh"
         }
         assignfield {
             applicationId "org.smap.smapTask.android.assignfield"
-            versionName "6.700-assignfield"
+            versionName "6.702-assignfield"
         }
         assignfield2 {
             applicationId "org.smap.smapTask.android.assignfield2"
-            versionName "6.700-assignfield2"
+            versionName "6.702-assignfield2"
         }
         informEd {
             applicationId "org.smap.smapTask.android.informEd"
-            versionName "6.700-informEd"
+            versionName "6.702-informEd"
         }
         pangolin {
             applicationId "org.smap.smapTask.android.pangolin"
-            versionName "6.700-pangolin"
+            versionName "6.702-pangolin"
         }
         stl2 {
             applicationId "org.smap.smapTask.android.stl2"
-            versionName "6.700-stl2"
+            versionName "6.702-stl2"
         }
         ljs {
             applicationId "org.smap.smapTask.android.ljs"
-            versionName "6.700-ljs"
+            versionName "6.702-ljs"
         }
     }
 
@@ -215,8 +219,14 @@ android {
         // abiFilters to exclude any ABIs; but to keep the APK slim, we include
         // the Mapbox native library only for 32-bit and 64-bit ARM devices and
         // omit it for all X86 devices.
-        exclude 'lib/x86/libmapbox-gl.so'
-        exclude 'lib/x86_64/libmapbox-gl.so'
+        if (!project.hasProperty("x86Libs")) {
+            exclude 'lib/x86/libmapbox-maps.so'
+            exclude 'lib/x86/libmapbox-common.so'
+            exclude 'lib/x86/libc++_shared.so'
+            exclude 'lib/x86_64/libmapbox-maps.so'
+            exclude 'lib/x86_64/libmapbox-common.so'
+            exclude 'lib/x86_64/libc++_shared.so'
+        }
     }
 
     compileOptions {
@@ -282,7 +292,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
 
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.2.1'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.1' // update from 9.2.1 to fix mapbox issue
 
     // Upgrading will require more changes in our codebase https://github.com/getodk/collect/issues/4305
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.8.0'

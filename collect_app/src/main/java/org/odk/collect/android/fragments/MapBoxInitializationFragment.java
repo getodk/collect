@@ -42,6 +42,9 @@ public class MapBoxInitializationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.mapbox_fragment_layout, container, false);
         initMapBox(rootView);
+        if (mapView != null) {
+            mapView.onCreate(savedInstanceState);
+        }
         return rootView;
     }
 
