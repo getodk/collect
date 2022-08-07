@@ -106,7 +106,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
         if (formController != null) {
             formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
         }
-        RankingWidgetDialog rankingWidgetDialog = new RankingWidgetDialog(savedItems == null ? items : savedItems, getFormEntryPrompt().getIndex());
+        RankingWidgetDialog rankingWidgetDialog = new RankingWidgetDialog(savedItems == null ? items : savedItems, getFormEntryPrompt());
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
     }
 

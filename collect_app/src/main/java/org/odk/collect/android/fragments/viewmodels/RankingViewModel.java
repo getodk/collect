@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.form.api.FormEntryPrompt;
 
 import java.util.List;
 
@@ -13,34 +13,34 @@ import java.util.List;
 public class RankingViewModel extends ViewModel {
 
     private final List<SelectChoice> items;
-    private final FormIndex formIndex;
+    private final FormEntryPrompt formEntryPrompt;
 
-    private RankingViewModel(List<SelectChoice> items, FormIndex formIndex) {
+    private RankingViewModel(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
         this.items = items;
-        this.formIndex = formIndex;
+        this.formEntryPrompt = formEntryPrompt;
     }
 
     public List<SelectChoice> getItems() {
         return items;
     }
 
-    public FormIndex getFormIndex() {
-        return formIndex;
+    public FormEntryPrompt getFormEntryPrompt() {
+        return formEntryPrompt;
     }
 
     public static class Factory implements ViewModelProvider.Factory {
         private final List<SelectChoice> items;
-        private final FormIndex formIndex;
+        private final FormEntryPrompt formEntryPrompt;
 
-        public Factory(List<SelectChoice> items, FormIndex formIndex) {
+        public Factory(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
             this.items = items;
-            this.formIndex = formIndex;
+            this.formEntryPrompt = formEntryPrompt;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new RankingViewModel(items, formIndex);
+            return (T) new RankingViewModel(items, formEntryPrompt);
         }
     }
 }

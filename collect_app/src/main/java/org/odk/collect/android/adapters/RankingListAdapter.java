@@ -26,12 +26,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter.ItemViewHolder;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -42,11 +40,11 @@ import java.util.List;
 public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
     private final List<SelectChoice> items;
-    private final FormIndex formIndex;
+    private final FormEntryPrompt formEntryPrompt;
 
-    public RankingListAdapter(List<SelectChoice> items, FormIndex formIndex) {
+    public RankingListAdapter(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
         this.items = items;
-        this.formIndex = formIndex;
+        this.formEntryPrompt = formEntryPrompt;
     }
 
     @NonNull
@@ -57,8 +55,7 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, int position) {
-        FormController formController = Collect.getInstance().getFormController();
-        CharSequence itemName = HtmlUtils.textToHtml(formController.getQuestionPrompt(formIndex).getSelectChoiceText(items.get(position)));
+        CharSequence itemName = HtmlUtils.textToHtml(formEntryPrompt.getSelectChoiceText(items.get(position)));
         holder.textView.setText(itemName);
     }
 

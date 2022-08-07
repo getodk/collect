@@ -137,10 +137,10 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
+    private final FormController formController;
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *
      * @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
@@ -168,6 +168,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             }
         }
 
+        formController = formEntryViewModel.getFormController();
+
         this.widgetFactory = new WidgetFactory(
                 context,
                 readOnlyOverride,
@@ -183,7 +185,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 audioRecorder,
                 viewLifecycle,
                 fileRequester,
-                stringRequester
+                stringRequester,
+                formController
         );
 
         widgets = new ArrayList<>();
@@ -484,10 +487,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
+
 
         if (bundle != null) {
             Set<String> keys = bundle.keySet();

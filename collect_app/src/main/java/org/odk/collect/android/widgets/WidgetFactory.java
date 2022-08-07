@@ -26,10 +26,10 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -82,6 +82,7 @@ public class WidgetFactory {
     private final LifecycleOwner viewLifecycle;
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
+    private final FormController formController;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
@@ -94,7 +95,8 @@ public class WidgetFactory {
                          AudioRecorder audioRecorder,
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
-                         StringRequester stringRequester) {
+                         StringRequester stringRequester,
+                         FormController formController) {
         this.activity = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -107,6 +109,7 @@ public class WidgetFactory {
         this.viewLifecycle = viewLifecycle;
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
+        this.formController = formController;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -206,7 +209,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
                 questionWidget = new OSMWidget(activity, questionDetails, waitingForDataRegistry,
-                        IntentLauncherImpl.INSTANCE, Collect.getInstance().getFormController());
+                        IntentLauncherImpl.INSTANCE, formController);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterProvider.create(prompt, useExternalRecorder);
