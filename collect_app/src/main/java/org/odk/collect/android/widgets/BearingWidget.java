@@ -49,6 +49,8 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
     public BearingWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, SensorManager sensorManager) {
         super(context, questionDetails);
+        render();
+
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.sensorManager = sensorManager;
     }

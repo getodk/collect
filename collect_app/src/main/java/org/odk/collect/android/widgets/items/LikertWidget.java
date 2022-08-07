@@ -57,6 +57,7 @@ public class LikertWidget extends QuestionWidget {
 
     public LikertWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
 
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 

@@ -28,6 +28,8 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
 
     public SelectMultiMinimalWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt, waitingForDataRegistry);
+        render();
+
         selectedItems = getFormEntryPrompt().getAnswerValue() == null
                 ? new ArrayList<>() :
                 (List<Selection>) getFormEntryPrompt().getAnswerValue().getValue();

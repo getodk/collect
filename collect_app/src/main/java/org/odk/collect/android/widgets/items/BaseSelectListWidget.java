@@ -34,6 +34,8 @@ public abstract class BaseSelectListWidget extends QuestionWidget implements Mul
 
     public BaseSelectListWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
+
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 
         logAnalytics(questionDetails);

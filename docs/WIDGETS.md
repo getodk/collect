@@ -13,6 +13,7 @@ public class TriggerWidget extends QuestionWidget {
 
     public TriggerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        render();
     }
 
     @Override
@@ -60,7 +61,7 @@ To create your own widget your class needs to override several methods:
 * `setOnLongClickListener` - Used to make sure clickable views in the widget work with the long click feature (shows the "Edit Prompt" menu). The passed listener should be set as the long click listener on clickable views in the widget.
 * `cancelLongPress` - As above this is used to make sure long click features work. The `cancelLongPress` call should simply be forwarded to clickable views in the widget.
 
-As you'll see from the example you need to call `widgetValueChanged` whenever the answer is changed in someway. This will make sure that any listeners attached to the widget will be called.
+As you'll see from the example you need to call `widgetValueChanged` whenever the answer is changed in someway. This will make sure that any listeners attached to the widget will be called. `render` must be called in your widget's constructor to signal that it's safe to call `onCreateAnswerView` and show the widget on screen.
 
 ### Handling rotation/configuration changes
 

@@ -60,6 +60,8 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     public ImageWidget(Context context, final QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
+        render();
+
         imageClickHandler = new ViewImageClickHandler();
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();

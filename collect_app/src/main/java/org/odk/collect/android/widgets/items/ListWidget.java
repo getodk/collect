@@ -79,6 +79,7 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
 
     public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance) {
         super(context, questionDetails);
+        render();
 
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 

@@ -62,6 +62,8 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
 
     public AnnotateWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
+        render();
+
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, R.string.annotate_image);
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();

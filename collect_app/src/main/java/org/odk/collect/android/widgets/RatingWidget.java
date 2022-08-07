@@ -44,6 +44,7 @@ public class RatingWidget extends QuestionWidget {
 
     public RatingWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
     }
 
     @Override

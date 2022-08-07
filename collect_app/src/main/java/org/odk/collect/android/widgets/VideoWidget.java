@@ -73,10 +73,12 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         this(context, prompt, waitingForDataRegistry, questionMediaManager, new CameraUtils());
+        render();
     }
 
     public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
         super(context, questionDetails);
+        render();
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;

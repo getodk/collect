@@ -44,6 +44,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
 
     public RangeIntegerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        render();
     }
 
     @Override

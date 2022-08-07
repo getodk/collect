@@ -43,6 +43,8 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
 
     public TimeWidget(Context context, final QuestionDetails prompt, DateTimeWidgetUtils widgetUtils) {
         super(context, prompt);
+        render();
+
         this.widgetUtils = widgetUtils;
     }
 

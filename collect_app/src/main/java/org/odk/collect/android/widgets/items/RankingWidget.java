@@ -55,6 +55,8 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
 
     public RankingWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        render();
+
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 
         setUpLayout(getOrderedItems());

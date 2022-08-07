@@ -43,6 +43,7 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
 
     public SelectOneImageMapWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
         super(context, questionDetails);
+        render();
 
         this.autoAdvance = autoAdvance;
 

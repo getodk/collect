@@ -29,6 +29,8 @@ public class IntegerWidget extends StringWidget {
 
     public IntegerWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
+
         StringWidgetUtils.adjustEditTextAnswerToIntegerWidget(answerText, questionDetails.getPrompt());
     }
 

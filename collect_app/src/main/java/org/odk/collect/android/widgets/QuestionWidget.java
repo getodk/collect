@@ -140,15 +140,18 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
         setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
-        View answerView = onCreateAnswerView(context, questionDetails.getPrompt(), getAnswerFontSize());
-        if (answerView != null) {
-            addAnswerView(answerView);
-        }
-
         if (context instanceof Activity && !questionDetails.isReadOnly()) {
             registerToClearAnswerOnLongPress((Activity) context, this);
         }
+
         hideAnswerContainerIfNeeded();
+    }
+
+    public void render() {
+        View answerView = onCreateAnswerView(getContext(), questionDetails.getPrompt(), getAnswerFontSize());
+        if (answerView != null) {
+            addAnswerView(answerView);
+        }
     }
 
     /**

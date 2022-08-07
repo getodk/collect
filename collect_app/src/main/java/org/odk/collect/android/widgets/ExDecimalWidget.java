@@ -40,6 +40,8 @@ public class ExDecimalWidget extends ExStringWidget {
 
     public ExDecimalWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails, waitingForDataRegistry, stringRequester);
+        render();
+
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 

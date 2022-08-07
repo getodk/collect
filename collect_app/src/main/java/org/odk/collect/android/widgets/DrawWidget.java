@@ -43,6 +43,8 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
 
     public DrawWidget(Context context, QuestionDetails prompt, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, String tmpImageFilePath) {
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
+        render();
+
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
         addCurrentImageToLayout();

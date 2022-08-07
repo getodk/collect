@@ -39,6 +39,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     public ExImageWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, FileRequester fileRequester) {
         super(context, questionDetails);
+        render();
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;

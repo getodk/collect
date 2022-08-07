@@ -38,6 +38,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
     public ExVideoWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, FileRequester fileRequester) {
         super(context, questionDetails);
+        render();
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;

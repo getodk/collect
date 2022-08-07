@@ -49,6 +49,8 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
     public DateTimeWidget(Context context, QuestionDetails prompt, DateTimeWidgetUtils widgetUtils) {
         super(context, prompt);
+        render();
+
         this.widgetUtils = widgetUtils;
     }
 

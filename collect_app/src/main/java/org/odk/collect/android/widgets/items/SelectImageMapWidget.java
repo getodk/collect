@@ -78,6 +78,8 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
 
     public SelectImageMapWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        render();
+
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 
         isSingleSelect = this instanceof SelectOneImageMapWidget;

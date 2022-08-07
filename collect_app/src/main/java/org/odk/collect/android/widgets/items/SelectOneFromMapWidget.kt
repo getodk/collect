@@ -25,6 +25,10 @@ import org.odk.collect.permissions.PermissionListener
 class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails) :
     QuestionWidget(context, questionDetails), WidgetDataReceiver {
 
+    init {
+        render()
+    }
+
     lateinit var binding: SelectOneFromMapWidgetAnswerBinding
     private var answer: SelectOneData? = null
 

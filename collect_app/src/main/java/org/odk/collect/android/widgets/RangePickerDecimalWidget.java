@@ -29,6 +29,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
 
     public RangePickerDecimalWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
     }
 
     @Override

@@ -59,6 +59,8 @@ public class LabelWidget extends QuestionWidget {
 
     public LabelWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
+
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
         addItems(context, questionDetails);
         SpacesInUnderlyingValuesWarning.forQuestionWidget(this).renderWarningIfNecessary(items);
