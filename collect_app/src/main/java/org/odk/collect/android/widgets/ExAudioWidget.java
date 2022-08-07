@@ -45,12 +45,13 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
     public ExAudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          AudioPlayer audioPlayer, WaitingForDataRegistry waitingForDataRegistry, FileRequester fileRequester) {
         super(context, questionDetails);
-        render();
 
         this.audioPlayer = audioPlayer;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.fileRequester = fileRequester;
+
+        render();
 
         updateVisibilities();
         updatePlayerMedia();
@@ -194,7 +195,7 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void setupAnswerFile(String fileName) {
         if (fileName != null && !fileName.isEmpty()) {
-            answerFile = new File(getInstanceFolder() + File.separator + fileName);
+            answerFile = questionMediaManager.getAnswerFile(fileName);
         }
     }
 }

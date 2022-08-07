@@ -39,11 +39,12 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     public ExImageWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager,
                          WaitingForDataRegistry waitingForDataRegistry, FileRequester fileRequester) {
         super(context, questionDetails);
-        render();
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.fileRequester = fileRequester;
+
+        render();
     }
 
     @Override
@@ -129,7 +130,7 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void setupAnswerFile(String fileName) {
         if (fileName != null && !fileName.isEmpty()) {
-            answerFile = new File(getInstanceFolder() + File.separator + fileName);
+            answerFile = questionMediaManager.getAnswerFile(fileName);
         }
     }
 

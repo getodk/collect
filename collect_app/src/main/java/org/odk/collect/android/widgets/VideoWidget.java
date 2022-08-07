@@ -117,7 +117,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     @Override
     public void deleteFile() {
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
+                        questionMediaManager.getAnswerFile(binaryName).getAbsolutePath());
         binaryName = null;
     }
 
@@ -252,7 +252,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     }
 
     private void playVideoFile() {
-        File file = new File(getInstanceFolder() + File.separator + binaryName);
+        File file = questionMediaManager.getAnswerFile(binaryName);
         mediaUtils.openFile(getContext(), file, "video/*");
     }
 }

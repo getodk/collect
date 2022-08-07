@@ -24,8 +24,6 @@ public class ExArbitraryFileWidget extends BaseArbitraryFileWidget {
                                  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry,
                                  FileRequester fileRequester) {
         super(context, questionDetails, questionMediaManager, waitingForDataRegistry);
-        render();
-
         this.fileRequester = fileRequester;
     }
 
