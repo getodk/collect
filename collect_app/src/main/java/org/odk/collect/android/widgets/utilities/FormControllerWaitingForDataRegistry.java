@@ -1,21 +1,23 @@
 package org.odk.collect.android.widgets.utilities;
 
 import org.javarosa.core.model.FormIndex;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
+
+import java.util.function.Supplier;
 
 import timber.log.Timber;
 
 public class FormControllerWaitingForDataRegistry implements WaitingForDataRegistry {
 
+    private final Supplier<FormController> formControllerProvider;
+
+    public FormControllerWaitingForDataRegistry(Supplier<FormController> formControllerProvider) {
+        this.formControllerProvider = formControllerProvider;
+    }
+
     @Override
     public void waitForData(FormIndex index) {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
+        FormController formController = formControllerProvider.get();
         if (formController == null) {
             Timber.w("Can not call setIndexWaitingForData() because of null formController");
             return;
@@ -26,12 +28,7 @@ public class FormControllerWaitingForDataRegistry implements WaitingForDataRegis
 
     @Override
     public boolean isWaitingForData(FormIndex index) {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
+        FormController formController = formControllerProvider.get();
         if (formController == null) {
             return false;
         }
@@ -41,12 +38,7 @@ public class FormControllerWaitingForDataRegistry implements WaitingForDataRegis
 
     @Override
     public void cancelWaitingForData() {
-        Collect collect = Collect.getInstance();
-        if (collect == null) {
-            throw new IllegalStateException("Collect application instance is null.");
-        }
-
-        FormController formController = collect.getFormController();
+        FormController formController = formControllerProvider.get();
         if (formController == null) {
             return;
         }

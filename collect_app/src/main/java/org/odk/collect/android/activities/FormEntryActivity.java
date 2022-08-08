@@ -508,7 +508,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider);
 
-        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
+        waitingForDataRegistry = new FormControllerWaitingForDataRegistry(this::getFormController);
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, intentLauncher, waitingForDataRegistry, permissionsProvider);
 
         RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
