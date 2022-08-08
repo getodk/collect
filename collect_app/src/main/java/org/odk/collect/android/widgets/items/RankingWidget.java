@@ -16,6 +16,9 @@
 
 package org.odk.collect.android.widgets.items;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.Button;
@@ -28,35 +31,33 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerTextView;
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-
 @SuppressLint("ViewConstructor")
 public class RankingWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
 
+    private final WaitingForDataRegistry waitingForDataRegistry;
     private List<SelectChoice> savedItems;
     Button showRankingDialogButton;
     private TextView answerTextView;
     private final List<SelectChoice> items;
 
-    public RankingWidget(Context context, QuestionDetails prompt) {
+    public RankingWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
         render();
 
+        this.waitingForDataRegistry = waitingForDataRegistry;
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
 
         setUpLayout(getOrderedItems());
@@ -104,10 +105,8 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
 
     @Override
     public void onButtonClick(int buttonId) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(getFormEntryPrompt().getIndex());
-        }
+        waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+
         RankingWidgetDialog rankingWidgetDialog = new RankingWidgetDialog(savedItems == null ? items : savedItems, getFormEntryPrompt());
         rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
     }

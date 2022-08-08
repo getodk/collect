@@ -33,6 +33,7 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 /**
  * Displays a DatePicker widget. DateWidget handles leap years and does not allow dates that do not
@@ -40,6 +41,7 @@ import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
  */
 @SuppressLint("ViewConstructor")
 public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver {
+    private final WaitingForDataRegistry waitingForDataRegistry;
     DateTimeWidgetAnswerBinding binding;
 
     private final DateTimeWidgetUtils widgetUtils;
@@ -47,11 +49,12 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     private LocalDateTime selectedDateTime;
     private DatePickerDetails datePickerDetails;
 
-    public DateTimeWidget(Context context, QuestionDetails prompt, DateTimeWidgetUtils widgetUtils) {
+    public DateTimeWidget(Context context, QuestionDetails prompt, DateTimeWidgetUtils widgetUtils, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
         render();
 
         this.widgetUtils = widgetUtils;
+        this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
     @Override
@@ -67,12 +70,12 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             binding.timeWidget.timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             binding.dateWidget.dateButton.setOnClickListener(v -> {
-                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                waitingForDataRegistry.waitForData(prompt.getIndex());
                 widgetUtils.showDatePickerDialog(context, datePickerDetails, selectedDateTime);
             });
 
             binding.timeWidget.timeButton.setOnClickListener(v -> {
-                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                waitingForDataRegistry.waitForData(prompt.getIndex());
                 widgetUtils.showTimePickerDialog(context, selectedDateTime);
             });
         }

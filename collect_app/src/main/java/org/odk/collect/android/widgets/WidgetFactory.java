@@ -121,13 +121,13 @@ public class WidgetFactory {
             case Constants.CONTROL_INPUT:
                 switch (prompt.getDataType()) {
                     case Constants.DATATYPE_DATE_TIME:
-                        questionWidget = new DateTimeWidget(activity, questionDetails, new DateTimeWidgetUtils());
+                        questionWidget = new DateTimeWidget(activity, questionDetails, new DateTimeWidgetUtils(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(activity, questionDetails, new DateTimeWidgetUtils());
+                        questionWidget = new DateWidget(activity, questionDetails, new DateTimeWidgetUtils(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_TIME:
-                        questionWidget = new TimeWidget(activity, questionDetails, new DateTimeWidgetUtils());
+                        questionWidget = new TimeWidget(activity, questionDetails, new DateTimeWidgetUtils(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_DECIMAL:
                         if (appearance.startsWith(Appearances.EX)) {
@@ -249,7 +249,7 @@ public class WidgetFactory {
                 }
                 break;
             case Constants.CONTROL_RANK:
-                questionWidget = new RankingWidget(activity, questionDetails);
+                questionWidget = new RankingWidget(activity, questionDetails, waitingForDataRegistry);
                 break;
             case Constants.CONTROL_TRIGGER:
                 questionWidget = new TriggerWidget(activity, questionDetails);

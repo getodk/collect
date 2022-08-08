@@ -31,9 +31,11 @@ import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
 public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
+    private final WaitingForDataRegistry waitingForDataRegistry;
     DateWidgetAnswerBinding binding;
 
     private final DateTimeWidgetUtils widgetUtils;
@@ -41,11 +43,12 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     private LocalDateTime selectedDate;
     private DatePickerDetails datePickerDetails;
 
-    public DateWidget(Context context, QuestionDetails prompt, DateTimeWidgetUtils widgetUtils) {
+    public DateWidget(Context context, QuestionDetails prompt, DateTimeWidgetUtils widgetUtils, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
         render();
 
         this.widgetUtils = widgetUtils;
+        this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
     @Override
@@ -59,7 +62,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
             binding.dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             binding.dateButton.setOnClickListener(v -> {
-                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                waitingForDataRegistry.waitForData(prompt.getIndex());
                 widgetUtils.showDatePickerDialog(context, datePickerDetails, selectedDate);
             });
         }

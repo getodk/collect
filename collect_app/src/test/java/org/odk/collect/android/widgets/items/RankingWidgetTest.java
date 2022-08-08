@@ -28,7 +28,7 @@ public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleI
     @NonNull
     @Override
     public RankingWidget createWidget() {
-        return new RankingWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new RankingWidget(activity, new QuestionDetails(formEntryPrompt), null);
     }
 
     @NonNull

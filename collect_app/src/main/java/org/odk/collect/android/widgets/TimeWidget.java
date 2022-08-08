@@ -32,20 +32,23 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 @SuppressLint("ViewConstructor")
 public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
+    private final WaitingForDataRegistry waitingForDataRegistry;
     TimeWidgetAnswerBinding binding;
 
     private final DateTimeWidgetUtils widgetUtils;
 
     private LocalDateTime selectedTime;
 
-    public TimeWidget(Context context, final QuestionDetails prompt, DateTimeWidgetUtils widgetUtils) {
+    public TimeWidget(Context context, final QuestionDetails prompt, DateTimeWidgetUtils widgetUtils, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
         render();
 
         this.widgetUtils = widgetUtils;
+        this.waitingForDataRegistry = waitingForDataRegistry;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
             binding.timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             binding.timeButton.setOnClickListener(v -> {
-                DateTimeWidgetUtils.setWidgetWaitingForData(prompt.getIndex());
+                waitingForDataRegistry.waitForData(prompt.getIndex());
                 widgetUtils.showTimePickerDialog(context, selectedTime);
             });
         }
