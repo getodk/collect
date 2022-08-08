@@ -14,11 +14,13 @@
 
 package org.odk.collect.android.widgets.items;
 
+import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.Nullable;
-
 import android.widget.RadioButton;
+
+import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
@@ -26,17 +28,14 @@ import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectOneListAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.utilities.SelectOneWidgetUtils;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 
 /**
  * SelectOneWidgets handles select-one fields using radio buttons.
@@ -51,10 +50,12 @@ public class SelectOneWidget extends BaseSelectListWidget {
     private AdvanceToNextListener listener;
 
     private final boolean autoAdvance;
+    private final FormController formController;
 
-    public SelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
+    public SelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, FormController formController) {
         super(context, questionDetails);
         this.autoAdvance = autoAdvance;
+        this.formController = formController;
         if (context instanceof AdvanceToNextListener) {
             listener = (AdvanceToNextListener) context;
         }
@@ -113,7 +114,6 @@ public class SelectOneWidget extends BaseSelectListWidget {
      * If there are "fast external itemset" selects right after this select, assume that they are linked to the current question and clear them.
      */
     private void clearFollowingItemsetWidgets() {
-        FormController formController = Collect.getInstance().getFormController();
         if (formController == null) {
             return;
         }
