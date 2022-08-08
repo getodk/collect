@@ -28,6 +28,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 
 /**
  * A widget which is responsible for multi select questions represented by
@@ -41,8 +42,8 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
 
     private final boolean autoAdvance;
 
-    public SelectOneImageMapWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance) {
-        super(context, questionDetails);
+    public SelectOneImageMapWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, SelectChoiceLoader selectChoiceLoader) {
+        super(context, questionDetails, selectChoiceLoader);
         render();
 
         this.autoAdvance = autoAdvance;

@@ -12,6 +12,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -24,10 +25,10 @@ public abstract class SelectMinimalWidget extends QuestionWidget implements Widg
     SelectMinimalWidgetAnswerBinding binding;
     private final WaitingForDataRegistry waitingForDataRegistry;
 
-    public SelectMinimalWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+    public SelectMinimalWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry, SelectChoiceLoader selectChoiceLoader) {
         super(context, prompt);
         this.waitingForDataRegistry = waitingForDataRegistry;
-        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
     }
 
     @Override

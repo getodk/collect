@@ -37,6 +37,7 @@ import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
@@ -53,12 +54,12 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     private TextView answerTextView;
     private final List<SelectChoice> items;
 
-    public RankingWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
+    public RankingWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry, SelectChoiceLoader selectChoiceLoader) {
         super(context, prompt);
         render();
 
         this.waitingForDataRegistry = waitingForDataRegistry;
-        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         setUpLayout(getOrderedItems());
     }

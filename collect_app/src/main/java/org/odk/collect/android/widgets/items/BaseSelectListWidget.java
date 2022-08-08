@@ -19,6 +19,7 @@ import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.utilities.SearchQueryViewModel;
 
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
@@ -32,11 +33,11 @@ public abstract class BaseSelectListWidget extends QuestionWidget implements Mul
 
     final List<SelectChoice> items;
 
-    public BaseSelectListWidget(Context context, QuestionDetails questionDetails) {
+    public BaseSelectListWidget(Context context, QuestionDetails questionDetails, SelectChoiceLoader selectChoiceLoader) {
         super(context, questionDetails);
         render();
 
-        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         logAnalytics(questionDetails);
         binding.choicesRecyclerView.initRecyclerView(setUpAdapter(), Appearances.isFlexAppearance(getQuestionDetails().getPrompt()));

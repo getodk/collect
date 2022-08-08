@@ -34,6 +34,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 
 import timber.log.Timber;
 
@@ -52,8 +53,8 @@ public class SelectOneWidget extends BaseSelectListWidget {
     private final boolean autoAdvance;
     private final FormController formController;
 
-    public SelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, FormController formController) {
-        super(context, questionDetails);
+    public SelectOneWidget(Context context, QuestionDetails questionDetails, boolean autoAdvance, FormController formController, SelectChoiceLoader selectChoiceLoader) {
+        super(context, questionDetails, selectChoiceLoader);
         this.autoAdvance = autoAdvance;
         this.formController = formController;
         if (context instanceof AdvanceToNextListener) {

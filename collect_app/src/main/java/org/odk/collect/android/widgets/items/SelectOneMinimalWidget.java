@@ -17,6 +17,7 @@ import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
@@ -28,8 +29,8 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
     private final boolean autoAdvance;
     private AdvanceToNextListener autoAdvanceListener;
 
-    public SelectOneMinimalWidget(Context context, QuestionDetails prompt, boolean autoAdvance, WaitingForDataRegistry waitingForDataRegistry) {
-        super(context, prompt, waitingForDataRegistry);
+    public SelectOneMinimalWidget(Context context, QuestionDetails prompt, boolean autoAdvance, WaitingForDataRegistry waitingForDataRegistry, SelectChoiceLoader selectChoiceLoader) {
+        super(context, prompt, waitingForDataRegistry, selectChoiceLoader);
         render();
 
         selectedItem = SelectOneWidgetUtils.getSelectedItem(prompt.getPrompt(), items);

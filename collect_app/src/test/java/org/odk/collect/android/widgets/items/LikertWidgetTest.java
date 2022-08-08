@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.QuestionWidgetTest;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class LikertWidgetTest extends QuestionWidgetTest<LikertWidget, SelectOne
     @NonNull
     @Override
     public LikertWidget createWidget() {
-        return new LikertWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new LikertWidget(activity, new QuestionDetails(formEntryPrompt), new FormEntryPromptSelectChoiceLoader());
     }
 
     @NonNull

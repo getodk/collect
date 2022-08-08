@@ -34,6 +34,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 
 import java.io.File;
 import java.util.HashMap;
@@ -55,11 +56,11 @@ public class LikertWidget extends QuestionWidget {
 
     HashMap<RadioButton, String> buttonsToName;
 
-    public LikertWidget(Context context, QuestionDetails questionDetails) {
+    public LikertWidget(Context context, QuestionDetails questionDetails, SelectChoiceLoader selectChoiceLoader) {
         super(context, questionDetails);
         render();
 
-        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         setMainViewLayoutParameters();
         setStructures();

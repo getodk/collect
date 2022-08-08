@@ -24,6 +24,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.List;
@@ -34,8 +35,8 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiImageMapWidget extends SelectImageMapWidget {
-    public SelectMultiImageMapWidget(Context context, QuestionDetails questionDetails) {
-        super(context, questionDetails);
+    public SelectMultiImageMapWidget(Context context, QuestionDetails questionDetails, SelectChoiceLoader selectChoiceLoader) {
+        super(context, questionDetails, selectChoiceLoader);
         render();
 
         if (questionDetails.getPrompt().getAnswerValue() != null) {

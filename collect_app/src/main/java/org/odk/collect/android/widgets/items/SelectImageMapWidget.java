@@ -36,6 +36,7 @@ import org.odk.collect.android.databinding.SelectImageMapWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -76,11 +77,11 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
 
     final List<SelectChoice> items;
 
-    public SelectImageMapWidget(Context context, QuestionDetails prompt) {
+    public SelectImageMapWidget(Context context, QuestionDetails prompt, SelectChoiceLoader selectChoiceLoader) {
         super(context, prompt);
         render();
 
-        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         isSingleSelect = this instanceof SelectOneImageMapWidget;
 

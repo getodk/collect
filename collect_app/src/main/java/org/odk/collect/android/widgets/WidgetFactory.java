@@ -235,21 +235,21 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 if (appearance.contains(Appearances.MINIMAL)) {
-                    questionWidget = new SelectMultiMinimalWidget(activity, questionDetails, waitingForDataRegistry);
+                    questionWidget = new SelectMultiMinimalWidget(activity, questionDetails, waitingForDataRegistry, formEntryViewModel);
                 } else if (appearance.contains(Appearances.LIST_NO_LABEL)) {
-                    questionWidget = new ListMultiWidget(activity, questionDetails, false);
+                    questionWidget = new ListMultiWidget(activity, questionDetails, false, formEntryViewModel);
                 } else if (appearance.contains(Appearances.LIST)) {
-                    questionWidget = new ListMultiWidget(activity, questionDetails, true);
+                    questionWidget = new ListMultiWidget(activity, questionDetails, true, formEntryViewModel);
                 } else if (appearance.contains(Appearances.LABEL)) {
-                    questionWidget = new LabelWidget(activity, questionDetails);
+                    questionWidget = new LabelWidget(activity, questionDetails, formEntryViewModel);
                 } else if (appearance.contains(Appearances.IMAGE_MAP)) {
-                    questionWidget = new SelectMultiImageMapWidget(activity, questionDetails);
+                    questionWidget = new SelectMultiImageMapWidget(activity, questionDetails, formEntryViewModel);
                 } else {
-                    questionWidget = new SelectMultiWidget(activity, questionDetails);
+                    questionWidget = new SelectMultiWidget(activity, questionDetails, formEntryViewModel);
                 }
                 break;
             case Constants.CONTROL_RANK:
-                questionWidget = new RankingWidget(activity, questionDetails, waitingForDataRegistry);
+                questionWidget = new RankingWidget(activity, questionDetails, waitingForDataRegistry, formEntryViewModel);
                 break;
             case Constants.CONTROL_TRIGGER:
                 questionWidget = new TriggerWidget(activity, questionDetails);
@@ -293,21 +293,21 @@ public class WidgetFactory {
         // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
         // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
         if (appearance.contains(Appearances.MINIMAL)) {
-            questionWidget = new SelectOneMinimalWidget(activity, questionDetails, isQuick, waitingForDataRegistry);
+            questionWidget = new SelectOneMinimalWidget(activity, questionDetails, isQuick, waitingForDataRegistry, formEntryViewModel);
         } else if (appearance.contains(Appearances.LIKERT)) {
-            questionWidget = new LikertWidget(activity, questionDetails);
+            questionWidget = new LikertWidget(activity, questionDetails, formEntryViewModel);
         } else if (appearance.contains(Appearances.LIST_NO_LABEL)) {
-            questionWidget = new ListWidget(activity, questionDetails, false, isQuick);
+            questionWidget = new ListWidget(activity, questionDetails, false, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.LIST)) {
-            questionWidget = new ListWidget(activity, questionDetails, true, isQuick);
+            questionWidget = new ListWidget(activity, questionDetails, true, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.LABEL)) {
-            questionWidget = new LabelWidget(activity, questionDetails);
+            questionWidget = new LabelWidget(activity, questionDetails, formEntryViewModel);
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
-            questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick);
+            questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.MAP)) {
             questionWidget = new SelectOneFromMapWidget(activity, questionDetails);
         } else {
-            questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController);
+            questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController, formEntryViewModel);
         }
         return questionWidget;
     }

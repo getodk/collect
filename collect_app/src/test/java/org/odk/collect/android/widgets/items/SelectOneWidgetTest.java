@@ -50,6 +50,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
 
@@ -65,7 +66,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     @NonNull
     @Override
     public SelectOneWidget createWidget() {
-        SelectOneWidget selectOneWidget = new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt), isQuick(), null);
+        SelectOneWidget selectOneWidget = new SelectOneWidget(activity, new QuestionDetails(formEntryPrompt), isQuick(), null, new FormEntryPromptSelectChoiceLoader());
         if (isQuick()) {
             selectOneWidget.setListener(listener);
         }

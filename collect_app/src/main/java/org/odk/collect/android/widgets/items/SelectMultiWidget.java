@@ -26,6 +26,7 @@ import org.odk.collect.android.adapters.AbstractSelectListAdapter;
 import org.odk.collect.android.adapters.SelectMultipleListAdapter;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ import java.util.List;
  */
 @SuppressLint("ViewConstructor")
 public class SelectMultiWidget extends BaseSelectListWidget {
-    public SelectMultiWidget(Context context, QuestionDetails prompt) {
-        super(context, prompt);
+    public SelectMultiWidget(Context context, QuestionDetails prompt, SelectChoiceLoader selectChoiceLoader) {
+        super(context, prompt, selectChoiceLoader);
         SpacesInUnderlyingValuesWarning
                 .forQuestionWidget(this)
                 .renderWarningIfNecessary(items);

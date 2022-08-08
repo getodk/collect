@@ -12,21 +12,28 @@ import androidx.lifecycle.ViewModelProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
+import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.questions.SelectChoiceUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
 import org.odk.collect.async.Scheduler;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class FormEntryViewModel extends ViewModel {
+public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
 
     private final Supplier<Long> clock;
     private final Scheduler scheduler;
@@ -259,6 +266,12 @@ public class FormEntryViewModel extends ViewModel {
         if (this.answerListener != null) {
             this.answerListener.onAnswer(index, answer);
         }
+    }
+
+    @NonNull
+    @Override
+    public List<SelectChoice> loadSelectChoices(@NonNull FormEntryPrompt prompt) throws FileNotFoundException, XPathSyntaxException, ExternalDataException {
+        return SelectChoiceUtils.loadSelectChoices(prompt, formController);
     }
 
     @Override

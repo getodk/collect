@@ -37,6 +37,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
 
@@ -62,7 +63,7 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
     @NonNull
     @Override
     public SelectMultiWidget createWidget() {
-        SelectMultiWidget selectMultiWidget = new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt));
+        SelectMultiWidget selectMultiWidget = new SelectMultiWidget(activity, new QuestionDetails(formEntryPrompt), new FormEntryPromptSelectChoiceLoader());
         selectMultiWidget.setFocus(activity);
         return selectMultiWidget;
     }
