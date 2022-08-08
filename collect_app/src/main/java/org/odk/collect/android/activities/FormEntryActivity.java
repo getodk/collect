@@ -744,13 +744,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private void nonblockingCreateSavePointData() {
         try {
-            SavePointTask savePointTask = new SavePointTask(this);
+            SavePointTask savePointTask = new SavePointTask(this, getFormController());
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
                 FormController formController = getFormController();
                 if (formController != null) {
-                    new SaveFormIndexTask(this, formController.getFormIndex()).execute();
+                    new SaveFormIndexTask(this, formController.getFormIndex(), formController.getInstanceFile()).execute();
                 }
             }
         } catch (Exception e) {
@@ -889,7 +889,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             progressDialog.setMessage(getString(R.string.please_wait));
             DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
 
-            mediaLoadingFragment.beginMediaLoadingTask(uri);
+            mediaLoadingFragment.beginMediaLoadingTask(uri, getFormController());
         });
     }
 
@@ -2196,7 +2196,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     // form was saved.
                                     // TODO: revisit the fallback. If for some reason the index
                                     // wasn't saved, we can now jump around which doesn't seem right.
-                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile(formController);
                                     if (formIndex != null) {
                                         formController.jumpToIndex(formIndex);
                                         formControllerAvailable(formController);

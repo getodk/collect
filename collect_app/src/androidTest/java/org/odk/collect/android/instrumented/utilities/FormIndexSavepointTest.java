@@ -16,12 +16,15 @@
 
 package org.odk.collect.android.instrumented.utilities;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.when;
+
 import org.javarosa.core.model.FormIndex;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
@@ -29,10 +32,6 @@ import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 
 import java.io.File;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.when;
 
 // Verify that a FormIndex can be saved to and restored from a file
 @RunWith(MockitoJUnitRunner.class)
@@ -48,13 +47,12 @@ public class FormIndexSavepointTest {
         // for loadFormIndexFromFile
         File instancePath = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator + instanceName);
         when(formController.getInstanceFile()).thenReturn(instancePath);
-        Collect.getInstance().setFormController(formController);
 
         FormIndex originalFormIndex = FormIndex.createBeginningOfFormIndex();
         File indexFile = SaveFormToDisk.getFormIndexFile(instanceName);
         SaveFormIndexTask.exportFormIndexToFile(originalFormIndex, indexFile);
 
-        FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile();
+        FormIndex readFormIndex = SaveFormIndexTask.loadFormIndexFromFile(formController);
 
         assertEquals(originalFormIndex, readFormIndex);
         assertNotNull(readFormIndex);

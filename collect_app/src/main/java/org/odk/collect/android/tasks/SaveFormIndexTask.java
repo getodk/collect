@@ -19,7 +19,6 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.javarosa.core.model.FormIndex;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;
@@ -34,24 +33,24 @@ public class SaveFormIndexTask extends AsyncTask<Void, Void, String> {
 
     private final SaveFormIndexListener listener;
     private final FormIndex formIndex;
+    private final File instanceFile;
 
     public interface SaveFormIndexListener {
         void onSaveFormIndexError(String errorMessage);
     }
 
-    public SaveFormIndexTask(SaveFormIndexListener listener, FormIndex formIndex) {
+    public SaveFormIndexTask(SaveFormIndexListener listener, FormIndex formIndex, File instanceFile) {
         this.listener = listener;
         this.formIndex = formIndex;
+        this.instanceFile = instanceFile;
     }
 
     @Override
     protected String doInBackground(Void... params) {
         long start = System.currentTimeMillis();
 
-        FormController formController = Collect.getInstance().getFormController();
-
         try {
-            File tempFormIndexFile = SaveFormToDisk.getFormIndexFile(formController.getInstanceFile().getName());
+            File tempFormIndexFile = SaveFormToDisk.getFormIndexFile(instanceFile.getName());
             exportFormIndexToFile(formIndex, tempFormIndexFile);
 
             long end = System.currentTimeMillis();
@@ -85,11 +84,10 @@ public class SaveFormIndexTask extends AsyncTask<Void, Void, String> {
         }
     }
 
-    public static FormIndex loadFormIndexFromFile() {
+    public static FormIndex loadFormIndexFromFile(FormController formController) {
         FormIndex formIndex = null;
         try {
-            String instanceName = Collect.getInstance()
-                    .getFormController()
+            String instanceName = formController
                     .getInstanceFile()
                     .getName();
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(SaveFormToDisk.getFormIndexFile(instanceName)));

@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.tasks;
 
+import static org.odk.collect.android.analytics.AnalyticsEvents.ENCRYPT_SUBMISSION;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.content.ContentValues;
 import android.net.Uri;
 import android.util.Pair;
@@ -42,9 +45,9 @@ import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -65,9 +68,6 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.analytics.AnalyticsEvents.ENCRYPT_SUBMISSION;
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 /**
  * Background task for loading a form.
@@ -172,7 +172,6 @@ public class SaveFormToDisk {
      * the instance currently managed by the {@link FormController}.
      */
     private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
-        FormController formController = Collect.getInstance().getFormController();
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
@@ -330,8 +329,6 @@ public class SaveFormToDisk {
      * other methods.
      */
     private void exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
-        FormController formController = Collect.getInstance().getFormController();
-
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_collecting_message));
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
@@ -391,7 +388,7 @@ public class SaveFormToDisk {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;
 
-                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()), "");
+                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(formController), "");
             }
 
             // At this point, we have:

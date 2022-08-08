@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.ImageConverter;
@@ -24,12 +23,14 @@ import javax.inject.Inject;
 
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
+    private final File instanceFile;
     @Inject
     SettingsProvider settingsProvider;
 
     private WeakReference<FormEntryActivity> formEntryActivity;
 
-    public MediaLoadingTask(FormEntryActivity formEntryActivity) {
+    public MediaLoadingTask(FormEntryActivity formEntryActivity, File instanceFile) {
+        this.instanceFile = instanceFile;
         onAttach(formEntryActivity);
     }
 
@@ -40,24 +41,19 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     @Override
     protected File doInBackground(Uri... uris) {
-        FormController formController = Collect.getInstance().getFormController();
+        if (instanceFile != null) {
+            String extension = ContentUriHelper.getFileExtensionFromUri(uris[0]);
 
-        if (formController != null) {
-            File instanceFile = formController.getInstanceFile();
-            if (instanceFile != null) {
-                String extension = ContentUriHelper.getFileExtensionFromUri(uris[0]);
+            File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
+            FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
+            QuestionWidget questionWidget = formEntryActivity.get().getWidgetWaitingForBinaryData();
 
-                File newFile = FileUtils.createDestinationMediaFile(instanceFile.getParent(), extension);
-                FileUtils.saveAnswerFileFromUri(uris[0], newFile, Collect.getInstance());
-                QuestionWidget questionWidget = formEntryActivity.get().getWidgetWaitingForBinaryData();
-
-                // apply image conversion if the widget is an image widget
-                if (questionWidget instanceof BaseImageWidget) {
-                    String imageSizeMode = settingsProvider.getUnprotectedSettings().getString(KEY_IMAGE_SIZE);
-                    ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get(), imageSizeMode);
-                }
-                return newFile;
+            // apply image conversion if the widget is an image widget
+            if (questionWidget instanceof BaseImageWidget) {
+                String imageSizeMode = settingsProvider.getUnprotectedSettings().getString(KEY_IMAGE_SIZE);
+                ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get(), imageSizeMode);
             }
+            return newFile;
         }
         return null;
     }

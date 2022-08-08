@@ -60,11 +60,13 @@ class SelectOneFromMapWidgetTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesFormEntryViewModelFactory(
                 scheduler: Scheduler,
-                formSessionStore: FormSessionStore
+                formSessionStore: FormSessionStore,
             ): FormEntryViewModel.Factory {
-                return object : FormEntryViewModel.Factory(System::currentTimeMillis,
+                return object : FormEntryViewModel.Factory(
+                    System::currentTimeMillis,
                     scheduler,
-                    formSessionStore) {
+                    formSessionStore
+                ) {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return formEntryViewModel as T

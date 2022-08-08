@@ -21,7 +21,6 @@ package org.odk.collect.android.tasks;
 import android.os.AsyncTask;
 
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.SavePointListener;
 
@@ -40,10 +39,12 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
     private static int lastPriorityUsed;
 
     private final SavePointListener listener;
+    private final FormController formController;
     private final int priority;
 
-    public SavePointTask(SavePointListener listener) {
+    public SavePointTask(SavePointListener listener, FormController formController) {
         this.listener = listener;
+        this.formController = formController;
         this.priority = ++lastPriorityUsed;
     }
 
@@ -58,7 +59,6 @@ public class SavePointTask extends AsyncTask<Void, Void, String> {
             long start = System.currentTimeMillis();
 
             try {
-                FormController formController = Collect.getInstance().getFormController();
                 File temp = SaveFormToDisk.getSavepointFile(formController.getInstanceFile().getName());
                 ByteArrayPayload payload = formController.getFilledInFormXml();
 
