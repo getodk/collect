@@ -425,7 +425,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionStore, getIntent().getData().toString()))
+                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionStore, getSessionId()))
                 .get(BackgroundLocationViewModel.class);
 
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
@@ -526,11 +526,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private void formControllerAvailable(@NonNull FormController formController) {
         AnalyticsUtils.setForm(formController);
 
-        menuDelegate.setSession(getIntent().getData().toString());
+        menuDelegate.setSession(getSessionId());
 
         formSaveViewModel.formLoaded(formController);
         backgroundAudioViewModel.formLoaded(formController);
-        formEntryViewModel.setSession(getIntent().getData().toString());
+        formEntryViewModel.setSession(getSessionId());
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -2085,7 +2085,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.cancel(true);
                 t.destroy();
 
-                formSessionStore.set(getIntent().getData().toString(), formController);
+                formSessionStore.set(getSessionId(), formController);
 
                 backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2199,7 +2199,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                                 formControllerAvailable(formController);
                                 Intent intent = new Intent(this, FormHierarchyActivity.class);
-                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getIntent().getData().toString());
+                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getSessionId());
                                 startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
@@ -2208,7 +2208,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     } else {
                         if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
                             Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
-                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getIntent().getData().toString());
+                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getSessionId());
                             startActivity(intent);
                         }
                         finish();
@@ -2409,6 +2409,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 backgroundLocationViewModel.locationProvidersChanged();
             }
         }
+    }
+
+    @NonNull
+    private String getSessionId() {
+        return getIntent().getData().toString();
     }
 
     private void activityDisplayed() {
