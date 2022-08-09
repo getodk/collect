@@ -467,7 +467,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
-            formIndexAnimationHandler.handle(index);
+            if (index != null && Collect.getInstance().getFormController() == null) {
+                // https://github.com/getodk/collect/issues/5241
+                createErrorDialog("getFormController() is null, please email support@getodk.org with a description of what you were doing when this happened.", true);
+            } else {
+                formIndexAnimationHandler.handle(index);
+            }
         });
 
         formEntryViewModel.isLoading().observe(this, isLoading -> {
