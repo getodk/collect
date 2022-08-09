@@ -109,10 +109,6 @@ import org.odk.collect.android.utilities.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
-import org.odk.collect.android.widgets.utilities.FileRequester;
-import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
-import org.odk.collect.android.widgets.utilities.StringRequester;
-import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.androidshared.network.ConnectivityProvider;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.IntentLauncher;
@@ -592,16 +588,6 @@ public class AppDependencyModule {
     @Provides
     public IntentLauncher providesIntentLauncher() {
         return IntentLauncherImpl.INSTANCE;
-    }
-
-    @Provides
-    public FileRequester providesFileRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
-        return new FileRequesterImpl(intentLauncher, externalAppIntentProvider);
-    }
-
-    @Provides
-    public StringRequester providesStringRequester(IntentLauncher intentLauncher, ExternalAppIntentProvider externalAppIntentProvider) {
-        return new StringRequesterImpl(intentLauncher, externalAppIntentProvider);
     }
 
     @Provides

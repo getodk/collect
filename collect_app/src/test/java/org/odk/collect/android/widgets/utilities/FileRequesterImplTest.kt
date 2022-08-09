@@ -15,6 +15,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.robolectric.Robolectric
@@ -32,18 +33,20 @@ class FileRequesterImplTest {
         it.putExtra("fail", "fail")
     }
 
+    private val formController: FormController = mock()
+
     private lateinit var activity: Activity
     private lateinit var fileRequester: FileRequester
 
     @Before
     fun setup() {
         activity = Robolectric.buildActivity(Activity::class.java).get()
-        fileRequester = FileRequesterImpl(intentLauncher, externalAppIntentProvider)
+        fileRequester = FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController)
     }
 
     @Test
     fun `When exception is thrown by ExternalAppIntentProvider#getIntentToRunExternalApp a toast should be displayed`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).then {
             throw Exception("exception")
         }
         fileRequester.launch(
@@ -59,6 +62,7 @@ class FileRequesterImplTest {
     fun `When exception is thrown by ExternalAppIntentProvider#getIntentToRunExternalAppWithoutDefaultCategory a toast should be displayed`() {
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -76,7 +80,7 @@ class FileRequesterImplTest {
 
     @Test
     fun `When error is thrown by ExternalAppIntentProvider#getIntentToRunExternalApp a toast should be displayed`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).then {
             throw Exception("error")
         }
         fileRequester.launch(
@@ -92,6 +96,7 @@ class FileRequesterImplTest {
     fun `When error is thrown by ExternalAppIntentProvider#getIntentToRunExternalAppWithoutDefaultCategory a toast should be displayed`() {
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -109,7 +114,7 @@ class FileRequesterImplTest {
 
     @Test
     fun `If the first attempt to start activity succeeded nothing else should happen`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             availableIntent
         )
 
@@ -124,11 +129,12 @@ class FileRequesterImplTest {
 
     @Test
     fun `If the first attempt to start activity failed there should be another one`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -146,11 +152,12 @@ class FileRequesterImplTest {
 
     @Test
     fun `If both attempts to start activity failed a toast should be displayed`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -172,11 +179,12 @@ class FileRequesterImplTest {
     @Test
     fun `If both attempts to start activity failed a toast with custom message should be displayed if it is set`() {
         whenever(formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")).thenReturn("Custom message")
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )

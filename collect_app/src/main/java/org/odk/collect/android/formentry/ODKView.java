@@ -68,6 +68,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
@@ -80,11 +81,12 @@ import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
-import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
-import org.odk.collect.android.widgets.utilities.StringRequester;
+import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.PlaybackFailedException;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -130,10 +132,10 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     SettingsProvider settingsProvider;
 
     @Inject
-    FileRequester fileRequester;
+    ExternalAppIntentProvider externalAppIntentProvider;
 
     @Inject
-    StringRequester stringRequester;
+    IntentLauncher intentLauncher;
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
@@ -184,8 +186,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 formEntryViewModel,
                 audioRecorder,
                 viewLifecycle,
-                fileRequester,
-                stringRequester,
+                new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
+                new StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 formController
         );
 
@@ -427,7 +429,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
             try {
                 ExternalAppsUtils.populateParameters(i, parameters,
-                        c.getIndex().getReference());
+                        c.getIndex().getReference(), formController);
 
                 for (FormEntryPrompt p : questionPrompts) {
                     IFormElement formElement = p.getFormElement();

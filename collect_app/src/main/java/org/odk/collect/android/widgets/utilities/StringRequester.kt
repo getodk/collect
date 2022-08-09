@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
+import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
 import org.odk.collect.androidshared.system.IntentLauncher
 import java.io.Serializable
@@ -13,6 +14,7 @@ import java.lang.Exception
 class StringRequesterImpl(
     val intentLauncher: IntentLauncher,
     val externalAppIntentProvider: ExternalAppIntentProvider,
+    private val formController: FormController
 ) : StringRequester {
 
     override fun launch(
@@ -23,11 +25,12 @@ class StringRequesterImpl(
         onError: (String) -> Unit
     ) {
         try {
-            val intent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)?.apply {
+            val intent = externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)?.apply {
                 putExtra("value", value)
             }
             val intentWithoutDefaultCategory =
                 externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                    formController,
                     formEntryPrompt,
                     activity.packageManager
                 )?.apply {
