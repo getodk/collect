@@ -453,13 +453,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
-            if (index != null && Collect.getInstance().getFormController() == null) {
-                // https://github.com/getodk/collect/issues/5241
-                Timber.e(new Error("getCurrentIndex() firing with null getFormController(). The one stored in formEntryViewModel is " + (formEntryViewModel.getFormController() != null ? "not null" : "null")));
-                createErrorDialog("getFormController() is null, please email support@getodk.org with a description of what you were doing when this happened.", true);
-            } else {
-                formIndexAnimationHandler.handle(index);
-            }
+            formIndexAnimationHandler.handle(index);
         });
 
         formEntryViewModel.isLoading().observe(this, isLoading -> {
@@ -603,9 +597,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 return;
             }
-
-            // Not a restart from a screen orientation change (or other).
-            Collect.getInstance().setFormController(null);
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -2094,7 +2085,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.cancel(true);
                 t.destroy();
 
-                Collect.getInstance().setFormController(formController);
                 formSessionStore.set(getIntent().getData().toString(), formController);
 
                 backgroundLocationViewModel.formFinishedLoading();
