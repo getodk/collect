@@ -425,7 +425,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings()))
+                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionStore, getIntent().getData().toString()))
                 .get(BackgroundLocationViewModel.class);
 
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
