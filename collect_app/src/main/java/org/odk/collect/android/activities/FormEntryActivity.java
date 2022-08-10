@@ -522,15 +522,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
     }
 
-    // Precondition: the instance directory must be ready so that the audit file can be created
     private void formControllerAvailable(@NonNull FormController formController) {
+        formSessionStore.set(getSessionId(), formController);
+
         AnalyticsUtils.setForm(formController);
 
+        formEntryViewModel.setSession(getSessionId());
         menuDelegate.setSession(getSessionId());
 
         formSaveViewModel.formLoaded(formController);
         backgroundAudioViewModel.formLoaded(formController);
-        formEntryViewModel.setSession(getSessionId());
+
+        backgroundLocationViewModel.formFinishedLoading();
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -2085,9 +2088,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.cancel(true);
                 t.destroy();
 
-                formSessionStore.set(getSessionId(), formController);
-
-                backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
@@ -2156,13 +2156,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                             }
 
+                            formControllerAvailable(formController);
+
                             // onResume ran before the form was loaded. Let the viewModel know that the activity
                             // is about to be displayed and configured. Do this before the refresh actually
                             // happens because if audit logging is enabled, the refresh logs a question event
                             // and we want that to show up after initialization events.
                             activityDisplayed();
-
-                            formControllerAvailable(formController);
                             formEntryViewModel.updateIndex();
 
                             if (warningMsg != null) {
@@ -2206,12 +2206,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                         formController.getAuditEventLogger().setEditing(true);
                     } else {
-                        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                            Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
-                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getSessionId());
-                            startActivity(intent);
-                        }
-                        finish();
+                        formControllerAvailable(formController);
+                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                                Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
+                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getSessionId());
+                                startActivity(intent);
+                            }
+                            finish();
+
                     }
                 }
             }
