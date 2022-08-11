@@ -370,6 +370,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Timber.w("onCreate");
         // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
         // this issue by including WebViews
         if (Build.VERSION.SDK_INT >= 24) {
@@ -469,7 +470,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             if (index != null && Collect.getInstance().getFormController() == null) {
                 // https://github.com/getodk/collect/issues/5241
-                Timber.e("getCurrentIndex() firing with null getFormController()");
+                Timber.e("getCurrentIndex() firing with null getFormController(). The one stored in formEntryViewModel is %s", (formEntryViewModel.isFormControllerSet() ? "not null" : "null"));
                 createErrorDialog("getFormController() is null, please email support@getodk.org with a description of what you were doing when this happened.", true);
             } else {
                 formIndexAnimationHandler.handle(index);
@@ -783,6 +784,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Timber.w("onSaveInstanceState");
         super.onSaveInstanceState(outState);
         outState.putString(KEY_FORMPATH, formPath);
         FormController formController = getFormController();
@@ -1876,6 +1878,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onStart() {
+        Timber.w("onStart");
         super.onStart();
         FormController formController = getFormController();
 
@@ -1894,6 +1897,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onPause() {
+        Timber.w("onPause");
         backgroundLocationViewModel.activityHidden();
 
         FormController formController = getFormController();
@@ -1912,6 +1916,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onResume() {
+        Timber.w("onResume");
         super.onResume();
 
         activityDisplayed();
@@ -2018,6 +2023,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onDestroy() {
+        Timber.w("onDestroy");
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(null);
             // We have to call cancel to terminate the thread, otherwise it
@@ -2302,6 +2308,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      * requested.
      */
     private void finishAndReturnInstance() {
+        Timber.w("Form saved and closed");
+
         String action = getIntent().getAction();
         if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
             // caller is waiting on a picked form

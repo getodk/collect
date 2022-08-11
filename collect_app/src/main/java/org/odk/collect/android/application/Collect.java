@@ -119,7 +119,7 @@ public class Collect extends Application implements
     }
 
     public void setFormController(@Nullable FormController controller) {
-        Timber.w("Setting formController to %s", (controller == null ? "null" : "not null"));
+        Timber.w("Setting formController form %s to %s", (formController == null ? "null" : "not null"), (controller == null ? "null" : "not null"));
         formController = controller;
     }
 
