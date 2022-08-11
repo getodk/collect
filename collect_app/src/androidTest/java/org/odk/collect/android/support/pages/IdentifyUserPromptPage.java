@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
@@ -11,6 +9,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+
+import org.odk.collect.android.R;
 
 public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
 
@@ -33,9 +33,9 @@ public class IdentifyUserPromptPage extends Page<IdentifyUserPromptPage> {
         return this;
     }
 
-    public FormEntryPage clickKeyboardEnter() {
+    public <D extends Page<D>> D clickKeyboardEnter(D destination) {
         onView(withHint(getTranslatedString(R.string.identity))).perform(pressImeActionButton());
-        return new FormEntryPage(formName).assertOnPage();
+        return destination.assertOnPage();
     }
 
     public IdentifyUserPromptPage clickKeyboardEnterWithValidationError() {

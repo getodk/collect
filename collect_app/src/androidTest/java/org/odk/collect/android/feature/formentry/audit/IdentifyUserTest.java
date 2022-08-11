@@ -13,6 +13,8 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.IdentifyUserPromptPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
@@ -43,7 +45,7 @@ public class IdentifyUserTest {
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
-                .clickKeyboardEnter()
+                .clickKeyboardEnter(new FormEntryPage("Identify User"))
                 .swipeToEndScreen()
                 .clickSaveAndExit();
 
@@ -54,17 +56,27 @@ public class IdentifyUserTest {
     }
 
     @Test
-    public void openingSavedForm_promptsForIdentity() {
+    public void openingSavedForm_andThenEnteringIdentity_andThenFillingForm_logsUser() throws IOException {
         rule.startAtMainMenu()
                 .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Lucius")
-                .clickKeyboardEnter()
+                .clickKeyboardEnter(new FormEntryPage("Identify User"))
                 .swipeToEndScreen()
                 .clickSaveAndExit()
+
                 .clickEditSavedForm()
-                .clickOnFormWithIdentityPrompt("Identify User");
+                .clickOnFormWithIdentityPrompt("Identify User")
+                .enterIdentity("Jack")
+                .clickKeyboardEnter(new FormHierarchyPage("Identify User"))
+                .clickJumpEndButton()
+                .clickSaveAndExit();
+
+            List<CSVRecord> auditLog = getAuditLog();
+            CSVRecord formResumeEvent = auditLog.get(7);
+            assertThat(formResumeEvent.get(0), equalTo("form resume"));
+            assertThat(formResumeEvent.get(4), equalTo("Jack"));
     }
 
     @Test
