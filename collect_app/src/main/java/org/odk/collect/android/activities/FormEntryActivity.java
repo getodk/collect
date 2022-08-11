@@ -469,6 +469,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             if (index != null && Collect.getInstance().getFormController() == null) {
                 // https://github.com/getodk/collect/issues/5241
+                Timber.e("getCurrentIndex() firing with null getFormController()");
                 createErrorDialog("getFormController() is null, please email support@getodk.org with a description of what you were doing when this happened.", true);
             } else {
                 formIndexAnimationHandler.handle(index);
@@ -1400,11 +1401,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void onScreenRefresh() {
-        FormController formController = getFormController();
-        if (formController == null) {
-            Timber.w("FormController in the application class is null, FormController in formEntryViewModel is %s", (formEntryViewModel.isFormControllerSet() ? "not null" : "null"));
-        }
-
         int event = getFormController().getEvent();
 
         SwipeHandler.View current = createView(event, false);
@@ -1959,13 +1955,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     t.cancel(true);
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
-                    Timber.w("Starting MainMenuActivity because formController is null");
+                    Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask not null");
                     startActivity(new Intent(this, MainMenuActivity.class));
                 }
             }
         } else {
             if (formController == null) {
                 // there is no formController -- fire MainMenu activity?
+                Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask is null");
                 startActivity(new Intent(this, MainMenuActivity.class));
                 finish();
                 return;
