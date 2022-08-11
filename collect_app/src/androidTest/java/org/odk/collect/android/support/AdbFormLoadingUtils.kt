@@ -99,7 +99,9 @@ object AdbFormLoadingUtils {
     /**
      * @return the instances dir path that the user would expect (from docs)
      */
-    private fun getInstancesDirPath(projectName: String): String {
+    @JvmStatic
+    @JvmOverloads
+    fun getInstancesDirPath(projectName: String = "Demo project"): String {
         val path = getProjectPath(projectName) + "/instances/"
         File(path).mkdirs()
         return path

@@ -1,15 +1,28 @@
 package org.odk.collect.android.feature.formentry.audit;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.TestRuleChain;
+import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.pages.IdentifyUserPromptPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class IdentifyUserTest {
@@ -24,7 +37,7 @@ public class IdentifyUserTest {
             .around(rule);
 
     @Test
-    public void openingForm_andThenEnteringIdentity_proceedsToForm() {
+    public void openingForm_andThenEnteringIdentity_andThenFillingForm_logsUser() throws IOException {
         rule.startAtMainMenu()
                 .copyForm(IDENTIFY_USER_AUDIT_FORM)
                 .clickFillBlankForm()
@@ -33,6 +46,11 @@ public class IdentifyUserTest {
                 .clickKeyboardEnter()
                 .swipeToEndScreen()
                 .clickSaveAndExit();
+
+        List<CSVRecord> auditLog = getAuditLog();
+        CSVRecord formStartEvent = auditLog.get(1);
+        assertThat(formStartEvent.get(0), equalTo("form start"));
+        assertThat(formStartEvent.get(4), equalTo("Lucius"));
     }
 
     @Test
@@ -97,5 +115,22 @@ public class IdentifyUserTest {
                 .clickOnForm("Identify User False")
                 .swipeToEndScreen()
                 .clickSaveAndExit();
+    }
+
+    private List<CSVRecord> getAuditLog() throws IOException {
+        File instanceDir = new File(AdbFormLoadingUtils.getInstancesDirPath()).listFiles()[0];
+        File auditLog = Arrays.stream(instanceDir.listFiles())
+                .filter(file -> file.getName().equals("audit.csv"))
+                .findFirst()
+                .get();
+
+        List<CSVRecord> records;
+        try (FileReader auditLogReader = new FileReader(auditLog)) {
+            try (CSVParser parser = CSVFormat.DEFAULT.parse(auditLogReader)) {
+                records = parser.getRecords();
+            }
+        }
+
+        return records;
     }
 }
