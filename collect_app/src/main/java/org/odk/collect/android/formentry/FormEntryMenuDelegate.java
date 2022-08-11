@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -34,18 +33,14 @@ public class FormEntryMenuDelegate implements MenuDelegate {
     private final BackgroundLocationViewModel backgroundLocationViewModel;
     private final BackgroundAudioViewModel backgroundAudioViewModel;
 
-    @Nullable
-    private FormController formController;
-    private String sessionId;
     private final AudioRecorder audioRecorder;
     private final SettingsProvider settingsProvider;
-    private final FormSessionStore formSessionStore;
 
     public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
                                  FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
                                  BackgroundLocationViewModel backgroundLocationViewModel,
                                  BackgroundAudioViewModel backgroundAudioViewModel,
-                                 SettingsProvider settingsProvider, FormSessionStore formSessionStore) {
+                                 SettingsProvider settingsProvider) {
         this.activity = activity;
         this.answersProvider = answersProvider;
 
@@ -54,12 +49,6 @@ public class FormEntryMenuDelegate implements MenuDelegate {
         this.backgroundLocationViewModel = backgroundLocationViewModel;
         this.backgroundAudioViewModel = backgroundAudioViewModel;
         this.settingsProvider = settingsProvider;
-        this.formSessionStore = formSessionStore;
-    }
-
-    public void setSession(String sessionId) {
-        this.sessionId = sessionId;
-        this.formController = formSessionStore.get(sessionId);
     }
 
     @Override
@@ -69,6 +58,8 @@ public class FormEntryMenuDelegate implements MenuDelegate {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        FormController formController = formEntryViewModel.getFormController();
+
         boolean useability;
 
         useability = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID);
@@ -135,7 +126,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
                 formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers());
                 formEntryViewModel.openHierarchy();
                 Intent i = new Intent(activity, FormHierarchyActivity.class);
-                i.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                i.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, formEntryViewModel.getSessionId());
                 activity.startActivityForResult(i, ApplicationConstants.RequestCodes.HIERARCHY_ACTIVITY);
             }
 

@@ -139,8 +139,8 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         setSupportActionBar(toolbar);
 
         String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
+        formEntryViewModelFactory.setSessionId(sessionId);
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory).get(FormEntryViewModel.class);
-        formEntryViewModel.setSession(sessionId);
 
         FormController formController = formEntryViewModel.getFormController();
         startIndex = formController.getFormIndex();

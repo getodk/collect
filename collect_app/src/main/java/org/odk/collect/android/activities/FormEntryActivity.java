@@ -90,6 +90,7 @@ import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
@@ -168,6 +169,7 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
@@ -373,6 +375,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
+        this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
+                .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(getSessionId()))
+                .build());
+
         super.onCreate(savedInstanceState);
 
         Collect.getInstance().getComponent().inject(this);
@@ -396,8 +402,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                settingsProvider,
-                formSessionStore
+                settingsProvider
         );
 
         nextButton = findViewById(R.id.form_forward_button);
@@ -449,6 +454,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
+        formEntryViewModelFactory.setSessionId(getSessionId());
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
 
@@ -526,9 +532,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formSessionStore.set(getSessionId(), formController);
 
         AnalyticsUtils.setForm(formController);
-
-        formEntryViewModel.setSession(getSessionId());
-        menuDelegate.setSession(getSessionId());
 
         formSaveViewModel.formLoaded(formController);
         backgroundAudioViewModel.formLoaded(formController);

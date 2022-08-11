@@ -96,7 +96,7 @@ public class BackgroundLocationViewModel extends ViewModel {
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.equals(BackgroundLocationViewModel.class)) {
                 BackgroundLocationManager locationManager =
-                        new BackgroundLocationManager(fusedLocatonClient, new BackgroundLocationHelper(permissionsProvider, generalSettings, () -> formSessionStore.get(sessionId)));
+                        new BackgroundLocationManager(fusedLocatonClient, new BackgroundLocationHelper(permissionsProvider, generalSettings, () -> formSessionStore.get(sessionId).getValue()));
                 return (T) new BackgroundLocationViewModel(locationManager);
             }
             return null;

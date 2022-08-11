@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -37,13 +38,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final Supplier<Long> clock;
     private final Scheduler scheduler;
-    private final FormSessionStore formSessionStore;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormController.FailedConstraint> failedConstraint = new MutableLiveData<>(null);
+    private final LiveData<FormController> formSession;
+    private final String sessionId;
 
     @Nullable
     private FormController formController;
@@ -54,19 +56,27 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     @Nullable
     private AnswerListener answerListener;
 
+    private final Observer<FormController> formSessionObserver = formController -> {
+        if (formController != null) {
+            this.formController = formController;
+
+            boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
+            this.hasBackgroundRecording.setValue(hasBackgroundRecording);
+        }
+    };
+
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore) {
+    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore, String sessionId) {
         this.clock = clock;
         this.scheduler = scheduler;
-        this.formSessionStore = formSessionStore;
+
+        this.sessionId = sessionId;
+        formSession = formSessionStore.get(this.sessionId);
+        formSession.observeForever(formSessionObserver);
     }
 
-    public void setSession(String sessionId) {
-        this.formController = formSessionStore.get(sessionId);
-
-        boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
-        this.hasBackgroundRecording.setValue(hasBackgroundRecording);
-//        updateIndex();
+    public String getSessionId() {
+        return sessionId;
     }
 
     /**
@@ -277,6 +287,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     @Override
     protected void onCleared() {
         this.answerListener = null;
+        formSession.removeObserver(formSessionObserver);
     }
 
     public void updateIndex() {
@@ -288,6 +299,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         private final Supplier<Long> clock;
         private final Scheduler scheduler;
         private final FormSessionStore formSessionStore;
+        private String sessionId;
 
         public Factory(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore) {
             this.clock = clock;
@@ -295,11 +307,15 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             this.formSessionStore = formSessionStore;
         }
 
+        public void setSessionId(String sessionId) {
+            this.sessionId = sessionId;
+        }
+
         @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, scheduler, formSessionStore);
+            return (T) new FormEntryViewModel(clock, scheduler, formSessionStore, sessionId);
         }
     }
 

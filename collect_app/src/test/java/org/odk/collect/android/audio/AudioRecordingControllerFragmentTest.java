@@ -30,6 +30,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -53,7 +54,9 @@ public class AudioRecordingControllerFragmentTest {
     private ExternalWebPageHelper externalWebPageHelper;
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(R.style.Theme_MaterialComponents);
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(R.style.Theme_MaterialComponents, new FragmentFactoryBuilder()
+            .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment("blah"))
+            .build());
 
     @Before
     public void setup() throws IOException {

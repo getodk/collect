@@ -1,24 +1,30 @@
 package org.odk.collect.android.formentry
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidshared.data.getState
 
 interface FormSessionStore {
-    fun get(id: String): FormController?
+    fun get(id: String): LiveData<FormController?>
     fun set(id: String, formController: FormController)
 }
 
 class InMemFormSessionStore : FormSessionStore {
 
-    private val map = mutableMapOf<String, FormController>()
+    private val map = mutableMapOf<String, MutableLiveData<FormController?>>()
 
-    override fun get(id: String): FormController? {
-        return map[id]
+    override fun get(id: String): LiveData<FormController?> {
+        return getLiveData(id)
     }
 
     override fun set(id: String, formController: FormController) {
-        map[id] = formController
+        getLiveData(id).value = formController
+    }
+
+    private fun getLiveData(id: String): MutableLiveData<FormController?> {
+        return map.getOrPut(id) { MutableLiveData<FormController?>(null) }
     }
 }
 
@@ -26,13 +32,16 @@ class AppStateFormSessionStore(application: Application) : FormSessionStore {
 
     private val appState = application.getState()
 
-    override fun get(id: String): FormController? {
-        return appState.get(getKey(id))
+    override fun get(id: String): LiveData<FormController?> {
+        return getLiveData(id)
     }
 
     override fun set(id: String, formController: FormController) {
-        appState.set(getKey(id), formController)
+        getLiveData(id).value = formController
     }
+
+    private fun getLiveData(id: String) =
+        appState.get(getKey(id), MutableLiveData<FormController?>(null))
 
     private fun getKey(id: String) = "$KEY_PREFIX:$id"
 

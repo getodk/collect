@@ -66,10 +66,8 @@ public class FormEntryViewModelTest {
 
         scheduler = new FakeScheduler();
 
-        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler, formSessionStore);
-
         formSessionStore.set("blah", formController);
-        viewModel.setSession("blah");
+        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler, formSessionStore, "blah");
     }
 
     @Test
