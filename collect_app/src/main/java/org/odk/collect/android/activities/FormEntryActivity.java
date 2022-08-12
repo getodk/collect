@@ -549,7 +549,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         menuDelegate.formLoaded(formController);
 
-        identityPromptViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
         backgroundAudioViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
@@ -2184,10 +2183,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         showFormLoadErrorAndExit(getString(R.string.loading_form_failed));
                     }
 
-                    formControllerAvailable(formController);
+                    identityPromptViewModel.formLoaded(formController);
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
+                            formControllerAvailable(formController);
                             startFormEntry(formController, warningMsg);
                         }
                     });
@@ -2197,7 +2197,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     // we've just loaded a saved form, so start in the hierarchy view
                     String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
                     if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                        formControllerAvailable(formController);
+                        identityPromptViewModel.formLoaded(formController);
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
                                 if (!allowMovingBackwards) {
@@ -2216,6 +2216,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                formControllerAvailable(formController);
                                 startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
