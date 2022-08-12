@@ -2193,50 +2193,39 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     });
                 } else {
                     Intent reqIntent = getIntent();
-                    boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-                    if (!showFirst) {
-                        // we've just loaded a saved form, so start in the hierarchy view
-                        String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                            formControllerAvailable(formController);
-                            identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
-                                if (!requiresIdentity) {
-                                    if (!allowMovingBackwards) {
-                                        // we aren't allowed to jump around the form so attempt to
-                                        // go directly to the question we were on last time the
-                                        // form was saved.
-                                        // TODO: revisit the fallback. If for some reason the index
-                                        // wasn't saved, we can now jump around which doesn't seem right.
-                                        FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
-                                        if (formIndex != null) {
-                                            formController.jumpToIndex(formIndex);
-                                            onScreenRefresh();
-                                            return;
-                                        }
-                                    }
-
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                                    startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
-                                }
-                            });
-
-                            formSaveViewModel.editingForm();
-                        } else {
-                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                                startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
-                            }
-                            finish();
-                        }
-                    } else {
+                    // we've just loaded a saved form, so start in the hierarchy view
+                    String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                    if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                         formControllerAvailable(formController);
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
+                                if (!allowMovingBackwards) {
+                                    // we aren't allowed to jump around the form so attempt to
+                                    // go directly to the question we were on last time the
+                                    // form was saved.
+                                    // TODO: revisit the fallback. If for some reason the index
+                                    // wasn't saved, we can now jump around which doesn't seem right.
+                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                                    if (formIndex != null) {
+                                        formController.jumpToIndex(formIndex);
+                                        onScreenRefresh();
+                                        return;
+                                    }
+                                }
+
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                                startFormEntry(formController, warningMsg);
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
+
+                        formSaveViewModel.editingForm();
+                    } else {
+                        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                            startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
+                        }
+                        finish();
                     }
                 }
             }
