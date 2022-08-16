@@ -9,8 +9,8 @@ interface Analytics {
 
     fun logEvent(event: String)
     fun logEventWithParam(event: String, key: String, value: String)
-    fun logFatal(throwable: Throwable)
-    fun logNonFatal(message: String)
+    fun logNonFatal(throwable: Throwable)
+    fun logMessage(message: String)
     fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean)
     fun setUserProperty(name: String, value: String)
 
