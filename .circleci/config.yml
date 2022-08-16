@@ -7,7 +7,7 @@ references:
   android_config: &android_config
     working_directory: ~/work
     docker:
-      - image: cimg/android:2022.03.1
+      - image: cimg/android:2022.06.1
     resource_class: medium+
 
 jobs:
@@ -19,17 +19,11 @@ jobs:
           name: Generate combined build.gradle file for cache key
           command: cat build.gradle */build.gradle .circleci/gradle.properties > deps.txt
       - restore_cache:
-          key: deps-{{ checksum "deps.txt" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
+          key: compile-deps-{{ checksum "deps.txt" }}
+
       - run:
           name: Copy gradle config
-          command: cp .circleci/gradle.properties ~/.gradle/gradle.properties
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: deps-{{ checksum "deps.txt" }}
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Download Robolectric deps
@@ -39,6 +33,10 @@ jobs:
           name: Compile code
           command: ./gradlew assembleDebug
 
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: compile-deps-{{ checksum "deps.txt" }}
       - persist_to_workspace:
           root: ~/work
           paths:
@@ -50,7 +48,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: deps-{{ checksum "deps.txt" }}
+          key: compile-deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Run code quality checks
@@ -66,7 +64,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: deps-{{ checksum "deps.txt" }}
+          key: test-modules-deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Generate list of modules for this fork
@@ -86,6 +84,11 @@ jobs:
       - store_test_results:
           path: collect_app/build/test-results
 
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: test-modules-deps-{{ checksum "deps.txt" }}
+
   test_app:
     <<: *android_config
     parallelism: 4
@@ -93,7 +96,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: deps-{{ checksum "deps.txt" }}
+          key: test-app-deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Generate list of test classes
@@ -120,17 +123,27 @@ jobs:
       - store_test_results:
           path: collect_app/build/test-results
 
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: test-app-deps-{{ checksum "deps.txt" }}
+
   build_instrumented:
     <<: *android_config
     steps:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: deps-{{ checksum "deps.txt" }}
+          key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Assemble connected test build
           command: ./gradlew assembleDebugAndroidTest
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: intrumented-deps-{{ checksum "deps.txt" }}
 
   build_release:
     <<: *android_config
@@ -138,7 +151,7 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: deps-{{ checksum "deps.txt" }}
+          key: compile-deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Assemble self signed release build
@@ -150,11 +163,17 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: deps-{{ checksum "deps.txt" }}
+          key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
           name: Assemble test build
           command: ./gradlew assembleDebug assembleDebugAndroidTest
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: intrumented-deps-{{ checksum "deps.txt" }}
+
       - run:
           name: Authorize gcloud
           command: |
