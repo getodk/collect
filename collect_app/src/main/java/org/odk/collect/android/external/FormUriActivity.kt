@@ -23,6 +23,8 @@ class FormUriActivity : ComponentActivity() {
     @Inject
     lateinit var projectsRepository: ProjectsRepository
 
+    private var formFillingAlreadyStarted = false
+
     private val openForm =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             setResult(it.resultCode, it.data)
@@ -32,6 +34,10 @@ class FormUriActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
+
+        if (savedInstanceState != null) {
+            formFillingAlreadyStarted = savedInstanceState.getBoolean(FORM_FILLING_ALREADY_STARTED)
+        }
 
         val projects = projectsRepository.getAll()
         if (projects.isEmpty()) {
@@ -49,13 +55,16 @@ class FormUriActivity : ComponentActivity() {
             logAnalytics(uriProjectId)
 
             if (projectId == currentProjectProvider.getCurrentProject().uuid) {
-                openForm.launch(
-                    Intent(this, FormEntryActivity::class.java).also {
-                        it.action = intent.action
-                        it.data = uri
-                        intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
-                    },
-                )
+                if (!formFillingAlreadyStarted) {
+                    formFillingAlreadyStarted = true
+                    openForm.launch(
+                        Intent(this, FormEntryActivity::class.java).also {
+                            it.action = intent.action
+                            it.data = uri
+                            intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
+                        },
+                    )
+                }
             } else {
                 MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.wrong_project_selected_for_form)
@@ -68,6 +77,11 @@ class FormUriActivity : ComponentActivity() {
         }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(FORM_FILLING_ALREADY_STARTED, formFillingAlreadyStarted)
+        super.onSaveInstanceState(outState)
+    }
+
     private fun logAnalytics(uriProjectId: String?) {
         if (uriProjectId != null) {
             Analytics.log(AnalyticsEvents.FORM_ACTION_WITH_PROJECT_ID)
@@ -78,5 +92,9 @@ class FormUriActivity : ComponentActivity() {
         if (intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE) != null) {
             Analytics.log(AnalyticsEvents.FORM_ACTION_WITH_FORM_MODE_EXTRA)
         }
+    }
+
+    companion object {
+        private const val FORM_FILLING_ALREADY_STARTED = "FORM_FILLING_ALREADY_STARTED"
     }
 }
