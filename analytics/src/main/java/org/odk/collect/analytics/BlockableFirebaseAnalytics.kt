@@ -29,11 +29,11 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
         firebaseAnalytics.logEvent(event, null)
     }
 
-    override fun logFatal(throwable: Throwable) {
+    override fun logNonFatal(throwable: Throwable) {
         crashlytics.recordException(throwable)
     }
 
-    override fun logNonFatal(message: String) {
+    override fun logMessage(message: String) {
         crashlytics.log(message)
     }
 

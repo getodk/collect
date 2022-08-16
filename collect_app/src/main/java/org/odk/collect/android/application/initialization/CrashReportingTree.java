@@ -20,10 +20,10 @@ class CrashReportingTree extends Timber.Tree {
             return;
         }
 
-        analytics.logNonFatal((priority == Log.ERROR ? "E/" : "W/") + tag + ": " + message);
+        analytics.logMessage((priority == Log.ERROR ? "E/" : "W/") + tag + ": " + message);
 
         if (t != null && priority == Log.ERROR) {
-            analytics.logFatal(t);
+            analytics.logNonFatal(t);
         }
     }
 }
