@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import org.junit.rules.ExternalResource
+import timber.log.Timber
 
 /**
  * Alternative to [ActivityScenario] that allows tests to do work before launching the [Activity]
@@ -27,6 +28,12 @@ open class ActivityScenarioLauncherRule : ExternalResource() {
     }
 
     override fun after() {
-        scenarios.forEach(ActivityScenario<*>::close)
+        scenarios.forEach {
+            try {
+                it.close()
+            } catch (e: Throwable) {
+                Timber.e("Error closing ActivityScenario: $e")
+            }
+        }
     }
 }
