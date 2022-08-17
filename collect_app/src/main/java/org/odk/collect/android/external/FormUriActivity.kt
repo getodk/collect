@@ -13,7 +13,6 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.projects.ProjectsRepository
-import timber.log.Timber
 import javax.inject.Inject
 
 class FormUriActivity : ComponentActivity() {
@@ -50,7 +49,6 @@ class FormUriActivity : ComponentActivity() {
             logAnalytics(uriProjectId)
 
             if (projectId == currentProjectProvider.getCurrentProject().uuid) {
-                Timber.w("Form started via VIEW/EDIT actions")
                 openForm.launch(
                     Intent(this, FormEntryActivity::class.java).also {
                         it.action = intent.action
