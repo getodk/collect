@@ -18,6 +18,8 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 
 import org.hamcrest.Matchers;
@@ -353,6 +355,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>(formName, new MainMenuPage()))
                 .clickIgnoreChanges();
+    }
+
+    public FormEntryPage assertBackgroundLocationSnackbarShown() {
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(R.string.background_location_enabled), "⋮"))));
+        return this;
     }
 
     public static class QuestionAndAnswer {
