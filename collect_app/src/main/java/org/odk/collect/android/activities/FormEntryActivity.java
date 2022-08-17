@@ -2105,6 +2105,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         final FormController formController = task.getFormController();
 
         if (formController != null) {
+            Timber.w("Form %s started", formController.getFormTitle());
+
             if (readPhoneStatePermissionRequestNeeded) {
                 permissionsProvider.requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override

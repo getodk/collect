@@ -27,8 +27,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import timber.log.Timber;
-
 public class FormEntryViewModel extends ViewModel implements RequiresFormController {
 
     private final Supplier<Long> clock;
@@ -255,7 +253,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     private void updateIndex() {
-        Timber.w("Update formIndex");
         currentIndex.setValue(formController.getFormIndex());
     }
 
