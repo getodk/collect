@@ -2187,8 +2187,26 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
+
+                            // Register to receive location provider change updates and write them to the audit
+                            // log. onStart has already run but the formController was null so try again.
+                            if (formController.currentFormAuditsLocation()
+                                    && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
+                                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+                            }
+
+                            // onResume ran before the form was loaded. Let the viewModel know that the activity
+                            // is about to be displayed and configured. Do this before the refresh actually
+                            // happens because if audit logging is enabled, the refresh logs a question event
+                            // and we want that to show up after initialization events.
+                            activityDisplayed();
+
                             formControllerAvailable(formController);
-                            startFormEntry(formController, warningMsg);
+
+                            if (warningMsg != null) {
+                                showLongToast(this, warningMsg);
+                                Timber.w(warningMsg);
+                            }
                         }
                     });
                 } else {
@@ -2234,28 +2252,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.e("FormController is null");
             showLongToast(this, R.string.loading_form_failed);
             finish();
-        }
-    }
-
-    private void startFormEntry(FormController formController, String warningMsg) {
-        // Register to receive location provider change updates and write them to the audit
-        // log. onStart has already run but the formController was null so try again.
-        if (formController.currentFormAuditsLocation()
-                && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
-            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-        }
-
-        // onResume ran before the form was loaded. Let the viewModel know that the activity
-        // is about to be displayed and configured. Do this before the refresh actually
-        // happens because if audit logging is enabled, the refresh logs a question event
-        // and we want that to show up after initialization events.
-        activityDisplayed();
-
-        onScreenRefresh();
-
-        if (warningMsg != null) {
-            showLongToast(this, warningMsg);
-            Timber.w(warningMsg);
         }
     }
 

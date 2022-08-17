@@ -18,7 +18,6 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.os.Build;
 
-import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 
