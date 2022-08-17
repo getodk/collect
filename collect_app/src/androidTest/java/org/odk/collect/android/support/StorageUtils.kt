@@ -127,7 +127,7 @@ object StorageUtils {
 
     @Throws(IOException::class)
     @JvmStatic
-    public fun getAuditLogForFirstInstance(): List<CSVRecord?> {
+    public fun getAuditLogForFirstInstance(): List<CSVRecord> {
         val instanceDir = File(getInstancesDirPath()).listFiles()[0]
         val auditLog = Arrays.stream(instanceDir.listFiles())
             .filter { file: File -> file.name == "audit.csv" }
