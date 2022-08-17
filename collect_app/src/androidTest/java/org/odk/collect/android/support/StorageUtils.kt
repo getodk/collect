@@ -17,15 +17,18 @@ package org.odk.collect.android.support
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVRecord
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import java.io.File
+import java.io.FileReader
 import java.io.IOException
 import java.util.Arrays
 
 /**
  * Emulates the process of copying a form via ADB
  */
-object AdbFormLoadingUtils {
+object StorageUtils {
     /**
      * Copies a form with the given file name and given associated media to the SD Card.
      *
@@ -120,5 +123,23 @@ object AdbFormLoadingUtils {
             }
         }
         throw IllegalArgumentException("No project on disk with that name!")
+    }
+
+    @Throws(IOException::class)
+    @JvmStatic
+    public fun getAuditLogForFirstInstance(): List<CSVRecord?> {
+        val instanceDir = File(getInstancesDirPath()).listFiles()[0]
+        val auditLog = Arrays.stream(instanceDir.listFiles())
+            .filter { file: File -> file.name == "audit.csv" }
+            .findFirst()
+            .get()
+
+        val records = FileReader(auditLog).use { auditLogReader ->
+            CSVFormat.DEFAULT.parse(auditLogReader).use { parser ->
+                parser.records
+            }
+        }
+
+        return records
     }
 }

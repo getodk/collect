@@ -33,7 +33,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.rules.RunnableRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -160,7 +160,7 @@ public class FormNavigationTest {
      * FormLoaderTask loads forms from SD card so we need to put each form there
      */
     private void copyToStorage(String formName) throws IOException {
-        AdbFormLoadingUtils.copyFormToDemoProject(formName);
+        StorageUtils.copyFormToDemoProject(formName);
     }
 
     private static String formPath(String formName) {

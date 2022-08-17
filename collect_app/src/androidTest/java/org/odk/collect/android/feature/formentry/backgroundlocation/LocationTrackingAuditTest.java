@@ -5,25 +5,20 @@ import static org.hamcrest.Matchers.equalTo;
 
 import android.app.Application;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
 import org.odk.collect.android.support.FakeLocationClient;
+import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.rules.FormActivityTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.testshared.FakeLocation;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 public class LocationTrackingAuditTest {
@@ -54,7 +49,7 @@ public class LocationTrackingAuditTest {
                 .swipeToNextQuestion("Text2")
                 .clickSave();
 
-        List<CSVRecord> auditLog = getAuditLog();
+        List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
         assertThat(auditLog.get(2).get(0), equalTo("location tracking enabled"));
         assertThat(auditLog.get(3).get(0), equalTo("location permissions granted"));
         assertThat(auditLog.get(4).get(0), equalTo("location providers enabled"));
@@ -75,22 +70,5 @@ public class LocationTrackingAuditTest {
         rule.startInFormEntry()
                 .clickOptionsIcon()
                 .assertText(R.string.track_location);
-    }
-
-    private List<CSVRecord> getAuditLog() throws IOException {
-        File instanceDir = new File(AdbFormLoadingUtils.getInstancesDirPath()).listFiles()[0];
-        File auditLog = Arrays.stream(instanceDir.listFiles())
-                .filter(file -> file.getName().equals("audit.csv"))
-                .findFirst()
-                .get();
-
-        List<CSVRecord> records;
-        try (FileReader auditLogReader = new FileReader(auditLog)) {
-            try (CSVParser parser = CSVFormat.DEFAULT.parse(auditLogReader)) {
-                records = parser.getRecords();
-            }
-        }
-
-        return records;
     }
 }

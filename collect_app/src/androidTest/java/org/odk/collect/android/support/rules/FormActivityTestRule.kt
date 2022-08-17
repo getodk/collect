@@ -8,7 +8,7 @@ import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.AdbFormLoadingUtils
+import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.projects.Project
@@ -43,7 +43,7 @@ class FormActivityTestRule @JvmOverloads constructor(
                 DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
             component.projectsRepository().save(DEMO_PROJECT)
             component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID)
-            AdbFormLoadingUtils.copyFormToDemoProject(formFilename, mediaFilePaths, true)
+            StorageUtils.copyFormToDemoProject(formFilename, mediaFilePaths, true)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

@@ -8,7 +8,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.rules.RunnableRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -44,8 +44,8 @@ public class FormLoaderTaskTest {
                     component.projectsRepository().save(Project.Companion.getDEMO_PROJECT());
                     component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID);
 
-                    AdbFormLoadingUtils.copyFormToDemoProject(SECONDARY_INSTANCE_EXTERNAL_CSV_FORM, Arrays.asList("external_csv_cities.csv", "external_csv_countries.csv", "external_csv_neighbourhoods.csv"));
-                    AdbFormLoadingUtils.copyFormToDemoProject(SIMPLE_SEARCH_EXTERNAL_CSV_FORM, Collections.singletonList(SIMPLE_SEARCH_EXTERNAL_CSV_FILE));
+                    StorageUtils.copyFormToDemoProject(SECONDARY_INSTANCE_EXTERNAL_CSV_FORM, Arrays.asList("external_csv_cities.csv", "external_csv_countries.csv", "external_csv_neighbourhoods.csv"));
+                    StorageUtils.copyFormToDemoProject(SIMPLE_SEARCH_EXTERNAL_CSV_FORM, Collections.singletonList(SIMPLE_SEARCH_EXTERNAL_CSV_FILE));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
