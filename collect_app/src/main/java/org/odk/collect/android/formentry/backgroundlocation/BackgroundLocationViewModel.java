@@ -8,9 +8,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.location.GoogleFusedLocationClient;
+import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.location.LocationClient;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.shared.settings.Settings;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Ensures that background location tracking continues throughout the activity lifecycle. Builds
@@ -69,18 +73,25 @@ public class BackgroundLocationViewModel extends ViewModel {
         private final PermissionsProvider permissionsProvider;
         private final Settings generalSettings;
 
+        /**
+         * It's not clear why this needs to use the {@link org.odk.collect.location.GoogleFusedLocationClient}
+         */
+        @Inject
+        @Named("fused")
+        LocationClient fusedLocatonClient;
+
         public Factory(PermissionsProvider permissionsProvider, Settings generalSettings) {
             this.permissionsProvider = permissionsProvider;
             this.generalSettings = generalSettings;
+
+            DaggerUtils.getComponent(Collect.getInstance()).inject(this);
         }
 
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.equals(BackgroundLocationViewModel.class)) {
-                GoogleFusedLocationClient googleLocationClient = new GoogleFusedLocationClient(Collect.getInstance());
-
                 BackgroundLocationManager locationManager =
-                        new BackgroundLocationManager(googleLocationClient, new BackgroundLocationHelper(permissionsProvider, generalSettings));
+                        new BackgroundLocationManager(fusedLocatonClient, new BackgroundLocationHelper(permissionsProvider, generalSettings));
                 return (T) new BackgroundLocationViewModel(locationManager);
             }
             return null;

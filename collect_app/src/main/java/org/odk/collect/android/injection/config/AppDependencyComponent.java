@@ -37,6 +37,7 @@ import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
+import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
@@ -288,6 +289,8 @@ public interface AppDependencyComponent {
     void inject(PenColorPickerDialog colorPickerDialog);
 
     void inject(BlankFormListActivity blankFormListActivity);
+
+    void inject(BackgroundLocationViewModel.Factory factory);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

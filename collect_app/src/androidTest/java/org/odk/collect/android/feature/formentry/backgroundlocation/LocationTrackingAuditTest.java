@@ -30,7 +30,7 @@ public class LocationTrackingAuditTest {
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(new TestDependencies() {
                 @Override
-                public LocationClient providesLocationClient(Application application) {
+                public LocationClient providesFusedLocationClient(Application application) {
                     return locationClient;
                 }
             })

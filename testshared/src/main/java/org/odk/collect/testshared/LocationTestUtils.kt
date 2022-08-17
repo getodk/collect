@@ -55,6 +55,7 @@ class FakeLocation(provider: String?) : Location(provider) {
     private var _longitude: Double = 0.0
     private var _accuracy: Float? = null
     private var _altitude: Double = 0.0
+    private var _time = System.currentTimeMillis()
 
     fun setIsFromMockProvider(isFromMockProvider: Boolean) {
         _isFromMockProvider = isFromMockProvider
@@ -106,6 +107,10 @@ class FakeLocation(provider: String?) : Location(provider) {
 
     override fun setAccuracy(horizontalAccuracy: Float) {
         _accuracy = horizontalAccuracy
+    }
+
+    override fun getTime(): Long {
+        return _time
     }
 
     override fun equals(other: Any?): Boolean {
