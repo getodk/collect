@@ -828,7 +828,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
-            onScreenRefresh();
+            if (requestCode == RequestCodes.HIERARCHY_ACTIVITY && !formEntryViewModel.isFormControllerSet()) {
+                formControllerAvailable(formController);
+            } else {
+                onScreenRefresh();
+            }
+
             return;
         }
 
@@ -2234,12 +2239,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                                formControllerAvailable(formController);
                                 startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
 
-                        formSaveViewModel.editingForm();
+                        formController.getAuditEventLogger().setEditing(true);
                     } else {
                         if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
                             startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
