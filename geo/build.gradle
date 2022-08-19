@@ -59,6 +59,7 @@ dependencies {
     kapt Dependencies.dagger_compiler
     implementation Dependencies.androidx_fragment_ktx
     implementation project(path: ':shared')
+    implementation project(path: ':icons')
     implementation project(path: ':strings')
     implementation project(path: ':location')
     implementation project(path: ':androidshared')

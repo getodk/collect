@@ -1,3 +1,4 @@
+import dependencies.Dependencies
 import dependencies.Versions
 
 plugins {
@@ -31,4 +32,5 @@ android {
 }
 
 dependencies {
+    implementation Dependencies.android_material
 }

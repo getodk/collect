@@ -253,6 +253,7 @@ dependencies {
     implementation project(':shared')
     implementation project(':androidshared')
     implementation project(':nbistubs')
+    implementation project(':icons')
     implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
