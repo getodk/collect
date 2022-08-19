@@ -1,9 +1,6 @@
 package org.odk.collect.android.support
 
 import junit.framework.AssertionFailedError
-import java.lang.AssertionError
-import java.lang.Exception
-import java.lang.RuntimeException
 import java.util.concurrent.Callable
 
 object WaitFor {
@@ -29,7 +26,7 @@ object WaitFor {
             counter++
         }
 
-        throw RuntimeException("waitFor failed", failure)
+        throw failure!!
     }
 
     @JvmStatic

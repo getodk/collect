@@ -41,7 +41,7 @@ import org.junit.Assert
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.support.AdbFormLoadingUtils
+import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
@@ -365,7 +365,7 @@ abstract class Page<T : Page<T>> {
     @JvmOverloads
     fun copyForm(formFilename: String, mediaFileNames: List<String>? = null, copyToDatabase: Boolean = false, projectName: String = "Demo project"): T {
         try {
-            AdbFormLoadingUtils.copyFormToStorage(formFilename, mediaFileNames, copyToDatabase, formFilename, projectName)
+            StorageUtils.copyFormToStorage(formFilename, mediaFileNames, copyToDatabase, formFilename, projectName)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
@@ -374,7 +374,7 @@ abstract class Page<T : Page<T>> {
 
     fun copyInstance(instanceFileName: String): T {
         try {
-            AdbFormLoadingUtils.copyInstanceToDemoProject(instanceFileName)
+            StorageUtils.copyInstanceToDemoProject(instanceFileName)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

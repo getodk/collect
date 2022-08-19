@@ -8,7 +8,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.AdbFormLoadingUtils;
+import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -35,7 +35,7 @@ public class FormsAdbTest {
                 .assertFormExists("One Question")
                 .pressBack(new MainMenuPage());
 
-        AdbFormLoadingUtils.copyFormToDemoProject("one-question-updated.xml", "one-question.xml");
+        StorageUtils.copyFormToDemoProject("one-question-updated.xml", "one-question.xml");
 
         mainMenuPage
                 .clickFillBlankForm()

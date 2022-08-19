@@ -124,6 +124,7 @@ import org.odk.collect.audiorecorder.recording.AudioRecorderFactory;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.imageloader.GlideImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
+import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
@@ -606,6 +607,12 @@ public class AppDependencyModule {
     @Provides
     public LocationClient providesLocationClient(Application application) {
         return LocationClientProvider.getClient(application);
+    }
+
+    @Provides
+    @Named("fused")
+    public LocationClient providesFusedLocationClient(Application application) {
+        return new GoogleFusedLocationClient(application);
     }
 
     @Provides

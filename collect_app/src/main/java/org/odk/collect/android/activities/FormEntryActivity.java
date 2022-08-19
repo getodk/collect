@@ -549,7 +549,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         menuDelegate.formLoaded(formController);
 
-        identityPromptViewModel.formLoaded(formController);
         formSaveViewModel.formLoaded(formController);
         backgroundAudioViewModel.formLoaded(formController);
         formEntryViewModel.formLoaded(formController);
@@ -829,7 +828,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
-            onScreenRefresh();
+            if (requestCode == RequestCodes.HIERARCHY_ACTIVITY && !formEntryViewModel.isFormControllerSet()) {
+                formControllerAvailable(formController);
+            } else {
+                onScreenRefresh();
+            }
+
             return;
         }
 
@@ -2184,59 +2188,67 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         showFormLoadErrorAndExit(getString(R.string.loading_form_failed));
                     }
 
-                    formControllerAvailable(formController);
+                    identityPromptViewModel.formLoaded(formController);
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
                             formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
-                            startFormEntry(formController, warningMsg);
+
+                            // Register to receive location provider change updates and write them to the audit
+                            // log. onStart has already run but the formController was null so try again.
+                            if (formController.currentFormAuditsLocation()
+                                    && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
+                                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+                            }
+
+                            // onResume ran before the form was loaded. Let the viewModel know that the activity
+                            // is about to be displayed and configured. Do this before the refresh actually
+                            // happens because if audit logging is enabled, the refresh logs a question event
+                            // and we want that to show up after initialization events.
+                            activityDisplayed();
+
+                            formControllerAvailable(formController);
+
+                            if (warningMsg != null) {
+                                showLongToast(this, warningMsg);
+                                Timber.w(warningMsg);
+                            }
                         }
                     });
                 } else {
                     Intent reqIntent = getIntent();
-                    boolean showFirst = reqIntent.getBooleanExtra("start", false);
 
-                    if (!showFirst) {
-                        // we've just loaded a saved form, so start in the hierarchy view
-                        String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                        if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                            formControllerAvailable(formController);
-                            identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
-                                if (!requiresIdentity) {
-                                    if (!allowMovingBackwards) {
-                                        // we aren't allowed to jump around the form so attempt to
-                                        // go directly to the question we were on last time the
-                                        // form was saved.
-                                        // TODO: revisit the fallback. If for some reason the index
-                                        // wasn't saved, we can now jump around which doesn't seem right.
-                                        FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
-                                        if (formIndex != null) {
-                                            formController.jumpToIndex(formIndex);
-                                            onScreenRefresh();
-                                            return;
-                                        }
-                                    }
-
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                                    formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                                    startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
-                                }
-                            });
-
-                            formSaveViewModel.editingForm();
-                        } else {
-                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                                startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
-                            }
-                            finish();
-                        }
-                    } else {
-                        formControllerAvailable(formController);
+                    // we've just loaded a saved form, so start in the hierarchy view
+                    String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                    if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
+                        identityPromptViewModel.formLoaded(formController);
                         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                             if (!requiresIdentity) {
+                                if (!allowMovingBackwards) {
+                                    // we aren't allowed to jump around the form so attempt to
+                                    // go directly to the question we were on last time the
+                                    // form was saved.
+                                    // TODO: revisit the fallback. If for some reason the index
+                                    // wasn't saved, we can now jump around which doesn't seem right.
+                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                                    if (formIndex != null) {
+                                        formController.jumpToIndex(formIndex);
+                                        formControllerAvailable(formController);
+                                        return;
+                                    }
+                                }
+
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                                startFormEntry(formController, warningMsg);
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
+
+                        formController.getAuditEventLogger().setEditing(true);
+                    } else {
+                        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                            startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
+                        }
+                        finish();
                     }
                 }
             }
@@ -2244,28 +2256,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             Timber.e("FormController is null");
             showLongToast(this, R.string.loading_form_failed);
             finish();
-        }
-    }
-
-    private void startFormEntry(FormController formController, String warningMsg) {
-        // Register to receive location provider change updates and write them to the audit
-        // log. onStart has already run but the formController was null so try again.
-        if (formController.currentFormAuditsLocation()
-                && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
-            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
-        }
-
-        // onResume ran before the form was loaded. Let the viewModel know that the activity
-        // is about to be displayed and configured. Do this before the refresh actually
-        // happens because if audit logging is enabled, the refresh logs a question event
-        // and we want that to show up after initialization events.
-        activityDisplayed();
-
-        onScreenRefresh();
-
-        if (warningMsg != null) {
-            showLongToast(this, warningMsg);
-            Timber.w(warningMsg);
         }
     }
 
