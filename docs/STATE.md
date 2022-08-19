@@ -22,13 +22,13 @@ and update this document as the code evolves.
 * A lot of code lives in between one "god" Activity (`FormEntryActivity`) and a process singleton (`FormController`)
 * Core form entry flow uses custom side-to-side swipe view (in `FormEntryActivity` made up of `ODKView`)
 * Questions are rendered using a view "framework" of implementations inheriting from `QuestionWidget` (which is documented at in [WIDGETS.MD](WIDGETS.md))
-* Async/reactivity handled with a mixture of callbacks, LiveData and Rx
+* Async/reactivity handled with a mixture of callbacks and LiveData
 * App mostly stores data in flat files indexed in SQLite
 * Access to data in SQLite happens through repository objects which deal in data/domain objects (`FormsRepository` and `Form` for example)
 * Settings UIs for the app use Android's Preferences abstraction
 * App uses [Material 2 Theming](https://material.io/develop/android/theming/theming-overview) so [Material components](https://material.io/components?platform=android) (and [Material 3 components](https://m3.material.io/) where appropriate)are preferred over custom or platform ones.
 * Dagger2 is used to inject "black box" objects such as Activity and just uses a very basic setup
-* Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask (and some Rx)
+* Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask
 * Geo activities use three engines (Mapbox, osmdroid, Google Maps) depending on the selected basemap even though Mapbox could do everything osmdroid does
 * Code goes through static analysis using CheckStyle, PMD, ktlint and Android Lint
 * Forms get into the app from three different sources (Open Rosa servers, Google Drive and disk) but the logic for this is disparate and they don't sit behind a common interface
@@ -42,7 +42,7 @@ and update this document as the code evolves.
 * Writing pretty much all new code in Kotlin
 * Writing new code using a [multi-module approach](CODE-GUIDELINES.md#gradle-sub-modules) (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up
 * Trying to remove technical debt flagged with `@Deprecated`
-* Replacing Rx (and other async work such as `AsyncTask`) with `LiveData` + `Scheduler` abstraction
+* Replacing async work such as `AsyncTask` with `LiveData` + `Scheduler` abstraction
 * Gradually removing use of `CursorLoader` (all remaining uses are in `CursorLoaderFactory`)
 * Using AndroidX Test in new local tests and migrating other local tests as we touch them (from classic Robolectric)
 * Replacing uses of Google Guava with similar helpers in Kotlin Standard Library
