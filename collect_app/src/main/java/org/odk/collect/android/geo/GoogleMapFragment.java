@@ -33,7 +33,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -57,7 +56,6 @@ import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
-import org.odk.collect.maps.MapsMarkerCache;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.settings.SettingsProvider;
@@ -194,7 +192,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onDestroy() {
-        MapsMarkerCache.clearCache();
+        BitmapDescriptorCache.clearCache();
         super.onDestroy();
     }
 
@@ -661,7 +659,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     private BitmapDescriptor getBitmapDescriptor(int drawableId) {
-        return BitmapDescriptorFactory.fromBitmap(MapsMarkerCache.getMarkerBitmap(drawableId, getContext()));
+        return BitmapDescriptorCache.getBitmapDescriptor(drawableId, getContext());
     }
 
     private void showGpsDisabledAlert() {
