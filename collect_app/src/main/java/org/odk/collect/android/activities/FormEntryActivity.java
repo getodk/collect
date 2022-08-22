@@ -183,6 +183,7 @@ import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
+import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -370,7 +371,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Timber.w("onCreate");
+        Timber.w("onCreate %s", Md5.getMd5Hash(getIntent().getData().toString()));
         // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
         // this issue by including WebViews
         if (Build.VERSION.SDK_INT >= 24) {
@@ -783,7 +784,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Timber.w("onSaveInstanceState");
+        Timber.w("onSaveInstanceState %s", Md5.getMd5Hash(getIntent().getData().toString()));
         super.onSaveInstanceState(outState);
         outState.putString(KEY_FORMPATH, formPath);
         FormController formController = getFormController();
@@ -1882,7 +1883,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onStart() {
-        Timber.w("onStart");
+        Timber.w("onStart %s", Md5.getMd5Hash(getIntent().getData().toString()));
         super.onStart();
         FormController formController = getFormController();
 
@@ -1901,7 +1902,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onPause() {
-        Timber.w("onPause");
+        Timber.w("onPause %s", Md5.getMd5Hash(getIntent().getData().toString()));
         backgroundLocationViewModel.activityHidden();
 
         FormController formController = getFormController();
@@ -1920,7 +1921,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onResume() {
-        Timber.w("onResume");
+        Timber.w("onResume %s", Md5.getMd5Hash(getIntent().getData().toString()));
         super.onResume();
 
         activityDisplayed();
@@ -2027,7 +2028,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     protected void onDestroy() {
-        Timber.w("onDestroy");
+        Timber.w("onDestroy %s", Md5.getMd5Hash(getIntent().getData().toString()));
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(null);
             // We have to call cancel to terminate the thread, otherwise it
