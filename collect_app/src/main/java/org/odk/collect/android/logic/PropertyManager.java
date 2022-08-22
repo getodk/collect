@@ -57,7 +57,7 @@ public class PropertyManager implements IPropertyManager {
 
     private final Map<String, String> properties = new HashMap<>();
 
-    private MutableLiveData<Boolean> isPhoneNumberRequired = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isPhoneNumberRequired = new MutableLiveData<>();
 
     @Inject
     DeviceDetailsProvider deviceDetailsProvider;
@@ -85,6 +85,8 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager reload() {
+        isPhoneNumberRequired.postValue(false);
+
         try {
             putProperty(PROPMGR_DEVICE_ID,     "",         deviceDetailsProvider.getDeviceId());
             putProperty(PROPMGR_PHONE_NUMBER,  SCHEME_TEL,          deviceDetailsProvider.getLine1Number());
