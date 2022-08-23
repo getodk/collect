@@ -439,7 +439,7 @@ public class SaveFormToDisk {
                 values.put(DatabaseInstanceColumns.GEOMETRY_TYPE, (String) null);
 
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, new File(lastSavedPath))) {
-                    Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
+                    Timber.e(new Error("Error deleting plaintext files for " + instanceXml.getAbsolutePath()));
                 }
             }
         }
@@ -472,7 +472,7 @@ public class SaveFormToDisk {
         if (!instanceXml.delete()) {
             String msg = "Error deleting " + instanceXml.getAbsolutePath()
                     + " prior to renaming submission.xml";
-            Timber.e(msg);
+            Timber.e(new Error(msg));
             throw new IOException(msg);
         }
 
@@ -480,7 +480,7 @@ public class SaveFormToDisk {
         if (!submissionXml.renameTo(instanceXml)) {
             String msg =
                     "Error renaming submission.xml to " + instanceXml.getAbsolutePath();
-            Timber.e(msg);
+            Timber.e(new Error(msg));
             throw new IOException(msg);
         }
     }

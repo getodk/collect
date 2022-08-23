@@ -227,7 +227,7 @@ public class InstanceDiskSynchronizer {
 
                 SaveFormToDisk.manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
                 if (!EncryptionUtils.deletePlaintextFiles(instanceXml, null)) {
-                    Timber.e("Error deleting plaintext files for %s", instanceXml.getAbsolutePath());
+                    Timber.e(new Error("Error deleting plaintext files for " + instanceXml.getAbsolutePath()));
                 }
             }
         }

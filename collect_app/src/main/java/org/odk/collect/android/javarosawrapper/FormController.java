@@ -219,7 +219,7 @@ public class FormController {
             case "endOfForm":
                 return FormIndex.createEndOfFormIndex();
             case "unexpected":
-                Timber.e("Unexpected string from XPath");
+                Timber.e(new Error("Unexpected string from XPath"));
                 return null;
             default:
                 FormIndex returned = null;

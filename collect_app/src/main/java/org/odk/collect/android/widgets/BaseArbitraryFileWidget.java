@@ -53,10 +53,10 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
                 widgetValueChanged();
             } else {
                 answerFile = null;
-                Timber.e("Inserting Arbitrary file FAILED");
+                Timber.e(new Error("Inserting Arbitrary file FAILED"));
             }
         } else if (object != null) {
-            Timber.e("FileWidget's setBinaryData must receive a File but received: %s", object.getClass());
+            Timber.e(new Error("FileWidget's setBinaryData must receive a File but received: " + object.getClass()));
         }
     }
 

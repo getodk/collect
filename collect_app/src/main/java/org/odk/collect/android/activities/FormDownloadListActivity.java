@@ -462,7 +462,7 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     public boolean isLocalFormSuperseded(String formId) {
         if (formId == null) {
-            Timber.e("isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!");
+            Timber.e(new Error("isLocalFormSuperseded: server is not OpenRosa-compliant. <formID> is null!"));
             return true;
         }
 

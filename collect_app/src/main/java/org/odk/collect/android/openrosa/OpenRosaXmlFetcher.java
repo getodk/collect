@@ -56,7 +56,7 @@ class OpenRosaXmlFetcher {
             if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
                 String error = "getXML failed while accessing "
                         + urlString + " with status code: " + inputStreamResult.getStatusCode();
-                Timber.e(error);
+                Timber.e(new Error(error));
                 return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
             }
 
@@ -98,7 +98,7 @@ class OpenRosaXmlFetcher {
         }
 
         if (uri.getHost() == null) {
-            Timber.e("Invalid server URL (no hostname): %s", downloadUrl);
+            Timber.e(new Error("Invalid server URL (no hostname): " + downloadUrl));
             throw new Exception("Invalid server URL (no hostname): " + downloadUrl);
         }
 

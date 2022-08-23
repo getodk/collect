@@ -28,8 +28,10 @@ class StoragePathProvider(
                 File(path + File.separator + sanitizedProjectName).createNewFile()
             } catch (e: Exception) {
                 Timber.e(
-                    FileUtils.getFilenameError(
-                        projectsRepository.get(uuid)!!.name
+                    Error(
+                        FileUtils.getFilenameError(
+                            projectsRepository.get(uuid)!!.name
+                        )
                     )
                 )
             }

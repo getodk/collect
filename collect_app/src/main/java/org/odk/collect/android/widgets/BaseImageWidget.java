@@ -109,10 +109,10 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 addCurrentImageToLayout();
                 widgetValueChanged();
             } else {
-                Timber.e("NO IMAGE EXISTS at: %s", newImage.getAbsolutePath());
+                Timber.e(new Error("NO IMAGE EXISTS at: " + newImage.getAbsolutePath()));
             }
         } else {
-            Timber.e("ImageWidget's setBinaryData must receive a File object.");
+            Timber.e(new Error("ImageWidget's setBinaryData must receive a File object."));
         }
     }
 

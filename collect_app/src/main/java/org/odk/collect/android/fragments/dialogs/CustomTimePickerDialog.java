@@ -102,7 +102,7 @@ public class CustomTimePickerDialog extends DialogFragment {
                 if (mode == modeSpinner) {
                     Field field = findField(TimePickerDialog.class, TimePicker.class, "mTimePicker");
                     if (field == null) {
-                        Timber.e("Reflection failed: Couldn't find field 'mTimePicker'");
+                        Timber.e(new Error("Reflection failed: Couldn't find field 'mTimePicker'"));
                         return;
                     }
 
@@ -111,7 +111,7 @@ public class CustomTimePickerDialog extends DialogFragment {
                     Field delegateField = findField(TimePicker.class, delegateClass, "mDelegate");
 
                     if (delegateField == null) {
-                        Timber.e("Reflection failed: Couldn't find field 'mDelegate'");
+                        Timber.e(new Error("Reflection failed: Couldn't find field 'mDelegate'"));
                         return;
                     }
                     Object delegate = delegateField.get(timePicker);

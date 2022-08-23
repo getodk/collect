@@ -255,7 +255,7 @@ public class DrawActivity extends CollectAbstractActivity {
             // apparently on 4.x, the orientation change notification can occur
             // sometime before the view is rendered. In that case, the view
             // dimensions will not be known.
-            Timber.e("View has zero width or zero height");
+            Timber.e(new Error("View has zero width or zero height"));
         } else {
             FileOutputStream fos;
             fos = new FileOutputStream(f);

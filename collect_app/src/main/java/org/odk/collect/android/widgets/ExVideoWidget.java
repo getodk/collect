@@ -91,15 +91,15 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
                 binding.playVideoButton.setEnabled(true);
                 widgetValueChanged();
             } else {
-                Timber.e("Inserting Video file FAILED");
+                Timber.e(new Error("Inserting Video file FAILED"));
             }
         } else if (object != null) {
             if (object instanceof File) {
                 ToastUtils.showLongToast(getContext(), R.string.invalid_file_type);
                 mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
-                Timber.e("ExVideoWidget's setBinaryData must receive a video file but received: %s", FileUtils.getMimeType((File) object));
+                Timber.e(new Error("ExVideoWidget's setBinaryData must receive a video file but received: " + FileUtils.getMimeType((File) object)));
             } else {
-                Timber.e("ExVideoWidget's setBinaryData must receive a video file but received: %s", object.getClass());
+                Timber.e(new Error("ExVideoWidget's setBinaryData must receive a video file but received: " + object.getClass()));
             }
         }
     }

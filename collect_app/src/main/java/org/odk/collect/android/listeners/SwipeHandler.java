@@ -123,14 +123,14 @@ public class SwipeHandler {
                     beenSwiped = true;
                     if (velocityX > 0) {
                         if (e1.getX() > e2.getX()) {
-                            Timber.e("showNextView VelocityX is bogus! %f > %f", e1.getX(), e2.getX());
+                            Timber.e(new Error("showNextView VelocityX is bogus! " + e1.getX() + " > " + e2.getX()));
                             onSwipe.onSwipeForward();
                         } else {
                             onSwipe.onSwipeBackward();
                         }
                     } else {
                         if (e1.getX() < e2.getX()) {
-                            Timber.e("showPreviousView VelocityX is bogus! %f < %f", e1.getX(), e2.getX());
+                            Timber.e("showPreviousView VelocityX is bogus! " + e1.getX() + " < " + e2.getX());
                             onSwipe.onSwipeBackward();
                         } else {
                             onSwipe.onSwipeForward();

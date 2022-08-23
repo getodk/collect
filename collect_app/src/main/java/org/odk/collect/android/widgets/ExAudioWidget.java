@@ -100,15 +100,15 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
                 updatePlayerMedia();
                 widgetValueChanged();
             } else {
-                Timber.e("Inserting Audio file FAILED");
+                Timber.e(new Error("Inserting Audio file FAILED"));
             }
         } else if (object != null) {
             if (object instanceof File) {
                 ToastUtils.showLongToast(getContext(), R.string.invalid_file_type);
                 mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
-                Timber.e("ExAudioWidget's setBinaryData must receive a audio file but received: %s", FileUtils.getMimeType((File) object));
+                Timber.e(new Error("ExAudioWidget's setBinaryData must receive a audio file but received: " + FileUtils.getMimeType((File) object)));
             } else {
-                Timber.e("ExAudioWidget's setBinaryData must receive a audio file but received: %s", object.getClass());
+                Timber.e(new Error("ExAudioWidget's setBinaryData must receive a audio file but received: " + object.getClass()));
             }
         }
     }

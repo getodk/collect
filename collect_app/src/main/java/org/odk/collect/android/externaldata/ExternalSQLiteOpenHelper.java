@@ -91,7 +91,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
             // this means that the function handler needed the database through calling
             // getReadableDatabase() --> getWritableDatabase(),
             // but this is not allowed, so just return;
-            Timber.e("The function handler triggered this external data population. This is not good.");
+            Timber.e(new Error("The function handler triggered this external data population. This is not good."));
             return;
         }
 

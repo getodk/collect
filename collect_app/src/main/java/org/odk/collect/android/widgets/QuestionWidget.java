@@ -304,7 +304,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     @Deprecated
     protected void addQuestionLabel(View v) {
         if (v == null) {
-            Timber.e("cannot add a null view as questionMediaLayout");
+            Timber.e(new Error("cannot add a null view as questionMediaLayout"));
             return;
         }
         // default for questionmedialayout

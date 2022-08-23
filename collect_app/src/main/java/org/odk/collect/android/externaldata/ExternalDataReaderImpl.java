@@ -64,8 +64,7 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
             if (ExternalSQLiteOpenHelper.shouldUpdateDBforDataSet(dbFile, dataSetFile)) {
                 boolean deleted = dbFile.delete();
                 if (!deleted) {
-                    Timber.e("%s has changed but we could not delete the previous DB at %s",
-                            dataSetFile.getName(), dbFile.getAbsolutePath());
+                    Timber.e(new Error(dataSetFile.getName() + " has changed but we could not delete the previous DB at " + dbFile.getAbsolutePath()));
                     return true;
                 }
             } else {

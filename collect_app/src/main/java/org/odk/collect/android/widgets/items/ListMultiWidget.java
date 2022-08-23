@@ -177,7 +177,7 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
 
                         if (errorMsg != null) {
                             // errorMsg is only set when an error has occured
-                            Timber.e(errorMsg);
+                            Timber.e(new Error(errorMsg));
                             missingImage = new TextView(getContext());
                             missingImage.setText(errorMsg);
 

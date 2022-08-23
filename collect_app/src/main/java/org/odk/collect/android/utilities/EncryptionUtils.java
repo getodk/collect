@@ -271,7 +271,7 @@ public class EncryptionUtils {
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
             if (instance == null) {
                 String msg = getLocalizedString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
-                Timber.e(msg);
+                Timber.e(new Error(msg));
                 throw new EncryptionException(msg, null);
             }
 

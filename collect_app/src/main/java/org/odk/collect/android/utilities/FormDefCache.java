@@ -54,7 +54,7 @@ public final class FormDefCache {
             Timber.i("Deleting no-longer-wanted temp cache file %s for form %s",
                     tempCacheFile.getName(), formDef.getTitle());
             if (!tempCacheFile.delete()) {
-                Timber.e("Unable to delete %s", tempCacheFile.getName());
+                Timber.e(new Error("Unable to delete " + tempCacheFile.getName()));
             }
         } else {
             if (tempCacheFile.renameTo(cachedFormDefFile)) {
@@ -63,8 +63,7 @@ public final class FormDefCache {
                 Timber.i("Caching %s took %.3f seconds.", formDef.getTitle(),
                         (System.currentTimeMillis() - formSaveStart) / 1000F);
             } else {
-                Timber.e("Unable to rename temporary file %s to cache file %s",
-                        tempCacheFile.toString(), cachedFormDefFile.toString());
+                Timber.e(new Error("Unable to rename temporary file " + tempCacheFile + " to cache file " + cachedFormDefFile));
             }
         }
 

@@ -184,7 +184,7 @@ public class ExternalDataHandlerSearch extends ExternalDataHandlerBase {
                 c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
                         selectionArgs, null, null, ExternalDataUtil.SORT_COLUMN_NAME);
             } catch (Exception e) {
-                Timber.e(getLocalizedString(Collect.getInstance(), R.string.ext_import_csv_missing_error, dataSetName, dataSetName));
+                Timber.e(new Error(getLocalizedString(Collect.getInstance(), R.string.ext_import_csv_missing_error, dataSetName, dataSetName)));
                 c = db.query(ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME, sqlColumns, selection,
                         selectionArgs, null, null, null);
             }

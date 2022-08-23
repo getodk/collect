@@ -126,7 +126,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         final String formPath = path[0];
         if (formPath == null) {
-            Timber.e("formPath is null");
+            Timber.e(new Error("formPath is null"));
             errorMsg = "formPath is null, please email support@getodk.org with a description of what you were doing when this happened.";
             return null;
         }
@@ -418,7 +418,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         // weak check for matching forms
         if (!savedRoot.getName().equals(templateRoot.getName()) || savedRoot.getMult() != 0) {
-            Timber.e("Saved form instance does not match template form definition");
+            Timber.e(new Error("Saved form instance does not match template form definition"));
             return;
         }
 

@@ -193,7 +193,7 @@ public abstract class AppListFragment extends ListFragment {
     private void setupBottomSheet() {
         CollectAbstractActivity activity = (CollectAbstractActivity) getActivity();
         if (activity == null) {
-            Timber.e("Activity is null");
+            Timber.e(new Error("Activity is null"));
             return;
         }
 
