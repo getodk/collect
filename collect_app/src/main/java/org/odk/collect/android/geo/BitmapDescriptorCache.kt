@@ -26,6 +26,7 @@ object BitmapDescriptorCache {
 
     @JvmStatic
     fun clearCache() {
+        MapsMarkerCache.clearCache()
         cache.evictAll()
     }
 }
