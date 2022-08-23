@@ -32,7 +32,7 @@ open class ActivityScenarioLauncherRule : ExternalResource() {
             try {
                 it.close()
             } catch (e: Throwable) {
-                Timber.e("Error closing ActivityScenario: $e")
+                Timber.e(Error("Error closing ActivityScenario: $e"))
             }
         }
     }

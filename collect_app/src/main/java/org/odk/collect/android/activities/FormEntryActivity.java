@@ -471,7 +471,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             if (index != null && Collect.getInstance().getFormController() == null) {
                 // https://github.com/getodk/collect/issues/5241
-                Timber.e("getCurrentIndex() firing with null getFormController(). The one stored in formEntryViewModel is %s", (formEntryViewModel.isFormControllerSet() ? "not null" : "null"));
+                Timber.e(new Error("getCurrentIndex() firing with null getFormController(). The one stored in formEntryViewModel is " + (formEntryViewModel.isFormControllerSet() ? "not null" : "null")));
                 createErrorDialog("getFormController() is null, please email support@getodk.org with a description of what you were doing when this happened.", true);
             } else {
                 formIndexAnimationHandler.handle(index);
@@ -741,7 +741,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
         } else {
-            Timber.e("Couldn't access cache directory when looking for save points!");
+            Timber.e(new Error("Couldn't access cache directory when looking for save points!"));
         }
 
         return null;
@@ -772,7 +772,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             }
         } catch (Exception e) {
-            Timber.e("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?");
+            Timber.e(new Error("Could not schedule SavePointTask. Perhaps a lot of swiping is taking place?"));
         }
     }
 
@@ -821,7 +821,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     && formLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
                 formLoaderTask.setActivityResult(requestCode, resultCode, intent);
             } else {
-                Timber.e("Got an activityResult without any pending form loader");
+                Timber.e(new Error("Got an activityResult without any pending form loader"));
             }
             return;
         }
@@ -935,7 +935,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             }
         } else {
-            Timber.e("currentView returned null.");
+            Timber.e(new Error("currentView returned null."));
         }
         return null;
     }
@@ -976,7 +976,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
 
             if (!set) {
-                Timber.e("Attempting to return data to a widget or set of widgets not looking for data");
+                Timber.e(new Error("Attempting to return data to a widget or set of widgets not looking for data"));
             }
         }
     }
@@ -1183,7 +1183,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 return new EmptyView(this);
 
             default:
-                Timber.e("Attempted to create a view that does not exist.");
+                Timber.e(new Error("Attempted to create a view that does not exist."));
                 // this is badness to avoid a crash.
                 try {
                     event = formController.stepToNextScreenEvent();
@@ -1946,7 +1946,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         FormController formController = getFormController();
 
         if (formController != null && !formEntryViewModel.isFormControllerSet()) {
-            Timber.e("FormController set in App but not ViewModel");
+            Timber.e(new Error("FormController set in App but not ViewModel"));
         }
 
         if (formLoaderTask != null) {
@@ -2071,7 +2071,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else if (outAnimation == animation) {
             animationCompletionSet |= 2;
         } else {
-            Timber.e("Unexpected animation");
+            Timber.e(new Error("Unexpected animation"));
         }
 
         if (animationCompletionSet == 3) {
@@ -2254,7 +2254,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 }
             }
         } else {
-            Timber.e("FormController is null");
+            Timber.e(new Error("FormController is null"));
             showLongToast(this, R.string.loading_form_failed);
             finish();
         }

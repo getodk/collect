@@ -157,7 +157,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
             outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
             outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
         } else {
-            Timber.e("Unexpected null search view (issue #1412)");
+            Timber.e(new Error("Unexpected null search view (issue #1412)"));
         }
     }
 

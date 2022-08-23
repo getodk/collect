@@ -263,7 +263,7 @@ public class LikertWidget extends QuestionWidget {
                 errorMsg = getContext().getString(R.string.file_missing, imageFile);
             }
             if (errorMsg != null) {
-                Timber.e(errorMsg);
+                Timber.e(new Error(errorMsg));
             }
         } catch (InvalidReferenceException e) {
             Timber.d(e, "Invalid image reference due to %s ", e.getMessage());

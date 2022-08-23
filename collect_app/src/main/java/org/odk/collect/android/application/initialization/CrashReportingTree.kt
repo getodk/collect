@@ -10,7 +10,7 @@ internal class CrashReportingTree(private val analytics: Analytics) : Timber.Tre
         when (priority) {
             Log.WARN -> analytics.logMessage("W/$tag: $message")
 
-            Log.ERROR -> analytics.logNonFatal(t ?: Throwable("E/$tag: $message"))
+            Log.ERROR -> analytics.logNonFatal(t ?: Error("E/$tag: $message"))
         }
     }
 }

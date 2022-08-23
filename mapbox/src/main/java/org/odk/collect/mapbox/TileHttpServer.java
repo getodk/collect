@@ -81,7 +81,7 @@ class TileHttpServer {
                 continue;  // this port is in use; try another one
             }
         }
-        Timber.e("No ports available from %d to %d", portMin, portMax);
+        Timber.e(new Error("No ports available from " + portMin + " to " + portMax));
         return null;
     }
 

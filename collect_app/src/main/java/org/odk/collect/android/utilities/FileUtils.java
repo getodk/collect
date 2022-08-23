@@ -116,8 +116,7 @@ public final class FileUtils {
             if (errorMessage != null) {
                 try {
                     Thread.sleep(500);
-                    Timber.e("Retrying to copy the file after 500ms: %s",
-                            sourceFile.getAbsolutePath());
+                    Timber.e(new Error("Retrying to copy the file after 500ms: " + sourceFile.getAbsolutePath()));
                     errorMessage = actualCopy(sourceFile, destFile);
                 } catch (InterruptedException e) {
                     Timber.i(e);
@@ -126,7 +125,7 @@ public final class FileUtils {
             return errorMessage;
         } else {
             String msg = "Source file does not exist: " + sourceFile.getAbsolutePath();
-            Timber.e(msg);
+            Timber.e(new Error(msg));
             return msg;
         }
     }
@@ -349,7 +348,7 @@ public final class FileUtils {
      */
     public static void checkMediaPath(File mediaDir) {
         if (mediaDir.exists() && mediaDir.isFile()) {
-            Timber.e("The media folder is already there and it is a FILE!! We will need to delete it and create a folder instead");
+            Timber.e(new Error("The media folder is already there and it is a FILE!! We will need to delete it and create a folder instead"));
             boolean deleted = mediaDir.delete();
             if (!deleted) {
                 throw new RuntimeException(
@@ -508,7 +507,7 @@ public final class FileUtils {
                 success = true;
 
             } catch (Exception e) {
-                Timber.e(e.toString());
+                Timber.e(e);
                 // silently retry unless this is the last attempt,
                 // in which case we rethrow the exception.
 

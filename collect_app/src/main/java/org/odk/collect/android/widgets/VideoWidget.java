@@ -154,10 +154,10 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
                 widgetValueChanged();
                 playButton.setEnabled(binaryName != null);
             } else {
-                Timber.e("Inserting Video file FAILED");
+                Timber.e(new Error("Inserting Video file FAILED"));
             }
         } else {
-            Timber.e("VideoWidget's setBinaryData must receive a File or Uri object.");
+            Timber.e(new Error("VideoWidget's setBinaryData must receive a File or Uri object."));
         }
     }
 

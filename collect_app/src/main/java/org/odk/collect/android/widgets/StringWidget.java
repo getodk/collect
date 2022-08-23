@@ -184,7 +184,7 @@ public class StringWidget extends QuestionWidget {
                     answerEditText.setMinLines(rows);
                     answerEditText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
                 } catch (Exception e) {
-                    Timber.e("Unable to process the rows setting for the answerText field: %s", e.toString());
+                    Timber.e(new Error("Unable to process the rows setting for the answerText field: " + e));
                 }
             }
         }

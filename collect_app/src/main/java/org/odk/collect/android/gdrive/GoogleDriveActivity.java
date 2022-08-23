@@ -660,7 +660,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 }
                 if (rootId == null) {
                     if (!isCancelled()) {
-                        Timber.e("Unable to fetch drive contents");
+                        Timber.e(new Error("Unable to fetch drive contents"));
                     }
                     return null;
                 }

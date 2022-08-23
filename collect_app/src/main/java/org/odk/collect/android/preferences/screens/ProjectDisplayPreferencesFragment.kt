@@ -145,8 +145,10 @@ class ProjectDisplayPreferencesFragment :
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedOldProjectName).delete()
                 } catch (e: Exception) {
                     Timber.e(
-                        FileUtils.getFilenameError(
-                            name
+                        Error(
+                            FileUtils.getFilenameError(
+                                name
+                            )
                         )
                     )
                 }
@@ -156,8 +158,10 @@ class ProjectDisplayPreferencesFragment :
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + sanitizedNewProjectName).createNewFile()
                 } catch (e: Exception) {
                     Timber.e(
-                        FileUtils.getFilenameError(
-                            newValue as String
+                        Error(
+                            FileUtils.getFilenameError(
+                                newValue as String
+                            )
                         )
                     )
                 }

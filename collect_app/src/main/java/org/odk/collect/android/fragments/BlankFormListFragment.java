@@ -242,7 +242,7 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
             ToastUtils.showShortToast(requireContext(), getString(R.string.file_deleted_ok, String.valueOf(deletedForms)));
         } else {
             // had some failures
-            Timber.e("Failed to delete %d forms", toDeleteCount - deletedForms);
+            Timber.e(new Error("Failed to delete " + (toDeleteCount - deletedForms) + " forms"));
             ToastUtils.showLongToast(requireContext(), getString(R.string.file_deleted_error, String.valueOf(getCheckedCount()
                     - deletedForms), String.valueOf(getCheckedCount())));
         }

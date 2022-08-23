@@ -153,10 +153,10 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 updatePlayerMedia();
                 widgetValueChanged();
             } else {
-                Timber.e("NO AUDIO EXISTS at: %s", newAudio.getAbsolutePath());
+                Timber.e(new Error("NO AUDIO EXISTS at: " + newAudio.getAbsolutePath()));
             }
         } else {
-            Timber.e("AudioWidget's setBinaryData must receive a File object.");
+            Timber.e(new Error("AudioWidget's setBinaryData must receive a File object."));
         }
     }
 

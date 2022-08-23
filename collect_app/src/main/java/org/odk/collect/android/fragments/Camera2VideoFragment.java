@@ -226,7 +226,7 @@ public class Camera2VideoFragment extends Fragment
                 return size;
             }
         }
-        Timber.e("Couldn't find any suitable video size");
+        Timber.e(new Error("Couldn't find any suitable video size"));
         return choices[choices.length - 1];
     }
 
@@ -257,7 +257,7 @@ public class Camera2VideoFragment extends Fragment
         if (!bigEnough.isEmpty()) {
             return Collections.min(bigEnough, new Camera2Fragment.CompareSizesByArea());
         } else {
-            Timber.e("Couldn't find any suitable preview size");
+            Timber.e(new Error("Couldn't find any suitable preview size"));
             return choices[0];
         }
     }

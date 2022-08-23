@@ -51,7 +51,7 @@ public class ExternalDataManagerImpl implements ExternalDataManager {
         if (sqLiteOpenHelper == null) {
             if (mediaFolder == null) {
                 String msg = getLocalizedString(Collect.getInstance(), R.string.ext_not_initialized_error);
-                Timber.e(msg);
+                Timber.e(new Error(msg));
                 if (required) {
                     throw new ExternalDataException(msg);
                 } else {

@@ -36,7 +36,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
         File writeDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.SETTINGS));
         if (!writeDir.exists()) {
             if (!writeDir.mkdirs()) {
-                Timber.e("Error creating directory %s", writeDir.getAbsolutePath());
+                Timber.e(new Error("Error creating directory " + writeDir.getAbsolutePath()));
             }
         }
 

@@ -208,7 +208,7 @@ public class SavedFormListFragment extends InstanceListFragment implements Delet
             ToastUtils.showShortToast(requireContext(), getString(R.string.file_deleted_ok, String.valueOf(deletedInstances)));
         } else {
             // had some failures
-            Timber.e("Failed to delete %d instances", toDeleteCount - deletedInstances);
+            Timber.e(new Error("Failed to delete " + (toDeleteCount - deletedInstances) + " instances"));
             ToastUtils.showLongToast(requireContext(), getString(R.string.file_deleted_error,
                     String.valueOf(toDeleteCount - deletedInstances),
                     String.valueOf(toDeleteCount)));

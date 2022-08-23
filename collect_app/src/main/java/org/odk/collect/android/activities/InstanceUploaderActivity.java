@@ -153,7 +153,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 
         if (instancesToSend.length == 0) {
-            Timber.e("onCreate: No instances to upload!");
+            Timber.e(new Error("onCreate: No instances to upload!"));
             // drop through -- everything will process through OK
         } else {
             Timber.i("onCreate: Beginning upload of %d instances!", instancesToSend.length);

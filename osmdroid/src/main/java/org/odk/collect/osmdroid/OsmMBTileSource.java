@@ -112,7 +112,7 @@ class OsmMBTileSource extends BitmapTileSourceBase {
         if (cursor.getCount() != 0) {
             cursor.moveToFirst();
             value = cursor.getInt(0);
-            Timber.e("Found a minimum zoomlevel of %d", value);
+            Timber.e(new Error("Found a minimum zoomlevel of " + value));
         }
 
         cursor.close();

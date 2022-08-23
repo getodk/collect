@@ -95,15 +95,15 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
                 displayImage();
                 widgetValueChanged();
             } else {
-                Timber.e("Inserting Image file FAILED");
+                Timber.e(new Error("Inserting Image file FAILED"));
             }
         } else if (object != null) {
             if (object instanceof File) {
                 ToastUtils.showLongToast(getContext(), R.string.invalid_file_type);
                 mediaUtils.deleteMediaFile(((File) object).getAbsolutePath());
-                Timber.e("ExImageWidget's setBinaryData must receive an image file but received: %s", FileUtils.getMimeType((File) object));
+                Timber.e(new Error("ExImageWidget's setBinaryData must receive an image file but received: " + FileUtils.getMimeType((File) object)));
             } else {
-                Timber.e("ExImageWidget's setBinaryData must receive an image file but received: %s", object.getClass());
+                Timber.e(new Error("ExImageWidget's setBinaryData must receive an image file but received: " + object.getClass()));
             }
         }
     }

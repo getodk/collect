@@ -123,7 +123,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
         // at this point, we don't expect this to be empty...
         if (instancesToSend.length == 0) {
-            Timber.e("onCreate: No instances to upload!");
+            Timber.e(new Error("onCreate: No instances to upload!"));
             // drop through --
             // everything will process through OK
         } else {

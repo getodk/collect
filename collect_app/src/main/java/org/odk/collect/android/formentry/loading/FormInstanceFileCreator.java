@@ -33,7 +33,7 @@ public class FormInstanceFileCreator {
         if (FileUtils.createFolder(instanceDir)) {
             return new File(instanceDir + File.separator + formFileName + "_" + timestamp + ".xml");
         } else {
-            Timber.e("Error creating form instance file");
+            Timber.e(new Error("Error creating form instance file"));
             return null;
         }
     }
