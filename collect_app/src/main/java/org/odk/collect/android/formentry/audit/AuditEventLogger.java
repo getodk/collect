@@ -2,6 +2,7 @@
 package org.odk.collect.android.formentry.audit;
 
 import android.location.Location;
+import android.os.Looper;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.FormIndex;
@@ -57,6 +58,11 @@ public class AuditEventLogger {
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
                          boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
+        if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
+            throw new IllegalStateException("Cannot log event from background thread!");
+        }
+
+
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
@@ -101,6 +107,10 @@ public class AuditEventLogger {
      * Finalizes and writes events
      */
     public void flush() {
+        if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
+            throw new IllegalStateException("Cannot flush events from background thread!");
+        }
+
         if (isAuditEnabled()) {
             finalizeEvents();
             writeEvents();
