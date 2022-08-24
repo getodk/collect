@@ -1,7 +1,11 @@
 
 package org.odk.collect.android.formentry.audit;
 
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
+import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
+
 import android.location.Location;
+import android.os.Looper;
 import android.os.SystemClock;
 
 import org.javarosa.core.model.FormIndex;
@@ -13,9 +17,6 @@ import java.util.List;
 
 import io.reactivex.annotations.Nullable;
 import timber.log.Timber;
-
-import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_DISABLED;
-import static org.odk.collect.android.formentry.audit.AuditEvent.AuditEventType.LOCATION_PROVIDERS_ENABLED;
 
 /**
  * Handle logging of auditEvents (which contain time and might contain location coordinates),
@@ -57,6 +58,8 @@ public class AuditEventLogger {
      */
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
                          boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
+        checkAndroidUIThread();
+
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }
@@ -101,9 +104,18 @@ public class AuditEventLogger {
      * Finalizes and writes events
      */
     public void flush() {
+        checkAndroidUIThread();
+
         if (isAuditEnabled()) {
             finalizeEvents();
             writeEvents();
+        }
+    }
+
+    private void checkAndroidUIThread() {
+        Looper mainLooper = Looper.getMainLooper();
+        if (mainLooper != null && mainLooper.getThread() != Thread.currentThread()) {
+            throw new IllegalStateException("Cannot modify audit log from background thread!");
         }
     }
 

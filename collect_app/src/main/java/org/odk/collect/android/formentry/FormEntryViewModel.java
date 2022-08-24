@@ -162,9 +162,11 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         isLoading.setValue(true);
 
         scheduler.immediate((Supplier<Boolean>) () -> {
-            return updateAnswersForScreen(answers, evaluateConstraints);
+            return saveScreenAnswersToFormController(answers, evaluateConstraints);
         }, updateSuccess -> {
             isLoading.setValue(false);
+
+            formController.getAuditEventLogger().flush();
 
             if (updateSuccess) {
                 try {
@@ -183,9 +185,11 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         isLoading.setValue(true);
 
         scheduler.immediate((Supplier<Boolean>) () -> {
-            return updateAnswersForScreen(answers);
+            return saveScreenAnswersToFormController(answers, false);
         }, updateSuccess -> {
             isLoading.setValue(false);
+
+            formController.getAuditEventLogger().flush();
 
             if (updateSuccess) {
                 try {
@@ -206,6 +210,13 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
     }
 
     public boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
+        boolean success = saveScreenAnswersToFormController(answers, evaluateConstraints);
+        formController.getAuditEventLogger().flush();
+
+        return success;
+    }
+
+    private boolean saveScreenAnswersToFormController(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
         if (formController == null) {
             return false;
         }
@@ -221,7 +232,6 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
             return false;
         }
 
-        formController.getAuditEventLogger().flush();
         return true;
     }
 
