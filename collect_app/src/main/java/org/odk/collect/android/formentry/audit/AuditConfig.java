@@ -16,12 +16,12 @@
 
 package org.odk.collect.android.formentry.audit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.odk.collect.location.LocationClient;
 
 import java.util.Locale;
-
-import io.reactivex.annotations.NonNull;
-import io.reactivex.annotations.Nullable;
 
 /**
  * This class is responsible for storing the current audit configuration, which contains three

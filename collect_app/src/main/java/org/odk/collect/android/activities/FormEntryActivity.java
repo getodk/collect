@@ -93,8 +93,6 @@ import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
-import org.odk.collect.android.events.ReadPhoneStatePermissionRxEvent;
-import org.odk.collect.android.events.RxEventBus;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
@@ -195,9 +193,6 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 /**
@@ -244,8 +239,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
-    public static final String KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED = "readPhoneStatePermissionRequestNeeded";
-
     public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormEntryActivity.class.getName() + MaterialProgressDialogFragment.class.getName() + "mediaLoading";
 
     private boolean autoSaved;
@@ -281,8 +274,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean newForm = true;
     private boolean readPhoneStatePermissionRequestNeeded;
 
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-
     MediaLoadingFragment mediaLoadingFragment;
     private FormEntryMenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
@@ -300,9 +291,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private boolean showNavigationButtons;
-
-    @Inject
-    RxEventBus eventBus;
 
     @Inject
     Analytics analytics;
@@ -391,13 +379,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         setupViewModels();
         swipeHandler = new SwipeHandler(this, settingsProvider.getUnprotectedSettings());
 
-        compositeDisposable.add(eventBus
-                .register(ReadPhoneStatePermissionRxEvent.class)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    readPhoneStatePermissionRequestNeeded = true;
-                }));
+        propertyManager.isPhoneNumberRequired().observe(this, isPhoneNumberRequired -> readPhoneStatePermissionRequestNeeded = isPhoneNumberRequired);
 
         errorMessage = null;
 
@@ -581,9 +563,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             saveName = savedInstanceState.getString(KEY_SAVE_NAME);
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
-            }
-            if (savedInstanceState.containsKey(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED)) {
-                readPhoneStatePermissionRequestNeeded = savedInstanceState.getBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED);
             }
             if (savedInstanceState.containsKey(KEY_LOCATION_PERMISSIONS_GRANTED)) {
                 locationPermissionsPreviouslyGranted = savedInstanceState.getBoolean(KEY_LOCATION_PERMISSIONS_GRANTED);
@@ -806,7 +785,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         outState.putString(KEY_ERROR, errorMessage);
         outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
-        outState.putBoolean(KEY_READ_PHONE_STATE_PERMISSION_REQUEST_NEEDED, readPhoneStatePermissionRequestNeeded);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
     }
 
@@ -2043,7 +2021,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         releaseOdkView();
-        compositeDisposable.dispose();
 
         try {
             unregisterReceiver(locationProvidersReceiver);

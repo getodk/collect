@@ -41,7 +41,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import androidx.annotation.NonNull;
-import androidx.legacy.app.FragmentCompat;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -67,8 +66,7 @@ import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
-public class Camera2Fragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+public class Camera2Fragment extends Fragment implements View.OnClickListener {
 
     /**
      * Conversion from screen rotation to JPEG orientation. For front camera only.

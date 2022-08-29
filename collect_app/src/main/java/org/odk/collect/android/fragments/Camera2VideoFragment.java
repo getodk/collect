@@ -45,7 +45,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.legacy.app.FragmentCompat;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
@@ -66,8 +65,7 @@ import timber.log.Timber;
 /*https://github.com/googlesamples/android-Camera2Video/blob/master/Application/src/main/java/com/
  example/android/camera2video/Camera2VideoFragment.java*/
 
-public class Camera2VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+public class Camera2VideoFragment extends Fragment implements View.OnClickListener {
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;

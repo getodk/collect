@@ -373,13 +373,4 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         alertDialog.show();
         return true;
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (listAdapter != null) {
-            ((InstanceUploaderAdapter) listAdapter).onDestroy();
-        }
-    }
 }

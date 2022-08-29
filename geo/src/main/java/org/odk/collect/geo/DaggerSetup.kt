@@ -100,7 +100,7 @@ open class GeoDependencyModule {
     internal open fun providesGeoPointViewModelFactory(application: Application): GeoPointViewModelFactory {
         return object : GeoPointViewModelFactory {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 val componentProvider = application as GeoDependencyComponentProvider
                 val component = componentProvider.geoDependencyComponent
                 return LocationTrackerGeoPointViewModel(

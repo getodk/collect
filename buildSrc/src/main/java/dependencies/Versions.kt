@@ -6,8 +6,11 @@ object Versions {
     const val android_target_sdk = 31
 
     const val androidx_fragment = "1.4.1"
-    const val okhttp3 = "4.9.3"
-    const val dagger = "2.41"
-    const val kotlin = "1.6.10"
-    const val mockito = "4.5.1"
+    const val dagger = "2.42"
+    const val espresso = "3.4.0"
+    const val glide = "4.13.2"
+    const val mockito = "4.6.1"
+    const val okhttp3 = "4.10.0"
+    const val robolectric = "4.7.3"
+    const val work = "2.7.1"
 }
