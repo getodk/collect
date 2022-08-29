@@ -111,6 +111,10 @@ public class RangeWidgetUtils {
         BigDecimal actualValue = null;
         if (prompt.getAnswerValue() != null) {
             actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
+
+            if (actualValue.compareTo(rangeStart) < 0 || actualValue.compareTo(rangeEnd) > 0) {
+                actualValue = null;
+            }
         }
 
         if (isRangeSliderWidgetValid(rangeQuestion, slider)) {
