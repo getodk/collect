@@ -674,6 +674,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null);
+        formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);
     }
@@ -1932,6 +1933,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (fec != null) {
                     if (!propertyManager.isPhoneStateRequired()) {
                         loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
+                    } else if (permissionsProvider.isReadPhoneStatePermissionGranted()) {
+                        loadForm();
                     }
                 } else {
                     DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
