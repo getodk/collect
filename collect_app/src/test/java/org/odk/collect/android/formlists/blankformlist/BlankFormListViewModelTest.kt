@@ -200,6 +200,33 @@ class BlankFormListViewModelTest {
     }
 
     @Test
+    fun `only the newest version of every form (by date) should be visible if hiding old form versions enabled`() {
+        saveForms(
+            form(dbId = 1, formId = "1", version = "2"),
+            form(dbId = 2, formId = "1", version = "1")
+        )
+
+        createViewModel()
+
+        assertThat(viewModel.formsToDisplay.value!!.size, `is`(1))
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "1", version = "1"))
+    }
+
+    @Test
+    fun `all form versions should be visible if hiding old form versions disabled`() {
+        saveForms(
+            form(dbId = 1, formId = "1", version = "2"),
+            form(dbId = 2, formId = "1", version = "1")
+        )
+
+        createViewModel(shouldHideOldFormVersions = false)
+
+        assertThat(viewModel.formsToDisplay.value!!.size, `is`(2))
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", version = "2"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "1", version = "1"))
+    }
+
+    @Test
     fun `list of forms should be sorted when sorting order is changed`() {
         saveForms(
             form(dbId = 1, formId = "1", formName = "1Form"),
@@ -318,8 +345,9 @@ class BlankFormListViewModelTest {
         }
     }
 
-    private fun createViewModel(runAllBackgroundTasks: Boolean = true) {
+    private fun createViewModel(runAllBackgroundTasks: Boolean = true, shouldHideOldFormVersions: Boolean = true) {
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
+        generalSettings.save(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, shouldHideOldFormVersions)
 
         viewModel = BlankFormListViewModel(
             formsRepository,
