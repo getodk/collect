@@ -200,7 +200,7 @@ class BlankFormListViewModelTest {
     }
 
     @Test
-    fun `only the newest version of every form (by date) should be visible if hiding old form versions enabled`() {
+    fun `only the newest version of every form (by date) should be visible if hiding old form versions is enabled`() {
         saveForms(
             form(dbId = 1, formId = "1", version = "2"),
             form(dbId = 2, formId = "1", version = "1")
@@ -213,7 +213,7 @@ class BlankFormListViewModelTest {
     }
 
     @Test
-    fun `all form versions should be visible if hiding old form versions disabled`() {
+    fun `all form versions should be visible if hiding old form versions is disabled`() {
         saveForms(
             form(dbId = 1, formId = "1", version = "2"),
             form(dbId = 2, formId = "1", version = "1")
