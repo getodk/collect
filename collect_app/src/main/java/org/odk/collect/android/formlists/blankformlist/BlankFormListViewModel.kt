@@ -128,7 +128,7 @@ class BlankFormListViewModel(
                         it.formId
                     }.map { (_, itemsWithSameId) ->
                         itemsWithSameId.sortedBy {
-                            it.formVersion
+                            it.dateOfCreation
                         }.last()
                     }
                 }
