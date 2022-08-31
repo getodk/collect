@@ -9,6 +9,6 @@ package org.odk.collect.permissions
  */
 interface PermissionListener {
     fun granted()
-    fun denied()
+    fun denied() = Unit
     fun additionalExplanationDialogClosed() = Unit
 }

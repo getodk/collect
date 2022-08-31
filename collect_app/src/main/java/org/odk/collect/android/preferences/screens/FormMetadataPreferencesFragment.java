@@ -20,7 +20,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.utils.Validator;
-import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
 
 import javax.inject.Inject;
@@ -62,16 +61,7 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
         if (permissionsProvider.isReadPhoneStatePermissionGranted()) {
             phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
         } else if (savedInstanceState == null) {
-            permissionsProvider.requestReadPhoneStatePermission(getActivity(), true, new PermissionListener() {
-                @Override
-                public void granted() {
-                    phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
-                }
-
-                @Override
-                public void denied() {
-                }
-            });
+            permissionsProvider.requestReadPhoneStatePermission(getActivity(), true, () -> phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER)));
         }
     }
 

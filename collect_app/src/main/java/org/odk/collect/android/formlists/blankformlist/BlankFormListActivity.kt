@@ -100,8 +100,6 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
                         }
                     )
                 }
-
-                override fun denied() = Unit
             }
         )
     }

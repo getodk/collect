@@ -884,20 +884,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void loadFile(Uri uri) {
-        permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), new PermissionListener() {
-            @Override
-            public void granted() {
-                MaterialProgressDialogFragment progressDialog = new MaterialProgressDialogFragment();
-                progressDialog.setMessage(getString(R.string.please_wait));
-                DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
+        permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), () -> {
+            MaterialProgressDialogFragment progressDialog = new MaterialProgressDialogFragment();
+            progressDialog.setMessage(getString(R.string.please_wait));
+            DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
 
-                mediaLoadingFragment.beginMediaLoadingTask(uri);
-            }
-
-            @Override
-            public void denied() {
-
-            }
+            mediaLoadingFragment.beginMediaLoadingTask(uri);
         });
     }
 

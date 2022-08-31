@@ -52,8 +52,6 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
                             (context as FragmentActivity).supportFragmentManager
                         )
                     }
-
-                    override fun denied() = Unit
                 }
             )
         }

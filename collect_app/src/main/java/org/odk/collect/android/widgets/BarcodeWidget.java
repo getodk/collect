@@ -36,7 +36,6 @@ import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.permissions.PermissionListener;
 
 /**
  * Widget that allows user to scan barcodes and add them to the form.
@@ -117,21 +116,14 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     }
 
     private void onButtonClick() {
-        getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
-            @Override
-            public void granted() {
-                waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+        getPermissionsProvider().requestCameraPermission((Activity) getContext(), () -> {
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
 
-                IntentIntegrator intent = new IntentIntegrator((Activity) getContext())
-                        .setCaptureActivity(ScannerWithFlashlightActivity.class);
+            IntentIntegrator intent = new IntentIntegrator((Activity) getContext())
+                    .setCaptureActivity(ScannerWithFlashlightActivity.class);
 
-                setCameraIdIfNeeded(getFormEntryPrompt(), intent);
-                intent.initiateScan();
-            }
-
-            @Override
-            public void denied() {
-            }
+            setCameraIdIfNeeded(getFormEntryPrompt(), intent);
+            intent.initiateScan();
         });
     }
 

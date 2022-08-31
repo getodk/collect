@@ -542,11 +542,6 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
                                             questionWidget.showAnswerContainer();
                                         }
-
-                                        @Override
-                                        public void denied() {
-
-                                        }
                                     });
                                 } catch (Exception | Error e) {
                                     Timber.w(e);

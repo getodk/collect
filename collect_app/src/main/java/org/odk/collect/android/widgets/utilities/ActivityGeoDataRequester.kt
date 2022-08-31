@@ -78,8 +78,6 @@ class ActivityGeoDataRequester(
                         ApplicationConstants.RequestCodes.LOCATION_CAPTURE,
                     )
                 }
-
-                override fun denied() {}
             },
         )
     }
@@ -110,8 +108,6 @@ class ActivityGeoDataRequester(
                         ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE,
                     )
                 }
-
-                override fun denied() {}
             },
         )
     }
@@ -142,8 +138,6 @@ class ActivityGeoDataRequester(
                         ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE,
                     )
                 }
-
-                override fun denied() {}
             },
         )
     }
