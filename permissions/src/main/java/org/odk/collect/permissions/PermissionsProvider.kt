@@ -266,7 +266,7 @@ open class PermissionsProvider internal constructor(
             .setMessage(message)
             .setCancelable(false)
             .setPositiveButton(R.string.ok) { _, _ ->
-                action.additionalExplanationDialogClosed()
+                action.additionalExplanationClosed()
             }
             .setNeutralButton(R.string.open_settings) { _, _ ->
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
