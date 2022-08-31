@@ -185,6 +185,7 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
+import org.odk.collect.shared.strings.UUIDGenerator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -359,11 +360,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormEntryViewModel formEntryViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
 
+    private static final String KEY_SESSION_ID = "sessionId";
+    private String sessionId;
+
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            sessionId = new UUIDGenerator().generateUUID();
+        } else {
+            sessionId = savedInstanceState.getString(KEY_SESSION_ID);
+        }
+
         Timber.w("onCreate %s", Md5.getMd5Hash(getIntent().getData().toString()));
         // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
         // this issue by including WebViews
@@ -376,7 +386,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
-                .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(getSessionId()))
+                .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(sessionId))
                 .build());
 
         super.onCreate(savedInstanceState);
@@ -430,7 +440,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionStore, getSessionId()))
+                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionStore, sessionId))
                 .get(BackgroundLocationViewModel.class);
 
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
@@ -454,7 +464,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        formEntryViewModelFactory.setSessionId(getSessionId());
+        formEntryViewModelFactory.setSessionId(sessionId);
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
 
@@ -529,7 +539,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
-        formSessionStore.set(getSessionId(), formController);
+        formSessionStore.set(sessionId, formController);
 
         AnalyticsUtils.setForm(formController);
 
@@ -765,6 +775,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onSaveInstanceState(Bundle outState) {
         Timber.w("onSaveInstanceState %s", Md5.getMd5Hash(getIntent().getData().toString()));
         super.onSaveInstanceState(outState);
+
+        outState.putString(KEY_SESSION_ID, sessionId);
+
         outState.putString(KEY_FORMPATH, formPath);
         FormController formController = getFormController();
         if (formController != null) {
@@ -2202,7 +2215,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                                 formControllerAvailable(formController);
                                 Intent intent = new Intent(this, FormHierarchyActivity.class);
-                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getSessionId());
+                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
                                 startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
@@ -2212,7 +2225,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formControllerAvailable(formController);
                             if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
                                 Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
-                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, getSessionId());
+                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
                                 startActivity(intent);
                             }
                             finish();
@@ -2414,11 +2427,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 backgroundLocationViewModel.locationProvidersChanged();
             }
         }
-    }
-
-    @NonNull
-    private String getSessionId() {
-        return getIntent().getData().toString();
     }
 
     private void activityDisplayed() {
