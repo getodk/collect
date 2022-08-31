@@ -87,6 +87,9 @@ class QRCodeTabsActivity : LocalizedActivity() {
                 }
 
                 override fun denied() {
+                }
+
+                override fun additionalExplanationDialogClosed() {
                     finish()
                 }
             }

@@ -258,13 +258,15 @@ open class PermissionsProvider internal constructor(
         drawable: Int,
         action: PermissionListener
     ) {
+        action.denied()
+
         MaterialAlertDialogBuilder(activity)
             .setIcon(drawable)
             .setTitle(title)
             .setMessage(message)
             .setCancelable(false)
             .setPositiveButton(R.string.ok) { _, _ ->
-                action.denied()
+                action.additionalExplanationDialogClosed()
             }
             .setNeutralButton(R.string.open_settings) { _, _ ->
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
