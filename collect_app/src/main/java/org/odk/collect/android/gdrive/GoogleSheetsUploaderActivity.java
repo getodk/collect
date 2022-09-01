@@ -179,7 +179,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
             }
 
             @Override
-            public void denied() {
+            public void additionalExplanationClosed() {
                 finish();
             }
         });

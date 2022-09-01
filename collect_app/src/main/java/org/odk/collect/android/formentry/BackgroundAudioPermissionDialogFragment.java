@@ -71,7 +71,7 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
             }
 
             @Override
-            public void denied() {
+            public void additionalExplanationClosed() {
                 activity.finish();
             }
         });

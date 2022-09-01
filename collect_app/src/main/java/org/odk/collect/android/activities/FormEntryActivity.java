@@ -2087,7 +2087,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     }
 
                     @Override
-                    public void denied() {
+                    public void additionalExplanationClosed() {
                         finish();
                     }
                 });
