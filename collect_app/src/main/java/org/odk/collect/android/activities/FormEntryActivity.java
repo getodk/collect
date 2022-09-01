@@ -272,7 +272,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private String startingXPath;
     private String waitingXPath;
     private boolean newForm = true;
-    private boolean readPhoneStatePermissionRequestNeeded;
 
     MediaLoadingFragment mediaLoadingFragment;
     private FormEntryMenuDelegate menuDelegate;
@@ -378,8 +377,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         setContentView(R.layout.form_entry);
         setupViewModels();
         swipeHandler = new SwipeHandler(this, settingsProvider.getUnprotectedSettings());
-
-        propertyManager.isPhoneNumberRequired().observe(this, isPhoneNumberRequired -> readPhoneStatePermissionRequestNeeded = isPhoneNumberRequired);
 
         errorMessage = null;
 
@@ -677,6 +674,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null);
+        formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);
     }
@@ -1933,8 +1931,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     && formLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
                 FormController fec = formLoaderTask.getFormController();
                 if (fec != null) {
-                    if (!readPhoneStatePermissionRequestNeeded) {
+                    if (!propertyManager.isPhoneStateRequired()) {
                         loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
+                    } else if (permissionsProvider.isReadPhoneStatePermissionGranted()) {
+                        loadForm();
                     }
                 } else {
                     DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
@@ -2087,11 +2087,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         final FormController formController = task.getFormController();
 
         if (formController != null) {
-            if (readPhoneStatePermissionRequestNeeded) {
+            if (propertyManager.isPhoneStateRequired()) {
                 permissionsProvider.requestReadPhoneStatePermission(this, true, new PermissionListener() {
                     @Override
                     public void granted() {
-                        readPhoneStatePermissionRequestNeeded = false;
                         loadForm();
                     }
 

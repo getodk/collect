@@ -19,9 +19,6 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_USERNAME;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USERNAME;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
 import org.odk.collect.android.application.Collect;
@@ -57,7 +54,7 @@ public class PropertyManager implements IPropertyManager {
 
     private final Map<String, String> properties = new HashMap<>();
 
-    private final MutableLiveData<Boolean> isPhoneNumberRequired = new MutableLiveData<>();
+    private boolean isPhoneStateRequired;
 
     @Inject
     DeviceDetailsProvider deviceDetailsProvider;
@@ -85,7 +82,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public PropertyManager reload() {
-        isPhoneNumberRequired.postValue(false);
+        isPhoneStateRequired = false;
 
         try {
             putProperty(PROPMGR_DEVICE_ID,     "",         deviceDetailsProvider.getDeviceId());
@@ -135,7 +132,7 @@ public class PropertyManager implements IPropertyManager {
     @Override
     public String getSingularProperty(String propertyName) {
         if (!permissionsProvider.isReadPhoneStatePermissionGranted() && isPropertyDangerous(propertyName)) {
-            isPhoneNumberRequired.postValue(true);
+            isPhoneStateRequired = true;
         }
 
         // for now, all property names are in english...
@@ -169,8 +166,8 @@ public class PropertyManager implements IPropertyManager {
         return null;
     }
 
-    public LiveData<Boolean> isPhoneNumberRequired() {
-        return isPhoneNumberRequired;
+    public boolean isPhoneStateRequired() {
+        return isPhoneStateRequired;
     }
 
     public static String withUri(String name) {
