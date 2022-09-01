@@ -2,6 +2,11 @@ package org.odk.collect.androidshared.livedata;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
+
+import org.odk.collect.async.Cancellable;
+
+import java.util.function.Consumer;
 
 import kotlin.Triple;
 
@@ -9,6 +14,20 @@ public class LiveDataUtils {
 
     private LiveDataUtils() {
 
+    }
+
+    public static <T> Cancellable observe(LiveData<T> liveData, Consumer<T> consumer) {
+        Observer<T> observer = value -> {
+            if (value != null) {
+                consumer.accept(value);
+            }
+        };
+
+        liveData.observeForever(observer);
+        return () -> {
+            liveData.removeObserver(observer);
+            return true;
+        };
     }
 
     public static <T, U, V> LiveData<Triple<T, U, V>> zip3(LiveData<T> one, LiveData<U> two, LiveData<V> three) {

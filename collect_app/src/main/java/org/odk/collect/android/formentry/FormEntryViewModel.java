@@ -1,12 +1,12 @@
 package org.odk.collect.android.formentry;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
+import static org.odk.collect.androidshared.livedata.LiveDataUtils.observe;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -26,6 +26,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
+import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 
 import java.io.FileNotFoundException;
@@ -44,7 +45,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormController.FailedConstraint> failedConstraint = new MutableLiveData<>(null);
-    private final LiveData<FormController> formSession;
     private final String sessionId;
 
     @Nullable
@@ -56,14 +56,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     @Nullable
     private AnswerListener answerListener;
 
-    private final Observer<FormController> formSessionObserver = formController -> {
-        if (formController != null) {
-            this.formController = formController;
-
-            boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
-            this.hasBackgroundRecording.setValue(hasBackgroundRecording);
-        }
-    };
+    private final Cancellable formSessionObserver;
 
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore, String sessionId) {
@@ -71,8 +64,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         this.scheduler = scheduler;
 
         this.sessionId = sessionId;
-        formSession = formSessionStore.get(this.sessionId);
-        formSession.observeForever(formSessionObserver);
+        formSessionObserver = observe(formSessionStore.get(this.sessionId), formController -> {
+            this.formController = formController;
+
+            boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
+            this.hasBackgroundRecording.setValue(hasBackgroundRecording);
+        });
     }
 
     public String getSessionId() {
@@ -287,7 +284,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     @Override
     protected void onCleared() {
         this.answerListener = null;
-        formSession.removeObserver(formSessionObserver);
+        formSessionObserver.cancel();
     }
 
     public void updateIndex() {
