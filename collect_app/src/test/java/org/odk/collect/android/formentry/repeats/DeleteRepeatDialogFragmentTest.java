@@ -27,7 +27,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.formentry.FormSessionStore;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.CollectHelpers;
@@ -49,7 +49,7 @@ public class DeleteRepeatDialogFragmentTest {
         FormEntryViewModel formEntryViewModel = mock(FormEntryViewModel.class);
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionStore formSessionStore) {
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
                 return new FormEntryViewModel.Factory(null, null, null) {
                     @NonNull
                     @Override

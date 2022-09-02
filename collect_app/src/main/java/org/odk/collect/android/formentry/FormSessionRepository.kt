@@ -5,15 +5,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidshared.data.getState
+import org.odk.collect.shared.strings.UUIDGenerator
 
-interface FormSessionStore {
+interface FormSessionRepository {
+    fun create(): String
     fun get(id: String): LiveData<FormController?>
     fun set(id: String, formController: FormController)
 }
 
-class InMemFormSessionStore : FormSessionStore {
+class InMemFormSessionRepository : FormSessionRepository {
 
     private val map = mutableMapOf<String, MutableLiveData<FormController?>>()
+
+    override fun create(): String {
+        return UUIDGenerator().generateUUID()
+    }
 
     override fun get(id: String): LiveData<FormController?> {
         return getLiveData(id)
@@ -28,9 +34,13 @@ class InMemFormSessionStore : FormSessionStore {
     }
 }
 
-class AppStateFormSessionStore(application: Application) : FormSessionStore {
+class AppStateFormSessionRepository(application: Application) : FormSessionRepository {
 
     private val appState = application.getState()
+
+    override fun create(): String {
+        return UUIDGenerator().generateUUID()
+    }
 
     override fun get(id: String): LiveData<FormController?> {
         return getLiveData(id)

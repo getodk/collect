@@ -105,7 +105,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
-import org.odk.collect.android.formentry.FormSessionStore;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.RecordingHandler;
@@ -185,7 +185,6 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
-import org.odk.collect.shared.strings.UUIDGenerator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -342,7 +341,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     IntentLauncher intentLauncher;
 
     @Inject
-    FormSessionStore formSessionStore;
+    FormSessionRepository formSessionRepository;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -379,8 +378,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
+        Collect.getInstance().getComponent().inject(this);
+
         if (savedInstanceState == null) {
-            sessionId = new UUIDGenerator().generateUUID();
+            sessionId = formSessionRepository.create();
         } else {
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
@@ -390,8 +391,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .build());
 
         super.onCreate(savedInstanceState);
-
-        Collect.getInstance().getComponent().inject(this);
         formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
@@ -440,7 +439,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionStore, sessionId))
+                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionRepository, sessionId))
                 .get(BackgroundLocationViewModel.class);
 
         backgroundAudioViewModelFactory.setSessionId(sessionId);
@@ -540,7 +539,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
-        formSessionStore.set(sessionId, formController);
+        formSessionRepository.set(sessionId, formController);
 
         AnalyticsUtils.setForm(formController);
 

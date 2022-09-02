@@ -23,7 +23,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
-import org.odk.collect.android.formentry.FormSessionStore
+import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -96,7 +96,7 @@ class SelectOneFromMapDialogFragmentTest {
                 }
             }
 
-            override fun providesFormEntryViewModelFactory(scheduler: Scheduler, formSessionStore: FormSessionStore): FormEntryViewModel.Factory {
+            override fun providesFormEntryViewModelFactory(scheduler: Scheduler, formSessionStore: FormSessionRepository): FormEntryViewModel.Factory {
                 return object : FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionStore) {
                     @Suppress("UNCHECKED_CAST")
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {

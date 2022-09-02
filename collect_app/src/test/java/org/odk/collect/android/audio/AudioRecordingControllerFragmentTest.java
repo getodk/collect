@@ -25,7 +25,7 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.formentry.FormSessionStore;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -77,8 +77,8 @@ public class AudioRecordingControllerFragmentTest {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics, FormSessionStore formSessionStore) {
-                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis, formSessionStore) {
+            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics, FormSessionRepository formSessionRepository) {
+                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis, formSessionRepository) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -88,8 +88,8 @@ public class AudioRecordingControllerFragmentTest {
             }
 
             @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionStore formSessionStore) {
-                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionStore) {
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
+                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionRepository) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

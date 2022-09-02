@@ -166,20 +166,20 @@ public class BackgroundAudioViewModel extends ViewModel {
         private final Settings generalSettings;
         private final PermissionsChecker permissionsChecker;
         private final Supplier<Long> clock;
-        private final FormSessionStore formSessionStore;
+        private final FormSessionRepository formSessionRepository;
         private LiveData<FormController> formSession;
 
         @Inject
-        public Factory(AudioRecorder audioRecorder, Settings generalSettings, PermissionsChecker permissionsChecker, Supplier<Long> clock, FormSessionStore formSessionStore) {
+        public Factory(AudioRecorder audioRecorder, Settings generalSettings, PermissionsChecker permissionsChecker, Supplier<Long> clock, FormSessionRepository formSessionRepository) {
             this.audioRecorder = audioRecorder;
             this.generalSettings = generalSettings;
             this.permissionsChecker = permissionsChecker;
             this.clock = clock;
-            this.formSessionStore = formSessionStore;
+            this.formSessionRepository = formSessionRepository;
         }
 
         public void setSessionId(String sessionId) {
-            this.formSession = formSessionStore.get(sessionId);
+            this.formSession = formSessionRepository.get(sessionId);
         }
 
         @NonNull

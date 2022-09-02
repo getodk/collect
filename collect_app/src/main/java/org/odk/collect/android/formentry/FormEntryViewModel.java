@@ -59,12 +59,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final Cancellable formSessionObserver;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore, String sessionId) {
+    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId) {
         this.clock = clock;
         this.scheduler = scheduler;
 
         this.sessionId = sessionId;
-        formSessionObserver = observe(formSessionStore.get(this.sessionId), formController -> {
+        formSessionObserver = observe(formSessionRepository.get(this.sessionId), formController -> {
             this.formController = formController;
 
             boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
@@ -295,13 +295,13 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
         private final Supplier<Long> clock;
         private final Scheduler scheduler;
-        private final FormSessionStore formSessionStore;
+        private final FormSessionRepository formSessionRepository;
         private String sessionId;
 
-        public Factory(Supplier<Long> clock, Scheduler scheduler, FormSessionStore formSessionStore) {
+        public Factory(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository) {
             this.clock = clock;
             this.scheduler = scheduler;
-            this.formSessionStore = formSessionStore;
+            this.formSessionRepository = formSessionRepository;
         }
 
         public void setSessionId(String sessionId) {
@@ -312,7 +312,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, scheduler, formSessionStore, sessionId);
+            return (T) new FormEntryViewModel(clock, scheduler, formSessionRepository, sessionId);
         }
     }
 

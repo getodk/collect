@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formentry.FormSessionStore;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -73,7 +73,7 @@ public class BackgroundLocationViewModel extends ViewModel {
     public static class Factory implements ViewModelProvider.Factory {
         private final PermissionsProvider permissionsProvider;
         private final Settings generalSettings;
-        private final FormSessionStore formSessionStore;
+        private final FormSessionRepository formSessionRepository;
         private final String sessionId;
 
         /**
@@ -83,10 +83,10 @@ public class BackgroundLocationViewModel extends ViewModel {
         @Named("fused")
         LocationClient fusedLocatonClient;
 
-        public Factory(PermissionsProvider permissionsProvider, Settings generalSettings, FormSessionStore formSessionStore, String sessionId) {
+        public Factory(PermissionsProvider permissionsProvider, Settings generalSettings, FormSessionRepository formSessionRepository, String sessionId) {
             this.permissionsProvider = permissionsProvider;
             this.generalSettings = generalSettings;
-            this.formSessionStore = formSessionStore;
+            this.formSessionRepository = formSessionRepository;
             this.sessionId = sessionId;
 
             DaggerUtils.getComponent(Collect.getInstance()).inject(this);
@@ -96,7 +96,7 @@ public class BackgroundLocationViewModel extends ViewModel {
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (modelClass.equals(BackgroundLocationViewModel.class)) {
                 BackgroundLocationManager locationManager =
-                        new BackgroundLocationManager(fusedLocatonClient, new BackgroundLocationHelper(permissionsProvider, generalSettings, () -> formSessionStore.get(sessionId).getValue()));
+                        new BackgroundLocationManager(fusedLocatonClient, new BackgroundLocationHelper(permissionsProvider, generalSettings, () -> formSessionRepository.get(sessionId).getValue()));
                 return (T) new BackgroundLocationViewModel(locationManager);
             }
             return null;

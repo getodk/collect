@@ -46,10 +46,10 @@ import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.draw.PenColorPickerViewModel;
-import org.odk.collect.android.formentry.AppStateFormSessionStore;
+import org.odk.collect.android.formentry.AppStateFormSessionRepository;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.formentry.FormSessionStore;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
 import org.odk.collect.android.formentry.saving.DiskFormSaver;
@@ -409,18 +409,18 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSessionStore providesFormSessionStore(Application application) {
-        return new AppStateFormSessionStore(application);
+    public FormSessionRepository providesFormSessionStore(Application application) {
+        return new AppStateFormSessionRepository(application);
     }
 
     @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionStore formSessionStore) {
-        return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionStore);
+    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
+        return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionRepository);
     }
 
     @Provides
-    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics, FormSessionStore formSessionStore) {
-        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis, formSessionStore);
+    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics, FormSessionRepository formSessionRepository) {
+        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis, formSessionRepository);
     }
 
     @Provides

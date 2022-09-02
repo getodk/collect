@@ -17,7 +17,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
-import org.odk.collect.android.formentry.FormSessionStore
+import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -60,7 +60,7 @@ class SelectOneFromMapWidgetTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesFormEntryViewModelFactory(
                 scheduler: Scheduler,
-                formSessionStore: FormSessionStore,
+                formSessionStore: FormSessionRepository,
             ): FormEntryViewModel.Factory {
                 return object : FormEntryViewModel.Factory(
                     System::currentTimeMillis,
