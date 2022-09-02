@@ -409,8 +409,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void onClick(MapPoint point) {
         if (inputActive && !recordingEnabled) {
-            map.appendPointToPoly(featureId, point);
-            updateUi();
+            appendPointIfNew(point);
         }
     }
 
@@ -431,6 +430,13 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void recordPoint(MapPoint point) {
         if (point != null && isLocationAcceptable(point)) {
+            appendPointIfNew(point);
+        }
+    }
+
+    private void appendPointIfNew(MapPoint point) {
+        List<MapPoint> points = map.getPolyPoints(featureId);
+        if (points.isEmpty() || !point.equals(points.get(points.size() - 1))) {
             map.appendPointToPoly(featureId, point);
             updateUi();
         }
