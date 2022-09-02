@@ -17,8 +17,10 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.androidshared.livedata.LiveDataUtils;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
+import org.odk.collect.async.Cancellable;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
@@ -32,7 +34,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
-public class BackgroundAudioViewModel extends ViewModel implements RequiresFormController {
+public class BackgroundAudioViewModel extends ViewModel {
 
     private final AudioRecorder audioRecorder;
     private final Settings generalSettings;
@@ -45,12 +47,13 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
 
     // These fields handle storing record action details while we're granting permissions
     private final HashSet<TreeReference> tempTreeReferences = new HashSet<>();
+    private final Cancellable formSessionObserver;
     private String tempQuality;
 
     @Nullable
     private AuditEventLogger auditEventLogger;
 
-    public BackgroundAudioViewModel(AudioRecorder audioRecorder, Settings generalSettings, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Supplier<Long> clock) {
+    public BackgroundAudioViewModel(AudioRecorder audioRecorder, Settings generalSettings, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Supplier<Long> clock, LiveData<FormController> formSession) {
         this.audioRecorder = audioRecorder;
         this.generalSettings = generalSettings;
         this.recordAudioActionRegistry = recordAudioActionRegistry;
@@ -62,16 +65,16 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
         });
 
         isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(generalSettings.getBoolean(KEY_BACKGROUND_RECORDING));
-    }
 
-    @Override
-    public void formLoaded(@NonNull FormController formController) {
-        this.auditEventLogger = formController.getAuditEventLogger();
+        formSessionObserver = LiveDataUtils.observe(formSession, formController -> {
+            this.auditEventLogger = formController.getAuditEventLogger();
+        });
     }
 
     @Override
     protected void onCleared() {
         recordAudioActionRegistry.unregister();
+        formSessionObserver.cancel();
     }
 
     public LiveData<Boolean> isPermissionRequired() {
@@ -163,13 +166,20 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
         private final Settings generalSettings;
         private final PermissionsChecker permissionsChecker;
         private final Supplier<Long> clock;
+        private final FormSessionStore formSessionStore;
+        private LiveData<FormController> formSession;
 
         @Inject
-        public Factory(AudioRecorder audioRecorder, Settings generalSettings, PermissionsChecker permissionsChecker, Supplier<Long> clock) {
+        public Factory(AudioRecorder audioRecorder, Settings generalSettings, PermissionsChecker permissionsChecker, Supplier<Long> clock, FormSessionStore formSessionStore) {
             this.audioRecorder = audioRecorder;
             this.generalSettings = generalSettings;
             this.permissionsChecker = permissionsChecker;
             this.clock = clock;
+            this.formSessionStore = formSessionStore;
+        }
+
+        public void setSessionId(String sessionId) {
+            this.formSession = formSessionStore.get(sessionId);
         }
 
         @NonNull
@@ -187,7 +197,7 @@ public class BackgroundAudioViewModel extends ViewModel implements RequiresFormC
                 }
             };
 
-            return (T) new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock);
+            return (T) new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock, formSession);
         }
     }
 }

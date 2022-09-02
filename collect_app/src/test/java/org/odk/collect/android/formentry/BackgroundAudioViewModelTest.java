@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import android.Manifest;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.instance.TreeReference;
@@ -36,9 +37,12 @@ public class BackgroundAudioViewModelTest {
     private final PermissionsChecker permissionsChecker = mock(PermissionsChecker.class);
     private final FakeRecordAudioActionRegistry recordAudioActionRegistry = new FakeRecordAudioActionRegistry();
     private final AudioRecorder audioRecorder = mock(AudioRecorder.class);
+    private final FormController formController = mock(FormController.class);
+    private final AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
 
     private BackgroundAudioViewModel viewModel;
     private Supplier<Long> clock;
+    private final MutableLiveData<FormController> formSession = new MutableLiveData<>(formController);
 
     @Before
     public void setup() {
@@ -47,7 +51,9 @@ public class BackgroundAudioViewModelTest {
         Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
         generalSettings.clear();
 
-        viewModel = new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock);
+        when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
+
+        viewModel = new BackgroundAudioViewModel(audioRecorder, generalSettings, recordAudioActionRegistry, permissionsChecker, clock, formSession);
     }
 
     @Test
@@ -158,11 +164,6 @@ public class BackgroundAudioViewModelTest {
 
     @Test
     public void setBackgroundRecordingEnabled_whenFalse_logsEventToAuditLog() {
-        FormController formController = mock(FormController.class);
-        AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
-        when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
-        viewModel.formLoaded(formController);
-
         when(clock.get()).thenReturn(1234L);
         viewModel.setBackgroundRecordingEnabled(false);
         verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, 1234L);
@@ -170,14 +171,21 @@ public class BackgroundAudioViewModelTest {
 
     @Test
     public void setBackgroundRecordingEnabled_whenTrue_logsEventToAuditLog() {
-        FormController formController = mock(FormController.class);
-        AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
-        when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
-        viewModel.formLoaded(formController);
-
         when(clock.get()).thenReturn(1234L);
         viewModel.setBackgroundRecordingEnabled(true);
         verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_ENABLED, true, 1234L);
+    }
+
+    @Test
+    public void onCleared_stopsUpdatingAuditEventLogger() {
+        when(clock.get()).thenReturn(1234L);
+
+        viewModel.onCleared();
+        when(formController.getAuditEventLogger()).thenReturn(mock(AuditEventLogger.class));
+        formSession.setValue(formController);
+
+        viewModel.setBackgroundRecordingEnabled(false);
+        verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, 1234L);
     }
 
     private static class FakeRecordAudioActionRegistry implements BackgroundAudioViewModel.RecordAudioActionRegistry {

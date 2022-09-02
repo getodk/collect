@@ -57,6 +57,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         DaggerUtils.getComponent(context).inject(this);
 
         formEntryViewModelFactory.setSessionId(sessionId);
+        backgroundAudioViewModelFactory.setSessionId(sessionId);
         formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
         backgroundAudioViewModel = new ViewModelProvider(requireActivity(), backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
     }

@@ -368,12 +368,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            sessionId = new UUIDGenerator().generateUUID();
-        } else {
-            sessionId = savedInstanceState.getString(KEY_SESSION_ID);
-        }
-
         Timber.w("onCreate %s", Md5.getMd5Hash(getIntent().getData().toString()));
         // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
         // this issue by including WebViews
@@ -383,6 +377,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             } catch (Exception | Error e) {
                 // Don't crash if WebView not available
             }
+        }
+
+        if (savedInstanceState == null) {
+            sessionId = new UUIDGenerator().generateUUID();
+        } else {
+            sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
@@ -443,6 +443,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionStore, sessionId))
                 .get(BackgroundLocationViewModel.class);
 
+        backgroundAudioViewModelFactory.setSessionId(sessionId);
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
         backgroundAudioViewModel.isPermissionRequired().observe(this, isPermissionRequired -> {
             if (isPermissionRequired) {
@@ -544,8 +545,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         AnalyticsUtils.setForm(formController);
 
         formSaveViewModel.formLoaded(formController);
-        backgroundAudioViewModel.formLoaded(formController);
-
         backgroundLocationViewModel.formFinishedLoading();
     }
 
