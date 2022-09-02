@@ -2,6 +2,7 @@ package org.odk.collect.androidshared.livedata;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import org.odk.collect.async.Cancellable;
@@ -28,6 +29,10 @@ public class LiveDataUtils {
             liveData.removeObserver(observer);
             return true;
         };
+    }
+
+    public static <T> LiveData<T> liveDataOf(T value) {
+        return new MutableLiveData<>(value);
     }
 
     public static <T, U, V> LiveData<Triple<T, U, V>> zip3(LiveData<T> one, LiveData<U> two, LiveData<V> three) {

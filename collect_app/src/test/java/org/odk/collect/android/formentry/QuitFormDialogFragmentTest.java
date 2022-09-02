@@ -10,13 +10,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.savedstate.SavedStateRegistryOwner;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -50,13 +53,23 @@ public class QuitFormDialogFragmentTest {
     public void setup() {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils) {
-                return (owner, defaultArgs) -> new ViewModelProvider.Factory() {
-
-                    @NonNull
+            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository) {
+                return new FormSaveViewModel.FactoryFactory() {
                     @Override
-                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                        return (T) formSaveViewModel;
+                    public void setSessionId(String sessionId) {
+
+                    }
+
+                    @Override
+                    public ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs) {
+                        return new ViewModelProvider.Factory() {
+
+                            @NonNull
+                            @Override
+                            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                                return (T) formSaveViewModel;
+                            }
+                        };
                     }
                 };
             }

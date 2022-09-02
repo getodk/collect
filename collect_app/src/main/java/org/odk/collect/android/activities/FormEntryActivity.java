@@ -500,6 +500,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
+        formSaveViewModelFactoryFactory.setSessionId(sessionId);
         formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
@@ -543,7 +544,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         AnalyticsUtils.setForm(formController);
 
-        formSaveViewModel.formLoaded(formController);
         backgroundLocationViewModel.formFinishedLoading();
     }
 

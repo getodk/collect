@@ -19,12 +19,10 @@ import androidx.savedstate.SavedStateRegistryOwner;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
-import org.jetbrains.annotations.NotNull;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.externaldata.ExternalDataManager;
-import org.odk.collect.android.formentry.RequiresFormController;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -34,6 +32,7 @@ import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.androidshared.livedata.LiveDataUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.material.MaterialProgressDialogFragment;
@@ -53,7 +52,7 @@ import java.util.function.Supplier;
 
 import timber.log.Timber;
 
-public class FormSaveViewModel extends ViewModel implements MaterialProgressDialogFragment.OnCancelCallback, RequiresFormController, QuestionMediaManager {
+public class FormSaveViewModel extends ViewModel implements MaterialProgressDialogFragment.OnCancelCallback, QuestionMediaManager {
 
     public static final String ORIGINAL_FILES = "originalFiles";
     public static final String RECENT_FILES = "recentFiles";
@@ -84,7 +83,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private final AudioRecorder audioRecorder;
     private final CurrentProjectProvider currentProjectProvider;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormController> formSession) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
@@ -100,11 +99,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         if (stateHandle.get(RECENT_FILES) != null) {
             recentFiles = stateHandle.get(RECENT_FILES);
         }
-    }
 
-    @Override
-    public void formLoaded(@NotNull FormController formController) {
-        this.formController = formController;
+        LiveDataUtils.observe(formSession, formController -> {
+            this.formController = formController;
+        });
     }
 
     public void editingForm() {
@@ -519,6 +517,8 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
      */
 
     public interface FactoryFactory {
+
+        void setSessionId(String sessionId);
 
         ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs);
     }
