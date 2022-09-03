@@ -1107,7 +1107,7 @@ public class Utilities {
                     String registeredServer = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_SERVER, null);
                     String registeredUser = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_USER, null);
 
-                    // Update the server if the token is new or the server or username's have changed
+                    // Update the server if the token is new or the server or usernames have changed
                     if (newToken || registeredServer == null || registeredUser == null ||
                             !username.equals(registeredUser) || !server.equals(registeredServer)) {
 

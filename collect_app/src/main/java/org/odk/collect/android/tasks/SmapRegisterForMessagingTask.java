@@ -30,9 +30,9 @@ public class SmapRegisterForMessagingTask extends AsyncTask<String, Void, String
         try {
 
             Timber.i("================================================== Notifying server of messaging update");
-            Timber.i("    token: " + token);
-            Timber.i("    server: " + server);
-            Timber.i("    user: " + username);
+            Timber.i("    token: %s", token);
+            Timber.i("    server: %s", server);
+            Timber.i("    user: %s", username);
             AWSMobileClient.initializeMobileClientIfNecessary(Collect.getInstance());
             final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
             DevicesDO devices = new DevicesDO();
