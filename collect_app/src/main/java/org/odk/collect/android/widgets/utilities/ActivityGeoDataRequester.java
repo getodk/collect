@@ -75,6 +75,9 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
                 intent.putExtra(READ_ONLY, prompt.isReadOnly());
 
+                // SMAP - Pass the question path so that it can be used to identify previous values in a repeat
+                intent.putExtra(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
+
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE);
             }
 
