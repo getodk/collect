@@ -26,7 +26,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 
+import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.model.xform.XPathReference;
+import org.javarosa.xpath.XPathNodeset;
+import org.javarosa.xpath.expr.XPathFuncExpr;
+import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
@@ -45,6 +53,7 @@ import timber.log.Timber;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.DRAGGABLE_ONLY;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.LOCATION;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.QUESTION_PATH;
 
 /**
  * Allow the user to indicate a location by placing a marker on a map, either
@@ -101,6 +110,9 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
     /** True if the intent requested for the point to be read-only. */
     private boolean intentReadOnly;
+
+    /** Used to look up previous locations in a repeat */
+    private String questionPath;
 
     /** True if the intent requested for the marker to be draggable. */
     private boolean intentDraggable;
@@ -263,6 +275,25 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         map.setGpsLocationEnabled(true);
 
         //placePrevMarker(new MapPoint(37.421998,-122.084));      // TODO get previous markers
+        FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+        EvaluationContext ec = formDef.getEvaluationContext();
+        FormInstance formInstance = formDef.getInstance();
+
+        questionPath = intent.getStringExtra(QUESTION_PATH);
+
+        XPathPathExpr pathExpr = XPathReference.getPathExpr(questionPath);
+        XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
+        int size = xpathNodeset.size();
+        for(int i = 0; i < size -1; i++) {
+            Object o = xpathNodeset.getValAt(i);
+            String val = o.toString();
+            if(val != null) {
+                String [] coords = val.split(" ");
+                if(coords.length > 1) {
+                    placePrevMarker(new MapPoint(Double.valueOf(coords[0]),Double.valueOf(coords[1])));
+                }
+            }
+        }
 
         if (previousState != null) {
             restoreFromInstanceState(previousState);

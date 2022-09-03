@@ -22,6 +22,7 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
     public static final String READ_ONLY = "readOnly";
     public static final String DRAGGABLE_ONLY = "draggable";
     public static final String EXTRA_RETAIN_MOCK_ACCURACY = "retainMockAccuracy";
+    public static final String QUESTION_PATH = "questionPath";
 
     private final PermissionsProvider permissionsProvider;
 
@@ -42,6 +43,9 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 if (answerText != null && !answerText.isEmpty()) {
                     bundle.putDoubleArray(LOCATION, GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
                 }
+
+                // SMAP - Pass the question path so that it can be used to identify previous values in a repeat
+                bundle.putString(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
 
                 bundle.putDouble(ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
                 bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
