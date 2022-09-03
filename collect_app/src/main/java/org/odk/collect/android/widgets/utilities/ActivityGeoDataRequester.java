@@ -45,7 +45,9 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 }
 
                 // SMAP - Pass the question path so that it can be used to identify previous values in a repeat
-                bundle.putString(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
+                if(hasMapHistoryAppearance(prompt)) {
+                    bundle.putString(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
+                }
 
                 bundle.putDouble(ACCURACY_THRESHOLD, GeoWidgetUtils.getAccuracyThreshold(prompt.getQuestion()));
                 bundle.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt));
@@ -76,7 +78,9 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 intent.putExtra(READ_ONLY, prompt.isReadOnly());
 
                 // SMAP - Pass the question path so that it can be used to identify previous values in a repeat
-                intent.putExtra(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
+                if(hasMapHistoryAppearance(prompt)) {
+                    intent.putExtra(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
+                }
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE);
             }
@@ -100,7 +104,9 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 intent.putExtra(READ_ONLY, prompt.isReadOnly());
 
                 // SMAP - Pass the question path so that it can be used to identify previous values in a repeat
-                intent.putExtra(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
+                if(hasMapHistoryAppearance(prompt)) {
+                    intent.putExtra(QUESTION_PATH, prompt.getFormElement().getBind().getReference().toString());
+                }
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE);
             }
@@ -121,6 +127,10 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
 
     private boolean hasMapsAppearance(FormEntryPrompt prompt) {
         return Appearances.hasAppearance(prompt, Appearances.MAPS);
+    }
+
+    private boolean hasMapHistoryAppearance(FormEntryPrompt prompt) {
+        return Appearances.hasAppearance(prompt, Appearances.HISTORY_MAP);
     }
 
     private boolean hasPlacementMapAppearance(FormEntryPrompt prompt) {

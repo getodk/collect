@@ -71,6 +71,7 @@ public class Appearances {
     // Maps appearances
     public static final String PLACEMENT_MAP            = "placement-map";
     public static final String MAPS                     = "maps";
+    public static final String HISTORY_MAP              = "history-map";
 
     // Groups and repeats
     public static final String FIELD_LIST = "field-list";
