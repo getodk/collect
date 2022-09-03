@@ -248,6 +248,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return featureId;
     }
 
+    /*
+     * Smap
+     * Add a layer of previous geopoints selected for this question
+     */
+    @Override public void addPrevMarker(MapPoint point, @IconAnchor String iconAnchor) {
+        map.addMarker(new MarkerOptions()
+                .position(toLatLng(point))
+                .snippet(point.alt + ";" + point.sd)
+                .draggable(false)
+                .icon(getBitmapDescriptor(R.drawable.ic_prev_map_point))
+                .anchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor)));
+    }
+
     @Override public void setMarkerIcon(int featureId, int drawableId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {

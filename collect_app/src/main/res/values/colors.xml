@@ -40,5 +40,7 @@ the License.
     <!-- Colors for recorded points and lines drawn on the map. -->
     <color name="mapPointCircle">#ffff0000</color>
     <color name="mapPointFill">#ffffffff</color>
+    <color name="prevMapPointCircle">#ffff0000</color>
+    <color name="prevMapPointFill">#ff0000ff</color>
     <color name="mapLine">#ffff0000</color>
 </resources>

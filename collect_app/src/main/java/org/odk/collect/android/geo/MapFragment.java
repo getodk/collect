@@ -125,6 +125,11 @@ public interface MapFragment {
      */
     int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor);
 
+    /**
+     * smap add a previous marker
+     */
+    void addPrevMarker(MapPoint point,  @IconAnchor String iconAnchor);
+
     /** Sets the icon for a marker. */
     void setMarkerIcon(int featureId, int drawableId);
 

@@ -262,6 +262,8 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);
 
+        //placePrevMarker(new MapPoint(37.421998,-122.084));      // TODO get previous markers
+
         if (previousState != null) {
             restoreFromInstanceState(previousState);
         }
@@ -393,6 +395,14 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         }
         captureLocation = true;
         setClear = false;
+    }
+
+    /*
+     * smap
+     * Place a reference marker for a previously recorded point
+     */
+    private void placePrevMarker(@NonNull MapPoint point) {
+        map.addPrevMarker(point, MapFragment.CENTER);
     }
 
     @VisibleForTesting public String getLocationStatus() {

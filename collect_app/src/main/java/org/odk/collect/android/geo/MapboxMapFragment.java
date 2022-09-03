@@ -337,6 +337,21 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return featureId;
     }
 
+    /*
+     * Smap
+     * Add a layer of previous geopoints selected for this question TODO
+     */
+    @Override public void addPrevMarker(MapPoint point, @IconAnchor String iconAnchor) {
+        symbolManager.create(new SymbolOptions()
+                .withLatLng(toLatLng(point))
+                .withIconImage(addIconImage(R.drawable.ic_prev_map_point))
+                .withIconSize(1f)
+                .withSymbolSortKey(10f)
+                .withDraggable(false)
+                .withTextOpacity(0f)
+                .withIconAnchor(getIconAnchorValue(iconAnchor)));
+    }
+
     @Override public void setMarkerIcon(int featureId, int drawableId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {

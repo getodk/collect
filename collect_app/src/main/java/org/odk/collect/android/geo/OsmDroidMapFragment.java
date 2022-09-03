@@ -294,6 +294,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return featureId;
     }
 
+    /*
+     * Smap
+     * Add a layer of previous geopoints selected for this question TODO
+     */
+    @Override public void addPrevMarker(MapPoint point, @IconAnchor String iconAnchor) {
+
+    }
+
     @Override public void setMarkerIcon(int featureId, int drawableId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {
