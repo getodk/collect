@@ -31,7 +31,6 @@ import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xpath.XPathNodeset;
-import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -71,6 +70,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
     public static final String SET_CLEAR_KEY = "set_clear";
     public static final String POINT_FROM_INTENT_KEY = "point_from_intent";
     public static final String INTENT_READ_ONLY_KEY = "intent_read_only";
+    public static final String INTENT_QUESTION_PATH_KEY = "question_path";
     public static final String INTENT_DRAGGABLE_KEY = "intent_draggable";
     public static final String IS_POINT_LOCKED_KEY = "is_point_locked";
 
@@ -168,6 +168,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         state.putBoolean(POINT_FROM_INTENT_KEY, pointFromIntent);
         state.putBoolean(INTENT_READ_ONLY_KEY, intentReadOnly);
         state.putBoolean(INTENT_DRAGGABLE_KEY, intentDraggable);
+        state.putString(INTENT_QUESTION_PATH_KEY, questionPath);
         state.putBoolean(IS_POINT_LOCKED_KEY, isPointLocked);
 
         // UI state
@@ -281,16 +282,18 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
 
         questionPath = intent.getStringExtra(QUESTION_PATH);
 
-        XPathPathExpr pathExpr = XPathReference.getPathExpr(questionPath);
-        XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
-        int size = xpathNodeset.size();
-        for(int i = 0; i < size -1; i++) {
-            Object o = xpathNodeset.getValAt(i);
-            String val = o.toString();
-            if(val != null) {
-                String [] coords = val.split(" ");
-                if(coords.length > 1) {
-                    placePrevMarker(new MapPoint(Double.valueOf(coords[0]),Double.valueOf(coords[1])));
+        if(questionPath != null) {
+            XPathPathExpr pathExpr = XPathReference.getPathExpr(questionPath);
+            XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
+            int size = xpathNodeset.size();
+            for (int i = 0; i < size - 1; i++) {
+                Object o = xpathNodeset.getValAt(i);
+                String val = o.toString();
+                if (val != null) {
+                    String[] coords = val.split(" ");
+                    if (coords.length > 1) {
+                        placePrevMarker(new MapPoint(Double.valueOf(coords[0]), Double.valueOf(coords[1])));
+                    }
                 }
             }
         }
@@ -309,6 +312,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
         intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false);
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false);
+        questionPath = state.getString(INTENT_QUESTION_PATH_KEY, null);
 
         // Restore the marker and dialog after the flags, because they use some of them.
         MapPoint point = state.getParcelable(POINT_KEY);
@@ -327,6 +331,7 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         intentReadOnly = state.getBoolean(INTENT_READ_ONLY_KEY, false);
         intentDraggable = state.getBoolean(INTENT_DRAGGABLE_KEY, false);
         isPointLocked = state.getBoolean(IS_POINT_LOCKED_KEY, false);
+        questionPath = state.getString(INTENT_QUESTION_PATH_KEY, null);
 
         // Restore the rest of the UI state.
         MapPoint mapCenter = state.getParcelable(MAP_CENTER_KEY);
