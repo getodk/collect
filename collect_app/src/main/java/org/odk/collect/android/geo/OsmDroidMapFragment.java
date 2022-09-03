@@ -296,7 +296,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     /*
      * Smap
-     * Add a layer of previous geopoints selected for this question TODO
+     * Add a layer of previous geopoints selected for this question
      */
     @Override public void addPrevMarker(MapPoint point, @IconAnchor String iconAnchor) {
         Marker marker = new Marker(map);
@@ -306,6 +306,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         marker.setIcon(ContextCompat.getDrawable(map.getContext(), R.drawable.ic_prev_map_point));
         marker.setAnchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor));
         map.getOverlays().add(marker);
+    }
+
+    @Override public void addPrevPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+
     }
 
     @Override public void setMarkerIcon(int featureId, int drawableId) {

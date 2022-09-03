@@ -43,4 +43,5 @@ the License.
     <color name="prevMapPointCircle">#ffff0000</color>
     <color name="prevMapPointFill">#ff0000ff</color>
     <color name="mapLine">#ffff0000</color>
+    <color name="prevMapLine">#ff0000ff</color>
 </resources>

@@ -26,7 +26,14 @@ import android.widget.TextView;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
+import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.condition.EvaluationContext;
+import org.javarosa.core.model.instance.FormInstance;
+import org.javarosa.model.xform.XPathReference;
+import org.javarosa.xpath.XPathNodeset;
+import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
@@ -48,6 +55,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.QUESTION_PATH;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
 
 public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
@@ -61,6 +69,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
+    public static final String INTENT_QUESTION_PATH_KEY = "question_path";
 
     public enum OutputMode { GEOTRACE, GEOSHAPE }
 
@@ -106,6 +115,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     private boolean recordingAutomatic; // whether GPS readings are taken at regular intervals (if not, only when user-directed)
     private boolean intentReadOnly; // whether the intent requested for the path to be read-only.
 
+    private String questionPath;    // Used to look up previous locations in a repeat
+
     private int intervalIndex = DEFAULT_INTERVAL_INDEX;
 
     private int accuracyThresholdIndex = DEFAULT_ACCURACY_THRESHOLD_INDEX;
@@ -129,6 +140,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
+            questionPath = savedInstanceState.getString(INTENT_QUESTION_PATH_KEY, null);
         }
 
         intentReadOnly = getIntent().getBooleanExtra(READ_ONLY, false);
@@ -163,6 +175,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic);
         state.putInt(INTERVAL_INDEX_KEY, intervalIndex);
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
+        state.putString(INTENT_QUESTION_PATH_KEY, questionPath);
     }
 
     @Override protected void onDestroy() {
@@ -230,8 +243,34 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         zoomButton = findViewById(R.id.zoom);
         zoomButton.setOnClickListener(v -> map.zoomToPoint(map.getGpsLocation(), true));
 
-        List<MapPoint> points = new ArrayList<>();
+        // Add
         Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(QUESTION_PATH)) {
+
+            /*
+             * Add shapes previously added to this repeat if requested (questionPath should be non null)
+             */
+            questionPath = intent.getStringExtra(QUESTION_PATH);
+
+            if (questionPath != null) {
+                FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+                EvaluationContext ec = formDef.getEvaluationContext();
+                FormInstance formInstance = formDef.getInstance();
+                XPathPathExpr pathExpr = XPathReference.getPathExpr(questionPath);
+                XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
+                int size = xpathNodeset.size();
+                for (int i = 0; i < size - 1; i++) {
+                    Object o = xpathNodeset.getValAt(i);
+                    String val = o.toString();
+                    if (val != null) {
+                        Iterable<MapPoint> prevPoints = parsePoints(val);
+                        map.addPrevPoly(prevPoints, outputMode == OutputMode.GEOSHAPE);
+                    }
+                }
+            }
+        }
+
+        List<MapPoint> points = new ArrayList<>();
         if (intent != null && intent.hasExtra(ANSWER_KEY)) {
             originalAnswerString = intent.getStringExtra(ANSWER_KEY);
             points = parsePoints(originalAnswerString);

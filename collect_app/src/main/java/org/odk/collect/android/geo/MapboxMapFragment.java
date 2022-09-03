@@ -412,6 +412,24 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return true;
     }
 
+    @Override public void addPrevPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+
+        Line line = lineManager.create(new LineOptions()
+                .withLineColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.prevMapLine)))
+                .withLineWidth(PolyFeature.STROKE_WIDTH)
+                .withLatLngs(new ArrayList<>())
+            );
+        List<LatLng> latLngs = new ArrayList<>();
+        for (MapPoint point : points) {
+            latLngs.add(toLatLng(point));
+        }
+        if (closedPolygon && !latLngs.isEmpty()) {
+            latLngs.add(latLngs.get(0));
+        }
+        line.setLatLngs(latLngs);
+        lineManager.update(line);
+    }
+
     @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
         int featureId = nextFeatureId++;
         features.put(featureId, new PolyFeature(featureId, lineManager, symbolManager, points, closedPolygon));

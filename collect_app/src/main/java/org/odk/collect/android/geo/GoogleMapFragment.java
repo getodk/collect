@@ -261,6 +261,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 .anchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor)));
     }
 
+    @Override public void addPrevPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+
+    }
+
     @Override public void setMarkerIcon(int featureId, int drawableId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {

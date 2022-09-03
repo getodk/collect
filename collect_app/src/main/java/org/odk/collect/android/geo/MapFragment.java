@@ -126,9 +126,14 @@ public interface MapFragment {
     int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor);
 
     /**
-     * smap add a previous marker
+     * smap add a previous marker and poly
      */
     void addPrevMarker(MapPoint point,  @IconAnchor String iconAnchor);
+
+    /**
+     * smap add a previous poly
+     */
+    void addPrevPoly(Iterable<MapPoint> points, boolean closedPolygon);
 
     /** Sets the icon for a marker. */
     void setMarkerIcon(int featureId, int drawableId);

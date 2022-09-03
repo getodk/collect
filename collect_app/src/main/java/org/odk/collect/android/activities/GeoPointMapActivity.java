@@ -275,14 +275,15 @@ public class GeoPointMapActivity extends BaseGeoMapActivity {
         map.setGpsLocationListener(this::onLocationChanged);
         map.setGpsLocationEnabled(true);
 
-        //placePrevMarker(new MapPoint(37.421998,-122.084));      // TODO get previous markers
-        FormDef formDef = Collect.getInstance().getFormController().getFormDef();
-        EvaluationContext ec = formDef.getEvaluationContext();
-        FormInstance formInstance = formDef.getInstance();
 
+        /*
+         * Add geopoints previously added to this repeat if requested (questionPath should be non null)
+         */
         questionPath = intent.getStringExtra(QUESTION_PATH);
-
         if(questionPath != null) {
+            FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+            EvaluationContext ec = formDef.getEvaluationContext();
+            FormInstance formInstance = formDef.getInstance();
             XPathPathExpr pathExpr = XPathReference.getPathExpr(questionPath);
             XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
             int size = xpathNodeset.size();
