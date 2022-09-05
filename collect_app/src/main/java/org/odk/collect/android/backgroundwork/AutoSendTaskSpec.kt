@@ -14,36 +14,17 @@
 package org.odk.collect.android.backgroundwork
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.os.Environment
 import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
-import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
-import org.odk.collect.android.utilities.FormsRepositoryProvider
-import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.WorkerAdapter
-import org.odk.collect.forms.Form
-import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 import java.util.function.Supplier
 import javax.inject.Inject
 
 class AutoSendTaskSpec : TaskSpec {
-    @Inject
-    lateinit var connectivityProvider: NetworkStateProvider
-
-    @Inject
-    lateinit var formsRepositoryProvider: FormsRepositoryProvider
-
-    @Inject
-    lateinit var settingsProvider: SettingsProvider
-
     @Inject
     lateinit var instanceAutoSender: InstanceAutoSender
 
@@ -54,31 +35,11 @@ class AutoSendTaskSpec : TaskSpec {
     override val backoffPolicy: BackoffPolicy? = null
     override val backoffDelay: Long? = null
 
-    /**
-     * If the app-level auto-send setting is enabled, send all finalized forms that don't specify not
-     * to auto-send at the form level. If the app-level auto-send setting is disabled, send all
-     * finalized forms that specify to send at the form level.
-     *
-     *
-     * Fails immediately if:
-     * - storage isn't ready
-     * - the network type that toggled on is not the desired type AND no form specifies auto-send
-     *
-     *
-     * If the network type doesn't match the auto-send settings, retry next time a connection is
-     * available.
-     */
     override fun getTask(context: Context, inputData: Map<String, String>, isLastUniqueExecution: Boolean): Supplier<Boolean> {
         DaggerUtils.getComponent(context).inject(this)
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                val currentNetworkInfo = connectivityProvider.networkInfo
-                if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED ||
-                    !(networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId) || atLeastOneFormSpecifiesAutoSend(projectId))
-                ) {
-                    networkTypeMatchesAutoSendSetting(currentNetworkInfo, projectId)
-                }
                 instanceAutoSender.autoSendInstances(projectDependencyProviderFactory.create(projectId))
             } else {
                 throw IllegalArgumentException("No project ID provided!")
@@ -88,44 +49,6 @@ class AutoSendTaskSpec : TaskSpec {
 
     override fun getWorkManagerAdapter(): Class<out WorkerAdapter> {
         return Adapter::class.java
-    }
-
-    /**
-     * Returns whether the currently-available connection type is included in the app-level auto-send
-     * settings.
-     *
-     * @return true if a connection is available and settings specify it should trigger auto-send,
-     * false otherwise.
-     */
-    private fun networkTypeMatchesAutoSendSetting(
-        currentNetworkInfo: NetworkInfo?,
-        projectId: String?
-    ): Boolean {
-        if (currentNetworkInfo == null) {
-            return false
-        }
-        val autosend = settingsProvider.getUnprotectedSettings(projectId).getString(ProjectKeys.KEY_AUTOSEND)
-
-        var sendwifi = autosend == "wifi_only"
-        var sendnetwork = (autosend == "cellular_only").also {
-            Analytics.log(AnalyticsEvents.CELLULAR_ONLY)
-        }
-
-        if (autosend == "wifi_and_cellular") {
-            sendwifi = true
-            sendnetwork = true
-        }
-        return currentNetworkInfo.type == ConnectivityManager.TYPE_WIFI &&
-            sendwifi || currentNetworkInfo.type == ConnectivityManager.TYPE_MOBILE && sendnetwork
-    }
-
-    /**
-     * Returns true if at least one form currently on the device specifies that all of its filled
-     * forms should auto-send no matter the connection type.
-     */
-    private fun atLeastOneFormSpecifiesAutoSend(projectId: String?): Boolean {
-        return formsRepositoryProvider.get(projectId).all.stream()
-            .anyMatch { form: Form -> java.lang.Boolean.parseBoolean(form.autoSend) }
     }
 
     class Adapter(context: Context, workerParams: WorkerParameters) :
