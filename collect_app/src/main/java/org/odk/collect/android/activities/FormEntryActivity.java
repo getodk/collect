@@ -601,7 +601,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (formController != null) {
                     formControllerAvailable(formController);
-                    formEntryViewModel.updateIndex();
+                    formEntryViewModel.refresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
@@ -818,7 +818,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
-            formEntryViewModel.updateIndex();
+            formEntryViewModel.refresh();
             return;
         }
 
@@ -2129,7 +2129,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.w("Calling onActivityResult from loadingComplete");
 
                     formControllerAvailable(formController);
-                    formEntryViewModel.updateIndex();
+                    formEntryViewModel.refresh();
                     onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                     return;
                 }
@@ -2177,7 +2177,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             // happens because if audit logging is enabled, the refresh logs a question event
                             // and we want that to show up after initialization events.
                             activityDisplayed();
-                            formEntryViewModel.updateIndex();
+                            formEntryViewModel.refresh();
 
                             if (warningMsg != null) {
                                 showLongToast(this, warningMsg);
@@ -2204,7 +2204,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     if (formIndex != null) {
                                         formController.jumpToIndex(formIndex);
                                         formControllerAvailable(formController);
-                                        formEntryViewModel.updateIndex();
+                                        formEntryViewModel.refresh();
                                         return;
                                     }
                                 }

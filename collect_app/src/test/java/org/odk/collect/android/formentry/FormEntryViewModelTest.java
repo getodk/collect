@@ -208,7 +208,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
-        viewModel.updateIndex();
+        viewModel.refresh();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveForward(new HashMap<>());
@@ -309,7 +309,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
-        viewModel.updateIndex();
+        viewModel.refresh();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveBackward(new HashMap<>());

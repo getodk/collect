@@ -108,7 +108,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
         jumpBackIndex = formController.getFormIndex();
         jumpToNewRepeat();
-        updateIndex();
+        refresh();
     }
 
     public void jumpToNewRepeat() {
@@ -136,7 +136,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        updateIndex();
+        refresh();
     }
 
     public void cancelRepeatPrompt() {
@@ -155,7 +155,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        updateIndex();
+        refresh();
     }
 
     public void errorDisplayed() {
@@ -194,7 +194,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 }
 
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                updateIndex();
+                refresh();
             }
         });
     }
@@ -218,7 +218,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 }
 
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                updateIndex();
+                refresh();
             }
         });
     }
@@ -287,7 +287,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         formSessionObserver.cancel();
     }
 
-    public void updateIndex() {
+    public void refresh() {
         currentIndex.setValue(formController.getFormIndex());
     }
 
