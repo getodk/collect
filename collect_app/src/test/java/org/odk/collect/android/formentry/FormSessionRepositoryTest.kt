@@ -40,4 +40,14 @@ abstract class FormSessionRepositoryTest {
         assertThat(formSessionRepository.get(id1).getOrAwaitValue(), equalTo(formController1))
         assertThat(formSessionRepository.get(id2).getOrAwaitValue(), equalTo(formController2))
     }
+
+    @Test
+    fun clear_clearsLiveDataForId() {
+        val id = formSessionRepository.create()
+        val formController = mock<FormController>()
+        formSessionRepository.set(id, formController)
+
+        formSessionRepository.clear(id)
+        assertThat(formSessionRepository.get(id).getOrAwaitValue(), equalTo(null))
+    }
 }

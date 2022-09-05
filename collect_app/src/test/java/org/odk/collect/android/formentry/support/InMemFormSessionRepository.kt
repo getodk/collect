@@ -22,6 +22,10 @@ class InMemFormSessionRepository : FormSessionRepository {
         getLiveData(id).value = formController
     }
 
+    override fun clear(id: String) {
+        getLiveData(id).value = null
+    }
+
     private fun getLiveData(id: String): MutableLiveData<FormController?> {
         return map.getOrPut(id) { MutableLiveData<FormController?>(null) }
     }

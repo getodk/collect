@@ -11,6 +11,7 @@ interface FormSessionRepository {
     fun create(): String
     fun get(id: String): LiveData<FormController?>
     fun set(id: String, formController: FormController)
+    fun clear(id: String)
 }
 
 class AppStateFormSessionRepository(application: Application) : FormSessionRepository {
@@ -27,6 +28,10 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
 
     override fun set(id: String, formController: FormController) {
         getLiveData(id).value = formController
+    }
+
+    override fun clear(id: String) {
+        getLiveData(id).value = null
     }
 
     private fun getLiveData(id: String) =

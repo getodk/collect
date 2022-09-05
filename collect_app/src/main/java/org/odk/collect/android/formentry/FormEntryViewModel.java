@@ -45,6 +45,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormController.FailedConstraint> failedConstraint = new MutableLiveData<>(null);
+    @NonNull
+    private final FormSessionRepository formSessionRepository;
     private final String sessionId;
 
     @Nullable
@@ -62,6 +64,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId) {
         this.clock = clock;
         this.scheduler = scheduler;
+        this.formSessionRepository = formSessionRepository;
 
         this.sessionId = sessionId;
         formSessionObserver = observe(formSessionRepository.get(this.sessionId), formController -> {
@@ -289,6 +292,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     public void refresh() {
         currentIndex.setValue(formController.getFormIndex());
+    }
+
+    public void exit() {
+        formSessionRepository.clear(sessionId);
     }
 
     public static class Factory implements ViewModelProvider.Factory {

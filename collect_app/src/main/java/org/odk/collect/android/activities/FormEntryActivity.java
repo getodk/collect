@@ -460,7 +460,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
-                finish();
+                exit();
             }
         });
 
@@ -1636,7 +1636,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     case BUTTON_POSITIVE:
                         if (shouldExit) {
                             errorMessage = null;
-                            finish();
+                            exit();
                         }
                         break;
                 }
@@ -1948,7 +1948,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // there is no formController -- fire MainMenu activity?
                 Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask is null");
                 startActivity(new Intent(this, MainMenuActivity.class));
-                finish();
+                exit();
                 return;
             }
         }
@@ -2092,7 +2092,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     @Override
                     public void additionalExplanationClosed() {
-                        finish();
+                        exit();
                     }
                 });
             } else {
@@ -2226,15 +2226,15 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
                                 startActivity(intent);
                             }
-                            finish();
 
+                        finish();
                     }
                 }
             }
         } else {
             Timber.e(new Error("FormController is null"));
             showLongToast(this, R.string.loading_form_failed);
-            finish();
+            exit();
         }
     }
 
@@ -2296,6 +2296,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
+        exit();
+    }
+
+    private void exit() {
+        formEntryViewModel.exit();
         finish();
     }
 
@@ -2373,7 +2378,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             t.cancel(true);
             t.destroy();
         }
-        finish();
+        exit();
     }
 
     private void onDataChanged(Object data) {
