@@ -169,6 +169,7 @@ the specific language governing permissions and limitations under the License.
         <activity android:name=".activities.GeoPointActivity" />
         <activity android:name=".activities.GeoPointMapActivity" />
         <activity android:name=".activities.GeoPolyActivity" />
+        <activity android:name=".activities.GeoCompoundActivity" />
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
         <!-- smap add NFC -->

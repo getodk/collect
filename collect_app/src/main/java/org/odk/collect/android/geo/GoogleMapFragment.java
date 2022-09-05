@@ -262,6 +262,21 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void addPrevPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+        List<LatLng> latLngs = new ArrayList<>();
+        for (MapPoint point : points) {
+            latLngs.add(toLatLng(point));
+        }
+        if (closedPolygon && !latLngs.isEmpty()) {
+            latLngs.add(latLngs.get(0));
+        }
+
+        map.addPolyline(new PolylineOptions()
+                .color(getResources().getColor(R.color.prevMapLine))
+                .zIndex(1)
+                .width(PolyFeature.STROKE_WIDTH)
+                .addAll(latLngs)
+                .clickable(false)
+        );
 
     }
 

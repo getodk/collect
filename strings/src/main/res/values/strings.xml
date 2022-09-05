@@ -504,8 +504,10 @@
     <string name="geopoint_view_read_only">View GeoPoint</string>
     <string name="geoshape_view_read_only">View GeoShape</string>
     <string name="geotrace_view_read_only">View GeoTrace</string>
+    <string name="geocompound_view_read_only">View Compound Map</string>
     <string name="get_shape">Start GeoShape</string>
     <string name="get_trace">Start GeoTrace</string>
+    <string name="get_geocompound">Start Compound Map</string>
 
     <!-- %1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8" -->
     <string name="west">W %1$s%2$s%3$s</string>
@@ -517,6 +519,7 @@
     <string name="north">N %1$s%2$s%3$s</string>
 
     <string name="geoshape_title">GeoShape</string>
+    <string name="geocompound_title">Compound Map</string>
     <string name="input_method">Input method</string>
     <string name="start">Start</string>
     <string name="enable_gps">Enable GPS</string>
@@ -564,6 +567,7 @@
     <string name="discard">Discard</string>
     <string name="geoshape_view_change_location">View or Change GeoShape</string>
     <string name="geotrace_view_change_location">View or Change GeoTrace</string>
+    <string name="geocompound_view_change_location">View or Change Compound Map</string>
     <string name="geometry_status">Saved forms: %d (%d shown on map)</string>
     <!-- Name of an action button -->
     <string name="view_data">View Saved Form</string>

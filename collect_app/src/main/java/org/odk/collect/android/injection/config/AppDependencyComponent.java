@@ -10,6 +10,7 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
+import org.odk.collect.android.activities.GeoCompoundActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
@@ -191,6 +192,8 @@ public interface AppDependencyComponent {
     void inject(GeoPointMapActivity geoMapActivity);
 
     void inject(GeoPolyActivity geoPolyActivity);
+
+    void inject(GeoCompoundActivity geoCompoundActivity);
 
     void inject(FormMapActivity formMapActivity);
 

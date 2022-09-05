@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.activities.GeoCompoundActivity;
 import org.odk.collect.android.activities.GeoPointActivity;
 import org.odk.collect.android.activities.GeoPointMapActivity;
 import org.odk.collect.android.activities.GeoPolyActivity;
@@ -109,6 +110,26 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 }
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE);
+            }
+
+            @Override
+            public void denied() {
+            }
+        });
+    }
+
+    @Override
+    public void requestGeoCompound(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry) {
+        permissionsProvider.requestLocationPermissions((Activity) context, new PermissionListener() {
+            @Override
+            public void granted() {
+                waitingForDataRegistry.waitForData(prompt.getIndex());
+
+                Intent intent = new Intent(context, GeoCompoundActivity.class);
+                intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
+                intent.putExtra(READ_ONLY, prompt.isReadOnly());
+
+                ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOCOMPOUND_CAPTURE);
             }
 
             @Override

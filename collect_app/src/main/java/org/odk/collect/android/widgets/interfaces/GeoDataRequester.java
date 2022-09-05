@@ -12,4 +12,6 @@ public interface GeoDataRequester {
     void requestGeoShape(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry);
 
     void requestGeoTrace(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry);
+
+    void requestGeoCompound(Context context, FormEntryPrompt prompt, String answerText, WaitingForDataRegistry waitingForDataRegistry);
 }

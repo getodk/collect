@@ -61,7 +61,7 @@ public class GeoCompoundWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.simpleButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {
-                geoDataRequester.requestGeoTrace(context, prompt, getAnswerText(), waitingForDataRegistry);
+                geoDataRequester.requestGeoCompound(context, prompt, getAnswerText(), waitingForDataRegistry);
             } else {
                 mapConfigurator.showUnavailableMessage(context);
             }
@@ -74,15 +74,15 @@ public class GeoCompoundWidget extends QuestionWidget implements WidgetDataRecei
 
         if (getFormEntryPrompt().isReadOnly()) {
             if (dataAvailable) {
-                binding.simpleButton.setText(R.string.geotrace_view_read_only);
+                binding.simpleButton.setText(R.string.geocompound_view_read_only);
             } else {
                 binding.simpleButton.setVisibility(View.GONE);
             }
         } else {
             if (dataAvailable) {
-                binding.simpleButton.setText(R.string.geotrace_view_change_location);
+                binding.simpleButton.setText(R.string.geocompound_view_change_location);
             } else {
-                binding.simpleButton.setText(R.string.get_trace);
+                binding.simpleButton.setText(R.string.get_geocompound);
             }
         }
 
@@ -103,7 +103,7 @@ public class GeoCompoundWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
-        binding.simpleButton.setText(R.string.get_trace);
+        binding.simpleButton.setText(R.string.get_geocompound);
         widgetValueChanged();
     }
 
@@ -117,7 +117,7 @@ public class GeoCompoundWidget extends QuestionWidget implements WidgetDataRecei
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
-        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_trace : R.string.geotrace_view_change_location);
+        binding.simpleButton.setText(answer.toString().isEmpty() ? R.string.get_geocompound : R.string.geocompound_view_change_location);
         widgetValueChanged();
     }
 
