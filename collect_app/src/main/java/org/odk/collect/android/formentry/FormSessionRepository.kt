@@ -13,27 +13,6 @@ interface FormSessionRepository {
     fun set(id: String, formController: FormController)
 }
 
-class InMemFormSessionRepository : FormSessionRepository {
-
-    private val map = mutableMapOf<String, MutableLiveData<FormController?>>()
-
-    override fun create(): String {
-        return UUIDGenerator().generateUUID()
-    }
-
-    override fun get(id: String): LiveData<FormController?> {
-        return getLiveData(id)
-    }
-
-    override fun set(id: String, formController: FormController) {
-        getLiveData(id).value = formController
-    }
-
-    private fun getLiveData(id: String): MutableLiveData<FormController?> {
-        return map.getOrPut(id) { MutableLiveData<FormController?>(null) }
-    }
-}
-
 class AppStateFormSessionRepository(application: Application) : FormSessionRepository {
 
     private val appState = application.getState()

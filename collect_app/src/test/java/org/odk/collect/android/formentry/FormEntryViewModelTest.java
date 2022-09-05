@@ -32,6 +32,7 @@ import org.mockito.InOrder;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.formentry.support.InMemFormSessionRepository;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.testshared.FakeScheduler;
