@@ -7,7 +7,7 @@ import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
-class AutoSendSettingChecker(
+class AutoSendSettingsProvider(
     private val networkStateProvider: NetworkStateProvider,
     private val settingsProvider: SettingsProvider
 ) {

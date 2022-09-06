@@ -12,8 +12,8 @@ import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
-class AutoSendSettingCheckerTest {
-    private lateinit var autoSendSettingChecker: AutoSendSettingChecker
+class AutoSendSettingsProviderTest {
+    private lateinit var autoSendSettingsProvider: AutoSendSettingsProvider
 
     private val networkStateProvider: NetworkStateProvider = mock()
     private val settingsProvider = InMemSettingsProvider()
@@ -24,7 +24,7 @@ class AutoSendSettingCheckerTest {
     fun `return false when networkInfo is null`() {
         setupAutoSendSettingChecker(networkInfo = null)
 
-        assertFalse(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
@@ -34,7 +34,7 @@ class AutoSendSettingCheckerTest {
             networkType = ConnectivityManager.TYPE_WIFI
         )
 
-        assertFalse(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
@@ -44,7 +44,7 @@ class AutoSendSettingCheckerTest {
             networkType = ConnectivityManager.TYPE_MOBILE
         )
 
-        assertFalse(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
@@ -54,7 +54,7 @@ class AutoSendSettingCheckerTest {
             networkType = ConnectivityManager.TYPE_WIFI
         )
 
-        assertTrue(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertTrue(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
@@ -64,7 +64,7 @@ class AutoSendSettingCheckerTest {
             networkType = ConnectivityManager.TYPE_WIFI
         )
 
-        assertFalse(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
@@ -74,7 +74,7 @@ class AutoSendSettingCheckerTest {
             networkType = ConnectivityManager.TYPE_MOBILE
         )
 
-        assertTrue(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertTrue(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
@@ -84,7 +84,7 @@ class AutoSendSettingCheckerTest {
             networkType = ConnectivityManager.TYPE_WIFI
         )
 
-        assertTrue(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertTrue(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
@@ -94,7 +94,7 @@ class AutoSendSettingCheckerTest {
             networkType = ConnectivityManager.TYPE_MOBILE
         )
 
-        assertTrue(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId))
+        assertTrue(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     private fun setupAutoSendSettingChecker(
@@ -107,6 +107,6 @@ class AutoSendSettingCheckerTest {
         }
         whenever(networkStateProvider.networkInfo).thenReturn(networkInfo)
         settingsProvider.getUnprotectedSettings(projectId).save(ProjectKeys.KEY_AUTOSEND, autoSendOption)
-        autoSendSettingChecker = AutoSendSettingChecker(networkStateProvider, settingsProvider)
+        autoSendSettingsProvider = AutoSendSettingsProvider(networkStateProvider, settingsProvider)
     }
 }

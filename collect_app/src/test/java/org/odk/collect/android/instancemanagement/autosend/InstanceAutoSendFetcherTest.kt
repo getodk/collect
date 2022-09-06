@@ -17,7 +17,7 @@ import org.odk.collect.shared.TempFiles.createTempDir
 
 class InstanceAutoSendFetcherTest {
     private lateinit var instanceAutoSendFetcher: InstanceAutoSendFetcher
-    private val autoSendSettingChecker: AutoSendSettingChecker = mock()
+    private val autoSendSettingsProvider: AutoSendSettingsProvider = mock()
     private val projectId = Project.DEMO_PROJECT_NAME
     private val instancesRepository = InMemInstancesRepository()
     private val formsRepository = InMemFormsRepository()
@@ -38,7 +38,7 @@ class InstanceAutoSendFetcherTest {
 
     @Before
     fun setup() {
-        instanceAutoSendFetcher = InstanceAutoSendFetcher(autoSendSettingChecker)
+        instanceAutoSendFetcher = InstanceAutoSendFetcher(autoSendSettingsProvider)
 
         formsRepository.save(formWithAutoSend)
         formsRepository.save(formWithoutAutoSend)
@@ -58,7 +58,7 @@ class InstanceAutoSendFetcherTest {
 
     @Test
     fun `when autosend enabled in settings return all finalized forms`() {
-        whenever(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId)).thenReturn(true)
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(true)
 
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
 
@@ -71,7 +71,7 @@ class InstanceAutoSendFetcherTest {
 
     @Test
     fun `when autosend disabled in settings return only those instances with autosend enabled on a form level`() {
-        whenever(autoSendSettingChecker.isAutoSendEnabledInSettings(projectId)).thenReturn(false)
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(false)
 
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
 

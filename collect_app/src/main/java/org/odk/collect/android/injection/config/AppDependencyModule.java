@@ -66,7 +66,7 @@ import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
-import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingChecker;
+import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher;
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSender;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
@@ -521,13 +521,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AutoSendSettingChecker providesAutoSendSettingChecker(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
-        return new AutoSendSettingChecker(networkStateProvider, settingsProvider);
+    public AutoSendSettingsProvider providesAutoSendSettingChecker(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
+        return new AutoSendSettingsProvider(networkStateProvider, settingsProvider);
     }
 
     @Provides
-    public InstanceAutoSendFetcher providesInstanceAutoSendFetcher(AutoSendSettingChecker autoSendSettingChecker) {
-        return new InstanceAutoSendFetcher(autoSendSettingChecker);
+    public InstanceAutoSendFetcher providesInstanceAutoSendFetcher(AutoSendSettingsProvider autoSendSettingsProvider) {
+        return new InstanceAutoSendFetcher(autoSendSettingsProvider);
     }
 
     @Provides
