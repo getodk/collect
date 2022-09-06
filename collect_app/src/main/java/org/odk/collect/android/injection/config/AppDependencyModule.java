@@ -66,6 +66,8 @@ import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
+import org.odk.collect.android.instancemanagement.AutoSendSettingChecker;
+import org.odk.collect.android.instancemanagement.InstanceAutoSendFetcher;
 import org.odk.collect.android.instancemanagement.InstanceAutoSender;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.logic.PropertyManager;
@@ -519,8 +521,18 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(Context context, Notifier notifier, Analytics analytics, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState) {
-        return new InstanceAutoSender(context, notifier, analytics, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState);
+    public AutoSendSettingChecker providesAutoSendSettingChecker(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
+        return new AutoSendSettingChecker(networkStateProvider, settingsProvider);
+    }
+
+    @Provides
+    public InstanceAutoSendFetcher providesInstanceAutoSendFetcher(AutoSendSettingChecker autoSendSettingChecker) {
+        return new InstanceAutoSendFetcher(autoSendSettingChecker);
+    }
+
+    @Provides
+    public InstanceAutoSender providesInstanceAutoSender(InstanceAutoSendFetcher instanceAutoSendFetcher, Context context, Notifier notifier, Analytics analytics, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState) {
+        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, analytics, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState);
     }
 
     @Provides

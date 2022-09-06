@@ -19,6 +19,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.instancemanagement.InstanceAutoSendFetcher
 import org.odk.collect.android.instancemanagement.InstanceAutoSender
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
@@ -46,6 +47,7 @@ class AutoSendTaskSpecTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesInstanceAutoSender(
+                instanceAutoSendFetcher: InstanceAutoSendFetcher,
                 context: Context?,
                 notifier: Notifier?,
                 analytics: Analytics?,

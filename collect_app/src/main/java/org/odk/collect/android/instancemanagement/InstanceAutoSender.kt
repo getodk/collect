@@ -9,15 +9,11 @@ import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.upload.FormUploadException
-import org.odk.collect.android.utilities.InstanceUploaderUtils
-import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.permissions.PermissionsProvider
-import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.shared.settings.Settings
 
 class InstanceAutoSender(
+    private val instanceAutoSendFetcher: InstanceAutoSendFetcher,
     private val context: Context,
     private val notifier: Notifier,
     private val analytics: Analytics,
@@ -37,11 +33,12 @@ class InstanceAutoSender(
         )
         return projectDependencyProvider.changeLockProvider.getInstanceLock(projectDependencyProvider.projectId).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {
-                val toUpload = getInstancesToAutoSend(
-                    projectDependencyProvider.formsRepository,
+                val toUpload = instanceAutoSendFetcher.getInstancesToAutoSend(
+                    projectDependencyProvider.projectId,
                     projectDependencyProvider.instancesRepository,
-                    projectDependencyProvider.generalSettings
+                    projectDependencyProvider.formsRepository
                 )
+
                 try {
                     val result: Map<Instance, FormUploadException?> = instanceSubmitter.submitInstances(toUpload)
                     notifier.onSubmission(result, projectDependencyProvider.projectId)
@@ -69,25 +66,6 @@ class InstanceAutoSender(
             } else {
                 false
             }
-        }
-    }
-
-    private fun getInstancesToAutoSend(
-        formsRepository: FormsRepository,
-        instancesRepository: InstancesRepository,
-        generalSettings: Settings
-    ): List<Instance> {
-        val isAutoSendAppSettingEnabled = generalSettings.getString(ProjectKeys.KEY_AUTOSEND) != "off"
-        return instancesRepository.getAllByStatus(
-            Instance.STATUS_COMPLETE,
-            Instance.STATUS_SUBMISSION_FAILED
-        ).filter {
-            InstanceUploaderUtils.shouldFormBeSent(
-                formsRepository,
-                it.formId,
-                it.formVersion,
-                isAutoSendAppSettingEnabled
-            )
         }
     }
 }
