@@ -52,10 +52,10 @@ class FormUriActivity : ComponentActivity() {
             val uriProjectId = uri?.getQueryParameter("projectId")
             val projectId = uriProjectId ?: firstProject.uuid
 
-            logAnalytics(uriProjectId)
-
             if (projectId == currentProjectProvider.getCurrentProject().uuid) {
                 if (!formFillingAlreadyStarted) {
+                    logAnalytics(uriProjectId)
+
                     formFillingAlreadyStarted = true
                     openForm.launch(
                         Intent(this, FormEntryActivity::class.java).also {
