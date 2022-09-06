@@ -3,6 +3,8 @@ package org.odk.collect.android.feature.external
 import android.content.Intent
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -12,6 +14,7 @@ import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -26,7 +29,7 @@ class InstanceEditActionTest {
         .around(rule)
 
     @Test
-    fun opensInstance() {
+    fun editingInstance_andSaving_returnsInstanceURI() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
@@ -37,7 +40,34 @@ class InstanceEditActionTest {
         val uri = InstancesContract.getUri("DEMO", instanceId)
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
-        rule.launch(intent, FormEntryPage("One Question"))
+        val result = rule.launchForResult(intent, FormHierarchyPage("One Question")) {
+            it.clickGoToStart()
+                .answerQuestion("what is your age", "32")
+                .swipeToEndScreen()
+                .clickSaveAndExit(AppClosedPage())
+        }
+
+        assertThat(result.resultData.data, equalTo(uri))
+    }
+
+    @Test
+    fun editingInstance_andIgnoringChanges_returnsInstanceURI() {
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
+
+        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
+        val uri = InstancesContract.getUri("DEMO", instanceId)
+
+        val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
+        val result = rule.launchForResult(intent, FormHierarchyPage("One Question")) {
+            it.clickGoToStart()
+                .pressBackAndIgnoreChanges(AppClosedPage())
+        }
+
+        assertThat(result.resultData.data, equalTo(uri))
     }
 
     @Test
