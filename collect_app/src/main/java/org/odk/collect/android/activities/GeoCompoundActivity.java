@@ -41,6 +41,7 @@ import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
+import org.odk.collect.android.geo.models.GeoCompoundData;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -244,35 +245,12 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
         // Add
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(QUESTION_PATH)) {
-
-            /*
-             * Add shapes previously added to this repeat if requested (questionPath should be non null)
-             */
-            questionPath = intent.getStringExtra(QUESTION_PATH);
-
-            if (questionPath != null) {
-                FormDef formDef = Collect.getInstance().getFormController().getFormDef();
-                EvaluationContext ec = formDef.getEvaluationContext();
-                FormInstance formInstance = formDef.getInstance();
-                XPathPathExpr pathExpr = XPathReference.getPathExpr(questionPath);
-                XPathNodeset xpathNodeset = pathExpr.eval(formInstance, ec);
-                int size = xpathNodeset.size();
-                for (int i = 0; i < size - 1; i++) {
-                    Object o = xpathNodeset.getValAt(i);
-                    String val = o.toString();
-                    if (val != null) {
-                        Iterable<MapPoint> prevPoints = parsePoints(val);
-                        map.addPrevPoly(prevPoints, outputMode == OutputMode.GEOSHAPE);
-                    }
-                }
-            }
-        }
 
         List<MapPoint> points = new ArrayList<>();
         if (intent != null && intent.hasExtra(ANSWER_KEY)) {
             originalAnswerString = intent.getStringExtra(ANSWER_KEY);
-            points = parsePoints(originalAnswerString);
+            GeoCompoundData cd = new GeoCompoundData(originalAnswerString);
+            points = cd.points;
         }
         if (restoredPoints != null) {
             points = restoredPoints;
