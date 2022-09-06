@@ -2,11 +2,16 @@ package org.odk.collect.android.formentry;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.DialogInterface;
@@ -43,6 +48,7 @@ import org.robolectric.shadows.ShadowDialog;
 public class QuitFormDialogFragmentTest {
 
     private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
+    private final FormEntryViewModel formEntryViewModel = mock(FormEntryViewModel.class);
 
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
@@ -73,7 +79,19 @@ public class QuitFormDialogFragmentTest {
                     }
                 };
             }
+
+            @Override
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
+                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionRepository) {
+                    @NonNull
+                    @Override
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        return (T) formEntryViewModel;
+                    }
+                };
+            }
         });
+
     }
 
     @Test
@@ -128,5 +146,13 @@ public class QuitFormDialogFragmentTest {
             RobolectricHelpers.runLooper();
             assertFalse(dialog.isShowing());
         });
+    }
+
+    @Test
+    public void clickingIgnoreChanges_callsExitOnFormEntryViewModel() {
+        launcherRule.launch(QuitFormDialogFragment.class);
+
+        onView(withText(R.string.do_not_save)).inRoot(isDialog()).perform(click());
+        verify(formEntryViewModel).exit();
     }
 }

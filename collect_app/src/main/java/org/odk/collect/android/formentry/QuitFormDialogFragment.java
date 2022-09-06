@@ -53,7 +53,11 @@ public class QuitFormDialogFragment extends DialogFragment {
     @Inject
     CurrentProjectProvider currentProjectProvider;
 
+    @Inject
+    FormEntryViewModel.Factory formEntryViewModelFactory;
+
     private FormSaveViewModel formSaveViewModel;
+    private FormEntryViewModel formEntryViewModel;
     private Listener listener;
 
     @Override
@@ -63,6 +67,7 @@ public class QuitFormDialogFragment extends DialogFragment {
 
         ViewModelProvider.Factory factory = formSaveViewModelFactoryFactory.create(requireActivity(), null);
         formSaveViewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
+        formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
 
         if (context instanceof Listener) {
             listener = (Listener) context;
@@ -97,6 +102,7 @@ public class QuitFormDialogFragment extends DialogFragment {
                 }
             } else {
                 formSaveViewModel.ignoreChanges();
+                formEntryViewModel.exit();
 
                 String action = getActivity().getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
