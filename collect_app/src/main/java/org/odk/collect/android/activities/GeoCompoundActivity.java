@@ -41,6 +41,7 @@ import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
+import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.geo.models.GeoCompoundData;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
@@ -51,6 +52,7 @@ import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -247,15 +249,18 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         Intent intent = getIntent();
 
         List<MapPoint> points = new ArrayList<>();
+        HashMap<Integer, CompoundMarker> markers = new HashMap<>();
         if (intent != null && intent.hasExtra(ANSWER_KEY)) {
             originalAnswerString = intent.getStringExtra(ANSWER_KEY);
             GeoCompoundData cd = new GeoCompoundData(originalAnswerString);
             points = cd.points;
+            markers = cd.markers;
         }
         if (restoredPoints != null) {
             points = restoredPoints;
+            // TODO restored markers
         }
-        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE);
+        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE, markers);
 
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -459,7 +464,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addDraggablePoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE);
+        featureId = map.addDraggablePoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, null);
         inputActive = false;
         updateUi();
     }

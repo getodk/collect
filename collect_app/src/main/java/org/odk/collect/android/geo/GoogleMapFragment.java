@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
@@ -292,9 +293,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
     }
 
-    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, HashMap<Integer, CompoundMarker> markers) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(map, points, closedPolygon));
+        features.put(featureId, new PolyFeature(map, points, closedPolygon, markers));
         return featureId;
     }
 
@@ -737,7 +738,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private final boolean closedPolygon;
         private Polyline polyline;
 
-        PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
+        PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon, HashMap<Integer, CompoundMarker> geoMarkers) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             if (map == null) {  // during Robolectric tests, map will be null

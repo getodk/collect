@@ -55,6 +55,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MbtilesFile.LayerType;
 import org.odk.collect.android.geo.MbtilesFile.MbtilesException;
+import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.location.client.MapboxLocationCallback;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -430,9 +431,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         lineManager.update(line);
     }
 
-    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon,
+                                          HashMap<Integer, CompoundMarker> markers) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(featureId, lineManager, symbolManager, points, closedPolygon));
+        features.put(featureId, new PolyFeature(featureId, lineManager, symbolManager, points, closedPolygon, markers));
         return featureId;
     }
 
@@ -524,11 +526,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         return new LatLng(point.lat, point.lon);
     }
 
-    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
+    private Symbol createSymbol(SymbolManager symbolManager, MapPoint point, boolean draggable,
+                                @IconAnchor String iconAnchor,
+                                CompoundMarker cm) {
+
+        float iconSize = 1f;
+        if(cm != null) {
+            iconSize = 5f;
+        }
         return symbolManager.create(new SymbolOptions()
             .withLatLng(toLatLng(point))
             .withIconImage(addIconImage(R.drawable.ic_map_point))
-            .withIconSize(1f)
+            .withIconSize(iconSize)
             .withSymbolSortKey(10f)
             .withDraggable(draggable)
             .withTextOpacity(0f)
@@ -786,7 +795,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             this.featureId = featureId;
             this.symbolManager = symbolManager;
             this.point = point;
-            this.symbol = createSymbol(symbolManager, point, draggable, iconAnchor);
+            this.symbol = createSymbol(symbolManager, point, draggable, iconAnchor, null);
             symbolManager.addClickListener(clickListener);
             symbolManager.addDragListener(dragListener);
         }
@@ -856,14 +865,19 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private Line line;
 
         PolyFeature(int featureId, LineManager lineManager, SymbolManager symbolManager,
-            Iterable<MapPoint> points, boolean closedPolygon) {
+            Iterable<MapPoint> points, boolean closedPolygon, HashMap<Integer, CompoundMarker> markers) {
             this.featureId = featureId;
             this.lineManager = lineManager;
             this.symbolManager = symbolManager;
             this.closedPolygon = closedPolygon;
+            int idx = 0;
             for (MapPoint point : points) {
                 this.points.add(point);
-                this.symbols.add(createSymbol(symbolManager, point, true, CENTER));
+                CompoundMarker cm = null;
+                if(markers != null) {
+                    cm = markers.get(idx++);
+                }
+                this.symbols.add(createSymbol(symbolManager, point, true, CENTER, cm));
             }
             line = lineManager.create(new LineOptions()
                 .withLineColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.mapLine)))
@@ -899,7 +913,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 return;
             }
             points.add(point);
-            symbols.add(createSymbol(symbolManager, point, true, CENTER));
+            symbols.add(createSymbol(symbolManager, point, true, CENTER, null));
             updateLine();
         }
 

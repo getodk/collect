@@ -278,7 +278,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE);
+        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE, null);
 
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -482,7 +482,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addDraggablePoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE);
+        featureId = map.addDraggablePoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, null);
         inputActive = false;
         updateUi();
     }

@@ -41,6 +41,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
@@ -324,9 +325,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
     }
 
-    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, HashMap<Integer, CompoundMarker> markers) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(map, points, closedPolygon));
+        features.put(featureId, new PolyFeature(map, points, closedPolygon, markers));
         return featureId;
     }
 
@@ -704,7 +705,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         final boolean closedPolygon;
         static final int STROKE_WIDTH = 5;
 
-        PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
+        PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon, HashMap<Integer, CompoundMarker> geoMarkers) {
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();

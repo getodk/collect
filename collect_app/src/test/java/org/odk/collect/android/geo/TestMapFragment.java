@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
+import org.odk.collect.android.geo.models.CompoundMarker;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +73,21 @@ public class TestMapFragment implements MapFragment {
         locationListener = null;
         lastFeatureId = 0;
         mappedPoints.clear();
+    }
+
+    @Override
+    public void addPrevMarker(MapPoint mp, String s) {
+
+    }
+
+    @Override
+    public void addPrevPoly(Iterable<MapPoint> mpa, boolean b) {
+
+    }
+
+    @Override
+    public void setRetainMockAccuracy(boolean b) {
+
     }
 
     @Override
@@ -140,7 +157,7 @@ public class TestMapFragment implements MapFragment {
     }
 
     @Override
-    public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+    public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, HashMap<Integer, CompoundMarker> markers) {
         return 0;
     }
 

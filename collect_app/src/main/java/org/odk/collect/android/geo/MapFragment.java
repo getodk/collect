@@ -21,8 +21,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 import androidx.fragment.app.FragmentActivity;
 
+import org.odk.collect.android.geo.models.CompoundMarker;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -146,7 +149,7 @@ public interface MapFragment {
      * The vertices will have handles that can be dragged by the user.
      * Returns a positive integer, the featureId for the newly added shape.
      */
-    int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon);
+    int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, HashMap<Integer, CompoundMarker> markers);
 
     /** Appends a vertex to the polyline or polygon specified by featureId. */
     void appendPointToPoly(int featureId, @NonNull MapPoint point);
