@@ -1,4 +1,4 @@
-package org.odk.collect.android.instancemanagement
+package org.odk.collect.android.instancemanagement.autosend
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`

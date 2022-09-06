@@ -1,4 +1,4 @@
-package org.odk.collect.android.instancemanagement
+package org.odk.collect.android.instancemanagement.autosend
 
 import android.net.ConnectivityManager
 import org.odk.collect.androidshared.network.NetworkStateProvider

@@ -19,8 +19,8 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.instancemanagement.InstanceAutoSendFetcher
-import org.odk.collect.android.instancemanagement.InstanceAutoSender
+import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher
+import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSender
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory

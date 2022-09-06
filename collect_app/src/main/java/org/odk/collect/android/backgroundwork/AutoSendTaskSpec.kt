@@ -17,7 +17,7 @@ import android.content.Context
 import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.instancemanagement.InstanceAutoSender
+import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSender
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.WorkerAdapter
