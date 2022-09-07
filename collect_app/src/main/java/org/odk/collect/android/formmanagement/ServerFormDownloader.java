@@ -6,13 +6,13 @@ import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
+import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.async.OngoingWorkListener;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.shared.strings.Md5;
-import org.odk.collect.shared.strings.Validator;
 
 import java.io.File;
 import java.io.IOException;

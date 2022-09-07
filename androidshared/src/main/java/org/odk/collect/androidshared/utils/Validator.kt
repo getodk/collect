@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.shared.strings
+package org.odk.collect.androidshared.utils
 
+import android.util.Patterns
+import android.webkit.URLUtil
 import java.util.regex.Pattern
 
 object Validator {
@@ -35,9 +37,6 @@ object Validator {
 
     @JvmStatic
     fun isUrlValid(url: String): Boolean {
-        return Pattern
-            .compile("^https?://.+$", Pattern.CASE_INSENSITIVE)
-            .matcher(url)
-            .matches()
+        return URLUtil.isValidUrl(url) && Patterns.WEB_URL.matcher(url).matches()
     }
 }
