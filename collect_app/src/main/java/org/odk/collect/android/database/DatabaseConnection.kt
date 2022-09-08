@@ -59,6 +59,22 @@ open class DatabaseConnection(
         private val toClose = mutableListOf<SQLiteOpenHelper>()
 
         @JvmStatic
+        fun cleanUp() {
+            val openHelpersToClear = mutableListOf<String>()
+
+            openHelpers.forEach { (databasePath, openHelper) ->
+                if (!File(databasePath).exists()) {
+                    openHelper.close()
+                    openHelpersToClear.add(databasePath)
+                }
+            }
+
+            openHelpersToClear.forEach {
+                openHelpers.remove(it)
+            }
+        }
+
+        @JvmStatic
         fun closeAll() {
             openHelpers.forEach { (_, openHelper) -> openHelper.close() }
             openHelpers.clear()
