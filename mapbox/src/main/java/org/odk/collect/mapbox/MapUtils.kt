@@ -9,6 +9,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapsMarkerCache
+import org.odk.collect.maps.MarkerDescription
 
 object MapUtils {
     fun createPointAnnotation(
@@ -34,7 +35,7 @@ object MapUtils {
     fun createPointAnnotations(
         context: Context,
         pointAnnotationManager: PointAnnotationManager,
-        markerFeatures: List<MapFragment.MarkerDescription>,
+        markerFeatures: List<MarkerDescription>,
     ): List<PointAnnotation> {
         val pointAnnotationOptionsList = markerFeatures.map {
             PointAnnotationOptions()

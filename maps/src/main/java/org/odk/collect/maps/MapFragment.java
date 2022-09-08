@@ -200,35 +200,4 @@ public interface MapFragment {
         void onFeature(int featureId);
     }
 
-    class MarkerDescription {
-
-        private final MapPoint point;
-        private final boolean draggable;
-        private final String iconAnchor;
-        private final int iconDrawableId;
-
-        public MarkerDescription(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
-            this.point = point;
-            this.draggable = draggable;
-            this.iconAnchor = iconAnchor;
-            this.iconDrawableId = iconDrawableId;
-        }
-
-        public MapPoint getPoint() {
-            return point;
-        }
-
-        public boolean isDraggable() {
-            return draggable;
-        }
-
-        @IconAnchor
-        public String getIconAnchor() {
-            return iconAnchor;
-        }
-
-        public int getIconDrawableId() {
-            return iconDrawableId;
-        }
-    }
 }

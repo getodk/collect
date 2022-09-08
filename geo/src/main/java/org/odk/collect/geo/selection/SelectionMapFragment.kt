@@ -26,6 +26,7 @@ import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.MarkerDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
@@ -345,7 +346,7 @@ class SelectionMapFragment(
         itemsByFeatureId.clear()
 
         val markerDescriptions = items.map {
-            MapFragment.MarkerDescription(
+            MarkerDescription(
                 MapPoint(it.latitude, it.longitude),
                 false,
                 MapFragment.BOTTOM,

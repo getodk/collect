@@ -55,6 +55,7 @@ import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapsMarkerCache
+import org.odk.collect.maps.MarkerDescription
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -286,11 +287,18 @@ class MapboxMapFragment :
         iconDrawableId: Int,
     ): Int {
         return addMarkers(
-            listOf(MapFragment.MarkerDescription(point, draggable, iconAnchor, iconDrawableId))
+            listOf(
+                MarkerDescription(
+                    point,
+                    draggable,
+                    iconAnchor,
+                    iconDrawableId
+                )
+            )
         ).first()
     }
 
-    override fun addMarkers(markers: List<MapFragment.MarkerDescription>): List<Int> {
+    override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         val pointAnnotations =
             MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
 

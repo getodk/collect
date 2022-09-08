@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets.support
 import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.MarkerDescription
 
 class NoOpMapFragment : Fragment(), MapFragment {
 
@@ -45,7 +46,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
-    override fun addMarkers(markers: MutableList<MapFragment.MarkerDescription>?): MutableList<Int> {
+    override fun addMarkers(markers: MutableList<MarkerDescription>?): MutableList<Int> {
         TODO("Not yet implemented")
     }
 

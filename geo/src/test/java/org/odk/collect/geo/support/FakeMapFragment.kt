@@ -6,6 +6,7 @@ import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.MarkerDescription
 
 class FakeMapFragment : Fragment(), MapFragment {
 
@@ -87,7 +88,7 @@ class FakeMapFragment : Fragment(), MapFragment {
         return markers.size - 1
     }
 
-    override fun addMarkers(markers: List<MapFragment.MarkerDescription>): List<Int> {
+    override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
             addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDrawableId)
         }
