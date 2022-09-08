@@ -102,6 +102,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private PointListener clickListener;
     private PointListener longPressListener;
     private FeatureListener featureClickListener;
+    private FeatureListener featureLineListener;
     private FeatureListener dragEndListener;
 
     private LocationComponent locationComponent;
@@ -535,6 +536,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             iconSize = 5f;
         }
         return symbolManager.create(new SymbolOptions()
+
             .withLatLng(toLatLng(point))
             .withIconImage(addIconImage(R.drawable.ic_map_point))
             .withIconSize(iconSize)
@@ -860,6 +862,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private final LineClickListener lineClickListener = new LineClickListener();
         private final SymbolDragListener symbolDragListener = new SymbolDragListener();
         private final List<MapPoint> points = new ArrayList<>();
+        private final HashMap<Integer, CompoundMarker> markers = new HashMap<>();
         private final List<Symbol> symbols = new ArrayList<>();
         private final boolean closedPolygon;
         private Line line;
@@ -875,9 +878,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 this.points.add(point);
                 CompoundMarker cm = null;
                 if(markers != null) {
-                    cm = markers.get(idx++);
+                    cm = markers.get(idx);
+                    if(cm != null) {
+                        this.markers.put(idx, cm);      // Doing a deep copy of markers as is done for points - not sure why
+                    }
                 }
                 this.symbols.add(createSymbol(symbolManager, point, true, CENTER, cm));
+                idx++;
             }
             line = lineManager.create(new LineOptions()
                 .withLineColor(ColorUtils.colorToRgbaString(getResources().getColor(R.color.mapLine)))
@@ -941,19 +948,24 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
         class SymbolClickListener implements OnSymbolClickListener {
             @Override public void onAnnotationClick(Symbol clickedSymbol) {
+                if(featureClickListener != null) {
+                    featureClickListener.onFeature((int) clickedSymbol.getId());
+                }
+                /*
                 for (Symbol symbol : symbols) {
                     if (clickedSymbol.getId() == symbol.getId() && featureClickListener != null) {
                         featureClickListener.onFeature(featureId);
                         break;
                     }
                 }
+                 */
             }
         }
 
         class LineClickListener implements OnLineClickListener {
             @Override public void onAnnotationClick(Line clickedLine) {
-                if (clickedLine.getId() == line.getId() && featureClickListener != null) {
-                    featureClickListener.onFeature(featureId);
+                if (clickedLine.getId() == line.getId() && featureLineListener != null) {
+                    featureLineListener.onFeature(featureId);
                 }
             }
         }

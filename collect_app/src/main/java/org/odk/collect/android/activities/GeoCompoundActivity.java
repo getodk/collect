@@ -29,6 +29,8 @@ import android.widget.TextView;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.instance.FormInstance;
@@ -36,6 +38,7 @@ import org.javarosa.model.xform.XPathReference;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
@@ -60,6 +63,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
@@ -261,7 +266,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             // TODO restored markers
         }
         featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE, markers);
-
+        map.setFeatureClickListener(this::onFeatureClicked);
         if (inputActive && !intentReadOnly) {
             startInput();
         }
@@ -412,6 +417,29 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     @Override
     public void setAccuracyThresholdIndex(int accuracyThresholdIndex) {
         this.accuracyThresholdIndex = accuracyThresholdIndex;
+    }
+
+
+    /**
+     * Reacts to a tap on a feature by showing a submission summary.
+     */
+    public void onFeatureClicked(int featureId) {
+        Timber.i("Feature: %s", featureId);
+        /*
+        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
+            removeEnlargedMarkerIfExist(featureId);
+
+            FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
+            if (mappableFormInstance != null) {
+                map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
+                updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
+                setUpSummarySheetDetails(mappableFormInstance);
+            }
+            viewModel.setSelectedSubmissionId(featureId);
+        }
+        */
     }
 
     private void onClick(MapPoint point) {
