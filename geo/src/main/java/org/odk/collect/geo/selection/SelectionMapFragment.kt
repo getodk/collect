@@ -350,7 +350,9 @@ class SelectionMapFragment(
                 MapPoint(it.latitude, it.longitude),
                 false,
                 MapFragment.BOTTOM,
-                it.smallIcon
+                it.smallIcon,
+                it.color,
+                it.symbol
             )
         }
 
@@ -399,6 +401,8 @@ sealed interface MappableSelectItem {
     val name: String
     val properties: List<IconifiedText>
     val selected: Boolean
+    val color: String?
+    val symbol: String?
 
     data class WithInfo(
         override val id: Long,
@@ -410,6 +414,8 @@ sealed interface MappableSelectItem {
         override val properties: List<IconifiedText>,
         val info: String,
         override val selected: Boolean = false,
+        override val color: String? = null,
+        override val symbol: String? = null
     ) : MappableSelectItem
 
     data class WithAction(
@@ -422,6 +428,8 @@ sealed interface MappableSelectItem {
         override val properties: List<IconifiedText>,
         val action: IconifiedText,
         override val selected: Boolean = false,
+        override val color: String? = null,
+        override val symbol: String? = null
     ) : MappableSelectItem
 
     data class IconifiedText(val icon: Int?, val text: String)

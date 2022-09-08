@@ -192,6 +192,9 @@ internal class SelectChoicesMapData(
                     MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
                 }
 
+                val markerColor = selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
+                val markerSymbol = selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
+
                 list + MappableSelectItem.WithAction(
                     index.toLong(),
                     latitude,
@@ -204,7 +207,9 @@ internal class SelectChoicesMapData(
                         R.drawable.ic_save,
                         resources.getString(R.string.select_item)
                     ),
-                    selectChoice.index == selectedIndex
+                    selectChoice.index == selectedIndex,
+                    markerColor,
+                    markerSymbol
                 )
             } else {
                 list
