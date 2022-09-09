@@ -56,6 +56,7 @@ import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapsMarkerCache
 import org.odk.collect.maps.MarkerDescription
+import org.odk.collect.maps.MarkerIconDescription
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -292,7 +293,7 @@ class MapboxMapFragment :
                     point,
                     draggable,
                     iconAnchor,
-                    iconDrawableId
+                    MarkerIconDescription(iconDrawableId)
                 )
             )
         ).first()

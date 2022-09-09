@@ -90,7 +90,7 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
-            addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDrawableId)
+            addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDescription.iconDrawableId)
         }
     }
 

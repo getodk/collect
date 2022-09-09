@@ -303,7 +303,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     public List<Integer> addMarkers(List<MarkerDescription> markers) {
         List<Integer> featureIds = new ArrayList<>();
         for (MarkerDescription markerDescription : markers) {
-            int featureId = addMarker(markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDrawableId());
+            int featureId = addMarker(markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDescription().getIconDrawableId());
             featureIds.add(featureId);
         }
 

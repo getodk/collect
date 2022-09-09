@@ -27,6 +27,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MarkerDescription
+import org.odk.collect.maps.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
@@ -350,9 +351,7 @@ class SelectionMapFragment(
                 MapPoint(it.latitude, it.longitude),
                 false,
                 MapFragment.BOTTOM,
-                it.smallIcon,
-                it.color,
-                it.symbol
+                MarkerIconDescription(it.smallIcon, it.color, it.symbol)
             )
         }
 

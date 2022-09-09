@@ -40,7 +40,7 @@ object MapUtils {
         val pointAnnotationOptionsList = markerFeatures.map {
             PointAnnotationOptions()
                 .withPoint(Point.fromLngLat(it.point.lon, it.point.lat, it.point.alt))
-                .withIconImage(MapsMarkerCache.getMarkerBitmap(it.iconDrawableId, context))
+                .withIconImage(MapsMarkerCache.getMarkerBitmap(it.iconDescription.iconDrawableId, context))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
                 .withDraggable(it.isDraggable)
