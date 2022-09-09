@@ -100,7 +100,7 @@ public interface MapFragment {
      * the user will be able to drag the marker to change its location.
      * Returns a positive integer, the featureId for the newly added shape.
      */
-    int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId);
+    int addMarker(MarkerDescription markerDescription);
 
     List<Integer> addMarkers(List<MarkerDescription> markers);
 

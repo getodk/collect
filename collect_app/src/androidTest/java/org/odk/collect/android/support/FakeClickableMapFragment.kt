@@ -39,14 +39,14 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         animate: Boolean
     ) {}
 
-    override fun addMarker(point: MapPoint?, draggable: Boolean, iconAnchor: String?, iconDrawableId: Int): Int {
+    override fun addMarker(markerDescription: MarkerDescription): Int {
         val id = idCounter++
         return id
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
-            addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDescription.iconDrawableId)
+            addMarker(it)
         }
     }
 

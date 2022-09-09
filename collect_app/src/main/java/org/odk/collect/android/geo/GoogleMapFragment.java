@@ -264,9 +264,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         hasCenter = true;
     }
 
-    @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
+    @Override public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(map, point, draggable, iconAnchor, iconDrawableId));
+        features.put(featureId, new MarkerFeature(map, markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDescription().getIconDrawableId()));
         return featureId;
     }
 
@@ -274,7 +274,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     public List<Integer> addMarkers(List<MarkerDescription> markers) {
         List<Integer> featureIds = new ArrayList<>();
         for (MarkerDescription markerDescription : markers) {
-            int featureId = addMarker(markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDescription().getIconDrawableId());
+            int featureId = addMarker(markerDescription);
             featureIds.add(featureId);
         }
 

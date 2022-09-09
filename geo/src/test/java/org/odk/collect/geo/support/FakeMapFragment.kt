@@ -76,21 +76,16 @@ class FakeMapFragment : Fragment(), MapFragment {
         hasCenter = true
     }
 
-    override fun addMarker(
-        point: MapPoint,
-        draggable: Boolean,
-        iconAnchor: String,
-        iconDrawableId: Int,
-    ): Int {
-        markers.add(point)
+    override fun addMarker(markerDescription: MarkerDescription): Int {
+        markers.add(markerDescription.point)
         markerIcons.add(null)
-        markerIcons[markers.size - 1] = iconDrawableId
+        markerIcons[markers.size - 1] = markerDescription.iconDescription.iconDrawableId
         return markers.size - 1
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
-            addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDescription.iconDrawableId)
+            addMarker(it)
         }
     }
 

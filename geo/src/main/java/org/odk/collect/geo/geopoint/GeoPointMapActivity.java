@@ -42,6 +42,8 @@ import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.MarkerDescription;
+import org.odk.collect.maps.MarkerIconDescription;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;
@@ -400,7 +402,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     /** Places the marker and enables the button to remove it. */
     private void placeMarker(@NonNull MapPoint point) {
         map.clearFeatures();
-        featureId = map.addMarker(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, R.drawable.ic_map_point);
+        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, new MarkerIconDescription(R.drawable.ic_map_point)));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
         }

@@ -37,12 +37,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
     ) {
     }
 
-    override fun addMarker(
-        point: MapPoint?,
-        draggable: Boolean,
-        iconAnchor: String?,
-        iconDrawableId: Int,
-    ): Int {
+    override fun addMarker(markerDescription: MarkerDescription): Int {
         TODO("Not yet implemented")
     }
 

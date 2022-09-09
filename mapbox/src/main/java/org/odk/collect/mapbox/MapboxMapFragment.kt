@@ -56,7 +56,6 @@ import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MapsMarkerCache
 import org.odk.collect.maps.MarkerDescription
-import org.odk.collect.maps.MarkerIconDescription
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -281,22 +280,8 @@ class MapboxMapFragment :
         hasCenter = true
     }
 
-    override fun addMarker(
-        point: MapPoint,
-        draggable: Boolean,
-        iconAnchor: String,
-        iconDrawableId: Int,
-    ): Int {
-        return addMarkers(
-            listOf(
-                MarkerDescription(
-                    point,
-                    draggable,
-                    iconAnchor,
-                    MarkerIconDescription(iconDrawableId)
-                )
-            )
-        ).first()
+    override fun addMarker(markerDescription: MarkerDescription): Int {
+        return addMarkers(listOf(markerDescription)).first()
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
