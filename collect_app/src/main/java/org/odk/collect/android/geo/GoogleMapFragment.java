@@ -579,7 +579,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (locationCrosshairs == null) {
             locationCrosshairs = map.addMarker(new MarkerOptions()
                 .position(loc)
-                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
+                .icon(getBitmapDescriptor(new MarkerIconDescription(R.drawable.ic_crosshairs)))
                 .anchor(0.5f, 0.5f)  // center the crosshairs on the position
             );
         }
@@ -638,7 +638,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(markerDescription.getPoint()))
             .snippet(markerDescription.getPoint().alt + ";" + markerDescription.getPoint().sd)
             .draggable(markerDescription.isDraggable())
-            .icon(getBitmapDescriptor(markerDescription.getIconDescription().getIconDrawableId()))
+            .icon(getBitmapDescriptor(markerDescription.getIconDescription()))
             .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
         );
     }
@@ -660,8 +660,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private BitmapDescriptor getBitmapDescriptor(int drawableId) {
-        return BitmapDescriptorCache.getBitmapDescriptor(drawableId, getContext());
+    private BitmapDescriptor getBitmapDescriptor(MarkerIconDescription markerIconDescription) {
+        return BitmapDescriptorCache.getBitmapDescriptor(getContext(), markerIconDescription);
     }
 
     private void showGpsDisabledAlert() {
@@ -724,7 +724,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
 
         public void setIcon(int drawableId) {
-            marker.setIcon(getBitmapDescriptor(drawableId));
+            marker.setIcon(getBitmapDescriptor(new MarkerIconDescription(drawableId)));
         }
 
         public MapPoint getPoint() {
