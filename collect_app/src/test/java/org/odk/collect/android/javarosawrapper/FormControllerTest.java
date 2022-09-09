@@ -4,6 +4,7 @@ import com.google.common.io.Files;
 
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
+import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
@@ -92,7 +93,7 @@ public class FormControllerTest {
 
     //region indexIsInFieldList
     @Test
-    public void questionInGroupWithoutFieldListAppearance_isNotInFieldList() throws IOException {
+    public void questionInGroupWithoutFieldListAppearance_isNotInFieldList() throws IOException, XFormParser.ParseException {
         FormController formController = createFormController(GROUP);
 
         formController.stepToNextEvent(true);
@@ -102,7 +103,7 @@ public class FormControllerTest {
     }
 
     @Test
-    public void questionInGroupWithoutFieldListAppearance_isInFieldList() throws IOException {
+    public void questionInGroupWithoutFieldListAppearance_isInFieldList() throws IOException, XFormParser.ParseException {
         FormController formController = createFormController(FIELD_LIST);
 
         formController.stepToNextEvent(true);
@@ -113,7 +114,7 @@ public class FormControllerTest {
     //endregion
 
     @NotNull
-    private FormController createFormController(String xform) throws IOException {
+    private FormController createFormController(String xform) throws IOException, XFormParser.ParseException {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(xform.getBytes());
         final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
         final FormEntryController formEntryController = new FormEntryController(fem);

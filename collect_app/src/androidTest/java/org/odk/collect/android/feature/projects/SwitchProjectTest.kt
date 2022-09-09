@@ -7,6 +7,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -44,8 +45,8 @@ class SwitchProjectTest {
     }
 
     @Test
-    fun switchingProject_switchesServerFormsAndInstances() {
-        testDependencies.server.addForm("One Question", "one-question", "1", "one-question.xml")
+    fun switchingProject_switchesSettingsFormsInstancesAndEntities() {
+        testDependencies.server.addForm("One Question Entity", "one-question-entity", "1", "one-question-entity.xml")
 
         rule.startAtMainMenu()
             // Copy and fill form
@@ -74,11 +75,10 @@ class SwitchProjectTest {
             .clickOKOnDialog(MainMenuPage())
 
             // Fill form
-            .startBlankForm("One Question")
-            .swipeToEndScreen()
-            .clickSaveAndExit()
+            .startBlankForm("One Question Entity")
+            .fillOutAndSave(FormEntryPage.QuestionAndAnswer("Name", "Alice"))
             .clickEditSavedForm(1)
-            .assertText("One Question")
+            .assertText("One Question Entity")
             .pressBack(MainMenuPage())
 
             // Switch back to first project
@@ -103,5 +103,10 @@ class SwitchProjectTest {
             // Check instances
             .clickSendFinalizedForm(1)
             .assertText("Two Question")
+            .pressBack(MainMenuPage())
+
+            // Check entities
+            .openEntityBrowser()
+            .assertTextDoesNotExist("people")
     }
 }

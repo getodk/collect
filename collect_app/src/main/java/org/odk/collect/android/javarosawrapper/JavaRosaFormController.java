@@ -37,6 +37,7 @@ import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
+import org.javarosa.entities.internal.Entities;
 import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
@@ -53,6 +54,7 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.entities.Entity;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +62,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 import timber.log.Timber;
 
@@ -273,8 +276,8 @@ public class JavaRosaFormController implements FormController {
         return formEntryController.getModel().getCaptionPrompt();
     }
 
-    public boolean postProcessInstance() {
-        return formEntryController.getModel().getForm().postProcessInstance();
+    public void finalizeForm() {
+        formEntryController.finalizeFormEntry();
     }
 
     /**
@@ -1070,5 +1073,10 @@ public class JavaRosaFormController implements FormController {
 
     public IAnswerData getAnswer(TreeReference treeReference) {
         return getFormDef().getMainInstance().resolveReference(treeReference).getValue();
+    }
+
+    public Stream<Entity> getEntities() {
+        Entities extra = formEntryController.getModel().getExtras().get(Entities.class);
+        return extra.getEntities().stream().map(entity -> new Entity(entity.dataset, entity.properties));
     }
 }

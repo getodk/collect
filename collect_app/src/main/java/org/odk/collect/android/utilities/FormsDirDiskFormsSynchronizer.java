@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import android.database.SQLException;
 
+import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
@@ -209,7 +210,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         HashMap<String, String> fields;
         try {
             fields = FileUtils.getMetadataFromFormDefinition(formDefFile);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | XFormParser.ParseException e) {
             throw new IllegalArgumentException(formDefFile.getName() + " :: " + e.toString());
         }
 

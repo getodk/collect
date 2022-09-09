@@ -1158,6 +1158,10 @@
     ##############################################
     -->
     <string name="open_settings">Open Settings</string>
-    <string name="entities_title">Entities</string>
 
+    ##############################################
+    # Entities
+    ##############################################
+    <string name="entities_title">Entities</string>
+    <string name="entity_summary">%1$s: %2$s</string>
 </resources>

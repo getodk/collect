@@ -10,8 +10,11 @@ import net.danlew.android.joda.JodaTimeInitializer
 import org.javarosa.core.model.CoreModelModule
 import org.javarosa.core.services.PrototypeManager
 import org.javarosa.core.util.JavaRosaCoreModule
+import org.javarosa.entities.EntityXFormParserFactory
 import org.javarosa.model.xform.XFormsModule
 import org.javarosa.xform.parse.XFormParser
+import org.javarosa.xform.parse.XFormParserFactory
+import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.Collect
@@ -80,6 +83,9 @@ class ApplicationInitializer(
             CollectSetGeopointActionHandler.ELEMENT_NAME,
             CollectSetGeopointActionHandler()
         )
+
+        // Configure default parser factory
+        XFormUtils.setXFormParserFactory(EntityXFormParserFactory(XFormParserFactory()))
     }
 
     private fun initializeLogging() {

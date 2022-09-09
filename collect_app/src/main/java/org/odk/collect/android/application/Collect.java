@@ -43,6 +43,7 @@ import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
+import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
@@ -172,9 +173,16 @@ public class Collect extends Application implements
                 .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent.projectsRepository()))
                 .build();
 
+        // Mapbox dependencies
         objectProvider.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
         objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
         objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
+
+        // Entities dependencies
+        objectProvider.addSupplier(EntitiesRepository.class, () -> {
+            String projectId = applicationComponent.currentProjectProvider().getCurrentProject().getUuid();
+            return applicationComponent.entitiesRepositoryProvider().get(projectId);
+        });
     }
 
     @NotNull
