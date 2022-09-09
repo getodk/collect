@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MarkerDescription
+import org.odk.collect.maps.MarkerIconDescription
 
 class NoOpMapFragment : Fragment(), MapFragment {
 
@@ -45,7 +46,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
-    override fun setMarkerIcon(featureId: Int, drawableId: Int) {
+    override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint {

@@ -56,6 +56,7 @@ import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MarkerDescription
 import org.odk.collect.maps.MarkerIconCreator
+import org.odk.collect.maps.MarkerIconDescription
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -310,10 +311,10 @@ class MapboxMapFragment :
         return featureIds
     }
 
-    override fun setMarkerIcon(featureId: Int, drawableId: Int) {
+    override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {
         val feature = features[featureId]
         if (feature is MarkerFeature) {
-            feature.setIcon(drawableId)
+            feature.setIcon(markerIconDescription)
         }
     }
 

@@ -105,7 +105,7 @@ public interface MapFragment {
     List<Integer> addMarkers(List<MarkerDescription> markers);
 
     /** Sets the icon for a marker. */
-    void setMarkerIcon(int featureId, int drawableId);
+    void setMarkerIcon(int featureId, MarkerIconDescription markerIconDescription);
 
     /** Gets the location of an existing marker. */
     MapPoint getMarkerPoint(int featureId);

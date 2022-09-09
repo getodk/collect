@@ -235,7 +235,11 @@ class SelectionMapFragment(
                     selectedFeatureViewModel.setSelectedFeatureId(null)
                     map.setMarkerIcon(
                         selectedFeatureId,
-                        itemsByFeatureId[selectedFeatureId]!!.smallIcon
+                        MarkerIconDescription(
+                            itemsByFeatureId[selectedFeatureId]!!.smallIcon,
+                            itemsByFeatureId[selectedFeatureId]!!.color,
+                            itemsByFeatureId[selectedFeatureId]!!.symbol
+                        )
                     )
 
                     onBackPressedCallback.isEnabled = false
@@ -274,7 +278,7 @@ class SelectionMapFragment(
                 } else {
                     map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
                 }
-                map.setMarkerIcon(featureId, item.largeIcon)
+                map.setMarkerIcon(featureId, MarkerIconDescription(item.largeIcon, item.color, item.symbol))
                 summarySheet.setItem(item)
 
                 summarySheetBehavior.state = STATE_COLLAPSED
@@ -333,7 +337,11 @@ class SelectionMapFragment(
         if (selectedFeatureId != null && selectedFeatureId != itemId) {
             map.setMarkerIcon(
                 selectedFeatureId,
-                itemsByFeatureId[selectedFeatureId]!!.smallIcon
+                MarkerIconDescription(
+                    itemsByFeatureId[selectedFeatureId]!!.smallIcon,
+                    itemsByFeatureId[selectedFeatureId]!!.color,
+                    itemsByFeatureId[selectedFeatureId]!!.symbol
+                )
             )
         }
     }

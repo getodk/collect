@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.MarkerDescription
+import org.odk.collect.maps.MarkerIconDescription
 
 class FakeClickableMapFragment : Fragment(), MapFragment {
 
@@ -50,7 +51,7 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         }
     }
 
-    override fun setMarkerIcon(featureId: Int, drawableId: Int) {}
+    override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {}
 
     override fun getMarkerPoint(featureId: Int): MapPoint {
         return MapPoint(0.0, 0.0)

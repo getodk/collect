@@ -30,8 +30,8 @@ class MarkerFeature(
         }
     }
 
-    fun setIcon(drawableId: Int) {
-        pointAnnotation.iconImageBitmap = MarkerIconCreator.getMarkerIconBitmap(context, MarkerIconDescription(drawableId))
+    fun setIcon(markerIconDescription: MarkerIconDescription) {
+        pointAnnotation.iconImageBitmap = MarkerIconCreator.getMarkerIconBitmap(context, markerIconDescription)
         pointAnnotationManager.update(pointAnnotation)
     }
 

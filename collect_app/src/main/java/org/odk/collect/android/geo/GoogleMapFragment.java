@@ -282,10 +282,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return featureIds;
     }
 
-    @Override public void setMarkerIcon(int featureId, int drawableId) {
+    @Override public void setMarkerIcon(int featureId, MarkerIconDescription markerIconDescription) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {
-            ((MarkerFeature) feature).setIcon(drawableId);
+            ((MarkerFeature) feature).setIcon(markerIconDescription);
         }
     }
 
@@ -723,8 +723,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             marker = createMarker(map, markerDescription);
         }
 
-        public void setIcon(int drawableId) {
-            marker.setIcon(getBitmapDescriptor(new MarkerIconDescription(drawableId)));
+        public void setIcon(MarkerIconDescription markerIconDescription) {
+            marker.setIcon(getBitmapDescriptor(markerIconDescription));
         }
 
         public MapPoint getPoint() {
