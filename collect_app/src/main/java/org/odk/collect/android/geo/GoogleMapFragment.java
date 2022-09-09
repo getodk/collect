@@ -266,7 +266,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(map, markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDescription().getIconDrawableId()));
+        features.put(featureId, new MarkerFeature(map, markerDescription));
         return featureId;
     }
 
@@ -718,8 +718,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private class MarkerFeature implements MapFeature {
         private Marker marker;
 
-        MarkerFeature(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
-            marker = createMarker(map, point, draggable, iconAnchor, iconDrawableId);
+        MarkerFeature(GoogleMap map, MarkerDescription markerDescription) {
+            marker = createMarker(map, markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDescription().getIconDrawableId());
         }
 
         public void setIcon(int drawableId) {
