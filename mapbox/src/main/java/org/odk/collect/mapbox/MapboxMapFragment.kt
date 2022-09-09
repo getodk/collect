@@ -54,8 +54,8 @@ import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.MapsMarkerCache
 import org.odk.collect.maps.MarkerDescription
+import org.odk.collect.maps.MarkerIconCreator
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -203,7 +203,7 @@ class MapboxMapFragment :
 
     override fun onDestroy() {
         tileServer?.destroy()
-        MapsMarkerCache.clearCache()
+        MarkerIconCreator.clearCache()
         super.onDestroy()
     }
 
