@@ -82,7 +82,7 @@ public class Collect extends Application implements
     private static Collect singleton;
 
     private final AppState appState = new AppState();
-    private final SupplierObjectProvider mapboxDependencies = new SupplierObjectProvider();
+    private final SupplierObjectProvider objectProvider = new SupplierObjectProvider();
 
     private ExternalDataManager externalDataManager;
     private AppDependencyComponent applicationComponent;
@@ -172,9 +172,9 @@ public class Collect extends Application implements
                 .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent.projectsRepository()))
                 .build();
 
-        mapboxDependencies.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
-        mapboxDependencies.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
-        mapboxDependencies.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
+        objectProvider.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
+        objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
+        objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
     }
 
     @NotNull
@@ -288,7 +288,7 @@ public class Collect extends Application implements
 
     @NonNull
     @Override
-    public ObjectProvider getMultiClassProvider() {
-        return mapboxDependencies;
+    public ObjectProvider getObjectProvider() {
+        return objectProvider;
     }
 }

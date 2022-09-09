@@ -5,7 +5,7 @@ import java.util.function.Supplier
 /**
  * Allows a shared singleton to act as a provider for dependencies by implementing
  * [ObjectProviderHost] and returning a [ObjectProvider] from
- * [ObjectProviderHost.getMultiClassProvider].
+ * [ObjectProviderHost.getObjectProvider].
  */
 
 interface ObjectProvider {
@@ -13,7 +13,7 @@ interface ObjectProvider {
 }
 
 interface ObjectProviderHost {
-    fun getMultiClassProvider(): ObjectProvider
+    fun getObjectProvider(): ObjectProvider
 }
 
 /**
