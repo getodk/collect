@@ -48,6 +48,7 @@ import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MarkerDescription;
+import org.odk.collect.maps.MarkerIconDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.settings.SettingsProvider;
@@ -587,16 +588,16 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                         map.getController().setCenter(lastMapCenter));
     }
 
-    private Marker createMarker(MapView map, MapPoint point, MapFeature feature, @IconAnchor String iconAnchor, int iconDrawableId) {
+    private Marker createMarker(MapView map, MarkerDescription markerDescription) {
         // A Marker's position is a GeoPoint with latitude, longitude, and
         // altitude fields.  We need to store the standard deviation value
         // somewhere, so it goes in the marker's sub-description field.
         Marker marker = new Marker(map);
-        marker.setPosition(toGeoPoint(point));
-        marker.setSubDescription(Double.toString(point.sd));
-        marker.setDraggable(feature != null);
-        marker.setIcon(ContextCompat.getDrawable(map.getContext(), iconDrawableId));
-        marker.setAnchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor));
+        marker.setPosition(toGeoPoint(markerDescription.getPoint()));
+        marker.setSubDescription(Double.toString(markerDescription.getPoint().sd));
+        marker.setDraggable(markerDescription.isDraggable());
+        marker.setIcon(ContextCompat.getDrawable(map.getContext(), markerDescription.getIconDescription().getIconDrawableId()));
+        marker.setAnchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()));
         marker.setOnMarkerClickListener((clickedMarker, mapView) -> {
             int featureId = findFeature(clickedMarker);
             if (featureClickListener != null && featureId != -1) {
@@ -747,7 +748,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
         MarkerFeature(MapView map, MarkerDescription markerDescription) {
             this.map = map;
-            this.marker = createMarker(map, markerDescription.getPoint(), markerDescription.isDraggable() ? this : null, markerDescription.getIconAnchor(), markerDescription.getIconDescription().getIconDrawableId());
+            this.marker = createMarker(map, markerDescription);
         }
 
         public void setIcon(int drawableId) {
@@ -802,7 +803,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             paint.setStrokeWidth(STROKE_WIDTH);
             map.getOverlays().add(polyline);
             for (MapPoint point : points) {
-                markers.add(createMarker(map, point, this, CENTER, R.drawable.ic_map_point));
+                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             }
             update();
         }
@@ -844,7 +845,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(createMarker(map, point, this, CENTER, R.drawable.ic_map_point));
+            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             update();
         }
 

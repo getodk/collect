@@ -57,6 +57,7 @@ import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MarkerDescription;
+import org.odk.collect.maps.MarkerIconDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.settings.SettingsProvider;
@@ -626,7 +627,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private Marker createMarker(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
+    private Marker createMarker(GoogleMap map, MarkerDescription markerDescription) {
         if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
         }
@@ -634,11 +635,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // fields.  We need to store the point's altitude and standard
         // deviation values somewhere, so they go in the marker's snippet.
         return map.addMarker(new MarkerOptions()
-            .position(toLatLng(point))
-            .snippet(point.alt + ";" + point.sd)
-            .draggable(draggable)
-            .icon(getBitmapDescriptor(iconDrawableId))
-            .anchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor))  // center the icon on the position
+            .position(toLatLng(markerDescription.getPoint()))
+            .snippet(markerDescription.getPoint().alt + ";" + markerDescription.getPoint().sd)
+            .draggable(markerDescription.isDraggable())
+            .icon(getBitmapDescriptor(markerDescription.getIconDescription().getIconDrawableId()))
+            .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
         );
     }
 
@@ -719,7 +720,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private Marker marker;
 
         MarkerFeature(GoogleMap map, MarkerDescription markerDescription) {
-            marker = createMarker(map, markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDescription().getIconDrawableId());
+            marker = createMarker(map, markerDescription);
         }
 
         public void setIcon(int drawableId) {
@@ -762,7 +763,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 return;
             }
             for (MapPoint point : points) {
-                markers.add(createMarker(map, point, true, CENTER, R.drawable.ic_map_point));
+                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             }
             update();
         }
@@ -818,7 +819,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(map, point, true, CENTER, R.drawable.ic_map_point));
+            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             update();
         }
 
