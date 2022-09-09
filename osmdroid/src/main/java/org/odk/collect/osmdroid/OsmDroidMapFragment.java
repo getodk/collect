@@ -48,6 +48,7 @@ import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
 import org.odk.collect.maps.MarkerDescription;
+import org.odk.collect.maps.MarkerIconCreator;
 import org.odk.collect.maps.MarkerIconDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
@@ -176,6 +177,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public void onDestroy() {
         clearFeatures();  // prevent a memory leak due to refs held by markers
+        MarkerIconCreator.clearCache();
         super.onDestroy();
     }
 
@@ -596,7 +598,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         marker.setPosition(toGeoPoint(markerDescription.getPoint()));
         marker.setSubDescription(Double.toString(markerDescription.getPoint().sd));
         marker.setDraggable(markerDescription.isDraggable());
-        marker.setIcon(ContextCompat.getDrawable(map.getContext(), markerDescription.getIconDescription().getIconDrawableId()));
+        marker.setIcon(MarkerIconCreator.getMarkerIconDrawable(map.getContext(), markerDescription.getIconDescription()));
         marker.setAnchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()));
         marker.setOnMarkerClickListener((clickedMarker, mapView) -> {
             int featureId = findFeature(clickedMarker);
@@ -752,7 +754,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
 
         public void setIcon(int drawableId) {
-            marker.setIcon(ContextCompat.getDrawable(map.getContext(), drawableId));
+            marker.setIcon(MarkerIconCreator.getMarkerIconDrawable(map.getContext(), new MarkerIconDescription(drawableId)));
         }
 
         public MapPoint getPoint() {
