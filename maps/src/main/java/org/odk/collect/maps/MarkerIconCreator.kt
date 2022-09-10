@@ -26,19 +26,14 @@ object MarkerIconCreator {
 
     @JvmStatic
     fun getMarkerIconBitmap(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
-        val (drawableId, color, symbol) = markerIconDescription
-
+        val drawableId = markerIconDescription.iconDrawableId
+        val color = markerIconDescription.getColor()
+        val symbol = markerIconDescription.getSymbol()
         val bitmapId = markerIconDescription.hashCode()
 
         if (cache[bitmapId] == null) {
             ContextCompat.getDrawable(context, drawableId)?.also { drawable ->
-                color?.let {
-                    try {
-                        drawable.setTint(Color.parseColor(it))
-                    } catch (e: Throwable) {
-                        // ignore
-                    }
-                }
+                color?.let { drawable.setTint(it) }
 
                 drawable.toBitmap().also { bitmap ->
                     symbol?.let {
