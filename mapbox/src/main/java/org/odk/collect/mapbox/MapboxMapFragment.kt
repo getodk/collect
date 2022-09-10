@@ -54,12 +54,12 @@ import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.MarkerDescription
-import org.odk.collect.maps.MarkerIconCreator
-import org.odk.collect.maps.MarkerIconDescription
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconCreator
+import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.injection.ObjectProviderHost
 import timber.log.Timber

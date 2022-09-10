@@ -6,6 +6,7 @@ import org.hamcrest.Matchers.nullValue
 import org.hamcrest.core.Is.`is`
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 @RunWith(AndroidJUnit4::class)
 class MarkerIconDescriptionTest {

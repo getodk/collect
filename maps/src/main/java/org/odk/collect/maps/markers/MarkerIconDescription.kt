@@ -1,4 +1,4 @@
-package org.odk.collect.maps
+package org.odk.collect.maps.markers
 
 import android.graphics.Color
 import org.odk.collect.shared.strings.StringUtils

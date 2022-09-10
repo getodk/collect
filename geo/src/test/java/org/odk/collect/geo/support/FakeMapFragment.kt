@@ -6,8 +6,8 @@ import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.MarkerDescription
-import org.odk.collect.maps.MarkerIconDescription
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 class FakeMapFragment : Fragment(), MapFragment {
 

@@ -5,8 +5,8 @@ import android.os.Looper
 import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.MarkerDescription
-import org.odk.collect.maps.MarkerIconDescription
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 class FakeClickableMapFragment : Fragment(), MapFragment {
 

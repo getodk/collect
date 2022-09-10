@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.LruCache
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import org.odk.collect.maps.MarkerIconCreator
-import org.odk.collect.maps.MarkerIconDescription
+import org.odk.collect.maps.markers.MarkerIconCreator
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 object BitmapDescriptorCache {
     /**

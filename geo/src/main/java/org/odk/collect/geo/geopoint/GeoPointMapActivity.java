@@ -42,8 +42,8 @@ import org.odk.collect.geo.ReferenceLayerSettingsNavigator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
-import org.odk.collect.maps.MarkerDescription;
-import org.odk.collect.maps.MarkerIconDescription;
+import org.odk.collect.maps.markers.MarkerDescription;
+import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.text.DecimalFormat;

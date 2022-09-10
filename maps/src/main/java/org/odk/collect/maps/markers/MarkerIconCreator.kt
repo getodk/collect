@@ -1,4 +1,4 @@
-package org.odk.collect.maps
+package org.odk.collect.maps.markers
 
 import android.content.Context
 import android.graphics.Bitmap
