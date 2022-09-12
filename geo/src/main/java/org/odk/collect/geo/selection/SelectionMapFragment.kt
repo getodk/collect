@@ -172,7 +172,7 @@ class SelectionMapFragment(
             map.zoomToBoundingBox(points, 0.8, false)
         }
 
-        binding.layerMenu.setOnClickListener {
+        binding.layerMenu.setMultiClickSafeOnClickListener {
             referenceLayerSettingsNavigator.navigateToReferenceLayerSettings(requireActivity())
         }
 
