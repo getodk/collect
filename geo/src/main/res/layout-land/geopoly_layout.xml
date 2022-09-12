@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/location_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:paddingLeft="5dip"
+        android:paddingTop="5dip"
+        android:paddingRight="5dip"
+        android:paddingBottom="5dip"
+        android:text="@string/location_status_searching"
+        android:textColor="?colorOnPrimary"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_container"
+        android:name="org.odk.collect.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintTop_toBottomOf="@id/location_status" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/record_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:drawableEnd="@drawable/ic_distance_wrapped"
+        android:padding="15dp"
+        android:paddingBottom="20dp"
+        android:text="@string/record_geopoint"
+        android:textStyle="bold"
+        android:tint="@color/color_on_surface_tint_list"
+        android:tintMode="src_in"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location_status"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/zoom"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:contentDescription="@string/show_my_location"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/location_status"
+        app:srcCompat="@drawable/ic_my_location" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/layers"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:contentDescription="@string/layer_data_file"
+        app:fabSize="mini"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/zoom"
+        app:srcCompat="@drawable/ic_layers" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/play"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:contentDescription="@string/input_method"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/pause"
+        app:srcCompat="@drawable/ic_add_location" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pause"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:contentDescription="@string/pause_location_recording"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/backspace"
+        app:srcCompat="@drawable/ic_pause_36"
+        tools:visibility="visible" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/backspace"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:contentDescription="@string/remove_last_point"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/clear"
+        app:srcCompat="@drawable/ic_backspace" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/clear"
+        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:contentDescription="@string/clear"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/save"
+        app:srcCompat="@drawable/ic_delete" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/save"
+        style="@style/Widget.Material3.FloatingActionButton.Primary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:contentDescription="@string/save"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_save" />
+
+    <TextView
+        android:id="@+id/collection_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#BF000000"
+        android:paddingLeft="5dip"
+        android:paddingTop="5dip"
+        android:paddingRight="5dip"
+        android:paddingBottom="5dip"
+        android:text=""
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
