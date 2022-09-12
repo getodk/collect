@@ -4,6 +4,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.mapbox.mapboxsdk.maps.Style;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.GeoPolyActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 
@@ -122,6 +123,11 @@ public final class GeneralKeys {
     public static final String KEY_SMAP_PASSWORD_POLICY = "pw_policy";
     public static final String KEY_SMAP_CURRENT_ORGANISATION = "smap_current_organisation";
     public static final String KEY_SMAP_ORGANISATIONS = "smap_organisations";
+
+    // GeoPoly recording settings
+    public static final String KEY_SMAP_INPUT_METHOD = "smap_input_method";
+    public static final String KEY_SMAP_IM_RI = "smap_im_ri";
+    public static final String KEY_SMAP_IM_ACC = "smap_im_acc";
     // end smap
 
     // experimental
@@ -200,6 +206,10 @@ public final class GeneralKeys {
         hashMap.put(KEY_SMAP_REGISTRATION_USER, "");
         hashMap.put(KEY_SMAP_LAST_LOGIN, "0");
         hashMap.put(KEY_SMAP_PASSWORD_POLICY, "-1");
+
+        hashMap.put(KEY_SMAP_INPUT_METHOD, "not set");
+        hashMap.put(KEY_SMAP_IM_RI, GeoPolyActivity.DEFAULT_INTERVAL_INDEX);
+        hashMap.put(KEY_SMAP_IM_ACC, GeoPolyActivity.DEFAULT_ACCURACY_THRESHOLD_INDEX);
         // end smap
 
         // map_preferences.xml

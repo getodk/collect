@@ -39,6 +39,8 @@ import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.GeneralKeys;
+import org.odk.collect.android.preferences.GeneralSharedPreferences;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.GeoUtils;
@@ -68,6 +70,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public static final String RECORDING_ENABLED_KEY = "recording_enabled";
     public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
     public static final String INTERVAL_INDEX_KEY = "interval_index";
+    public static final String INPUT_MODE_KEY = "input_mode";
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
     public static final String INTENT_QUESTION_PATH_KEY = "question_path";
 
@@ -103,13 +106,14 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     private static final int[] INTERVAL_OPTIONS = {
         1, 5, 10, 20, 30, 60, 300, 600, 1200, 1800
     };
-    private static final int DEFAULT_INTERVAL_INDEX = 3; // default is 20 seconds
+    public static final int DEFAULT_INTERVAL_INDEX = 3; // default is 20 seconds
 
     private static final int[] ACCURACY_THRESHOLD_OPTIONS = {
         0, 3, 5, 10, 15, 20
     };
-    private static final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
+    public static final int DEFAULT_ACCURACY_THRESHOLD_INDEX = 3; // default is 10 meters
 
+    private boolean inputModeSetOnPhone;    // True if the mode was not set on the server
     private boolean inputActive; // whether we are ready for the user to add points
     private boolean recordingEnabled; // whether points are taken from GPS readings (if not, placed by tapping)
     private boolean recordingAutomatic; // whether GPS readings are taken at regular intervals (if not, only when user-directed)
@@ -138,9 +142,23 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             recordingEnabled = savedInstanceState.getBoolean(RECORDING_ENABLED_KEY, false);
             recordingAutomatic = savedInstanceState.getBoolean(RECORDING_AUTOMATIC_KEY, false);
             intervalIndex = savedInstanceState.getInt(INTERVAL_INDEX_KEY, DEFAULT_INTERVAL_INDEX);
+            inputModeSetOnPhone = savedInstanceState.getBoolean(INPUT_MODE_KEY, true);
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
             questionPath = savedInstanceState.getString(INTENT_QUESTION_PATH_KEY, null);
+        } else {
+            String inputMethod = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_INPUT_METHOD);
+            if(inputMethod != null && !inputMethod.equals("not set")) {
+                inputModeSetOnPhone = false;
+                recordingAutomatic = inputMethod.equals("auto");
+                recordingEnabled = inputMethod.equals("auto") || inputMethod.equals("man");
+                if(recordingAutomatic) {
+                    intervalIndex= (Integer) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_IM_RI);
+                    accuracyThresholdIndex = (Integer) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_IM_ACC);
+                }
+            } else {
+                inputModeSetOnPhone = true;
+            }
         }
 
         intentReadOnly = getIntent().getBooleanExtra(READ_ONLY, false);
@@ -174,6 +192,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled);
         state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic);
         state.putInt(INTERVAL_INDEX_KEY, intervalIndex);
+        state.putBoolean(INPUT_MODE_KEY, inputModeSetOnPhone);
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
         state.putString(INTENT_QUESTION_PATH_KEY, questionPath);
     }
@@ -226,7 +245,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
-            if (map.getPolyPoints(featureId).isEmpty()) {
+            if (map.getPolyPoints(featureId).isEmpty() && inputModeSetOnPhone) {
                 DialogUtils.showIfNotShowing(SettingsDialogFragment.class, getSupportFragmentManager());
             } else {
                 startInput();

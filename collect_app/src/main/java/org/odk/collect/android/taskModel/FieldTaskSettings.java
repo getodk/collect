@@ -42,4 +42,7 @@ public class FieldTaskSettings {
     public int ft_pw_policy;
     public String ft_backward_navigation;
     public String ft_navigation;
+    public String ft_input_method;
+    public int ft_im_ri;
+    public int ft_im_acc;
 }

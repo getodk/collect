@@ -877,6 +877,23 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
 
             /*
+             * Override the GeoPoly Input Method setting if this is set from the server
+             */
+            if(tr.settings.ft_input_method != null && (tr.settings.ft_input_method.equals("pt")
+                            || tr.settings.ft_input_method.equals("man")
+                            || tr.settings.ft_input_method.equals("auto"))) {
+
+                    // Set the preference value using the server value and disable from local editing
+                    editor.putString(GeneralKeys.KEY_SMAP_INPUT_METHOD, tr.settings.ft_input_method);
+                    if(tr.settings.ft_input_method.equals("auto")) {
+                        editor.putInt(GeneralKeys.KEY_SMAP_IM_RI, tr.settings.ft_im_ri);
+                        editor.putInt(GeneralKeys.KEY_SMAP_IM_ACC, tr.settings.ft_im_acc);
+                    }
+            } else {
+                editor.putString(GeneralKeys.KEY_SMAP_INPUT_METHOD, "not set");
+            }
+
+            /*
              * Override the delete after send setting if this is set from the server
              */
             if(tr.settings.ft_delete != null) {
