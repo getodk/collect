@@ -5,13 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
-import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
@@ -54,8 +51,6 @@ class FormUriActivity : ComponentActivity() {
 
             if (projectId == currentProjectProvider.getCurrentProject().uuid) {
                 if (!formFillingAlreadyStarted) {
-                    logAnalytics(uriProjectId)
-
                     formFillingAlreadyStarted = true
                     openForm.launch(
                         Intent(this, FormEntryActivity::class.java).also {
@@ -80,18 +75,6 @@ class FormUriActivity : ComponentActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putBoolean(FORM_FILLING_ALREADY_STARTED, formFillingAlreadyStarted)
         super.onSaveInstanceState(outState)
-    }
-
-    private fun logAnalytics(uriProjectId: String?) {
-        if (uriProjectId != null) {
-            Analytics.log(AnalyticsEvents.FORM_ACTION_WITH_PROJECT_ID)
-        } else {
-            Analytics.log(AnalyticsEvents.FORM_ACTION_WITHOUT_PROJECT_ID)
-        }
-
-        if (intent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE) != null) {
-            Analytics.log(AnalyticsEvents.FORM_ACTION_WITH_FORM_MODE_EXTRA)
-        }
     }
 
     companion object {
