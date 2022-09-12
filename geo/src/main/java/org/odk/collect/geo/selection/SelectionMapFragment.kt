@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
+import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.R
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator
@@ -163,11 +164,11 @@ class SelectionMapFragment(
     private fun initMap(newMapFragment: MapFragment, binding: SelectionMapLayoutBinding) {
         map = newMapFragment
 
-        binding.zoomToLocation.setOnClickListener {
+        binding.zoomToLocation.setMultiClickSafeOnClickListener {
             map.zoomToPoint(map.gpsLocation, true)
         }
 
-        binding.zoomToBounds.setOnClickListener {
+        binding.zoomToBounds.setMultiClickSafeOnClickListener {
             map.zoomToBoundingBox(points, 0.8, false)
         }
 
@@ -176,7 +177,7 @@ class SelectionMapFragment(
         }
 
         if (showNewItemButton) {
-            binding.newItem.setOnClickListener {
+            binding.newItem.setMultiClickSafeOnClickListener {
                 parentFragmentManager.setFragmentResult(
                     REQUEST_SELECT_ITEM,
                     Bundle().also {
