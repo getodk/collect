@@ -132,6 +132,8 @@
     <string name="smap_checking_file">Checking %1$s.\n\nForm %2$s of %3$s form(s).</string>
     <string name="smap_storage_runtime_permission_denied_desc">Without these permissions FieldTask can\'t access your forms or save answers. Reopen the app when you are ready to grant them.</string>
     <string name="smap_background_location_permission_denied">If location recording is not allowed all the time FieldTask will not be able to alert you if a location dependent task is nearby.</string>
+    <string name="smap_set_marker">Set Marker</string>
+    <string name="smap_apply">Apply</string>
     <string-array name="smap_kontrolid_servers">
         <item>Kontrolid Org Server</item>
         <item>Kontrolid Com Server</item>

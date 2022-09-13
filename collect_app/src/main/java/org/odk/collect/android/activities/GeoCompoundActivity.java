@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
@@ -40,6 +41,7 @@ import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.geo.CompoundDialogFragment;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
@@ -66,7 +68,8 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
+public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback,
+        CompoundDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
@@ -385,6 +388,19 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     }
 
     @Override
+    public void updateMarker(int id) {
+        String marker;
+        if(id == R.id.gc_marker_pit) {
+            marker = "pit";
+        } else if(id == R.id.gc_marker_fault) {
+            marker = "fault";
+        } else {
+            marker = "none";
+        }
+
+    }
+
+    @Override
     public void updateRecordingMode(int id) {
         recordingEnabled = id != R.id.placement_mode;
         recordingAutomatic = id == R.id.automatic_mode;
@@ -419,27 +435,18 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         this.accuracyThresholdIndex = accuracyThresholdIndex;
     }
 
-
     /**
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int featureId) {
         Timber.i("Feature: %s", featureId);
-        /*
-        summarySheet.setState(BottomSheetBehavior.STATE_HIDDEN);
+        DialogFragment df = new CompoundDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("pit_name", "The Pit");
+        args.putString("fault_name", "The fault");
+        df.setArguments(args);
+        df.show(getSupportFragmentManager(), CompoundDialogFragment.class.getName());
 
-        if (!isSummaryForGivenSubmissionDisplayed(featureId)) {
-            removeEnlargedMarkerIfExist(featureId);
-
-            FormMapViewModel.MappableFormInstance mappableFormInstance = instancesByFeatureId.get(featureId);
-            if (mappableFormInstance != null) {
-                map.zoomToPoint(new MapPoint(mappableFormInstance.getLatitude(), mappableFormInstance.getLongitude()), map.getZoom(), true);
-                updateSubmissionMarker(featureId, mappableFormInstance.getStatus(), true);
-                setUpSummarySheetDetails(mappableFormInstance);
-            }
-            viewModel.setSelectedSubmissionId(featureId);
-        }
-        */
     }
 
     private void onClick(MapPoint point) {
