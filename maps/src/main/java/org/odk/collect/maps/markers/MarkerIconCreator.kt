@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.BitmapDrawable
 import android.util.LruCache
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toBitmap
 
 object MarkerIconCreator {
@@ -33,13 +34,18 @@ object MarkerIconCreator {
 
         if (cache[bitmapId] == null) {
             ContextCompat.getDrawable(context, drawableId)?.also { drawable ->
-                color?.let { drawable.setTint(it) }
+                var isBackgroundDark = true
+
+                color?.let {
+                    drawable.setTint(it)
+                    isBackgroundDark = ColorUtils.calculateLuminance(color) < 0.5
+                }
 
                 drawable.toBitmap().also { bitmap ->
                     symbol?.let {
                         val paint = Paint().also {
                             it.style = Paint.Style.FILL
-                            it.color = Color.WHITE
+                            it.color = if (isBackgroundDark) Color.WHITE else Color.BLACK
                             it.textSize = (bitmap.width / 3).toFloat()
                             it.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
                             it.textAlign = Paint.Align.CENTER
