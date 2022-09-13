@@ -46,7 +46,7 @@ object MarkerIconCreator {
                         val paint = Paint().also {
                             it.style = Paint.Style.FILL
                             it.color = if (isBackgroundDark) Color.WHITE else Color.BLACK
-                            it.textSize = (bitmap.width / 3).toFloat()
+                            it.textSize = (bitmap.width / 2.3).toFloat()
                             it.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
                             it.textAlign = Paint.Align.CENTER
                         }

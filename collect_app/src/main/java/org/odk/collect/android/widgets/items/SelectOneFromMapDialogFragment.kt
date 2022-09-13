@@ -199,8 +199,8 @@ internal class SelectChoicesMapData(
                     index.toLong(),
                     latitude,
                     longitude,
-                    R.drawable.ic_map_marker_small,
-                    R.drawable.ic_map_marker_big,
+                    if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
+                    if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
                     prompt.getSelectChoiceText(selectChoice),
                     properties,
                     MappableSelectItem.IconifiedText(
