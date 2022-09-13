@@ -29,12 +29,13 @@ class PermissionsProviderTest {
         }
     }
     private val permissionsDialogCreator = mock<PermissionsDialogCreator>()
+    private val locationAccessibilityChecker = mock<LocationAccessibilityChecker>()
 
     private lateinit var permissionsProvider: PermissionsProvider
 
     @Before
     fun setup() {
-        permissionsProvider = PermissionsProvider(permissionsChecker, permissionsApi, permissionsDialogCreator)
+        permissionsProvider = PermissionsProvider(permissionsChecker, permissionsApi, permissionsDialogCreator, locationAccessibilityChecker)
     }
 
     @Test

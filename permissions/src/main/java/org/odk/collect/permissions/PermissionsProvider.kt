@@ -3,10 +3,7 @@ package org.odk.collect.permissions
 import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
-import android.content.Context
-import android.location.LocationManager
 import android.net.Uri
-import androidx.core.location.LocationManagerCompat
 
 /**
  * PermissionsProvider allows all permission related messages and checks to be encapsulated in one
@@ -16,7 +13,8 @@ import androidx.core.location.LocationManagerCompat
 open class PermissionsProvider internal constructor(
     private val permissionsChecker: PermissionsChecker,
     private val requestPermissionsApi: RequestPermissionsAPI,
-    private val permissionsDialogCreator: PermissionsDialogCreator
+    private val permissionsDialogCreator: PermissionsDialogCreator,
+    private val locationAccessibilityChecker: LocationAccessibilityChecker
 ) {
 
     /**
@@ -25,7 +23,8 @@ open class PermissionsProvider internal constructor(
     constructor(permissionsChecker: PermissionsChecker) : this(
         permissionsChecker,
         DexterRequestPermissionsAPI,
-        PermissionsDialogCreatorImpl
+        PermissionsDialogCreatorImpl,
+        LocationAccessibilityCheckerImpl
     )
 
     val isCameraPermissionGranted: Boolean
@@ -83,7 +82,7 @@ open class PermissionsProvider internal constructor(
             activity,
             object : PermissionListener {
                 override fun granted() {
-                    if (isLocationEnabled(activity)) {
+                    if (locationAccessibilityChecker.isLocationEnabled(activity)) {
                         action.granted()
                     } else {
                         permissionsDialogCreator.showEnableGPSDialog(activity, action)
@@ -254,10 +253,5 @@ open class PermissionsProvider internal constructor(
         } catch (e: Error) {
             listener.denied()
         }
-    }
-
-    private fun isLocationEnabled(activity: Activity): Boolean {
-        val locationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return LocationManagerCompat.isLocationEnabled(locationManager)
     }
 }
