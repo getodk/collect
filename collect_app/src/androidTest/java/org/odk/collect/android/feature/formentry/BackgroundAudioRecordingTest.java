@@ -176,7 +176,7 @@ public class BackgroundAudioRecordingTest {
                 .assertText(R.string.background_audio_permission_explanation)
                 .clickOK(new FormEntryPage("One Question"));
 
-        permissionsProvider.deny();
+        permissionsProvider.additionalExplanationClosed();
         new MainMenuPage().assertOnPage();
     }
 
@@ -224,12 +224,8 @@ public class BackgroundAudioRecordingTest {
             controllable = true;
         }
 
-        public void grant() {
-            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> action.granted());
-        }
-
-        public void deny() {
-            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> action.denied());
+        public void additionalExplanationClosed() {
+            InstrumentationRegistry.getInstrumentation().runOnMainSync(() -> action.additionalExplanationClosed());
         }
     }
 }
