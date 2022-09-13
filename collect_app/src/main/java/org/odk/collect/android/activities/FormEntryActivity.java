@@ -2221,11 +2221,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         formController.getAuditEventLogger().setEditing(true);
                     } else {
                         formControllerAvailable(formController);
-                            if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                                Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
-                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
-                                startActivity(intent);
-                            }
+                        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                            Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
+                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                            startActivity(intent);
+                        }
 
                         finish();
                     }
