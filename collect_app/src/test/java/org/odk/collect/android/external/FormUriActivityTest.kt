@@ -25,6 +25,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
@@ -105,6 +106,19 @@ class FormUriActivityTest {
         launcherRule.launch<FormUriActivity>(getIntent(firstProject.uuid))
 
         Intents.intended(hasComponent(FormEntryActivity::class.java.name))
+        Intents.intended(hasData(FormsContract.getUri(firstProject.uuid, 1)))
+        Intents.intended(hasExtra("KEY_1", "Text"))
+    }
+
+    @Test
+    fun `Form filling should not be started again after recreating the activity or getting back to it`() {
+        saveTestProjects()
+
+        val scenario = launcherRule.launch<FormUriActivity>(getIntent(firstProject.uuid))
+
+        scenario.recreate()
+
+        Intents.intended(hasComponent(FormEntryActivity::class.java.name), Intents.times(1))
         Intents.intended(hasData(FormsContract.getUri(firstProject.uuid, 1)))
         Intents.intended(hasExtra("KEY_1", "Text"))
     }
