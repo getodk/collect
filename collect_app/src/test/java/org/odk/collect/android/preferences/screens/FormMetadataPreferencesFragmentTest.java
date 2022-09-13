@@ -114,7 +114,7 @@ public class FormMetadataPreferencesFragmentTest {
         }
 
         @Override
-        public void requestReadPhoneStatePermission(Activity activity, boolean displayPermissionDeniedDialog, @NonNull PermissionListener action) {
+        public void requestReadPhoneStatePermission(Activity activity, @NonNull PermissionListener action) {
             timesRequested++;
             this.lastAction = action;
         }
