@@ -28,12 +28,13 @@ class PermissionsProviderTest {
             (it.getArgument(1) as PermissionListener).granted()
         }
     }
+    private val permissionsDialogCreator = mock<PermissionsDialogCreator>()
 
     private lateinit var permissionsProvider: PermissionsProvider
 
     @Before
     fun setup() {
-        permissionsProvider = PermissionsProvider(permissionsChecker, permissionsApi)
+        permissionsProvider = PermissionsProvider(permissionsChecker, permissionsApi, permissionsDialogCreator)
     }
 
     @Test

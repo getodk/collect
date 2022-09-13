@@ -4,13 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.location.LocationManager
 import android.net.Uri
-import android.provider.Settings
 import androidx.core.location.LocationManagerCompat
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * PermissionsProvider allows all permission related messages and checks to be encapsulated in one
@@ -19,7 +15,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
  */
 open class PermissionsProvider internal constructor(
     private val permissionsChecker: PermissionsChecker,
-    private val requestPermissionsApi: RequestPermissionsAPI
+    private val requestPermissionsApi: RequestPermissionsAPI,
+    private val permissionsDialogCreator: PermissionsDialogCreator
 ) {
 
     /**
@@ -27,7 +24,8 @@ open class PermissionsProvider internal constructor(
      */
     constructor(permissionsChecker: PermissionsChecker) : this(
         permissionsChecker,
-        DexterRequestPermissionsAPI
+        DexterRequestPermissionsAPI,
+        PermissionsDialogCreatorImpl
     )
 
     val isCameraPermissionGranted: Boolean
@@ -62,7 +60,7 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
-                    showAdditionalExplanation(
+                    permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.camera_runtime_permission_denied_title,
                         R.string.camera_runtime_permission_denied_desc,
@@ -88,29 +86,12 @@ open class PermissionsProvider internal constructor(
                     if (isLocationEnabled(activity)) {
                         action.granted()
                     } else {
-                        MaterialAlertDialogBuilder(activity)
-                            .setMessage(activity.getString(R.string.gps_enable_message))
-                            .setCancelable(false)
-                            .setPositiveButton(
-                                activity.getString(R.string.enable_gps)
-                            ) { _: DialogInterface?, _: Int ->
-                                activity.startActivityForResult(
-                                    Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0
-                                )
-                            }
-                            .setNegativeButton(
-                                activity.getString(R.string.cancel)
-                            ) { dialog: DialogInterface, _: Int ->
-                                action.denied()
-                                dialog.cancel()
-                            }
-                            .create()
-                            .show()
+                        permissionsDialogCreator.showEnableGPSDialog(activity, action)
                     }
                 }
 
                 override fun denied() {
-                    showAdditionalExplanation(
+                    permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.location_runtime_permissions_denied_title,
                         R.string.location_runtime_permissions_denied_desc,
@@ -132,7 +113,7 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
-                    showAdditionalExplanation(
+                    permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.record_audio_runtime_permission_denied_title,
                         R.string.record_audio_runtime_permission_denied_desc,
@@ -154,7 +135,7 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
-                    showAdditionalExplanation(
+                    permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.camera_runtime_permission_denied_title,
                         R.string.camera_runtime_permission_denied_desc,
@@ -176,7 +157,7 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
-                    showAdditionalExplanation(
+                    permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.get_accounts_runtime_permission_denied_title,
                         R.string.get_accounts_runtime_permission_denied_desc,
@@ -203,7 +184,7 @@ open class PermissionsProvider internal constructor(
 
                 override fun denied() {
                     if (displayPermissionDeniedDialog) {
-                        showAdditionalExplanation(
+                        permissionsDialogCreator.showAdditionalExplanation(
                             activity,
                             R.string.read_phone_state_runtime_permission_denied_title,
                             R.string.read_phone_state_runtime_permission_denied_desc,
@@ -241,33 +222,6 @@ open class PermissionsProvider internal constructor(
         requestPermissionsApi.requestPermissions(activity, safePermissionsListener, *permissions)
     }
 
-    protected open fun showAdditionalExplanation(
-        activity: Activity,
-        title: Int,
-        message: Int,
-        drawable: Int,
-        action: PermissionListener
-    ) {
-        action.denied()
-
-        MaterialAlertDialogBuilder(activity)
-            .setIcon(drawable)
-            .setTitle(title)
-            .setMessage(message)
-            .setCancelable(false)
-            .setPositiveButton(R.string.ok) { _, _ ->
-                action.additionalExplanationClosed()
-            }
-            .setNeutralButton(R.string.open_settings) { _, _ ->
-                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", activity.packageName, null)
-                    activity.startActivity(this)
-                }
-            }
-            .create()
-            .show()
-    }
-
     fun requestReadUriPermission(
         activity: Activity,
         uri: Uri,
@@ -286,7 +240,7 @@ open class PermissionsProvider internal constructor(
                     }
 
                     override fun denied() {
-                        showAdditionalExplanation(
+                        permissionsDialogCreator.showAdditionalExplanation(
                             activity, R.string.storage_runtime_permission_denied_title,
                             R.string.storage_runtime_permission_denied_desc, R.drawable.sd,
                             listener
