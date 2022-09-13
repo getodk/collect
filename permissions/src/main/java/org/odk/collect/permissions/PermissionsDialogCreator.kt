@@ -26,7 +26,6 @@ internal object PermissionsDialogCreatorImpl : PermissionsDialogCreator {
     override fun showEnableGPSDialog(
         activity: Activity,
         action: PermissionListener
-
     ) {
         MaterialAlertDialogBuilder(activity)
             .setMessage(activity.getString(R.string.gps_enable_message))
@@ -55,8 +54,6 @@ internal object PermissionsDialogCreatorImpl : PermissionsDialogCreator {
         drawable: Int,
         action: PermissionListener
     ) {
-        action.denied()
-
         MaterialAlertDialogBuilder(activity)
             .setIcon(drawable)
             .setTitle(title)

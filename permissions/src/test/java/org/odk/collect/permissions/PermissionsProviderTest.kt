@@ -8,12 +8,11 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 
 class PermissionsProviderTest {
@@ -23,11 +22,7 @@ class PermissionsProviderTest {
     private var uri = mock<Uri>()
     private var contentResolver = mock<ContentResolver>()
     private var permissionListener = mock<PermissionListener>()
-    private val permissionsApi = mock<RequestPermissionsAPI> {
-        on { requestPermissions(any(), any(), any()) } doAnswer {
-            (it.getArgument(1) as PermissionListener).granted()
-        }
-    }
+    private val permissionsApi = TestRequestPermissionsAPI()
     private val permissionsDialogCreator = mock<PermissionsDialogCreator>()
     private val locationAccessibilityChecker = mock<LocationAccessibilityChecker>()
 
@@ -39,102 +34,285 @@ class PermissionsProviderTest {
     }
 
     @Test
-    fun `When camera permission granted should isCameraPermissionGranted() return true`() {
+    fun `When camera permission granted should isCameraPermissionGranted return true`() {
         whenever(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)).thenReturn(true)
 
         assertThat(permissionsProvider.isCameraPermissionGranted, `is`(true))
     }
 
     @Test
-    fun `When camera permission not granted should isCameraPermissionGranted() return false`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA))
-            .thenReturn(false)
+    fun `When camera permission is not granted should isCameraPermissionGranted return false`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)).thenReturn(false)
 
         assertThat(permissionsProvider.isCameraPermissionGranted, `is`(false))
     }
 
     @Test
-    fun `When location permissions granted should areLocationPermissionsGranted() return true`() {
-        whenever(
-            permissionsChecker.isPermissionGranted(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        ).thenReturn(true)
+    fun `When camera permission is granted should requestCameraPermission call PermissionListener#granted`() {
+        permissionsApi.setGrantedPermission(Manifest.permission.CAMERA)
+
+        permissionsProvider.requestCameraPermission(activity, permissionListener)
+
+        verify(permissionListener).granted()
+        verifyNoMoreInteractions(permissionListener)
+        verifyNoInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When camera permission is not granted should requestCameraPermission call PermissionListener#denied`() {
+        permissionsProvider.requestCameraPermission(activity, permissionListener)
+
+        verify(permissionListener).denied()
+        verifyNoMoreInteractions(permissionListener)
+    }
+
+    @Test
+    fun `When camera permission is not granted should requestCameraPermission call PermissionsDialogCreator#showAdditionalExplanation`() {
+        permissionsProvider.requestCameraPermission(activity, permissionListener)
+
+        verify(permissionsDialogCreator).showAdditionalExplanation(
+            activity,
+            R.string.camera_runtime_permission_denied_title,
+            R.string.camera_runtime_permission_denied_desc,
+            R.drawable.ic_photo_camera,
+            permissionListener
+        )
+        verifyNoMoreInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When location permission granted should areLocationPermissionsGranted return true`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)).thenReturn(true)
 
         assertThat(permissionsProvider.areLocationPermissionsGranted(), `is`(true))
     }
 
     @Test
-    fun `When location permissions not granted should areLocationPermissionsGranted() return false`() {
-        whenever(
-            permissionsChecker.isPermissionGranted(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        ).thenReturn(false)
+    fun `When location permission is not granted should areLocationPermissionsGranted return false`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)).thenReturn(false)
 
         assertThat(permissionsProvider.areLocationPermissionsGranted(), `is`(false))
     }
 
     @Test
-    fun `When camera and audio permissions granted should areCameraAndRecordAudioPermissionsGranted() return true`() {
-        whenever(
-            permissionsChecker.isPermissionGranted(
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
-            )
-        ).thenReturn(true)
+    fun `When location permission is granted and location is enabled in settings should requestEnabledLocationPermissions call PermissionListener#granted`() {
+        whenever(locationAccessibilityChecker.isLocationEnabled(activity)).thenReturn(true)
+        permissionsApi.setGrantedPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+
+        permissionsProvider.requestEnabledLocationPermissions(activity, permissionListener)
+
+        verify(permissionListener).granted()
+        verifyNoMoreInteractions(permissionListener)
+        verifyNoInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When location permission is granted and location is disabled in settings should requestEnabledLocationPermissions call PermissionsDialogCreator#showEnableGPSDialog`() {
+        whenever(locationAccessibilityChecker.isLocationEnabled(activity)).thenReturn(false)
+        permissionsApi.setGrantedPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+
+        permissionsProvider.requestEnabledLocationPermissions(activity, permissionListener)
+
+        verify(permissionsDialogCreator).showEnableGPSDialog(activity, permissionListener)
+        verifyNoInteractions(permissionListener)
+    }
+
+    @Test
+    fun `When location permission is not granted should requestEnabledLocationPermissions call PermissionListener#denied`() {
+        permissionsProvider.requestEnabledLocationPermissions(activity, permissionListener)
+
+        verify(permissionListener).denied()
+        verifyNoMoreInteractions(permissionListener)
+    }
+
+    @Test
+    fun `When location permission is not granted should requestEnabledLocationPermissions call PermissionsDialogCreator#showAdditionalExplanation`() {
+        permissionsProvider.requestEnabledLocationPermissions(activity, permissionListener)
+
+        verify(permissionsDialogCreator).showAdditionalExplanation(
+            activity,
+            R.string.location_runtime_permissions_denied_title,
+            R.string.location_runtime_permissions_denied_desc,
+            R.drawable.ic_room_black_24dp,
+            permissionListener
+        )
+
+        verifyNoMoreInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When audio permission is granted should requestRecordAudioPermission call PermissionListener#granted`() {
+        permissionsApi.setGrantedPermission(Manifest.permission.RECORD_AUDIO)
+
+        permissionsProvider.requestRecordAudioPermission(activity, permissionListener)
+
+        verify(permissionListener).granted()
+        verifyNoMoreInteractions(permissionListener)
+        verifyNoInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When audio permission is not granted should requestRecordAudioPermission call PermissionListener#denied`() {
+        permissionsProvider.requestRecordAudioPermission(activity, permissionListener)
+
+        verify(permissionListener).denied()
+        verifyNoMoreInteractions(permissionListener)
+    }
+
+    @Test
+    fun `When audio permission is not granted should requestRecordAudioPermission call PermissionsDialogCreator#showAdditionalExplanation`() {
+        permissionsProvider.requestRecordAudioPermission(activity, permissionListener)
+
+        verify(permissionsDialogCreator).showAdditionalExplanation(
+            activity,
+            R.string.record_audio_runtime_permission_denied_title,
+            R.string.record_audio_runtime_permission_denied_desc,
+            R.drawable.ic_mic,
+            permissionListener
+        )
+
+        verifyNoMoreInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When camera and audio permission is granted should areCameraAndRecordAudioPermissionsGranted() return true`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)).thenReturn(true)
 
         assertThat(permissionsProvider.areCameraAndRecordAudioPermissionsGranted(), `is`(true))
     }
 
     @Test
-    fun `When camera and audio permissions not granted should areCameraAndRecordAudioPermissionsGranted() return false`() {
-        whenever(
-            permissionsChecker.isPermissionGranted(
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
-            )
-        ).thenReturn(false)
+    fun `When camera and audio permission is not granted should areCameraAndRecordAudioPermissionsGranted() return false`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)).thenReturn(false)
 
         assertThat(permissionsProvider.areCameraAndRecordAudioPermissionsGranted(), `is`(false))
     }
 
     @Test
-    fun `When get accounts permission granted should isGetAccountsPermissionGranted() return true`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)).thenReturn(
-            true
+    fun `When camera and audio permission is granted should requestCameraAndRecordAudioPermissions call PermissionListener#granted`() {
+        permissionsApi.setGrantedPermission(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO)
+
+        permissionsProvider.requestCameraAndRecordAudioPermissions(activity, permissionListener)
+
+        verify(permissionListener).granted()
+        verifyNoMoreInteractions(permissionListener)
+        verifyNoInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When camera and audio permission is not granted should requestCameraAndRecordAudioPermissions call PermissionListener#denied`() {
+        permissionsProvider.requestCameraAndRecordAudioPermissions(activity, permissionListener)
+
+        verify(permissionListener).denied()
+        verifyNoMoreInteractions(permissionListener)
+    }
+
+    @Test
+    fun `When camera and audio permission is not granted should requestCameraAndRecordAudioPermissions call PermissionsDialogCreator#showAdditionalExplanation`() {
+        permissionsProvider.requestCameraAndRecordAudioPermissions(activity, permissionListener)
+
+        verify(permissionsDialogCreator).showAdditionalExplanation(
+            activity,
+            R.string.camera_runtime_permission_denied_title,
+            R.string.camera_runtime_permission_denied_desc,
+            R.drawable.ic_photo_camera,
+            permissionListener
         )
+        verifyNoMoreInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When get accounts permission is granted should isGetAccountsPermissionGranted() return true`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)).thenReturn(true)
 
         assertThat(permissionsProvider.isGetAccountsPermissionGranted, `is`(true))
     }
 
     @Test
-    fun `When get accounts permission not granted should isGetAccountsPermissionGranted() return false`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)).thenReturn(
-            false
-        )
+    fun `When get accounts permission is not granted should isGetAccountsPermissionGranted() return false`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)).thenReturn(false)
 
         assertThat(permissionsProvider.isGetAccountsPermissionGranted, `is`(false))
     }
 
     @Test
-    fun `When read phone state permission granted should isReadPhoneStatePermissionGranted() return true`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(
-            true
+    fun `When get accounts permission is granted should requestGetAccountsPermission call PermissionListener#granted`() {
+        permissionsApi.setGrantedPermission(Manifest.permission.GET_ACCOUNTS)
+
+        permissionsProvider.requestGetAccountsPermission(activity, permissionListener)
+
+        verify(permissionListener).granted()
+        verifyNoMoreInteractions(permissionListener)
+        verifyNoInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When get accounts permission is denied should requestGetAccountsPermission call PermissionListener#denied`() {
+        permissionsProvider.requestGetAccountsPermission(activity, permissionListener)
+
+        verify(permissionListener).denied()
+        verifyNoMoreInteractions(permissionListener)
+    }
+
+    @Test
+    fun `When get accounts permission is denied should requestGetAccountsPermission call PermissionsDialogCreator#showAdditionalExplanation`() {
+        permissionsProvider.requestGetAccountsPermission(activity, permissionListener)
+
+        verify(permissionsDialogCreator).showAdditionalExplanation(
+            activity,
+            R.string.get_accounts_runtime_permission_denied_title,
+            R.string.get_accounts_runtime_permission_denied_desc,
+            R.drawable.ic_get_accounts,
+            permissionListener
         )
+        verifyNoMoreInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When read phone state permission is granted should isReadPhoneStatePermissionGranted() return true`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(true)
 
         assertThat(permissionsProvider.isReadPhoneStatePermissionGranted, `is`(true))
     }
 
     @Test
-    fun `When read phone state permission not granted should isReadPhoneStatePermissionGranted() return false`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(
-            false
-        )
+    fun `When read phone state permission is not granted should isReadPhoneStatePermissionGranted() return false`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
 
         assertThat(permissionsProvider.isReadPhoneStatePermissionGranted, `is`(false))
+    }
+
+    @Test
+    fun `When read phone state permission is granted should requestReadPhoneStatePermission call PermissionListener#granted`() {
+        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
+
+        permissionsProvider.requestReadPhoneStatePermission(activity, permissionListener)
+
+        verify(permissionListener).granted()
+        verifyNoMoreInteractions(permissionListener)
+        verifyNoInteractions(permissionsDialogCreator)
+    }
+
+    @Test
+    fun `When read phone state permission is not granted should requestReadPhoneStatePermission call PermissionListener#denied`() {
+        permissionsProvider.requestReadPhoneStatePermission(activity, permissionListener)
+
+        verify(permissionListener).denied()
+        verifyNoMoreInteractions(permissionListener)
+    }
+
+    @Test
+    fun `When read phone state permission is not granted should requestReadPhoneStatePermission call PermissionsDialogCreator#showAdditionalExplanation`() {
+        permissionsProvider.requestReadPhoneStatePermission(activity, permissionListener)
+
+        verify(permissionsDialogCreator).showAdditionalExplanation(
+            activity,
+            R.string.read_phone_state_runtime_permission_denied_title,
+            R.string.read_phone_state_runtime_permission_denied_desc,
+            R.drawable.ic_phone,
+            permissionListener
+        )
+        verifyNoMoreInteractions(permissionsDialogCreator)
     }
 
     @Test
@@ -164,9 +342,7 @@ class PermissionsProviderTest {
 
     @Test
     fun `granted listener is not called when Activity is finishing`() {
-        whenever(permissionsApi.requestPermissions(any(), any(), any())).doAnswer {
-            (it.getArgument(1) as PermissionListener).granted()
-        }
+        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
 
         whenever(activity.isFinishing).doReturn(true)
 
@@ -181,9 +357,7 @@ class PermissionsProviderTest {
 
     @Test
     fun `denied listener is not called when Activity is finishing`() {
-        whenever(permissionsApi.requestPermissions(any(), any(), any())).doAnswer {
-            (it.getArgument(1) as PermissionListener).denied()
-        }
+        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
 
         whenever(activity.isFinishing).doReturn(true)
 
@@ -194,5 +368,26 @@ class PermissionsProviderTest {
         )
 
         verifyNoInteractions(permissionListener)
+    }
+
+    private class TestRequestPermissionsAPI : RequestPermissionsAPI {
+
+        private var grantedPermissions: List<String> = emptyList()
+
+        override fun requestPermissions(
+            activity: Activity,
+            listener: PermissionListener,
+            vararg permissions: String
+        ) {
+            if (grantedPermissions.containsAll(permissions.asList())) {
+                listener.granted()
+            } else {
+                listener.denied()
+            }
+        }
+
+        fun setGrantedPermission(vararg grantedPermissions: String) {
+            this.grantedPermissions = grantedPermissions.asList()
+        }
     }
 }

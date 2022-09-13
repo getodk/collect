@@ -61,7 +61,7 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
         if (permissionsProvider.isReadPhoneStatePermissionGranted()) {
             phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
         } else if (savedInstanceState == null) {
-            permissionsProvider.requestReadPhoneStatePermission(getActivity(), true, () -> phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER)));
+            permissionsProvider.requestReadPhoneStatePermission(getActivity(), () -> phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER)));
         }
     }
 

@@ -2080,7 +2080,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController != null) {
             if (propertyManager.isPhoneStateRequired()) {
-                permissionsProvider.requestReadPhoneStatePermission(this, true, new PermissionListener() {
+                permissionsProvider.requestReadPhoneStatePermission(this, new PermissionListener() {
                     @Override
                     public void granted() {
                         loadForm();

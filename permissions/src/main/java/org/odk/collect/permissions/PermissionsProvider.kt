@@ -59,6 +59,8 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
+                    action.denied()
+
                     permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.camera_runtime_permission_denied_title,
@@ -90,6 +92,8 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
+                    action.denied()
+
                     permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.location_runtime_permissions_denied_title,
@@ -112,6 +116,8 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
+                    action.denied()
+
                     permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.record_audio_runtime_permission_denied_title,
@@ -134,6 +140,8 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
+                    action.denied()
+
                     permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.camera_runtime_permission_denied_title,
@@ -156,6 +164,8 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
+                    action.denied()
+
                     permissionsDialogCreator.showAdditionalExplanation(
                         activity,
                         R.string.get_accounts_runtime_permission_denied_title,
@@ -171,7 +181,6 @@ open class PermissionsProvider internal constructor(
 
     open fun requestReadPhoneStatePermission(
         activity: Activity,
-        displayPermissionDeniedDialog: Boolean,
         action: PermissionListener
     ) {
         requestPermissions(
@@ -182,17 +191,15 @@ open class PermissionsProvider internal constructor(
                 }
 
                 override fun denied() {
-                    if (displayPermissionDeniedDialog) {
-                        permissionsDialogCreator.showAdditionalExplanation(
-                            activity,
-                            R.string.read_phone_state_runtime_permission_denied_title,
-                            R.string.read_phone_state_runtime_permission_denied_desc,
-                            R.drawable.ic_phone,
-                            action
-                        )
-                    } else {
-                        action.denied()
-                    }
+                    action.denied()
+
+                    permissionsDialogCreator.showAdditionalExplanation(
+                        activity,
+                        R.string.read_phone_state_runtime_permission_denied_title,
+                        R.string.read_phone_state_runtime_permission_denied_desc,
+                        R.drawable.ic_phone,
+                        action
+                    )
                 }
             },
             Manifest.permission.READ_PHONE_STATE
