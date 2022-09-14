@@ -61,5 +61,4 @@ dependencies {
     testImplementation Dependencies.androidx_test_espresso_intents
     testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.robolectric
-    testImplementation Dependencies.robolectric_shadows_multidex
 }
