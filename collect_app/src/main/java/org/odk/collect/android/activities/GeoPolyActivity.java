@@ -411,7 +411,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
                     recordPoint(currentMapPoint);
                 }
-            }), INTERVAL_OPTIONS[intervalIndex], INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
+            }), 0, INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
         }
         updateUi();
     }

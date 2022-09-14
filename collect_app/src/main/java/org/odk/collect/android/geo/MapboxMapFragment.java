@@ -30,6 +30,7 @@ import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.annotation.Annotation;
 import com.mapbox.mapboxsdk.plugins.annotation.Line;
 import com.mapbox.mapboxsdk.plugins.annotation.LineManager;
 import com.mapbox.mapboxsdk.plugins.annotation.LineOptions;
@@ -443,6 +444,13 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyFeature) {
             ((PolyFeature) feature).appendPoint(point);
+        }
+    }
+
+    @Override public void updatePolyPointIcon(int featureId, int markerId, int drawableId) {
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).updateMarkerIcon(markerId, drawableId);
         }
     }
 
@@ -862,7 +870,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         private final LineClickListener lineClickListener = new LineClickListener();
         private final SymbolDragListener symbolDragListener = new SymbolDragListener();
         private final List<MapPoint> points = new ArrayList<>();
-        private final HashMap<Integer, CompoundMarker> markers = new HashMap<>();
         private final List<Symbol> symbols = new ArrayList<>();
         private final boolean closedPolygon;
         private Line line;
@@ -879,9 +886,6 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 CompoundMarker cm = null;
                 if(markers != null) {
                     cm = markers.get(idx);
-                    if(cm != null) {
-                        this.markers.put(idx, cm);      // Doing a deep copy of markers as is done for points - not sure why
-                    }
                 }
                 this.symbols.add(createSymbol(symbolManager, point, true, CENTER, cm));
                 idx++;
@@ -922,6 +926,16 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             points.add(point);
             symbols.add(createSymbol(symbolManager, point, true, CENTER, null));
             updateLine();
+        }
+
+        public void updateMarkerIcon(int markerId, int drawableId) {
+            if (map == null) {
+                return;
+            }
+            Symbol s = symbols.get(markerId);
+            s.setIconImage(addIconImage(drawableId));
+            symbolManager.update(s);
+            //updateLine();
         }
 
         public void removeLastPoint() {

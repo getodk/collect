@@ -27,6 +27,10 @@ public class CompoundDialogFragment extends DialogFragment {
     private int intervalIndex = -1;
     private int accuracyThresholdIndex = -1;
 
+    public static final String PIT_KEY = "pit_name";
+    public static final String FAULT_KEY = "fault_name";
+    public static final String FEATUREID_KEY = "feature_id";
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -34,7 +38,6 @@ public class CompoundDialogFragment extends DialogFragment {
         if (context instanceof SettingsDialogCallback) {
             callback = (SettingsDialogCallback) context;
         }
-
     }
 
     @NonNull
@@ -43,9 +46,9 @@ public class CompoundDialogFragment extends DialogFragment {
         super.onCreateDialog(savedInstanceState);
 
         Bundle args = getArguments();
-        String pitName = args.getString("pit_name");
-        String faultName = args.getString("fault_name");
-
+        String pitName = args.getString(PIT_KEY);
+        String faultName = args.getString(FAULT_KEY);
+        int featureId = args.getInt(FEATUREID_KEY);
 
         View settingsView = getActivity().getLayoutInflater().inflate(R.layout.geocompound_dialog, null);
         RadioButton rb_pit = settingsView.findViewById(R.id.gc_marker_pit);
@@ -68,7 +71,8 @@ public class CompoundDialogFragment extends DialogFragment {
                 .setTitle(getString(R.string.smap_set_marker))
                 .setView(settingsView)
                 .setPositiveButton(getString(R.string.smap_apply), (dialog, id) -> {
-                    callback.updateMarker(radioGroup.getCheckedRadioButtonId());
+                    RadioButton rb = settingsView.findViewById(radioGroup.getCheckedRadioButtonId());
+                    callback.updateMarker(featureId, getMarkerType(radioGroup.getCheckedRadioButtonId()));
                     dismiss();
                 })
                 .setNegativeButton(R.string.cancel, (dialog, id) -> {
@@ -78,6 +82,16 @@ public class CompoundDialogFragment extends DialogFragment {
     }
 
     public interface SettingsDialogCallback {
-        void updateMarker(int checkedId);
+        void updateMarker(int id, String marker);
+    }
+
+    private String getMarkerType(int checkedId) {
+        if(checkedId == R.id.gc_marker_pit) {
+            return "pit";
+        } else if(checkedId == R.id.gc_marker_fault) {
+            return "fault";
+        } else {
+            return "none";
+        }
     }
 }

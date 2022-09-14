@@ -49,6 +49,7 @@ import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.geo.models.GeoCompoundData;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.GeoUtils;
@@ -95,6 +96,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     @Inject
     LocationTracker locationTracker;
 
+    private HashMap<Integer, CompoundMarker> markers = new HashMap<>();
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalAnswerString = "";
@@ -257,7 +259,6 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         Intent intent = getIntent();
 
         List<MapPoint> points = new ArrayList<>();
-        HashMap<Integer, CompoundMarker> markers = new HashMap<>();
         if (intent != null && intent.hasExtra(ANSWER_KEY)) {
             originalAnswerString = intent.getStringExtra(ANSWER_KEY);
             GeoCompoundData cd = new GeoCompoundData(originalAnswerString);
@@ -382,22 +383,22 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
                     recordPoint(currentMapPoint);
                 }
-            }), INTERVAL_OPTIONS[intervalIndex], INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
+            }), 0, INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
         }
         updateUi();
     }
 
     @Override
-    public void updateMarker(int id) {
-        String marker;
-        if(id == R.id.gc_marker_pit) {
-            marker = "pit";
-        } else if(id == R.id.gc_marker_fault) {
-            marker = "fault";
+    public void updateMarker(int markerId, String marker) {
+        CompoundMarker cm = markers.get(markerId);
+        if(cm == null) {
+            cm = new CompoundMarker(markerId, marker);
+            markers.put(markerId,cm);
         } else {
-            marker = "none";
+            cm.type = marker;
         }
-
+        int drawableId = getDrawableIdForMarker(cm, true);
+        map.updatePolyPointIcon(featureId, markerId, drawableId);
     }
 
     @Override
@@ -442,11 +443,11 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         Timber.i("Feature: %s", featureId);
         DialogFragment df = new CompoundDialogFragment();
         Bundle args = new Bundle();
-        args.putString("pit_name", "The Pit");
-        args.putString("fault_name", "The fault");
+        args.putString(CompoundDialogFragment.PIT_KEY, "The Pit");
+        args.putString(CompoundDialogFragment.FAULT_KEY, "The fault");
+        args.putInt(CompoundDialogFragment.FEATUREID_KEY, featureId);
         df.setArguments(args);
         df.show(getSupportFragmentManager(), CompoundDialogFragment.class.getName());
-
     }
 
     private void onClick(MapPoint point) {
@@ -583,5 +584,17 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
     @VisibleForTesting public MapFragment getMapFragment() {
         return map;
+    }
+
+    public int getDrawableIdForMarker(CompoundMarker cm, boolean enlarged) {
+        if(cm != null) {
+            switch (cm.type) {
+                case CompoundMarker.MARKER_PIT:
+                    return enlarged ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
+                case CompoundMarker.MARKER_FAULT:
+                    return enlarged ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
+            }
+        }
+        return R.drawable.ic_map_point;
     }
 }

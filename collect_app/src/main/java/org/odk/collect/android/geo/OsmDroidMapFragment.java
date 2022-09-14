@@ -338,6 +338,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
+    @Override public void updatePolyPointIcon(int featureId, int markerId, int drawableId) {
+        // TODO
+    }
+
     @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyFeature) {

@@ -1,5 +1,6 @@
 package org.odk.collect.android.geo.models;
 
+import org.odk.collect.android.R;
 import org.odk.collect.android.geo.MapPoint;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import timber.log.Timber;
 
 public class GeoCompoundData {
+
     public ArrayList<MapPoint> points = new ArrayList<>();
     public HashMap<Integer, CompoundMarker> markers = new HashMap<>();
 
@@ -71,4 +73,5 @@ public class GeoCompoundData {
             }
         }
     }
+
 }
