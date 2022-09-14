@@ -14,7 +14,6 @@
 
 package org.odk.collect.android.activities;
 
-import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.QUESTION_PATH;
 import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester.READ_ONLY;
 
 import android.content.Context;
@@ -30,17 +29,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-
-import org.javarosa.core.model.FormDef;
-import org.javarosa.core.model.condition.EvaluationContext;
-import org.javarosa.core.model.instance.FormInstance;
-import org.javarosa.model.xform.XPathReference;
-import org.javarosa.xpath.XPathNodeset;
-import org.javarosa.xpath.expr.XPathPathExpr;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.viewmodels.FormMapViewModel;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.CompoundDialogFragment;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
@@ -49,7 +38,6 @@ import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.geo.models.GeoCompoundData;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.GeoUtils;
@@ -83,12 +71,8 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     public static final String ACCURACY_THRESHOLD_INDEX_KEY = "accuracy_threshold_index";
     public static final String INTENT_QUESTION_PATH_KEY = "question_path";
 
-    public enum OutputMode { GEOTRACE, GEOSHAPE }
-
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private ScheduledFuture schedulerHandler;
-
-    private OutputMode outputMode;
 
     @Inject
     MapProvider mapProvider;
@@ -157,7 +141,6 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         }
 
         intentReadOnly = getIntent().getBooleanExtra(READ_ONLY, false);
-        outputMode = (OutputMode) getIntent().getSerializableExtra(OUTPUT_MODE_KEY);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(R.string.geocompound_title));
@@ -226,11 +209,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         ImageButton saveButton = findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
             if (!map.getPolyPoints(featureId).isEmpty()) {
-                if (outputMode == OutputMode.GEOTRACE) {
-                    saveAsPolyline();
-                } else {
-                    saveAsPolygon();
-                }
+                saveAsPolyline();
             } else {
                 finishWithResult();
             }
@@ -269,7 +248,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             points = restoredPoints;
             // TODO restored markers
         }
-        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE, markers);
+        featureId = map.addDraggablePoly(points, false, markers);
         map.setFeatureClickListener(this::onFeatureClicked);
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -315,7 +294,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     private void finishWithResult() {
         List<MapPoint> points = map.getPolyPoints(featureId);
         setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.ANSWER_KEY, GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE))));
+            FormEntryActivity.ANSWER_KEY, GeoUtils.formatPointsResultString(points, false)));
         finish();
     }
 
@@ -349,15 +328,6 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
                     continue;
                 }
                 points.add(new MapPoint(lat, lon, alt, sd));
-            }
-        }
-        if (outputMode == OutputMode.GEOSHAPE) {
-            // Closed polygons are stored with a last point that duplicates the
-            // first point.  To prepare a polygon for display and editing, we
-            // need to remove this duplicate point.
-            int count = points.size();
-            if (count > 1 && points.get(0).equals(points.get(count - 1))) {
-                points.remove(count - 1);
             }
         }
         return points;
@@ -499,7 +469,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addDraggablePoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, null);
+        featureId = map.addDraggablePoly(new ArrayList<>(), false, null);
         inputActive = false;
         updateUi();
     }

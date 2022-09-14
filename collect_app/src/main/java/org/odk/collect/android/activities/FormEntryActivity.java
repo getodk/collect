@@ -964,6 +964,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     setWidgetData(gshr);
                 }
                 break;
+            case RequestCodes.GEOCOMPOUND_CAPTURE:
+                String gcc = intent.getStringExtra(ANSWER_KEY);
+                if (getCurrentViewIfODKView() != null) {
+                    setWidgetData(gcc);
+                }
+                break;
             case RequestCodes.NFC_CAPTURE:       // smap
                 String nfcId = intent.getStringExtra(NFC_RESULT);
                 setWidgetData(nfcId);
