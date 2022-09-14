@@ -338,7 +338,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
-    @Override public void updatePolyPointIcon(int featureId, int markerId, int drawableId) {
+    @Override public void updatePolyPointIcon(int featureId, int markerId, CompoundMarker cm) {
         // TODO
     }
 

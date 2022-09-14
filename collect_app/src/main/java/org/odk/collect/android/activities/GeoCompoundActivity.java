@@ -397,8 +397,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         } else {
             cm.type = marker;
         }
-        int drawableId = getDrawableIdForMarker(cm, true);
-        map.updatePolyPointIcon(featureId, markerId, drawableId);
+        map.updatePolyPointIcon(featureId, markerId, cm);
     }
 
     @Override
@@ -584,17 +583,5 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
     @VisibleForTesting public MapFragment getMapFragment() {
         return map;
-    }
-
-    public int getDrawableIdForMarker(CompoundMarker cm, boolean enlarged) {
-        if(cm != null) {
-            switch (cm.type) {
-                case CompoundMarker.MARKER_PIT:
-                    return enlarged ? R.drawable.ic_room_blue_48dp : R.drawable.ic_room_blue_24dp;
-                case CompoundMarker.MARKER_FAULT:
-                    return enlarged ? R.drawable.ic_room_deep_purple_48dp : R.drawable.ic_room_deep_purple_24dp;
-            }
-        }
-        return R.drawable.ic_map_point;
     }
 }

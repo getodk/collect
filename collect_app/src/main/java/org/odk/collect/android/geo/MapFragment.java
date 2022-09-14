@@ -169,7 +169,7 @@ public interface MapFragment {
     /** Removes a specified map feature from the map, leaving its featureId invalid. */
     void removeFeature(int featureId);
 
-    void updatePolyPointIcon(int featureId, int markerId, int drawableId);
+    void updatePolyPointIcon(int featureId, int markerId, CompoundMarker cm);
 
     /** Removes all map features from the map. */
     void clearFeatures();

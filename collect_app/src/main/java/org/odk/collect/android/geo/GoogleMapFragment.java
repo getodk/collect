@@ -306,7 +306,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    @Override public void updatePolyPointIcon(int featureId, int markerId, int drawableId) {
+    @Override public void updatePolyPointIcon(int featureId, int markerId, CompoundMarker cm) {
         // TODO
     }
 

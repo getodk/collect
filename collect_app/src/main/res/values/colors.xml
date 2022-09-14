@@ -38,8 +38,12 @@ the License.
     <color name="locationAccuracyFill">#200099ff</color>
 
     <!-- Colors for recorded points and lines drawn on the map. -->
-    <color name="mapPointCircle">#ffff0000</color>
+    <color name="mapPointCircle">#ff000000</color>
     <color name="mapPointFill">#ffffffff</color>
+    <color name="mapPointCirclePit">#ff0000ff</color>
+    <color name="mapPointFillPit">#ff0000ff</color>
+    <color name="mapPointCircleFault">#ffff0000</color>
+    <color name="mapPointFillFault">#ffff0000</color>
     <color name="prevMapPointCircle">#ffff0000</color>
     <color name="prevMapPointFill">#ff0000ff</color>
     <color name="mapLine">#ffff0000</color>

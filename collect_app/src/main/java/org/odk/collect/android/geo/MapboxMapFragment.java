@@ -447,10 +447,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
     }
 
-    @Override public void updatePolyPointIcon(int featureId, int markerId, int drawableId) {
+    @Override public void updatePolyPointIcon(int featureId, int markerId, CompoundMarker cm) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyFeature) {
-            ((PolyFeature) feature).updateMarkerIcon(markerId, drawableId);
+            ((PolyFeature) feature).updateMarkerIcon(markerId, cm);
         }
     }
 
@@ -539,14 +539,17 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                                 @IconAnchor String iconAnchor,
                                 CompoundMarker cm) {
 
+        int drawableId = R.drawable.ic_map_point;
         float iconSize = 1f;
         if(cm != null) {
-            iconSize = 5f;
+            drawableId = cm.getDrawableIdForMarker();
+            iconSize = 2f;
         }
+
         return symbolManager.create(new SymbolOptions()
 
             .withLatLng(toLatLng(point))
-            .withIconImage(addIconImage(R.drawable.ic_map_point))
+            .withIconImage(addIconImage(drawableId))
             .withIconSize(iconSize)
             .withSymbolSortKey(10f)
             .withDraggable(draggable)
@@ -928,14 +931,16 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
             updateLine();
         }
 
-        public void updateMarkerIcon(int markerId, int drawableId) {
+        public void updateMarkerIcon(int markerId, CompoundMarker cm) {
             if (map == null) {
                 return;
             }
+            int drawableId = cm.getDrawableIdForMarker();
+            float iconSize = cm.type.equals("none") ? 1f : 2f;
             Symbol s = symbols.get(markerId);
             s.setIconImage(addIconImage(drawableId));
-            symbolManager.update(s);
-            //updateLine();
+            s.setIconSize(iconSize);
+            symbolManager.update(symbols);
         }
 
         public void removeLastPoint() {
