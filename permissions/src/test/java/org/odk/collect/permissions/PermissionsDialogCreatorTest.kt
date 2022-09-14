@@ -106,23 +106,6 @@ class PermissionsDialogCreatorTest {
     }
 
     @Test
-    fun `PermissionListener#additionalExplanationClosed should not be called after clicking on the neutral button in explanation dialog`() {
-        PermissionsDialogCreatorImpl.showAdditionalExplanation(
-            activity,
-            R.string.camera_runtime_permission_denied_title,
-            R.string.camera_runtime_permission_denied_desc,
-            R.drawable.ic_photo_camera,
-            permissionListener
-        )
-
-        val dialog = ShadowDialog.getLatestDialog() as AlertDialog
-        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).performClick()
-        RobolectricHelpers.runLooper()
-
-        verifyNoInteractions(permissionListener)
-    }
-
-    @Test
     fun `Settings should be open after clicking on the neutral button in explanation dialog`() {
         PermissionsDialogCreatorImpl.showAdditionalExplanation(
             activity,
@@ -138,5 +121,7 @@ class PermissionsDialogCreatorTest {
 
         Intents.intended(IntentMatchers.hasAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS))
         Intents.intended(IntentMatchers.hasData(Uri.fromParts("package", activity.packageName, null)))
+
+        verifyNoInteractions(permissionListener)
     }
 }
