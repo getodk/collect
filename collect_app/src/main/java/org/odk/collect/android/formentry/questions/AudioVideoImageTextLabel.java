@@ -36,7 +36,6 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.databinding.AudioVideoImageTextLabelBinding;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
-import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -93,7 +92,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
         if (questionText != null && !questionText.isEmpty()) {
             textLabel.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
-            textLabel.setText(HtmlUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(questionText, isRequiredQuestion)));
+            textLabel.setText(FormEntryPromptUtils.styledQuestionText(questionText, isRequiredQuestion));
             textLabel.setMovementMethod(LinkMovementMethod.getInstance());
 
             // Wrap to the size of the parent view

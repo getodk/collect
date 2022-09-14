@@ -19,6 +19,7 @@ package org.odk.collect.android.utilities;
 import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.data.DateData;
@@ -119,15 +120,11 @@ public final class FormEntryPromptUtils {
         return fep.getAnswerText();
     }
 
-    public static String markQuestionIfIsRequired(String questionText, boolean isRequired) {
-        if (isRequired) {
-            if (questionText == null) {
-                questionText = "";
-            }
-            questionText = "<span style=\"color:#F44336\">*</span> " + questionText;
-        }
-
-        return questionText;
+    public static CharSequence styledQuestionText(String questionText, boolean isRequired) {
+        CharSequence styledQuestionText = HtmlUtils.textToHtml(questionText);
+       return isRequired
+                ? new SpannableStringBuilder(HtmlUtils.textToHtml("<span style=\"color:#F44336\">*</span>")).append(" ").append(styledQuestionText)
+                : styledQuestionText;
     }
 
     @Nullable
