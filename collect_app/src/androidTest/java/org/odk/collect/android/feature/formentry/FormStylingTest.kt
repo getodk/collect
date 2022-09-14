@@ -29,6 +29,14 @@ class FormStylingTest {
     }
 
     @Test
+    fun requiredQuestionLabelWithHeaderStyleTest() {
+        rule.startAtMainMenu()
+            .copyForm(FORM_FILE_NAME)
+            .startBlankForm(FORM_NAME)
+            .swipeToNextQuestion("Required text question with header style", true)
+    }
+
+    @Test
     fun questionHintTest() {
         rule.startAtMainMenu()
             .copyForm(FORM_FILE_NAME)
@@ -204,7 +212,7 @@ class FormStylingTest {
             .startBlankForm(FORM_NAME)
             .clickGoToArrow()
             .assertHierarchyItem(0, "Note text", null)
-            .assertHierarchyItem(3, "Rank widget", "1. One")
+            .assertHierarchyItem(4, "Rank widget", "1. One")
     }
 
     @Test
