@@ -46,6 +46,7 @@
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
             android:contentDescription="@string/new_item"
+            android:theme="@style/ForceLightSurfaceOverlay"
             app:srcCompat="@drawable/ic_note_add" />
 
         <ScrollView
@@ -68,6 +69,7 @@
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/show_my_location"
+                    android:theme="@style/ForceLightSurfaceOverlay"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_my_location" />
 
@@ -79,6 +81,7 @@
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/zoom_to_fit_all"
+                    android:theme="@style/ForceLightSurfaceOverlay"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_crop_frame" />
 
@@ -90,6 +93,7 @@
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/layer_data_file"
+                    android:theme="@style/ForceLightSurfaceOverlay"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_layers" />
             </LinearLayout>

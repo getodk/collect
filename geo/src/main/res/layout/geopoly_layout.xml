@@ -56,6 +56,7 @@
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/show_my_location"
+        android:theme="@style/ForceLightSurfaceOverlay"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/location_status"
@@ -69,6 +70,7 @@
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/layer_data_file"
+        android:theme="@style/ForceLightSurfaceOverlay"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zoom"
@@ -82,6 +84,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/input_method"
+        android:theme="@style/ForceLightSurfaceOverlay"
         app:layout_constraintBottom_toTopOf="@id/pause"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_location" />
@@ -94,6 +97,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/pause_location_recording"
+        android:theme="@style/ForceLightSurfaceOverlay"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/backspace"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,6 +112,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/remove_last_point"
+        android:theme="@style/ForceLightSurfaceOverlay"
         app:layout_constraintBottom_toTopOf="@id/clear"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_backspace" />
@@ -120,6 +125,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/clear"
+        android:theme="@style/ForceLightSurfaceOverlay"
         app:layout_constraintBottom_toTopOf="@id/save"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_delete" />
@@ -132,6 +138,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/save"
+        android:theme="@style/ForceLightSurfaceOverlay"
         app:layout_constraintBottom_toTopOf="@id/collection_status"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_save" />
