@@ -31,6 +31,7 @@ public class CompoundDialogFragment extends DialogFragment {
     public static final String FAULT_KEY = "fault_name";
     public static final String FEATUREID_KEY = "feature_id";
     public static final String LABEL_KEY = "label";
+    public static final String VALUE_KEY = "label";
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -51,16 +52,27 @@ public class CompoundDialogFragment extends DialogFragment {
         String faultName = args.getString(FAULT_KEY);
         int featureId = args.getInt(FEATUREID_KEY);
         String label = args.getString(LABEL_KEY);
+        String value = args.getString(VALUE_KEY);
         if(label == null || label.equals("")) {
             label = getString(R.string.smap_set_marker);
         }
         View settingsView = getActivity().getLayoutInflater().inflate(R.layout.geocompound_dialog, null);
         RadioButton rb_pit = settingsView.findViewById(R.id.gc_marker_pit);
         RadioButton rb_fault = settingsView.findViewById(R.id.gc_marker_fault);
+        RadioButton rb_none = settingsView.findViewById(R.id.gc_marker_none);
         rb_pit.setText(pitName);
         rb_fault.setText(faultName);
+        rb_none.setChecked(true);
+        if(value != null) {
+            if(value.equals("pit")) {
+                rb_pit.setChecked(true);
+            } else  if(value.equals("fault")) {
+                rb_fault.setChecked(true);
+            }
+        }
 
         radioGroup = settingsView.findViewById(R.id.radio_group);
+
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             checkedRadioButtonId = checkedId;
         });

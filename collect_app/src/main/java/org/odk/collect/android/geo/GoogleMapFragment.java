@@ -47,6 +47,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
+import com.mapbox.mapboxsdk.plugins.annotation.Symbol;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.models.CompoundMarker;
@@ -307,7 +308,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void updatePolyPointIcon(int featureId, int markerId, CompoundMarker cm) {
-        // TODO
+        MapFeature feature = features.get(featureId);
+        if (feature instanceof PolyFeature) {
+            ((PolyFeature) feature).updateMarkerIcon(markerId, cm);
+        }
     }
 
     @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
@@ -631,10 +635,18 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private Marker createMarker(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
+    private Marker createMarker(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, CompoundMarker cm) {
         if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
         }
+
+        int drawableId = R.drawable.ic_map_point;
+        float iconSize = 1f;
+        if(cm != null) {
+            drawableId = cm.getDrawableIdForMarker();
+            iconSize = 2f;  // TODO
+        }
+
         // A Marker's position is a LatLng with just latitude and longitude
         // fields.  We need to store the point's altitude and standard
         // deviation values somewhere, so they go in the marker's snippet.
@@ -642,7 +654,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(point))
             .snippet(point.alt + ";" + point.sd)
             .draggable(draggable)
-            .icon(getBitmapDescriptor(R.drawable.ic_map_point))
+            .icon(getBitmapDescriptor(drawableId))
             .anchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor))  // center the icon on the position
         );
     }
@@ -706,7 +718,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private Marker marker;
 
         MarkerFeature(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor) {
-            marker = createMarker(map, point, draggable, iconAnchor);
+            marker = createMarker(map, point, draggable, iconAnchor, null);
         }
 
         public void setIcon(int drawableId) {
@@ -748,8 +760,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
+            int idx = 0;
             for (MapPoint point : points) {
-                markers.add(createMarker(map, point, true, CENTER));
+                CompoundMarker cm = null;
+                if(markers != null) {
+                    cm = geoMarkers.get(idx);
+                }
+                markers.add(createMarker(map, point, true, CENTER, cm));
+                idx++;
             }
             update();
         }
@@ -805,7 +823,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(map, point, true, CENTER));
+            markers.add(createMarker(map, point, true, CENTER, null));
+            update();
+        }
+
+        public void updateMarkerIcon(int markerId, CompoundMarker cm) {
+            if (map == null) {
+                return;
+            }
+            int drawableId = cm.getDrawableIdForMarker();
+            float iconSize = cm.type.equals("none") ? 1f : 2f;
+            Marker m = markers.get(markerId);
+            m.setIcon(getBitmapDescriptor(drawableId));
+            // TODO set icon size
             update();
         }
 
