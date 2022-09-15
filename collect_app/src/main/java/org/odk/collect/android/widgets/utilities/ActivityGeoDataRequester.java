@@ -126,8 +126,9 @@ public class ActivityGeoDataRequester implements GeoDataRequester {
                 waitingForDataRegistry.waitForData(prompt.getIndex());
 
                 Intent intent = new Intent(context, GeoCompoundActivity.class);
-                intent.putExtra(GeoPolyActivity.ANSWER_KEY, answerText);
+                intent.putExtra(GeoCompoundActivity.ANSWER_KEY, answerText);
                 intent.putExtra(READ_ONLY, prompt.isReadOnly());
+                intent.putExtra(GeoCompoundActivity.APPEARANCE_KEY, Appearances.getSanitizedAppearanceHint(prompt));
 
                 ((Activity) context).startActivityForResult(intent, ApplicationConstants.RequestCodes.GEOCOMPOUND_CAPTURE);
             }

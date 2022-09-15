@@ -62,7 +62,7 @@ import timber.log.Timber;
 public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback,
         CompoundDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
-    public static final String OUTPUT_MODE_KEY = "output_mode";
+    public static final String APPEARANCE_KEY = "appearances";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINTS_KEY = "points";
@@ -87,6 +87,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalAnswerString = "";
+    private String originalAppearanceString = "";
 
     private ImageButton zoomButton;
     private ImageButton playButton;
@@ -250,6 +251,11 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             points = restoredPoints;
             markers = getMarkerHashMap(restoredMarkers);
         }
+
+        if (intent != null && intent.hasExtra(APPEARANCE_KEY)) {
+            originalAppearanceString = intent.getStringExtra(APPEARANCE_KEY);
+        }
+
         featureId = map.addDraggablePoly(points, false, markers);
         map.setFeatureClickListener(this::onFeatureClicked);
         if (inputActive && !intentReadOnly) {
