@@ -46,8 +46,10 @@ import org.odk.collect.location.Location;
 import org.odk.collect.location.tracker.LocationTracker;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -64,6 +66,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
     public static final String POINTS_KEY = "points";
+    public static final String MARKERS_KEY = "markers";
     public static final String INPUT_ACTIVE_KEY = "input_active";
     public static final String RECORDING_ENABLED_KEY = "recording_enabled";
     public static final String RECORDING_AUTOMATIC_KEY = "recording_automatic";
@@ -122,6 +125,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     private MapPoint restoredMapCenter;
     private Double restoredMapZoom;
     private List<MapPoint> restoredPoints;
+    private List<CompoundMarker> restoredMarkers;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +135,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
+            restoredMarkers = savedInstanceState.getParcelableArrayList(MARKERS_KEY);
             inputActive = savedInstanceState.getBoolean(INPUT_ACTIVE_KEY, false);
             recordingEnabled = savedInstanceState.getBoolean(RECORDING_ENABLED_KEY, false);
             recordingAutomatic = savedInstanceState.getBoolean(RECORDING_AUTOMATIC_KEY, false);
@@ -165,6 +170,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
+        state.putParcelableArrayList(MARKERS_KEY, new ArrayList<>(getMarkerArray()));
         state.putBoolean(INPUT_ACTIVE_KEY, inputActive);
         state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled);
         state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic);
@@ -208,11 +214,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
         ImageButton saveButton = findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
-            if (!map.getPolyPoints(featureId).isEmpty()) {
-                saveAsPolyline();
-            } else {
-                finishWithResult();
-            }
+            saveAsGeoCompound();
         });
 
         playButton = findViewById(R.id.play);
@@ -246,7 +248,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         }
         if (restoredPoints != null) {
             points = restoredPoints;
-            // TODO restored markers
+            markers = getMarkerHashMap(restoredMarkers);
         }
         featureId = map.addDraggablePoly(points, false, markers);
         map.setFeatureClickListener(this::onFeatureClicked);
@@ -269,32 +271,20 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         updateUi();
     }
 
-    private void saveAsPolyline() {
-        if (map.getPolyPoints(featureId).size() > 1) {
-            finishWithResult();
-        } else {
+    private void saveAsGeoCompound() {
+
+        String result = "";     // Default result if there are no points
+        if (map.getPolyPoints(featureId).size() == 1) {
             ToastUtils.showShortToastInMiddle(getString(R.string.polyline_validator));
-        }
-    }
-
-    private void saveAsPolygon() {
-        if (map.getPolyPoints(featureId).size() > 2) {
-            // Close the polygon.
+            return;     // do not finish
+        } else if (map.getPolyPoints(featureId).size() > 1) {
             List<MapPoint> points = map.getPolyPoints(featureId);
-            int count = points.size();
-            if (count > 1 && !points.get(0).equals(points.get(count - 1))) {
-                map.appendPointToPoly(featureId, points.get(0));
-            }
-            finishWithResult();
-        } else {
-            ToastUtils.showShortToastInMiddle(getString(R.string.polygon_validator));
+            StringBuilder rb = new StringBuilder("line:")
+                    .append(GeoUtils.formatPointsResultString(points, false))
+                    .append(getMarkersAsText(points));
+            result = rb.toString();
         }
-    }
-
-    private void finishWithResult() {
-        List<MapPoint> points = map.getPolyPoints(featureId);
-        setResult(RESULT_OK, new Intent().putExtra(
-            FormEntryActivity.ANSWER_KEY, GeoUtils.formatPointsResultString(points, false)));
+        setResult(RESULT_OK, new Intent().putExtra(FormEntryActivity.ANSWER_KEY, result));
         finish();
     }
 
@@ -362,7 +352,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     public void updateMarker(int markerId, String marker) {
         CompoundMarker cm = markers.get(markerId);
         if(cm == null) {
-            cm = new CompoundMarker(markerId, marker);
+            cm = new CompoundMarker(markerId, marker, "");
             markers.put(markerId,cm);
         } else {
             cm.type = marker;
@@ -415,6 +405,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         args.putString(CompoundDialogFragment.PIT_KEY, "The Pit");
         args.putString(CompoundDialogFragment.FAULT_KEY, "The fault");
         args.putInt(CompoundDialogFragment.FEATUREID_KEY, featureId);
+        args.putString(CompoundDialogFragment.LABEL_KEY, getMarkerLabel(featureId));
         df.setArguments(args);
         df.show(getSupportFragmentManager(), CompoundDialogFragment.class.getName());
     }
@@ -553,5 +544,71 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
 
     @VisibleForTesting public MapFragment getMapFragment() {
         return map;
+    }
+
+    private String getMarkersAsText(List<MapPoint> points) {
+        StringBuilder out = new StringBuilder("");
+
+        Collection<Integer> indexes = markers.keySet();
+        List<Integer> list = new ArrayList<>(indexes);
+        java.util.Collections.sort(list);
+
+        for(int index : list) {
+            MapPoint point = points.get(index);
+            CompoundMarker cm = markers.get(index);
+
+            String location = String.format(Locale.US, "%s %s %s %s;",
+                    point.lat, point.lon,
+                    point.alt, (float) point.sd);
+
+            out.append("#marker:")
+                    .append(location)
+                    .append(":index=")
+                    .append(index)
+                    .append(";type=")
+                    .append(cm.type);
+        }
+        return out.toString();
+    }
+
+    /*
+     *  Append an index number to the label
+     *  If marker is the third one encountered of the same type starting from the first marker
+     *   then append "3" to the label and so on.
+     */
+    private String getMarkerLabel(int markerIdx) {
+        String label = "";
+        CompoundMarker marker = markers.get(markerIdx);
+
+        Collection<Integer> indexes = markers.keySet();
+        List<Integer> list = new ArrayList<>(indexes);
+        java.util.Collections.sort(list);
+
+        int labelIndex = 1;
+        for(int index : list) {
+            if(index == markerIdx) {
+                return marker.label + labelIndex;
+            }
+            CompoundMarker cm = markers.get(index);
+            if(cm.type.equals(marker.type)) {
+                labelIndex++;
+            }
+
+        }
+        return label;
+    }
+
+    private ArrayList<CompoundMarker> getMarkerArray() {
+        return new ArrayList(markers.values());
+    }
+
+    private HashMap<Integer, CompoundMarker> getMarkerHashMap(List<CompoundMarker> markerArray) {
+        HashMap<Integer, CompoundMarker> markers = new HashMap<>();
+        if(markerArray != null) {
+            for(CompoundMarker cm : markerArray) {
+                markers.put(cm.index, cm);
+            }
+        }
+        return markers;
     }
 }

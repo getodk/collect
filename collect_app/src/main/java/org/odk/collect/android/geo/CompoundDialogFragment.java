@@ -30,6 +30,7 @@ public class CompoundDialogFragment extends DialogFragment {
     public static final String PIT_KEY = "pit_name";
     public static final String FAULT_KEY = "fault_name";
     public static final String FEATUREID_KEY = "feature_id";
+    public static final String LABEL_KEY = "label";
 
     @Override
     public void onAttach(@NonNull Context context) {
