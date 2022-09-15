@@ -37,6 +37,7 @@ import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.SettingsDialogFragment;
 import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.geo.models.GeoCompoundData;
+import org.odk.collect.android.geo.models.MarkerType;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.MapsPreferences;
 import org.odk.collect.android.utilities.DialogUtils;
@@ -84,6 +85,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     LocationTracker locationTracker;
 
     private HashMap<Integer, CompoundMarker> markers = new HashMap<>();
+    private HashMap<String, MarkerType> markerTypes = new HashMap<>();
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
     private String originalAnswerString = "";
@@ -144,6 +146,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             accuracyThresholdIndex = savedInstanceState.getInt(
                 ACCURACY_THRESHOLD_INDEX_KEY, DEFAULT_ACCURACY_THRESHOLD_INDEX);
             questionPath = savedInstanceState.getString(INTENT_QUESTION_PATH_KEY, null);
+            originalAppearanceString = savedInstanceState.getString(APPEARANCE_KEY, "");
         }
 
         intentReadOnly = getIntent().getBooleanExtra(READ_ONLY, false);
@@ -178,6 +181,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         state.putInt(INTERVAL_INDEX_KEY, intervalIndex);
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
         state.putString(INTENT_QUESTION_PATH_KEY, questionPath);
+        state.putString(APPEARANCE_KEY, originalAppearanceString);
     }
 
     @Override protected void onDestroy() {
@@ -240,20 +244,25 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         // Add
         Intent intent = getIntent();
 
+        // Get the marker types from the appearance
+        if (intent != null && intent.hasExtra(APPEARANCE_KEY)) {
+            originalAppearanceString = intent.getStringExtra(APPEARANCE_KEY);
+            markerTypes = getMarkerTypes(originalAppearanceString);
+        }
+        if(originalAppearanceString != null) {
+            markerTypes = getMarkerTypes(originalAppearanceString);
+        }
+
         List<MapPoint> points = new ArrayList<>();
         if (intent != null && intent.hasExtra(ANSWER_KEY)) {
             originalAnswerString = intent.getStringExtra(ANSWER_KEY);
-            GeoCompoundData cd = new GeoCompoundData(originalAnswerString);
+            GeoCompoundData cd = new GeoCompoundData(originalAnswerString, markerTypes);
             points = cd.points;
             markers = cd.markers;
         }
         if (restoredPoints != null) {
             points = restoredPoints;
             markers = getMarkerHashMap(restoredMarkers);
-        }
-
-        if (intent != null && intent.hasExtra(APPEARANCE_KEY)) {
-            originalAppearanceString = intent.getStringExtra(APPEARANCE_KEY);
         }
 
         featureId = map.addDraggablePoly(points, false, markers);
@@ -355,13 +364,14 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     }
 
     @Override
-    public void updateMarker(int markerId, String marker) {
+    public void updateMarker(int markerId, String markerType) {
         CompoundMarker cm = markers.get(markerId);
         if(cm == null) {
-            cm = new CompoundMarker(markerId, marker, "");
+            cm = new CompoundMarker(markerId, markerType, getMarkerTypeLabel(markerType));
             markers.put(markerId,cm);
         } else {
-            cm.type = marker;
+            cm.type = markerType;
+            cm.label = getMarkerTypeLabel(markerType);
         }
         map.updatePolyPointIcon(featureId, markerId, cm);
     }
@@ -408,8 +418,8 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         Timber.i("Feature: %s", featureId);
         DialogFragment df = new CompoundDialogFragment();
         Bundle args = new Bundle();
-        args.putString(CompoundDialogFragment.PIT_KEY, "The Pit");
-        args.putString(CompoundDialogFragment.FAULT_KEY, "The fault");
+        args.putString(CompoundDialogFragment.PIT_KEY, getMarkerTypeName("pit"));
+        args.putString(CompoundDialogFragment.FAULT_KEY, getMarkerTypeName("fault"));
         args.putInt(CompoundDialogFragment.FEATUREID_KEY, featureId);
         args.putString(CompoundDialogFragment.LABEL_KEY, getMarkerLabel(featureId));
         df.setArguments(args);
@@ -577,6 +587,24 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         return out.toString();
     }
 
+    private String getMarkerTypeName(String type) {
+        String name = type;
+        MarkerType mt = markerTypes.get(type);
+        if(mt != null) {
+            name = mt.name;
+        }
+        return name;
+    }
+
+    private String getMarkerTypeLabel(String type) {
+        String label = "";
+        MarkerType mt = markerTypes.get(type);
+        if(mt != null) {
+            label = mt.label;
+        }
+        return label;
+    }
+
     /*
      *  Append an index number to the label
      *  If marker is the third one encountered of the same type starting from the first marker
@@ -586,20 +614,22 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         String label = "";
         CompoundMarker marker = markers.get(markerIdx);
 
-        Collection<Integer> indexes = markers.keySet();
-        List<Integer> list = new ArrayList<>(indexes);
-        java.util.Collections.sort(list);
+        if(marker != null) {
+            Collection<Integer> indexes = markers.keySet();
+            List<Integer> list = new ArrayList<>(indexes);
+            java.util.Collections.sort(list);
 
-        int labelIndex = 1;
-        for(int index : list) {
-            if(index == markerIdx) {
-                return marker.label + labelIndex;
-            }
-            CompoundMarker cm = markers.get(index);
-            if(cm.type.equals(marker.type)) {
-                labelIndex++;
-            }
+            int labelIndex = 1;
+            for (int index : list) {
+                if (index == markerIdx) {
+                    return marker.label + labelIndex;
+                }
+                CompoundMarker cm = markers.get(index);
+                if (cm != null && cm.type.equals(marker.type)) {
+                    labelIndex++;
+                }
 
+            }
         }
         return label;
     }
@@ -616,5 +646,24 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             }
         }
         return markers;
+    }
+
+    private HashMap<String, MarkerType> getMarkerTypes(String appearance) {
+        HashMap<String, MarkerType> markerTypes = new HashMap<>();
+        if(appearance != null) {
+            String components[] = appearance.split(" ");
+            for (int i = 0; i < components.length; i++) {
+                if(components[i].startsWith("marker:")) {
+                    String componentParts [] = components[i].split(":");
+                    if(componentParts.length >= 4) {
+                        String type = componentParts[1];
+                        String name = componentParts[2];
+                        String label = componentParts[3];
+                        markerTypes.put(type, new MarkerType(type, name, label));
+                    }
+                }
+            }
+        }
+        return markerTypes;
     }
 }

@@ -13,7 +13,7 @@ public class GeoCompoundData {
     public ArrayList<MapPoint> points = new ArrayList<>();
     public HashMap<Integer, CompoundMarker> markers = new HashMap<>();
 
-    public GeoCompoundData(String value) {
+    public GeoCompoundData(String value, HashMap<String, MarkerType> markerTypes) {
         if(value != null) {
             String components[] = value.split("#");
             for(int i = 0; i < components.length; i++) {
@@ -66,6 +66,12 @@ public class GeoCompoundData {
                             } else if(pe[0].trim().equals("type")) {
                                 cm.type = pe[1].trim();
                             }
+                        }
+                    }
+                    if(cm.type != null) {
+                        MarkerType mt = markerTypes.get(cm.type);
+                        if(mt != null) {
+                            cm.label = mt.label;
                         }
                     }
                     markers.put(cm.index, cm);
