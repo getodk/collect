@@ -415,14 +415,14 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
      * Reacts to a tap on a feature by showing a submission summary.
      */
     public void onFeatureClicked(int markerIdx) {
-        Timber.i("Feature: %s", featureId);
+        Timber.i("Marker: %s", markerIdx);
         CompoundMarker marker = markers.get(markerIdx);
         DialogFragment df = new CompoundDialogFragment();
         Bundle args = new Bundle();
         args.putString(CompoundDialogFragment.PIT_KEY, getMarkerTypeName("pit"));
         args.putString(CompoundDialogFragment.FAULT_KEY, getMarkerTypeName("fault"));
-        args.putInt(CompoundDialogFragment.FEATUREID_KEY, featureId);
-        args.putString(CompoundDialogFragment.LABEL_KEY, getMarkerLabel(featureId));
+        args.putInt(CompoundDialogFragment.FEATUREID_KEY, markerIdx);
+        args.putString(CompoundDialogFragment.LABEL_KEY, getMarkerLabel(markerIdx));
         if(marker != null) {
             args.putString(CompoundDialogFragment.VALUE_KEY, marker.type);
         }

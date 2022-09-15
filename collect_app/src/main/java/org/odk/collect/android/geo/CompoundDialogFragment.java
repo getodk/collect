@@ -31,7 +31,7 @@ public class CompoundDialogFragment extends DialogFragment {
     public static final String FAULT_KEY = "fault_name";
     public static final String FEATUREID_KEY = "feature_id";
     public static final String LABEL_KEY = "label";
-    public static final String VALUE_KEY = "label";
+    public static final String VALUE_KEY = "value";
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -76,12 +76,6 @@ public class CompoundDialogFragment extends DialogFragment {
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             checkedRadioButtonId = checkedId;
         });
-
-        if (checkedRadioButtonId == -1) {
-            //checkedRadioButtonId = callback.getCheckedId();
-
-            radioGroup.check(checkedRadioButtonId);
-        }
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle(label)
