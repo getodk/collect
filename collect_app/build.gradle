@@ -159,23 +159,13 @@ android {
     }
 
     packagingOptions {
-        // Pick first occurrence of any files that cause conflicts, as defined
-        // in common.gradle
-        pickFirst 'META-INF/DEPENDENCIES'
-        pickFirst 'META-INF/LICENSE'
-        pickFirst 'META-INF/LICENSE.txt'
-        pickFirst 'META-INF/NOTICE'
-        pickFirst 'META-INF/NOTICE.txt'
-        pickFirst 'META-INF/services/com.fasterxml.jackson.core.JsonFactory'
-        pickFirst 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec'
-        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyReader'
-        pickFirst 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter'
-        pickFirst 'draftv4/schema'
-        pickFirst 'draftv3/schema'
+        resources {
+            // These library licenses will be referenced in-app
+            excludes += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
 
-        // These library licenses will be referenced in-app
-        exclude 'META-INF/ASL-2.0.txt'
-        exclude 'META-INF/LGPL-3.0.txt'
+            // Pick first occurrence of any files that cause conflicts
+            pickFirsts += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/LICENSE.txt', 'META-INF/NOTICE', 'META-INF/NOTICE.txt', 'META-INF/services/com.fasterxml.jackson.core.JsonFactory', 'META-INF/services/com.fasterxml.jackson.core.ObjectCodec', 'META-INF/services/javax.ws.rs.ext.MessageBodyReader', 'META-INF/services/javax.ws.rs.ext.MessageBodyWriter', 'draftv4/schema', 'draftv3/schema']
+        }
 
         // To ensure that ODK Collect is installable on all devices, we don't use
         // abiFilters to exclude any ABIs; but to keep the APK slim, we include
@@ -213,14 +203,6 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError true
-        xmlReport true
-        htmlReport true
-        checkGeneratedSources true
-        checkDependencies true
-        lintConfig file("${project.rootDir}/config/lint.xml")
-    }
 
     sourceSets {
         androidTest {
@@ -230,6 +212,15 @@ android {
             java.srcDirs += "src/commonTest/java"
         }
     }
+    lint {
+        abortOnError true
+        checkDependencies true
+        checkGeneratedSources true
+        htmlReport true
+        lintConfig file("$rootDir/config/lint.xml")
+        xmlReport true
+    }
+    namespace 'org.odk.collect.android'
 }
 
 configurations.all {

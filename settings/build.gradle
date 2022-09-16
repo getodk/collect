@@ -34,16 +34,17 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     packagingOptions {
-        // These library licenses will be referenced in-app
-        exclude 'META-INF/ASL-2.0.txt'
-        exclude 'META-INF/LGPL-3.0.txt'
+        resources {
+            // These library licenses will be referenced in-app
+            excludes += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
 
-        // Pick first occurrence of any files that cause conflicts
-        pickFirst 'draftv4/schema'
-        pickFirst 'draftv3/schema'
+            // Pick first occurrence of any files that cause conflicts
+            pickFirsts += ['draftv4/schema', 'draftv3/schema']
+        }
     }
+
+    namespace 'org.odk.collect.settings'
 }
 
 dependencies {

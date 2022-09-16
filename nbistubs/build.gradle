@@ -18,4 +18,5 @@ android {
             minifyEnabled false
         }
     }
+    namespace 'org.odk.collect.nbistubs'
 }
