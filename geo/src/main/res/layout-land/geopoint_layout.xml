@@ -41,13 +41,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/zoom"
-        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/show_my_location"
-        android:theme="@style/ForceLightSurfaceOverlay"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/status_section"
@@ -55,14 +55,14 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/layer_menu"
-        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/layer_data_file"
-        android:theme="@style/ForceLightSurfaceOverlay"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zoom"
@@ -70,26 +70,26 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/place_marker"
-        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/record_geopoint"
-        android:theme="@style/ForceLightSurfaceOverlay"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/clear"
         app:srcCompat="@drawable/ic_add_location" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/clear"
-        style="@style/Widget.Material3.FloatingActionButton.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/clear"
-        android:theme="@style/ForceLightSurfaceOverlay"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/accept_location"
         app:srcCompat="@drawable/ic_delete" />
@@ -103,7 +103,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/save"
-        android:theme="@style/ForceLightSurfaceOverlay"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_save" />

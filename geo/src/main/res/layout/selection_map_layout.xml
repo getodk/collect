@@ -46,7 +46,7 @@
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:layout_marginBottom="@dimen/margin_standard"
             android:contentDescription="@string/new_item"
-            android:theme="@style/ForceLightSurfaceOverlay"
+            android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
             app:srcCompat="@drawable/ic_note_add" />
 
         <ScrollView
@@ -63,37 +63,37 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_location"
-                    style="@style/Widget.Material3.FloatingActionButton.Surface"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/show_my_location"
-                    android:theme="@style/ForceLightSurfaceOverlay"
+                    android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_my_location" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_bounds"
-                    style="@style/Widget.Material3.FloatingActionButton.Surface"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/zoom_to_fit_all"
-                    android:theme="@style/ForceLightSurfaceOverlay"
+                    android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_crop_frame" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/layer_menu"
-                    style="@style/Widget.Material3.FloatingActionButton.Surface"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/layer_data_file"
-                    android:theme="@style/ForceLightSurfaceOverlay"
+                    android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
                     app:fabSize="mini"
                     app:srcCompat="@drawable/ic_layers" />
             </LinearLayout>
