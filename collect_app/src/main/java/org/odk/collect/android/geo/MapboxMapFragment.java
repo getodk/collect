@@ -267,7 +267,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 initLocationComponent();
 
                 if (mapReadyListener != null && getActivity() != null) {
-                    mapReadyListener.onReady(this);
+                   // mapReadyListener.onReady(this);
                 }
             });
         }
@@ -905,7 +905,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
         }
 
         public List<MapPoint> getPoints() {
-            return new ArrayList<>(points);
+            return points;
         }
 
         public void dispose() {

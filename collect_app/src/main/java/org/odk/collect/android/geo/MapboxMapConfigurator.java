@@ -34,7 +34,7 @@ class MapboxMapConfigurator implements MapConfigurator {
     }
 
     @Override public boolean isAvailable(Context context) {
-        return MapboxUtils.initMapbox() != null;
+        return true;    // If the app builds then mapbox is available
     }
 
     @Override public void showUnavailableMessage(Context context) {

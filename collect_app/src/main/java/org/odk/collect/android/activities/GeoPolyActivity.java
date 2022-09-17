@@ -62,6 +62,7 @@ import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester
 
 public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
+    public static final String FEATURE_KEY = "feature";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -135,6 +136,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         DaggerUtils.getComponent(this).inject(this);
 
         if (savedInstanceState != null) {
+            featureId = savedInstanceState.getInt(FEATURE_KEY);
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
@@ -186,6 +188,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             return;
         }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
+        state.putInt(FEATURE_KEY, featureId);
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
         state.putBoolean(INPUT_ACTIVE_KEY, inputActive);
@@ -208,6 +211,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     public void initMap(MapFragment newMapFragment) {
         map = newMapFragment;
+        //ToastUtils.showShortToastInMiddle("init mqp");
 
         locationStatus = findViewById(R.id.location_status);
         collectionStatus = findViewById(R.id.collection_status);
@@ -289,6 +293,10 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             }
         }
 
+        /*
+         * Apply points list in order of increasing priority, first an empty list, then the initial
+         * passed in value, then restored state, then the current map view if it exists
+         */
         List<MapPoint> points = new ArrayList<>();
         if (intent != null && intent.hasExtra(ANSWER_KEY)) {
             originalAnswerString = intent.getStringExtra(ANSWER_KEY);
@@ -297,7 +305,11 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE, null);
+        if(map.getPolyPoints(featureId).size() > 0) {
+            points = map.getPolyPoints(featureId);
+        } else {
+            featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE, null);
+        }
 
         if (inputActive && !intentReadOnly) {
             startInput();
