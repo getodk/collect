@@ -77,8 +77,8 @@
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/record_geopoint"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-        app:layout_constraintBottom_toTopOf="@id/clear"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/clear"
         app:srcCompat="@drawable/ic_add_location" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -90,8 +90,8 @@
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/clear"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-        app:layout_constraintBottom_toTopOf="@id/accept_location"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/accept_location"
         app:srcCompat="@drawable/ic_delete" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

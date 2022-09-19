@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uses a higher alpha value when disabled to make sure buttons are still visible over darker
+parts of the map (often a problem in satellite modes). -->
+<resources>
+    <style name="Widget.Geo.FloatingActionButton.Map.Surface" parent="Widget.Material3.FloatingActionButton.Surface">
+        <item name="backgroundTint">@color/fab_surface_background_color_less_transparent_disabled</item>
+    </style>
+</resources>

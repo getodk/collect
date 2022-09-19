@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -35,16 +36,17 @@
             android:layout_above="@id/geometry_status"
             android:layout_below="@id/title" />
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/new_item"
-            style="@style/Widget.Geo.MapButton"
+            style="@style/Widget.Material3.FloatingActionButton.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/geometry_status"
             android:layout_alignParentEnd="true"
-            android:layout_margin="5dp"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:layout_marginBottom="@dimen/margin_standard"
             android:contentDescription="@string/new_item"
-            android:padding="15dp"
+            android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
             app:srcCompat="@drawable/ic_note_add" />
 
         <ScrollView
@@ -59,34 +61,40 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_location"
-                    style="@style/Widget.Geo.MapButton"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:padding="15dp"
+                    android:layout_marginHorizontal="@dimen/margin_standard"
+                    android:layout_marginTop="@dimen/margin_standard"
+                    android:contentDescription="@string/show_my_location"
+                    android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
+                    app:fabSize="mini"
                     app:srcCompat="@drawable/ic_my_location" />
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeImageButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_bounds"
-                    style="@style/Widget.Geo.MapButton"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:padding="15dp"
+                    android:layout_marginHorizontal="@dimen/margin_standard"
+                    android:layout_marginTop="@dimen/margin_standard"
+                    android:contentDescription="@string/zoom_to_fit_all"
+                    android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
+                    app:fabSize="mini"
                     app:srcCompat="@drawable/ic_crop_frame" />
 
-                <androidx.appcompat.widget.AppCompatImageButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/layer_menu"
-                    style="@style/Widget.Geo.MapButton"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:padding="15dp"
+                    android:layout_marginHorizontal="@dimen/margin_standard"
+                    android:layout_marginTop="@dimen/margin_standard"
+                    android:contentDescription="@string/layer_data_file"
+                    android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
+                    app:fabSize="mini"
                     app:srcCompat="@drawable/ic_layers" />
             </LinearLayout>
         </ScrollView>
@@ -98,6 +106,7 @@
         android:layout_height="match_parent"
         android:background="?colorSurface"
         app:behavior_hideable="true"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        tools:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

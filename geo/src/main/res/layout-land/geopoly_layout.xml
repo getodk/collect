@@ -56,8 +56,8 @@
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/show_my_location"
-        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:fabSize="mini"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/location_status"
         app:srcCompat="@drawable/ic_my_location" />
@@ -68,9 +68,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/layer_data_file"
-        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zoom"
@@ -83,24 +83,24 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
-        android:contentDescription="@string/input_method"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-        app:layout_constraintBottom_toTopOf="@id/pause"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/input_method"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/pause"
         app:srcCompat="@drawable/ic_add_location" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pause"
         style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
         android:layout_width="wrap_content"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/pause_location_recording"
-        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/backspace"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/backspace"
         app:srcCompat="@drawable/ic_pause_36"
         tools:visibility="visible" />
 
@@ -109,12 +109,12 @@
         style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
         android:contentDescription="@string/remove_last_point"
-        android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-        app:layout_constraintBottom_toTopOf="@id/clear"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/clear"
         app:srcCompat="@drawable/ic_backspace" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -124,10 +124,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
-        android:contentDescription="@string/clear"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-        app:layout_constraintBottom_toTopOf="@id/save"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/clear"
+        app:layout_constraintBottom_toTopOf="@id/collection_status"
+        app:layout_constraintEnd_toStartOf="@id/save"
         app:srcCompat="@drawable/ic_delete" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -598,6 +598,18 @@
     <!-- Text of button user can press to get help when setting up Reference Layers -->
     <string name="get_help_with_reference_layers">Get help with Reference Layers</string>
 
+    <!-- Description for button that zooms to the user's current location on a map -->
+    <string name="show_my_location">Show my location</string>
+
+    <!-- Description for button that zooms a map so that it shows all items -->
+    <string name="zoom_to_fit_all">Zoom to fit all</string>
+
+    <!-- Description for button that pauses automatic location recording -->
+    <string name="pause_location_recording">Pause</string>
+
+    <!-- Description for button that removes the last recorded point -->
+    <string name="remove_last_point">Remove last point</string>
+
     <!--
     ##############################################
     # SEND FINALIZED FORM
