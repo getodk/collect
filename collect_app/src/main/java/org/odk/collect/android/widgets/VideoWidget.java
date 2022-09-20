@@ -45,7 +45,6 @@ import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.io.File;
@@ -188,27 +187,9 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         switch (id) {
             case R.id.capture_video:
                 if (selfie) {
-                    getPermissionsProvider().requestCameraAndRecordAudioPermissions((Activity) getContext(), new PermissionListener() {
-                        @Override
-                        public void granted() {
-                            captureVideo();
-                        }
-
-                        @Override
-                        public void denied() {
-                        }
-                    });
+                    getPermissionsProvider().requestCameraAndRecordAudioPermissions((Activity) getContext(), this::captureVideo);
                 } else {
-                    getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
-                        @Override
-                        public void granted() {
-                            captureVideo();
-                        }
-
-                        @Override
-                        public void denied() {
-                        }
-                    });
+                    getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureVideo);
                 }
                 break;
             case R.id.choose_video:

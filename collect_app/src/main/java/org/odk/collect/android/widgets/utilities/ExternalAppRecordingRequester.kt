@@ -45,8 +45,6 @@ class ExternalAppRecordingRequester(
                         waitingForDataRegistry.cancelWaitingForData()
                     }
                 }
-
-                override fun denied() {}
             }
         )
     }

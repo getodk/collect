@@ -198,10 +198,6 @@ class ManualProjectCreatorDialog :
                         )
                     }
                 }
-
-                override fun denied() {
-                    // nothing
-                }
             }
         )
     }

@@ -884,20 +884,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void loadFile(Uri uri) {
-        permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), new PermissionListener() {
-            @Override
-            public void granted() {
-                MaterialProgressDialogFragment progressDialog = new MaterialProgressDialogFragment();
-                progressDialog.setMessage(getString(R.string.please_wait));
-                DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
+        permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), () -> {
+            MaterialProgressDialogFragment progressDialog = new MaterialProgressDialogFragment();
+            progressDialog.setMessage(getString(R.string.please_wait));
+            DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
 
-                mediaLoadingFragment.beginMediaLoadingTask(uri);
-            }
-
-            @Override
-            public void denied() {
-
-            }
+            mediaLoadingFragment.beginMediaLoadingTask(uri);
         });
     }
 
@@ -2088,14 +2080,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         if (formController != null) {
             if (propertyManager.isPhoneStateRequired()) {
-                permissionsProvider.requestReadPhoneStatePermission(this, true, new PermissionListener() {
+                permissionsProvider.requestReadPhoneStatePermission(this, new PermissionListener() {
                     @Override
                     public void granted() {
                         loadForm();
                     }
 
                     @Override
-                    public void denied() {
+                    public void additionalExplanationClosed() {
                         finish();
                     }
                 });

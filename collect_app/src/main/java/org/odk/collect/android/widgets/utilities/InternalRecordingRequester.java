@@ -6,7 +6,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
-import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
 
 public class InternalRecordingRequester implements RecordingRequester {
@@ -23,22 +22,14 @@ public class InternalRecordingRequester implements RecordingRequester {
 
     @Override
     public void requestRecording(FormEntryPrompt prompt) {
-        permissionsProvider.requestRecordAudioPermission(activity, new PermissionListener() {
-            @Override
-            public void granted() {
-                String quality = FormEntryPromptUtils.getBindAttribute(prompt, "quality");
-                if (quality != null && quality.equals("voice-only")) {
-                    audioRecorder.start(prompt.getIndex(), Output.AMR);
-                } else if (quality != null && quality.equals("low")) {
-                    audioRecorder.start(prompt.getIndex(), Output.AAC_LOW);
-                } else {
-                    audioRecorder.start(prompt.getIndex(), Output.AAC);
-                }
-            }
-
-            @Override
-            public void denied() {
-
+        permissionsProvider.requestRecordAudioPermission(activity, () -> {
+            String quality = FormEntryPromptUtils.getBindAttribute(prompt, "quality");
+            if (quality != null && quality.equals("voice-only")) {
+                audioRecorder.start(prompt.getIndex(), Output.AMR);
+            } else if (quality != null && quality.equals("low")) {
+                audioRecorder.start(prompt.getIndex(), Output.AAC_LOW);
+            } else {
+                audioRecorder.start(prompt.getIndex(), Output.AAC);
             }
         });
     }

@@ -111,8 +111,6 @@ class QrCodeProjectCreatorDialog :
                                 }
                             }
                         }
-
-                        override fun denied() {}
                     }
                 )
             }
@@ -152,9 +150,6 @@ class QrCodeProjectCreatorDialog :
                     if (isAdded) {
                         startScanning(savedInstanceState)
                     }
-                }
-
-                override fun denied() {
                 }
             }
         )

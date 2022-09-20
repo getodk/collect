@@ -35,7 +35,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.permissions.PermissionListener;
 
 import java.io.File;
 import java.util.Locale;
@@ -131,16 +130,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     public void onButtonClick(int buttonId) {
         switch (buttonId) {
             case R.id.capture_image:
-                getPermissionsProvider().requestCameraPermission((Activity) getContext(), new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        captureImage();
-                    }
-
-                    @Override
-                    public void denied() {
-                    }
-                });
+                getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage);
                 break;
             case R.id.choose_image:
                 imageCaptureHandler.chooseImage(R.string.annotate_image);

@@ -86,7 +86,7 @@ class QRCodeTabsActivity : LocalizedActivity() {
                     setupViewPager()
                 }
 
-                override fun denied() {
+                override fun additionalExplanationClosed() {
                     finish()
                 }
             }

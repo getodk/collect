@@ -28,16 +28,6 @@ class FakePermissionsProvider :
         }
     }
 
-    override fun showAdditionalExplanation(
-        activity: Activity,
-        title: Int,
-        message: Int,
-        drawable: Int,
-        action: PermissionListener
-    ) {
-        action.denied()
-    }
-
     fun setPermissionGranted(permissionGranted: Boolean) {
         isPermissionGranted = permissionGranted
     }

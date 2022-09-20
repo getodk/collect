@@ -273,7 +273,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             }
 
             @Override
-            public void denied() {
+            public void additionalExplanationClosed() {
                 finish();
             }
         });
