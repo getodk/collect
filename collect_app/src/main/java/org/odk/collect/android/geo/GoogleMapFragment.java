@@ -91,6 +91,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private PointListener gpsLocationListener;
     private FeatureListener featureClickListener;
     private FeatureListener dragEndListener;
+    private CompoundMarkerListener compoundMarkerListener;
 
     private LocationClient locationClient;
     private boolean clientWantsLocationUpdates;
@@ -366,6 +367,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
         gpsLocationListener = listener;
     }
 
+    @Override public void setCompoundMarkerListener(@Nullable CompoundMarkerListener listener) {
+        compoundMarkerListener = listener;
+    }
+
     @Override public void setGpsLocationEnabled(boolean enable) {
         if (enable != clientWantsLocationUpdates) {
             clientWantsLocationUpdates = enable;
@@ -424,10 +429,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public boolean onMarkerClick(Marker marker) {
-        if (featureClickListener != null) { // FormMapActivity
-            featureClickListener.onFeature(findFeature(marker));
-        } else { // GeoWidget
-            onMapClick(marker.getPosition());
+        if (compoundMarkerListener != null) { // FormMapActivity
+            int id = ((PolyFeature) features.get(findFeature(marker))).getMarkerIndex(marker);
+            if(id >= 0) {
+                compoundMarkerListener.onCompoundMarker(id);
+            }
         }
         return true;  // consume the event (no default zoom and popup behaviour)
     }
@@ -659,6 +665,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         );
     }
 
+
     private float getIconAnchorValueX(@IconAnchor String iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
@@ -778,6 +785,17 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         public boolean ownsPolyline(Polyline givenPolyline) {
             return polyline.equals(givenPolyline);
+        }
+
+        public int getMarkerIndex(Marker m) {
+            int idx = 0;
+            for (Marker marker : markers) {
+                if(m.equals(marker)) {
+                    return idx;
+                }
+                idx++;
+            }
+            return -1;
         }
 
         public void update() {

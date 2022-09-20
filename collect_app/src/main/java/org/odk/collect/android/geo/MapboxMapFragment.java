@@ -105,6 +105,7 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
     private FeatureListener featureClickListener;
     private FeatureListener featureLineListener;
     private FeatureListener dragEndListener;
+    private CompoundMarkerListener compoundMarkerListener;
 
     private LocationComponent locationComponent;
     private boolean clientWantsLocationUpdates;
@@ -382,6 +383,10 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
     @Override public void setDragEndListener(@Nullable FeatureListener listener) {
         dragEndListener = listener;
+    }
+
+    @Override public void setCompoundMarkerListener(@Nullable CompoundMarkerListener listener) {
+        compoundMarkerListener = listener;
     }
 
     @Override public @Nullable String getLocationProvider() {
@@ -967,17 +972,9 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
 
         class SymbolClickListener implements OnSymbolClickListener {
             @Override public void onAnnotationClick(Symbol clickedSymbol) {
-                if(featureClickListener != null) {
-                    featureClickListener.onFeature((int) clickedSymbol.getId());
+                if(compoundMarkerListener != null) {
+                    compoundMarkerListener.onCompoundMarker((int) clickedSymbol.getId());
                 }
-                /*
-                for (Symbol symbol : symbols) {
-                    if (clickedSymbol.getId() == symbol.getId() && featureClickListener != null) {
-                        featureClickListener.onFeature(featureId);
-                        break;
-                    }
-                }
-                 */
             }
         }
 

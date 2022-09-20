@@ -266,7 +266,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         }
 
         featureId = map.addDraggablePoly(points, false, markers);
-        map.setFeatureClickListener(this::onFeatureClicked);
+        map.setCompoundMarkerListener(this::onCompoundMarkerClicked);
         if (inputActive && !intentReadOnly) {
             startInput();
         }
@@ -414,7 +414,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     /**
      * Reacts to a tap on a feature by showing a submission summary.
      */
-    public void onFeatureClicked(int markerIdx) {
+    public void onCompoundMarkerClicked(int markerIdx) {
         Timber.i("Marker: %s", markerIdx);
         CompoundMarker marker = markers.get(markerIdx);
         DialogFragment df = new CompoundDialogFragment();

@@ -186,6 +186,9 @@ public interface MapFragment {
     /** Sets or clears the callback for when a drag is completed. */
     void setDragEndListener(@Nullable FeatureListener listener);
 
+    /** Sets or clears the callback for a click on a feature. */
+    void setCompoundMarkerListener(@Nullable CompoundMarkerListener listener);
+
     /**
      * Enables/disables GPS tracking.  While enabled, the GPS location is shown
      * on the map, the first GPS fix will trigger any pending callbacks set by
@@ -232,5 +235,9 @@ public interface MapFragment {
 
     interface FeatureListener {
         void onFeature(int featureId);
+    }
+
+    interface CompoundMarkerListener {
+        void onCompoundMarker(int featureId);
     }
 }

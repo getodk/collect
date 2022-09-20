@@ -85,11 +85,6 @@ public class PermissionsProvider {
      */
     public void requestStoragePermissions(Activity activity, @NonNull PermissionListener action) {
 
-        Timber.e("xoxoxo - fieldTask request storage permissions:q");   // smap
-        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {   // smap
-            Timber.i(ste.toString());
-        }
-
         if (storageStateProvider.isScopedStorageUsed()) {
             action.granted();
             return;

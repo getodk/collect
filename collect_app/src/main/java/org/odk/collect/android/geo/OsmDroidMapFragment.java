@@ -95,6 +95,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     private PointListener longPressListener;
     private PointListener gpsLocationListener;
     private FeatureListener featureClickListener;
+    private CompoundMarkerListener compoundMarkerListener;
     private FeatureListener dragEndListener;
     private MyLocationNewOverlay myLocationOverlay;
     private LocationClient locationClient;
@@ -393,6 +394,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         gpsLocationListener = listener;
     }
 
+    @Override public void setCompoundMarkerListener(@Nullable CompoundMarkerListener listener) {
+        compoundMarkerListener = listener;
+    }
+
     @Override public void runOnGpsLocationReady(@NonNull ReadyListener listener) {
         myLocationOverlay.runOnFirstFix(() -> getActivity().runOnUiThread(() -> listener.onReady(this)));
     }
@@ -568,8 +573,8 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         marker.setAnchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor));
         marker.setOnMarkerClickListener((clickedMarker, mapView) -> {
             int featureId = findFeature(clickedMarker);
-            if (featureClickListener != null && featureId != -1) {
-                featureClickListener.onFeature(featureId);
+            if (compoundMarkerListener != null && featureId != -1) {
+                compoundMarkerListener.onCompoundMarker(featureId);
                 return true;  // consume the event
             }
             return false;
