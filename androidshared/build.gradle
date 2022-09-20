@@ -44,6 +44,7 @@ android {
             includeAndroidResources = true
         }
     }
+    namespace 'org.odk.collect.androidshared'
 }
 
 dependencies {

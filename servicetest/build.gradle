@@ -28,6 +28,7 @@ android {
             minifyEnabled false
         }
     }
+    namespace 'org.odk.collect.servicetest'
 }
 dependencies {
     coreLibraryDesugaring Dependencies.desugar

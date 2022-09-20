@@ -45,6 +45,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'org.odk.collect.geo'
 }
 
 dependencies {

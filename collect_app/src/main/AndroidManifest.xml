@@ -9,7 +9,6 @@ the specific language governing permissions and limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.odk.collect.android"
     tools:ignore="GoogleAppIndexingWarning">
 
     <uses-feature
