@@ -18,6 +18,9 @@ import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -30,6 +33,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.geo.CompoundDialogFragment;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
@@ -51,6 +55,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -63,6 +69,7 @@ import timber.log.Timber;
 public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsDialogFragment.SettingsDialogCallback,
         CompoundDialogFragment.SettingsDialogCallback {
     public static final String ANSWER_KEY = "answer";
+    public static final String FEATURE_KEY = "feature";
     public static final String APPEARANCE_KEY = "appearances";
     public static final String MAP_CENTER_KEY = "map_center";
     public static final String MAP_ZOOM_KEY = "map_zoom";
@@ -135,6 +142,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         DaggerUtils.getComponent(this).inject(this);
 
         if (savedInstanceState != null) {
+            featureId = savedInstanceState.getInt(FEATURE_KEY);
             restoredMapCenter = savedInstanceState.getParcelable(MAP_CENTER_KEY);
             restoredMapZoom = savedInstanceState.getDouble(MAP_ZOOM_KEY);
             restoredPoints = savedInstanceState.getParcelableArrayList(POINTS_KEY);
@@ -172,6 +180,7 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             return;
         }
         state.putParcelable(MAP_CENTER_KEY, map.getCenter());
+        state.putInt(FEATURE_KEY, featureId);
         state.putDouble(MAP_ZOOM_KEY, map.getZoom());
         state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
         state.putParcelableArrayList(MARKERS_KEY, new ArrayList<>(getMarkerArray()));
@@ -182,6 +191,22 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         state.putInt(ACCURACY_THRESHOLD_INDEX_KEY, accuracyThresholdIndex);
         state.putString(INTENT_QUESTION_PATH_KEY, questionPath);
         state.putString(APPEARANCE_KEY, originalAppearanceString);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // We're not using managed dialogs, so we have to dismiss the dialog to prevent it from
+        // leaking memory.
+        //if (locationDialog != null && locationDialog.isShowing()) {
+        //    locationDialog.dismiss();
+        //}
     }
 
     @Override protected void onDestroy() {
@@ -265,7 +290,11 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
             markers = getMarkerHashMap(restoredMarkers);
         }
 
-        featureId = map.addDraggablePoly(points, false, markers);
+        if(map.getPolyPoints(featureId).size() > 0) {
+            points = map.getPolyPoints(featureId);
+        } else {
+            featureId = map.addDraggablePoly(points, false, markers);
+        }
         map.setCompoundMarkerListener(this::onCompoundMarkerClicked);
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -412,22 +441,24 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
     }
 
     /**
-     * Reacts to a tap on a feature by showing a submission summary.
+     * Reacts to a tap on a Marker by showing a dialog to get the marker type
      */
     public void onCompoundMarkerClicked(int markerIdx) {
-        Timber.i("Marker: %s", markerIdx);
-        CompoundMarker marker = markers.get(markerIdx);
-        DialogFragment df = new CompoundDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(CompoundDialogFragment.PIT_KEY, getMarkerTypeName("pit"));
-        args.putString(CompoundDialogFragment.FAULT_KEY, getMarkerTypeName("fault"));
-        args.putInt(CompoundDialogFragment.FEATUREID_KEY, markerIdx);
-        args.putString(CompoundDialogFragment.LABEL_KEY, getMarkerLabel(markerIdx));
-        if(marker != null) {
-            args.putString(CompoundDialogFragment.VALUE_KEY, marker.type);
+        if(!inputActive ) { // Don't allow selection of a marker while recording new points
+            Timber.i("Marker: %s", markerIdx);
+            CompoundMarker marker = markers.get(markerIdx);
+            DialogFragment df = new CompoundDialogFragment();
+            Bundle args = new Bundle();
+            args.putString(CompoundDialogFragment.PIT_KEY, getMarkerTypeName("pit"));
+            args.putString(CompoundDialogFragment.FAULT_KEY, getMarkerTypeName("fault"));
+            args.putInt(CompoundDialogFragment.FEATUREID_KEY, markerIdx);
+            args.putString(CompoundDialogFragment.LABEL_KEY, getMarkerLabel(markerIdx));
+            if (marker != null) {
+                args.putString(CompoundDialogFragment.VALUE_KEY, marker.type);
+            }
+            df.setArguments(args);
+            df.show(getSupportFragmentManager(), CompoundDialogFragment.class.getName());
         }
-        df.setArguments(args);
-        df.show(getSupportFragmentManager(), CompoundDialogFragment.class.getName());
     }
 
     private void onClick(MapPoint point) {
@@ -573,6 +604,8 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
         List<Integer> list = new ArrayList<>(indexes);
         java.util.Collections.sort(list);
 
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+
         for(int index : list) {
             MapPoint point = points.get(index);
             CompoundMarker cm = markers.get(index);
@@ -587,8 +620,34 @@ public class GeoCompoundActivity extends BaseGeoMapActivity implements SettingsD
                     .append(index)
                     .append(";type=")
                     .append(cm.type);
+            try {
+                String address = getAddress(geocoder, point.lat, point.lon);
+                if(address.length() > 0) {
+                    String label = getMarkerLabel(index);
+                    Collect.getInstance().putCompoundAddress(label, address);
+                }
+            } catch (Exception e) {
+                Timber.e(e);
+            }
         }
         return out.toString();
+    }
+
+    private String getAddress(Geocoder geocoder, Double lat, Double lon) throws Exception{
+        StringBuilder sAddress = new StringBuilder("");
+        List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+
+        if (addresses != null) {
+            Address a1 = addresses.get(0);
+
+            for (int i = 0; i <= a1.getMaxAddressLineIndex(); i++) {
+                if(i > 0) {
+                    sAddress.append(", ");
+                }
+                sAddress.append(a1.getAddressLine(i));
+            }
+        }
+        return sAddress.toString();
     }
 
     private String getMarkerTypeName(String type) {

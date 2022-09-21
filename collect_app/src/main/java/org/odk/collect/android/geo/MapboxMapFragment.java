@@ -261,14 +261,18 @@ public class MapboxMapFragment extends org.odk.collect.android.geo.mapboxsdk.Map
                 // See addTo() above for why we add this placeholder layer.
                 style.addLayer(new BackgroundLayer(PLACEHOLDER_LAYER_ID)
                     .withProperties(backgroundColor("rgba(0, 0, 0, 0)")));
-                lineManager = createLineManager();
-                symbolManager = createSymbolManager();
+                if(lineManager == null) {
+                    lineManager = createLineManager();
+                }
+                if(symbolManager == null) {
+                    symbolManager = createSymbolManager();
+                }
 
                 loadReferenceOverlay();
                 initLocationComponent();
 
                 if (mapReadyListener != null && getActivity() != null) {
-                   // mapReadyListener.onReady(this);
+                   // mapReadyListener.onReady(this);  // Causes initMap to be recalled
                 }
             });
         }

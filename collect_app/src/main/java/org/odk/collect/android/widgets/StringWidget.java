@@ -34,6 +34,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Utilities;
@@ -128,6 +129,17 @@ public class StringWidget extends QuestionWidget {
     public void setDisplayValueFromModel() {
         String currentAnswer = getFormEntryPrompt().getAnswerText();
 
+        // If no current answer check for a compound address
+        if(currentAnswer == null) {
+            String n = getFormEntryPrompt().getQuestion().getBind().getReference().toString();
+            if(n != null) {
+                int idx = n.lastIndexOf('/');
+                if(idx >= 0) {
+                    currentAnswer = Collect.getInstance().getCompoundAddress(n.substring(idx + 1));
+                }
+            }
+
+        }
         if (currentAnswer != null) {
             answerText.setText(currentAnswer);
             Selection.setSelection(answerText.getText(), answerText.getText().toString().length());

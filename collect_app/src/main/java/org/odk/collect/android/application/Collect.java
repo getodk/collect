@@ -82,6 +82,7 @@ public class Collect extends Application implements LocalizedApplication,
     private HashMap<String, SmapRemoteDataItem> remoteCache = null;         // smap
     private int remoteCalls;                                                // smap
     private Stack<FormLaunchDetail> formStack = new Stack<>();              // smap
+    private HashMap<String, String> compoundAddresses = new HashMap<>();
     private FormRestartDetails mRestartDetails;                             // smap
     private String formId;                                                  // smap
     private String searchLocalData;                                         // smap
@@ -320,6 +321,14 @@ public class Collect extends Application implements LocalizedApplication,
         } else {
             return formStack.pop();
         }
+    }
+
+    public void putCompoundAddress(String qName, String address) {
+        compoundAddresses.put(qName, address);
+    }
+
+    public String getCompoundAddress(String qName) {
+        return compoundAddresses.get(qName);
     }
     // End Smap
 
