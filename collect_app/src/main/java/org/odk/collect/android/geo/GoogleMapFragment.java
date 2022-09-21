@@ -430,9 +430,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public boolean onMarkerClick(Marker marker) {
         if (compoundMarkerListener != null) { // FormMapActivity
-            int id = ((PolyFeature) features.get(findFeature(marker))).getMarkerIndex(marker);
-            if(id >= 0) {
-                compoundMarkerListener.onCompoundMarker(id);
+            PolyFeature pf = (PolyFeature) features.get(findFeature(marker));
+            if(pf != null) {
+                int id = pf.getMarkerIndex(marker);
+                if (id >= 0) {
+                    compoundMarkerListener.onCompoundMarker(id);
+                }
             }
         }
         return true;  // consume the event (no default zoom and popup behaviour)

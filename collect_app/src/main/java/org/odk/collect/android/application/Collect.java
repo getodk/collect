@@ -323,6 +323,10 @@ public class Collect extends Application implements LocalizedApplication,
         }
     }
 
+    public void clearCompoundAddresses() {
+        compoundAddresses = new HashMap<String, String> ();
+    }
+
     public void putCompoundAddress(String qName, String address) {
         compoundAddresses.put(qName, address);
     }
