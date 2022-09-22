@@ -116,6 +116,8 @@
   <string name="smap_checking_file">Comprobando %1$s.\n\nForm. %2$s de %3$s formulario(s).</string>
   <string name="smap_storage_runtime_permission_denied_desc">Sin estos permisos, la app no puede acceder a sus formularios ni guardar respuestas. Vuelva a abrir la aplicación cuando esté listo para otorgarlos.</string>
   <string name="smap_background_location_permission_denied">Si el registro de la ubicación no está permitida todo el tiempo, la app no podrá alertarle si hay una tarea que dependa de la ubicación cerca.</string>
+  <string name="smap_set_marker">Establecer marcador</string>
+  <string name="smap_apply">Aplicar</string>
   <string-array name="smap_kontrolid_servers">
     <item>Servidor Kontrolid ORG</item>
     <item>Servidor Kontrolid COM</item>
