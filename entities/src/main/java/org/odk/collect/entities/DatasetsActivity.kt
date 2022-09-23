@@ -5,19 +5,17 @@ import android.os.Bundle
 import org.odk.collect.entities.EntitiesActivity.Companion.EXTRA_DATASET
 import org.odk.collect.entities.databinding.ListItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
-import org.odk.collect.shared.injection.ObjectProviderHost
 import org.odk.collect.strings.localization.LocalizedActivity
+import javax.inject.Inject
 
 class DatasetsActivity : LocalizedActivity() {
 
-    private val entitiesRepository by lazy {
-        (application as ObjectProviderHost)
-            .getObjectProvider()
-            .provide(EntitiesRepository::class.java)
-    }
+    @Inject
+    lateinit var entitiesRepository: EntitiesRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (application as EntitiesDependencyComponentProvider).entitiesDependencyComponent.inject(this)
 
         val binding = ListLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
