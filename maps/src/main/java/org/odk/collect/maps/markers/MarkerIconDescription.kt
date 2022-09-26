@@ -35,13 +35,6 @@ class MarkerIconDescription @JvmOverloads constructor(
         }
     }
 
-    override fun hashCode(): Int {
-        var result = iconDrawableId.hashCode()
-        result = result * 31 + color.hashCode()
-        result = result * 31 + symbol.hashCode()
-        return result
-    }
-
     private fun shorthandToLonghandHexColor(shorthandColor: String): String {
         var longHandColor = ""
         shorthandColor.substring(1).map {
