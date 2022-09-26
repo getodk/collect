@@ -456,7 +456,7 @@
   <string name="location_status_acceptable">Precisión de ubicación: %.2f m (aceptable)</string>
   <string name="location_status_unacceptable">Precisión de ubicación: %.2f m (inaceptable)</string>
   <string name="collection_status_paused">Puntos ingresados: %d</string>
-  <string name="collection_status_placement">Puntos ingresados: %d (toque para ublicar puntos)</string>
+  <string name="collection_status_placement">Puntos ingresados: %d (toque para ubicar puntos)</string>
   <string name="collection_status_manual">Puntos ingresados: %d (registro manual)</string>
   <string name="collection_status_auto_seconds">Puntos ingresados: %1$d (registrando cada %2$d seg)</string>
   <string name="collection_status_auto_minutes">Puntos ingresados: %1$d (registrando cada %2$d min)</string>
