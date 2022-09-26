@@ -5,6 +5,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 
 apply from: '../config/quality.gradle'
@@ -57,6 +58,9 @@ dependencies {
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.android_material
+    implementation Dependencies.androidx_navigation_fragment_ktx
+    implementation Dependencies.androidx_navigation_ui
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
+
 }

@@ -3,8 +3,7 @@
     package="org.odk.collect.entities" >
 
     <application>
-        <activity android:name=".DatasetsActivity" />
-        <activity android:name=".EntitiesActivity" />
+        <activity android:name=".EntityBrowserActivity" />
     </application>
 
 </manifest>

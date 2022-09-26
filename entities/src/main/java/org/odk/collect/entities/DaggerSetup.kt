@@ -21,8 +21,8 @@ interface EntitiesDependencyComponent {
         fun build(): EntitiesDependencyComponent
     }
 
-    fun inject(entitiesActivity: EntitiesActivity)
-    fun inject(entitiesActivity: DatasetsActivity)
+    fun inject(datasetsFragment: DatasetsFragment)
+    fun inject(datasetsFragment: EntitiesFragment)
 }
 
 @Module

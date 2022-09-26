@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.entities.DatasetsActivity;
+import org.odk.collect.entities.EntityBrowserActivity;
 
 public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragment {
 
@@ -21,7 +21,7 @@ public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragm
 
         findPreference("entities").setOnPreferenceClickListener(preference -> {
             FragmentActivity activity = requireActivity();
-            activity.startActivity(new Intent(activity, DatasetsActivity.class));
+            activity.startActivity(new Intent(activity, EntityBrowserActivity.class));
             return true;
         });
     }

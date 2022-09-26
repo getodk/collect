@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    app:startDestination="@id/datasets">
+
+    <fragment
+        android:id="@+id/datasets"
+        android:name="org.odk.collect.entities.DatasetsFragment"
+        android:label="@string/entities_title">
+        <action
+            android:id="@+id/datasets_to_entities"
+            app:destination="@id/entities" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/entities"
+        android:name="org.odk.collect.entities.EntitiesFragment"
+        android:label="{dataset}">
+        <argument
+            android:name="dataset"
+            app:argType="string" />
+    </fragment>
+</navigation>

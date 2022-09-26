@@ -12,6 +12,8 @@ object Dependencies {
     const val androidx_browser = "androidx.browser:browser:1.4.0"
     const val androidx_recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
     const val androidx_fragment = "androidx.fragment:fragment:${Versions.androidx_fragment}"
+    const val androidx_navigation_fragment_ktx = "androidx.navigation:navigation-fragment-ktx:2.5.2"
+    const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:2.5.2"
     const val androidx_appcompat = "androidx.appcompat:appcompat:1.4.2"
     const val androidx_work_runtime = "androidx.work:work-runtime:${Versions.work}"
     const val androidx_cardview = "androidx.cardview:cardview:1.0.0"
