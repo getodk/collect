@@ -22,7 +22,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var gpsLocation: MapPoint? = null
     private var featureClickListener: FeatureListener? = null
     private val markers: MutableList<MapPoint> = ArrayList()
-    private val markerIcons: MutableList<Int?> = ArrayList()
+    private val markerIcons: MutableList<MarkerIconDescription?> = ArrayList()
     private var hasCenter = false
 
     override fun init(
@@ -79,8 +79,7 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun addMarker(markerDescription: MarkerDescription): Int {
         markers.add(markerDescription.point)
-        markerIcons.add(null)
-        markerIcons[markers.size - 1] = markerDescription.iconDescription.iconDrawableId
+        markerIcons.add(markerDescription.iconDescription)
         return markers.size - 1
     }
 
@@ -91,7 +90,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {
-        markerIcons[featureId] = markerIconDescription.iconDrawableId
+        markerIcons[featureId] = markerIconDescription
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint {
@@ -176,7 +175,7 @@ class FakeMapFragment : Fragment(), MapFragment {
         return markers
     }
 
-    fun getMarkerIcons(): List<Int?> {
+    fun getMarkerIcons(): List<MarkerIconDescription?> {
         return markerIcons
     }
 

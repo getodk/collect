@@ -27,7 +27,7 @@ object MarkerIconCreator {
 
     @JvmStatic
     fun getMarkerIconBitmap(context: Context, markerIconDescription: MarkerIconDescription): Bitmap {
-        val drawableId = markerIconDescription.iconDrawableId
+        val drawableId = markerIconDescription.icon
         val color = markerIconDescription.getColor()
         val symbol = markerIconDescription.getSymbol()
         val bitmapId = markerIconDescription.hashCode()

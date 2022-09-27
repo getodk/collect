@@ -5,7 +5,7 @@ import org.odk.collect.shared.strings.StringUtils
 import java.util.Locale
 
 class MarkerIconDescription @JvmOverloads constructor(
-    val iconDrawableId: Int,
+    val icon: Int,
     private val color: String? = null,
     private val symbol: String? = null
 ) {

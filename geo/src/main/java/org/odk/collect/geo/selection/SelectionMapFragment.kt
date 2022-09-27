@@ -233,14 +233,7 @@ class SelectionMapFragment(
                 val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
                 if (newState == STATE_HIDDEN && selectedFeatureId != null) {
                     selectedFeatureViewModel.setSelectedFeatureId(null)
-                    map.setMarkerIcon(
-                        selectedFeatureId,
-                        MarkerIconDescription(
-                            itemsByFeatureId[selectedFeatureId]!!.smallIcon,
-                            itemsByFeatureId[selectedFeatureId]!!.color,
-                            itemsByFeatureId[selectedFeatureId]!!.symbol
-                        )
-                    )
+                    resetIcon(selectedFeatureId)
 
                     onBackPressedCallback.isEnabled = false
                 } else {
@@ -268,7 +261,10 @@ class SelectionMapFragment(
     }
 
     private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
-        removeEnlargedMarkerIfExist(featureId)
+        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+        if (selectedFeatureId != null && selectedFeatureId != featureId) {
+            resetIcon(selectedFeatureId)
+        }
 
         val item = itemsByFeatureId[featureId]
         if (item != null) {
@@ -278,16 +274,23 @@ class SelectionMapFragment(
                 } else {
                     map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
                 }
-                map.setMarkerIcon(featureId, MarkerIconDescription(item.largeIcon, item.color, item.symbol))
+
+                map.setMarkerIcon(
+                    featureId,
+                    MarkerIconDescription(item.largeIcon, item.color, item.symbol)
+                )
+
                 summarySheet.setItem(item)
 
                 summarySheetBehavior.state = STATE_COLLAPSED
-                summarySheet.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        summarySheet.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        summarySheetBehavior.peekHeight = summarySheet.peekHeight
+                summarySheet.viewTreeObserver.addOnGlobalLayoutListener(
+                    object : ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            summarySheet.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                            summarySheetBehavior.peekHeight = summarySheet.peekHeight
+                        }
                     }
-                })
+                )
 
                 selectedFeatureViewModel.setSelectedFeatureId(featureId)
             } else {
@@ -332,18 +335,12 @@ class SelectionMapFragment(
         }
     }
 
-    private fun removeEnlargedMarkerIfExist(itemId: Int) {
-        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
-        if (selectedFeatureId != null && selectedFeatureId != itemId) {
-            map.setMarkerIcon(
-                selectedFeatureId,
-                MarkerIconDescription(
-                    itemsByFeatureId[selectedFeatureId]!!.smallIcon,
-                    itemsByFeatureId[selectedFeatureId]!!.color,
-                    itemsByFeatureId[selectedFeatureId]!!.symbol
-                )
-            )
-        }
+    private fun resetIcon(selectedFeatureId: Int) {
+        val item = itemsByFeatureId[selectedFeatureId]!!
+        map.setMarkerIcon(
+            selectedFeatureId,
+            MarkerIconDescription(item.smallIcon, item.color, item.symbol)
+        )
     }
 
     /**
