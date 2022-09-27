@@ -10,10 +10,12 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.R
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.widgets.items.SelectChoicesMapData.InvalidGeometry
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
+import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
 import org.odk.collect.testshared.FakeScheduler
 
@@ -186,6 +188,63 @@ class SelectChoicesMapDataTest {
 
         val data = loadDataForPrompt(prompt)
         assertThat(data.hasInvalidGeometry().value, equalTo(InvalidGeometry("A", "0 -180.01 0 0")))
+    }
+
+    /**
+     * Attributes names come from properties defined at
+     * https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0.
+     */
+    @Test
+    fun `marker symbol and color are pulled from simple style attributes`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "12.0 -1.0 305 0"),
+                        treeElement("marker-symbol", "A"),
+                        treeElement("marker-color", "#ffffff")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val item = data.getMappableItems().getOrAwaitValue()!![0]
+        assertThat(item.symbol, equalTo("A"))
+        assertThat(item.color, equalTo("#ffffff"))
+    }
+
+    @Test
+    fun `uses different icon if marker-symbol is defined`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "12.0 -1.0 305 0"),
+                        treeElement("marker-symbol", "A")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        val item = data.getMappableItems().getOrAwaitValue()!![0]
+        assertThat(item.smallIcon, equalTo(R.drawable.ic_map_marker_small))
+        assertThat(item.largeIcon, equalTo(R.drawable.ic_map_marker_big))
     }
 
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
