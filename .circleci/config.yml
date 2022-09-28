@@ -19,7 +19,9 @@ jobs:
           name: Generate combined build.gradle file for cache key
           command: cat build.gradle */build.gradle .circleci/gradle.properties > deps.txt
       - restore_cache:
-          key: compile-deps-{{ checksum "deps.txt" }}
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps-
 
       - run:
           name: Copy gradle config
@@ -48,7 +50,9 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: compile-deps-{{ checksum "deps.txt" }}
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps-
 
       - run:
           name: Run code quality checks
@@ -64,7 +68,9 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: test-modules-deps-{{ checksum "deps.txt" }}
+          keys:
+            - test-modules-deps-{{ checksum "deps.txt" }}
+            - test-modules-deps
 
       - run:
           name: Generate list of modules for this fork
@@ -96,7 +102,9 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: test-app-deps-{{ checksum "deps.txt" }}
+          keys:
+            - test-app-deps-{{ checksum "deps.txt" }}
+            - test-app-deps-
 
       - run:
           name: Generate list of test classes
@@ -134,7 +142,9 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+          keys:
+            - intrumented-deps-{{ checksum "deps.txt" }}
+            - intrumented-deps
 
       - run:
           name: Assemble connected test build
@@ -151,7 +161,9 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: compile-deps-{{ checksum "deps.txt" }}
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps
 
       - run:
           name: Assemble self signed release build
@@ -163,7 +175,9 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+          keys:
+            - intrumented-deps-{{ checksum "deps.txt" }}
+            - intrumented-deps
 
       - run:
           name: Assemble test build
