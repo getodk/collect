@@ -6,6 +6,8 @@ import org.odk.collect.maps.MapFragment.FeatureListener
 import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 class FakeMapFragment : Fragment(), MapFragment {
 
@@ -20,7 +22,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var gpsLocation: MapPoint? = null
     private var featureClickListener: FeatureListener? = null
     private val markers: MutableList<MapPoint> = ArrayList()
-    private val markerIcons: MutableList<Int?> = ArrayList()
+    private val markerIcons: MutableList<MarkerIconDescription?> = ArrayList()
     private var hasCenter = false
 
     override fun init(
@@ -75,26 +77,20 @@ class FakeMapFragment : Fragment(), MapFragment {
         hasCenter = true
     }
 
-    override fun addMarker(
-        point: MapPoint,
-        draggable: Boolean,
-        iconAnchor: String,
-        iconDrawableId: Int,
-    ): Int {
-        markers.add(point)
-        markerIcons.add(null)
-        markerIcons[markers.size - 1] = iconDrawableId
+    override fun addMarker(markerDescription: MarkerDescription): Int {
+        markers.add(markerDescription.point)
+        markerIcons.add(markerDescription.iconDescription)
         return markers.size - 1
     }
 
-    override fun addMarkers(markers: List<MapFragment.MarkerDescription>): List<Int> {
+    override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
-            addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDrawableId)
+            addMarker(it)
         }
     }
 
-    override fun setMarkerIcon(featureId: Int, drawableId: Int) {
-        markerIcons[featureId] = drawableId
+    override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {
+        markerIcons[featureId] = markerIconDescription
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint {
@@ -179,7 +175,7 @@ class FakeMapFragment : Fragment(), MapFragment {
         return markers
     }
 
-    fun getMarkerIcons(): List<Int?> {
+    fun getMarkerIcons(): List<MarkerIconDescription?> {
         return markerIcons
     }
 

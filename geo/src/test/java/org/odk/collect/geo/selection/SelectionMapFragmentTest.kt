@@ -1,6 +1,7 @@
 package org.odk.collect.geo.selection
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
@@ -347,12 +348,16 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
-                largeIcon = android.R.drawable.ic_lock_idle_alarm
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+                symbol = "A",
+                color = "#ffffff"
             ),
             Fixtures.actionMappableSelectItem().copy(
                 id = 1,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
-                largeIcon = android.R.drawable.ic_lock_idle_alarm
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+                symbol = "B",
+                color = "#000000"
             ),
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
@@ -361,8 +366,16 @@ class SelectionMapFragmentTest {
         map.ready()
 
         map.clickOnFeature(1)
-        assertThat(map.getMarkerIcons()[0], equalTo(items[0].smallIcon))
-        assertThat(map.getMarkerIcons()[1], equalTo(items[1].largeIcon))
+
+        val firstIcon = map.getMarkerIcons()[0]!!
+        assertThat(firstIcon.icon, equalTo(items[0].smallIcon))
+        assertThat(firstIcon.getSymbol(), equalTo("A"))
+        assertThat(firstIcon.getColor(), equalTo(Color.parseColor("#ffffff")))
+
+        val secondIcon = map.getMarkerIcons()[1]!!
+        assertThat(secondIcon.icon, equalTo(items[1].largeIcon))
+        assertThat(secondIcon.getSymbol(), equalTo("B"))
+        assertThat(secondIcon.getColor(), equalTo(Color.parseColor("#000000")))
     }
 
     @Test
@@ -371,12 +384,16 @@ class SelectionMapFragmentTest {
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
-                largeIcon = android.R.drawable.ic_lock_idle_alarm
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+                symbol = "A",
+                color = "#ffffff"
             ),
             Fixtures.actionMappableSelectItem().copy(
                 id = 1,
                 smallIcon = android.R.drawable.ic_lock_idle_charging,
-                largeIcon = android.R.drawable.ic_lock_idle_alarm
+                largeIcon = android.R.drawable.ic_lock_idle_alarm,
+                symbol = "B",
+                color = "#000000"
             ),
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
@@ -386,8 +403,16 @@ class SelectionMapFragmentTest {
 
         map.clickOnFeature(0)
         map.clickOnFeature(1)
-        assertThat(map.getMarkerIcons()[0], equalTo(items[0].smallIcon))
-        assertThat(map.getMarkerIcons()[1], equalTo(items[1].largeIcon))
+
+        val firstIcon = map.getMarkerIcons()[0]!!
+        assertThat(firstIcon.icon, equalTo(items[0].smallIcon))
+        assertThat(firstIcon.getSymbol(), equalTo("A"))
+        assertThat(firstIcon.getColor(), equalTo(Color.parseColor("#ffffff")))
+
+        val secondIcon = map.getMarkerIcons()[1]!!
+        assertThat(secondIcon.icon, equalTo(items[1].largeIcon))
+        assertThat(secondIcon.getSymbol(), equalTo("B"))
+        assertThat(secondIcon.getColor(), equalTo(Color.parseColor("#000000")))
     }
 
     @Test
@@ -453,12 +478,13 @@ class SelectionMapFragmentTest {
 
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
             .check(matches(not(isDisplayed())))
-        assertThat(map.getMarkerIcons()[0], equalTo(item.smallIcon))
+        assertThat(map.getMarkerIcons()[0]!!.icon, equalTo(item.smallIcon))
     }
 
     @Test
     fun `pressing back with an item selected deselects it`() {
-        val item = Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1")
+        val item = Fixtures.actionMappableSelectItem()
+            .copy(id = 0, name = "Blah1", symbol = "A", color = "#ffffff")
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(listOf(item)))
 
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
@@ -471,7 +497,10 @@ class SelectionMapFragmentTest {
 
         onView(allOf(isDescendantOfA(withId(R.id.summary_sheet)), withText("Blah1")))
             .check(matches(not(isDisplayed())))
-        assertThat(map.getMarkerIcons()[0], equalTo(item.smallIcon))
+
+        assertThat(map.getMarkerIcons()[0]!!.icon, equalTo(item.smallIcon))
+        assertThat(map.getMarkerIcons()[0]!!.getSymbol(), equalTo("A"))
+        assertThat(map.getMarkerIcons()[0]!!.getColor(), equalTo(Color.parseColor("#ffffff")))
     }
 
     @Test

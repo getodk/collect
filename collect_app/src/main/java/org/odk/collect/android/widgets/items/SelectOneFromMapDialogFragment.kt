@@ -192,19 +192,24 @@ internal class SelectChoicesMapData(
                     MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
                 }
 
+                val markerColor = selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
+                val markerSymbol = selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
+
                 list + MappableSelectItem.WithAction(
                     index.toLong(),
                     latitude,
                     longitude,
-                    R.drawable.ic_map_marker_24dp,
-                    R.drawable.ic_map_marker_48dp,
+                    if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
+                    if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
                     prompt.getSelectChoiceText(selectChoice),
                     properties,
                     MappableSelectItem.IconifiedText(
                         R.drawable.ic_save,
                         resources.getString(R.string.select_item)
                     ),
-                    selectChoice.index == selectedIndex
+                    selectChoice.index == selectedIndex,
+                    markerColor,
+                    markerSymbol
                 )
             } else {
                 list

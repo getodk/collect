@@ -157,8 +157,8 @@ class SelectOneFromMapDialogFragmentTest {
                             0,
                             selectChoices[0].getChild("geometry")!!.split(" ")[0].toDouble(),
                             selectChoices[0].getChild("geometry")!!.split(" ")[1].toDouble(),
-                            R.drawable.ic_map_marker_24dp,
-                            R.drawable.ic_map_marker_48dp,
+                            R.drawable.ic_map_marker_with_hole_small,
+                            R.drawable.ic_map_marker_with_hole_big,
                             "A",
                             emptyList(),
                             IconifiedText(
@@ -169,8 +169,8 @@ class SelectOneFromMapDialogFragmentTest {
                             1,
                             selectChoices[1].getChild("geometry")!!.split(" ")[0].toDouble(),
                             selectChoices[1].getChild("geometry")!!.split(" ")[1].toDouble(),
-                            R.drawable.ic_map_marker_24dp,
-                            R.drawable.ic_map_marker_48dp,
+                            R.drawable.ic_map_marker_with_hole_small,
+                            R.drawable.ic_map_marker_with_hole_big,
                             "B",
                             emptyList(),
                             IconifiedText(

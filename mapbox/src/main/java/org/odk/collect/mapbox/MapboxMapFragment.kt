@@ -54,10 +54,12 @@ import org.odk.collect.maps.MapFragment.PointListener
 import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapFragmentDelegate
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.MapsMarkerCache
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils.getReferenceLayerFile
 import org.odk.collect.maps.layers.MbtilesFile
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconCreator
+import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.shared.injection.ObjectProviderHost
 import timber.log.Timber
@@ -202,7 +204,7 @@ class MapboxMapFragment :
 
     override fun onDestroy() {
         tileServer?.destroy()
-        MapsMarkerCache.clearCache()
+        MarkerIconCreator.clearCache()
         super.onDestroy()
     }
 
@@ -279,18 +281,11 @@ class MapboxMapFragment :
         hasCenter = true
     }
 
-    override fun addMarker(
-        point: MapPoint,
-        draggable: Boolean,
-        iconAnchor: String,
-        iconDrawableId: Int,
-    ): Int {
-        return addMarkers(
-            listOf(MapFragment.MarkerDescription(point, draggable, iconAnchor, iconDrawableId))
-        ).first()
+    override fun addMarker(markerDescription: MarkerDescription): Int {
+        return addMarkers(listOf(markerDescription)).first()
     }
 
-    override fun addMarkers(markers: List<MapFragment.MarkerDescription>): List<Int> {
+    override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         val pointAnnotations =
             MapUtils.createPointAnnotations(requireContext(), pointAnnotationManager, markers)
 
@@ -316,10 +311,10 @@ class MapboxMapFragment :
         return featureIds
     }
 
-    override fun setMarkerIcon(featureId: Int, drawableId: Int) {
+    override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {
         val feature = features[featureId]
         if (feature is MarkerFeature) {
-            feature.setIcon(drawableId)
+            feature.setIcon(markerIconDescription)
         }
     }
 

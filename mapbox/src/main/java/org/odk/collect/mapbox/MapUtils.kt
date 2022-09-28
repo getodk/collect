@@ -8,7 +8,9 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.MapsMarkerCache
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconCreator
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 object MapUtils {
     fun createPointAnnotation(
@@ -22,7 +24,7 @@ object MapUtils {
         return pointAnnotationManager.create(
             PointAnnotationOptions()
                 .withPoint(Point.fromLngLat(point.lon, point.lat, point.alt))
-                .withIconImage(MapsMarkerCache.getMarkerBitmap(iconDrawableId, context))
+                .withIconImage(MarkerIconCreator.getMarkerIconBitmap(context, MarkerIconDescription(iconDrawableId)))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
                 .withDraggable(draggable)
@@ -34,12 +36,12 @@ object MapUtils {
     fun createPointAnnotations(
         context: Context,
         pointAnnotationManager: PointAnnotationManager,
-        markerFeatures: List<MapFragment.MarkerDescription>,
+        markerFeatures: List<MarkerDescription>,
     ): List<PointAnnotation> {
         val pointAnnotationOptionsList = markerFeatures.map {
             PointAnnotationOptions()
                 .withPoint(Point.fromLngLat(it.point.lon, it.point.lat, it.point.alt))
-                .withIconImage(MapsMarkerCache.getMarkerBitmap(it.iconDrawableId, context))
+                .withIconImage(MarkerIconCreator.getMarkerIconBitmap(context, it.iconDescription))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
                 .withDraggable(it.isDraggable)

@@ -5,6 +5,8 @@ import android.os.Looper
 import androidx.fragment.app.Fragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 class FakeClickableMapFragment : Fragment(), MapFragment {
 
@@ -38,18 +40,18 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         animate: Boolean
     ) {}
 
-    override fun addMarker(point: MapPoint?, draggable: Boolean, iconAnchor: String?, iconDrawableId: Int): Int {
+    override fun addMarker(markerDescription: MarkerDescription): Int {
         val id = idCounter++
         return id
     }
 
-    override fun addMarkers(markers: List<MapFragment.MarkerDescription>): List<Int> {
+    override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
         return markers.map {
-            addMarker(it.point, it.isDraggable, it.iconAnchor, it.iconDrawableId)
+            addMarker(it)
         }
     }
 
-    override fun setMarkerIcon(featureId: Int, drawableId: Int) {}
+    override fun setMarkerIcon(featureId: Int, markerIconDescription: MarkerIconDescription) {}
 
     override fun getMarkerPoint(featureId: Int): MapPoint {
         return MapPoint(0.0, 0.0)

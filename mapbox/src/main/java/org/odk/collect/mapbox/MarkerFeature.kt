@@ -7,7 +7,8 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
-import org.odk.collect.maps.MapsMarkerCache
+import org.odk.collect.maps.markers.MarkerIconCreator
+import org.odk.collect.maps.markers.MarkerIconDescription
 
 /** A point annotation that can optionally be dragged by the user. */
 class MarkerFeature(
@@ -29,8 +30,8 @@ class MarkerFeature(
         }
     }
 
-    fun setIcon(drawableId: Int) {
-        pointAnnotation.iconImageBitmap = MapsMarkerCache.getMarkerBitmap(drawableId, context)
+    fun setIcon(markerIconDescription: MarkerIconDescription) {
+        pointAnnotation.iconImageBitmap = MarkerIconCreator.getMarkerIconBitmap(context, markerIconDescription)
         pointAnnotationManager.update(pointAnnotation)
     }
 

@@ -56,6 +56,8 @@ import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.markers.MarkerDescription;
+import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.settings.SettingsProvider;
@@ -263,9 +265,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         hasCenter = true;
     }
 
-    @Override public int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
+    @Override public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(map, point, draggable, iconAnchor, iconDrawableId));
+        features.put(featureId, new MarkerFeature(map, markerDescription));
         return featureId;
     }
 
@@ -273,17 +275,17 @@ public class GoogleMapFragment extends SupportMapFragment implements
     public List<Integer> addMarkers(List<MarkerDescription> markers) {
         List<Integer> featureIds = new ArrayList<>();
         for (MarkerDescription markerDescription : markers) {
-            int featureId = addMarker(markerDescription.getPoint(), markerDescription.isDraggable(), markerDescription.getIconAnchor(), markerDescription.getIconDrawableId());
+            int featureId = addMarker(markerDescription);
             featureIds.add(featureId);
         }
 
         return featureIds;
     }
 
-    @Override public void setMarkerIcon(int featureId, int drawableId) {
+    @Override public void setMarkerIcon(int featureId, MarkerIconDescription markerIconDescription) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof MarkerFeature) {
-            ((MarkerFeature) feature).setIcon(drawableId);
+            ((MarkerFeature) feature).setIcon(markerIconDescription);
         }
     }
 
@@ -577,7 +579,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (locationCrosshairs == null) {
             locationCrosshairs = map.addMarker(new MarkerOptions()
                 .position(loc)
-                .icon(getBitmapDescriptor(R.drawable.ic_crosshairs))
+                .icon(getBitmapDescriptor(new MarkerIconDescription(R.drawable.ic_crosshairs)))
                 .anchor(0.5f, 0.5f)  // center the crosshairs on the position
             );
         }
@@ -625,7 +627,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private Marker createMarker(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
+    private Marker createMarker(GoogleMap map, MarkerDescription markerDescription) {
         if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
             return null;
         }
@@ -633,11 +635,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // fields.  We need to store the point's altitude and standard
         // deviation values somewhere, so they go in the marker's snippet.
         return map.addMarker(new MarkerOptions()
-            .position(toLatLng(point))
-            .snippet(point.alt + ";" + point.sd)
-            .draggable(draggable)
-            .icon(getBitmapDescriptor(iconDrawableId))
-            .anchor(getIconAnchorValueX(iconAnchor), getIconAnchorValueY(iconAnchor))  // center the icon on the position
+            .position(toLatLng(markerDescription.getPoint()))
+            .snippet(markerDescription.getPoint().alt + ";" + markerDescription.getPoint().sd)
+            .draggable(markerDescription.isDraggable())
+            .icon(getBitmapDescriptor(markerDescription.getIconDescription()))
+            .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
         );
     }
 
@@ -658,8 +660,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private BitmapDescriptor getBitmapDescriptor(int drawableId) {
-        return BitmapDescriptorCache.getBitmapDescriptor(drawableId, getContext());
+    private BitmapDescriptor getBitmapDescriptor(MarkerIconDescription markerIconDescription) {
+        return BitmapDescriptorCache.getBitmapDescriptor(getContext(), markerIconDescription);
     }
 
     private void showGpsDisabledAlert() {
@@ -717,12 +719,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     private class MarkerFeature implements MapFeature {
         private Marker marker;
 
-        MarkerFeature(GoogleMap map, MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
-            marker = createMarker(map, point, draggable, iconAnchor, iconDrawableId);
+        MarkerFeature(GoogleMap map, MarkerDescription markerDescription) {
+            marker = createMarker(map, markerDescription);
         }
 
-        public void setIcon(int drawableId) {
-            marker.setIcon(getBitmapDescriptor(drawableId));
+        public void setIcon(MarkerIconDescription markerIconDescription) {
+            marker.setIcon(getBitmapDescriptor(markerIconDescription));
         }
 
         public MapPoint getPoint() {
@@ -761,7 +763,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 return;
             }
             for (MapPoint point : points) {
-                markers.add(createMarker(map, point, true, CENTER, R.drawable.ic_map_point));
+                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             }
             update();
         }
@@ -817,7 +819,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(map, point, true, CENTER, R.drawable.ic_map_point));
+            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             update();
         }
 

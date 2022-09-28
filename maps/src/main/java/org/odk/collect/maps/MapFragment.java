@@ -18,6 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 
+import org.odk.collect.maps.markers.MarkerDescription;
+import org.odk.collect.maps.markers.MarkerIconDescription;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.List;
@@ -100,12 +103,12 @@ public interface MapFragment {
      * the user will be able to drag the marker to change its location.
      * Returns a positive integer, the featureId for the newly added shape.
      */
-    int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId);
+    int addMarker(MarkerDescription markerDescription);
 
     List<Integer> addMarkers(List<MarkerDescription> markers);
 
     /** Sets the icon for a marker. */
-    void setMarkerIcon(int featureId, int drawableId);
+    void setMarkerIcon(int featureId, MarkerIconDescription markerIconDescription);
 
     /** Gets the location of an existing marker. */
     MapPoint getMarkerPoint(int featureId);
@@ -200,35 +203,4 @@ public interface MapFragment {
         void onFeature(int featureId);
     }
 
-    class MarkerDescription {
-
-        private final MapPoint point;
-        private final boolean draggable;
-        private final String iconAnchor;
-        private final int iconDrawableId;
-
-        public MarkerDescription(MapPoint point, boolean draggable, @IconAnchor String iconAnchor, int iconDrawableId) {
-            this.point = point;
-            this.draggable = draggable;
-            this.iconAnchor = iconAnchor;
-            this.iconDrawableId = iconDrawableId;
-        }
-
-        public MapPoint getPoint() {
-            return point;
-        }
-
-        public boolean isDraggable() {
-            return draggable;
-        }
-
-        @IconAnchor
-        public String getIconAnchor() {
-            return iconAnchor;
-        }
-
-        public int getIconDrawableId() {
-            return iconDrawableId;
-        }
-    }
 }

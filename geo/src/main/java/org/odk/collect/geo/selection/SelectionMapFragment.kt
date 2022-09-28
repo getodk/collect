@@ -27,6 +27,8 @@ import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.maps.MapPoint
+import org.odk.collect.maps.markers.MarkerDescription
+import org.odk.collect.maps.markers.MarkerIconDescription
 import org.odk.collect.material.BottomSheetBehavior
 import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.permissions.PermissionsChecker
@@ -232,10 +234,7 @@ class SelectionMapFragment(
                 val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
                 if (newState == STATE_HIDDEN && selectedFeatureId != null) {
                     selectedFeatureViewModel.setSelectedFeatureId(null)
-                    map.setMarkerIcon(
-                        selectedFeatureId,
-                        itemsByFeatureId[selectedFeatureId]!!.smallIcon
-                    )
+                    resetIcon(selectedFeatureId)
 
                     onBackPressedCallback.isEnabled = false
                 } else {
@@ -263,7 +262,10 @@ class SelectionMapFragment(
     }
 
     private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
-        removeEnlargedMarkerIfExist(featureId)
+        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+        if (selectedFeatureId != null && selectedFeatureId != featureId) {
+            resetIcon(selectedFeatureId)
+        }
 
         val item = itemsByFeatureId[featureId]
         if (item != null) {
@@ -273,16 +275,23 @@ class SelectionMapFragment(
                 } else {
                     map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
                 }
-                map.setMarkerIcon(featureId, item.largeIcon)
+
+                map.setMarkerIcon(
+                    featureId,
+                    MarkerIconDescription(item.largeIcon, item.color, item.symbol)
+                )
+
                 summarySheet.setItem(item)
 
                 summarySheetBehavior.state = STATE_COLLAPSED
-                summarySheet.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        summarySheet.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        summarySheetBehavior.peekHeight = summarySheet.peekHeight
+                summarySheet.viewTreeObserver.addOnGlobalLayoutListener(
+                    object : ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            summarySheet.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                            summarySheetBehavior.peekHeight = summarySheet.peekHeight
+                        }
                     }
-                })
+                )
 
                 selectedFeatureViewModel.setSelectedFeatureId(featureId)
             } else {
@@ -327,14 +336,12 @@ class SelectionMapFragment(
         }
     }
 
-    private fun removeEnlargedMarkerIfExist(itemId: Int) {
-        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
-        if (selectedFeatureId != null && selectedFeatureId != itemId) {
-            map.setMarkerIcon(
-                selectedFeatureId,
-                itemsByFeatureId[selectedFeatureId]!!.smallIcon
-            )
-        }
+    private fun resetIcon(selectedFeatureId: Int) {
+        val item = itemsByFeatureId[selectedFeatureId]!!
+        map.setMarkerIcon(
+            selectedFeatureId,
+            MarkerIconDescription(item.smallIcon, item.color, item.symbol)
+        )
     }
 
     /**
@@ -346,11 +353,11 @@ class SelectionMapFragment(
         itemsByFeatureId.clear()
 
         val markerDescriptions = items.map {
-            MapFragment.MarkerDescription(
+            MarkerDescription(
                 MapPoint(it.latitude, it.longitude),
                 false,
                 MapFragment.BOTTOM,
-                it.smallIcon
+                MarkerIconDescription(it.smallIcon, it.color, it.symbol)
             )
         }
 
@@ -399,6 +406,8 @@ sealed interface MappableSelectItem {
     val name: String
     val properties: List<IconifiedText>
     val selected: Boolean
+    val color: String?
+    val symbol: String?
 
     data class WithInfo(
         override val id: Long,
@@ -410,6 +419,8 @@ sealed interface MappableSelectItem {
         override val properties: List<IconifiedText>,
         val info: String,
         override val selected: Boolean = false,
+        override val color: String? = null,
+        override val symbol: String? = null
     ) : MappableSelectItem
 
     data class WithAction(
@@ -422,6 +433,8 @@ sealed interface MappableSelectItem {
         override val properties: List<IconifiedText>,
         val action: IconifiedText,
         override val selected: Boolean = false,
+        override val color: String? = null,
+        override val symbol: String? = null
     ) : MappableSelectItem
 
     data class IconifiedText(val icon: Int?, val text: String)
