@@ -22,7 +22,6 @@ jobs:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
             - compile-deps-
-
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -37,7 +36,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: compile-deps-{{ checksum "deps.txt" }}
       - persist_to_workspace:
           root: ~/work
@@ -53,6 +52,9 @@ jobs:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
             - compile-deps-
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
@@ -71,6 +73,9 @@ jobs:
           keys:
             - test-modules-deps-{{ checksum "deps.txt" }}
             - test-modules-deps
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Generate list of modules for this fork
@@ -92,7 +97,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: test-modules-deps-{{ checksum "deps.txt" }}
 
   test_app:
@@ -105,6 +110,9 @@ jobs:
           keys:
             - test-app-deps-{{ checksum "deps.txt" }}
             - test-app-deps-
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Generate list of test classes
@@ -133,7 +141,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: test-app-deps-{{ checksum "deps.txt" }}
 
   build_instrumented:
@@ -145,6 +153,9 @@ jobs:
           keys:
             - intrumented-deps-{{ checksum "deps.txt" }}
             - intrumented-deps
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble connected test build
@@ -152,7 +163,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
   build_release:
@@ -164,6 +175,9 @@ jobs:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
             - compile-deps
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble self signed release build
@@ -178,6 +192,9 @@ jobs:
           keys:
             - intrumented-deps-{{ checksum "deps.txt" }}
             - intrumented-deps
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble test build
@@ -185,7 +202,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
