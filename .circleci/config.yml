@@ -72,7 +72,8 @@ jobs:
       - restore_cache:
           keys:
             - test-modules-deps-{{ checksum "deps.txt" }}
-            - test-modules-deps
+            - test-modules-deps-
+            - compile-deps-
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -110,6 +111,7 @@ jobs:
           keys:
             - test-app-deps-{{ checksum "deps.txt" }}
             - test-app-deps-
+            - compile-deps-
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -152,7 +154,8 @@ jobs:
       - restore_cache:
           keys:
             - intrumented-deps-{{ checksum "deps.txt" }}
-            - intrumented-deps
+            - intrumented-deps-
+            - compile-deps-
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -192,6 +195,7 @@ jobs:
           keys:
             - intrumented-deps-{{ checksum "deps.txt" }}
             - intrumented-deps
+            - compile-deps-
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
