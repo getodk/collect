@@ -32,37 +32,50 @@ object MarkerIconCreator {
         val symbol = markerIconDescription.getSymbol()
         val bitmapId = markerIconDescription.hashCode()
 
-        if (cache[bitmapId] == null) {
-            ContextCompat.getDrawable(context, drawableId)?.also { drawable ->
-                var isBackgroundDark = true
+        return if (cache[bitmapId] == null) {
+            createBitmap(context, drawableId, color, symbol).also {
+                cache.put(bitmapId, it)
+            }
+        } else {
+            cache[bitmapId]
+        }
+    }
 
-                color?.let {
-                    drawable.setTint(it)
-                    isBackgroundDark = ColorUtils.calculateLuminance(color) < 0.5
-                }
+    private fun createBitmap(
+        context: Context,
+        drawableId: Int,
+        color: Int?,
+        symbol: String?,
+    ): Bitmap {
+        val drawable = ContextCompat.getDrawable(context, drawableId)
+        if (drawable != null) {
+            drawable.mutate()
 
-                drawable.toBitmap().also { bitmap ->
-                    symbol?.let {
-                        val paint = Paint().also {
-                            it.style = Paint.Style.FILL
-                            it.color = if (isBackgroundDark) Color.WHITE else Color.BLACK
-                            it.textSize = (bitmap.width / 2.3).toFloat()
-                            it.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                            it.textAlign = Paint.Align.CENTER
-                        }
+            val isBackgroundDark = color?.let {
+                drawable.setTint(it)
+                ColorUtils.calculateLuminance(color) < 0.5
+            } ?: true
 
-                        Canvas(bitmap).also {
-                            val x: Int = it.width / 2
-                            val y: Int = it.height / 2
-                            it.drawText(symbol, x.toFloat(), y.toFloat(), paint)
-                        }
+            return drawable.toBitmap().also { bitmap ->
+                symbol?.let {
+                    val paint = Paint().also {
+                        it.style = Paint.Style.FILL
+                        it.color = if (isBackgroundDark) Color.WHITE else Color.BLACK
+                        it.textSize = (bitmap.width / 2.3).toFloat()
+                        it.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+                        it.textAlign = Paint.Align.CENTER
                     }
 
-                    cache.put(bitmapId, bitmap)
+                    Canvas(bitmap).also {
+                        val x: Int = it.width / 2
+                        val y: Int = it.height / 2
+                        it.drawText(symbol, x.toFloat(), y.toFloat(), paint)
+                    }
                 }
             }
+        } else {
+            throw IllegalStateException("Drawable cannot be created!")
         }
-        return cache[bitmapId]
     }
 
     @JvmStatic
