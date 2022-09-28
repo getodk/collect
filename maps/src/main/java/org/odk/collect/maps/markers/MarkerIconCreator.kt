@@ -19,7 +19,7 @@ object MarkerIconCreator {
      * The case when markers have symbols is an exception and then it doesn't make sense to cache
      * bitmaps because every marker will most likely be unique.
      */
-    private val cache = LruCache<Int, Bitmap>(10)
+    private val cache = LruCache<String, Bitmap>(10)
 
     @JvmStatic
     fun getMarkerIconDrawable(context: Context, markerIconDescription: MarkerIconDescription) =
@@ -30,7 +30,8 @@ object MarkerIconCreator {
         val drawableId = markerIconDescription.icon
         val color = markerIconDescription.getColor()
         val symbol = markerIconDescription.getSymbol()
-        val bitmapId = markerIconDescription.hashCode()
+
+        val bitmapId = drawableId.toString() + color + symbol
 
         return if (cache[bitmapId] == null) {
             createBitmap(context, drawableId, color, symbol).also {
