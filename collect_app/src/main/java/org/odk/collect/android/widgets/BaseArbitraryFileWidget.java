@@ -25,6 +25,7 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
         super(context, questionDetails);
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
+        render();
     }
 
     @Override
@@ -62,7 +63,7 @@ public abstract class BaseArbitraryFileWidget extends QuestionWidget implements 
 
     protected void setupAnswerFile(String fileName) {
         if (fileName != null && !fileName.isEmpty()) {
-            answerFile = new File(getInstanceFolder() + File.separator + fileName);
+            answerFile = questionMediaManager.getAnswerFile(fileName);
         }
     }
 

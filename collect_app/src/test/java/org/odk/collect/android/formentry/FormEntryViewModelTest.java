@@ -32,6 +32,7 @@ import org.mockito.InOrder;
 import org.mockito.stubbing.Answer;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
+import org.odk.collect.android.formentry.support.InMemFormSessionRepository;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.testshared.FakeScheduler;
@@ -49,6 +50,7 @@ public class FormEntryViewModelTest {
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
+    private final FormSessionRepository formSessionRepository = new InMemFormSessionRepository();
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -65,8 +67,8 @@ public class FormEntryViewModelTest {
 
         scheduler = new FakeScheduler();
 
-        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler);
-        viewModel.formLoaded(formController);
+        formSessionRepository.set("blah", formController);
+        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler, formSessionRepository, "blah");
     }
 
     @Test
@@ -206,6 +208,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
+        viewModel.refresh();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveForward(new HashMap<>());
@@ -306,6 +309,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
+        viewModel.refresh();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveBackward(new HashMap<>());

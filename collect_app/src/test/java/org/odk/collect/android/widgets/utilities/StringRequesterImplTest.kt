@@ -16,6 +16,7 @@ import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.utilities.ExternalAppIntentProvider
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.robolectric.Robolectric
@@ -37,18 +38,20 @@ class StringRequesterImplTest {
         it.putExtra("fail", "fail")
     }
 
+    private val formController: FormController = mock()
+
     private lateinit var activity: Activity
     private lateinit var stringRequester: StringRequester
 
     @Before
     fun setup() {
         activity = Robolectric.buildActivity(Activity::class.java).get()
-        stringRequester = StringRequesterImpl(intentLauncher, externalAppIntentProvider)
+        stringRequester = StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController)
     }
 
     @Test
     fun `When exception is thrown by ExternalAppIntentProvider#getIntentToRunExternalApp onError should be called`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).then {
             throw Exception("exception")
         }
         stringRequester.launch(
@@ -66,6 +69,7 @@ class StringRequesterImplTest {
     fun `When exception is thrown by ExternalAppIntentProvider#getIntentToRunExternalAppWithoutDefaultCategory onError should be called`() {
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -85,7 +89,7 @@ class StringRequesterImplTest {
 
     @Test
     fun `When error is thrown by ExternalAppIntentProvider#getIntentToRunExternalApp onError should be called`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).then {
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).then {
             throw Exception("error")
         }
         stringRequester.launch(
@@ -103,6 +107,7 @@ class StringRequesterImplTest {
     fun `When error is thrown by ExternalAppIntentProvider#getIntentToRunExternalAppWithoutDefaultCategory onError should be called`() {
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -122,7 +127,7 @@ class StringRequesterImplTest {
 
     @Test
     fun `If the first attempt to start activity succeeded nothing else should happen`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             availableIntent
         )
 
@@ -141,7 +146,7 @@ class StringRequesterImplTest {
 
     @Test
     fun `If the first attempt to start activity succeeded for intent with ACTION_SENDTO nothing else should happen`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             availableActionSendToIntent
         )
 
@@ -160,11 +165,12 @@ class StringRequesterImplTest {
 
     @Test
     fun `If the first attempt to start activity failed there should be another one`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -185,11 +191,12 @@ class StringRequesterImplTest {
 
     @Test
     fun `If the first attempt to start activity failed for intent with ACTION_SENDTO there should be another one`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableActionSendToIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -210,11 +217,12 @@ class StringRequesterImplTest {
 
     @Test
     fun `If both attempts to start activity failed onError should be called`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -237,11 +245,12 @@ class StringRequesterImplTest {
 
     @Test
     fun `If both attempts to start activity failed for intent with ACTION_SENDTO onError should be called`() {
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableActionSendToIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -265,11 +274,12 @@ class StringRequesterImplTest {
     @Test
     fun `If both attempts to start activity failed onError should be called with custom message if it is set`() {
         whenever(formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")).thenReturn("Custom message")
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -289,11 +299,12 @@ class StringRequesterImplTest {
     @Test
     fun `If both attempts to start activity failed for intent with ACTION_SENDTO onError should be called with custom message if it is set`() {
         whenever(formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")).thenReturn("Custom message")
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableActionSendToIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )
@@ -313,11 +324,12 @@ class StringRequesterImplTest {
     @Test
     fun `Value should be added to intent`() {
         whenever(formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")).thenReturn("Custom message")
-        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)).thenReturn(
+        whenever(externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)).thenReturn(
             unAvailableIntent
         )
         whenever(
             externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
+                formController,
                 formEntryPrompt,
                 activity.packageManager
             )

@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class SelectMultiImageMapWidgetTest extends SelectImageMapWidgetTest<Sele
     @NonNull
     @Override
     public SelectMultiImageMapWidget createWidget() {
-        return new SelectMultiImageMapWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new SelectMultiImageMapWidget(activity, new QuestionDetails(formEntryPrompt), new FormEntryPromptSelectChoiceLoader());
     }
 
     @NonNull

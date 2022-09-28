@@ -9,14 +9,15 @@ import androidx.fragment.app.Fragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 
 public class MediaLoadingFragment extends Fragment {
 
     private MediaLoadingTask mediaLoadingTask;
 
-    public void beginMediaLoadingTask(Uri uri) {
-        mediaLoadingTask = new MediaLoadingTask((FormEntryActivity) getActivity());
+    public void beginMediaLoadingTask(Uri uri, FormController formController) {
+        mediaLoadingTask = new MediaLoadingTask((FormEntryActivity) getActivity(), formController.getInstanceFile());
         mediaLoadingTask.execute(uri);
     }
 

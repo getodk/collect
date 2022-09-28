@@ -44,6 +44,8 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     public GeoPointMapWidget(Context context, QuestionDetails questionDetails,
                              WaitingForDataRegistry waitingForDataRegistry, GeoDataRequester geoDataRequester) {
         super(context, questionDetails);
+        render();
+
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.geoDataRequester = geoDataRequester;
     }

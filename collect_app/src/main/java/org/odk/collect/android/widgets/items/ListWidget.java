@@ -48,6 +48,7 @@ import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,10 +78,11 @@ public class ListWidget extends QuestionWidget implements MultiChoiceWidget, OnC
     private final boolean displayLabel;
     private final List<SelectChoice> items;
 
-    public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance) {
+    public ListWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, boolean autoAdvance, SelectChoiceLoader selectChoiceLoader) {
         super(context, questionDetails);
+        render();
 
-        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         this.autoAdvance = autoAdvance;
         this.displayLabel = displayLabel;

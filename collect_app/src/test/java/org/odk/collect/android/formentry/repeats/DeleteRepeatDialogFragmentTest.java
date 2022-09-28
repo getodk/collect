@@ -1,23 +1,5 @@
 package org.odk.collect.android.formentry.repeats;
 
-import android.content.DialogInterface;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.test.core.app.ApplicationProvider;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.testshared.RobolectricHelpers;
-import org.robolectric.shadows.ShadowDialog;
-
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -29,6 +11,30 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
+import android.content.DialogInterface;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModel;
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
+import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormSessionRepository;
+import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.testshared.RobolectricHelpers;
+import org.robolectric.shadows.ShadowDialog;
+
 @RunWith(AndroidJUnit4.class)
 public class DeleteRepeatDialogFragmentTest {
 
@@ -36,15 +42,31 @@ public class DeleteRepeatDialogFragmentTest {
     private FragmentManager fragmentManager;
     private DeleteRepeatDialogFragment dialogFragment;
 
+    private final FormController formController = mock(FormController.class, RETURNS_MOCKS);
+
     @Before
     public void setup() {
+        FormEntryViewModel formEntryViewModel = mock(FormEntryViewModel.class);
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
+                return new FormEntryViewModel.Factory(null, null, null) {
+                    @NonNull
+                    @Override
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                        return (T) formEntryViewModel;
+                    }
+                };
+            }
+        });
+
+        when(formEntryViewModel.getFormController()).thenReturn(formController);
+        when(formController.getLastRepeatedGroupName()).thenReturn("blah");
+        when(formController.getLastRepeatedGroupRepeatCount()).thenReturn(0);
+
         activity = CollectHelpers.createThemedActivity(TestActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new DeleteRepeatDialogFragment();
-
-        dialogFragment.formController = mock(FormController.class, RETURNS_MOCKS);
-        when(dialogFragment.formController.getLastRepeatedGroupName()).thenReturn("blah");
-        when(dialogFragment.formController.getLastRepeatedGroupRepeatCount()).thenReturn(0);
     }
 
     @Test
@@ -100,7 +122,7 @@ public class DeleteRepeatDialogFragmentTest {
 
         RobolectricHelpers.runLooper();
         assertThat(activity.deleteGroupCalled, equalTo(true));
-        verify(dialogFragment.formController).deleteRepeat();
+        verify(formController).deleteRepeat();
     }
 
     private AlertDialog launchDialog() {

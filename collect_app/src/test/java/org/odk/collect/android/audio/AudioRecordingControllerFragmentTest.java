@@ -25,10 +25,12 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -52,7 +54,9 @@ public class AudioRecordingControllerFragmentTest {
     private ExternalWebPageHelper externalWebPageHelper;
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(R.style.Theme_MaterialComponents);
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(R.style.Theme_MaterialComponents, new FragmentFactoryBuilder()
+            .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment("blah"))
+            .build());
 
     @Before
     public void setup() throws IOException {
@@ -73,8 +77,8 @@ public class AudioRecordingControllerFragmentTest {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
 
             @Override
-            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics) {
-                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis) {
+            public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics, FormSessionRepository formSessionRepository) {
+                return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis, formSessionRepository) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
@@ -84,8 +88,8 @@ public class AudioRecordingControllerFragmentTest {
             }
 
             @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler) {
-                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler) {
+            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
+                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionRepository) {
                     @NonNull
                     @Override
                     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

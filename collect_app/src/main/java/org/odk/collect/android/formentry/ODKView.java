@@ -68,6 +68,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.utilities.ContentUriHelper;
+import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
@@ -80,11 +81,12 @@ import org.odk.collect.android.widgets.WidgetFactory;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
-import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
-import org.odk.collect.android.widgets.utilities.StringRequester;
+import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.audioclips.PlaybackFailedException;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -130,17 +132,17 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     SettingsProvider settingsProvider;
 
     @Inject
-    FileRequester fileRequester;
+    ExternalAppIntentProvider externalAppIntentProvider;
 
     @Inject
-    StringRequester stringRequester;
+    IntentLauncher intentLauncher;
 
     private final WidgetFactory widgetFactory;
     private final LifecycleOwner viewLifecycle;
+    private final FormController formController;
 
     /**
      * Builds the view for a specified question or field-list of questions.
-     *
      * @param context         the activity creating this view
      * @param questionPrompts the questions to be included in this view
      * @param groups          the group hierarchy that this question or field list is in
@@ -168,6 +170,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             }
         }
 
+        formController = formEntryViewModel.getFormController();
+
         this.widgetFactory = new WidgetFactory(
                 context,
                 readOnlyOverride,
@@ -182,8 +186,9 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 formEntryViewModel,
                 audioRecorder,
                 viewLifecycle,
-                fileRequester,
-                stringRequester
+                new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
+                new StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
+                formController
         );
 
         widgets = new ArrayList<>();
@@ -424,7 +429,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
             try {
                 ExternalAppsUtils.populateParameters(i, parameters,
-                        c.getIndex().getReference());
+                        c.getIndex().getReference(), formController);
 
                 for (FormEntryPrompt p : questionPrompts) {
                     IFormElement formElement = p.getFormElement();
@@ -484,10 +489,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
     public void setDataForFields(Bundle bundle) throws JavaRosaException {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController == null) {
-            return;
-        }
+
 
         if (bundle != null) {
             Set<String> keys = bundle.keySet();

@@ -90,6 +90,7 @@ import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
 import org.odk.collect.android.audio.AudioControllerView;
+import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
@@ -104,6 +105,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.RecordingHandler;
@@ -167,6 +169,7 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
@@ -337,6 +340,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     @Inject
     IntentLauncher intentLauncher;
 
+    @Inject
+    FormSessionRepository formSessionRepository;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -352,6 +358,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
+
+    private static final String KEY_SESSION_ID = "sessionId";
+    private String sessionId;
 
     /**
      * Called when the activity is first created.
@@ -369,9 +378,19 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        super.onCreate(savedInstanceState);
-
         Collect.getInstance().getComponent().inject(this);
+
+        if (savedInstanceState == null) {
+            sessionId = formSessionRepository.create();
+        } else {
+            sessionId = savedInstanceState.getString(KEY_SESSION_ID);
+        }
+
+        this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
+                .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(sessionId))
+                .build());
+
+        super.onCreate(savedInstanceState);
         formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
@@ -420,9 +439,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     private void setupViewModels() {
         backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings()))
+                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionRepository, sessionId))
                 .get(BackgroundLocationViewModel.class);
 
+        backgroundAudioViewModelFactory.setSessionId(sessionId);
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
         backgroundAudioViewModel.isPermissionRequired().observe(this, isPermissionRequired -> {
             if (isPermissionRequired) {
@@ -440,21 +460,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         identityPromptViewModel.isFormEntryCancelled().observe(this, isFormEntryCancelled -> {
             if (isFormEntryCancelled) {
-                finish();
+                exit();
             }
         });
 
+        formEntryViewModelFactory.setSessionId(sessionId);
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
 
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
-            if (index != null && Collect.getInstance().getFormController() == null) {
-                // https://github.com/getodk/collect/issues/5241
-                Timber.e(new Error("getCurrentIndex() firing with null getFormController(). The one stored in formEntryViewModel is " + (formEntryViewModel.isFormControllerSet() ? "not null" : "null")));
-                createErrorDialog("getFormController() is null, please email support@getodk.org with a description of what you were doing when this happened.", true);
-            } else {
-                formIndexAnimationHandler.handle(index);
-            }
+            formIndexAnimationHandler.handle(index);
         });
 
         formEntryViewModel.isLoading().observe(this, isLoading -> {
@@ -485,6 +500,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
+        formSaveViewModelFactoryFactory.setSessionId(sessionId);
         formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
@@ -503,7 +519,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider);
 
-        waitingForDataRegistry = new FormControllerWaitingForDataRegistry();
+        waitingForDataRegistry = new FormControllerWaitingForDataRegistry(this::getFormController);
         externalAppRecordingRequester = new ExternalAppRecordingRequester(this, intentLauncher, waitingForDataRegistry, permissionsProvider);
 
         RecordingHandler recordingHandler = new RecordingHandler(formSaveViewModel, this, audioRecorder, new AMRAppender(), new M4AAppender());
@@ -523,15 +539,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
     }
 
-    // Precondition: the instance directory must be ready so that the audit file can be created
     private void formControllerAvailable(@NonNull FormController formController) {
+        formSessionRepository.set(sessionId, formController);
+
         AnalyticsUtils.setForm(formController);
 
-        menuDelegate.formLoaded(formController);
-
-        formSaveViewModel.formLoaded(formController);
-        backgroundAudioViewModel.formLoaded(formController);
-        formEntryViewModel.formLoaded(formController);
+        backgroundLocationViewModel.formFinishedLoading();
     }
 
     private void setupFields(Bundle savedInstanceState) {
@@ -588,7 +601,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 if (formController != null) {
                     formControllerAvailable(formController);
-                    onScreenRefresh();
+                    formEntryViewModel.refresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
@@ -598,9 +611,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                 return;
             }
-
-            // Not a restart from a screen orientation change (or other).
-            Collect.getInstance().setFormController(null);
 
             Intent intent = getIntent();
             if (intent != null) {
@@ -739,13 +749,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
      */
     private void nonblockingCreateSavePointData() {
         try {
-            SavePointTask savePointTask = new SavePointTask(this);
+            SavePointTask savePointTask = new SavePointTask(this, getFormController());
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
                 FormController formController = getFormController();
                 if (formController != null) {
-                    new SaveFormIndexTask(this, formController.getFormIndex()).execute();
+                    new SaveFormIndexTask(this, formController.getFormIndex(), formController.getInstanceFile()).execute();
                 }
             }
         } catch (Exception e) {
@@ -756,13 +766,16 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     // This method may return null if called before form loading is finished
     @Nullable
     private FormController getFormController() {
-        return Collect.getInstance().getFormController();
+        return formEntryViewModel.getFormController();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         Timber.w("onSaveInstanceState %s", Md5.getMd5Hash(getIntent().getData().toString()));
         super.onSaveInstanceState(outState);
+
+        outState.putString(KEY_SESSION_ID, sessionId);
+
         outState.putString(KEY_FORMPATH, formPath);
         FormController formController = getFormController();
         if (formController != null) {
@@ -805,12 +818,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
-            if (requestCode == RequestCodes.HIERARCHY_ACTIVITY && !formEntryViewModel.isFormControllerSet()) {
-                formControllerAvailable(formController);
-            } else {
-                onScreenRefresh();
-            }
-
+            formEntryViewModel.refresh();
             return;
         }
 
@@ -889,7 +897,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             progressDialog.setMessage(getString(R.string.please_wait));
             DialogFragmentUtils.showIfNotShowing(progressDialog, TAG_PROGRESS_DIALOG_MEDIA_LOADING, getSupportFragmentManager());
 
-            mediaLoadingFragment.beginMediaLoadingTask(uri);
+            mediaLoadingFragment.beginMediaLoadingTask(uri, getFormController());
         });
     }
 
@@ -980,7 +988,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
+                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
                 return true;
         }
 
@@ -1244,7 +1252,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT)), new FormEndView.Listener() {
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), new FormEndView.Listener() {
             @Override
             public void onSaveAsChanged(String saveAs) {
                 // Seems like this is needed for rotation?
@@ -1499,7 +1507,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(Collect.getInstance().getFormController()));
+                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(getFormController()));
 
                             saveForm(false, false, null, false);
                             autoSaved = true;
@@ -1628,7 +1636,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     case BUTTON_POSITIVE:
                         if (shouldExit) {
                             errorMessage = null;
-                            finish();
+                            exit();
                         }
                         break;
                 }
@@ -1745,7 +1753,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Override
     public void onSaveChangesClicked() {
-        saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT)), null, true);
+        saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
     }
 
     @Nullable
@@ -1913,10 +1921,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         FormController formController = getFormController();
 
-        if (formController != null && !formEntryViewModel.isFormControllerSet()) {
-            Timber.e(new Error("FormController set in App but not ViewModel"));
-        }
-
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(this);
             if (formController == null
@@ -1944,7 +1948,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 // there is no formController -- fire MainMenu activity?
                 Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask is null");
                 startActivity(new Intent(this, MainMenuActivity.class));
-                finish();
+                exit();
                 return;
             }
         }
@@ -2088,7 +2092,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
                     @Override
                     public void additionalExplanationClosed() {
-                        finish();
+                        exit();
                     }
                 });
             } else {
@@ -2098,9 +2102,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 t.cancel(true);
                 t.destroy();
 
-                Collect.getInstance().setFormController(formController);
-
-                backgroundLocationViewModel.formFinishedLoading();
                 Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
 
                 // Set the language if one has already been set in the past
@@ -2128,7 +2129,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     Timber.w("Calling onActivityResult from loadingComplete");
 
                     formControllerAvailable(formController);
-                    onScreenRefresh();
+                    formEntryViewModel.refresh();
                     onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                     return;
                 }
@@ -2169,13 +2170,14 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                 registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                             }
 
+                            formControllerAvailable(formController);
+
                             // onResume ran before the form was loaded. Let the viewModel know that the activity
                             // is about to be displayed and configured. Do this before the refresh actually
                             // happens because if audit logging is enabled, the refresh logs a question event
                             // and we want that to show up after initialization events.
                             activityDisplayed();
-
-                            formControllerAvailable(formController);
+                            formEntryViewModel.refresh();
 
                             if (warningMsg != null) {
                                 showLongToast(this, warningMsg);
@@ -2198,25 +2200,33 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                                     // form was saved.
                                     // TODO: revisit the fallback. If for some reason the index
                                     // wasn't saved, we can now jump around which doesn't seem right.
-                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile();
+                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile(formController);
                                     if (formIndex != null) {
                                         formController.jumpToIndex(formIndex);
                                         formControllerAvailable(formController);
+                                        formEntryViewModel.refresh();
                                         return;
                                     }
                                 }
 
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                                startActivityForResult(new Intent(this, FormHierarchyActivity.class), RequestCodes.HIERARCHY_ACTIVITY);
+                                formControllerAvailable(formController);
+                                Intent intent = new Intent(this, FormHierarchyActivity.class);
+                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                                startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
 
                         formController.getAuditEventLogger().setEditing(true);
                     } else {
+                        formControllerAvailable(formController);
                         if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                            startActivity(new Intent(this, ViewOnlyFormHierarchyActivity.class));
+                            Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
+                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                            startActivity(intent);
                         }
+
                         finish();
                     }
                 }
@@ -2224,7 +2234,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         } else {
             Timber.e(new Error("FormController is null"));
             showLongToast(this, R.string.loading_form_failed);
-            finish();
+            exit();
         }
     }
 
@@ -2286,6 +2296,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
+        exit();
+    }
+
+    private void exit() {
+        formEntryViewModel.exit();
         finish();
     }
 
@@ -2363,7 +2378,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             t.cancel(true);
             t.destroy();
         }
-        finish();
+        exit();
     }
 
     private void onDataChanged(Object data) {

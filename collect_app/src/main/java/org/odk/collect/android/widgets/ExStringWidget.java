@@ -92,6 +92,8 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails);
+        render();
+
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.stringRequester = stringRequester;
         getComponent(context).inject(this);

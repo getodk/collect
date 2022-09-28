@@ -44,6 +44,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     public RangeDecimalWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        render();
     }
 
     @Override

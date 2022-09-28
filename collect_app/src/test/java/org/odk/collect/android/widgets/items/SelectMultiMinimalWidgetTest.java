@@ -15,6 +15,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,7 @@ public class SelectMultiMinimalWidgetTest extends GeneralSelectMultiWidgetTest<S
     @NonNull
     @Override
     public SelectMultiMinimalWidget createWidget() {
-        return new SelectMultiMinimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry());
+        return new SelectMultiMinimalWidget(activity, new QuestionDetails(formEntryPrompt), new FakeWaitingForDataRegistry(), new FormEntryPromptSelectChoiceLoader());
     }
 
     @Test

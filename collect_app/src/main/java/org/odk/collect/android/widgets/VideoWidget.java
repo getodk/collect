@@ -73,10 +73,12 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
         this(context, prompt, waitingForDataRegistry, questionMediaManager, new CameraUtils());
+        render();
     }
 
     public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
         super(context, questionDetails);
+        render();
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
@@ -115,7 +117,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     @Override
     public void deleteFile() {
         questionMediaManager.deleteAnswerFile(getFormEntryPrompt().getIndex().toString(),
-                        getInstanceFolder() + File.separator + binaryName);
+                        questionMediaManager.getAnswerFile(binaryName).getAbsolutePath());
         binaryName = null;
     }
 
@@ -250,7 +252,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     }
 
     private void playVideoFile() {
-        File file = new File(getInstanceFolder() + File.separator + binaryName);
+        File file = questionMediaManager.getAnswerFile(binaryName);
         mediaUtils.openFile(getContext(), file, "video/*");
     }
 }

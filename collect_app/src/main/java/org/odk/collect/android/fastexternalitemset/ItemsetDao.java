@@ -27,7 +27,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.expr.XPathExpression;
 import org.javarosa.xpath.parser.XPathSyntaxException;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;
@@ -86,15 +85,13 @@ public class ItemsetDao {
         return itemLabel;
     }
 
-    public List<SelectChoice> getItems(FormEntryPrompt formEntryPrompt, XPathParseTool pathParseTool) throws FileNotFoundException, XPathSyntaxException {
+    public List<SelectChoice> getItems(FormEntryPrompt formEntryPrompt, XPathParseTool pathParseTool, FormController formController) throws FileNotFoundException, XPathSyntaxException {
         String nodesetString = getNodesetString(formEntryPrompt);
 
         List<String> arguments = new ArrayList<>();
         String selectionString = getSelectionStringAndPopulateArguments(getQueryString(nodesetString), arguments);
 
-        FormController formController = Collect.getInstance().getFormController();
         String[] selectionArgs = getSelectionArgs(arguments, nodesetString, formController, pathParseTool, formEntryPrompt);
-
         return selectionArgs == null ? null : getItemsFromDatabase(selectionString, selectionArgs, formController, adapter);
     }
 

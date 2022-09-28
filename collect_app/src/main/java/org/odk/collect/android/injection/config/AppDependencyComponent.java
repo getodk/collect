@@ -38,6 +38,7 @@ import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
+import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
@@ -291,6 +292,8 @@ public interface AppDependencyComponent {
     void inject(BlankFormListActivity blankFormListActivity);
 
     void inject(BackgroundLocationViewModel.Factory factory);
+
+    void inject(DeleteRepeatDialogFragment deleteRepeatDialogFragment);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

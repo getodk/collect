@@ -35,8 +35,13 @@ class AppState {
     private val map = mutableMapOf<String, Any?>()
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> get(key: String, default: T? = null): T {
+    fun <T> get(key: String, default: T): T {
         return map.getOrPut(key) { default } as T
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> get(key: String): T? {
+        return map.get(key) as T?
     }
 
     fun set(key: String, value: Any?) {

@@ -42,6 +42,8 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
         this.fileRequester = fileRequester;
+
+        render();
     }
 
     @Override
@@ -124,7 +126,7 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
 
     private void setupAnswerFile(String fileName) {
         if (fileName != null && !fileName.isEmpty()) {
-            answerFile = new File(getInstanceFolder() + File.separator + fileName);
+            answerFile = questionMediaManager.getAnswerFile(fileName);
         }
     }
 }

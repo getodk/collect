@@ -125,6 +125,8 @@ public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceive
 
     public ExPrinterWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
+        render();
+
         this.waitingForDataRegistry = waitingForDataRegistry;
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");

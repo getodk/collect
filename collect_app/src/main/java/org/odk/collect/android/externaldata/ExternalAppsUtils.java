@@ -36,6 +36,7 @@ import org.javarosa.xpath.expr.XPathPathExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalParamsException;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 
@@ -113,12 +114,12 @@ public final class ExternalAppsUtils {
     }
 
     public static void populateParameters(Intent intent, Map<String, String> exParams,
-            TreeReference reference) throws ExternalParamsException {
+                                          TreeReference reference, FormController formController) throws ExternalParamsException {
         if (exParams != null) {
             for (Map.Entry<String, String> paramEntry : exParams.entrySet()) {
                 String paramEntryValue = paramEntry.getValue();
                 try {
-                    Object result = getValueRepresentedBy(paramEntry.getValue(), reference);
+                    Object result = getValueRepresentedBy(paramEntry.getValue(), reference, formController);
 
                     if (result instanceof Serializable) {
                         intent.putExtra(paramEntry.getKey(), (Serializable) result);
@@ -131,13 +132,13 @@ public final class ExternalAppsUtils {
         }
     }
 
-    public static Object getValueRepresentedBy(String text, TreeReference reference) throws XPathSyntaxException {
+    public static Object getValueRepresentedBy(String text, TreeReference reference, FormController formController) throws XPathSyntaxException {
         if (text.startsWith("'")) {
             // treat this as a constant parameter but not require an ending quote
             return text.endsWith("'") ? text.substring(1, text.length() - 1) : text.substring(1);
         }
 
-        FormDef formDef = Collect.getInstance().getFormController().getFormDef();
+        FormDef formDef = formController.getFormDef();
         FormInstance formInstance = formDef.getInstance();
         EvaluationContext evaluationContext = new EvaluationContext(formDef.getEvaluationContext(), reference);
         if (text.startsWith("/")) {
@@ -147,7 +148,7 @@ public final class ExternalAppsUtils {
             return XPathFuncExpr.unpack(xpathNodeset);
         } else if (text.equals("instanceProviderID()")) {
             // instanceProviderID returns -1 if the current instance has not been saved to disk already
-            String path = Collect.getInstance().getFormController().getInstanceFile().getAbsolutePath();
+            String path = formController.getInstanceFile().getAbsolutePath();
 
             String instanceProviderID = "-1";
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);

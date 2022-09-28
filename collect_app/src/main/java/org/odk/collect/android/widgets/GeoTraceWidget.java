@@ -47,6 +47,8 @@ public class GeoTraceWidget extends QuestionWidget implements WidgetDataReceiver
     public GeoTraceWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry,
                           MapConfigurator mapConfigurator, GeoDataRequester geoDataRequester) {
         super(context, questionDetails);
+        render();
+
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.mapConfigurator = mapConfigurator;
         this.geoDataRequester = geoDataRequester;

@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
 
 import android.app.Activity;
 
@@ -13,6 +14,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.WidgetTestActivity;
@@ -35,7 +37,7 @@ public class WidgetFactoryTest {
     @Before
     public void setup() {
         Activity activity = CollectHelpers.buildThemedActivity(WidgetTestActivity.class).get();
-        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, null, null, null, null, null);
+        widgetFactory = new WidgetFactory(activity, false, false, null, null, null, null, mock(FormEntryViewModel.class), null, null, null, null, null);
     }
 
     @Test

@@ -70,6 +70,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
 
     public AudioWidget(Context context, QuestionDetails questionDetails, QuestionMediaManager questionMediaManager, AudioPlayer audioPlayer, RecordingRequester recordingRequester, AudioFileRequester audioFileRequester, RecordingStatusHandler recordingStatusHandler) {
         super(context, questionDetails);
+        render();
+
         this.audioPlayer = audioPlayer;
 
         this.questionMediaManager = questionMediaManager;

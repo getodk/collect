@@ -61,6 +61,8 @@ public class FormEntryMenuDelegateTest {
 
         formEntryViewModel = mock(FormEntryViewModel.class);
         when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableNonNullLiveData<>(false));
+        when(formEntryViewModel.getSessionId()).thenReturn("blah");
+        when(formEntryViewModel.getFormController()).thenReturn(formController);
 
         BackgroundLocationViewModel backgroundLocationViewModel = mock(BackgroundLocationViewModel.class);
         backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
@@ -75,7 +77,6 @@ public class FormEntryMenuDelegateTest {
                 backgroundAudioViewModel,
                 TestSettingsProvider.getSettingsProvider()
         );
-        formEntryMenuDelegate.formLoaded(formController);
     }
 
     @Test
@@ -102,7 +103,7 @@ public class FormEntryMenuDelegateTest {
 
     @Test
     public void onPrepare_whenFormControllerIsNull_hidesAddRepeat() {
-        formEntryMenuDelegate.formLoaded(null);
+        when(formEntryViewModel.getFormController()).thenReturn(null);
 
         RoboMenu menu = new RoboMenu();
         formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);

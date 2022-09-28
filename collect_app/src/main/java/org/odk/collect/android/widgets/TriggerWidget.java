@@ -39,6 +39,7 @@ public class TriggerWidget extends QuestionWidget {
 
     public TriggerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
+        render();
     }
 
     @Override

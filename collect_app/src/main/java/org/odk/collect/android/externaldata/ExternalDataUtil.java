@@ -165,7 +165,7 @@ public final class ExternalDataUtil {
     }
 
     public static ArrayList<SelectChoice> populateExternalChoices(FormEntryPrompt formEntryPrompt,
-            XPathFuncExpr xpathfuncexpr) throws FileNotFoundException {
+            XPathFuncExpr xpathfuncexpr, FormController formController) throws FileNotFoundException {
         try {
             List<SelectChoice> selectChoices = formEntryPrompt.getSelectChoices();
             ArrayList<SelectChoice> returnedChoices = new ArrayList<>();
@@ -188,8 +188,7 @@ public final class ExternalDataUtil {
 
                     ExternalDataManager externalDataManager =
                             Collect.getInstance().getExternalDataManager();
-                    FormInstance formInstance =
-                            Collect.getInstance().getFormController().getFormDef().getInstance();
+                    FormInstance formInstance = formController.getFormDef().getInstance();
                     EvaluationContext baseEvaluationContext = new EvaluationContext(formInstance);
                     EvaluationContext evaluationContext = new EvaluationContext(
                             baseEvaluationContext, formEntryPrompt.getIndex().getReference());
@@ -218,10 +217,9 @@ public final class ExternalDataUtil {
             if (!fileName.endsWith(".csv")) {
                 fileName = fileName + ".csv";
             }
-            FormController formController = Collect.getInstance().getFormController();
             String filePath = fileName;
             if (formController != null) {
-                filePath = Collect.getInstance().getFormController().getMediaFolder() + File.separator + fileName;
+                filePath = formController.getMediaFolder() + File.separator + fileName;
             }
             if (!new File(filePath).exists()) {
                 throw new FileNotFoundException(filePath);

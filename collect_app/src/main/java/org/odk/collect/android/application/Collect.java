@@ -22,7 +22,6 @@ import android.content.res.Configuration;
 import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,6 @@ import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
 import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
 import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.androidshared.data.AppState;
@@ -70,8 +68,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class Collect extends Application implements
         LocalizedApplication,
@@ -88,8 +84,6 @@ public class Collect extends Application implements
     private final AppState appState = new AppState();
     private final SupplierObjectProvider mapboxDependencies = new SupplierObjectProvider();
 
-    @Nullable
-    private FormController formController;
     private ExternalDataManager externalDataManager;
     private AppDependencyComponent applicationComponent;
 
@@ -112,15 +106,6 @@ public class Collect extends Application implements
     @Deprecated
     public static Collect getInstance() {
         return singleton;
-    }
-
-    public FormController getFormController() {
-        return formController;
-    }
-
-    public void setFormController(@Nullable FormController controller) {
-        Timber.w("Setting formController from %s to %s", (formController == null ? "null" : "not null"), (controller == null ? "null" : "not null"));
-        formController = controller;
     }
 
     public ExternalDataManager getExternalDataManager() {

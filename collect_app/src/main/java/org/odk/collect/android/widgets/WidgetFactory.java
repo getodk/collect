@@ -26,10 +26,10 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
+import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.CameraUtils;
@@ -82,6 +82,7 @@ public class WidgetFactory {
     private final LifecycleOwner viewLifecycle;
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
+    private final FormController formController;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
@@ -94,7 +95,8 @@ public class WidgetFactory {
                          AudioRecorder audioRecorder,
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
-                         StringRequester stringRequester) {
+                         StringRequester stringRequester,
+                         FormController formController) {
         this.activity = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -107,6 +109,7 @@ public class WidgetFactory {
         this.viewLifecycle = viewLifecycle;
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
+        this.formController = formController;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -118,13 +121,13 @@ public class WidgetFactory {
             case Constants.CONTROL_INPUT:
                 switch (prompt.getDataType()) {
                     case Constants.DATATYPE_DATE_TIME:
-                        questionWidget = new DateTimeWidget(activity, questionDetails, new DateTimeWidgetUtils());
+                        questionWidget = new DateTimeWidget(activity, questionDetails, new DateTimeWidgetUtils(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_DATE:
-                        questionWidget = new DateWidget(activity, questionDetails, new DateTimeWidgetUtils());
+                        questionWidget = new DateWidget(activity, questionDetails, new DateTimeWidgetUtils(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_TIME:
-                        questionWidget = new TimeWidget(activity, questionDetails, new DateTimeWidgetUtils());
+                        questionWidget = new TimeWidget(activity, questionDetails, new DateTimeWidgetUtils(), waitingForDataRegistry);
                         break;
                     case Constants.DATATYPE_DECIMAL:
                         if (appearance.startsWith(Appearances.EX)) {
@@ -206,7 +209,7 @@ public class WidgetFactory {
                 break;
             case Constants.CONTROL_OSM_CAPTURE:
                 questionWidget = new OSMWidget(activity, questionDetails, waitingForDataRegistry,
-                        IntentLauncherImpl.INSTANCE, Collect.getInstance().getFormController());
+                        IntentLauncherImpl.INSTANCE, formController);
                 break;
             case Constants.CONTROL_AUDIO_CAPTURE:
                 RecordingRequester recordingRequester = recordingRequesterProvider.create(prompt, useExternalRecorder);
@@ -232,21 +235,21 @@ public class WidgetFactory {
                 // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
                 // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
                 if (appearance.contains(Appearances.MINIMAL)) {
-                    questionWidget = new SelectMultiMinimalWidget(activity, questionDetails, waitingForDataRegistry);
+                    questionWidget = new SelectMultiMinimalWidget(activity, questionDetails, waitingForDataRegistry, formEntryViewModel);
                 } else if (appearance.contains(Appearances.LIST_NO_LABEL)) {
-                    questionWidget = new ListMultiWidget(activity, questionDetails, false);
+                    questionWidget = new ListMultiWidget(activity, questionDetails, false, formEntryViewModel);
                 } else if (appearance.contains(Appearances.LIST)) {
-                    questionWidget = new ListMultiWidget(activity, questionDetails, true);
+                    questionWidget = new ListMultiWidget(activity, questionDetails, true, formEntryViewModel);
                 } else if (appearance.contains(Appearances.LABEL)) {
-                    questionWidget = new LabelWidget(activity, questionDetails);
+                    questionWidget = new LabelWidget(activity, questionDetails, formEntryViewModel);
                 } else if (appearance.contains(Appearances.IMAGE_MAP)) {
-                    questionWidget = new SelectMultiImageMapWidget(activity, questionDetails);
+                    questionWidget = new SelectMultiImageMapWidget(activity, questionDetails, formEntryViewModel);
                 } else {
-                    questionWidget = new SelectMultiWidget(activity, questionDetails);
+                    questionWidget = new SelectMultiWidget(activity, questionDetails, formEntryViewModel);
                 }
                 break;
             case Constants.CONTROL_RANK:
-                questionWidget = new RankingWidget(activity, questionDetails);
+                questionWidget = new RankingWidget(activity, questionDetails, waitingForDataRegistry, formEntryViewModel);
                 break;
             case Constants.CONTROL_TRIGGER:
                 questionWidget = new TriggerWidget(activity, questionDetails);
@@ -290,21 +293,21 @@ public class WidgetFactory {
         // search() appearance/function (not part of XForms spec) added by SurveyCTO gets
         // considered in each widget by calls to ExternalDataUtil.getSearchXPathExpression.
         if (appearance.contains(Appearances.MINIMAL)) {
-            questionWidget = new SelectOneMinimalWidget(activity, questionDetails, isQuick, waitingForDataRegistry);
+            questionWidget = new SelectOneMinimalWidget(activity, questionDetails, isQuick, waitingForDataRegistry, formEntryViewModel);
         } else if (appearance.contains(Appearances.LIKERT)) {
-            questionWidget = new LikertWidget(activity, questionDetails);
+            questionWidget = new LikertWidget(activity, questionDetails, formEntryViewModel);
         } else if (appearance.contains(Appearances.LIST_NO_LABEL)) {
-            questionWidget = new ListWidget(activity, questionDetails, false, isQuick);
+            questionWidget = new ListWidget(activity, questionDetails, false, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.LIST)) {
-            questionWidget = new ListWidget(activity, questionDetails, true, isQuick);
+            questionWidget = new ListWidget(activity, questionDetails, true, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.LABEL)) {
-            questionWidget = new LabelWidget(activity, questionDetails);
+            questionWidget = new LabelWidget(activity, questionDetails, formEntryViewModel);
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
-            questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick);
+            questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.MAP)) {
             questionWidget = new SelectOneFromMapWidget(activity, questionDetails);
         } else {
-            questionWidget = new SelectOneWidget(activity, questionDetails, isQuick);
+            questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController, formEntryViewModel);
         }
         return questionWidget;
     }

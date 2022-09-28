@@ -6,7 +6,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
 
-import org.javarosa.core.model.FormIndex;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.CopticChronology;
@@ -14,7 +13,6 @@ import org.joda.time.chrono.EthiopicChronology;
 import org.joda.time.chrono.IslamicChronology;
 import org.joda.time.chrono.PersianChronologyKhayyamBorkowski;
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.fragments.dialogs.BikramSambatDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CopticDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;
@@ -23,7 +21,6 @@ import org.odk.collect.android.fragments.dialogs.FixedDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.IslamicDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.MyanmarDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.PersianDatePickerDialog;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.DatePickerDetails;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.MyanmarDateUtils;
@@ -49,13 +46,6 @@ public class DateTimeWidgetUtils {
     public static final String TIME = "time";
     public static final String DIALOG_THEME = "dialog_theme";
     public static final String DATE_PICKER_DETAILS = "date_picker_details";
-
-    public static void setWidgetWaitingForData(FormIndex formIndex) {
-        FormController formController = Collect.getInstance().getFormController();
-        if (formController != null) {
-            formController.setIndexWaitingForData(formIndex);
-        }
-    }
 
     public static DatePickerDetails getDatePickerDetails(String appearance) {
         DatePickerDetails.DatePickerType datePickerType = DatePickerDetails.DatePickerType.GREGORIAN;

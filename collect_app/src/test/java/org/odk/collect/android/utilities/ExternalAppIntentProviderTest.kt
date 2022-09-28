@@ -26,14 +26,14 @@ class ExternalAppIntentProviderTest {
     @Test
     fun intentAction_shouldBeSetProperly() {
         `when`(formEntryPrompt.appearanceHint).thenReturn("ex:com.example.collectanswersprovider()")
-        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
+        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(null, formEntryPrompt)
         assertThat(resultIntent.action, `is`("com.example.collectanswersprovider"))
     }
 
     @Test
     fun whenNoParamsSpecified_shouldIntentHaveNoExtras() {
         `when`(formEntryPrompt.appearanceHint).thenReturn("ex:com.example.collectanswersprovider()")
-        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
+        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(null, formEntryPrompt)
         assertThat(resultIntent.extras, nullValue())
     }
 
@@ -41,7 +41,7 @@ class ExternalAppIntentProviderTest {
     fun whenParamsSpecified_shouldIntentHaveExtras() {
         `when`(formEntryPrompt.appearanceHint)
             .thenReturn("ex:com.example.collectanswersprovider(param1='value1', param2='value2')")
-        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
+        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(null, formEntryPrompt)
         assertThat(resultIntent.extras!!.keySet().size, `is`(2))
         assertThat(resultIntent.extras!!.getString("param1"), `is`("value1"))
         assertThat(resultIntent.extras!!.getString("param2"), `is`("value2"))
@@ -51,7 +51,7 @@ class ExternalAppIntentProviderTest {
     fun whenParamsContainUri_shouldThatUriBeAddedAsIntentData() {
         `when`(formEntryPrompt.appearanceHint)
             .thenReturn("ex:com.example.collectanswersprovider(param1='value1', uri_data='file:///tmp/android.txt')")
-        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(formEntryPrompt)
+        val resultIntent = externalAppIntentProvider.getIntentToRunExternalApp(null, formEntryPrompt)
         assertThat(resultIntent.data.toString(), `is`("file:///tmp/android.txt"))
         assertThat(resultIntent.extras!!.keySet().size, `is`(1))
         assertThat(resultIntent.extras!!.getString("param1"), `is`("value1"))

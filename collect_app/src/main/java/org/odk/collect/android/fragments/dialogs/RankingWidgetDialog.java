@@ -19,13 +19,6 @@ package org.odk.collect.android.fragments.dialogs;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
-import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.ItemTouchHelper.Callback;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -33,10 +26,18 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
+import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.ItemTouchHelper.Callback;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.R.string;
@@ -52,7 +53,7 @@ public class RankingWidgetDialog extends DialogFragment {
     private RankingListener listener;
     private RankingListAdapter rankingListAdapter;
     private List<SelectChoice> items;
-    private FormIndex formIndex;
+    private FormEntryPrompt formEntryPrompt;
     private RankingViewModel viewModel;
 
     public interface RankingListener {
@@ -62,9 +63,9 @@ public class RankingWidgetDialog extends DialogFragment {
     public RankingWidgetDialog() {
     }
 
-    public RankingWidgetDialog(List<SelectChoice> items, FormIndex formIndex) {
+    public RankingWidgetDialog(List<SelectChoice> items, FormEntryPrompt formEntryPrompt) {
         this.items = new ArrayList<>(items);
-        this.formIndex = formIndex;
+        this.formEntryPrompt = formEntryPrompt;
     }
 
     @Override
@@ -73,7 +74,7 @@ public class RankingWidgetDialog extends DialogFragment {
         if (context instanceof RankingListener) {
             listener = (RankingListener) context;
         }
-        viewModel = new ViewModelProvider(this, new RankingViewModel.Factory(items, formIndex)).get(RankingViewModel.class);
+        viewModel = new ViewModelProvider(this, new RankingViewModel.Factory(items, formEntryPrompt)).get(RankingViewModel.class);
         if (viewModel.getItems() == null) {
             dismiss();
         }
@@ -123,7 +124,7 @@ public class RankingWidgetDialog extends DialogFragment {
     }
 
     private RecyclerView setUpRecyclerView() {
-        rankingListAdapter = new RankingListAdapter(viewModel.getItems(), viewModel.getFormIndex());
+        rankingListAdapter = new RankingListAdapter(viewModel.getItems(), viewModel.getFormEntryPrompt());
 
         RecyclerView recyclerView = new RecyclerView(getContext());
         recyclerView.setHasFixedSize(true);

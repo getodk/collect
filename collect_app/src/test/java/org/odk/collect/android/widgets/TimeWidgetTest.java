@@ -16,6 +16,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.DateTimeUtils;
+import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -143,6 +144,6 @@ public class TimeWidgetTest {
     }
 
     private TimeWidget createWidget(FormEntryPrompt prompt) {
-        return new TimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils);
+        return new TimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry());
     }
 }

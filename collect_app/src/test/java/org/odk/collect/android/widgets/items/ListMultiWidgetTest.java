@@ -12,6 +12,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -26,7 +27,7 @@ public class ListMultiWidgetTest extends GeneralSelectMultiWidgetTest<ListMultiW
     @NonNull
     @Override
     public ListMultiWidget createWidget() {
-        return new ListMultiWidget(activity, new QuestionDetails(formEntryPrompt), true);
+        return new ListMultiWidget(activity, new QuestionDetails(formEntryPrompt), true, new FormEntryPromptSelectChoiceLoader());
     }
 
     @Test

@@ -29,6 +29,8 @@ public class DecimalWidget extends StringWidget {
 
     public DecimalWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
+
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
     }
 

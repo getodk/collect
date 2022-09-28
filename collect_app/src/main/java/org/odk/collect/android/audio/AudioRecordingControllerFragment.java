@@ -1,5 +1,11 @@
 package org.odk.collect.android.audio;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+import static org.odk.collect.androidshared.livedata.LiveDataUtils.zip4;
+import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,21 +24,16 @@ import org.odk.collect.android.databinding.AudioRecordingControllerFragmentBindi
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.RecordingSession;
-import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.strings.format.LengthFormatterKt;
 
 import javax.inject.Inject;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
-import static org.odk.collect.androidshared.livedata.LiveDataUtils.zip4;
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-
 public class AudioRecordingControllerFragment extends Fragment {
 
+    private final String sessionId;
     @Inject
     AudioRecorder audioRecorder;
 
@@ -46,11 +47,17 @@ public class AudioRecordingControllerFragment extends Fragment {
     private FormEntryViewModel formEntryViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
 
+    public AudioRecordingControllerFragment(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
+        formEntryViewModelFactory.setSessionId(sessionId);
+        backgroundAudioViewModelFactory.setSessionId(sessionId);
         formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
         backgroundAudioViewModel = new ViewModelProvider(requireActivity(), backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
     }

@@ -45,6 +45,7 @@ import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.ImageFileUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
+import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.warnings.SpacesInUnderlyingValuesWarning;
 
 import java.io.File;
@@ -72,10 +73,11 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
     private final List<SelectChoice> items;
 
     @SuppressWarnings("unchecked")
-    public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel) {
+    public ListMultiWidget(Context context, QuestionDetails questionDetails, boolean displayLabel, SelectChoiceLoader selectChoiceLoader) {
         super(context, questionDetails);
+        render();
 
-        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt());
+        items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         checkBoxes = new ArrayList<>();
         this.displayLabel = displayLabel;

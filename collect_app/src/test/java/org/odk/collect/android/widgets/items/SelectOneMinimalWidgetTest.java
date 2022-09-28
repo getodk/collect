@@ -12,6 +12,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import java.util.Collections;
 
@@ -25,7 +26,7 @@ public class SelectOneMinimalWidgetTest extends GeneralSelectOneWidgetTest<Selec
     @NonNull
     @Override
     public SelectOneMinimalWidget createWidget() {
-        return new SelectOneMinimalWidget(activity, new QuestionDetails(formEntryPrompt), false, new FakeWaitingForDataRegistry());
+        return new SelectOneMinimalWidget(activity, new QuestionDetails(formEntryPrompt), false, new FakeWaitingForDataRegistry(), new FormEntryPromptSelectChoiceLoader());
     }
 
     @Test

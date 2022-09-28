@@ -14,6 +14,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.SelectWidgetTest;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleI
     @NonNull
     @Override
     public RankingWidget createWidget() {
-        return new RankingWidget(activity, new QuestionDetails(formEntryPrompt));
+        return new RankingWidget(activity, new QuestionDetails(formEntryPrompt), null, new FormEntryPromptSelectChoiceLoader());
     }
 
     @NonNull

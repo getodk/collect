@@ -356,6 +356,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
                 .clickIgnoreChanges();
     }
 
+    public <D extends Page<D>> D pressBackAndIgnoreChanges(D destination) {
+        return closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<D>(formName, destination))
+                .clickIgnoreChanges();
+    }
+
     public FormEntryPage assertBackgroundLocationSnackbarShown() {
         onView(withId(com.google.android.material.R.id.snackbar_text))
                 .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(R.string.background_location_enabled), "⋮"))));

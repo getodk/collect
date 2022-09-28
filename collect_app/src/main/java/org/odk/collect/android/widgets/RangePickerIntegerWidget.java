@@ -29,6 +29,7 @@ public class RangePickerIntegerWidget extends QuestionWidget  {
 
     public RangePickerIntegerWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
+        render();
     }
 
     @Override

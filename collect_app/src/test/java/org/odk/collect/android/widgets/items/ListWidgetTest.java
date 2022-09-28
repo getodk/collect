@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import org.junit.Test;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
+import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -21,7 +22,7 @@ public class ListWidgetTest extends GeneralSelectOneWidgetTest<ListWidget> {
     @NonNull
     @Override
     public ListWidget createWidget() {
-        return new ListWidget(activity, new QuestionDetails(formEntryPrompt), false, false);
+        return new ListWidget(activity, new QuestionDetails(formEntryPrompt), false, false, new FormEntryPromptSelectChoiceLoader());
     }
 
     @Test
