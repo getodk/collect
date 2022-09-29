@@ -59,6 +59,10 @@ jobs:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
             - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -81,6 +85,10 @@ jobs:
             - test-modules-deps-{{ checksum "deps.txt" }}
             - test-modules-deps-
             - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -119,6 +127,10 @@ jobs:
             - test-app-deps-{{ checksum "deps.txt" }}
             - test-app-deps-
             - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -163,6 +175,10 @@ jobs:
             - intrumented-deps-{{ checksum "deps.txt" }}
             - intrumented-deps-
             - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -185,6 +201,10 @@ jobs:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
             - compile-deps
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -203,6 +223,10 @@ jobs:
             - intrumented-deps-{{ checksum "deps.txt" }}
             - intrumented-deps
             - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
