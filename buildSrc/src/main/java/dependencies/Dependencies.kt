@@ -4,7 +4,6 @@ object Dependencies {
     const val desugar = "com.android.tools:desugar_jdk_libs:1.1.5"
     const val androidx_startup = "androidx.startup:startup-runtime:1.1.1"
     const val androidx_annotations = "androidx.annotation:annotation:1.4.0"
-    const val androidx_lifecycle_extensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
     const val androidx_lifecycle_runtime_ktx = "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0"
     const val androidx_viewpager2= "androidx.viewpager2:viewpager2:1.0.0"
     const val androidx_lifecycle_livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:2.5.0"

@@ -334,7 +334,6 @@ dependencies {
     implementation Dependencies.danlew_android_joda
 
     // Android Architecture Components:
-    implementation Dependencies.androidx_lifecycle_extensions
     implementation Dependencies.androidx_lifecycle_runtime_ktx
     implementation Dependencies.androidx_viewpager2
 

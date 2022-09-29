@@ -12,7 +12,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
@@ -66,7 +66,7 @@ public class ChangesReasonPromptDialogFragment extends MaterialFullScreenDialogF
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = ViewModelProviders.of(requireActivity()).get(FormSaveViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(FormSaveViewModel.class);
     }
 
     @Override

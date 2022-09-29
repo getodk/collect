@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.async.Scheduler;
@@ -50,9 +50,7 @@ public class AudioHelper {
 
         AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(mediaPlayerFactory, scheduler);
 
-        viewModel = ViewModelProviders
-                .of(activity, factory)
-                .get(AudioClipViewModel.class);
+        viewModel = new ViewModelProvider(activity, factory).get(AudioClipViewModel.class);
 
         registerLifecycleCallbacks(activity, lifecycleOwner);
     }
