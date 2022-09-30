@@ -73,8 +73,7 @@ class FormMapActivity : LocalizedActivity() {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(SelectionMapFragment::class.java) {
                 SelectionMapFragment(
-                    selectionMapData = viewModel,
-                    onBackPressedDispatcher = onBackPressedDispatcher
+                    selectionMapData = viewModel
                 )
             }
             .build()

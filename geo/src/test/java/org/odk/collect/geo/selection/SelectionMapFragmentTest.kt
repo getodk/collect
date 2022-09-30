@@ -73,7 +73,7 @@ class SelectionMapFragmentTest {
         R.style.Theme_MaterialComponents,
         object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-                return SelectionMapFragment(data, onBackPressedDispatcher)
+                return SelectionMapFragment(data, onBackPressedDispatcher = onBackPressedDispatcher)
             }
         }
     )
@@ -225,7 +225,11 @@ class SelectionMapFragmentTest {
             SelectionMapFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(SelectionMapFragment::class.java) {
-                    SelectionMapFragment(data, onBackPressedDispatcher, zoomToFitItems = false)
+                    SelectionMapFragment(
+                        data,
+                        zoomToFitItems = false,
+                        onBackPressedDispatcher = onBackPressedDispatcher
+                    )
                 }.build()
         )
         map.ready()
@@ -445,7 +449,11 @@ class SelectionMapFragmentTest {
             SelectionMapFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(SelectionMapFragment::class.java) {
-                    SelectionMapFragment(data, onBackPressedDispatcher, skipSummary = true)
+                    SelectionMapFragment(
+                        data,
+                        skipSummary = true,
+                        onBackPressedDispatcher = onBackPressedDispatcher
+                    )
                 }.build()
         )
         map.ready()
@@ -595,7 +603,11 @@ class SelectionMapFragmentTest {
             SelectionMapFragment::class.java,
             factory = FragmentFactoryBuilder()
                 .forClass(SelectionMapFragment::class.java) {
-                    SelectionMapFragment(data, onBackPressedDispatcher, showNewItemButton = false)
+                    SelectionMapFragment(
+                        data,
+                        showNewItemButton = false,
+                        onBackPressedDispatcher = onBackPressedDispatcher
+                    )
                 }.build()
         )
         map.ready()

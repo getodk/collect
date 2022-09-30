@@ -41,10 +41,10 @@ import javax.inject.Inject
  */
 class SelectionMapFragment(
     val selectionMapData: SelectionMapData,
-    val onBackPressedDispatcher: OnBackPressedDispatcher,
     val skipSummary: Boolean = false,
-    val showNewItemButton: Boolean = true,
     val zoomToFitItems: Boolean = true,
+    val showNewItemButton: Boolean = true,
+    val onBackPressedDispatcher: OnBackPressedDispatcher? = null,
 ) : Fragment() {
 
     @Inject
@@ -226,7 +226,7 @@ class SelectionMapFragment(
             }
         }
 
-        onBackPressedDispatcher.addCallback(
+        (onBackPressedDispatcher ?: requireActivity().onBackPressedDispatcher).addCallback(
             viewLifecycleOwner,
             closeSummarySheet
         )
