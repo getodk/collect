@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "org.smap.smapTask.android.stl_public",
+  "variantName": "processStl_publicReleaseResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 6706,
+      "versionName": "6.706-stl",
+      "outputFile": "fieldTask-stl_public-release-null.apk"
+    }
+  ]
+}

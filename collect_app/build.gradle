@@ -130,6 +130,10 @@ android {
             applicationId "org.smap.smapTask.android.stl2"
             versionName "6.706-stl2"
         }
+        stl {
+            applicationId "org.smap.smapTask.android.stl"
+            versionName "6.706-stl"
+        }
         ljs {
             applicationId "org.smap.smapTask.android.ljs"
             versionName "6.706-ljs"
