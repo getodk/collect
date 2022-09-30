@@ -12,7 +12,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -53,7 +55,7 @@ class GeoPointActivityTest {
 
                 override fun providesGeoPointViewModelFactory(application: Application) =
                     mock<GeoPointViewModelFactory> {
-                        on { create(GeoPointViewModel::class.java) } doReturn viewModel
+                        on { create(eq(GeoPointViewModel::class.java), any()) } doReturn viewModel
                     }
             })
             .build()
