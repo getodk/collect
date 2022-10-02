@@ -103,16 +103,13 @@ public class LocalDataManagerSmap {
                                 case XmlPullParser.START_TAG:
                                     parser.next();
                                     value = parser.getText();
-                                    Timber.i("%%%%%%%%: " + tag + " : " + parser.getEventType() + " : " + value);
 
                                     if(parser.getEventType() == XmlPullParser.TEXT) {
-                                        Timber.i("#####################: " + tag + " : " + value);
                                         if (li.survey.columns.contains(tag)) {
                                             String safeColumnName = ExternalDataUtil.toSafeColumnName(tag, columnNamesCache);
                                             currentForm.values.put(safeColumnName, value);
                                         }
                                     } else if(parser.getEventType() == XmlPullParser.START_TAG) {
-                                        Timber.i("#####################: Sub Form: %s", tag);
                                         if (!tag.equals("main")) {   // Top level form main already has a form definition which is an entry point to the graph
                                             FormData subFormData = new FormData();
                                             formDataStack.push(currentForm);
@@ -129,7 +126,6 @@ public class LocalDataManagerSmap {
                                         if(completedForm.values.size() > 0 || completedForm.subForms.size() > 0) {  // Add if not empty
                                             currentForm.subForms.add(completedForm);
                                         }
-                                        Timber.i("#####################: End Sub Form: %s", tag);
                                     }
                                     parser.next();
                                     break;

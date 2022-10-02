@@ -232,8 +232,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         processItemSets(formMediaDir);
 
-
-
         if (xpath != null) {
             // we are resuming after having terminated -- set index to this
             // position...
