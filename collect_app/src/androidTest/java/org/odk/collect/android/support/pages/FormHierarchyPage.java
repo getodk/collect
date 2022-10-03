@@ -8,6 +8,7 @@ import org.odk.collect.android.support.WaitFor;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -27,9 +28,9 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
     @NonNull
     @Override
     public FormHierarchyPage assertOnPage() {
-        // Make sure we wait for loading to finish
+        // Make sure we've left the fill blank form screen
         WaitFor.waitFor((Callable<Void>) () -> {
-            assertTextDoesNotExist(R.string.loading_form);
+            onView(withId(R.id.menu_goto)).check(doesNotExist());
             return null;
         });
 
