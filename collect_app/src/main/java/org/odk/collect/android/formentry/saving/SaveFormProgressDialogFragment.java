@@ -1,27 +1,19 @@
 package org.odk.collect.android.formentry.saving;
 
+import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
+
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.async.Scheduler;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
 import javax.inject.Inject;
 
-import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.SAVING;
-
 public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragment {
-
-    @Inject
-    Analytics analytics;
-
-    @Inject
-    Scheduler scheduler;
 
     @Inject
     FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
