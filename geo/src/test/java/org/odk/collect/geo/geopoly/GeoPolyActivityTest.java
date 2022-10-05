@@ -14,15 +14,19 @@
 
 package org.odk.collect.geo.geopoly;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.app.Application;
 import android.content.Intent;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
@@ -99,48 +103,51 @@ public class GeoPolyActivityTest {
 
     @Test
     public void recordButton_should_beHiddenForAutomaticMode() {
-        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
+        launcherRule.launch(GeoPolyActivity.class);
         mapFragment.ready();
 
-        scenario.onActivity((activity -> {
-            activity.updateRecordingMode(R.id.automatic_mode);
-            activity.startInput();
-            assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.GONE));
-        }));
+        onView(withId(R.id.play)).perform(click());
+        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click());
+        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        onView(withId(R.id.record_button)).check(matches(not(isDisplayed())));
     }
 
     @Test
     public void recordButton_should_beVisibleForManualMode() {
-        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(GeoPolyActivity.class);
+        launcherRule.launch(GeoPolyActivity.class);
         mapFragment.ready();
 
-        scenario.onActivity((activity -> {
-            activity.updateRecordingMode(R.id.manual_mode);
-            activity.startInput();
-            assertThat(activity.findViewById(R.id.record_button).getVisibility(), is(View.VISIBLE));
-        }));
+        onView(withId(R.id.play)).perform(click());
+        onView(withId(R.id.manual_mode)).inRoot(isDialog()).perform(click());
+        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        onView(withId(R.id.record_button)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void startingInput_usingAutomaticMode_usesRetainMockAccuracyToStartLocationTracker() {
+    public void startingInput_usingAutomaticMode_usesRetainMockAccuracyTrueToStartLocationTracker() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
 
         intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, true);
-        launcherRule.<GeoPolyActivity>launch(intent).onActivity(activity -> {
-            mapFragment.ready();
-            activity.updateRecordingMode(R.id.automatic_mode);
-            activity.startInput();
-            verify(locationTracker).start(true);
-        });
+        launcherRule.<GeoPolyActivity>launch(intent);
 
-        Mockito.reset(locationTracker); // Ignore previous calls
+        mapFragment.ready();
+        onView(withId(R.id.play)).perform(click());
+        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click());
+        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        verify(locationTracker).start(true);
+    }
+
+    @Test
+    public void startingInput_usingAutomaticMode_usesRetainMockAccuracyFalseToStartLocationTracker() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
 
         intent.putExtra(Constants.EXTRA_RETAIN_MOCK_ACCURACY, false);
-        launcherRule.<GeoPolyActivity>launch(intent).onActivity(activity -> {
-            mapFragment.ready();
-            activity.updateRecordingMode(R.id.automatic_mode);
-            activity.startInput();
-            verify(locationTracker).start(false);
-        });
+        launcherRule.<GeoPolyActivity>launch(intent);
+
+        mapFragment.ready();
+        onView(withId(R.id.play)).perform(click());
+        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click());
+        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        verify(locationTracker).start(false);
     }
 }
