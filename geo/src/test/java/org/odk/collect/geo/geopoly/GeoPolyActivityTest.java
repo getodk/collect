@@ -20,6 +20,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -38,7 +40,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule;
 import org.odk.collect.geo.Constants;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
@@ -49,6 +50,7 @@ import org.odk.collect.geo.support.FakeMapFragment;
 import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.location.tracker.LocationTracker;
 import org.odk.collect.maps.MapFragmentFactory;
+import org.odk.collect.maps.MapPoint;
 import org.robolectric.shadows.ShadowApplication;
 
 @RunWith(AndroidJUnit4.class)
@@ -61,7 +63,7 @@ public class GeoPolyActivityTest {
     public ActivityScenarioLauncherRule launcherRule = new ActivityScenarioLauncherRule();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         ShadowApplication shadowApplication = shadowOf(ApplicationProvider.<Application>getApplicationContext());
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION");
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
@@ -106,9 +108,7 @@ public class GeoPolyActivityTest {
         launcherRule.launch(GeoPolyActivity.class);
         mapFragment.ready();
 
-        onView(withId(R.id.play)).perform(click());
-        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click());
-        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        startInput(R.id.automatic_mode);
         onView(withId(R.id.record_button)).check(matches(not(isDisplayed())));
     }
 
@@ -117,9 +117,7 @@ public class GeoPolyActivityTest {
         launcherRule.launch(GeoPolyActivity.class);
         mapFragment.ready();
 
-        onView(withId(R.id.play)).perform(click());
-        onView(withId(R.id.manual_mode)).inRoot(isDialog()).perform(click());
-        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        startInput(R.id.manual_mode);
         onView(withId(R.id.record_button)).check(matches(isDisplayed()));
     }
 
@@ -131,9 +129,7 @@ public class GeoPolyActivityTest {
         launcherRule.<GeoPolyActivity>launch(intent);
 
         mapFragment.ready();
-        onView(withId(R.id.play)).perform(click());
-        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click());
-        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        startInput(R.id.automatic_mode);
         verify(locationTracker).start(true);
     }
 
@@ -145,9 +141,38 @@ public class GeoPolyActivityTest {
         launcherRule.<GeoPolyActivity>launch(intent);
 
         mapFragment.ready();
-        onView(withId(R.id.play)).perform(click());
-        onView(withId(R.id.automatic_mode)).inRoot(isDialog()).perform(click());
-        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
+        startInput(R.id.automatic_mode);
         verify(locationTracker).start(false);
+    }
+
+    @Test
+    public void recordingPointManually_whenPointIsADuplicateOfTheLastPoint_skipsPoint() {
+        launcherRule.launch(GeoPolyActivity.class);
+        mapFragment.ready();
+
+        startInput(R.id.manual_mode);
+
+        mapFragment.setLocation(new MapPoint(1, 1));
+        onView(withId(R.id.record_button)).perform(click());
+        onView(withId(R.id.record_button)).perform(click());
+        assertThat(mapFragment.getPolyPoints(0).size(), equalTo(1));
+    }
+
+    @Test
+    public void placingPoint_whenPointIsADuplicateOfTheLastPoint_skipsPoint() {
+        launcherRule.launch(GeoPolyActivity.class);
+        mapFragment.ready();
+
+        startInput(R.id.placement_mode);
+
+        mapFragment.click(new MapPoint(1, 1));
+        mapFragment.click(new MapPoint(1, 1));
+        assertThat(mapFragment.getPolyPoints(0).size(), equalTo(1));
+    }
+
+    private void startInput(int mode) {
+        onView(withId(R.id.play)).perform(click());
+        onView(withId(mode)).inRoot(isDialog()).perform(click());
+        onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
     }
 }

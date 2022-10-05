@@ -24,6 +24,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private val markers: MutableList<MapPoint> = ArrayList()
     private val markerIcons: MutableList<MarkerIconDescription?> = ArrayList()
     private var hasCenter = false
+    private val polyPoints = mutableMapOf<Int, MutableList<MapPoint>>()
 
     override fun init(
         readyListener: ReadyListener?,
@@ -101,10 +102,16 @@ class FakeMapFragment : Fragment(), MapFragment {
         return 0
     }
 
-    override fun appendPointToPoly(featureId: Int, point: MapPoint) {}
-    override fun removePolyLastPoint(featureId: Int) {}
+    override fun appendPointToPoly(featureId: Int, point: MapPoint) {
+        polyPoints.getOrPut(featureId) { mutableListOf() }.add(point)
+    }
+
+    override fun removePolyLastPoint(featureId: Int) {
+        polyPoints.getOrPut(featureId) { mutableListOf() }.removeLast()
+    }
+
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
-        return emptyList()
+        return polyPoints.getOrPut(featureId) { mutableListOf() }
     }
 
     override fun clearFeatures() {
