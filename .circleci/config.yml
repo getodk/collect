@@ -7,7 +7,7 @@ references:
   android_config: &android_config
     working_directory: ~/work
     docker:
-      - image: cimg/android:2022.06.1
+      - image: cimg/android:2022.09.2
     resource_class: medium+
 
 jobs:
@@ -19,8 +19,12 @@ jobs:
           name: Generate combined build.gradle file for cache key
           command: cat build.gradle */build.gradle .circleci/gradle.properties > deps.txt
       - restore_cache:
-          key: compile-deps-{{ checksum "deps.txt" }}
-
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - run:
           name: Copy gradle config
           command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
@@ -35,7 +39,11 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/wrapper
+          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
           key: compile-deps-{{ checksum "deps.txt" }}
       - persist_to_workspace:
           root: ~/work
@@ -48,7 +56,16 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: compile-deps-{{ checksum "deps.txt" }}
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
@@ -64,7 +81,17 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: test-modules-deps-{{ checksum "deps.txt" }}
+          keys:
+            - test-modules-deps-{{ checksum "deps.txt" }}
+            - test-modules-deps-
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Generate list of modules for this fork
@@ -86,7 +113,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: test-modules-deps-{{ checksum "deps.txt" }}
 
   test_app:
@@ -96,7 +123,17 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: test-app-deps-{{ checksum "deps.txt" }}
+          keys:
+            - test-app-deps-{{ checksum "deps.txt" }}
+            - test-app-deps-
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Generate list of test classes
@@ -125,7 +162,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: test-app-deps-{{ checksum "deps.txt" }}
 
   build_instrumented:
@@ -134,7 +171,17 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+          keys:
+            - intrumented-deps-{{ checksum "deps.txt" }}
+            - intrumented-deps-
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble connected test build
@@ -142,7 +189,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
   build_release:
@@ -151,7 +198,16 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: compile-deps-{{ checksum "deps.txt" }}
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble self signed release build
@@ -163,7 +219,17 @@ jobs:
       - attach_workspace:
           at: ~/work
       - restore_cache:
-          key: intrumented-deps-{{ checksum "deps.txt" }}
+          keys:
+            - intrumented-deps-{{ checksum "deps.txt" }}
+            - intrumented-deps
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble test build
@@ -171,7 +237,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle
+            - ~/.gradle/caches
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:

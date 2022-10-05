@@ -68,16 +68,16 @@ configurations.all {
     transitive = true
 }
 
-task checkAll(type: GradleBuild) {
-    tasks = ['checkCode', 'checkTests']
-}
-
 task checkCode(type: GradleBuild) {
     tasks = ['pmd', 'ktlintCheck', 'checkstyle', 'lintDebug']
 }
 
 task checkTests(type: GradleBuild) {
     tasks = ['testDebugUnitTest', 'connectedDebugAndroidTest']
+}
+
+task checkAll(type: GradleBuild) {
+    tasks = ['checkCode', 'checkTests']
 }
 
 task checkFeature(type: GradleBuild) {
