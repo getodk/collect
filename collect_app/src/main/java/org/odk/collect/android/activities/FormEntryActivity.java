@@ -1912,7 +1912,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (!formSaveViewModel.isSaving()) {
             if (currentView != null && formController != null
                     && formController.currentPromptIsQuestion()) {
-                formEntryViewModel.updateAnswersForScreen(getAnswers());
+                formEntryViewModel.saveScreenAnswersToFormController(getAnswers(), false);
             }
         }
 
