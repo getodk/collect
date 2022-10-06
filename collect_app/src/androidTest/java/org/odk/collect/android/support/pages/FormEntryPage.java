@@ -78,6 +78,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage swipeToNextQuestion(String questionText, boolean isRequired) {
         flingLeft();
 
+        // Make sure any saving finishes (can happen with saveIncomplete forms)
+        WaitFor.waitFor((Callable<Void>) () -> {
+            assertTextDoesNotExist(R.string.saving_form);
+            return null;
+        });
+
         if (isRequired) {
             assertQuestionText("* " + questionText);
         } else {
