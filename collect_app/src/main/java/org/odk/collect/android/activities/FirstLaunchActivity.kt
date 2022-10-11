@@ -6,6 +6,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.application.initialization.ApplicationInitializer
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
@@ -19,6 +20,7 @@ import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
 import javax.inject.Inject
+import kotlin.system.exitProcess
 
 class FirstLaunchActivity : CollectAbstractActivity() {
 
@@ -46,6 +48,11 @@ class FirstLaunchActivity : CollectAbstractActivity() {
             MaterialAlertDialogBuilder(this)
                 .setTitle("Collect crashed!")
                 .setOnDismissListener { launchApp() }
+                .show()
+        } else if (ApplicationInitializer.FAILED) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Collect crashed!")
+                .setOnDismissListener { exitProcess(0) }
                 .show()
         } else {
             launchApp()
