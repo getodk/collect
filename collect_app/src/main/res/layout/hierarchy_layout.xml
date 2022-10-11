@@ -61,8 +61,7 @@ the License.
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/buttonholder"
-        android:layout_below="@id/pathtext"
-        android:scrollbars="vertical" />
+        android:layout_below="@id/pathtext" />
 
     <TextView
         android:id="@android:id/empty"
