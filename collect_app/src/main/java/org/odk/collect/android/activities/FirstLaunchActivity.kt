@@ -2,6 +2,7 @@ package org.odk.collect.android.activities
 
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -15,6 +16,8 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import javax.inject.Inject
 
 class FirstLaunchActivity : CollectAbstractActivity() {
@@ -28,12 +31,28 @@ class FirstLaunchActivity : CollectAbstractActivity() {
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
 
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
 
+        if (settingsProvider.getMetaSettings().contains(MetaKeys.CRASH)) {
+            settingsProvider.getMetaSettings().remove(MetaKeys.CRASH)
+
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Collect crashed!")
+                .setOnDismissListener { launchApp() }
+                .show()
+        } else {
+            launchApp()
+        }
+    }
+
+    private fun launchApp() {
         if (projectsRepository.getAll().isNotEmpty()) {
             ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
             return
@@ -68,7 +87,8 @@ class FirstLaunchActivity : CollectAbstractActivity() {
                 projectsRepository.save(Project.DEMO_PROJECT)
                 currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
 
-                ActivityUtils.startActivityAndCloseAllOthers(this@FirstLaunchActivity, MainMenuActivity::class.java)
+                ActivityUtils.startActivityAndCloseAllOthers(this@FirstLaunchActivity,
+                    MainMenuActivity::class.java)
             }
         }
     }

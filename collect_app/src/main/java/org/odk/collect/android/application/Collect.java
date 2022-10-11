@@ -60,6 +60,7 @@ import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.shared.injection.ObjectProvider;
 import org.odk.collect.shared.injection.ObjectProviderHost;
 import org.odk.collect.shared.injection.SupplierObjectProvider;
@@ -145,6 +146,12 @@ public class Collect extends Application implements
         applicationInitializer.initialize();
         fixGoogleBug154855417();
         setupStrictMode();
+
+        Thread.UncaughtExceptionHandler defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            settingsProvider.getMetaSettings().save(MetaKeys.CRASH, "");
+            defaultUncaughtExceptionHandler.uncaughtException(t, e);
+        });
     }
 
     /**
