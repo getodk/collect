@@ -1,6 +1,7 @@
 package org.odk.collect.android.projects
 
 import android.content.Context
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -70,6 +71,22 @@ class QrCodeProjectCreatorDialogTest {
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
         }
+    }
+
+    // https://github.com/getodk/collect/issues/5266
+    @Test
+    fun `requestCameraPermission() should be called in onStart() to make sure it is called after returning to the dialog`() {
+        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
+
+        assertThat(permissionsProvider.countCameraPermissionRequests, `is`(1))
+
+        scenario.moveToState(Lifecycle.State.CREATED)
+
+        assertThat(permissionsProvider.countCameraPermissionRequests, `is`(1))
+
+        scenario.moveToState(Lifecycle.State.STARTED)
+
+        assertThat(permissionsProvider.countCameraPermissionRequests, `is`(2))
     }
 
     @Test

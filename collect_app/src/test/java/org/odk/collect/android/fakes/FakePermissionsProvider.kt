@@ -16,6 +16,8 @@ class FakePermissionsProvider :
     PermissionsProvider(PermissionsChecker(InstrumentationRegistry.getInstrumentation().targetContext)) {
     private var isPermissionGranted = false
 
+    var countCameraPermissionRequests = 0
+
     override fun requestPermissions(
         activity: Activity,
         listener: PermissionListener,
@@ -26,6 +28,11 @@ class FakePermissionsProvider :
         } else {
             listener.denied()
         }
+    }
+
+    override fun requestCameraPermission(activity: Activity, action: PermissionListener) {
+        super.requestCameraPermission(activity, action)
+        countCameraPermissionRequests++
     }
 
     fun setPermissionGranted(permissionGranted: Boolean) {

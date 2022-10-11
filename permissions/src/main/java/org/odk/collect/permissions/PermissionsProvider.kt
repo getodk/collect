@@ -50,7 +50,7 @@ open class PermissionsProvider internal constructor(
     open val isReadPhoneStatePermissionGranted: Boolean
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)
 
-    fun requestCameraPermission(activity: Activity, action: PermissionListener) {
+    open fun requestCameraPermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
             activity,
             object : PermissionListener {
