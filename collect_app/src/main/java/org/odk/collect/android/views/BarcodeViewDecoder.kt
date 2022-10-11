@@ -7,10 +7,8 @@ import com.journeyapps.barcodescanner.DecoratedBarcodeView
 
 open class BarcodeViewDecoder {
     open fun waitForBarcode(view: DecoratedBarcodeView): LiveData<BarcodeResult> {
-        val liveData = MutableLiveData<BarcodeResult>()
-
-        view.decodeContinuous { result -> liveData.value = result }
-
-        return liveData
+        return MutableLiveData<BarcodeResult>().also {
+            view.decodeContinuous { result -> it.value = result }
+        }
     }
 }
