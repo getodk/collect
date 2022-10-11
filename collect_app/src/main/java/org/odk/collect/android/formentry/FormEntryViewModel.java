@@ -216,7 +216,7 @@ public class FormEntryViewModel extends ViewModel implements RequiresFormControl
         return success;
     }
 
-    private boolean saveScreenAnswersToFormController(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
+    public boolean saveScreenAnswersToFormController(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
         if (formController == null) {
             return false;
         }
