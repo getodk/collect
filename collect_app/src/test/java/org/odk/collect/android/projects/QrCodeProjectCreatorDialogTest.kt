@@ -1,6 +1,7 @@
 package org.odk.collect.android.projects
 
 import android.content.Context
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
@@ -17,13 +18,15 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.any
 import org.mockito.Mockito.verifyNoInteractions
+import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.MainMenuActivity
@@ -70,6 +73,18 @@ class QrCodeProjectCreatorDialogTest {
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
         }
+    }
+
+    // https://github.com/getodk/collect/issues/5266
+    @Test
+    fun `requestCameraPermission() should be called in onStart() to make sure it is called after returning to the dialog`() {
+        val scenario = launcherRule.launch(fragmentClass = QrCodeProjectCreatorDialog::class.java, initialState = Lifecycle.State.CREATED)
+
+        assertFalse(permissionsProvider.cameraPermissionRequested)
+
+        scenario.moveToState(Lifecycle.State.STARTED)
+
+        assertTrue(permissionsProvider.cameraPermissionRequested)
     }
 
     @Test

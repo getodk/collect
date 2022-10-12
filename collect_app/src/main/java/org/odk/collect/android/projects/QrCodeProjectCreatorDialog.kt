@@ -79,6 +79,8 @@ class QrCodeProjectCreatorDialog :
     @Inject
     lateinit var intentLauncher: IntentLauncher
 
+    private var savedInstanceState: Bundle? = null
+
     private val imageQrCodeImportResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             val imageUri: Uri? = result.data?.data
@@ -128,6 +130,8 @@ class QrCodeProjectCreatorDialog :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        this.savedInstanceState = savedInstanceState
+
         binding = QrCodeProjectCreatorDialogLayoutBinding.inflate(inflater)
 
         configureMenu()
@@ -142,6 +146,13 @@ class QrCodeProjectCreatorDialog :
             dismiss()
         }
         beepManager = BeepManager(requireActivity())
+
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
         permissionsProvider.requestCameraPermission(
             requireActivity(),
             object : PermissionListener {
@@ -153,7 +164,6 @@ class QrCodeProjectCreatorDialog :
                 }
             }
         )
-        return binding.root
     }
 
     private fun configureMenu() {
