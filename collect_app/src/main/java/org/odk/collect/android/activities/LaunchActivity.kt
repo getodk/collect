@@ -1,27 +1,22 @@
 package org.odk.collect.android.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.strings.localization.LocalizedActivity
-import javax.inject.Inject
 
+/**
+ * This Activity is needed to replicate the new(er) Splash Screen behaviour on older Android
+ * versions.
+ *
+ * **See Also:** [https://developer.android.com/reference/kotlin/androidx/core/splashscreen/SplashScreen](https://developer.android.com/reference/kotlin/androidx/core/splashscreen/SplashScreen)
+ */
 class LaunchActivity : LocalizedActivity() {
-
-    @Inject
-    lateinit var projectsRepository: ProjectsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-
         super.onCreate(savedInstanceState)
-        DaggerUtils.getComponent(this).inject(this)
 
-        if (projectsRepository.getAll().isNotEmpty()) {
-            ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
-        } else {
-            ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity::class.java)
-        }
+        startActivity(Intent(this, MainMenuActivity::class.java))
     }
 }

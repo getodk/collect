@@ -41,6 +41,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -71,6 +72,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Inject
     SettingsProvider settingsProvider;
 
+    @Inject
+    ProjectsRepository projectsRepository;
+
     private MainMenuViewModel mainMenuViewModel;
 
     private CurrentProjectViewModel currentProjectViewModel;
@@ -81,6 +85,12 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         super.onCreate(savedInstanceState);
         DaggerUtils.getComponent(this).inject(this);
+
+        if (projectsRepository.getAll().isEmpty()) {
+            ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity.class);
+            return;
+        }
+
         setContentView(R.layout.main_menu);
 
         settingsProvider.getMetaSettings().save(MetaKeys.FIRST_LAUNCH, false);

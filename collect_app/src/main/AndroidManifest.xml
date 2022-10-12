@@ -100,7 +100,8 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".activities.LaunchActivity"
             android:theme="@style/Theme.Collect.SplashScreen"
-            android:exported="true">
+            android:exported="true"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
