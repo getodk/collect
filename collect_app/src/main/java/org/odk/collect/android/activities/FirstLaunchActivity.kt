@@ -1,7 +1,6 @@
 package org.odk.collect.android.activities
 
 import android.os.Bundle
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
@@ -11,7 +10,6 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.androidshared.ui.CrashHandler
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
 import org.odk.collect.projects.Project
@@ -34,20 +32,8 @@ class FirstLaunchActivity : CollectAbstractActivity() {
     lateinit var settingsProvider: SettingsProvider
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
-
-        CrashHandler.showCrashUIOrLaunchApp(this) {
-            launchApp()
-        }
-    }
-
-    private fun launchApp() {
-        if (projectsRepository.getAll().isNotEmpty()) {
-            ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
-            return
-        }
 
         FirstLaunchLayoutBinding.inflate(layoutInflater).apply {
             setContentView(this.root)
@@ -78,8 +64,10 @@ class FirstLaunchActivity : CollectAbstractActivity() {
                 projectsRepository.save(Project.DEMO_PROJECT)
                 currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
 
-                ActivityUtils.startActivityAndCloseAllOthers(this@FirstLaunchActivity,
-                    MainMenuActivity::class.java)
+                ActivityUtils.startActivityAndCloseAllOthers(
+                    this@FirstLaunchActivity,
+                    MainMenuActivity::class.java
+                )
             }
         }
     }

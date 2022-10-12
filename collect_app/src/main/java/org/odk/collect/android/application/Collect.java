@@ -74,9 +74,6 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
-
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class Collect extends Application implements
         LocalizedApplication,
@@ -139,9 +136,10 @@ public class Collect extends Application implements
 
     @Override
     public void onCreate() {
+        super.onCreate();
         singleton = this;
+
         CrashHandler.initializeApp(this, () -> {
-            super.onCreate();
             ExternalFilesUtils.testExternalFilesAccess(this);
 
             setupDagger();

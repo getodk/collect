@@ -4,8 +4,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -38,15 +36,6 @@ class FirstLaunchActivityTest {
 
     @get:Rule
     val activityRule = RecordedIntentsRule()
-
-    @Test
-    fun `MainMenuActivity should be started if there is at least one project`() {
-        CollectHelpers.setupDemoProject()
-
-        launcherRule.launch(FirstLaunchActivity::class.java)
-
-        Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
-    }
 
     @Test
     fun `The QrCodeProjectCreatorDialog should be displayed after clicking on the 'Configure with QR code' button`() {

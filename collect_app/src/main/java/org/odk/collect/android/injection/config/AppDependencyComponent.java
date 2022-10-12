@@ -15,6 +15,7 @@ import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.activities.InstanceUploaderActivity;
 import org.odk.collect.android.activities.InstanceUploaderListActivity;
+import org.odk.collect.android.activities.LaunchActivity;
 import org.odk.collect.android.activities.MainMenuActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.application.Collect;
@@ -295,6 +296,8 @@ public interface AppDependencyComponent {
     void inject(BackgroundLocationViewModel.Factory factory);
 
     void inject(DeleteRepeatDialogFragment deleteRepeatDialogFragment);
+
+    void inject(LaunchActivity launchActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

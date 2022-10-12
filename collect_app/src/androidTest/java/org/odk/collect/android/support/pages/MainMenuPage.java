@@ -12,13 +12,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.hamcrest.core.StringContains.containsString;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 
-import org.hamcrest.core.StringContains;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WaitFor;
 
@@ -27,7 +27,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     @Override
     public MainMenuPage assertOnPage() {
         return WaitFor.waitFor(() -> {
-            onView(withText(StringContains.containsString(getTranslatedString(R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
+            onView(withText(R.string.enter_data)).check(matches(isDisplayed()));
+            onView(withText(containsString(getTranslatedString(R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
             return this;
         });
     }

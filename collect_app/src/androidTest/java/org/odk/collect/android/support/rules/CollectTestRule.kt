@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import org.odk.collect.android.activities.FirstLaunchActivity
+import org.odk.collect.android.activities.LaunchActivity
 import org.odk.collect.android.external.AndroidShortcutsActivity
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -23,7 +23,7 @@ class CollectTestRule @JvmOverloads constructor(
         val firstLaunchPage = launch(
             Intent(
                 ApplicationProvider.getApplicationContext(),
-                FirstLaunchActivity::class.java
+                LaunchActivity::class.java
             ),
             FirstLaunchPage()
         ).assertOnPage()
@@ -46,6 +46,11 @@ class CollectTestRule @JvmOverloads constructor(
     fun launchShortcuts(): ShortcutsPage {
         val scenario = launchForResult(AndroidShortcutsActivity::class.java)
         return ShortcutsPage(scenario).assertOnPage()
+    }
+
+    fun <D : Page<D>> relaunch(destination: D): D {
+        launch(LaunchActivity::class.java)
+        return destination.assertOnPage()
     }
 
     fun <T : Page<T>> launch(intent: Intent, destination: T): T {
