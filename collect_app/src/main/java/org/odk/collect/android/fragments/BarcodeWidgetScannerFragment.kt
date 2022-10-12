@@ -5,7 +5,7 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import org.odk.collect.externalapp.ExternalAppUtils.returnSingleValue
 
 class BarcodeWidgetScannerFragment : BarCodeScannerFragment() {
-    override fun getSupportedCodeFormats(): Collection<String> {
+    override fun getSupportedCodeFormats(): Collection<String>? {
         return IntentIntegrator.ALL_CODE_TYPES
     }
 
