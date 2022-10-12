@@ -18,6 +18,8 @@ import com.journeyapps.barcodescanner.BarcodeResult
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -76,17 +78,13 @@ class QrCodeProjectCreatorDialogTest {
     // https://github.com/getodk/collect/issues/5266
     @Test
     fun `requestCameraPermission() should be called in onStart() to make sure it is called after returning to the dialog`() {
-        val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
+        val scenario = launcherRule.launch(fragmentClass = QrCodeProjectCreatorDialog::class.java, initialState = Lifecycle.State.CREATED)
 
-        assertThat(permissionsProvider.countCameraPermissionRequests, `is`(1))
-
-        scenario.moveToState(Lifecycle.State.CREATED)
-
-        assertThat(permissionsProvider.countCameraPermissionRequests, `is`(1))
+        assertFalse(permissionsProvider.cameraPermissionRequested)
 
         scenario.moveToState(Lifecycle.State.STARTED)
 
-        assertThat(permissionsProvider.countCameraPermissionRequests, `is`(2))
+        assertTrue(permissionsProvider.cameraPermissionRequested)
     }
 
     @Test

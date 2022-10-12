@@ -30,7 +30,7 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
     ): FragmentScenario<F> {
         val scenario = if (themResId != null) {
             FragmentScenario.launchInContainer(
-                fragmentClass,
+                fragmentClass = fragmentClass,
                 fragmentArgs = args,
                 themeResId = themResId,
                 factory = factory,
@@ -38,7 +38,7 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
             )
         } else {
             FragmentScenario.launchInContainer(
-                fragmentClass,
+                fragmentClass = fragmentClass,
                 fragmentArgs = args,
                 factory = factory,
                 initialState = initialState
@@ -53,20 +53,23 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
     @JvmOverloads
     fun <F : Fragment> launch(
         fragmentClass: Class<F>,
-        fragmentArgs: Bundle? = null
+        fragmentArgs: Bundle? = null,
+        initialState: Lifecycle.State = Lifecycle.State.RESUMED
     ): FragmentScenario<F> {
         val scenario = if (defaultThemeResId != null) {
             FragmentScenario.launch(
-                fragmentClass,
-                fragmentArgs,
-                defaultThemeResId,
-                null
+                fragmentClass = fragmentClass,
+                fragmentArgs = fragmentArgs,
+                themeResId = defaultThemeResId,
+                factory = null,
+                initialState = initialState
             )
         } else {
             FragmentScenario.launch(
-                fragmentClass,
-                fragmentArgs,
-                null
+                fragmentClass = fragmentClass,
+                fragmentArgs = fragmentArgs,
+                factory = null,
+                initialState = initialState
             )
         }
 
