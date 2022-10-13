@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import org.odk.collect.entities.databinding.ListItemLayoutBinding
 import org.odk.collect.entities.databinding.ListLayoutBinding
 import javax.inject.Inject
 
@@ -18,8 +17,8 @@ class EntitiesFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        String
-        (context.applicationContext as EntitiesDependencyComponentProvider).entitiesDependencyComponent.inject(this)
+        (context.applicationContext as EntitiesDependencyComponentProvider)
+            .entitiesDependencyComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -35,13 +34,10 @@ class EntitiesFragment : Fragment() {
         val binding = ListLayoutBinding.bind(view)
 
         entitiesRepository.getEntities(dataset).forEach { entity ->
-            val item = ListItemLayoutBinding.inflate(layoutInflater)
+            val item = EntityItemView(view.context)
+            item.setEntity(entity)
 
-            val firstField = entity.fields[0]
-            item.content.text =
-                getString(R.string.entity_summary, firstField.first, firstField.second)
-
-            binding.list.addView(item.root)
+            binding.list.addView(item)
         }
     }
 }

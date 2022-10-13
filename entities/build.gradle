@@ -63,4 +63,6 @@ dependencies {
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
 
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.robolectric
 }

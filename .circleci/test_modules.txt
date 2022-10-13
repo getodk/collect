@@ -13,3 +13,4 @@ permissions:testDebug
 settings:testDebug
 maps:testDebug
 errors:testDebug
+entities:testDebug
