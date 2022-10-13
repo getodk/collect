@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.SearchView
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.FormListSortingBottomSheetDialog
+import org.odk.collect.android.formlists.FormListSortingOption
 import org.odk.collect.android.utilities.MenuDelegate
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.ToastUtils
@@ -98,11 +99,23 @@ class BlankFormListMenuDelegate(
             R.id.menu_sort -> {
                 FormListSortingBottomSheetDialog(
                     activity,
-                    intArrayOf(
-                        R.string.sort_by_name_asc,
-                        R.string.sort_by_name_desc,
-                        R.string.sort_by_date_desc,
-                        R.string.sort_by_date_asc
+                    listOf(
+                        FormListSortingOption(
+                            R.drawable.ic_sort_by_alpha,
+                            R.string.sort_by_name_asc
+                        ),
+                        FormListSortingOption(
+                            R.drawable.ic_sort_by_alpha,
+                            R.string.sort_by_name_desc
+                        ),
+                        FormListSortingOption(
+                            R.drawable.ic_access_time,
+                            R.string.sort_by_date_desc
+                        ),
+                        FormListSortingOption(
+                            R.drawable.ic_access_time,
+                            R.string.sort_by_date_asc
+                        )
                     ),
                     viewModel.sortingOrder
                 ) { newSortingOrder ->

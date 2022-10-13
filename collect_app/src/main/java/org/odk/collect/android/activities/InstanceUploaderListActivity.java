@@ -45,6 +45,7 @@ import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitSchedul
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
+import org.odk.collect.android.formlists.FormListSortingOption;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
@@ -55,6 +56,7 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.keys.ProjectKeys;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -167,10 +169,24 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             binding.uploadButton.setEnabled(areCheckedItems());
         });
 
-        sortingOptions = new int[]{
-                R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                R.string.sort_by_date_desc, R.string.sort_by_date_asc
-        };
+        sortingOptions = Arrays.asList(
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_asc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_desc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_access_time,
+                        R.string.sort_by_date_desc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_access_time,
+                        R.string.sort_by_date_asc
+                )
+        );
 
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 

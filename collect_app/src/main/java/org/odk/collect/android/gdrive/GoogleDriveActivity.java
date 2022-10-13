@@ -44,6 +44,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
+import org.odk.collect.android.formlists.FormListSortingOption;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.TaskListener;
@@ -64,6 +65,7 @@ import org.odk.collect.shared.strings.Md5;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -215,9 +217,16 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
 
-        sortingOptions = new int[]{
-                R.string.sort_by_name_asc, R.string.sort_by_name_desc
-        };
+        sortingOptions = Arrays.asList(
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_asc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_desc
+                )
+        );
 
         driveHelper = new DriveHelper(googleApiProvider.getDriveApi(settingsProvider
                 .getUnprotectedSettings()

@@ -40,9 +40,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.formlists.FormListSortingAdapter;
+import org.odk.collect.android.formlists.FormListSortingOption;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
@@ -61,7 +61,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
 
     protected CursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
-    protected int[] sortingOptions;
+    protected List<FormListSortingOption> sortingOptions;
     protected Integer selectedSortingOrder;
     protected ListView listView;
     protected LinearLayout llParent;
@@ -296,13 +296,10 @@ abstract class AppListActivity extends CollectAbstractActivity {
         final View sheetView = getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
-        final SortDialogAdapter adapter = new SortDialogAdapter(this, recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
-            @Override
-            public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
-                holder.updateItemColor(selectedSortingOrder);
-                performSelectedSearch(position);
-                bottomSheetDialog.dismiss();
-            }
+        final FormListSortingAdapter adapter = new FormListSortingAdapter(sortingOptions, getSelectedSortingOrder(), position -> {
+            performSelectedSearch(position);
+            bottomSheetDialog.dismiss();
+            return null;
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);

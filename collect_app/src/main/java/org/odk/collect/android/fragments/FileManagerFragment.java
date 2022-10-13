@@ -30,7 +30,10 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.formlists.FormListSortingOption;
 import org.odk.collect.android.utilities.SnackbarUtils;
+
+import java.util.Arrays;
 
 public abstract class FileManagerFragment extends AppListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int LOADER_ID = 0x01;
@@ -62,10 +65,24 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
         getListView().setItemsCanFocus(false);
         deleteButton.setEnabled(false);
 
-        sortingOptions = new int[]{
-                R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                R.string.sort_by_date_desc, R.string.sort_by_date_asc
-        };
+        sortingOptions = Arrays.asList(
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_asc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_desc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_access_time,
+                        R.string.sort_by_date_desc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_access_time,
+                        R.string.sort_by_date_asc
+                )
+        );
         getLoaderManager().initLoader(LOADER_ID, null, this);
         super.onViewCreated(view, savedInstanceState);
     }
