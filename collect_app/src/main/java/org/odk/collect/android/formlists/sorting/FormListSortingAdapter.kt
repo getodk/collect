@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlists
+package org.odk.collect.android.formlists.sorting
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater

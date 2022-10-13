@@ -6,8 +6,8 @@ import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.SearchView
 import org.odk.collect.android.R
-import org.odk.collect.android.formlists.FormListSortingBottomSheetDialog
-import org.odk.collect.android.formlists.FormListSortingOption
+import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog
+import org.odk.collect.android.formlists.sorting.FormListSortingOption
 import org.odk.collect.android.utilities.MenuDelegate
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.ToastUtils

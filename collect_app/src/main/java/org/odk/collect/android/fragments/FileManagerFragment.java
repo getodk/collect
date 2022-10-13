@@ -30,7 +30,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.formlists.FormListSortingOption;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.utilities.SnackbarUtils;
 
 import java.util.Arrays;

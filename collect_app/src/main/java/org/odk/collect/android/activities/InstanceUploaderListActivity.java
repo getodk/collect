@@ -45,7 +45,7 @@ import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitSchedul
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
-import org.odk.collect.android.formlists.FormListSortingOption;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.network.NetworkStateProvider;

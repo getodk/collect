@@ -39,7 +39,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
-import org.odk.collect.android.formlists.FormListSortingOption;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;

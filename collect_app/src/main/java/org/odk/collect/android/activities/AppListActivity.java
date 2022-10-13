@@ -41,8 +41,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.formlists.FormListSortingAdapter;
-import org.odk.collect.android.formlists.FormListSortingOption;
+import org.odk.collect.android.formlists.sorting.FormListSortingAdapter;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 

@@ -44,7 +44,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormListActivity;
 import org.odk.collect.android.adapters.FileArrayAdapter;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
-import org.odk.collect.android.formlists.FormListSortingOption;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.TaskListener;

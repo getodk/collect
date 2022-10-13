@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlists
+package org.odk.collect.android.formlists.sorting
 
 data class FormListSortingOption(
     val icon: Int,

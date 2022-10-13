@@ -20,7 +20,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
-import org.odk.collect.android.formlists.FormListSortingBottomSheetDialog
+import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.robolectric.Shadows
