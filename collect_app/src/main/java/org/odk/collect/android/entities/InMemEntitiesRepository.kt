@@ -12,7 +12,7 @@ class InMemEntitiesRepository : EntitiesRepository {
     }
 
     override fun getEntities(dataset: String): List<Entity> {
-        return entities
+        return entities.filter { it.dataset == dataset }
     }
 
     override fun save(entity: Entity) {
