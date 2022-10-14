@@ -115,6 +115,10 @@ class BlankFormListMenuDelegate(
                         FormListSortingOption(
                             R.drawable.ic_access_time,
                             R.string.sort_by_date_asc
+                        ),
+                        FormListSortingOption(
+                            R.drawable.ic_sort_by_last_saved,
+                            R.string.sort_by_last_saved
                         )
                     ),
                     viewModel.sortingOrder
