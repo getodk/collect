@@ -20,6 +20,7 @@ class BlankFormListItemTest {
         instancesRepository.save(
             Instance.Builder()
                 .formId("0")
+                .formVersion("1")
                 .lastStatusChangeDate(5)
                 .build()
         )
@@ -27,6 +28,7 @@ class BlankFormListItemTest {
         instancesRepository.save(
             Instance.Builder()
                 .formId("1")
+                .formVersion("1")
                 .lastStatusChangeDate(3)
                 .build()
         )
@@ -34,6 +36,7 @@ class BlankFormListItemTest {
         instancesRepository.save(
             Instance.Builder()
                 .formId("1")
+                .formVersion("1")
                 .lastStatusChangeDate(4)
                 .build()
         )
@@ -99,5 +102,45 @@ class BlankFormListItemTest {
         val blankFormListItem = formToBlankFormListItem(form, Project.DEMO_PROJECT_ID, instancesRepository)
 
         assertThat(blankFormListItem.geometryPath, `is`(""))
+    }
+
+    @Test
+    fun `dateOfLastUsage should be set taking into account forms saved not only for given formId but also formVersion`() {
+        instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .lastStatusChangeDate(5)
+                .build()
+        )
+
+        instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("2")
+                .lastStatusChangeDate(3)
+                .build()
+        )
+
+        instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("2")
+                .lastStatusChangeDate(4)
+                .build()
+        )
+
+        val form = Form.Builder()
+            .dbId(1)
+            .formId("1")
+            .displayName("Sample form")
+            .version("2")
+            .geometryXpath("blah")
+            .date(1665742651521)
+            .build()
+
+        val blankFormListItem = formToBlankFormListItem(form, Project.DEMO_PROJECT_ID, instancesRepository)
+
+        assertThat(blankFormListItem.dateOfLastUsage, `is`(4L))
     }
 }

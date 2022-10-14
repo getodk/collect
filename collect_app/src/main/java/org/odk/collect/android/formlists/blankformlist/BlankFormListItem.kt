@@ -23,6 +23,9 @@ fun formToBlankFormListItem(form: Form, projectId: String, instancesRepository: 
     formVersion = form.version ?: "",
     geometryPath = form.geometryXpath ?: "",
     dateOfCreation = form.date,
-    dateOfLastUsage = instancesRepository.getAllByFormId(form.formId).maxByOrNull { it.lastStatusChangeDate }?.lastStatusChangeDate ?: 0L,
+    dateOfLastUsage = instancesRepository
+        .getAllByFormId(form.formId)
+        .filter { it.formVersion == form.version }
+        .maxByOrNull { it.lastStatusChangeDate }?.lastStatusChangeDate ?: 0L,
     contentUri = FormsContract.getUri(projectId, form.dbId)
 )

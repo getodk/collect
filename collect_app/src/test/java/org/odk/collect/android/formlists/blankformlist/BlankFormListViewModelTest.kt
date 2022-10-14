@@ -16,7 +16,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -390,6 +389,29 @@ class BlankFormListViewModelTest {
     }
 
     @Test
+    fun `when list of forms sorted 'by last saved', and there are different versions of the same form, sorting should distinguish different form versions`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "AForm v1", version = "1"),
+            form(dbId = 2, formId = "1", formName = "AForm v2", version = "2"),
+            form(dbId = 3, formId = "2", formName = "BForm")
+        )
+
+        saveInstances(
+            instance(formId = "1", lastStatusChangeDate = 1L, version = "1"),
+            instance(formId = "2", lastStatusChangeDate = 2L),
+            instance(formId = "1", lastStatusChangeDate = 3L, version = "2"),
+        )
+
+        createViewModel(shouldHideOldFormVersions = false)
+
+        viewModel.sortingOrder = 4
+
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "1", formName = "AForm v2", version = "2"), 3L)
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 3, formId = "2", formName = "BForm"), 2L)
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 1, formId = "1", formName = "AForm v1", version = "1"), 1L)
+    }
+
+    @Test
     fun `list of forms should be filtered when filterText is changed`() {
         saveForms(
             form(dbId = 1, formId = "1"),
@@ -499,16 +521,7 @@ class BlankFormListViewModelTest {
         assertThat(
             blankFormListItem,
             `is`(
-                BlankFormListItem(
-                    databaseId = form.dbId,
-                    formId = form.formId,
-                    formName = form.displayName,
-                    formVersion = form.version ?: "",
-                    geometryPath = form.geometryXpath ?: "",
-                    dateOfCreation = form.date,
-                    dateOfLastUsage = lastStatusChangeDate,
-                    contentUri = FormsContract.getUri(projectId, form.dbId)
-                )
+                formToBlankFormListItem(form, projectId, instancesRepository)
             )
         )
     }
@@ -516,7 +529,7 @@ class BlankFormListViewModelTest {
     private fun form(
         dbId: Long,
         formId: String = "1",
-        version: String = "1",
+        version: String? = null,
         formName: String = "Form $formId",
         deleted: Boolean = false
     ) = Form.Builder()
@@ -531,9 +544,11 @@ class BlankFormListViewModelTest {
 
     private fun instance(
         formId: String,
-        lastStatusChangeDate: Long
+        lastStatusChangeDate: Long,
+        version: String? = null
     ) = Instance.Builder()
         .formId(formId)
+        .formVersion(version)
         .lastStatusChangeDate(lastStatusChangeDate)
         .build()
 }
