@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -91,16 +90,7 @@ class BlankFormListViewModel(
         return formsRepository
             .all
             .map { form ->
-                BlankFormListItem(
-                    databaseId = form.dbId,
-                    formId = form.formId,
-                    formName = form.displayName,
-                    formVersion = form.version ?: "",
-                    geometryPath = form.geometryXpath ?: "",
-                    dateOfCreation = form.date,
-                    dateOfLastUsage = instancesRepository.getAllByFormId(form.formId).maxByOrNull { it.lastStatusChangeDate }?.lastStatusChangeDate ?: 0L,
-                    contentUri = FormsContract.getUri(projectId, form.dbId)
-                )
+                formToBlankFormListItem(form, projectId, instancesRepository)
             }
     }
 
@@ -113,16 +103,7 @@ class BlankFormListViewModel(
                     .filter {
                         !it.isDeleted
                     }.map { form ->
-                        BlankFormListItem(
-                            databaseId = form.dbId,
-                            formId = form.formId,
-                            formName = form.displayName,
-                            formVersion = form.version ?: "",
-                            geometryPath = form.geometryXpath ?: "",
-                            dateOfCreation = form.date,
-                            dateOfLastUsage = instancesRepository.getAllByFormId(form.formId).maxByOrNull { it.lastStatusChangeDate }?.lastStatusChangeDate ?: 0L,
-                            contentUri = FormsContract.getUri(projectId, form.dbId)
-                        )
+                        formToBlankFormListItem(form, projectId, instancesRepository)
                     }
 
                 if (shouldHideOldFormVersions) {
