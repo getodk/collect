@@ -37,7 +37,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
     private val viewModel: BlankFormListViewModel by viewModels { viewModelFactory }
 
-    private val adapter: FormListAdapter = FormListAdapter(this)
+    private val adapter: BlankFormListAdapter = BlankFormListAdapter(this)
 
     private lateinit var menuDelegate: BlankFormListMenuDelegate
 
