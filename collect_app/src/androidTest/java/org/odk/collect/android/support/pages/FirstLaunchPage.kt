@@ -10,17 +10,17 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
     }
 
     fun clickTryCollect(): MainMenuPage {
-        clickOnString(R.string.try_demo)
+        scrollToAndClickText(R.string.try_demo)
         return MainMenuPage().assertOnPage()
     }
 
     fun clickManuallyEnterProjectDetails(): ManualProjectCreatorDialogPage {
-        clickOnString(R.string.configure_manually)
+        scrollToAndClickText(R.string.configure_manually)
         return ManualProjectCreatorDialogPage().assertOnPage()
     }
 
     fun clickConfigureWithQrCode(): QrCodeProjectCreatorDialogPage {
-        clickOnString(R.string.configure_with_qr_code)
+        scrollToAndClickText(R.string.configure_with_qr_code)
         return QrCodeProjectCreatorDialogPage().assertOnPage()
     }
 }
