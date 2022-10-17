@@ -1162,5 +1162,7 @@
     ##############################################
     # Entities
     ##############################################
+    
+    <!-- An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project. -->
     <string name="entities_title">Entities</string>
 </resources>
