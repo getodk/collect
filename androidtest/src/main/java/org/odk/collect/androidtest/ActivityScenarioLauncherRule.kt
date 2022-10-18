@@ -27,6 +27,18 @@ open class ActivityScenarioLauncherRule : ExternalResource() {
         }
     }
 
+    fun <A : Activity> launchForResult(intent: Intent): ActivityScenario<A> {
+        return ActivityScenario.launchActivityForResult<A>(intent).also {
+            scenarios.add(it)
+        }
+    }
+
+    fun <A : Activity> launchForResult(activityClass: Class<A>): ActivityScenario<A> {
+        return ActivityScenario.launchActivityForResult(activityClass).also {
+            scenarios.add(it)
+        }
+    }
+
     override fun after() {
         scenarios.forEach {
             try {
