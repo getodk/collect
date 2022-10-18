@@ -16,6 +16,7 @@ These dialog themes need to reference `colorPrimary` directly as they do not inh
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="dialogCornerRadius">8dp</item>
+        <item name="android:scrollbars">none</item>
     </style>
 
     <style name="Theme.Collect.Dark.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Dialog">
@@ -43,6 +44,7 @@ These dialog themes need to reference `colorPrimary` directly as they do not inh
         <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
         <item name="dialogCornerRadius">8dp</item>
+        <item name="android:scrollbars">none</item>
     </style>
 
     <style name="Theme.Collect.Light.Calendar.DatePicker.Dialog" parent="Theme.AppCompat.Light.Dialog">
