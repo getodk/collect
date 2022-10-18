@@ -212,6 +212,7 @@ class FormStylingTest {
             .startBlankForm(FORM_NAME)
             .clickGoToArrow()
             .assertHierarchyItem(0, "Note text", null)
+            .assertHierarchyItem(1, "* Required text question with header style", null)
             .assertHierarchyItem(4, "Rank widget", "1. One")
     }
 
