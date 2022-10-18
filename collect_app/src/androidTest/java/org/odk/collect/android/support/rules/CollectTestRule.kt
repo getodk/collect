@@ -44,7 +44,7 @@ class CollectTestRule @JvmOverloads constructor(
             .addProject()
 
     fun launchShortcuts(): ShortcutsPage {
-        val scenario = launch(AndroidShortcutsActivity::class.java)
+        val scenario = launchForResult(AndroidShortcutsActivity::class.java)
         return ShortcutsPage(scenario).assertOnPage()
     }
 
@@ -58,7 +58,7 @@ class CollectTestRule @JvmOverloads constructor(
         destination: T,
         actions: Consumer<T>
     ): Instrumentation.ActivityResult {
-        val scenario = launch<Activity>(intent)
+        val scenario = launchForResult<Activity>(intent)
         destination.assertOnPage()
         actions.accept(destination)
         return scenario.result

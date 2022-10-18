@@ -252,7 +252,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun <D : Page<D>?> rotateToLandscape(destination: D): D {
-        onView(isRoot()).perform(rotateToLandscape())
+        currentActivity!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         waitForRotationToEnd()
         return destination!!.assertOnPage()
     }
@@ -419,7 +419,7 @@ abstract class Page<T : Page<T>> {
                 InstrumentationRegistry.getInstrumentation().runOnMainSync {
                     val activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
                     if (!activities.isEmpty()) {
-                        activity[0] = Iterables.getOnlyElement(activities)
+                        activity[0] = Iterables.getOnlyElement(activities) as Activity
                     } else {
                         activity[0] = null
                     }
