@@ -122,9 +122,15 @@ public final class FormEntryPromptUtils {
 
     public static CharSequence styledQuestionText(String questionText, boolean isRequired) {
         CharSequence styledQuestionText = HtmlUtils.textToHtml(questionText);
-       return isRequired
-                ? new SpannableStringBuilder(HtmlUtils.textToHtml("<span style=\"color:#F44336\">*</span>")).append(" ").append(styledQuestionText)
-                : styledQuestionText;
+        return isRequired
+               /*
+                Question text should be added first, then the asterisk mark which represents
+                required questions. If the order is changed some styling might not work well.
+                */
+               ? new SpannableStringBuilder(styledQuestionText)
+                    .insert(0, " ")
+                    .insert(0, HtmlUtils.textToHtml("<span style=\"color:#F44336\">*</span>"))
+               : styledQuestionText;
     }
 
     @Nullable
