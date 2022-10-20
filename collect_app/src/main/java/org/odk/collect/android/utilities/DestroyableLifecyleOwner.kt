@@ -5,22 +5,19 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 
 class DestroyableLifecyleOwner : LifecycleOwner {
-    private var lifecycleRegistry: LifecycleRegistry? = null
+    private var lifecycleRegistry = LifecycleRegistry(this).apply {
+        this.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    }
+
     fun start() {
-        if (lifecycleRegistry == null) {
-            lifecycleRegistry = LifecycleRegistry(this)
-        }
-        lifecycleRegistry!!.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
     }
 
     fun destroy() {
-        if (lifecycleRegistry != null) {
-            lifecycleRegistry!!.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-            lifecycleRegistry = null
-        }
+        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     }
 
     override fun getLifecycle(): Lifecycle {
-        return lifecycleRegistry!!
+        return lifecycleRegistry
     }
 }
