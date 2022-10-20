@@ -213,7 +213,7 @@ jobs:
           name: Assemble self signed release build
           command: ./gradlew assembleSelfSignedRelease
 
-  test_instrumented:
+  test_smoke_instrumented:
     <<: *android_config
     steps:
       - attach_workspace:
@@ -259,14 +259,64 @@ jobs:
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
               --device model=Pixel2,version=29,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
-              --environment-variables coverage=true,coverageFile=/sdcard/coverage.ec \
+              --directories-to-pull /sdcard --timeout 20m \
+              --test-targets "package org.odk.collect.android.feature.smoke"
+            fi
+          no_output_timeout: 25m
+
+  test_instrumented:
+    <<: *android_config
+    steps:
+      - attach_workspace:
+          at: ~/work
+      - restore_cache:
+          keys:
+            - intrumented-deps-{{ checksum "deps.txt" }}
+            - intrumented-deps
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Copy gradle config
+          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+
+      - run:
+          name: Assemble test build
+          command: ./gradlew assembleDebug assembleDebugAndroidTest
+
+      - save_cache:
+          paths:
+            - ~/.gradle/caches
+          key: intrumented-deps-{{ checksum "deps.txt" }}
+
+      - run:
+          name: Authorize gcloud
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
+              gcloud config set project api-project-322300403941
+              echo $GCLOUD_SERVICE_KEY | base64 --decode > client-secret.json
+              gcloud auth activate-service-account --key-file client-secret.json
+            fi
+      - run:
+          name: Run integration tests
+          command: |
+            if [[ "$CIRCLE_PROJECT_USERNAME" == "getodk" ]]; then \
+              echo "y" | gcloud beta firebase test android run \
+              --type instrumentation \
+              --num-uniform-shards=25 \
+              --app collect_app/build/outputs/apk/debug/*.apk \
+              --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
+              --device model=Pixel2,version=29,locale=en,orientation=portrait \
+              --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m
             fi
           no_output_timeout: 25m
 
 workflows:
   version: 2
-  workflow:
+  commit:
     jobs:
       - compile
       - check_quality:
@@ -287,9 +337,20 @@ workflows:
           filters:
             branches:
               ignore: master
-      - test_instrumented:
+      - test_smoke_instrumented:
           requires:
             - compile
           filters:
             branches:
               only: master
+
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - test_instrumented
