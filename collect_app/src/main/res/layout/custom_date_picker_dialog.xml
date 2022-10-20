@@ -32,6 +32,7 @@ limitations under the License.
                 android:id="@+id/day_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:scrollbars="none"
                 android:descendantFocusability="blocksDescendants" />
 
             <NumberPicker
@@ -42,12 +43,14 @@ limitations under the License.
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginStart="10dp"
+                android:scrollbars="none"
                 android:descendantFocusability="blocksDescendants" />
 
             <NumberPicker
                 android:id="@+id/year_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:scrollbars="none"
                 android:descendantFocusability="blocksDescendants" />
         </LinearLayout>
 

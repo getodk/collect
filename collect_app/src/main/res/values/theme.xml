@@ -35,6 +35,8 @@
         <item name="textAppearanceButton">@style/TextAppearance.Collect.Button</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
 
+        <item name="android:scrollbars">vertical</item>
+
         <item name="shapeAppearanceSmallComponent">
             @style/ShapeAppearance.MaterialComponents.SmallComponent
         </item>
