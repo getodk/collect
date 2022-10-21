@@ -84,7 +84,7 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                     skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
                     zoomToFitItems = false,
                     showNewItemButton = false,
-                    onBackPressedDispatcher = (requireDialog() as ComponentDialog).onBackPressedDispatcher
+                    onBackPressedDispatcher = { (requireDialog() as ComponentDialog).onBackPressedDispatcher }
                 )
             }
             .build()

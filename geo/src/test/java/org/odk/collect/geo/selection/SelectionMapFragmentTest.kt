@@ -73,7 +73,7 @@ class SelectionMapFragmentTest {
         R.style.Theme_MaterialComponents,
         object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
-                return SelectionMapFragment(data, onBackPressedDispatcher = onBackPressedDispatcher)
+                return SelectionMapFragment(data, onBackPressedDispatcher = { onBackPressedDispatcher })
             }
         }
     )
@@ -228,7 +228,7 @@ class SelectionMapFragmentTest {
                     SelectionMapFragment(
                         data,
                         zoomToFitItems = false,
-                        onBackPressedDispatcher = onBackPressedDispatcher
+                        onBackPressedDispatcher = { onBackPressedDispatcher }
                     )
                 }.build()
         )
@@ -452,7 +452,7 @@ class SelectionMapFragmentTest {
                     SelectionMapFragment(
                         data,
                         skipSummary = true,
-                        onBackPressedDispatcher = onBackPressedDispatcher
+                        onBackPressedDispatcher = { onBackPressedDispatcher }
                     )
                 }.build()
         )
@@ -606,7 +606,7 @@ class SelectionMapFragmentTest {
                     SelectionMapFragment(
                         data,
                         showNewItemButton = false,
-                        onBackPressedDispatcher = onBackPressedDispatcher
+                        onBackPressedDispatcher = { onBackPressedDispatcher }
                     )
                 }.build()
         )

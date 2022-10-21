@@ -147,7 +147,7 @@ class SelectOneFromMapDialogFragmentTest {
 
             val dialogBackPressedDispatcher =
                 (it.requireDialog() as ComponentDialog).onBackPressedDispatcher
-            assertThat(fragment.onBackPressedDispatcher, equalTo(dialogBackPressedDispatcher))
+            assertThat(fragment.onBackPressedDispatcher?.invoke(), equalTo(dialogBackPressedDispatcher))
         }
     }
 

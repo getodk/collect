@@ -44,7 +44,7 @@ class SelectionMapFragment(
     val skipSummary: Boolean = false,
     val zoomToFitItems: Boolean = true,
     val showNewItemButton: Boolean = true,
-    val onBackPressedDispatcher: OnBackPressedDispatcher? = null,
+    val onBackPressedDispatcher: (() -> OnBackPressedDispatcher)? = null,
 ) : Fragment() {
 
     @Inject
@@ -226,7 +226,7 @@ class SelectionMapFragment(
             }
         }
 
-        (onBackPressedDispatcher ?: requireActivity().onBackPressedDispatcher).addCallback(
+        (onBackPressedDispatcher?.invoke() ?: requireActivity().onBackPressedDispatcher).addCallback(
             viewLifecycleOwner,
             closeSummarySheet
         )
