@@ -62,7 +62,7 @@ public abstract class InstanceUploader {
         List<Instance> instances = new ArrayList<>();
 
         for (Long id : instanceDatabaseIds) {
-            instances.add(new InstancesRepositoryProvider(Collect.getInstance()).get().get(id));
+            instances.add(instancesRepositoryProvider.get().get(id));
         }
 
         return instances;
