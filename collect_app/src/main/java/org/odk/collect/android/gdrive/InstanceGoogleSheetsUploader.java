@@ -121,8 +121,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 key = PropertyUtils.genUUID();
             }
             insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
-        } catch (FormUploadException e) {
-            throw e;
         } catch (GoogleJsonResponseException e) {
             throw new FormUploadException(getErrorMessageFromGoogleJsonResponseException(e));
         }
