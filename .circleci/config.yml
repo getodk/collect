@@ -350,6 +350,6 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - master
     jobs:
       - test_instrumented
