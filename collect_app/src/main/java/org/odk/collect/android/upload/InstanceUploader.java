@@ -68,6 +68,17 @@ public abstract class InstanceUploader {
         return instances;
     }
 
+    public void markSubmissionFailed(Instance instance) {
+        instancesRepositoryProvider
+                .get()
+                .save(new Instance.Builder(instance)
+                        .status(Instance.STATUS_SUBMISSION_FAILED)
+                        .build()
+                );
+
+        instancesAppState.update();
+    }
+
     public void submissionComplete(Instance instance, boolean successful) {
         InstancesRepository instancesRepository = instancesRepositoryProvider.get();
 

@@ -71,6 +71,8 @@ public class InstanceServerUploader extends InstanceUploader {
      */
     @Override
     public String uploadOneSubmission(Instance instance, String urlString) throws FormUploadException {
+        markSubmissionFailed(instance);
+
         Uri submissionUri = Uri.parse(urlString);
 
         long contentLength = 10000000L;

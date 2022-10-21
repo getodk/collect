@@ -88,6 +88,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws FormUploadException {
+        markSubmissionFailed(instance);
+
         File instanceFile = new File(instance.getInstanceFilePath());
         if (!instanceFile.exists()) {
             throw new FormUploadException(FAIL + "instance XML file does not exist!");
