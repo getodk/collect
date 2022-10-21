@@ -37,6 +37,7 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,15 +52,14 @@ public class InstanceServerUploader extends InstanceUploader {
 
     private final OpenRosaHttpInterface httpInterface;
     private final WebCredentialsUtils webCredentialsUtils;
-    private final Map<Uri, Uri> uriRemap;
     private final Settings generalSettings;
+    private final Map<Uri, Uri> uriRemap = new HashMap<>();
 
     public InstanceServerUploader(OpenRosaHttpInterface httpInterface,
                                   WebCredentialsUtils webCredentialsUtils,
-                                  Map<Uri, Uri> uriRemap, Settings generalSettings) {
+                                  Settings generalSettings) {
         this.httpInterface = httpInterface;
         this.webCredentialsUtils = webCredentialsUtils;
-        this.uriRemap = uriRemap;
         this.generalSettings = generalSettings;
     }
 

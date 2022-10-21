@@ -96,7 +96,6 @@ class InstanceSubmitter(
         return InstanceServerUploader(
             httpInterface,
             WebCredentialsUtils(generalSettings),
-            HashMap(),
             generalSettings
         )
     }
