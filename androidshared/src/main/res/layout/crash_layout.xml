@@ -1,24 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/margin_standard" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/margin_standard" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="@dimen/margin_standard" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="@dimen/margin_standard" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        style="?textAppearanceTitleLarge"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Blah blah blah"/>
+        android:layout_marginHorizontal="@dimen/margin_extra_large"
+        android:gravity="center"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        tools:text="There was a crash last time the app was running!" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/ok_button"
+        style="@style/Widget.Material3.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/ok"/>
+        android:layout_marginTop="@dimen/margin_standard"
+        android:text="@string/ok"
+        app:layout_constraintEnd_toEndOf="@id/title"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintTop_toBottomOf="@id/title" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:src="@drawable/ic_baseline_warning_24"
+        app:layout_constraintBottom_toTopOf="@id/title"
+        app:layout_constraintEnd_toEndOf="@id/title"
+        app:layout_constraintStart_toStartOf="@id/title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
