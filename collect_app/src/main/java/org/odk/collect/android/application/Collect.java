@@ -140,7 +140,7 @@ public class Collect extends Application implements
         super.onCreate();
         singleton = this;
 
-        crashHandler = CrashHandler.install(this);
+        CrashHandler crashHandler = CrashHandler.install(this);
         crashHandler.checkConditions(() -> {
             ExternalFilesUtils.testExternalFilesAccess(this);
         });

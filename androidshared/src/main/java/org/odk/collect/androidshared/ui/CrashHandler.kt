@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import org.odk.collect.androidshared.R
+import org.odk.collect.androidshared.data.getState
 import kotlin.system.exitProcess
 
 class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
@@ -62,7 +63,14 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             val crashHandler = CrashHandler()
             wrapUncaughExceptionHandler(crashHandler, context)
 
-            return crashHandler
+            return crashHandler.also {
+                context.getState().set("crash_handler", it)
+            }
+        }
+
+        @JvmStatic
+        fun getInstance(context: Context): CrashHandler? {
+            return context.getState().get<CrashHandler>("crash_handler")
         }
 
         private fun wrapUncaughExceptionHandler(
