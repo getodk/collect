@@ -25,27 +25,21 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
     }
 
     fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): View? {
-        val crash = getPreferences(context).getBoolean(KEY_CRASH, false)
+        val preferences = getPreferences(context)
 
-        return if (crash || conditionFailure) {
-            val view = LayoutInflater.from(context).inflate(R.layout.crash_layout, null)
-
-            if (conditionFailure) {
-                view.findViewById<TextView>(R.id.title).setText(R.string.cant_start_app)
-            } else {
-                view.findViewById<TextView>(R.id.title).setText(R.string.crash_last_run)
+        return if (conditionFailure) {
+            LayoutInflater.from(context).inflate(R.layout.crash_layout, null).also {
+                it.findViewById<TextView>(R.id.title).setText(R.string.cant_start_app)
+                it.findViewById<View>(R.id.ok_button).setOnClickListener { processKiller.run() }
             }
-
-            view.findViewById<View>(R.id.ok_button).setOnClickListener {
-                getPreferences(context).edit().remove(KEY_CRASH).apply()
-
-                if (conditionFailure) {
-                    processKiller.run()
-                } else {
+        } else if (preferences.getBoolean(KEY_CRASH, false)) {
+            LayoutInflater.from(context).inflate(R.layout.crash_layout, null).also {
+                it.findViewById<TextView>(R.id.title).setText(R.string.crash_last_run)
+                it.findViewById<View>(R.id.ok_button).setOnClickListener {
+                    preferences.edit().remove(KEY_CRASH).apply()
                     onErrorDismissed?.run()
                 }
             }
-            view
         } else {
             null
         }

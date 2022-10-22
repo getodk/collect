@@ -121,5 +121,19 @@ class CrashHandlerTest {
         assertThat(otherCrashHandler.getCrashView(context), equalTo(null))
     }
 
+    @Test
+    fun getCrashView_whenThereHasBeenACrashRegistered_andCheckConditionFailed_andTheOkButtonIsClickedOnTheView_runsProcessKiller() {
+        createCrashHandler().registerCrash(context, RuntimeException())
+
+        val crashHandler = createCrashHandler()
+        crashHandler.checkConditions {
+            throw RuntimeException("blah")
+        }
+
+        val view = crashHandler.getCrashView(context)
+        view!!.findViewById<View>(R.id.ok_button).performClick()
+        verify(processKiller).run()
+    }
+
     private fun createCrashHandler() = CrashHandler(processKiller)
 }
