@@ -1,51 +1,79 @@
 package org.odk.collect.androidshared.ui
 
 import android.content.Context
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
+import org.odk.collect.androidshared.R
 import kotlin.system.exitProcess
 
-object CrashHandler {
+class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
 
-    private const val KEY_CRASH = "crash"
+    private var conditionFailure = false
 
-    private var initializationFailed = false
+    fun registerCrash(context: Context, crash: Throwable) {
+        getPreferences(context).edit().putBoolean(KEY_CRASH, true).apply()
+    }
 
-    @JvmStatic
-    fun initializeApp(context: Context, initializeApp: Runnable) {
+    fun checkConditions(runnable: Runnable) {
         try {
-            initializeApp.run()
+            runnable.run()
         } catch (t: Throwable) {
-            initializationFailed = true
-        }
-
-        val defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
-        Thread.setDefaultUncaughtExceptionHandler { t: Thread, e: Throwable ->
-            getPreferences(context).edit().putBoolean(KEY_CRASH, true).apply()
-            defaultUncaughtExceptionHandler?.uncaughtException(t, e)
+            conditionFailure = true
         }
     }
 
-    @JvmStatic
-    fun showCrashUIOrLaunchApp(context: Context, launchApp: Runnable) {
-        val preferences = getPreferences(context)
+    fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): View? {
+        val crash = getPreferences(context).getBoolean(KEY_CRASH, false)
 
-        if (preferences.contains(KEY_CRASH)) {
-            preferences.edit().remove(KEY_CRASH).apply()
+        return if (crash || conditionFailure) {
+            val view = LayoutInflater.from(context).inflate(R.layout.crash_layout, null)
 
-            MaterialAlertDialogBuilder(context)
-                .setTitle("Crashed!")
-                .setOnDismissListener { launchApp.run() }
-                .show()
-        } else if (initializationFailed) {
-            MaterialAlertDialogBuilder(context)
-                .setTitle("Crashed!")
-                .setOnDismissListener { exitProcess(0) }
-                .show()
+            if (conditionFailure) {
+                view.findViewById<TextView>(R.id.title).setText(R.string.cant_start_app)
+            } else {
+                view.findViewById<TextView>(R.id.title).setText(R.string.crash_last_run)
+            }
+
+            view.findViewById<View>(R.id.ok_button).setOnClickListener {
+                getPreferences(context).edit().remove(KEY_CRASH).apply()
+
+                if (conditionFailure) {
+                    processKiller.run()
+                } else {
+                    onErrorDismissed?.run()
+                }
+            }
+            view
         } else {
-            launchApp.run()
+            null
         }
     }
 
     private fun getPreferences(context: Context) =
         context.getSharedPreferences("crash_handler", Context.MODE_PRIVATE)
+
+    companion object {
+
+        private const val KEY_CRASH = "crash"
+
+        @JvmStatic
+        fun install(context: Context): CrashHandler {
+            val crashHandler = CrashHandler()
+            wrapUncaughExceptionHandler(crashHandler, context)
+
+            return crashHandler
+        }
+
+        private fun wrapUncaughExceptionHandler(
+            crashHandler: CrashHandler,
+            context: Context,
+        ) {
+            val defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
+            Thread.setDefaultUncaughtExceptionHandler { t, e ->
+                crashHandler.registerCrash(context, e)
+                defaultUncaughtExceptionHandler?.uncaughtException(t, e)
+            }
+        }
+    }
 }

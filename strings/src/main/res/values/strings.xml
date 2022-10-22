@@ -1162,7 +1162,17 @@
     ##############################################
     # Entities
     ##############################################
-    
+
     <!-- An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project. -->
     <string name="entities_title">Entities</string>
+
+    <!--
+    ##############################################
+    # Crash handling
+    ##############################################
+    -->
+
+    <string name="crash_last_run">There was a crash last time the app was running!</string>
+    <string name="cant_start_app">Cannot start the app!</string>
+
 </resources>

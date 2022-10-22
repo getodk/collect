@@ -3,6 +3,7 @@ package org.odk.collect.android.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import org.odk.collect.android.application.Collect
 import org.odk.collect.strings.localization.LocalizedActivity
 
 /**
@@ -17,6 +18,16 @@ class LaunchActivity : LocalizedActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
+        val crashHandler = (application as Collect).crashHandler
+        val crashView = crashHandler.getCrashView(this, ::launchApp)
+        if (crashView != null) {
+            setContentView(crashView)
+        } else {
+            launchApp()
+        }
+    }
+
+    private fun launchApp() {
         startActivity(Intent(this, MainMenuActivity::class.java))
     }
 }
