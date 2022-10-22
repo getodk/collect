@@ -352,4 +352,7 @@ workflows:
               only:
                 - master
     jobs:
-      - test_instrumented
+      - compile
+      - test_instrumented:
+          requires:
+            - compile
