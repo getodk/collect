@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Instrumentation
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import org.odk.collect.android.activities.LaunchActivity
+import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.external.AndroidShortcutsActivity
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -23,7 +23,7 @@ class CollectTestRule @JvmOverloads constructor(
         val firstLaunchPage = launch(
             Intent(
                 ApplicationProvider.getApplicationContext(),
-                LaunchActivity::class.java
+                MainMenuActivity::class.java
             ),
             FirstLaunchPage()
         ).assertOnPage()
@@ -49,7 +49,7 @@ class CollectTestRule @JvmOverloads constructor(
     }
 
     fun <D : Page<D>> relaunch(destination: D): D {
-        launch(LaunchActivity::class.java)
+        launch(MainMenuActivity::class.java)
         return destination.assertOnPage()
     }
 

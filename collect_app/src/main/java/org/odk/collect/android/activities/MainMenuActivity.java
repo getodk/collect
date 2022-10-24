@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
@@ -40,6 +41,7 @@ import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.androidshared.ui.CrashHandler;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
@@ -82,8 +84,16 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         new ThemeUtils(this).setDarkModeForCurrentProject();
+        SplashScreen.installSplashScreen(this);
 
         super.onCreate(savedInstanceState);
+
+        CrashHandler crashHandler = CrashHandler.getInstance(this);
+        if (crashHandler != null && crashHandler.getCrashView(this) != null) {
+            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+            return;
+        }
+
         DaggerUtils.getComponent(this).inject(this);
 
         if (projectsRepository.getAll().isEmpty()) {
