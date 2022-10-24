@@ -24,6 +24,10 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         }
     }
 
+    fun hasCrashed(context: Context): Boolean {
+        return getPreferences(context).getBoolean(KEY_CRASH, false) || conditionFailure
+    }
+
     @JvmOverloads
     fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): View? {
         val preferences = getPreferences(context)

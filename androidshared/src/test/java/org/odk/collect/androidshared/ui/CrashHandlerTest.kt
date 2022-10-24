@@ -25,6 +25,26 @@ class CrashHandlerTest {
     private val processKiller = mock<Runnable>()
 
     @Test
+    fun hasCrashed_whenThereAreNoCrashesRegistered_andNoConditionsFailed_returnsFalse() {
+        val crashHandler = createCrashHandler()
+        crashHandler.checkConditions { }
+        assertThat(crashHandler.hasCrashed(context), equalTo(false))
+    }
+
+    @Test
+    fun hasCrashed_whenThereHasBeenACrashRegistered_returnsTrue() {
+        createCrashHandler().registerCrash(context, RuntimeException())
+        assertThat(createCrashHandler().hasCrashed(context), equalTo(true))
+    }
+
+    @Test
+    fun hasCrashed_whenCheckingConditionsFails_returnsTrue() {
+        val crashHandler = createCrashHandler()
+        crashHandler.checkConditions { throw RuntimeException() }
+        assertThat(crashHandler.hasCrashed(context), equalTo(true))
+    }
+
+    @Test
     fun getCrashView_whenThereAreNoCrashesRegistered_returnsNull() {
         assertThat(createCrashHandler().getCrashView(context), equalTo(null))
     }

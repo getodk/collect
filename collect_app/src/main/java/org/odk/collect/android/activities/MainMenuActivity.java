@@ -89,7 +89,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
         super.onCreate(savedInstanceState);
 
         CrashHandler crashHandler = CrashHandler.getInstance(this);
-        if (crashHandler != null && crashHandler.getCrashView(this) != null) {
+        if (crashHandler != null && crashHandler.hasCrashed(this)) {
             ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
             return;
         }
