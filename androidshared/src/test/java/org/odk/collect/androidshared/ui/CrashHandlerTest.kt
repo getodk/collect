@@ -155,5 +155,17 @@ class CrashHandlerTest {
         verify(processKiller).run()
     }
 
+    @Test
+    fun checkConditions_whenNothingFails_returnsTrue() {
+        val crashHandler = createCrashHandler()
+        assertThat(crashHandler.checkConditions { }, equalTo(true))
+    }
+
+    @Test
+    fun checkConditions_whenSomethingFails_returnsFalse() {
+        val crashHandler = createCrashHandler()
+        assertThat(crashHandler.checkConditions { throw RuntimeException() }, equalTo(false))
+    }
+
     private fun createCrashHandler() = CrashHandler(processKiller)
 }

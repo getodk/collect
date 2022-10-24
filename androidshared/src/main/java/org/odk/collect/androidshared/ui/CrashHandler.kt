@@ -16,11 +16,13 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         getPreferences(context).edit().putBoolean(KEY_CRASH, true).apply()
     }
 
-    fun checkConditions(runnable: Runnable) {
-        try {
+    fun checkConditions(runnable: Runnable): Boolean {
+        return try {
             runnable.run()
+            true
         } catch (t: Throwable) {
             conditionFailure = true
+            false
         }
     }
 

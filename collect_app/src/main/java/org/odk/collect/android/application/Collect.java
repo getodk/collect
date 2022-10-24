@@ -141,16 +141,18 @@ public class Collect extends Application implements
         singleton = this;
 
         CrashHandler crashHandler = CrashHandler.install(this);
-        crashHandler.checkConditions(() -> {
+        boolean shouldLaunch = crashHandler.checkConditions(() -> {
             ExternalFilesUtils.testExternalFilesAccess(this);
         });
 
-        setupDagger();
-        DaggerUtils.getComponent(this).inject(this);
+        if (shouldLaunch) {
+            setupDagger();
+            DaggerUtils.getComponent(this).inject(this);
 
-        applicationInitializer.initialize();
-        fixGoogleBug154855417();
-        setupStrictMode();
+            applicationInitializer.initialize();
+            fixGoogleBug154855417();
+            setupStrictMode();
+        }
     }
 
     /**
