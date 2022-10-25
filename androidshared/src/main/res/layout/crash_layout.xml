@@ -47,6 +47,20 @@
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         tools:text="There was a crash last time the app was running!" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/message"
+        style="?textAppearanceBodyLarge"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_extra_large"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:layout_marginTop="@dimen/margin_standard"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="It exploded!" />
+
     <Button
         android:id="@+id/ok_button"
         style="@style/Widget.Material3.Button"
@@ -56,7 +70,7 @@
         android:text="@string/ok"
         app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"
-        app:layout_constraintTop_toBottomOf="@id/title" />
+        app:layout_constraintTop_toBottomOf="@id/message" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="64dp"

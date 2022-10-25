@@ -10,10 +10,10 @@ import kotlin.system.exitProcess
 
 class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
 
-    private var conditionFailure = false
+    private var conditionFailure: String? = null
 
     fun registerCrash(context: Context, crash: Throwable) {
-        getPreferences(context).edit().putBoolean(KEY_CRASH, true).apply()
+        getPreferences(context).edit().putString(KEY_CRASH, crash.message ?: "").apply()
     }
 
     fun checkConditions(runnable: Runnable): Boolean {
@@ -21,27 +21,33 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             runnable.run()
             true
         } catch (t: Throwable) {
-            conditionFailure = true
+            conditionFailure = t.message ?: ""
             false
         }
     }
 
     fun hasCrashed(context: Context): Boolean {
-        return getPreferences(context).getBoolean(KEY_CRASH, false) || conditionFailure
+        return getPreferences(context).contains(KEY_CRASH) || conditionFailure != null
     }
 
     @JvmOverloads
     fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): View? {
         val preferences = getPreferences(context)
 
-        return if (conditionFailure) {
+        return if (conditionFailure != null) {
+            val crashMessage = conditionFailure
+
             LayoutInflater.from(context).inflate(R.layout.crash_layout, null).also {
                 it.findViewById<TextView>(R.id.title).setText(R.string.cant_start_app)
+                it.findViewById<TextView>(R.id.message).text = crashMessage
                 it.findViewById<View>(R.id.ok_button).setOnClickListener { processKiller.run() }
             }
-        } else if (preferences.getBoolean(KEY_CRASH, false)) {
+        } else if (preferences.contains(KEY_CRASH)) {
+            val crashMessage = preferences.getString(KEY_CRASH, null)
+
             LayoutInflater.from(context).inflate(R.layout.crash_layout, null).also {
                 it.findViewById<TextView>(R.id.title).setText(R.string.crash_last_run)
+                it.findViewById<TextView>(R.id.message).text = crashMessage
                 it.findViewById<View>(R.id.ok_button).setOnClickListener {
                     preferences.edit().remove(KEY_CRASH).apply()
                     onErrorDismissed?.run()
