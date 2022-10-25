@@ -20,14 +20,8 @@ class CollectTestRule @JvmOverloads constructor(
     override fun before() {
         super.before()
 
-        val launchIntent = ApplicationProvider.getApplicationContext<Context>().packageManager
-            .getLaunchIntentForPackage("org.odk.collect.android")!!.also {
-                it.addCategory(Intent.CATEGORY_LAUNCHER)
-            }
-
-
         val firstLaunchPage = launch(
-            launchIntent,
+            getLaunchIntent(),
             FirstLaunchPage()
         ).assertOnPage()
 
@@ -52,12 +46,7 @@ class CollectTestRule @JvmOverloads constructor(
     }
 
     fun <D : Page<D>> relaunch(destination: D): D {
-        val launchIntent = ApplicationProvider.getApplicationContext<Context>().packageManager
-            .getLaunchIntentForPackage("org.odk.collect.android")!!.also {
-                it.addCategory(Intent.CATEGORY_LAUNCHER)
-            }
-
-        return launch(launchIntent, destination)
+        return launch(getLaunchIntent(), destination)
     }
 
     fun <T : Page<T>> launch(intent: Intent, destination: T): T {
@@ -74,5 +63,13 @@ class CollectTestRule @JvmOverloads constructor(
         destination.assertOnPage()
         actions.accept(destination)
         return scenario.result
+    }
+
+    private fun getLaunchIntent(): Intent {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val intent = context.packageManager.getLaunchIntentForPackage("org.odk.collect.android")
+        intent!!.addCategory(Intent.CATEGORY_LAUNCHER)
+
+        return intent
     }
 }
