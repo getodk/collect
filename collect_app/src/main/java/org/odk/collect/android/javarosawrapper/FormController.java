@@ -53,7 +53,6 @@ import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormNameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -93,26 +92,6 @@ public class FormController {
      * Store the auditEventLogger object with the form controller state
      */
     private AuditEventLogger auditEventLogger;
-
-    /**
-     * OpenRosa metadata of a form instance.
-     * <p>
-     * Contains the values for the required metadata
-     * fields and nothing else.
-     *
-     * @author mitchellsundt@gmail.com
-     */
-    public static final class InstanceMetadata {
-        public final String instanceId;
-        public final String instanceName;
-        public final AuditConfig auditConfig;
-
-        public InstanceMetadata(String instanceId, String instanceName, AuditConfig auditConfig) {
-            this.instanceId = instanceId;
-            this.instanceName = FormNameUtils.normalizeFormName(instanceName, false);
-            this.auditConfig = auditConfig;
-        }
-    }
 
     private final File mediaFolder;
     @Nullable
