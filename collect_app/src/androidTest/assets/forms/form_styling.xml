@@ -5,7 +5,7 @@
         <model odk:xforms-version="1.0.0">
             <itext>
                 <translation default="true()" lang="default">
-                    <text id="/data/q1:hint">
+                    <text id="/data/q0:hint">
                         <value>&lt;span style="color:blue"&gt;Hint text&lt;/span&gt;</value>
                         <value form="guidance">&lt;span style="color:blue"&gt;Guidance text&lt;/span&gt;</value>
                     </text>
@@ -13,6 +13,7 @@
             </itext>
             <instance>
                 <data id="form_styling">
+                    <q0 />
                     <q1 />
                     <selectOneQuestions>
                         <q2 />
@@ -35,7 +36,8 @@
                     </meta>
                 </data>
             </instance>
-            <bind nodeset="/data/q1" readonly="true()" type="string" />
+            <bind nodeset="/data/q0" readonly="true()" type="string" />
+            <bind nodeset="/data/q1" type="string" required="true()"/>
             <bind nodeset="/data/selectOneQuestions/q2" type="string" />
             <bind nodeset="/data/selectOneQuestions/q3" type="string" />
             <bind nodeset="/data/selectOneQuestions/q4" type="string" />
@@ -52,9 +54,12 @@
         </model>
     </h:head>
     <h:body>
-        <input ref="/data/q1">
+        <input ref="/data/q0">
             <label>&lt;span style="color:blue"&gt;Note text&lt;/span&gt;</label>
-            <hint ref="jr:itext('/data/q1:hint')" />
+            <hint ref="jr:itext('/data/q0:hint')" />
+        </input>
+        <input ref="/data/q1">
+            <label>#### &lt;span style="color:blue"&gt;Required text question with header style&lt;/span&gt;</label>
         </input>
         <group ref="/data/selectOneQuestions">
             <label>&lt;span style="color:blue"&gt;selectOneQuestions&lt;/span&gt;</label>

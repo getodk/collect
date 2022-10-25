@@ -42,7 +42,7 @@ public class HierarchyElement {
      * The primary text this element should be displayed with.
      */
     @NonNull
-    private final String primaryText;
+    private final CharSequence primaryText;
 
     /**
      * The secondary text this element should be displayed with.
@@ -56,7 +56,7 @@ public class HierarchyElement {
     @Nullable
     private Drawable icon;
 
-    public HierarchyElement(@NonNull String primaryText, @Nullable String secondaryText,
+    public HierarchyElement(@NonNull CharSequence primaryText, @Nullable String secondaryText,
                             @Nullable Drawable icon, @NonNull Type type, @NonNull FormIndex formIndex) {
         this.primaryText = primaryText;
         this.secondaryText = secondaryText;
@@ -66,7 +66,7 @@ public class HierarchyElement {
     }
 
     @NonNull
-    public String getPrimaryText() {
+    public CharSequence getPrimaryText() {
         return primaryText;
     }
 

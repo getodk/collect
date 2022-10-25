@@ -20,7 +20,7 @@ class HierarchyListItemView(context: Context) : FrameLayout(context) {
             binding.icon.visibility = GONE
         }
 
-        binding.primaryText.text = HtmlUtils.textToHtml(element.primaryText)
+        binding.primaryText.text = element.primaryText
 
         val secondaryText = element.secondaryText
         if (secondaryText != null && secondaryText.isNotEmpty()) {

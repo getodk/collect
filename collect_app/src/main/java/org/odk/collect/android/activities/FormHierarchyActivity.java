@@ -52,6 +52,7 @@ import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
@@ -554,7 +555,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                         String label = fp.getShortText();
                         String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
                         elementsToDisplay.add(
-                                new HierarchyElement(FormEntryPromptUtils.markQuestionIfIsRequired(label, fp.isRequired()), answerDisplay, null,
+                                new HierarchyElement(FormEntryPromptUtils.styledQuestionText(label, fp.isRequired()), answerDisplay, null,
                                         HierarchyElement.Type.QUESTION, fp.getIndex()));
                         break;
                     }
@@ -583,7 +584,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
 
                         FormEntryCaption caption = formController.getCaptionPrompt();
                         HierarchyElement groupElement = new HierarchyElement(
-                                caption.getShortText(), getString(R.string.group_label),
+                                HtmlUtils.textToHtml(caption.getShortText()), getString(R.string.group_label),
                                 ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
                                 HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
                         elementsToDisplay.add(groupElement);
@@ -636,13 +637,13 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                             }
 
                             HierarchyElement instance = new HierarchyElement(
-                                    repeatLabel, null,
+                                    HtmlUtils.textToHtml(repeatLabel), null,
                                     null, HierarchyElement.Type.REPEAT_INSTANCE, fc.getIndex());
                             elementsToDisplay.add(instance);
                         } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
-                                    fc.getShortText(), getString(R.string.repeatable_group_label),
+                                    HtmlUtils.textToHtml(fc.getShortText()), getString(R.string.repeatable_group_label),
                                     ContextCompat.getDrawable(this, R.drawable.ic_repeat),
                                     HierarchyElement.Type.REPEATABLE_GROUP, fc.getIndex());
                             elementsToDisplay.add(group);

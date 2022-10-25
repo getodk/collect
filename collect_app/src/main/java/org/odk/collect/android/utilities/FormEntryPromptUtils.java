@@ -19,6 +19,7 @@ package org.odk.collect.android.utilities;
 import static org.javarosa.core.model.Constants.DATATYPE_TEXT;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.data.DateData;
@@ -119,15 +120,17 @@ public final class FormEntryPromptUtils {
         return fep.getAnswerText();
     }
 
-    public static String markQuestionIfIsRequired(String questionText, boolean isRequired) {
-        if (isRequired) {
-            if (questionText == null) {
-                questionText = "";
-            }
-            questionText = "<span style=\"color:#F44336\">*</span> " + questionText;
-        }
-
-        return questionText;
+    public static CharSequence styledQuestionText(String questionText, boolean isRequired) {
+        CharSequence styledQuestionText = HtmlUtils.textToHtml(questionText);
+        return isRequired
+               /*
+                Question text should be added first, then the asterisk mark which represents
+                required questions. If the order is changed some styling might not work well.
+                */
+               ? new SpannableStringBuilder(styledQuestionText)
+                    .insert(0, " ")
+                    .insert(0, HtmlUtils.textToHtml("<span style=\"color:#F44336\">*</span>"))
+               : styledQuestionText;
     }
 
     @Nullable

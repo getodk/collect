@@ -323,7 +323,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             // wrap to the widget of vi
             helpText.setHorizontallyScrolling(false);
             if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
-                helpText.setText(HtmlUtils.textToHtml(FormEntryPromptUtils.markQuestionIfIsRequired(s, prompt.isRequired())));
+                helpText.setText(FormEntryPromptUtils.styledQuestionText(s, prompt.isRequired()));
             } else {
                 helpText.setText(HtmlUtils.textToHtml(s));
             }

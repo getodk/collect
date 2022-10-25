@@ -50,15 +50,6 @@ class HierarchyListItemViewTest {
     }
 
     @Test
-    fun `When primary text is html should be styled`() {
-        val view = HierarchyListItemView(context)
-
-        view.setElement(getHierarchyElement(null, "<h1>Primary text</h1>", ""))
-
-        assertThat(view.binding.primaryText.text.toString(), `is`("Primary text"))
-    }
-
-    @Test
     fun `When secondary text is not specified should be gone`() {
         val view = HierarchyListItemView(context)
 
