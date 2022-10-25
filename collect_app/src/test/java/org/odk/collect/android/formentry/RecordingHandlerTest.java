@@ -1,7 +1,5 @@
 package org.odk.collect.android.formentry;
 
-
-import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -20,7 +18,6 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.odk.collect.android.audio.AudioFileAppender;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
@@ -65,14 +62,11 @@ public class RecordingHandlerTest {
         recordingHandler.handle(formController, recordingSession, success -> {
         });
 
-        ArgumentCaptor<StringData> dataAc = ArgumentCaptor.forClass(StringData.class);
-        ArgumentCaptor<TreeReference> refAc = ArgumentCaptor.forClass(TreeReference.class);
-        ArgumentCaptor<Boolean> midSurveyAc = ArgumentCaptor.forClass(Boolean.class);
-
-        verify(formDef).setValue(dataAc.capture(), refAc.capture(), midSurveyAc.capture());
-        assertThat(dataAc.getValue(), is(new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName())));
-        assertThat(refAc.getValue(), is(treeReference));
-        assertFalse(midSurveyAc.getValue());
+        verify(formDef).setValue(
+                new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName()),
+                treeReference,
+                false
+        );
 
         verifyNoInteractions(m4aAppender);
     }
@@ -121,14 +115,11 @@ public class RecordingHandlerTest {
         recordingHandler.handle(formController, recordingSession, success -> {
         });
 
-        ArgumentCaptor<StringData> dataAc = ArgumentCaptor.forClass(StringData.class);
-        ArgumentCaptor<TreeReference> refAc = ArgumentCaptor.forClass(TreeReference.class);
-        ArgumentCaptor<Boolean> midSurveyAc = ArgumentCaptor.forClass(Boolean.class);
-
-        verify(formDef).setValue(dataAc.capture(), refAc.capture(), midSurveyAc.capture());
-        assertThat(dataAc.getValue(), is(new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName())));
-        assertThat(refAc.getValue(), is(treeReference));
-        assertFalse(midSurveyAc.getValue());
+        verify(formDef).setValue(
+                new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName()),
+                treeReference,
+                false
+        );
 
         verifyNoInteractions(m4aAppender);
     }
@@ -147,14 +138,11 @@ public class RecordingHandlerTest {
         recordingHandler.handle(formController, recordingSession, success -> {
         });
 
-        ArgumentCaptor<StringData> dataAc = ArgumentCaptor.forClass(StringData.class);
-        ArgumentCaptor<TreeReference> refAc = ArgumentCaptor.forClass(TreeReference.class);
-        ArgumentCaptor<Boolean> midSurveyAc = ArgumentCaptor.forClass(Boolean.class);
-
-        verify(formDef).setValue(dataAc.capture(), refAc.capture(), midSurveyAc.capture());
-        assertThat(dataAc.getValue(), is(new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName())));
-        assertThat(refAc.getValue(), is(treeReference));
-        assertFalse(midSurveyAc.getValue());
+        verify(formDef).setValue(
+                new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName()),
+                treeReference,
+                false
+        );
 
         verifyNoInteractions(amrAppender);
     }
@@ -203,14 +191,11 @@ public class RecordingHandlerTest {
         recordingHandler.handle(formController, recordingSession, success -> {
         });
 
-        ArgumentCaptor<StringData> dataAc = ArgumentCaptor.forClass(StringData.class);
-        ArgumentCaptor<TreeReference> refAc = ArgumentCaptor.forClass(TreeReference.class);
-        ArgumentCaptor<Boolean> midSurveyAc = ArgumentCaptor.forClass(Boolean.class);
-
-        verify(formDef).setValue(dataAc.capture(), refAc.capture(), midSurveyAc.capture());
-        assertThat(dataAc.getValue(), is(new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName())));
-        assertThat(refAc.getValue(), is(treeReference));
-        assertFalse(midSurveyAc.getValue());
+        verify(formDef).setValue(
+                new StringData(questionMediaManager.getAnswerFile(newRecording.getName()).getName()),
+                treeReference,
+                false
+        );
 
         verifyNoInteractions(amrAppender);
     }
