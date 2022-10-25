@@ -54,7 +54,8 @@ class CrashHandlerTest {
         createCrashHandler().registerCrash(context, RuntimeException())
 
         val view = createCrashHandler().getCrashView(context)
-        assertThat(view!!.findViewById<TextView>(R.id.title).text, equalTo(context.getString(R.string.crash_last_run)))
+        assertThat(view!!.findViewById<TextView>(R.id.title).text,
+            equalTo(context.getString(R.string.crash_last_run)))
     }
 
     @Test
@@ -100,7 +101,8 @@ class CrashHandlerTest {
         }
 
         val view = crashHandler.getCrashView(context)
-        assertThat(view!!.findViewById<TextView>(R.id.title).text, equalTo(context.getString(R.string.cant_start_app)))
+        assertThat(view!!.findViewById<TextView>(R.id.title).text,
+            equalTo(context.getString(R.string.cant_start_app)))
     }
 
     @Test
