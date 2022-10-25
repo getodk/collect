@@ -288,11 +288,7 @@ public class FormController {
         return formEntryController.getModel().getLanguage();
     }
 
-    public String getBindAttribute(String attributeNamespace, String attributeName) {
-        return getBindAttribute(getFormIndex(), attributeNamespace, attributeName);
-    }
-
-    public String getBindAttribute(FormIndex idx, String attributeNamespace, String attributeName) {
+    private String getBindAttribute(FormIndex idx, String attributeNamespace, String attributeName) {
         return formEntryController.getModel().getForm().getMainInstance().resolveReference(
                 idx.getReference()).getBindAttributeValue(attributeNamespace, attributeName);
     }
@@ -368,7 +364,7 @@ public class FormController {
     /**
      * Returns the `appearance` attribute of the current index, if any.
      */
-    public String getAppearanceAttr(@NonNull FormIndex index) {
+    private String getAppearanceAttr(@NonNull FormIndex index) {
         // FormDef can't have an appearance, it would throw an exception.
         if (index.isBeginningOfFormIndex()) {
             return null;
@@ -627,7 +623,7 @@ public class FormController {
      * Move the current form index to the next event of the given type
      * (or the end if none is found).
      */
-    public int stepToNextEventType(int eventType) {
+    private int stepToNextEventType(int eventType) {
         int event = getEvent();
         do {
             if (event == FormEntryController.EVENT_END_OF_FORM) {
@@ -1108,17 +1104,6 @@ public class FormController {
         } else {
             return groups[groups.length - 1];
         }
-    }
-
-    /**
-     * The repeat count of closest group the prompt belongs to.
-     */
-    public int getLastRepeatCount() {
-        if (getLastGroup() != null) {
-            return getLastGroup().getMultiplicity();
-        }
-        return -1;
-
     }
 
     /**
