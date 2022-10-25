@@ -33,6 +33,7 @@ import org.mockito.stubbing.Answer;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.formentry.support.InMemFormSessionRepository;
+import org.odk.collect.android.javarosawrapper.FailedConstraint;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.testshared.FakeScheduler;
@@ -228,7 +229,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void moveForward_whenThereIsAFailedConstraint_setsFailedConstraint() throws Exception {
-        FormController.FailedConstraint failedConstraint = new FormController.FailedConstraint(startingIndex, 0);
+        FailedConstraint failedConstraint = new FailedConstraint(startingIndex, 0);
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedConstraint);
 
         viewModel.moveForward(new HashMap<>());
@@ -239,7 +240,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void moveForward_whenThereIsAFailedConstraint_doesNotStepToNextEvent() throws Exception {
-        FormController.FailedConstraint failedConstraint = new FormController.FailedConstraint(startingIndex, 0);
+        FailedConstraint failedConstraint = new FailedConstraint(startingIndex, 0);
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedConstraint);
 
         viewModel.moveForward(new HashMap<>());

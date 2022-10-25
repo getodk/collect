@@ -696,16 +696,6 @@ public class FormController {
         return !absRef.equals(bindRef);
     }
 
-    public static class FailedConstraint {
-        public final FormIndex index;
-        public final int status;
-
-        public FailedConstraint(FormIndex index, int status) {
-            this.index = index;
-            this.status = status;
-        }
-    }
-
     /**
      * @return FailedConstraint of first failed constraint or null if all questions were saved.
      */
