@@ -1,10 +1,9 @@
-package org.odk.collect.androidshared.ui
+package org.odk.collect.crash_handler
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import org.odk.collect.androidshared.R
 import org.odk.collect.androidshared.data.getState
 import kotlin.system.exitProcess
 

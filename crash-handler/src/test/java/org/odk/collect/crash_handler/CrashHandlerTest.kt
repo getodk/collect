@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui
+package org.odk.collect.crash_handler
 
 import android.content.Context
 import android.view.View
@@ -13,7 +13,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.odk.collect.androidshared.R
 
 @RunWith(AndroidJUnit4::class)
 class CrashHandlerTest {
