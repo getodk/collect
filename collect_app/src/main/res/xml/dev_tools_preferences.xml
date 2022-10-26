@@ -5,6 +5,7 @@
     <Preference
         android:icon="@drawable/ic_outline_warning_accent_24"
         android:title="@string/crash_app"
+        android:summary="@string/crash_app_summary"
         android:key="crash_app"
         app:persistent="false"/>
 

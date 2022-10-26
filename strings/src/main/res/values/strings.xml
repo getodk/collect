@@ -1183,5 +1183,6 @@
 
     <string name="dev_tools">Developer tools</string>
     <string name="crash_app">Crash app</string>
+    <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
 
 </resources>
