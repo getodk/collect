@@ -74,9 +74,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
     @Inject
     SettingsProvider settingsProvider;
 
-    @Inject
-    ProjectsRepository projectsRepository;
-
     private MainMenuViewModel mainMenuViewModel;
 
     private CurrentProjectViewModel currentProjectViewModel;
@@ -96,7 +93,11 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         DaggerUtils.getComponent(this).inject(this);
 
-        if (projectsRepository.getAll().isEmpty()) {
+        mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
+
+        try {
+            currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
+        } catch (IllegalStateException e) {
             ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity.class);
             return;
         }
@@ -105,8 +106,6 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
         settingsProvider.getMetaSettings().save(MetaKeys.FIRST_LAUNCH, false);
 
-        mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
-        currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
         currentProjectViewModel.getCurrentProject().observe(this, project -> {
             invalidateOptionsMenu();
             setTitle(project.getName());
