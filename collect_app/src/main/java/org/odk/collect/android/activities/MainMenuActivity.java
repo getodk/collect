@@ -43,7 +43,6 @@ import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.crash_handler.CrashHandler;
-import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -94,10 +93,9 @@ public class MainMenuActivity extends CollectAbstractActivity {
         DaggerUtils.getComponent(this).inject(this);
 
         mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
+        currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
 
-        try {
-            currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
-        } catch (IllegalStateException e) {
+        if (!currentProjectViewModel.hasCurrentProject()) {
             ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity.class);
             return;
         }
