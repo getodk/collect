@@ -11,12 +11,12 @@ object AuditUtils {
         auditEventLogger: AuditEventLogger,
         currentTime: Long
     ) {
-        if (formController.event == FormEntryController.EVENT_QUESTION ||
-            formController.event == FormEntryController.EVENT_GROUP ||
-            formController.event == FormEntryController.EVENT_REPEAT
+        if (formController.getEvent() == FormEntryController.EVENT_QUESTION ||
+            formController.getEvent() == FormEntryController.EVENT_GROUP ||
+            formController.getEvent() == FormEntryController.EVENT_REPEAT
         ) {
             try {
-                for (question in formController.questionPrompts) {
+                for (question in formController.getQuestionPrompts()) {
                     val answer =
                         if (question.answerValue != null)
                             question.answerValue!!.displayText

@@ -71,7 +71,7 @@ import timber.log.Timber;
  *
  * @author carlhartung
  */
-public class FormController {
+public class JavaRosaFormController implements FormController {
 
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
@@ -99,7 +99,7 @@ public class FormController {
     private final FormEntryController formEntryController;
     private FormIndex indexWaitingForData;
 
-    public FormController(File mediaFolder, FormEntryController fec, File instanceFile) {
+    public JavaRosaFormController(File mediaFolder, FormEntryController fec, File instanceFile) {
         this.mediaFolder = mediaFolder;
         formEntryController = fec;
         this.instanceFile = instanceFile;
@@ -154,11 +154,6 @@ public class FormController {
         return auditEventLogger;
     }
 
-    /**
-     * For logging purposes...
-     *
-     * @return xpath value for this index
-     */
     public String getXPath(FormIndex index) {
         String value;
         switch (getEvent(index)) {
@@ -223,46 +218,26 @@ public class FormController {
         }
     }
 
-    /**
-     * returns the event for the current FormIndex.
-     */
     public int getEvent() {
         return formEntryController.getModel().getEvent();
     }
 
-    /**
-     * returns the event for the given FormIndex.
-     */
     public int getEvent(FormIndex index) {
         return formEntryController.getModel().getEvent(index);
     }
 
-    /**
-     * @return current FormIndex.
-     */
     public FormIndex getFormIndex() {
         return formEntryController.getModel().getFormIndex();
     }
 
-    /**
-     * Return the langauges supported by the currently loaded form.
-     *
-     * @return Array of Strings containing the languages embedded in the XForm.
-     */
     public String[] getLanguages() {
         return formEntryController.getModel().getLanguages();
     }
 
-    /**
-     * @return A String containing the title of the current form.
-     */
     public String getFormTitle() {
         return formEntryController.getModel().getFormTitle();
     }
 
-    /**
-     * @return the currently selected language.
-     */
     public String getLanguage() {
         return formEntryController.getModel().getLanguage();
     }
@@ -290,25 +265,14 @@ public class FormController {
         return formEntryController.getModel().getCaptionHierarchy(index);
     }
 
-    /**
-     * Returns a caption prompt for the given index. This is used to create a multi-question per
-     * screen view.
-     */
     public FormEntryCaption getCaptionPrompt(FormIndex index) {
         return formEntryController.getModel().getCaptionPrompt(index);
     }
 
-    /**
-     * Return the caption for the current FormIndex. This is usually used for a repeat prompt.
-     */
     public FormEntryCaption getCaptionPrompt() {
         return formEntryController.getModel().getCaptionPrompt();
     }
 
-    /**
-     * This fires off the jr:preload actions and events to save values like the
-     * end time of a form.
-     */
     public boolean postProcessInstance() {
         return formEntryController.getModel().getForm().postProcessInstance();
     }
@@ -353,12 +317,6 @@ public class FormController {
         return element.getAppearanceAttr();
     }
 
-    /**
-     * Returns true if the question at the given FormIndex uses the search() appearance/function
-     * of "fast itemset" feature.
-     * <p>
-     * Precondition: there is a question at the given FormIndex.
-     */
     public boolean usesDatabaseExternalDataFeature(@NonNull FormIndex index) {
         String queryAttribute = getFormDef().getChild(index).getAdditionalAttribute(null, "query");
         String appearanceAttribute = getAppearanceAttr(index);
@@ -367,11 +325,6 @@ public class FormController {
                 || queryAttribute != null && queryAttribute.length() > 0;
     }
 
-    /**
-     * Tests if the FormIndex 'index' is located inside a group that is marked as a "field-list"
-     *
-     * @return true if index is in a "field-list". False otherwise.
-     */
     public boolean indexIsInFieldList(FormIndex index) {
         int event = getEvent(index);
         if (event == FormEntryController.EVENT_QUESTION) {
@@ -400,11 +353,6 @@ public class FormController {
 
     }
 
-    /**
-     * Tests if the current FormIndex is located inside a group that is marked as a "field-list"
-     *
-     * @return true if index is in a "field-list". False otherwise.
-     */
     public boolean indexIsInFieldList() {
         return indexIsInFieldList(getFormIndex());
     }
@@ -429,9 +377,6 @@ public class FormController {
         return isFirstQuestion;
     }
 
-    /**
-     * Attempts to save answer into the given FormIndex into the data model.
-     */
     public int answerQuestion(FormIndex index, IAnswerData data) throws JavaRosaException {
         try {
             return formEntryController.answerQuestion(index, data, true);
@@ -440,14 +385,6 @@ public class FormController {
         }
     }
 
-    /**
-     * Goes through the entire form to make sure all entered answers comply with their constraints.
-     * Constraints are ignored on 'jump to', so answers can be outside of constraints. We don't
-     * allow saving to disk, though, until all answers conform to their constraints/requirements.
-     *
-     * @return ANSWER_OK and leave index unchanged or change index to bad value and return error
-     * type.
-     */
     public int validateAnswers(boolean markCompleted) throws JavaRosaException {
         ValidateOutcome outcome = getFormDef().validate(markCompleted);
         if (outcome != null) {
@@ -460,14 +397,6 @@ public class FormController {
         return FormEntryController.ANSWER_OK;
     }
 
-    /**
-     * saveAnswer attempts to save the current answer into the data model without doing any
-     * constraint checking. Only use this if you know what you're doing. For normal form filling
-     * you
-     * should always use answerQuestion or answerCurrentQuestion.
-     *
-     * @return true if saved successfully, false otherwise.
-     */
     public boolean saveAnswer(FormIndex index, IAnswerData data) throws JavaRosaException {
         try {
             return formEntryController.saveAnswer(index, data, true);
@@ -481,11 +410,6 @@ public class FormController {
         }
     }
 
-    /**
-     * Navigates forward in the form.
-     *
-     * @return the next event that should be handled by a view.
-     */
     public int stepToNextEvent(boolean stepIntoGroup) {
         if ((getEvent() == FormEntryController.EVENT_GROUP
                 || getEvent() == FormEntryController.EVENT_REPEAT)
@@ -496,10 +420,6 @@ public class FormController {
         }
     }
 
-    /**
-     * If using a view like HierarchyView that doesn't support multi-question per screen, step over
-     * the group represented by the FormIndex.
-     */
     public int stepOverGroup() {
         GroupDef gd =
                 (GroupDef) formEntryController.getModel().getForm()
@@ -511,12 +431,6 @@ public class FormController {
         return stepToNextEvent(STEP_OVER_GROUP);
     }
 
-    /**
-     * Move the current form index to the index of the previous question in the form.
-     * Step backward out of repeats and groups as needed. If the resulting question
-     * is itself within a field-list, move upward to the group or repeat defining that
-     * field-list.
-     */
     public int stepToPreviousScreenEvent() throws JavaRosaException {
         try {
             if (getEvent() != FormEntryController.EVENT_BEGINNING_OF_FORM) {
@@ -553,19 +467,13 @@ public class FormController {
         }
     }
 
-    /**
-     * Move the current form index to the index of the next question in the form.
-     * Stop if we should ask to create a new repeat group or if we reach the end of the form.
-     * If we enter a group or repeat, return that if it is a field-list definition.
-     * Otherwise, descend into the group or repeat searching for the first question.
-     */
     public int stepToNextScreenEvent() throws JavaRosaException {
         try {
             if (getEvent() != FormEntryController.EVENT_END_OF_FORM) {
                 int event;
                 group_skip:
                 do {
-                    event = stepToNextEvent(FormController.STEP_OVER_GROUP);
+                    event = stepToNextEvent(STEP_OVER_GROUP);
                     switch (event) {
                         case FormEntryController.EVENT_QUESTION:
                         case FormEntryController.EVENT_END_OF_FORM:
@@ -608,17 +516,12 @@ public class FormController {
             if (event == FormEntryController.EVENT_END_OF_FORM) {
                 break;
             }
-            event = stepToNextEvent(FormController.STEP_OVER_GROUP);
+            event = stepToNextEvent(STEP_OVER_GROUP);
         } while (event != eventType);
 
         return event;
     }
 
-    /**
-     * Move the current form index to the index of the first displayable group
-     * (that is, a repeatable group or a visible group),
-     * or to the start of the form.
-     */
     public int stepToOuterScreenEvent() {
         FormIndex index = getFormIndex();
 
@@ -661,9 +564,6 @@ public class FormController {
         return getEvent();
     }
 
-    /**
-     * Returns true if the index is either a repeatable group or a visible group.
-     */
     public boolean isDisplayableGroup(FormIndex index) {
         int event = getEvent(index);
         return event == FormEntryController.EVENT_REPEAT
@@ -696,9 +596,6 @@ public class FormController {
         return !absRef.equals(bindRef);
     }
 
-    /**
-     * @return FailedConstraint of first failed constraint or null if all questions were saved.
-     */
     public FailedConstraint saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers, boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
@@ -735,11 +632,6 @@ public class FormController {
         return null;
     }
 
-    /**
-     * Navigates backward in the form.
-     *
-     * @return the event that should be handled by a view.
-     */
     public int stepToPreviousEvent() {
         /*
          * Right now this will always skip to the beginning of a group if that group is represented
@@ -794,18 +686,10 @@ public class FormController {
 
     }
 
-    /**
-     * Jumps to a given FormIndex.
-     *
-     * @return EVENT for the specified Index.
-     */
     public int jumpToIndex(FormIndex index) {
         return formEntryController.jumpToIndex(index);
     }
 
-    /**
-     * Jumps to the next prompt for a repeated instance of the group referenced by the current FormIndex.
-     */
     public void jumpToNewRepeatPrompt() {
         FormIndex repeatGroupIndex = getRepeatGroupIndex(getFormIndex(), getFormDef());
         Integer depth = repeatGroupIndex.getDepth();
@@ -817,42 +701,19 @@ public class FormController {
         }
     }
 
-    /**
-     * Creates a new repeated instance of the group referenced by the current FormIndex.
-     */
     public void newRepeat() {
         formEntryController.newRepeat();
     }
 
-    /**
-     * If the current FormIndex is within a repeated group, will find the innermost repeat, delete
-     * it, and jump the FormEntryController to the previous valid index. That is, if you have
-     * group1
-     * (2) > group2 (3) and you call deleteRepeat, it will delete the 3rd instance of group2.
-     */
     public void deleteRepeat() {
         FormIndex fi = formEntryController.deleteRepeat();
         formEntryController.jumpToIndex(fi);
     }
 
-    /**
-     * Sets the current language.
-     */
     public void setLanguage(String language) {
         formEntryController.setLanguage(language);
     }
 
-    /**
-     * Returns an array of question prompts corresponding to the current {@link FormIndex}. These
-     * are the prompts that should be displayed to the user and don't include any non-relevant
-     * questions.
-     * <p>
-     * The array has a single element if there is a question at this {@link FormIndex} or multiple
-     * elements if there is a group.
-     *
-     * @throws RepeatsInFieldListException if there is a group at this {@link FormIndex} and it contains
-     *                          elements that are not questions or regular (non-repeat) groups.
-     */
     public FormEntryPrompt[] getQuestionPrompts() throws RepeatsInFieldListException {
         // For questions, there is only one.
         // For groups, there could be many, but we set that below
@@ -919,9 +780,6 @@ public class FormController {
         return indices;
     }
 
-    /**
-     * @return true if a group contains at least one relevant question, otherwise false
-     */
     public boolean isGroupRelevant() {
         GroupDef groupDef = (GroupDef) getCaptionPrompt().getFormElement();
         FormIndex currentChildIndex = formEntryController.getModel().incrementIndex(getFormIndex(), true);
@@ -986,9 +844,6 @@ public class FormController {
         return null;
     }
 
-    /**
-     * Returns an array of FormEntryCaptions for current FormIndex.
-     */
     public FormEntryCaption[] getGroupsForCurrentIndex() {
         // return an empty array if you ask for something impossible
         if (!(getEvent() == FormEntryController.EVENT_QUESTION
@@ -1013,9 +868,6 @@ public class FormController {
         return groups;
     }
 
-    /**
-     * This is used to enable/disable the "Delete Repeat" menu option.
-     */
     public boolean indexContainsRepeatableGroup() {
         FormEntryCaption[] groups = getCaptionHierarchy();
         if (groups.length == 0) {
@@ -1029,9 +881,6 @@ public class FormController {
         return false;
     }
 
-    /**
-     * The count of the closest group that repeats or -1.
-     */
     public int getLastRepeatedGroupRepeatCount() {
         FormEntryCaption[] groups = getCaptionHierarchy();
         if (groups.length > 0) {
@@ -1045,9 +894,6 @@ public class FormController {
         return -1;
     }
 
-    /**
-     * The name of the closest group that repeats or null.
-     */
     public String getLastRepeatedGroupName() {
         FormEntryCaption[] groups = getCaptionHierarchy();
         // no change
@@ -1075,9 +921,6 @@ public class FormController {
         }
     }
 
-    /**
-     * The text of closest group the prompt belongs to.
-     */
     public String getLastGroupText() {
         if (getLastGroup() != null) {
             return getLastGroup().getLongText();
@@ -1099,25 +942,11 @@ public class FormController {
         }
     }
 
-    /**
-     * Once a submission is marked as complete, it is saved in the
-     * submission format, which might be a fragment of the original
-     * form.
-     *
-     * @return true if the submission is the entire form.  If it is,
-     * then the submission can be re-opened for editing
-     * after it was marked-as-complete (provided it has
-     * not been encrypted).
-     */
     public boolean isSubmissionEntireForm() {
         IDataReference sub = getSubmissionDataReference();
         return getInstance().resolveReference(sub) == null;
     }
 
-    /**
-     * Constructs the XML payload for a filled-in form instance. This payload
-     * enables a filled-in form to be re-opened and edited.
-     */
     public ByteArrayPayload getFilledInFormXml() throws IOException {
         // assume no binary data inside the model.
         FormInstance datamodel = getInstance();
@@ -1126,9 +955,6 @@ public class FormController {
         return (ByteArrayPayload) serializer.createSerializedPayload(datamodel);
     }
 
-    /**
-     * Extract the portion of the form that should be uploaded to the server.
-     */
     public ByteArrayPayload getSubmissionXml() throws IOException {
         FormInstance instance = getInstance();
         XFormSerializingVisitor serializer = new XFormSerializingVisitor();
@@ -1155,9 +981,6 @@ public class FormController {
         return null;
     }
 
-    /**
-     * Get the OpenRosa required metadata of the portion of the form beng submitted
-     */
     public InstanceMetadata getSubmissionMetadata() {
         FormDef formDef = formEntryController.getModel().getForm();
         TreeElement rootElement = formDef.getInstance().getRoot();
@@ -1235,19 +1058,12 @@ public class FormController {
         return new InstanceMetadata(instanceId, instanceName, auditConfig);
     }
 
-    /**
-     * Returns true if the current form definition audits user location in the background.
-     */
     public boolean currentFormAuditsLocation() {
         AuditConfig auditConfig = getSubmissionMetadata().auditConfig;
 
         return auditConfig != null && auditConfig.isLocationEnabled();
     }
 
-    /**
-     * Returns true if the current form definition collects user location in the background either
-     * because of the audit configuration or because it contains odk:setgeopoint actions.
-     */
     public boolean currentFormCollectsBackgroundLocation() {
         return currentFormAuditsLocation() || getFormDef().hasAction(SetGeopointActionHandler.ELEMENT_NAME);
     }

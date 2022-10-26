@@ -4,15 +4,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
 
+import androidx.annotation.Nullable;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.junit.Before;
@@ -20,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.audio.AudioFileAppender;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.utilities.DummyFormController;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.androidtest.FakeLifecycleOwner;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -35,17 +36,17 @@ public class RecordingHandlerTest {
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
     private final FakeQuestionMediaManager questionMediaManager = new FakeQuestionMediaManager();
-    private final FormController formController = mock(FormController.class);
+    private final FormController formController = new TestFormController();
     private final FormDef formDef = mock(FormDef.class);
     private final AudioFileAppender amrAppender = mock(AudioFileAppender.class);
     private final AudioFileAppender m4aAppender = mock(AudioFileAppender.class);
 
-    RecordingHandler recordingHandler;
+    private File existingRecording;
+    private RecordingHandler recordingHandler;
 
     @Before
     public void setup() {
         recordingHandler = new RecordingHandler(questionMediaManager, new FakeLifecycleOwner(), mock(AudioRecorder.class), amrAppender, m4aAppender);
-        doReturn(formDef).when(formController).getFormDef();
     }
 
     @Test
@@ -74,11 +75,10 @@ public class RecordingHandlerTest {
     @Test
     public void whenBackgroundRecordingM4A_andRecordingAlreadySavedForReference_appendsAudioFiles() throws Exception {
         File recording = File.createTempFile("existing", ".m4a");
-        File existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
+        existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
         assertThat(existingRecording, not(nullValue()));
 
         TreeReference treeReference = new TreeReference();
-        when(formController.getAnswer(treeReference)).thenReturn(new StringData(existingRecording.getName()));
 
         File newRecording = File.createTempFile("new", ".m4a");
         RecordingSession recordingSession = new RecordingSession(new HashSet<TreeReference>() {
@@ -97,13 +97,12 @@ public class RecordingHandlerTest {
     @Test
     public void whenBackgroundRecordingM4A_andRecordingAlreadySavedForReferenceButTheAudioFileDoesNotExist_savesNewAnswer() throws Exception {
         File recording = File.createTempFile("existing", ".m4a");
-        File existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
+        existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
         assertThat(existingRecording, not(nullValue()));
 
         existingRecording.delete();
 
         TreeReference treeReference = new TreeReference();
-        when(formController.getAnswer(treeReference)).thenReturn(new StringData(existingRecording.getName()));
 
         File newRecording = File.createTempFile("new", ".m4a");
         RecordingSession recordingSession = new RecordingSession(new HashSet<TreeReference>() {
@@ -150,11 +149,10 @@ public class RecordingHandlerTest {
     @Test
     public void whenBackgroundRecordingAMR_andRecordingAlreadySavedForReference_appendsAudioFiles() throws Exception {
         File recording = File.createTempFile("existing", ".amr");
-        File existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
+        existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
         assertThat(existingRecording, not(nullValue()));
 
         TreeReference treeReference = new TreeReference();
-        when(formController.getAnswer(treeReference)).thenReturn(new StringData(existingRecording.getName()));
 
         File newRecording = File.createTempFile("new", ".amr");
         RecordingSession recordingSession = new RecordingSession(new HashSet<TreeReference>() {
@@ -173,13 +171,12 @@ public class RecordingHandlerTest {
     @Test
     public void whenBackgroundRecordingAMR_andRecordingAlreadySavedForReferenceButTheAudioFileDoesNotExist_savesNewAnswer() throws Exception {
         File recording = File.createTempFile("existing", ".amr");
-        File existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
+        existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
         assertThat(existingRecording, not(nullValue()));
 
         existingRecording.delete();
 
         TreeReference treeReference = new TreeReference();
-        when(formController.getAnswer(treeReference)).thenReturn(new StringData(existingRecording.getName()));
 
         File newRecording = File.createTempFile("new", ".amr");
         RecordingSession recordingSession = new RecordingSession(new HashSet<TreeReference>() {
@@ -203,11 +200,10 @@ public class RecordingHandlerTest {
     @Test
     public void whenBackgroundRecording_andRecordingAlreadySavedForReference_deletesNewFile() throws Exception {
         File recording = File.createTempFile("existing", ".m4a");
-        File existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
+        existingRecording = questionMediaManager.createAnswerFile(recording).getValue().getOrNull();
         assertThat(existingRecording, not(nullValue()));
 
         TreeReference treeReference = new TreeReference();
-        when(formController.getAnswer(treeReference)).thenReturn(new StringData(existingRecording.getName()));
 
         File newRecording = File.createTempFile("new", ".m4a");
         RecordingSession recordingSession = new RecordingSession(new HashSet<TreeReference>() {
@@ -220,5 +216,17 @@ public class RecordingHandlerTest {
         });
 
         assertThat(questionMediaManager.getAnswerFile(newRecording.getName()).exists(), is(false));
+    }
+
+    private class TestFormController extends DummyFormController {
+        @Override
+        public FormDef getFormDef() {
+            return formDef;
+        }
+
+        @Override
+        public IAnswerData getAnswer(@Nullable TreeReference treeReference) {
+            return existingRecording == null ? null : new StringData(existingRecording.getName());
+        }
     }
 }

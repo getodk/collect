@@ -50,6 +50,7 @@ import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
@@ -427,7 +428,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         // node to display.
         if (formController.isDisplayableGroup(startIndex)) {
             contextGroupRef = formController.getFormIndex().getReference();
-            formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+            formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
         } else {
             FormIndex potentialStartIndex = getPreviousLevel(startIndex);
             // Step back until we hit a displayable group or the beginning.
@@ -449,7 +450,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
             // Now test again. This should be true at this point or we're at the beginning.
             if (formController.isDisplayableGroup(formController.getFormIndex())) {
                 contextGroupRef = formController.getFormIndex().getReference();
-                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
             } else {
                 // Let contextGroupRef be null.
             }
@@ -539,7 +540,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                     // We're in a group within the one we want to list
                     // skip this question/group/repeat and move to the next index.
                     event =
-                            formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                            formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
                     continue;
                 }
 
@@ -627,7 +628,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
 
                             // If the child of the group has a more descriptive label, use that instead.
                             if (fc.getFormElement().getChildren().size() == 1 && fc.getFormElement().getChild(0) instanceof GroupDef) {
-                                formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                                formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
                                 String itemLabel = formController.getCaptionPrompt().getShortText();
                                 if (itemLabel != null) {
                                     // e.g. `1. Alice`
@@ -652,7 +653,7 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
                     }
                 }
 
-                event = formController.stepToNextEvent(FormController.STEP_INTO_GROUP);
+                event = formController.stepToNextEvent(JavaRosaFormController.STEP_INTO_GROUP);
             }
 
             recyclerView.setAdapter(new HierarchyListAdapter(elementsToDisplay, this::onElementClick));
