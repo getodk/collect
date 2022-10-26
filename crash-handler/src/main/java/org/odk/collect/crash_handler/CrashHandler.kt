@@ -1,9 +1,6 @@
 package org.odk.collect.crash_handler
 
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.TextView
 import org.odk.collect.androidshared.data.getState
 import kotlin.system.exitProcess
 
@@ -30,24 +27,22 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
     }
 
     @JvmOverloads
-    fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): View? {
+    fun getCrashView(context: Context, onErrorDismissed: Runnable? = null): CrashView? {
         val preferences = getPreferences(context)
 
         return if (conditionFailure != null) {
             val crashMessage = conditionFailure
 
-            LayoutInflater.from(context).inflate(R.layout.crash_layout, null).also {
-                it.findViewById<TextView>(R.id.title).setText(R.string.cant_start_app)
-                it.findViewById<TextView>(R.id.message).text = crashMessage
-                it.findViewById<View>(R.id.ok_button).setOnClickListener { processKiller.run() }
+            CrashView(context).also {
+                it.setCrash(context.getString(R.string.cant_start_app), crashMessage) {
+                    processKiller.run()
+                }
             }
         } else if (preferences.contains(KEY_CRASH)) {
             val crashMessage = preferences.getString(KEY_CRASH, null)
 
-            LayoutInflater.from(context).inflate(R.layout.crash_layout, null).also {
-                it.findViewById<TextView>(R.id.title).setText(R.string.crash_last_run)
-                it.findViewById<TextView>(R.id.message).text = crashMessage
-                it.findViewById<View>(R.id.ok_button).setOnClickListener {
+            CrashView(context).also {
+                it.setCrash(context.getString(R.string.crash_last_run), crashMessage) {
                     preferences.edit().remove(KEY_CRASH).apply()
                     onErrorDismissed?.run()
                 }
