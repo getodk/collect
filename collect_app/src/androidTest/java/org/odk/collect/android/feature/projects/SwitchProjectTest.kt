@@ -7,6 +7,8 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.EntitiesPage
+import org.odk.collect.android.support.pages.ExperimentalPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
@@ -79,6 +81,14 @@ class SwitchProjectTest {
             .fillOutAndSave(FormEntryPage.QuestionAndAnswer("Name", "Alice"))
             .clickEditSavedForm(1)
             .assertText("One Question Entity")
+            .pressBack(MainMenuPage())
+
+            .openEntityBrowser()
+            .clickOnDataset("people")
+            .assertEntity("name: Alice")
+            .pressBack(EntitiesPage())
+            .pressBack(ExperimentalPage())
+            .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
 
             // Switch back to first project
