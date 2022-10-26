@@ -26,7 +26,6 @@ import androidx.multidex.MultiDex;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.BuildConfig;
-import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -72,8 +71,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class Collect extends Application implements
         LocalizedApplication,
@@ -93,12 +90,6 @@ public class Collect extends Application implements
 
     private ExternalDataManager externalDataManager;
     private AppDependencyComponent applicationComponent;
-
-    @Inject
-    ApplicationInitializer applicationInitializer;
-
-    @Inject
-    SettingsProvider settingsProvider;
 
     private AudioRecorderDependencyComponent audioRecorderDependencyComponent;
     private ProjectsDependencyComponent projectsDependencyComponent;
@@ -149,7 +140,7 @@ public class Collect extends Application implements
             setupDagger();
             DaggerUtils.getComponent(this).inject(this);
 
-            applicationInitializer.initialize();
+            applicationComponent.applicationInitializer().initialize();
             fixGoogleBug154855417();
             setupStrictMode();
         }
@@ -241,7 +232,7 @@ public class Collect extends Application implements
     // https://issuetracker.google.com/issues/154855417
     private void fixGoogleBug154855417() {
         try {
-            Settings metaSharedPreferences = settingsProvider.getMetaSettings();
+            Settings metaSharedPreferences = applicationComponent.settingsProvider().getMetaSettings();
 
             boolean hasFixedGoogleBug154855417 = metaSharedPreferences.getBoolean(KEY_GOOGLE_BUG_154855417_FIXED);
 
@@ -259,7 +250,11 @@ public class Collect extends Application implements
     @NotNull
     @Override
     public Locale getLocale() {
-        return new Locale(LocaleHelper.getLocaleCode(settingsProvider.getUnprotectedSettings()));
+        if (this.applicationComponent != null) {
+            return new Locale(LocaleHelper.getLocaleCode(applicationComponent.settingsProvider().getUnprotectedSettings()));
+        } else {
+            return getResources().getConfiguration().locale;
+        }
     }
 
     @NotNull
@@ -294,7 +289,7 @@ public class Collect extends Application implements
                     .osmDroidDependencyModule(new CollectOsmDroidDependencyModule(
                             applicationComponent.referenceLayerRepository(),
                             applicationComponent.locationClient(),
-                            settingsProvider
+                            applicationComponent.settingsProvider()
                     ))
                     .build();
         }

@@ -46,6 +46,7 @@ import org.odk.collect.crash_handler.CrashHandler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import javax.inject.Inject;
 
@@ -56,7 +57,7 @@ import javax.inject.Inject;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity {
+public class MainMenuActivity extends LocalizedActivity {
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -79,9 +80,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        new ThemeUtils(this).setDarkModeForCurrentProject();
         SplashScreen.installSplashScreen(this);
-
         super.onCreate(savedInstanceState);
 
         CrashHandler crashHandler = CrashHandler.getInstance(this);
@@ -90,6 +89,7 @@ public class MainMenuActivity extends CollectAbstractActivity {
             return;
         }
 
+        new ThemeUtils(this).setDarkModeForCurrentProject();
         DaggerUtils.getComponent(this).inject(this);
 
         mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
