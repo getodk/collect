@@ -71,7 +71,11 @@ class FormMapActivity : LocalizedActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         DaggerUtils.getComponent(this).inject(this)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
-            .forClass(SelectionMapFragment::class.java) { SelectionMapFragment(viewModel) }
+            .forClass(SelectionMapFragment::class.java) {
+                SelectionMapFragment(
+                    selectionMapData = viewModel
+                )
+            }
             .build()
 
         super.onCreate(savedInstanceState)

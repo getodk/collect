@@ -47,7 +47,7 @@ dependencies {
     implementation project(':androidshared')
 
     implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.androidx_fragment
+    implementation Dependencies.androidx_fragment_ktx
     implementation Dependencies.android_material
     implementation Dependencies.karumi_dexter
     implementation Dependencies.timber

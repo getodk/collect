@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentResultListener
@@ -81,8 +82,9 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
                 SelectionMapFragment(
                     selectionMapData,
                     skipSummary = Appearances.hasAppearance(prompt, Appearances.QUICK),
+                    zoomToFitItems = false,
                     showNewItemButton = false,
-                    zoomToFitItems = false
+                    onBackPressedDispatcher = { (requireDialog() as ComponentDialog).onBackPressedDispatcher }
                 )
             }
             .build()

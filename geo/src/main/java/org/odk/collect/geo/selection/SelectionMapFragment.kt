@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -41,8 +42,9 @@ import javax.inject.Inject
 class SelectionMapFragment(
     val selectionMapData: SelectionMapData,
     val skipSummary: Boolean = false,
-    val showNewItemButton: Boolean = true,
     val zoomToFitItems: Boolean = true,
+    val showNewItemButton: Boolean = true,
+    val onBackPressedDispatcher: (() -> OnBackPressedDispatcher)? = null,
 ) : Fragment() {
 
     @Inject
@@ -218,15 +220,15 @@ class SelectionMapFragment(
         summarySheetBehavior = BottomSheetBehavior.from(summarySheet)
         summarySheetBehavior.state = STATE_HIDDEN
 
-        val onBackPressedCallback = object : OnBackPressedCallback(false) {
+        val closeSummarySheet = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
                 summarySheetBehavior.state = STATE_HIDDEN
             }
         }
 
-        requireActivity().onBackPressedDispatcher.addCallback(
+        (onBackPressedDispatcher?.invoke() ?: requireActivity().onBackPressedDispatcher).addCallback(
             viewLifecycleOwner,
-            onBackPressedCallback
+            closeSummarySheet
         )
 
         bottomSheetCallback = object : BottomSheetCallback() {
@@ -236,9 +238,9 @@ class SelectionMapFragment(
                     selectedFeatureViewModel.setSelectedFeatureId(null)
                     resetIcon(selectedFeatureId)
 
-                    onBackPressedCallback.isEnabled = false
+                    closeSummarySheet.isEnabled = false
                 } else {
-                    onBackPressedCallback.isEnabled = true
+                    closeSummarySheet.isEnabled = true
                 }
             }
 

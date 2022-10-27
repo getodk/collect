@@ -67,7 +67,6 @@ import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -438,9 +437,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     }
 
     private void setupViewModels() {
-        backgroundLocationViewModel = ViewModelProviders
-                .of(this, new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionRepository, sessionId))
-                .get(BackgroundLocationViewModel.class);
+        backgroundLocationViewModel = new ViewModelProvider(
+                this,
+                new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionRepository, sessionId)
+        ).get(BackgroundLocationViewModel.class);
 
         backgroundAudioViewModelFactory.setSessionId(sessionId);
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
@@ -451,7 +451,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         });
 
 
-        identityPromptViewModel = ViewModelProviders.of(this).get(IdentityPromptViewModel.class);
+        identityPromptViewModel = new ViewModelProvider(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
                 showIfNotShowing(IdentifyUserPromptDialogFragment.class, getSupportFragmentManager());
@@ -1177,9 +1177,10 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         odkViewLifecycle.start();
 
         AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
-        ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(ViewModelProviders
-                .of(this, factory)
-                .get(AudioClipViewModel.class), odkViewLifecycle);
+        ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(
+                new ViewModelProvider(this, factory).get(AudioClipViewModel.class),
+                odkViewLifecycle
+        );
 
         return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);
     }

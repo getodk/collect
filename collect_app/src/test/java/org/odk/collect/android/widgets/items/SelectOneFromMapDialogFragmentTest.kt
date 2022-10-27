@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.items
 
 import android.app.Application
 import android.os.Bundle
+import androidx.activity.ComponentDialog
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.test.core.app.ApplicationProvider
@@ -129,15 +130,13 @@ class SelectOneFromMapDialogFragmentTest {
     }
 
     @Test
-    fun `contains SelectionMapFragment with correct data`() {
+    fun `sets up SelectionMapFragment`() {
         val scenario = launcherRule.launch(
             SelectOneFromMapDialogFragment::class.java,
             Bundle().also {
                 it.putSerializable(ARG_FORM_INDEX, prompt.index)
             }
         )
-
-        scheduler.runBackground()
 
         scenario.onFragment {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
@@ -146,7 +145,28 @@ class SelectOneFromMapDialogFragmentTest {
             assertThat(fragment.skipSummary, equalTo(false))
             assertThat(fragment.showNewItemButton, equalTo(false))
 
+            val dialogBackPressedDispatcher =
+                (it.requireDialog() as ComponentDialog).onBackPressedDispatcher
+            assertThat(fragment.onBackPressedDispatcher?.invoke(), equalTo(dialogBackPressedDispatcher))
+        }
+    }
+
+    @Test
+    fun `gives SelectionMapFragment correct data`() {
+        val scenario = launcherRule.launch(
+            SelectOneFromMapDialogFragment::class.java,
+            Bundle().also {
+                it.putSerializable(ARG_FORM_INDEX, prompt.index)
+            }
+        )
+
+        scenario.onFragment {
+            val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)
+            val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
+
             val data = fragment.selectionMapData
+            scheduler.runBackground()
+
             assertThat(data.getMapTitle().value, equalTo(prompt.longText))
             assertThat(data.getItemCount().value, equalTo(prompt.selectChoices.size))
             assertThat(

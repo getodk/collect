@@ -11,7 +11,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
 import org.odk.collect.material.MaterialFullScreenDialogFragment;
@@ -63,7 +63,7 @@ public class IdentifyUserPromptDialogFragment extends MaterialFullScreenDialogFr
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
-        viewModel = ViewModelProviders.of(requireActivity()).get(IdentityPromptViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(IdentityPromptViewModel.class);
         viewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (!requiresIdentity) {
                 dismiss();

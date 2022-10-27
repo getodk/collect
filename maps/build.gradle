@@ -53,7 +53,8 @@ dependencies {
 
     implementation project(':shared')
     implementation Dependencies.kotlin_stdlib
-    implementation Dependencies.androidx_fragment
+    implementation(Dependencies.androidx_fragment_ktx)
+
     implementation Dependencies.androidx_annotations
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.timber
