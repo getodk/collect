@@ -266,3 +266,4 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - create and publish scheduled forum post with release description
 - write Play Store release notes, include link to forum post
 - upload to Play Store
+- if there was an active beta before release (this can happen with point releases), publish a new beta release to replace the previous one which was disabled by the production release
