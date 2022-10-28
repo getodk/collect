@@ -24,7 +24,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -591,10 +590,20 @@ public class Utilities {
      */
     public static int rejectObsoleteTasks(List<TaskResponseAssignment> assignmentsToKeep) {
 
+        List<TaskResponseAssignment> tasksToKeep = new ArrayList<>();
+
+        if(assignmentsToKeep != null && assignmentsToKeep.size() > 0) {
+            for (TaskResponseAssignment ta : assignmentsToKeep) {
+                if (ta.task.type != null && !ta.task.type.equals("case")) {
+                    tasksToKeep.add(ta);
+                }
+            }
+        }
+
         Uri dbUri = InstanceColumns.CONTENT_URI;
         int nIds = 0;
-        if (assignmentsToKeep != null) {
-            nIds = assignmentsToKeep.size();
+        if (tasksToKeep != null) {
+            nIds = tasksToKeep.size();
         }
 
         String[] selectArgs = new String[nIds + 1];
@@ -602,6 +611,7 @@ public class Utilities {
 
         StringBuffer selectClause = new StringBuffer(InstanceColumns.T_ASS_ID + " is not null and " + InstanceColumns.SOURCE + " = ?");
         selectClause.append(" and " + InstanceColumns.DELETED_DATE + " is null");
+        selectClause.append(" and " + InstanceColumns.T_TASK_TYPE + " != 'case'");
 
         // Only reject tasks that are still active
         selectClause.append(" and (" + InstanceColumns.T_TASK_STATUS + " == '" + STATUS_T_ACCEPTED + "' " +
@@ -614,7 +624,7 @@ public class Utilities {
                     selectClause.append(",");
                 }
                 selectClause.append("?");
-                selectArgs[i + 1] = String.valueOf(assignmentsToKeep.get(i).assignment.assignment_id);
+                selectArgs[i + 1] = String.valueOf(tasksToKeep.get(i).assignment.assignment_id);
             }
             selectClause.append(")");
         }
@@ -623,6 +633,77 @@ public class Utilities {
         cv.put(T_TASK_STATUS, Utilities.STATUS_T_REJECTED);
 
         return Collect.getInstance().getContentResolver().update(dbUri, cv, selectClause.toString(), selectArgs);
+    }
+
+    /*
+     * Delete any cases no longer assigned to this user
+     */
+    public static int deleteUnassignedCases(List<TaskResponseAssignment> assignmentsToKeep) {
+
+        List<TaskResponseAssignment> casesToKeep = new ArrayList<>();
+
+        if(assignmentsToKeep != null && assignmentsToKeep.size() > 0) {
+            for (TaskResponseAssignment ta : assignmentsToKeep) {
+                if (ta.task.type != null && ta.task.type.equals("case")) {
+                    casesToKeep.add(ta);
+                }
+            }
+        }
+
+        Uri dbUri = InstanceColumns.CONTENT_URI;
+
+        StringBuilder where = new StringBuilder(InstanceColumns.T_TASK_TYPE + " = 'case' and "
+                + InstanceColumns.SOURCE + " = ?");
+        where.append(" and " + InstanceColumns.DELETED_DATE + " is null");
+        where.append(" and " + T_TASK_STATUS + " != ?");
+
+        String[] whereArgs = new String[casesToKeep.size() + 2];
+            whereArgs[0] = Utilities.getSource();
+            whereArgs[1] = Utilities.STATUS_T_CLOSED;
+            if(casesToKeep.size() > 0) {
+                where.append(" and " + InstanceColumns.T_UPDATEID + " not in (");
+                for (int i = 0; i < casesToKeep.size(); i++) {
+                    if (i > 0) {
+                        where.append(",");
+                    }
+                    where.append("?");
+                    whereArgs[i + 1] = assignmentsToKeep.get(i).task.update_id;
+                }
+                where.append(")");
+            }
+
+
+            InstanceProvider ip = new InstanceProvider();
+
+        String obsoleteUpdateId;
+        Cursor c = null;
+        try {
+            c = Collect.getInstance().getContentResolver().query(dbUri, null, where.toString(), whereArgs, null);
+            if (c != null && c.getCount() > 0) {
+                c.moveToFirst();
+                obsoleteUpdateId = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
+                markOldCaseCancelled(obsoleteUpdateId);
+
+                // Delete the file
+                    /*
+                    do {
+                        String instanceFile = c.getString(
+                                c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                        File instanceDir = (new File(instanceFile)).getParentFile();
+                        ip.deleteAllFilesInDirectory(instanceDir);
+
+                    } while (c.moveToNext());
+
+                     */
+            }
+        } finally {
+            if (c != null) {
+                c.close();
+            }
+        }
+
+
+        return casesToKeep.size();
     }
 
     /*
@@ -711,6 +792,30 @@ public class Utilities {
                 + " / 1000, 'unixepoch') <  datetime('now','-6 months')";
 
         Collect.getInstance().getContentResolver().delete(dbUri, selectClause, null);
+    }
+
+    /*
+     * Delete the previous copy of a case that has been replaced
+     */
+    public static void markOldCaseCancelled(String updateId) {
+
+        Uri dbUri = InstanceColumns.CONTENT_URI;
+
+        String selectClause = InstanceColumns.T_TASK_TYPE + " = 'case' and "
+                + InstanceColumns.DELETED_DATE + " is null and "
+                + InstanceColumns.T_UPDATEID + " = ? and "
+                + InstanceColumns.SOURCE + " = ?";
+
+        ArrayList<String> selectArgsList = new ArrayList<>();
+        selectArgsList.add(updateId);
+        selectArgsList.add(Utilities.getSource());
+        String[] selectArgs = new String[selectArgsList.size()];
+        selectArgs = selectArgsList.toArray(selectArgs);
+
+        ContentValues cv = new ContentValues();
+        cv.put(T_TASK_STATUS, Utilities.STATUS_T_CANCELLED);
+
+        Collect.getInstance().getContentResolver().update(dbUri, cv, selectClause, selectArgs);
     }
 
     /*

@@ -94,6 +94,12 @@ import timber.log.Timber;
  * Background task for downloading tasks 
  * 
  * @author Neil Penman (neilpenman@gmail.com)
+ *
+ * Instance Status Values
+ * -> closed  : if cancelled and synchronised
+ * -> closed  : if submitted and synchronised
+ * -> accepted : when new task created
+ * -> cancelled : if task/case open on phone but deleted on server
  */
 public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, String>> {
 
@@ -659,6 +665,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         // Remove any tasks that have been deleted from the server
         Utilities.rejectObsoleteTasks(tr.taskAssignments);
+        Utilities.deleteUnassignedCases(tr.taskAssignments);
 
     	// Clean up the history table and remove old deleted instances
         Utilities.cleanHistory();
