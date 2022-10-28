@@ -138,6 +138,10 @@ android {
             applicationId "org.smap.smapTask.android.ljs"
             versionName "6.707-ljs"
         }
+        bps {
+            applicationId "org.smap.smapTask.android.bps"
+            versionName "6.707-bps"
+        }
     }
 
     buildTypes {
