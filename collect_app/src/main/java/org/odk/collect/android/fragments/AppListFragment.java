@@ -204,7 +204,6 @@ public abstract class AppListFragment extends ListFragment {
         final FormListSortingAdapter adapter = new FormListSortingAdapter(sortingOptions, getSelectedSortingOrder(), position -> {
             performSelectedSearch(position);
             bottomSheetDialog.dismiss();
-            return null;
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);

@@ -299,7 +299,6 @@ abstract class AppListActivity extends CollectAbstractActivity {
         final FormListSortingAdapter adapter = new FormListSortingAdapter(sortingOptions, getSelectedSortingOrder(), position -> {
             performSelectedSearch(position);
             bottomSheetDialog.dismiss();
-            return null;
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);

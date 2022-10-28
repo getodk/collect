@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SortItemLayoutBinding
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import java.util.function.Consumer
 
 class FormListSortingAdapter(
     private val sortingOptions: List<FormListSortingOption>,
     private val selectedSortingOrder: Int,
-    private val listener: (position: Int) -> Unit
+    private val listener: Consumer<Int>
 ) : RecyclerView.Adapter<FormListSortingAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +24,7 @@ class FormListSortingAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             holder.binding.root.setOnClickListener {
-                listener.invoke(position)
+                listener.accept(position)
                 selectItem(holder.binding)
             }
 
