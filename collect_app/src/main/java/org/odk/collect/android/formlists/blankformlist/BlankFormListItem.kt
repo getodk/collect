@@ -16,16 +16,16 @@ data class BlankFormListItem(
     val contentUri: Uri
 )
 
-fun formToBlankFormListItem(form: Form, projectId: String, instancesRepository: InstancesRepository) = BlankFormListItem(
-    databaseId = form.dbId,
-    formId = form.formId,
-    formName = form.displayName,
-    formVersion = form.version ?: "",
-    geometryPath = form.geometryXpath ?: "",
-    dateOfCreation = form.date,
+fun Form.toBlankFormListItem(projectId: String, instancesRepository: InstancesRepository) = BlankFormListItem(
+    databaseId = this.dbId,
+    formId = this.formId,
+    formName = this.displayName,
+    formVersion = this.version ?: "",
+    geometryPath = this.geometryXpath ?: "",
+    dateOfCreation = this.date,
     dateOfLastUsage = instancesRepository
-        .getAllByFormId(form.formId)
-        .filter { it.formVersion == form.version }
+        .getAllByFormId(this.formId)
+        .filter { it.formVersion == this.version }
         .maxByOrNull { it.lastStatusChangeDate }?.lastStatusChangeDate ?: 0L,
-    contentUri = FormsContract.getUri(projectId, form.dbId)
+    contentUri = FormsContract.getUri(projectId, this.dbId)
 )

@@ -521,7 +521,7 @@ class BlankFormListViewModelTest {
         assertThat(
             blankFormListItem,
             `is`(
-                formToBlankFormListItem(form, projectId, instancesRepository)
+                form.toBlankFormListItem(projectId, instancesRepository)
             )
         )
     }

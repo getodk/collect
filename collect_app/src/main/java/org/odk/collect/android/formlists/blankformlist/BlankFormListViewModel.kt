@@ -90,7 +90,7 @@ class BlankFormListViewModel(
         return formsRepository
             .all
             .map { form ->
-                formToBlankFormListItem(form, projectId, instancesRepository)
+                form.toBlankFormListItem(projectId, instancesRepository)
             }
     }
 
@@ -103,7 +103,7 @@ class BlankFormListViewModel(
                     .filter {
                         !it.isDeleted
                     }.map { form ->
-                        formToBlankFormListItem(form, projectId, instancesRepository)
+                        form.toBlankFormListItem(projectId, instancesRepository)
                     }
 
                 if (shouldHideOldFormVersions) {

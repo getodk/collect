@@ -50,7 +50,7 @@ class BlankFormListItemTest {
             .date(1665742651521)
             .build()
 
-        val blankFormListItem = formToBlankFormListItem(form, Project.DEMO_PROJECT_ID, instancesRepository)
+        val blankFormListItem = form.toBlankFormListItem(Project.DEMO_PROJECT_ID, instancesRepository)
 
         assertThat(blankFormListItem.databaseId, `is`(form.dbId))
         assertThat(blankFormListItem.formId, `is`(form.formId))
@@ -71,7 +71,7 @@ class BlankFormListItemTest {
             .date(1665742651521)
             .build()
 
-        val blankFormListItem = formToBlankFormListItem(form, Project.DEMO_PROJECT_ID, instancesRepository)
+        val blankFormListItem = form.toBlankFormListItem(Project.DEMO_PROJECT_ID, instancesRepository)
 
         assertThat(blankFormListItem.dateOfLastUsage, `is`(0L))
     }
@@ -85,7 +85,7 @@ class BlankFormListItemTest {
             .date(1665742651521)
             .build()
 
-        val blankFormListItem = formToBlankFormListItem(form, Project.DEMO_PROJECT_ID, instancesRepository)
+        val blankFormListItem = form.toBlankFormListItem(Project.DEMO_PROJECT_ID, instancesRepository)
 
         assertThat(blankFormListItem.formVersion, `is`(""))
     }
@@ -99,7 +99,7 @@ class BlankFormListItemTest {
             .date(1665742651521)
             .build()
 
-        val blankFormListItem = formToBlankFormListItem(form, Project.DEMO_PROJECT_ID, instancesRepository)
+        val blankFormListItem = form.toBlankFormListItem(Project.DEMO_PROJECT_ID, instancesRepository)
 
         assertThat(blankFormListItem.geometryPath, `is`(""))
     }
@@ -139,7 +139,7 @@ class BlankFormListItemTest {
             .date(1665742651521)
             .build()
 
-        val blankFormListItem = formToBlankFormListItem(form, Project.DEMO_PROJECT_ID, instancesRepository)
+        val blankFormListItem = form.toBlankFormListItem(Project.DEMO_PROJECT_ID, instancesRepository)
 
         assertThat(blankFormListItem.dateOfLastUsage, `is`(4L))
     }
