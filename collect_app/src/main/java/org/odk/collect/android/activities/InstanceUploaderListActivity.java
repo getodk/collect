@@ -126,14 +126,15 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             return;
         }
 
-        int checkedItemCount = getCheckedCount();
+        long[] instanceIds = listView.getCheckedItemIds();
 
-        if (checkedItemCount > 0) {
-            // items selected
-            uploadSelectedFiles();
+        if (instanceIds.length > 0) {
+            selectedInstances.clear();
             setAllToCheckedState(listView, false);
             toggleButtonLabel(findViewById(R.id.toggle_button), listView);
             binding.uploadButton.setEnabled(false);
+
+            uploadSelectedFiles(instanceIds);
         } else {
             // no items selected
             ToastUtils.showLongToast(this, R.string.noselect_error);
@@ -205,9 +206,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         binding.uploadButton.setText(R.string.send_selected_data);
     }
 
-    private void uploadSelectedFiles() {
-        long[] instanceIds = listView.getCheckedItemIds();
-
+    private void uploadSelectedFiles(long[] instanceIds) {
         String server = settingsProvider.getUnprotectedSettings().getString(KEY_PROTOCOL);
 
         if (server.equalsIgnoreCase(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
