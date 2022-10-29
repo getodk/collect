@@ -70,8 +70,12 @@ public class RecordingHandler {
         TreeReference firstReference = treeReferences.iterator().next();
         StringData answer = (StringData) formController.getAnswer(firstReference);
 
+        // smap make sure existing answer file exists
+        File existingAnswerFile = null;
         if (answer != null) {
-            File existingAnswerFile = questionMediaManager.getAnswerFile((String) answer.getValue());
+            existingAnswerFile = questionMediaManager.getAnswerFile((String) answer.getValue());
+        }
+        if(answer != null && existingAnswerFile != null && existingAnswerFile.exists()) {
             File newAnswerFile = result.getOrNull();
 
             if (newAnswerFile.getName().endsWith(".m4a")) {
