@@ -58,6 +58,7 @@ public class GeoCompoundWidget extends QuestionWidget implements WidgetDataRecei
 
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        setGeoTextLength(binding.geoAnswerText, prompt);
 
         binding.simpleButton.setOnClickListener(v -> {
             if (mapConfigurator.isAvailable(context)) {

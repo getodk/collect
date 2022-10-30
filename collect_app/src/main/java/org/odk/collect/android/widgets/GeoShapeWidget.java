@@ -16,6 +16,7 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -51,6 +52,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
         binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        setGeoTextLength(binding.geoAnswerText, prompt);
 
         binding.simpleButton.setOnClickListener(v ->
                 geoDataRequester.requestGeoShape(context, prompt, getAnswerText(), waitingForDataRegistry));

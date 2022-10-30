@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.MotionEvent;
@@ -34,6 +35,7 @@ import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AudioHelper;
+import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -68,6 +70,8 @@ import static org.odk.collect.android.formentry.media.FormMediaUtils.getClipID;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayColor;
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
+
+import com.google.android.material.textview.MaterialTextView;
 
 public abstract class QuestionWidget extends FrameLayout implements Widget {
 
@@ -461,6 +465,21 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public void widgetValueChanged() {
         if (valueChangedListener != null) {
             valueChangedListener.widgetValueChanged(this);
+        }
+    }
+
+    // smap
+    protected void setGeoTextLength(MaterialTextView geoAnswerText, FormEntryPrompt prompt) {
+        String textLength = prompt.getQuestion().getAdditionalAttribute(null, "geotextlength");
+        if (textLength != null) {
+            int l = 4;
+            try {
+                l = Integer.parseInt(textLength);
+            } catch (Exception e) {
+
+            }
+            geoAnswerText.setMaxLines(l);
+            geoAnswerText.setEllipsize(TextUtils.TruncateAt.END);
         }
     }
 }

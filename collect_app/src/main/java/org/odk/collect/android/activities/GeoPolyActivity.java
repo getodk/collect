@@ -211,7 +211,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     public void initMap(MapFragment newMapFragment) {
         map = newMapFragment;
-        //ToastUtils.showShortToastInMiddle("init mqp");
+        //ToastUtils.showShortToastInMiddle("init map");
 
         locationStatus = findViewById(R.id.location_status);
         collectionStatus = findViewById(R.id.collection_status);
