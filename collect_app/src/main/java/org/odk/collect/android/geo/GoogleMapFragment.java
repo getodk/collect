@@ -773,7 +773,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             int idx = 0;
             for (MapPoint point : points) {
                 CompoundMarker cm = null;
-                if(markers != null) {
+                if(geoMarkers != null) {
                     cm = geoMarkers.get(idx);
                 }
                 markers.add(createMarker(map, point, true, CENTER, cm));
