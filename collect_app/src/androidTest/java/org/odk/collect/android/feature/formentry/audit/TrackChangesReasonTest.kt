@@ -1,11 +1,14 @@
 package org.odk.collect.android.feature.formentry.audit
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -38,6 +41,13 @@ class TrackChangesReasonTest {
             .clickSaveAndExitWithChangesReasonPrompt()
             .enterReason("Needed to be more exciting and less mysterious")
             .clickSave()
+
+        val auditLogForFirstInstance = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLogForFirstInstance[10].get("event"), equalTo("change reason"))
+        assertThat(
+            auditLogForFirstInstance[10].get("change-reason"),
+            equalTo("Needed to be more exciting and less mysterious")
+        )
     }
 
     @Test

@@ -50,16 +50,16 @@ public class LocationTrackingAuditTest {
                 .clickSave();
 
         List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
-        assertThat(auditLog.get(2).get(0), equalTo("location tracking enabled"));
-        assertThat(auditLog.get(3).get(0), equalTo("location permissions granted"));
-        assertThat(auditLog.get(4).get(0), equalTo("location providers enabled"));
+        assertThat(auditLog.get(1).get(0), equalTo("location tracking enabled"));
+        assertThat(auditLog.get(2).get(0), equalTo("location permissions granted"));
+        assertThat(auditLog.get(3).get(0), equalTo("location providers enabled"));
 
-        CSVRecord firstQuestionEvent = auditLog.get(5);
+        CSVRecord firstQuestionEvent = auditLog.get(4);
         assertThat(firstQuestionEvent.get(0), equalTo("question"));
         assertThat(firstQuestionEvent.get(4), equalTo("1.0"));
         assertThat(firstQuestionEvent.get(5), equalTo("1.0"));
 
-        CSVRecord secondQuestionEvent = auditLog.get(6);
+        CSVRecord secondQuestionEvent = auditLog.get(5);
         assertThat(secondQuestionEvent.get(0), equalTo("question"));
         assertThat(secondQuestionEvent.get(4), equalTo("1.0"));
         assertThat(secondQuestionEvent.get(5), equalTo("1.0"));
