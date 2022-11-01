@@ -226,10 +226,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         });
     }
 
-    public boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers) {
-        return updateAnswersForScreen(answers, false);
-    }
-
     public boolean updateAnswersForScreen(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
         boolean success = saveScreenAnswersToFormController(answers, evaluateConstraints);
         formController.getAuditEventLogger().flush();

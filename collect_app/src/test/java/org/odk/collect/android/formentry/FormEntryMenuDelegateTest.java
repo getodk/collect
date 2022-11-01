@@ -175,7 +175,7 @@ public class FormEntryMenuDelegateTest {
         HashMap answers = new HashMap();
         when(answersProvider.getAnswers()).thenReturn(answers);
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
-        verify(formEntryViewModel).updateAnswersForScreen(answers);
+        verify(formEntryViewModel).updateAnswersForScreen(answers, false);
     }
 
     @Test
@@ -261,7 +261,7 @@ public class FormEntryMenuDelegateTest {
         HashMap answers = new HashMap();
         when(answersProvider.getAnswers()).thenReturn(answers);
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
-        verify(formEntryViewModel).updateAnswersForScreen(answers);
+        verify(formEntryViewModel).updateAnswersForScreen(answers, false);
     }
 
     @Test

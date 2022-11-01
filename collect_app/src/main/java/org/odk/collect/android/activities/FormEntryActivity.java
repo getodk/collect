@@ -1085,7 +1085,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // mFormEntryController is static so we don't need to pass it.
         if (formController != null && formController.currentPromptIsQuestion()) {
-            formEntryViewModel.updateAnswersForScreen(getAnswers());
+            formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
         }
         return null;
     }
@@ -1788,7 +1788,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
                         clearAnswer(qw);
-                        formEntryViewModel.updateAnswersForScreen(getAnswers());
+                        formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
                         break;
                 }
             }
@@ -1831,7 +1831,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             getFormController().setLanguage(languages[whichButton]);
                             dialog.dismiss();
                             if (getFormController().currentPromptIsQuestion()) {
-                                formEntryViewModel.updateAnswersForScreen(getAnswers());
+                                formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
                             }
                             onScreenRefresh();
                         })
@@ -1889,7 +1889,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (!formSaveViewModel.isSaving()) {
             if (currentView != null && formController != null
                     && formController.currentPromptIsQuestion()) {
-                formEntryViewModel.updateAnswersForScreen(getAnswers());
+                formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
             }
         }
 
