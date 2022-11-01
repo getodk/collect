@@ -383,6 +383,7 @@ public class AppDependencyModule {
     }
 
     @Provides
+    @Singleton
     public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Application application) {
         return new EntitiesRepositoryProvider(application);
     }
