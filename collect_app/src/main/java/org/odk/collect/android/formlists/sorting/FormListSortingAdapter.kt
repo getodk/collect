@@ -22,24 +22,22 @@ class FormListSortingAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(holder) {
-            holder.binding.root.setOnClickListener {
-                listener.accept(position)
-                selectItem(holder.binding)
-            }
+        holder.binding.root.setOnClickListener {
+            listener.accept(position)
+            selectItem(holder.binding)
+        }
 
-            with(sortingOptions[position]) {
-                binding.title.setText(this.text)
-                binding.icon.setImageResource(this.icon)
-                binding.icon.tag = this.icon
-                binding.icon.setImageDrawable(
-                    DrawableCompat.wrap(binding.icon.drawable).mutate()
-                )
+        val sortingOption = sortingOptions[position]
 
-                if (position == selectedSortingOrder) {
-                    selectItem(binding)
-                }
-            }
+        holder.binding.title.setText(sortingOption.text)
+        holder.binding.icon.setImageResource(sortingOption.icon)
+        holder.binding.icon.tag = sortingOption.icon
+        holder.binding.icon.setImageDrawable(
+            DrawableCompat.wrap(holder.binding.icon.drawable).mutate()
+        )
+
+        if (position == selectedSortingOrder) {
+            selectItem(holder.binding)
         }
     }
 
