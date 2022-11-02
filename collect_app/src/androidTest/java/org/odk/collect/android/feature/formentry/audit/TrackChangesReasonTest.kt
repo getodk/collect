@@ -122,8 +122,12 @@ class TrackChangesReasonTest {
             .clickGoToStart()
             .inputText("Nothing much!")
             .closeSoftKeyboard()
-            .pressBack(SaveOrIgnoreDialog("Track Changes Reason",
-                ChangesReasonPromptPage("Track Changes Reason")))
+            .pressBack(
+                SaveOrIgnoreDialog(
+                    "Track Changes Reason",
+                    ChangesReasonPromptPage("Track Changes Reason")
+                )
+            )
             .clickSaveChanges()
     }
 
