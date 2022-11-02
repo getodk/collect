@@ -4,7 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 
-class DestroyableLifecyleOwner : LifecycleOwner {
+class ControllableLifecyleOwner : LifecycleOwner {
     private var lifecycleRegistry = LifecycleRegistry(this).apply {
         this.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
     }

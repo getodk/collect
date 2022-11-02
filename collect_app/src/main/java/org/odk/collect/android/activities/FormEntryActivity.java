@@ -149,7 +149,7 @@ import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriHelper;
-import org.odk.collect.android.utilities.DestroyableLifecyleOwner;
+import org.odk.collect.android.utilities.ControllableLifecyleOwner;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -269,7 +269,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private TextView backButton;
 
     private ODKView odkView;
-    private final DestroyableLifecyleOwner odkViewLifecycle = new DestroyableLifecyleOwner();
+    private final ControllableLifecyleOwner odkViewLifecycle = new ControllableLifecyleOwner();
 
     private String instancePath;
     private String startingXPath;
