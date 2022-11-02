@@ -88,6 +88,8 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws FormUploadException {
+        markSubmissionFailed(instance);
+
         File instanceFile = new File(instance.getInstanceFilePath());
         if (!instanceFile.exists()) {
             throw new FormUploadException(FAIL + "instance XML file does not exist!");
@@ -103,7 +105,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             Form form = forms.get(0);
             if (form.getBASE64RSAPublicKey() != null) {
-                submissionComplete(instance, false);
                 throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
             }
 
@@ -120,15 +121,11 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
                 key = PropertyUtils.genUUID();
             }
             insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
-        } catch (FormUploadException e) {
-            submissionComplete(instance, false);
-            throw e;
         } catch (GoogleJsonResponseException e) {
-            submissionComplete(instance, false);
             throw new FormUploadException(getErrorMessageFromGoogleJsonResponseException(e));
         }
 
-        submissionComplete(instance, true);
+        markSubmissionComplete(instance);
         // Google Sheets can't provide a custom success message
         return null;
     }

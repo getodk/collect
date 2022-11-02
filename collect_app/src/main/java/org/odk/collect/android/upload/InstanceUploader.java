@@ -22,7 +22,6 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.forms.instances.InstancesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,26 +61,30 @@ public abstract class InstanceUploader {
         List<Instance> instances = new ArrayList<>();
 
         for (Long id : instanceDatabaseIds) {
-            instances.add(new InstancesRepositoryProvider(Collect.getInstance()).get().get(id));
+            instances.add(instancesRepositoryProvider.get().get(id));
         }
 
         return instances;
     }
 
-    public void submissionComplete(Instance instance, boolean successful) {
-        InstancesRepository instancesRepository = instancesRepositoryProvider.get();
+    public void markSubmissionFailed(Instance instance) {
+        instancesRepositoryProvider
+                .get()
+                .save(new Instance.Builder(instance)
+                        .status(Instance.STATUS_SUBMISSION_FAILED)
+                        .build()
+                );
 
-        if (successful) {
-            instancesRepository.save(new Instance.Builder(instance)
-                    .status(Instance.STATUS_SUBMITTED)
-                    .build()
-            );
-        } else {
-            instancesRepository.save(new Instance.Builder(instance)
-                    .status(Instance.STATUS_SUBMISSION_FAILED)
-                    .build()
-            );
-        }
+        instancesAppState.update();
+    }
+
+    public void markSubmissionComplete(Instance instance) {
+        instancesRepositoryProvider
+                .get()
+                .save(new Instance.Builder(instance)
+                        .status(Instance.STATUS_SUBMITTED)
+                        .build()
+                );
 
         instancesAppState.update();
     }

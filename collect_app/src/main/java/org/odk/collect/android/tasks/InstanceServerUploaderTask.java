@@ -25,7 +25,6 @@ import org.odk.collect.android.upload.FormUploadAuthRequestedException;
 import org.odk.collect.android.upload.FormUploadException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -62,7 +61,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     public Outcome doInBackground(Long... instanceIdsToUpload) {
         Outcome outcome = new Outcome();
 
-        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, new HashMap<>(), settingsProvider.getUnprotectedSettings());
+        InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings());
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
         String deviceId = new PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
