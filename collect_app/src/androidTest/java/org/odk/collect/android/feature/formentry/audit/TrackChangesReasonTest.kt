@@ -26,32 +26,31 @@ class TrackChangesReasonTest {
         .around(rule)
 
     @Test
-    fun openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andEnteringReason_andClickingSave_returnsToMainMenu() {
+    fun openingAFormToEdit_andClickingSaveAndExit_andEnteringReason_andClickingSave_returnsToMainMenu() {
         rule.startAtMainMenu()
             .copyForm("track-changes-reason-on-edit.xml")
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
             .clickSaveAndExit()
+
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
-            .clickGoToStart()
-            .inputText("Nothing much!")
-            .swipeToEndScreen()
+            .clickGoToEnd()
             .clickSaveAndExitWithChangesReasonPrompt()
             .enterReason("Needed to be more exciting and less mysterious")
             .clickSave()
 
         val auditLogForFirstInstance = StorageUtils.getAuditLogForFirstInstance()
-        assertThat(auditLogForFirstInstance[10].get("event"), equalTo("change reason"))
+        assertThat(auditLogForFirstInstance[9].get("event"), equalTo("change reason"))
         assertThat(
-            auditLogForFirstInstance[10].get("change-reason"),
+            auditLogForFirstInstance[9].get("change-reason"),
             equalTo("Needed to be more exciting and less mysterious")
         )
     }
 
     @Test
-    fun openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andPressingBack_returnsToForm() {
+    fun openingAFormToEdit_andClickingSaveAndExit_andPressingBack_returnsToForm() {
         rule.startAtMainMenu()
             .copyForm("track-changes-reason-on-edit.xml")
             .startBlankForm("Track Changes Reason")
@@ -59,10 +58,9 @@ class TrackChangesReasonTest {
             .swipeToEndScreen()
             .clickSaveAndExit()
             .clickEditSavedForm()
+
             .clickOnForm("Track Changes Reason")
-            .clickGoToStart()
-            .inputText("Nothing much!")
-            .swipeToEndScreen()
+            .clickGoToEnd()
             .clickSaveAndExitWithChangesReasonPrompt()
             .closeSoftKeyboard()
             .pressBack(FormEntryPage("Track Changes Reason"))
@@ -70,18 +68,17 @@ class TrackChangesReasonTest {
     }
 
     @Test
-    fun openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andClickingCross_returnsToForm() {
+    fun openingAFormToEdit_andClickingSaveAndExit_andClickingCross_returnsToForm() {
         rule.startAtMainMenu()
             .copyForm("track-changes-reason-on-edit.xml")
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
             .clickSaveAndExit()
+
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
-            .clickGoToStart()
-            .inputText("Nothing much!")
-            .swipeToEndScreen()
+            .clickGoToEnd()
             .clickSaveAndExitWithChangesReasonPrompt()
             .closeSoftKeyboard()
             .pressClose(FormEntryPage("Track Changes Reason"))
@@ -89,18 +86,17 @@ class TrackChangesReasonTest {
     }
 
     @Test
-    fun openingAFormToEdit_andChangingAValue_andClickingSaveAndExit_andRotating_remainsOnPrompt() {
+    fun openingAFormToEdit_andClickingSaveAndExit_andRotating_remainsOnPrompt() {
         rule.startAtMainMenu()
             .copyForm("track-changes-reason-on-edit.xml")
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
             .clickSaveAndExit()
+
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
-            .clickGoToStart()
-            .inputText("Nothing much!")
-            .swipeToEndScreen()
+            .clickGoToEnd()
             .clickSaveAndExitWithChangesReasonPrompt()
             .enterReason("Something")
             .rotateToLandscape(ChangesReasonPromptPage("Track Changes Reason"))
@@ -110,17 +106,17 @@ class TrackChangesReasonTest {
     }
 
     @Test
-    fun openingAFormToEdit_andChangingAValue_andPressingBack_andClickingSaveChanges_promptsForReason() {
+    fun openingAFormToEdit_andPressingBack_andClickingSaveChanges_promptsForReason() {
         rule.startAtMainMenu()
             .copyForm("track-changes-reason-on-edit.xml")
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
             .clickSaveAndExit()
+
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
-            .inputText("Nothing much!")
             .closeSoftKeyboard()
             .pressBack(
                 SaveOrIgnoreDialog(
@@ -132,50 +128,34 @@ class TrackChangesReasonTest {
     }
 
     @Test
-    fun openingAFormToEdit_andChangingAValue_andPressingBack_andIgnoringChanges_returnsToMainMenu() {
+    fun openingAFormToEdit_andPressingBack_andIgnoringChanges_returnsToMainMenu() {
         rule.startAtMainMenu()
             .copyForm("track-changes-reason-on-edit.xml")
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
             .clickSaveAndExit()
+
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
-            .inputText("Nothing much!")
             .closeSoftKeyboard()
             .pressBack(SaveOrIgnoreDialog("Track Changes Reason", MainMenuPage()))
             .clickIgnoreChanges()
     }
 
     @Test
-    fun openingAFormToEdit_andNotChangingAValue_andClickingSaveAndExit_returnsToMainMenu() {
+    fun openingFormToEdit_andClickingSave_promptsForReason() {
         rule.startAtMainMenu()
             .copyForm("track-changes-reason-on-edit.xml")
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
             .clickSaveAndExit()
-            .clickEditSavedForm()
-            .clickOnForm("Track Changes Reason")
-            .clickGoToStart()
-            .closeSoftKeyboard()
-            .swipeToEndScreen()
-            .clickSaveAndExit()
-    }
 
-    @Test
-    fun openingFormToEdit_andChangingValue_andClickingSave_promptsForReason() {
-        rule.startAtMainMenu()
-            .copyForm("track-changes-reason-on-edit.xml")
-            .startBlankForm("Track Changes Reason")
-            .inputText("Nothing much...")
-            .swipeToEndScreen()
-            .clickSaveAndExit()
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
-            .inputText("Nothing much!")
             .clickSaveWithChangesReasonPrompt()
             .enterReason("Bah")
             .clickSave(FormEntryPage("Track Changes Reason"))
