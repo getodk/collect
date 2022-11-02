@@ -1125,17 +1125,12 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
      */
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        FormController formController = getFormController();
         // if a form is loading, pass the loader task
         if (formLoaderTask != null
                 && formLoaderTask.getStatus() != AsyncTask.Status.FINISHED) {
             return formLoaderTask;
         }
 
-        // mFormEntryController is static so we don't need to pass it.
-        if (formController != null && formController.currentPromptIsQuestion()) {
-            formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
-        }
         return null;
     }
 
@@ -1835,7 +1830,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
                         clearAnswer(qw);
-                        formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
                         break;
                 }
             }
@@ -1877,9 +1871,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
                             getFormController().setLanguage(languages[whichButton]);
                             dialog.dismiss();
-                            if (getFormController().currentPromptIsQuestion()) {
-                                formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
-                            }
                             onScreenRefresh();
                         })
                 .setTitle(getString(R.string.change_language))
