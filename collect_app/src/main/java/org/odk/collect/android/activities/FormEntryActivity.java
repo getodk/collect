@@ -789,6 +789,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 outState.putString(KEY_XPATH_WAITING_FOR_DATA,
                         formController.getXPath(waiting));
             }
+
+            // make sure we're not already saving to disk. if we are, currentPrompt
+            // is getting constantly updated
+            if (!formSaveViewModel.isSaving()) {
+                if (currentView != null && formController != null
+                        && formController.currentPromptIsQuestion()) {
+
+                    // Update answers before creating save point
+                    formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
+                }
+            }
+
             // save the instance to a temp path...
             nonblockingCreateSavePointData();
         }
@@ -1881,17 +1893,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onPause() {
         Timber.w("onPause %s", Md5.getMd5Hash(getIntent().getData().toString()));
         backgroundLocationViewModel.activityHidden();
-
-        FormController formController = getFormController();
-
-        // make sure we're not already saving to disk. if we are, currentPrompt
-        // is getting constantly updated
-        if (!formSaveViewModel.isSaving()) {
-            if (currentView != null && formController != null
-                    && formController.currentPromptIsQuestion()) {
-                formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
-            }
-        }
 
         super.onPause();
     }
