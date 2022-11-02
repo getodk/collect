@@ -22,6 +22,7 @@ import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.questions.SelectChoiceUtils;
+import org.odk.collect.android.javarosawrapper.FailedConstraint;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
@@ -44,7 +45,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
-    private final MutableLiveData<FormController.FailedConstraint> failedConstraint = new MutableLiveData<>(null);
+    private final MutableLiveData<FailedConstraint> failedConstraint = new MutableLiveData<>(null);
     @NonNull
     private final FormSessionRepository formSessionRepository;
     private final String sessionId;
@@ -95,7 +96,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return error;
     }
 
-    public LiveData<FormController.FailedConstraint> getFailedConstraint() {
+    public LiveData<FailedConstraint> getFailedConstraint() {
         return failedConstraint;
     }
 
@@ -243,7 +244,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }
 
         try {
-            FormController.FailedConstraint result = formController.saveAllScreenAnswers(answers, evaluateConstraints);
+            FailedConstraint result = formController.saveAllScreenAnswers(answers, evaluateConstraints);
             if (result != null) {
                 failedConstraint.postValue(result);
                 return false;

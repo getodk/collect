@@ -42,6 +42,7 @@ import org.odk.collect.android.externaldata.ExternalDataReaderImpl;
 import org.odk.collect.android.externaldata.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
@@ -202,7 +203,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
         processItemSets(formMediaDir);
 
-        final FormController fc = new FormController(formMediaDir, fec, instancePath == null ? null
+        final FormController fc = new JavaRosaFormController(formMediaDir, fec, instancePath == null ? null
                 : new File(instancePath));
         if (xpath != null) {
             // we are resuming after having terminated -- set index to this

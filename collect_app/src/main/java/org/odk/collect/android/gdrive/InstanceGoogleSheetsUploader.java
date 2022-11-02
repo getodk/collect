@@ -14,7 +14,7 @@
 
 package org.odk.collect.android.gdrive;
 
-import static org.odk.collect.android.javarosawrapper.FormController.INSTANCE_ID;
+import static org.odk.collect.android.javarosawrapper.JavaRosaFormController.INSTANCE_ID;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import androidx.annotation.NonNull;

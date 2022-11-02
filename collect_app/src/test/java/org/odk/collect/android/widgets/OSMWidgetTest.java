@@ -19,6 +19,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.InstanceMetadata;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -73,7 +74,7 @@ public class OSMWidgetTest {
         when(formController.getInstanceFile()).thenReturn(instancePath);
         when(formController.getMediaFolder()).thenReturn(mediaFolder);
         when(formController.getSubmissionMetadata()).thenReturn(
-                new FormController.InstanceMetadata("instanceId", "instanceTesTName", null)
+                new InstanceMetadata("instanceId", "instanceTesTName", null)
         );
         when(formController.getFormDef()).thenReturn(formDef);
         when(formDef.getID()).thenReturn(0);

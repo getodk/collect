@@ -82,7 +82,7 @@ public class FormControllerTest {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(ONE_QUESTION_NESTED_REPEAT.getBytes());
         final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
         final FormEntryController formEntryController = new FormEntryController(fem);
-        FormController formController = new FormController(Files.createTempDir(), formEntryController, null);
+        FormController formController = new JavaRosaFormController(Files.createTempDir(), formEntryController, null);
         assertThat(formController.getSubmissionMetadata().auditConfig, is(nullValue()));
         assertThat(formController.getInstanceFile(), is(nullValue()));
 
@@ -117,7 +117,7 @@ public class FormControllerTest {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(xform.getBytes());
         final FormEntryModel fem = new FormEntryModel(XFormUtils.getFormFromInputStream(inputStream));
         final FormEntryController formEntryController = new FormEntryController(fem);
-        return new FormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
+        return new JavaRosaFormController(Files.createTempDir(), formEntryController, File.createTempFile("instance", ""));
     }
 
     private static final String ONE_QUESTION_REPEAT = "<?xml version=\"1.0\"?>\n" +

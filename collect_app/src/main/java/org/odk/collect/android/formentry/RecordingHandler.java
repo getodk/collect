@@ -72,15 +72,21 @@ public class RecordingHandler {
 
         if (answer != null) {
             File existingAnswerFile = questionMediaManager.getAnswerFile((String) answer.getValue());
-            File newAnswerFile = result.getOrNull();
+            if (existingAnswerFile != null && existingAnswerFile.exists()) {
+                File newAnswerFile = result.getOrNull();
 
-            if (newAnswerFile.getName().endsWith(".m4a")) {
-                m4aAppender.append(existingAnswerFile, newAnswerFile);
+                if (newAnswerFile.getName().endsWith(".m4a")) {
+                    m4aAppender.append(existingAnswerFile, newAnswerFile);
+                } else {
+                    amrAppender.append(existingAnswerFile, newAnswerFile);
+                }
+
+                newAnswerFile.delete();
             } else {
-                amrAppender.append(existingAnswerFile, newAnswerFile);
+                for (TreeReference treeReference : treeReferences) {
+                    formController.getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
+                }
             }
-
-            newAnswerFile.delete();
         } else {
             for (TreeReference treeReference : treeReferences) {
                 formController.getFormDef().setValue(new StringData(result.getOrNull().getName()), treeReference, false);
