@@ -13,8 +13,6 @@ import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
 class AutoSendSettingsProviderTest {
-    private lateinit var autoSendSettingsProvider: AutoSendSettingsProvider
-
     private val networkStateProvider: NetworkStateProvider = mock()
     private val settingsProvider = InMemSettingsProvider()
 
@@ -22,14 +20,14 @@ class AutoSendSettingsProviderTest {
 
     @Test
     fun `return false when networkInfo is null`() {
-        setupAutoSendSettingChecker(networkInfo = null)
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(networkInfo = null)
 
         assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
     fun `return false when autosend is disabled in settings`() {
-        setupAutoSendSettingChecker(
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "off",
             networkType = ConnectivityManager.TYPE_WIFI
         )
@@ -39,7 +37,7 @@ class AutoSendSettingsProviderTest {
 
     @Test
     fun `return false when autosend is enabled for wifi only but network type is cellular`() {
-        setupAutoSendSettingChecker(
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_only",
             networkType = ConnectivityManager.TYPE_MOBILE
         )
@@ -49,7 +47,7 @@ class AutoSendSettingsProviderTest {
 
     @Test
     fun `return true when autosend is enabled for wifi only and network type is wifi`() {
-        setupAutoSendSettingChecker(
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_only",
             networkType = ConnectivityManager.TYPE_WIFI
         )
@@ -59,7 +57,7 @@ class AutoSendSettingsProviderTest {
 
     @Test
     fun `return false when autosend is enabled for cellular only but network type is wifi`() {
-        setupAutoSendSettingChecker(
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "cellular_only",
             networkType = ConnectivityManager.TYPE_WIFI
         )
@@ -69,7 +67,7 @@ class AutoSendSettingsProviderTest {
 
     @Test
     fun `return true when autosend is enabled for cellular only and network type is cellular`() {
-        setupAutoSendSettingChecker(
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "cellular_only",
             networkType = ConnectivityManager.TYPE_MOBILE
         )
@@ -79,7 +77,7 @@ class AutoSendSettingsProviderTest {
 
     @Test
     fun `return true when autosend is enabled for wifi and cellular and network type is wifi`() {
-        setupAutoSendSettingChecker(
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_and_cellular",
             networkType = ConnectivityManager.TYPE_WIFI
         )
@@ -89,7 +87,7 @@ class AutoSendSettingsProviderTest {
 
     @Test
     fun `return true when autosend is enabled for wifi and cellular and network type is cellular`() {
-        setupAutoSendSettingChecker(
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_and_cellular",
             networkType = ConnectivityManager.TYPE_MOBILE
         )
@@ -97,16 +95,17 @@ class AutoSendSettingsProviderTest {
         assertTrue(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
-    private fun setupAutoSendSettingChecker(
+    private fun setupAutoSendSettingProvider(
         autoSendOption: String? = null,
         networkType: Int? = null,
         networkInfo: NetworkInfo? = mock()
-    ) {
+    ): AutoSendSettingsProvider {
         networkType?.let {
             whenever(networkInfo?.type).thenReturn(networkType)
         }
         whenever(networkStateProvider.networkInfo).thenReturn(networkInfo)
         settingsProvider.getUnprotectedSettings(projectId).save(ProjectKeys.KEY_AUTOSEND, autoSendOption)
-        autoSendSettingsProvider = AutoSendSettingsProvider(networkStateProvider, settingsProvider)
+
+        return AutoSendSettingsProvider(networkStateProvider, settingsProvider)
     }
 }
