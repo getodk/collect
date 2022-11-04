@@ -18,7 +18,9 @@ class AutoSendSettingsProvider(
         val autosend = settingsProvider.getUnprotectedSettings(projectId).getString(ProjectKeys.KEY_AUTOSEND)
         var sendwifi = autosend == "wifi_only"
         var sendnetwork = (autosend == "cellular_only").also {
-            Analytics.log(AnalyticsEvents.CELLULAR_ONLY)
+            if (it) {
+                Analytics.log(AnalyticsEvents.CELLULAR_ONLY)
+            }
         }
 
         if (autosend == "wifi_and_cellular") {
