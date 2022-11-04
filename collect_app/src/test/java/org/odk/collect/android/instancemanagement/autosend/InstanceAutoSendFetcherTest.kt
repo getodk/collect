@@ -16,8 +16,8 @@ import org.odk.collect.projects.Project
 import org.odk.collect.shared.TempFiles.createTempDir
 
 class InstanceAutoSendFetcherTest {
-    private lateinit var instanceAutoSendFetcher: InstanceAutoSendFetcher
     private val autoSendSettingsProvider: AutoSendSettingsProvider = mock()
+    private val instanceAutoSendFetcher = InstanceAutoSendFetcher(autoSendSettingsProvider)
     private val projectId = Project.DEMO_PROJECT_NAME
     private val instancesRepository = InMemInstancesRepository()
     private val formsRepository = InMemFormsRepository()
@@ -38,8 +38,6 @@ class InstanceAutoSendFetcherTest {
 
     @Before
     fun setup() {
-        instanceAutoSendFetcher = InstanceAutoSendFetcher(autoSendSettingsProvider)
-
         formsRepository.save(formWithAutoSend)
         formsRepository.save(formWithoutAutoSend)
 
