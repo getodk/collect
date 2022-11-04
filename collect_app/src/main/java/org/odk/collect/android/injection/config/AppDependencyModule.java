@@ -521,17 +521,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public AutoSendSettingsProvider providesAutoSendSettingChecker(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
-        return new AutoSendSettingsProvider(networkStateProvider, settingsProvider);
-    }
-
-    @Provides
-    public InstanceAutoSendFetcher providesInstanceAutoSendFetcher(AutoSendSettingsProvider autoSendSettingsProvider) {
-        return new InstanceAutoSendFetcher(autoSendSettingsProvider);
-    }
-
-    @Provides
-    public InstanceAutoSender providesInstanceAutoSender(InstanceAutoSendFetcher instanceAutoSendFetcher, Context context, Notifier notifier, Analytics analytics, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState) {
+    public InstanceAutoSender providesInstanceAutoSender(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider, Context context, Notifier notifier, Analytics analytics, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState) {
+        InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(new AutoSendSettingsProvider(networkStateProvider, settingsProvider));
         return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, analytics, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState);
     }
 
