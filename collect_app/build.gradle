@@ -290,7 +290,7 @@ dependencies {
     implementation "androidx.fragment:fragment:${rootProject.fragmentVersion}"
 
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     implementation "com.google.android.gms:play-services-auth:19.0.0"
     implementation "com.google.android.gms:play-services-maps:17.0.0"
@@ -309,14 +309,14 @@ dependencies {
 
     implementation "com.squareup.okhttp3:okhttp:${rootProject.okhttp3Version}"
     implementation "com.squareup.okhttp3:okhttp-tls:${rootProject.okhttp3Version}"
-    implementation 'com.burgstaller:okhttp-digest:2.5'
+    implementation 'io.github.rburgst:okhttp-digest:2.7'
 
     implementation 'com.github.mohamadian:PersianJodaTime:1.2'
     implementation 'com.github.chanmratekoko:myanmar-calendar:1.0.6.RC3'
     implementation 'bikramsambat:bikram-sambat:1.1.0'
-    implementation "com.rarepebble:colorpicker:3.0.1"
+    implementation "com.github.martin-stone:hsv-alpha-color-picker-android:3.0.1"
     implementation "commons-io:commons-io:2.5" // Commons 2.6+ introduce java.nio usage that we can't access until our minSdkVersion >= 26 (https://developer.android.com/reference/java/io/File#toPath())
-    implementation "net.sf.opencsv:opencsv:2.4"
+    implementation "com.opencsv:opencsv:5.6"
     // smap comment out reference to maven repository version of javarosa will use a local version instead
     //implementation("org.getodk:javarosa:3.1.0") {
     //    exclude group: 'joda-time'

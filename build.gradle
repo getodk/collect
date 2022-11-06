@@ -2,14 +2,14 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 
         maven {
             url "https://plugins.gradle.org/m2/"
         }
     }
 
-    ext.kotlin_version = '1.4.30'
+    ext.kotlin_version = '1.6.0'
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.3'
@@ -26,7 +26,7 @@ allprojects {
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()
 
-        jcenter()
+        mavenCentral()
         maven { url 'https://oss.sonatype.org/content/groups/public' }
         maven { url 'https://jitpack.io' }
         maven {
@@ -46,6 +46,11 @@ allprojects {
                 // Use the secret token you stored in gradle.properties as the password
                 password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
             }
+        }
+
+        // Local repo for dependencies that only existed in the defunct JCenter repo
+        maven {
+            url "${rootDir}/jcenter-local-m2"
         }
 
     }
@@ -89,7 +94,7 @@ ext {
 
     fragmentVersion = '1.3.6'
     daggerVersion = '2.40'
-    okhttp3Version = '4.9.2'
+    okhttp3Version = '4.10.0'
     timberVersion = '4.7.1'
     materialVersion = '1.3.0'
     coreKtxVersion = '1.3.2'
