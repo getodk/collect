@@ -19,14 +19,17 @@ class AutoSendSettingsProviderTest {
     private val projectId = Project.DEMO_PROJECT_NAME
 
     @Test
-    fun `return false when networkInfo is null`() {
-        val autoSendSettingsProvider = setupAutoSendSettingProvider(networkInfo = null)
+    fun `return false when autosend is disabled in settings and network is not available`() {
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
+            autoSendOption = "off",
+            networkType = null
+        )
 
         assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
     }
 
     @Test
-    fun `return false when autosend is disabled in settings`() {
+    fun `return false when autosend is disabled in settings and network type is wifi`() {
         val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "off",
             networkType = ConnectivityManager.TYPE_WIFI
@@ -36,7 +39,27 @@ class AutoSendSettingsProviderTest {
     }
 
     @Test
-    fun `return false when autosend is enabled for wifi only but network type is cellular`() {
+    fun `return false when autosend is disabled in settings and network type is cellular`() {
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
+            autoSendOption = "off",
+            networkType = ConnectivityManager.TYPE_MOBILE
+        )
+
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
+    }
+
+    @Test
+    fun `return false when autosend is enabled for 'wifi_only' and network is not available`() {
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
+            autoSendOption = "wifi_only",
+            networkType = null
+        )
+
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
+    }
+
+    @Test
+    fun `return false when autosend is enabled for 'wifi_only' and network type is cellular`() {
         val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_only",
             networkType = ConnectivityManager.TYPE_MOBILE
@@ -46,7 +69,7 @@ class AutoSendSettingsProviderTest {
     }
 
     @Test
-    fun `return true when autosend is enabled for wifi only and network type is wifi`() {
+    fun `return true when autosend is enabled for 'wifi_only' and network type is wifi`() {
         val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_only",
             networkType = ConnectivityManager.TYPE_WIFI
@@ -56,7 +79,17 @@ class AutoSendSettingsProviderTest {
     }
 
     @Test
-    fun `return false when autosend is enabled for cellular only but network type is wifi`() {
+    fun `return false when autosend is enabled for 'cellular_only' and network is not available`() {
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
+            autoSendOption = "cellular_only",
+            networkType = null
+        )
+
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
+    }
+
+    @Test
+    fun `return false when autosend is enabled for 'cellular_only' and network type is wifi`() {
         val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "cellular_only",
             networkType = ConnectivityManager.TYPE_WIFI
@@ -66,7 +99,7 @@ class AutoSendSettingsProviderTest {
     }
 
     @Test
-    fun `return true when autosend is enabled for cellular only and network type is cellular`() {
+    fun `return true when autosend is enabled for 'cellular_only' and network type is cellular`() {
         val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "cellular_only",
             networkType = ConnectivityManager.TYPE_MOBILE
@@ -76,7 +109,17 @@ class AutoSendSettingsProviderTest {
     }
 
     @Test
-    fun `return true when autosend is enabled for wifi and cellular and network type is wifi`() {
+    fun `return false when autosend is enabled for 'wifi_and_cellular' and network is not available`() {
+        val autoSendSettingsProvider = setupAutoSendSettingProvider(
+            autoSendOption = "wifi_and_cellular",
+            networkType = null
+        )
+
+        assertFalse(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId))
+    }
+
+    @Test
+    fun `return true when autosend is enabled for 'wifi_and_cellular' and network type is wifi`() {
         val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_and_cellular",
             networkType = ConnectivityManager.TYPE_WIFI
@@ -86,7 +129,7 @@ class AutoSendSettingsProviderTest {
     }
 
     @Test
-    fun `return true when autosend is enabled for wifi and cellular and network type is cellular`() {
+    fun `return true when autosend is enabled for 'wifi_and_cellular' and network type is cellular`() {
         val autoSendSettingsProvider = setupAutoSendSettingProvider(
             autoSendOption = "wifi_and_cellular",
             networkType = ConnectivityManager.TYPE_MOBILE
@@ -97,11 +140,13 @@ class AutoSendSettingsProviderTest {
 
     private fun setupAutoSendSettingProvider(
         autoSendOption: String? = null,
-        networkType: Int? = null,
-        networkInfo: NetworkInfo? = mock()
+        networkType: Int? = null
     ): AutoSendSettingsProvider {
+        var networkInfo: NetworkInfo? = null
         networkType?.let {
-            whenever(networkInfo?.type).thenReturn(networkType)
+            networkInfo = mock<NetworkInfo>().also {
+                whenever(it.type).thenReturn(networkType)
+            }
         }
         whenever(networkStateProvider.networkInfo).thenReturn(networkInfo)
         settingsProvider.getUnprotectedSettings(projectId).save(ProjectKeys.KEY_AUTOSEND, autoSendOption)
