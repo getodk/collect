@@ -5,6 +5,7 @@ import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
+import org.odk.collect.android.BuildConfig.APPLICATION_ID
 import org.odk.collect.android.external.AndroidShortcutsActivity
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -66,10 +67,12 @@ class CollectTestRule @JvmOverloads constructor(
     }
 
     private fun getLaunchIntent(): Intent {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val intent = context.packageManager.getLaunchIntentForPackage("org.odk.collect.android")
-        intent!!.addCategory(Intent.CATEGORY_LAUNCHER)
-
-        return intent
+        return ApplicationProvider
+            .getApplicationContext<Context>()
+            .packageManager
+            .getLaunchIntentForPackage(APPLICATION_ID)!!
+            .apply {
+                this.addCategory(Intent.CATEGORY_LAUNCHER)
+            }
     }
 }
