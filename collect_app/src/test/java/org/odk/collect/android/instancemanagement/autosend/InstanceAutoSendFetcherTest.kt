@@ -22,49 +22,62 @@ class InstanceAutoSendFetcherTest {
     private val instancesRepository = InMemInstancesRepository()
     private val formsRepository = InMemFormsRepository()
 
-    private val formWithAutoSend = buildForm("1", "1", createTempDir().absolutePath, autosend = "true").build()
+    private val formWithEnabledAutoSend = buildForm("1", "1", createTempDir().absolutePath, autosend = "true").build()
 
-    private val instanceOfFormWithAutoSendIncomplete = buildInstance("1", "1", "instance 1", Instance.STATUS_INCOMPLETE, null, createTempDir().absolutePath).build()
-    private val instanceOfFormWithAutoSendComplete = buildInstance("1", "1", "instance 2", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
-    private val instanceOfFormWithAutoSendSubmissionFailed = buildInstance("1", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
-    private val instanceOfFormWithAutoSendSubmitted = buildInstance("1", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithEnabledAutoSendIncomplete = buildInstance("1", "1", "instance 1", Instance.STATUS_INCOMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithEnabledAutoSendComplete = buildInstance("1", "1", "instance 2", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithEnabledAutoSendSubmissionFailed = buildInstance("1", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithEnabledAutoSendSubmitted = buildInstance("1", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
 
-    private val formWithoutAutoSend = buildForm("2", "1", createTempDir().absolutePath).build()
+    private val formWithoutSpecifiedAutoSend = buildForm("2", "1", createTempDir().absolutePath).build()
 
-    private val instanceOfFormWithoutAutoSendIncomplete = buildInstance("2", "1", "instance 1", Instance.STATUS_INCOMPLETE, null, createTempDir().absolutePath).build()
-    private val instanceOfFormWithoutAutoSendComplete = buildInstance("2", "1", "instance 2", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
-    private val instanceOfFormWithoutAutoSendSubmissionFailed = buildInstance("2", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
-    private val instanceOfFormWithoutAutoSendSubmitted = buildInstance("2", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithoutSpecifiedAutoSendIncomplete = buildInstance("2", "1", "instance 1", Instance.STATUS_INCOMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithoutSpecifiedAutoSendComplete = buildInstance("2", "1", "instance 2", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed = buildInstance("2", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithoutSpecifiedAutoSendSubmitted = buildInstance("2", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
+
+    private val formWithDisabledAutoSend = buildForm("3", "1", createTempDir().absolutePath, autosend = "false").build()
+
+    private val instanceOfFormWithDisabledAutoSendIncomplete = buildInstance("3", "1", "instance 1", Instance.STATUS_INCOMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithDisabledAutoSendComplete = buildInstance("3", "1", "instance 2", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithDisabledAutoSendSubmissionFailed = buildInstance("3", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithDisabledAutoSendSubmitted = buildInstance("3", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
 
     @Before
     fun setup() {
-        formsRepository.save(formWithAutoSend)
-        formsRepository.save(formWithoutAutoSend)
+        formsRepository.save(formWithEnabledAutoSend)
+        formsRepository.save(formWithoutSpecifiedAutoSend)
+        formsRepository.save(formWithDisabledAutoSend)
 
         instancesRepository.apply {
-            save(instanceOfFormWithAutoSendIncomplete)
-            save(instanceOfFormWithAutoSendComplete)
-            save(instanceOfFormWithAutoSendSubmissionFailed)
-            save(instanceOfFormWithAutoSendSubmitted)
+            save(instanceOfFormWithEnabledAutoSendIncomplete)
+            save(instanceOfFormWithEnabledAutoSendComplete)
+            save(instanceOfFormWithEnabledAutoSendSubmissionFailed)
+            save(instanceOfFormWithEnabledAutoSendSubmitted)
 
-            save(instanceOfFormWithoutAutoSendIncomplete)
-            save(instanceOfFormWithoutAutoSendComplete)
-            save(instanceOfFormWithoutAutoSendSubmissionFailed)
-            save(instanceOfFormWithoutAutoSendSubmitted)
+            save(instanceOfFormWithoutSpecifiedAutoSendIncomplete)
+            save(instanceOfFormWithoutSpecifiedAutoSendComplete)
+            save(instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed)
+            save(instanceOfFormWithoutSpecifiedAutoSendSubmitted)
+
+            save(instanceOfFormWithDisabledAutoSendIncomplete)
+            save(instanceOfFormWithDisabledAutoSendComplete)
+            save(instanceOfFormWithDisabledAutoSendSubmissionFailed)
+            save(instanceOfFormWithDisabledAutoSendSubmitted)
         }
     }
 
     @Test
-    fun `when autosend enabled in settings return all finalized forms`() {
+    fun `when autosend enabled in settings return all finalized instances of forms that do not have auto send disabled ona a form level`() {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(true)
 
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
 
         assertThat(instancesToSend.size, `is`(4))
-        assertTrue(instancesToSend.contains(instanceOfFormWithAutoSendComplete))
-        assertTrue(instancesToSend.contains(instanceOfFormWithAutoSendSubmissionFailed))
-        assertTrue(instancesToSend.contains(instanceOfFormWithoutAutoSendComplete))
-        assertTrue(instancesToSend.contains(instanceOfFormWithoutAutoSendSubmissionFailed))
+        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendComplete))
+        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendSubmissionFailed))
+        assertTrue(instancesToSend.contains(instanceOfFormWithoutSpecifiedAutoSendComplete))
+        assertTrue(instancesToSend.contains(instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed))
     }
 
     @Test
@@ -74,7 +87,7 @@ class InstanceAutoSendFetcherTest {
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
 
         assertThat(instancesToSend.size, `is`(2))
-        assertTrue(instancesToSend.contains(instanceOfFormWithAutoSendComplete))
-        assertTrue(instancesToSend.contains(instanceOfFormWithAutoSendSubmissionFailed))
+        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendComplete))
+        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendSubmissionFailed))
     }
 }

@@ -10,7 +10,11 @@ class InstanceAutoSendFetcher(private val autoSendSettingsProvider: AutoSendSett
         val allFinalizedForms = instancesRepository.getAllByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)
 
         return if (autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)) {
-            allFinalizedForms
+            allFinalizedForms.filter {
+                formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
+                    form.autoSend != "false"
+                } ?: false
+            }
         } else {
             allFinalizedForms.filter {
                 formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
