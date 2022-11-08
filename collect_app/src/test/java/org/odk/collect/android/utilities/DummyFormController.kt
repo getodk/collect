@@ -11,7 +11,9 @@ import org.odk.collect.android.formentry.audit.AuditEventLogger
 import org.odk.collect.android.javarosawrapper.FailedConstraint
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.javarosawrapper.InstanceMetadata
+import org.odk.collect.entities.Entity
 import java.io.File
+import java.util.stream.Stream
 
 open class DummyFormController : FormController {
     override fun getFormDef(): FormDef? = null
@@ -54,7 +56,7 @@ open class DummyFormController : FormController {
 
     override fun getCaptionPrompt(index: FormIndex?): FormEntryCaption? = null
 
-    override fun postProcessInstance(): Boolean = false
+    override fun finalizeForm() {}
 
     override fun usesDatabaseExternalDataFeature(index: FormIndex): Boolean = false
 
@@ -142,4 +144,6 @@ open class DummyFormController : FormController {
     override fun currentFormCollectsBackgroundLocation(): Boolean = false
 
     override fun getAnswer(treeReference: TreeReference?): IAnswerData? = null
+
+    override fun getEntities(): Stream<Entity> = Stream.empty()
 }
