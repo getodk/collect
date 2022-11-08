@@ -9,10 +9,10 @@ import org.javarosa.form.api.FormEntryCaption
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.exception.JavaRosaException
 import org.odk.collect.android.formentry.audit.AuditEventLogger
+import org.odk.collect.entities.Entity
 import java.io.File
 import java.io.IOException
 import java.util.stream.Stream
-import org.odk.collect.entities.Entity
 
 interface FormController {
     fun getFormDef(): FormDef?
