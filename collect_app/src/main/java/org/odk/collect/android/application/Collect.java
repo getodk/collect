@@ -43,6 +43,11 @@ import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
+import org.odk.collect.entities.DaggerEntitiesDependencyComponent;
+import org.odk.collect.entities.EntitiesDependencyComponent;
+import org.odk.collect.entities.EntitiesDependencyComponentProvider;
+import org.odk.collect.entities.EntitiesDependencyModule;
+import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
@@ -76,13 +81,14 @@ public class Collect extends Application implements
         GeoDependencyComponentProvider,
         OsmDroidDependencyComponentProvider,
         StateStore,
-        ObjectProviderHost {
+        ObjectProviderHost,
+        EntitiesDependencyComponentProvider {
 
     public static String defaultSysLanguage;
     private static Collect singleton;
 
     private final AppState appState = new AppState();
-    private final SupplierObjectProvider mapboxDependencies = new SupplierObjectProvider();
+    private final SupplierObjectProvider objectProvider = new SupplierObjectProvider();
 
     private ExternalDataManager externalDataManager;
     private AppDependencyComponent applicationComponent;
@@ -97,6 +103,7 @@ public class Collect extends Application implements
     private ProjectsDependencyComponent projectsDependencyComponent;
     private GeoDependencyComponent geoDependencyComponent;
     private OsmDroidDependencyComponent osmDroidDependencyComponent;
+    private EntitiesDependencyComponent entitiesDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -172,9 +179,10 @@ public class Collect extends Application implements
                 .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent.projectsRepository()))
                 .build();
 
-        mapboxDependencies.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
-        mapboxDependencies.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
-        mapboxDependencies.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
+        // Mapbox dependencies
+        objectProvider.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
+        objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
+        objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
     }
 
     @NotNull
@@ -288,7 +296,26 @@ public class Collect extends Application implements
 
     @NonNull
     @Override
-    public ObjectProvider getMultiClassProvider() {
-        return mapboxDependencies;
+    public ObjectProvider getObjectProvider() {
+        return objectProvider;
+    }
+
+    @NonNull
+    @Override
+    public EntitiesDependencyComponent getEntitiesDependencyComponent() {
+        if (entitiesDependencyComponent == null) {
+            entitiesDependencyComponent = DaggerEntitiesDependencyComponent.builder()
+                    .entitiesDependencyModule(new EntitiesDependencyModule() {
+                        @NonNull
+                        @Override
+                        public EntitiesRepository providesEntitiesRepository() {
+                            String projectId = applicationComponent.currentProjectProvider().getCurrentProject().getUuid();
+                            return applicationComponent.entitiesRepositoryProvider().get(projectId);
+                        }
+                    })
+                    .build();
+        }
+
+        return entitiesDependencyComponent;
     }
 }

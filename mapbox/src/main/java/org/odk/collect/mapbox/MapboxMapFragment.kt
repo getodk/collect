@@ -109,11 +109,11 @@ class MapboxMapFragment :
     private var hasCenter = false
 
     private val settingsProvider: SettingsProvider by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(SettingsProvider::class.java)
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(SettingsProvider::class.java)
     }
 
     private val referenceLayerRepository: ReferenceLayerRepository by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(ReferenceLayerRepository::class.java)
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(ReferenceLayerRepository::class.java)
     }
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {

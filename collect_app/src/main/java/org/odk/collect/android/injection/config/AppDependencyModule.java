@@ -51,6 +51,7 @@ import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.draw.PenColorPickerViewModel;
+import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.formentry.AppStateFormSessionRepository;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -384,7 +385,13 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository) {
+    @Singleton
+    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Application application) {
+        return new EntitiesRepositoryProvider(application);
+    }
+
+    @Provides
+    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
         return new FormSaveViewModel.FactoryFactory() {
 
             private LiveData<FormController> formSession;
@@ -400,7 +407,7 @@ public class AppDependencyModule {
                     @NonNull
                     @Override
                     protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-                        return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider, formSession);
+                        return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepositoryProvider.get(currentProjectProvider.getCurrentProject().getUuid()));
                     }
                 };
             }

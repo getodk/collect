@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.google.common.io.Files;
 
+import org.javarosa.xform.parse.XFormParser;
 import org.junit.Test;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormListItem;
@@ -361,7 +362,7 @@ public class ServerFormDownloaderTest {
 
         FormMetadataParser formMetadataParser = new FormMetadataParser() {
             @Override
-            public Map<String, String> parse(File file, File mediaDir) {
+            public Map<String, String> parse(File file, File mediaDir) throws XFormParser.ParseException {
                 File[] mediaFiles = mediaDir.listFiles();
                 assertThat(mediaFiles.length, is(2));
                 assertThat(stream(mediaFiles).map(File::getName).collect(toList()), containsInAnyOrder("file1", "file2"));

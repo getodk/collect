@@ -57,6 +57,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -86,6 +87,7 @@ public class SaveFormToDisk {
     private final Analytics analytics;
     private final ArrayList<String> tempFiles;
     private final String currentProjectId;
+    private final EntitiesRepository entitiesRepository;
 
     public static final int SAVED = 500;
     public static final int SAVE_ERROR = 501;
@@ -93,7 +95,7 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId) {
+                          Uri uri, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
         this.formController = formController;
         this.mediaUtils = mediaUtils;
         this.uri = uri;
@@ -103,6 +105,7 @@ public class SaveFormToDisk {
         this.analytics = analytics;
         this.tempFiles = tempFiles;
         this.currentProjectId = currentProjectId;
+        this.entitiesRepository = entitiesRepository;
     }
 
     @Nullable
@@ -126,7 +129,8 @@ public class SaveFormToDisk {
         }
 
         if (shouldFinalize) {
-            formController.postProcessInstance();
+            formController.finalizeForm();
+            formController.getEntities().forEach(entitiesRepository::save);
         }
 
         // close all open databases of external data.

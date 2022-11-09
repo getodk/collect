@@ -265,6 +265,7 @@ dependencies {
     implementation project(':externalapp')
     implementation project(':maps')
     implementation project(':osmdroid')
+    implementation project(':entities')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')

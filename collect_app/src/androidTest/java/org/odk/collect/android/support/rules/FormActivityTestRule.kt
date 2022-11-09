@@ -21,7 +21,7 @@ class FormActivityTestRule @JvmOverloads constructor(
     private val mediaFilePaths: List<String>? = null
 ) : ActivityScenarioLauncherRule() {
 
-    private var formEntryPage: FormEntryPage? = null
+    private lateinit var formEntryPage: FormEntryPage
 
     override fun before() {
         super.before()
@@ -29,10 +29,10 @@ class FormActivityTestRule @JvmOverloads constructor(
         setUpProjectAndCopyForm()
         launch<Activity>(activityIntent)
         formEntryPage = FormEntryPage(formName)
-        formEntryPage!!.assertOnPage()
+        formEntryPage.assertOnPage()
     }
 
-    fun startInFormEntry(): FormEntryPage? {
+    fun startInFormEntry(): FormEntryPage {
         return formEntryPage
     }
 

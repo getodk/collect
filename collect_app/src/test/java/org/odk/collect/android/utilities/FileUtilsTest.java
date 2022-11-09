@@ -1,6 +1,7 @@
 package org.odk.collect.android.utilities;
 
 import org.hamcrest.Matchers;
+import org.javarosa.xform.parse.XFormParser;
 import org.junit.Test;
 
 import java.io.BufferedWriter;
@@ -29,7 +30,7 @@ public class FileUtilsTest {
         assertEquals(expected, FileUtils.constructMediaPath("sample-file.docx"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withoutSubmission_returnsMetaDataFields() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withoutSubmission_returnsMetaDataFields() throws IOException, XFormParser.ParseException {
         String simpleForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
@@ -62,7 +63,7 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.BASE64_RSA_PUBLIC_KEY), is(nullValue()));
     }
 
-    @Test public void getMetadataFromFormDefinition_withSubmission_returnsMetaDataFields() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withSubmission_returnsMetaDataFields() throws IOException, XFormParser.ParseException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
@@ -105,7 +106,7 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is(nullValue()));
     }
 
-    @Test public void getMetadataFromFormDefinition_withGeopointsAtTopLevel_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withGeopointsAtTopLevel_returnsFirstGeopointBasedOnBodyOrder() throws IOException, XFormParser.ParseException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
@@ -145,7 +146,7 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withGeopointInGroup_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withGeopointInGroup_returnsFirstGeopointBasedOnBodyOrder() throws IOException, XFormParser.ParseException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
@@ -187,7 +188,7 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/my-group/location1"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withGeopointInRepeat_returnsFirstGeopointBasedOnBodyOrder() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withGeopointInRepeat_returnsFirstGeopointBasedOnBodyOrder() throws IOException, XFormParser.ParseException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns=\"http://www.w3.org/2002/xforms\">\n" +
@@ -228,7 +229,7 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location2"));
     }
 
-    @Test public void getMetadataFromFormDefinition_withSetGeopointBeforeBodyGeopoint_returnsFirstGeopointInInstance() throws IOException {
+    @Test public void getMetadataFromFormDefinition_withSetGeopointBeforeBodyGeopoint_returnsFirstGeopointInInstance() throws IOException, XFormParser.ParseException {
         String submissionForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +
                 "    xmlns:odk=\"http://www.opendatakit.org/xforms\"\n" +
@@ -266,7 +267,7 @@ public class FileUtilsTest {
         assertThat(metadataFromFormDefinition.get(FileUtils.GEOMETRY_XPATH), is("/data/location1"));
     }
 
-    @Test public void whenFormVersionIsEmpty_shouldBeTreatedAsNull() throws IOException {
+    @Test public void whenFormVersionIsEmpty_shouldBeTreatedAsNull() throws IOException, XFormParser.ParseException {
         String simpleForm = "<?xml version=\"1.0\"?>\n" +
                 "<h:html xmlns=\"http://www.w3.org/2002/xforms\"\n" +
                 "        xmlns:h=\"http://www.w3.org/1999/xhtml\"\n" +

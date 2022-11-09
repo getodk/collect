@@ -227,5 +227,14 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFillBlankForm()
                 .pressBack(new MainMenuPage());
     }
+
+    public EntitiesPage openEntityBrowser() {
+        openProjectSettingsDialog()
+                .clickSettings()
+                .clickExperimental()
+                .clickOnString(R.string.entities_title);
+
+        return new EntitiesPage().assertOnPage();
+    }
 }
 

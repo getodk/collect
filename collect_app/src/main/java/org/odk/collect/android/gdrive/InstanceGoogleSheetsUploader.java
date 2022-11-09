@@ -32,6 +32,7 @@ import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.util.PropertyUtils;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
+import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -295,7 +296,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         try {
             formDef = XFormUtils.getFormFromFormXml(formFilePath, lastSavedSrc);
             FormLoaderTask.importData(instanceFile, new FormEntryController(new FormEntryModel(formDef)));
-        } catch (IOException | RuntimeException e) {
+        } catch (IOException | RuntimeException | XFormParser.ParseException e) {
             throw new FormUploadException(e);
         }
         return formDef.getMainInstance().getRoot();

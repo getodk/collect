@@ -9,8 +9,10 @@ import org.javarosa.form.api.FormEntryCaption
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.exception.JavaRosaException
 import org.odk.collect.android.formentry.audit.AuditEventLogger
+import org.odk.collect.entities.Entity
 import java.io.File
 import java.io.IOException
+import java.util.stream.Stream
 
 interface FormController {
     fun getFormDef(): FormDef?
@@ -92,7 +94,7 @@ interface FormController {
      * This fires off the jr:preload actions and events to save values like the
      * end time of a form.
      */
-    fun postProcessInstance(): Boolean
+    fun finalizeForm()
 
     /**
      * Returns true if the question at the given FormIndex uses the search() appearance/function
@@ -328,4 +330,6 @@ interface FormController {
     fun currentFormCollectsBackgroundLocation(): Boolean
 
     fun getAnswer(treeReference: TreeReference?): IAnswerData?
+
+    fun getEntities(): Stream<Entity>
 }

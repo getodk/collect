@@ -12,6 +12,8 @@ object Dependencies {
     const val androidx_browser = "androidx.browser:browser:1.4.0"
     const val androidx_recyclerview = "androidx.recyclerview:recyclerview:1.2.1"
     const val androidx_fragment = "androidx.fragment:fragment:${Versions.androidx_fragment}"
+    const val androidx_navigation_fragment_ktx = "androidx.navigation:navigation-fragment-ktx:2.5.2"
+    const val androidx_navigation_ui = "androidx.navigation:navigation-ui-ktx:2.5.2"
     const val androidx_appcompat = "androidx.appcompat:appcompat:1.4.2"
     const val androidx_work_runtime = "androidx.work:work-runtime:${Versions.work}"
     const val androidx_cardview = "androidx.cardview:cardview:1.0.0"
@@ -40,7 +42,7 @@ object Dependencies {
     const val rarepebble_colorpicker = "com.github.martin-stone:hsv-alpha-color-picker-android:3.0.1"
     const val commons_io = "commons-io:commons-io:2.5" // Commons 2.6+ introduce java.nio usage that we can't access until our minSdkVersion >= 26 (https://developer.android.com/reference/java/io/File#toPath())
     const val opencsv = "com.opencsv:opencsv:5.6"
-    const val javarosa = "org.getodk:javarosa:3.5.0"
+    const val javarosa = "org.getodk:javarosa:4.0.0-SNAPSHOT"
     const val javarosa_local = "org.getodk:javarosa:local"
     const val karumi_dexter = "com.karumi:dexter:6.2.3"
     const val zxing_android_embedded = "com.journeyapps:zxing-android-embedded:4.3.0"

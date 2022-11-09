@@ -34,6 +34,7 @@ import org.javarosa.core.model.actions.setgeopoint.SetGeopointActionHandler;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
@@ -166,7 +167,7 @@ public final class FileUtils {
      * If the form definition contains a submission block, any or all of submission URI, base 64 RSA
      * public key, auto-delete and auto-send may be included.
      */
-    public static HashMap<String, String> getMetadataFromFormDefinition(File formDefinitionXml) {
+    public static HashMap<String, String> getMetadataFromFormDefinition(File formDefinitionXml) throws XFormParser.ParseException {
         FormDef formDef = XFormUtils.getFormFromFormXml(formDefinitionXml.getAbsolutePath(), "jr://file/" + LAST_SAVED_FILENAME);
 
         final HashMap<String, String> fields = new HashMap<>();

@@ -30,6 +30,7 @@ import org.odk.collect.android.configure.qr.QRCodeTabsActivity;
 import org.odk.collect.android.configure.qr.ShowQRCodeFragment;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.draw.PenColorPickerDialog;
+import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.AndroidShortcutsActivity;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.FormsProvider;
@@ -340,4 +341,6 @@ public interface AppDependencyComponent {
     ReferenceLayerRepository referenceLayerRepository();
 
     NetworkStateProvider networkStateProvider();
+
+    EntitiesRepositoryProvider entitiesRepositoryProvider();
 }

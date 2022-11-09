@@ -14,10 +14,16 @@
 
 package org.odk.collect.android.tasks;
 
+import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.os.AsyncTask;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -26,6 +32,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
 import org.javarosa.core.reference.ReferenceManager;
+import org.javarosa.entities.EntityFormFinalizationProcessor;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
@@ -58,12 +65,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.FormUtils.setupReferenceManagerForForm;
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 
 /**
  * Background task for loading a form.
@@ -177,6 +178,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         // create FormEntryController from formdef
         final FormEntryModel fem = new FormEntryModel(formDef);
         final FormEntryController fec = new FormEntryController(fem);
+        fec.addPostProcessor(new EntityFormFinalizationProcessor());
 
         boolean usedSavepoint = false;
 
@@ -223,7 +225,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         return data;
     }
 
-    private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) {
+    private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) throws XFormParser.ParseException {
         publishProgress(
                 getLocalizedString(Collect.getInstance(), R.string.survey_loading_reading_form_message));
 

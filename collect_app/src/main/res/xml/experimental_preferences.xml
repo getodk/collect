@@ -2,4 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/experimental">
 
+    <Preference
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/entities_title"
+        android:key="entities"
+        app:persistent="false"/>
+
 </PreferenceScreen>

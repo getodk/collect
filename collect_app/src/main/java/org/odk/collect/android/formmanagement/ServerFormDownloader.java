@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 
+import org.javarosa.xform.parse.XFormParser;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormNameUtils;
@@ -119,7 +120,7 @@ public class ServerFormDownloader implements FormDownloader {
                         .parse(fileResult.file, new File(tempMediaPath));
 
                 Timber.i("Parse finished in %.3f seconds.", (System.currentTimeMillis() - start) / 1000F);
-            } catch (RuntimeException e) {
+            } catch (RuntimeException | XFormParser.ParseException e) {
                 throw new FormDownloadException.FormParsingError();
             }
         }

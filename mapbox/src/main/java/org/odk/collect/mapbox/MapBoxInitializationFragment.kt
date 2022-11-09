@@ -20,11 +20,11 @@ import org.odk.collect.shared.injection.ObjectProviderHost
 class MapBoxInitializationFragment : Fragment() {
 
     private val settingsProvider: SettingsProvider by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(SettingsProvider::class.java)
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(SettingsProvider::class.java)
     }
 
     private val connectivityProvider: NetworkStateProvider by lazy {
-        (requireActivity().applicationContext as ObjectProviderHost).getMultiClassProvider().provide(NetworkStateProvider::class.java)
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(NetworkStateProvider::class.java)
     }
 
     override fun onAttach(context: Context) {
