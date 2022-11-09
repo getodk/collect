@@ -46,7 +46,8 @@ object FormUtils {
         formId: String,
         version: String?,
         formFilesPath: String,
-        xform: String = createXFormBody(formId, version)
+        xform: String = createXFormBody(formId, version),
+        autosend: String? = null
     ): Form.Builder {
         val fileName = formId + "-" + version + "-" + Math.random()
         val formFile = File("$formFilesPath/$fileName.xml")
@@ -62,5 +63,6 @@ object FormUtils {
             .formFilePath(formFile.absolutePath)
             .formId(formId)
             .version(version)
+            .autoSend(autosend)
     }
 }
