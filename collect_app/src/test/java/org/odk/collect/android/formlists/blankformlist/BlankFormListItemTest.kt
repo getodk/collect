@@ -17,16 +17,7 @@ class BlankFormListItemTest {
 
     @Test
     fun `Form should be properly converted to BlankFormListItem`() {
-        val form0 = Form.Builder()
-            .dbId(0)
-            .formId("0")
-            .displayName("Sample form A")
-            .version("1")
-            .geometryXpath("blah")
-            .date(1665742651521)
-            .build()
-
-        val form1 = Form.Builder()
+        val form = Form.Builder()
             .dbId(1)
             .formId("1")
             .displayName("Sample form B")
@@ -37,37 +28,21 @@ class BlankFormListItemTest {
 
         instancesRepository.save(
             Instance.Builder()
-                .formId(form0.formId)
-                .formVersion(form0.version)
-                .lastStatusChangeDate(5)
-                .build()
-        )
-
-        instancesRepository.save(
-            Instance.Builder()
-                .formId(form1.formId)
-                .formVersion(form1.version)
+                .formId(form.formId)
+                .formVersion(form.version)
                 .lastStatusChangeDate(3)
                 .build()
         )
 
-        instancesRepository.save(
-            Instance.Builder()
-                .formId(form1.formId)
-                .formVersion(form1.version)
-                .lastStatusChangeDate(4)
-                .build()
-        )
+        val blankFormListItem = form.toBlankFormListItem(Project.DEMO_PROJECT_ID, instancesRepository)
 
-        val blankFormListItem = form1.toBlankFormListItem(Project.DEMO_PROJECT_ID, instancesRepository)
-
-        assertThat(blankFormListItem.databaseId, `is`(form1.dbId))
-        assertThat(blankFormListItem.formId, `is`(form1.formId))
-        assertThat(blankFormListItem.formName, `is`(form1.displayName))
-        assertThat(blankFormListItem.formVersion, `is`(form1.version))
-        assertThat(blankFormListItem.geometryPath, `is`(form1.geometryXpath))
-        assertThat(blankFormListItem.dateOfCreation, `is`(form1.date))
-        assertThat(blankFormListItem.dateOfLastUsage, `is`(4L))
+        assertThat(blankFormListItem.databaseId, `is`(form.dbId))
+        assertThat(blankFormListItem.formId, `is`(form.formId))
+        assertThat(blankFormListItem.formName, `is`(form.displayName))
+        assertThat(blankFormListItem.formVersion, `is`(form.version))
+        assertThat(blankFormListItem.geometryPath, `is`(form.geometryXpath))
+        assertThat(blankFormListItem.dateOfCreation, `is`(form.date))
+        assertThat(blankFormListItem.dateOfLastUsage, `is`(3L))
         assertThat(blankFormListItem.contentUri, `is`(Uri.parse("content://org.odk.collect.android.provider.odk.forms/forms/1?projectId=DEMO")))
     }
 
