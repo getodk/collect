@@ -1,22 +1,22 @@
 package org.odk.collect.crash_handler
 
 import android.content.Context
-import android.view.View
+import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.TextView
+import org.odk.collect.crash_handler.databinding.CrashLayoutBinding
 
 class CrashView(context: Context) : FrameLayout(context) {
 
     private var onErrorDismissed: Runnable? = null
+    private val binding = CrashLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
-        inflate(context, R.layout.crash_layout, this)
-        findViewById<View>(R.id.ok_button).setOnClickListener { dismiss() }
+        binding.okButton.setOnClickListener { dismiss() }
     }
 
     fun setCrash(title: String, message: String?, onErrorDismissed: Runnable? = null) {
-        findViewById<TextView>(R.id.title).text = title
-        findViewById<TextView>(R.id.message).text = message
+        binding.title.text = title
+        binding.message.text = message
         this.onErrorDismissed = onErrorDismissed
     }
 

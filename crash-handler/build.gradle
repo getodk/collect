@@ -40,6 +40,10 @@ android {
         }
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     namespace 'org.odk.collect.crash_handler'
 }
 
