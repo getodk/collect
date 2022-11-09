@@ -63,7 +63,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         @JvmStatic
         fun install(context: Context): CrashHandler {
             val crashHandler = CrashHandler()
-            wrapUncaughExceptionHandler(crashHandler, context)
+            wrapUncaughtExceptionHandler(crashHandler, context)
 
             return crashHandler.also {
                 context.getState().set(KEY_INSTANCE, it)
@@ -75,7 +75,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             return context.getState().get<CrashHandler>(KEY_INSTANCE)
         }
 
-        private fun wrapUncaughExceptionHandler(
+        private fun wrapUncaughtExceptionHandler(
             crashHandler: CrashHandler,
             context: Context,
         ) {
