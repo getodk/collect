@@ -6,6 +6,8 @@ import kotlin.system.exitProcess
 
 class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
 
+    var createMockViews = false
+
     private var conditionFailure: String? = null
 
     fun registerCrash(context: Context, crash: Throwable) {
@@ -33,7 +35,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         return if (conditionFailure != null) {
             val crashMessage = conditionFailure
 
-            CrashView(context).also {
+            createCrashView(context).also {
                 it.setCrash(context.getString(R.string.cant_start_app), crashMessage) {
                     processKiller.run()
                 }
@@ -41,7 +43,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         } else if (preferences.contains(KEY_CRASH)) {
             val crashMessage = preferences.getString(KEY_CRASH, null)
 
-            CrashView(context).also {
+            createCrashView(context).also {
                 it.setCrash(context.getString(R.string.crash_last_run), crashMessage) {
                     preferences.edit().remove(KEY_CRASH).apply()
                     onErrorDismissed?.run()
@@ -49,6 +51,14 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             }
         } else {
             null
+        }
+    }
+
+    private fun createCrashView(context: Context): CrashView {
+        return if (createMockViews) {
+            MockCrashView(context)
+        } else {
+            CrashView(context)
         }
     }
 
