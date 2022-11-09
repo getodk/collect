@@ -9,6 +9,7 @@ import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
 import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.formentry.saving.FormSaveViewModel.SaveResult.State.CHANGE_REASON_REQUIRED;
@@ -129,6 +130,22 @@ public class FormSaveViewModelTest {
         LiveData<FormSaveViewModel.SaveResult> saveResult = viewModel.getSaveResult();
         viewModel.saveForm(Uri.parse("file://form"), true, "", false);
         assertThat(saveResult.getValue().getState(), equalTo(CHANGE_REASON_REQUIRED));
+    }
+
+    @Test
+    public void saveForm_whenAudioIsRecording_andFormNotExiting_restartsRecording() {
+        when(audioRecorder.isRecording()).thenReturn(true);
+
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+
+        verify(audioRecorder).restart();
+    }
+
+    @Test
+    public void saveForm_whenAudioIsNotRecording_andFormNotExiting_doesNotRestartRecording() {
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+
+        verify(audioRecorder, times(0)).restart();
     }
 
     @Test
