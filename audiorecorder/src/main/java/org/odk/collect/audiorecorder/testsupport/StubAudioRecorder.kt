@@ -65,6 +65,19 @@ class StubAudioRecorder(private val stubRecordingPath: String) : AudioRecorder()
         }
     }
 
+    override fun restart() {
+        if (!isRecording) {
+            if (failOnStart) {
+                currentSession.value = null
+                failedToStart.value = Consumable(Exception())
+            } else {
+                wasCleanedUp = false
+                isRecording = true
+                currentSession.value = currentSession.value?.copy(file = null)
+            }
+        }
+    }
+
     override fun pause() {
         currentSession.value?.let {
             currentSession.value = it.copy(paused = true)

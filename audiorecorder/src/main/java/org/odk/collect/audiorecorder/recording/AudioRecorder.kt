@@ -16,6 +16,7 @@ abstract class AudioRecorder {
     abstract fun failedToStart(): LiveData<Consumable<Exception?>>
 
     abstract fun start(sessionId: Serializable, output: Output)
+    abstract fun restart()
     abstract fun pause()
     abstract fun resume()
     abstract fun stop()
