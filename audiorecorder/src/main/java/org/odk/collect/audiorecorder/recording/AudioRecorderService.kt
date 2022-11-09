@@ -41,15 +41,24 @@ class AudioRecorderService : Service() {
         when (intent?.action) {
             ACTION_START -> {
                 val sessionId = intent.getSerializableExtra(EXTRA_SESSION_ID)
-                val output = intent.getSerializableExtra(EXTRA_OUTPUT) as Output
+                lastUsedOutput = intent.getSerializableExtra(EXTRA_OUTPUT) as Output
 
                 if (!recorder.isRecording() && sessionId != null) {
-                    startRecording(sessionId, output)
+                    startRecording(sessionId, lastUsedOutput)
                 }
             }
 
             ACTION_RESTART -> {
+                val file = recorder.stop()
+                recordingRepository.recordingReady(file)
 
+                try {
+                    recorder.start(lastUsedOutput)
+                    recordingRepository.restart()
+                } catch (e: Exception) {
+                    notification.dismiss()
+                    recordingRepository.failToStart(e)
+                }
             }
 
             ACTION_PAUSE -> {
@@ -149,5 +158,7 @@ class AudioRecorderService : Service() {
 
         const val EXTRA_SESSION_ID = "EXTRA_SESSION_ID"
         const val EXTRA_OUTPUT = "EXTRA_OUTPUT"
+
+        private lateinit var lastUsedOutput: Output
     }
 }

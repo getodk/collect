@@ -23,6 +23,13 @@ internal class RecordingRepository(appState: AppState) {
         _failedToStart.value = Consumable(null)
     }
 
+    fun restart() {
+        _currentSession.value?.let {
+            _currentSession.value = it.copy(file = null)
+        }
+        _failedToStart.value = Consumable(null)
+    }
+
     fun setDuration(duration: Long) {
         _currentSession.value?.let {
             _currentSession.value = it.copy(duration = duration)
