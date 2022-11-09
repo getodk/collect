@@ -39,10 +39,9 @@ public class RecordingHandler {
     public void handle(FormController formController, RecordingSession session, Consumer<Boolean> onRecordingHandled) {
         questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, result -> {
             if (result != null && result.isSuccess()) {
-                audioRecorder.cleanUp();
-
                 try {
                     if (session.getId() instanceof FormIndex) {
+                        audioRecorder.cleanUp();
                         handleForegroundRecording(formController, session, result);
                     } else if (session.getId() instanceof HashSet) {
                         handleBackgroundRecording(formController, session, result);
