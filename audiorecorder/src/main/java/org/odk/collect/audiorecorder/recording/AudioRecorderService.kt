@@ -48,6 +48,10 @@ class AudioRecorderService : Service() {
                 }
             }
 
+            ACTION_RESTART -> {
+
+            }
+
             ACTION_PAUSE -> {
                 if (recorder.isRecording()) {
                     recorder.pause()
@@ -137,6 +141,7 @@ class AudioRecorderService : Service() {
 
     companion object {
         const val ACTION_START = "START"
+        const val ACTION_RESTART = "RESTART"
         const val ACTION_PAUSE = "PAUSE"
         const val ACTION_RESUME = "RESUME"
         const val ACTION_STOP = "STOP"
