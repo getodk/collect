@@ -53,11 +53,12 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
     }
 
     private fun getPreferences(context: Context) =
-        context.getSharedPreferences("crash_handler", Context.MODE_PRIVATE)
+        context.getSharedPreferences(KEY_INSTANCE, Context.MODE_PRIVATE)
 
     companion object {
 
         private const val KEY_CRASH = "crash"
+        private const val KEY_INSTANCE = "crash_handler"
 
         @JvmStatic
         fun install(context: Context): CrashHandler {
@@ -65,13 +66,13 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             wrapUncaughExceptionHandler(crashHandler, context)
 
             return crashHandler.also {
-                context.getState().set("crash_handler", it)
+                context.getState().set(KEY_INSTANCE, it)
             }
         }
 
         @JvmStatic
         fun getInstance(context: Context): CrashHandler? {
-            return context.getState().get<CrashHandler>("crash_handler")
+            return context.getState().get<CrashHandler>(KEY_INSTANCE)
         }
 
         private fun wrapUncaughExceptionHandler(
