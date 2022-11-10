@@ -1,6 +1,7 @@
 package org.odk.collect.crash_handler
 
 import android.content.Context
+import android.content.SharedPreferences
 import org.odk.collect.androidshared.data.getState
 import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
@@ -69,6 +70,11 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         }
     }
 
+    /**
+     * Uses raw [SharedPreferences] instead of [Settings] to keep dependencies to a minimum.
+     * [CrashHandler] might have to work in cases where dependency injection cannot be configured
+     * due to an early crash or conditions check failing.
+     */
     private fun getPreferences(context: Context) =
         context.getSharedPreferences(KEY_INSTANCE, Context.MODE_PRIVATE)
 
