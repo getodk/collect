@@ -2,6 +2,7 @@ package org.odk.collect.crash_handler
 
 import android.content.Context
 import org.odk.collect.androidshared.data.getState
+import java.lang.Thread.UncaughtExceptionHandler
 import kotlin.system.exitProcess
 
 class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(0) }) {
@@ -76,12 +77,19 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         private const val KEY_CRASH = "crash"
         private const val KEY_INSTANCE = "crash_handler"
 
+        private var originalHandler: UncaughtExceptionHandler? = null
+
         @JvmStatic
         fun install(context: Context): CrashHandler {
             return CrashHandler().also {
                 context.getState().set("crash_handler", it)
                 wrapUncaughtExceptionHandler(it, context)
             }
+        }
+
+        @JvmStatic
+        fun uninstall() {
+            Thread.setDefaultUncaughtExceptionHandler(originalHandler)
         }
 
         @JvmStatic
@@ -93,7 +101,14 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             crashHandler: CrashHandler,
             context: Context,
         ) {
-            val defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
+            if (originalHandler != null) {
+                throw IllegalStateException("install() should not be called multiple times without uninstall()!")
+            }
+
+            val defaultUncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler().also {
+                originalHandler = it
+            }
+
             Thread.setDefaultUncaughtExceptionHandler { t, e ->
                 crashHandler.registerCrash(context, e)
                 defaultUncaughtExceptionHandler?.uncaughtException(t, e)
