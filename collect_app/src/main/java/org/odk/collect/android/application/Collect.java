@@ -42,12 +42,12 @@ import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
+import org.odk.collect.crash_handler.CrashHandler;
 import org.odk.collect.entities.DaggerEntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponentProvider;
 import org.odk.collect.entities.EntitiesDependencyModule;
 import org.odk.collect.entities.EntitiesRepository;
-import org.odk.collect.crash_handler.CrashHandler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
@@ -131,19 +131,19 @@ public class Collect extends Application implements
         super.onCreate();
         singleton = this;
 
-        CrashHandler crashHandler = CrashHandler.install(this);
-        boolean shouldLaunch = crashHandler.checkConditions(() -> {
-            ExternalFilesUtils.testExternalFilesAccess(this);
-        });
+        CrashHandler.install(this).launchApp(
+                () -> {
+                    ExternalFilesUtils.testExternalFilesAccess(this);
+                },
+                () -> {
+                    setupDagger();
+                    DaggerUtils.getComponent(this).inject(this);
 
-        if (shouldLaunch) {
-            setupDagger();
-            DaggerUtils.getComponent(this).inject(this);
-
-            applicationComponent.applicationInitializer().initialize();
-            fixGoogleBug154855417();
-            setupStrictMode();
-        }
+                    applicationComponent.applicationInitializer().initialize();
+                    fixGoogleBug154855417();
+                    setupStrictMode();
+                }
+        );
     }
 
     /**

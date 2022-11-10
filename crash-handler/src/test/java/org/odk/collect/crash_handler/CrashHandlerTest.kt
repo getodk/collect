@@ -26,7 +26,7 @@ class CrashHandlerTest {
     @Test
     fun hasCrashed_whenThereAreNoCrashesRegistered_andNoConditionsFailed_returnsFalse() {
         val crashHandler = createCrashHandler()
-        crashHandler.checkConditions { }
+        crashHandler.launchApp({})
         assertThat(crashHandler.hasCrashed(context), equalTo(false))
     }
 
@@ -39,7 +39,7 @@ class CrashHandlerTest {
     @Test
     fun hasCrashed_whenCheckingConditionsFails_returnsTrue() {
         val crashHandler = createCrashHandler()
-        crashHandler.checkConditions { throw RuntimeException() }
+        crashHandler.launchApp({ throw RuntimeException() })
         assertThat(crashHandler.hasCrashed(context), equalTo(true))
     }
 
@@ -98,9 +98,9 @@ class CrashHandlerTest {
     fun getCrashView_whenCheckingConditionsFails_returnsViewWithCrashDetails() {
         val crashHandler = createCrashHandler()
 
-        crashHandler.checkConditions {
+        crashHandler.launchApp({
             throw RuntimeException("blah")
-        }
+        })
 
         val view = crashHandler.getCrashView(context)
         assertThat(
@@ -114,9 +114,9 @@ class CrashHandlerTest {
     fun getCrashView_whenCheckingConditionsFails_andTheOkButtonIsClickedOnTheView_killsTheProcess() {
         val crashHandler = createCrashHandler()
 
-        crashHandler.checkConditions {
+        crashHandler.launchApp({
             throw RuntimeException("blah")
-        }
+        })
 
         val view = crashHandler.getCrashView(context)
         view!!.findViewById<View>(R.id.ok_button).performClick()
@@ -127,9 +127,9 @@ class CrashHandlerTest {
     fun getCrashView_whenCheckingConditionsFails_andTheOkButtonIsClickedOnTheView_doesNotRunErrorDismissedListener() {
         val crashHandler = createCrashHandler()
 
-        crashHandler.checkConditions {
+        crashHandler.launchApp({
             throw RuntimeException("blah")
-        }
+        })
 
         val onErrorDismissed = mock<Runnable>()
         val view = crashHandler.getCrashView(context, onErrorDismissed)
@@ -140,9 +140,9 @@ class CrashHandlerTest {
     @Test
     fun getCrashView_whenCheckConditionFailedInDifferentInstance_returnsNull() {
         val crashHandler = createCrashHandler()
-        crashHandler.checkConditions {
+        crashHandler.launchApp({
             throw RuntimeException("blah")
-        }
+        })
 
         val otherCrashHandler = createCrashHandler()
         assertThat(otherCrashHandler.getCrashView(context), equalTo(null))
@@ -153,9 +153,9 @@ class CrashHandlerTest {
         createCrashHandler().registerCrash(context, RuntimeException())
 
         val crashHandler = createCrashHandler()
-        crashHandler.checkConditions {
+        crashHandler.launchApp({
             throw RuntimeException("blah")
-        }
+        })
 
         val view = crashHandler.getCrashView(context)
         view!!.findViewById<View>(R.id.ok_button).performClick()
@@ -163,15 +163,24 @@ class CrashHandlerTest {
     }
 
     @Test
-    fun checkConditions_whenNothingFails_returnsTrue() {
+    fun launchApp_whenConditionsFail_runsOnSuccess() {
         val crashHandler = createCrashHandler()
-        assertThat(crashHandler.checkConditions { }, equalTo(true))
+
+        val onSuccess = mock<Runnable>()
+        crashHandler.launchApp(conditionsCheck = { }, onSuccess = onSuccess)
+        verify(onSuccess).run()
     }
 
     @Test
-    fun checkConditions_whenSomethingFails_returnsFalse() {
+    fun launchApp_whenSomethingFails_doesNotRunOnSuccess() {
         val crashHandler = createCrashHandler()
-        assertThat(crashHandler.checkConditions { throw RuntimeException() }, equalTo(false))
+
+        val onSuccess = mock<Runnable>()
+        crashHandler.launchApp(
+            conditionsCheck = { throw RuntimeException() },
+            onSuccess = onSuccess
+        )
+        verify(onSuccess, never()).run()
     }
 
     private fun createCrashHandler() = CrashHandler(processKiller)

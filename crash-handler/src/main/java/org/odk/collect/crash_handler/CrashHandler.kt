@@ -10,18 +10,14 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
 
     private var conditionFailure: String? = null
 
-    fun registerCrash(context: Context, crash: Throwable) {
-        getPreferences(context).edit().putString(KEY_CRASH, crash.message ?: "").apply()
+    fun launchApp(conditionsCheck: Runnable, onSuccess: Runnable? = null) {
+        if (checkConditions(conditionsCheck)) {
+            onSuccess?.run()
+        }
     }
 
-    fun checkConditions(runnable: Runnable): Boolean {
-        return try {
-            runnable.run()
-            true
-        } catch (t: Throwable) {
-            conditionFailure = t.message ?: ""
-            false
-        }
+    fun registerCrash(context: Context, crash: Throwable) {
+        getPreferences(context).edit().putString(KEY_CRASH, crash.message ?: "").apply()
     }
 
     fun hasCrashed(context: Context): Boolean {
@@ -51,6 +47,16 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             }
         } else {
             null
+        }
+    }
+
+    private fun checkConditions(runnable: Runnable): Boolean {
+        return try {
+            runnable.run()
+            true
+        } catch (t: Throwable) {
+            conditionFailure = t.message ?: ""
+            false
         }
     }
 
