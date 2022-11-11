@@ -16,14 +16,15 @@ package org.odk.collect.android.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import androidx.annotation.NonNull;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
@@ -34,14 +35,12 @@ import timber.log.Timber;
 
 public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.ViewHolder> {
     private final RecyclerViewClickListener listener;
-    private final int selectedSortingOrder;
-    private final RecyclerView recyclerView;
+    private int selectedSortingOrder;
     private final ThemeUtils themeUtils;
     private final int[] sortList;
 
-    public SortDialogAdapter(Context context, RecyclerView recyclerView, int[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
+    public SortDialogAdapter(Context context, int[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
         themeUtils = new ThemeUtils(context);
-        this.recyclerView = recyclerView;
         this.sortList = sortList;
         this.selectedSortingOrder = selectedSortingOrder;
         listener = recyclerViewClickListener;
@@ -77,6 +76,11 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         return sortList.length;
     }
 
+    public void updateSelectedPosition(int newSelectedPos) {
+        this.selectedSortingOrder = newSelectedPos;
+        notifyDataSetChanged();
+    }
+
     // inner class to hold a reference to each item of RecyclerView
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -88,24 +92,10 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
             txtViewTitle = itemLayoutView.findViewById(R.id.title);
             imgViewIcon = itemLayoutView.findViewById(R.id.icon);
 
-            itemLayoutView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClicked(ViewHolder.this, getLayoutPosition());
-                }
-            });
-        }
-
-        public void updateItemColor(int selectedSortingOrder) {
-            ViewHolder previousHolder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(selectedSortingOrder);
-            previousHolder.txtViewTitle.setTextColor(themeUtils.getColorOnSurface());
-            txtViewTitle.setTextColor(themeUtils.getAccentColor());
-            try {
-                DrawableCompat.setTintList(previousHolder.imgViewIcon.getDrawable(), null);
-                DrawableCompat.setTint(imgViewIcon.getDrawable(), themeUtils.getAccentColor());
-            } catch (NullPointerException e) {
-                Timber.i(e);
-            }
+            itemLayoutView.setOnClickListener(v -> {
+                        listener.onItemClicked(SortDialogAdapter.this, getLayoutPosition());
+                    }
+            );
         }
     }
 }

@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,6 +61,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -169,7 +171,10 @@ public class SmapTaskMapFragment extends Fragment
         Timber.i("######## onViewCreated");
         super.onViewCreated(rootView, savedInstanceState);
 
-        model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        SurveyDataViewModelFactory viewModelFactory = new SurveyDataViewModelFactory(sharedPreferences);
+
+        model = new ViewModelProvider(this, viewModelFactory).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
             Timber.i("-------------------------------------- Task Map Fragment got Data ");
             setData(surveyData);

@@ -16,7 +16,6 @@ package org.odk.collect.android.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -29,6 +28,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 
@@ -39,10 +49,9 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
-import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -54,24 +63,7 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import timber.log.Timber;
-
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
@@ -91,10 +83,7 @@ public class SmapTaskListFragment extends ListFragment {
 
     private String filterText;
 
-    private Integer selectedSortingOrder;
     private BottomSheetDialog bottomSheetDialog;
-
-    private static final String TASK_MANAGER_LIST_SORTING_ORDER = "taskManagerListSortingOrder";
 
     private SharedPreferences adminPreferences;
 
@@ -140,7 +129,7 @@ public class SmapTaskListFragment extends ListFragment {
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
-                return onLongListItemClick(v,pos,id);
+                return onLongListItemClick(v, pos, id);
             }
         });
 
@@ -158,7 +147,10 @@ public class SmapTaskListFragment extends ListFragment {
                 R.string.sort_by_status_asc, R.string.sort_by_status_desc
         };
 
-        model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        SurveyDataViewModelFactory viewModelFactory = new SurveyDataViewModelFactory(sharedPreferences);
+
+        model = new ViewModelProvider(this, viewModelFactory).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
             Timber.i("-------------------------------------- Task List Fragment got Data ");
             setData(surveyData);
@@ -167,7 +159,7 @@ public class SmapTaskListFragment extends ListFragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Notify the user if tracking is turned on
-        if(new LocationRegister().locationEnabled()
+        if (new LocationRegister().locationEnabled()
                 && PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean(GeneralKeys.KEY_SMAP_USER_LOCATION, false)) {
             SnackbarUtils.showLongSnackbar(getActivity().findViewById(R.id.llParent), getString(R.string.smap_location_tracking));
         }
@@ -201,14 +193,13 @@ public class SmapTaskListFragment extends ListFragment {
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
-        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
-            @Override
-            public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
-                holder.updateItemColor(selectedSortingOrder);
-                performSelectedSearch(position);
-                bottomSheetDialog.dismiss();
-            }
-        });
+        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), sortingOptions, model.getTaskSortingOrder(),
+                (itAdapter, position) -> {
+                    model.saveTaskSelectedSortingOrder(position);
+                    itAdapter.updateSelectedPosition(position);
+                    reloadData();
+                    bottomSheetDialog.dismiss();
+                });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -248,13 +239,9 @@ public class SmapTaskListFragment extends ListFragment {
     //    ((SmapMain) getActivity()).updateData(null);
     //}
 
-    protected String getSortingOrderKey() {
-        return TASK_MANAGER_LIST_SORTING_ORDER;
-    }
-
     public void setData(SurveyData data) {
         int count = 0;
-        if(mAdapter != null) {
+        if (mAdapter != null) {
             if (data != null) {
                 count = mAdapter.setData(data.tasks);
             } else {
@@ -264,11 +251,11 @@ public class SmapTaskListFragment extends ListFragment {
         //((SmapMain) getActivity()).updateData(data);  Loader
 
         FragmentActivity activity = (SmapMain) getActivity();
-        if(activity != null) {
+        if (activity != null) {
             TabLayout tabLayout = (TabLayout) (activity).findViewById(R.id.tabs);
-            if(tabLayout != null) {
+            if (tabLayout != null) {
                 TabLayout.Tab tab = tabLayout.getTabAt(1);
-                if(tab != null) {
+                if (tab != null) {
                     tab.setText(getString(R.string.smap_tasks) + "(" + count + ")");
                 }
             }
@@ -310,7 +297,7 @@ public class SmapTaskListFragment extends ListFragment {
                 .getDefaultSharedPreferences(getContext())
                 .getBoolean(GeneralKeys.KEY_SMAP_ODK_STYLE_MENUS, true);
 
-        if(odkMenus) {
+        if (odkMenus) {
             menu
                     .add(0, MENU_ENTERDATA, 0, R.string.enter_data)
                     .setIcon(android.R.drawable.ic_menu_edit)
@@ -344,12 +331,12 @@ public class SmapTaskListFragment extends ListFragment {
                 .getDefaultSharedPreferences(getContext())
                 .getBoolean(GeneralKeys.KEY_SMAP_ODK_ADMIN_MENU, false);
 
-        if(adminMenu) {
+        if (adminMenu) {
             menu
                     .add(0, R.id.menu_admin_preferences, 0,
                             R.string.admin_preferences)
                     .setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-       }
+        }
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
@@ -357,7 +344,7 @@ public class SmapTaskListFragment extends ListFragment {
         searchView.setQueryHint(getResources().getString(R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
-        if(filterText == null) {
+        if (filterText == null) {
             filterText = "";
         }
 
@@ -365,16 +352,16 @@ public class SmapTaskListFragment extends ListFragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 filterText = query;
-                updateAdapter();
+                reloadData();
                 searchView.clearFocus();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if(!filterText.equals(newText)) {
+                if (!filterText.equals(newText)) {
                     filterText = newText;
-                    updateAdapter();
+                    reloadData();
                 }
                 return false;
             }
@@ -444,68 +431,12 @@ public class SmapTaskListFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void performSelectedSearch(int position) {
-        saveSelectedSortingOrder(position);
-        updateAdapter();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-    }
-
-    protected String getSortingOrder() {
-        String sortOrder = "BY_NAME_ASC";
-        switch (getSelectedSortingOrder()) {
-
-            case BY_NAME_ASC:
-                sortOrder = "BY_NAME_ASC";
-                break;
-            case BY_NAME_DESC:
-                sortOrder = "BY_NAME_DESC";
-                break;
-            case BY_DATE_ASC:
-                sortOrder = "BY_DATE_ASC";
-                break;
-            case BY_DATE_DESC:
-                sortOrder = "BY_DATE_DESC";
-            case BY_STATUS_ASC:
-                sortOrder = "BY_STATUS_ASC";
-                break;
-            case BY_STATUS_DESC:
-                sortOrder = "BY_STATUS_DESC";
-                break;
-        }
-        return sortOrder;
-    }
-
-    private void saveSelectedSortingOrder(int selectedStringOrder) {
-        selectedSortingOrder = selectedStringOrder;
-        PreferenceManager.getDefaultSharedPreferences(Collect.getInstance())
-                .edit()
-                .putInt(getSortingOrderKey(), selectedStringOrder)
-                .apply();
-    }
-
-    protected void restoreSelectedSortingOrder() {
-        selectedSortingOrder = PreferenceManager
-                .getDefaultSharedPreferences(getContext())
-                .getInt(getSortingOrderKey(), BY_NAME_ASC);
-    }
-
-    protected int getSelectedSortingOrder() {
-        if (selectedSortingOrder == null) {
-            restoreSelectedSortingOrder();
-        }
-        return selectedSortingOrder;
-    }
-
     protected CharSequence getFilterText() {
         return filterText != null ? filterText : "";
         //return inputSearch != null ? inputSearch.getText() : "";
     }
 
-    protected void updateAdapter() {
+    protected void reloadData() {
         //MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();
         //if(taskLoader != null) {
         //    taskLoader.updateTaskSortOrder(getSortingOrder());
@@ -513,8 +444,7 @@ public class SmapTaskListFragment extends ListFragment {
         //    taskLoader.forceLoad();
         //}
 
-        if(model != null) {
-            model.updateFormSortOrder(getSortingOrder());
+        if (model != null) {
             model.updateFilter(getFilterText());
             model.loadData();
         }
@@ -553,7 +483,7 @@ public class SmapTaskListFragment extends ListFragment {
 
         TaskEntry task = (TaskEntry) getListAdapter().getItem(position);
 
-        if(task.type.equals("task")) {
+        if (task.type.equals("task")) {
             Intent i = new Intent(getActivity(), SmapTaskStatusActivity.class);
             i.putExtra("id", task.id);
 

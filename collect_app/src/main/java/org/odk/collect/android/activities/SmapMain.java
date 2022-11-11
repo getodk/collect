@@ -49,6 +49,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.SettingsImporter;
@@ -320,7 +321,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         initToolbar();
 
-        model = new ViewModelProvider(this).get(SurveyDataViewModel.class);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SurveyDataViewModelFactory viewModelFactory = new SurveyDataViewModelFactory(sharedPreferences);
+
+        model = new ViewModelProvider(this, viewModelFactory).get(SurveyDataViewModel.class);
         model.getSurveyData().observe(this, surveyData -> {
             // update U
             Timber.i("-------------------------------------- Smap Main Activity got Data ");

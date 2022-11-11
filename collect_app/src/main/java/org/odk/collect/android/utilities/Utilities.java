@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2014 Smap Consulting Pty Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -13,6 +13,12 @@
  */
 
 package org.odk.collect.android.utilities;
+
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
+import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
+import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
+import static org.odk.collect.android.utilities.FileUtils.write;
+import static java.lang.StrictMath.abs;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -68,12 +74,6 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-import static java.lang.StrictMath.abs;
-import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
-import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
-import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
-import static org.odk.collect.android.utilities.FileUtils.write;
-
 public class Utilities {
 
     @Inject
@@ -95,7 +95,10 @@ public class Utilities {
     public static final String STATUS_SYNC_YES = "synchronized";
     public static final String STATUS_SYNC_NO = "not synchronized";
 
-    public Utilities() {Collect.getInstance().getComponent().inject(this);}
+    public Utilities() {
+        Collect.getInstance().getComponent().inject(this);
+    }
+
     // Get the task source
     public static String getSource() {
         SharedPreferences sharedPreferences = PreferenceManager
@@ -112,7 +115,7 @@ public class Utilities {
     public static String getOrgMediaPath() {
         String source = getSource();
         String currentOrg = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION);
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS)  + File.separator
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator
                 + "smap_media" + File.separator + source + File.separator + currentOrg;
     }
 
@@ -266,7 +269,7 @@ public class Utilities {
             throw e;
         }
 
-       InputStream is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
+        InputStream is = httpInterface.executeGetRequest(uri, null, webCredentialsUtils.getCredentials(uri)).getInputStream();
 
 
         try {
@@ -389,7 +392,8 @@ public class Utilities {
     public static void getTasks(
             ArrayList<TaskEntry> tasks,
             boolean all_non_synchronised,
-            String sortOrder, String filter,
+            int sortOrder,
+            String filter,
             boolean serverOnly,
             boolean useGeofenceFilter,
             boolean getDeletedTasks) {
@@ -429,14 +433,14 @@ public class Utilities {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_IS_SYNC + " = ? ";
-            if(!getDeletedTasks) {
+            if (!getDeletedTasks) {
                 selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
             }
         } else {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
-            if(!getDeletedTasks) {
+            if (!getDeletedTasks) {
                 selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
             }
         }
@@ -467,15 +471,14 @@ public class Utilities {
         // Set up geofencing
 
         Location location = null;
-        ArrayList<GeofenceEntry> geofences = new ArrayList<GeofenceEntry> ();
-        if(useGeofenceFilter) {
+        ArrayList<GeofenceEntry> geofences = new ArrayList<GeofenceEntry>();
+        if (useGeofenceFilter) {
             Timber.i("############ use geofence filter");
             location = Collect.getInstance().getLocation();
-            if(location == null) {
+            if (location == null) {
                 Timber.i("############ location is null");
             }
         }
-
 
 
         try {
@@ -512,8 +515,8 @@ public class Utilities {
                 entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
                 entry.updateId = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
 
-                if(useGeofenceFilter && location != null) {
-                    if(entry.showDist > 0 && entry.schedLat != 0.0 && entry.schedLon != 0.0) {
+                if (useGeofenceFilter && location != null) {
+                    if (entry.showDist > 0 && entry.schedLat != 0.0 && entry.schedLon != 0.0) {
 
                         Location taskLocation = new Location("");
                         taskLocation.setLatitude(entry.schedLat);
@@ -526,7 +529,7 @@ public class Utilities {
                          */
                         GeofenceEntry gfe = new GeofenceEntry(entry.showDist, taskLocation);
                         double yDistance = abs(location.getLatitude() - gfe.location.getLatitude()) * 111111.1;     // lattitude difference in meters
-                        if(yDistance < entry.showDist) {            // rough check
+                        if (yDistance < entry.showDist) {            // rough check
                             if (distance < entry.showDist) {        // detailed check
                                 tasks.add(entry);
                                 gfe.in = true;
@@ -592,7 +595,7 @@ public class Utilities {
 
         List<TaskResponseAssignment> tasksToKeep = new ArrayList<>();
 
-        if(assignmentsToKeep != null && assignmentsToKeep.size() > 0) {
+        if (assignmentsToKeep != null && assignmentsToKeep.size() > 0) {
             for (TaskResponseAssignment ta : assignmentsToKeep) {
                 if (ta.task.type != null && !ta.task.type.equals("case")) {
                     tasksToKeep.add(ta);
@@ -642,7 +645,7 @@ public class Utilities {
 
         List<TaskResponseAssignment> casesToKeep = new ArrayList<>();
 
-        if(assignmentsToKeep != null && assignmentsToKeep.size() > 0) {
+        if (assignmentsToKeep != null && assignmentsToKeep.size() > 0) {
             for (TaskResponseAssignment ta : assignmentsToKeep) {
                 if (ta.task.type != null && ta.task.type.equals("case")) {
                     casesToKeep.add(ta);
@@ -658,22 +661,22 @@ public class Utilities {
         where.append(" and " + T_TASK_STATUS + " != ?");
 
         String[] whereArgs = new String[casesToKeep.size() + 2];
-            whereArgs[0] = Utilities.getSource();
-            whereArgs[1] = Utilities.STATUS_T_CLOSED;
-            if(casesToKeep.size() > 0) {
-                where.append(" and " + InstanceColumns.T_UPDATEID + " not in (");
-                for (int i = 0; i < casesToKeep.size(); i++) {
-                    if (i > 0) {
-                        where.append(",");
-                    }
-                    where.append("?");
-                    whereArgs[i + 1] = assignmentsToKeep.get(i).task.update_id;
+        whereArgs[0] = Utilities.getSource();
+        whereArgs[1] = Utilities.STATUS_T_CLOSED;
+        if (casesToKeep.size() > 0) {
+            where.append(" and " + InstanceColumns.T_UPDATEID + " not in (");
+            for (int i = 0; i < casesToKeep.size(); i++) {
+                if (i > 0) {
+                    where.append(",");
                 }
-                where.append(")");
+                where.append("?");
+                whereArgs[i + 1] = assignmentsToKeep.get(i).task.update_id;
             }
+            where.append(")");
+        }
 
 
-            InstanceProvider ip = new InstanceProvider();
+        InstanceProvider ip = new InstanceProvider();
 
         String obsoleteUpdateId;
         Cursor c = null;
@@ -788,7 +791,7 @@ public class Utilities {
         Uri dbUri = InstanceColumns.CONTENT_URI;
 
         String selectClause = InstanceColumns.DELETED_DATE + " is not null and "
-                +"datetime(" + InstanceColumns.DELETED_DATE
+                + "datetime(" + InstanceColumns.DELETED_DATE
                 + " / 1000, 'unixepoch') <  datetime('now','-6 months')";
 
         Collect.getInstance().getContentResolver().delete(dbUri, selectClause, null);
@@ -838,8 +841,8 @@ public class Utilities {
     }
 
     /*
-    * Set the status for the provided assignment id
-    */
+     * Set the status for the provided assignment id
+     */
     public static void setStatusForAssignment(long assId, String status) {
 
         Uri dbUri = InstanceColumns.CONTENT_URI;
@@ -894,13 +897,13 @@ public class Utilities {
         if (ta.location != null && ta.location.geometry != null && ta.location.geometry.coordinates != null && ta.location.geometry.coordinates.length >= 1) {
             // Set the location of the task to the first coordinate pair
             String firstCoord = ta.location.geometry.coordinates[0];
-            String [] fc = firstCoord.split(" ");
-            if(fc.length > 1) {
+            String[] fc = firstCoord.split(" ");
+            if (fc.length > 1) {
                 values.put(InstanceColumns.SCHED_LON, fc[0]);
                 values.put(InstanceColumns.SCHED_LAT, fc[1]);
             }
             StringBuilder builder = new StringBuilder();
-            for(String coord : ta.location.geometry.coordinates) {
+            for (String coord : ta.location.geometry.coordinates) {
                 builder.append(coord);
                 builder.append(",");
             }
@@ -919,7 +922,7 @@ public class Utilities {
         boolean valid = false;
         if (currentStatus != null && currentStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
             valid = true;
-        } else  if (currentStatus != null && currentStatus.equals(Utilities.STATUS_T_NEW)) {
+        } else if (currentStatus != null && currentStatus.equals(Utilities.STATUS_T_NEW)) {
             valid = true;
         }
         return valid;
@@ -944,7 +947,7 @@ public class Utilities {
         boolean valid = false;
         if (currentStatus != null && currentStatus.equals(STATUS_T_ACCEPTED)) {
             valid = true;
-        } else if(taskType != null && taskType.equals("case")) {
+        } else if (taskType != null && taskType.equals("case")) {
             valid = true;
         }
 
@@ -1091,7 +1094,7 @@ public class Utilities {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         String s = "";
-        if(t > 0) {
+        if (t > 0) {
 
             df.setTimeZone(TimeZone.getDefault());
             s = df.format(t);
@@ -1105,7 +1108,7 @@ public class Utilities {
      */
     public static String translateMsg(Exception e, String in) {
         String msg = null;
-        if(e != null) {
+        if (e != null) {
             msg = e.getMessage();
         } else {
             msg = in;
@@ -1114,17 +1117,17 @@ public class Utilities {
         if (msg != null) {
             if (msg.contains("Unauthorized") || msg.contains(": 401")) {
                 out = Collect.getInstance().getString(R.string.smap_login_unauthorized);
-            } else if(msg.contains("Unable to resolve host")) {
+            } else if (msg.contains("Unable to resolve host")) {
                 out = msg + ". " + Collect.getInstance().getString(R.string.no_connection);
             } else {
-                if(e != null) {
+                if (e != null) {
                     out = e.getLocalizedMessage();
                 } else {
                     out = msg;
                 }
             }
         }
-        if(out == null) {
+        if (out == null) {
             out = Collect.getInstance().getString(R.string.smap_unknown_error);
         }
         return out;
@@ -1202,7 +1205,7 @@ public class Utilities {
 
             // Get the token
             String token = sharedPreferences.getString(GeneralKeys.KEY_SMAP_REGISTRATION_ID, null);
-            if(token != null && token.trim().length() > 0) {
+            if (token != null && token.trim().length() > 0) {
 
                 String username = sharedPreferences.getString(GeneralKeys.KEY_USERNAME, null);
                 String server = getSource();
@@ -1241,7 +1244,7 @@ public class Utilities {
                 Context.CONNECTIVITY_SERVICE);
         NetworkInfo currentNetworkInfo = manager.getActiveNetworkInfo();
 
-        if(currentNetworkInfo != null) {
+        if (currentNetworkInfo != null) {
             String autosend = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_AUTOSEND);
             boolean sendwifi = autosend.equals("wifi_only");
             boolean sendnetwork = autosend.equals("cellular_only");
@@ -1268,11 +1271,11 @@ public class Utilities {
     public static String escapeSingleQuotesInFn(String in) {
         StringBuilder paramsOut = new StringBuilder("");
         String out = "";
-        if(in != null) {
+        if (in != null) {
 
             int idx1 = in.indexOf('(');
             int idx2 = in.lastIndexOf(')');
-            if(idx1 >= 0 && idx2 > idx1) {
+            if (idx1 >= 0 && idx2 > idx1) {
                 String fn = in.substring(0, idx1);
                 String params = in.substring(idx1, idx2);
                 String end = in.substring(idx2);
@@ -1304,16 +1307,16 @@ public class Utilities {
     public static boolean deleteRecursive(File deleteFile, String exceptName) {
 
         boolean empty = true;
-        if(!deleteFile.getName().equals(exceptName)) {
+        if (!deleteFile.getName().equals(exceptName)) {
             if (deleteFile.isDirectory())
                 for (File child : deleteFile.listFiles()) {
-                    if(!child.getName().equals(exceptName)) {
-                        empty = empty  && deleteRecursive(child, exceptName);
+                    if (!child.getName().equals(exceptName)) {
+                        empty = empty && deleteRecursive(child, exceptName);
                     } else {
                         empty = false;
                     }
                 }
-            if(empty) {
+            if (empty) {
                 deleteFile.delete();
             }
         } else {
@@ -1322,22 +1325,28 @@ public class Utilities {
         return empty;
     }
 
-    private static String getTaskSortOrderExpr(String sortOrder) {
-
+    private static String getTaskSortOrderExpr(int sortOrder) {
         String sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " COLLATE NOCASE ASC";
 
-        if (sortOrder.equals("BY_NAME_ASC")) {
-            sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE ASC, " + InstanceColumns.T_SCHED_START + " ASC";
-        } else if (sortOrder.equals("BY_NAME_DESC")) {
-            sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE DESC, " + InstanceColumns.T_SCHED_START + " DESC";
-        } else if (sortOrder.equals("BY_DATE_ASC")) {
-            sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " ASC";
-        } else if (sortOrder.equals("BY_DATE_DESC")) {
-            sortOrderExpr = InstanceColumns.T_SCHED_START + " DESC, " + InstanceColumns.T_TITLE + " DESC";
-        } else if (sortOrder.equals("BY_STATUS_ASC")) {
-            sortOrderExpr = T_TASK_STATUS + " ASC, " + InstanceColumns.T_TITLE + " ASC";
-        } else if (sortOrder.equals("BY_STATUS_DESC")) {
-            sortOrderExpr = InstanceColumns.T_TASK_STATUS + " DESC, " + InstanceColumns.T_TITLE + " DESC";
+        switch (sortOrder) {
+            case ApplicationConstants.SortingOrder.BY_NAME_ASC:
+                sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE ASC, " + InstanceColumns.T_SCHED_START + " ASC";
+                break;
+            case ApplicationConstants.SortingOrder.BY_NAME_DESC:
+                sortOrderExpr = InstanceColumns.T_TITLE + " COLLATE NOCASE DESC, " + InstanceColumns.T_SCHED_START + " DESC";
+                break;
+            case ApplicationConstants.SortingOrder.BY_DATE_ASC:
+                sortOrderExpr = InstanceColumns.T_SCHED_START + " ASC, " + InstanceColumns.T_TITLE + " ASC";
+                break;
+            case ApplicationConstants.SortingOrder.BY_DATE_DESC:
+                sortOrderExpr = InstanceColumns.T_SCHED_START + " DESC, " + InstanceColumns.T_TITLE + " DESC";
+                break;
+            case ApplicationConstants.SortingOrder.BY_STATUS_ASC:
+                sortOrderExpr = T_TASK_STATUS + " ASC, " + InstanceColumns.T_TITLE + " ASC";
+                break;
+            case ApplicationConstants.SortingOrder.BY_STATUS_DESC:
+                sortOrderExpr = InstanceColumns.T_TASK_STATUS + " DESC, " + InstanceColumns.T_TITLE + " DESC";
+                break;
         }
         return sortOrderExpr;
     }
