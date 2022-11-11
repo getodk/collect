@@ -637,7 +637,7 @@ public class AppDependencyModule {
 
     @Provides
     public MapFragmentFactory providesMapFragmentFactory(SettingsProvider settingsProvider) {
-        return new MapFragmentFactoryImpl(settingsProvider.getUnprotectedSettings());
+        return new MapFragmentFactoryImpl(settingsProvider);
     }
 
     @Provides
