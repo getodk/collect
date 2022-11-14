@@ -797,7 +797,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                         && formController.currentPromptIsQuestion()) {
 
                     // Update answers before creating save point
-                    formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
+                    formEntryViewModel.saveScreenAnswersToFormController(getAnswers(), false);
                 }
             }
 
