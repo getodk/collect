@@ -50,7 +50,7 @@ public class RobolectricApplication extends Collect {
         // We don't want any clicks to be blocked
         MultiClickGuard.test = true;
 
-        CrashHandler.uninstall();
+        CrashHandler.uninstall(this);
 
         super.onCreate();
     }

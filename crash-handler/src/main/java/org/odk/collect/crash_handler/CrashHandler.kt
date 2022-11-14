@@ -94,8 +94,9 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
         }
 
         @JvmStatic
-        fun uninstall() {
+        fun uninstall(context: Context) {
             Thread.setDefaultUncaughtExceptionHandler(originalHandler)
+            context.getState().set("crash_handler", null)
         }
 
         @JvmStatic
