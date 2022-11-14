@@ -130,6 +130,31 @@ class AudioRecorderServiceTest {
     }
 
     @Test
+    fun restartAction_continuesUpdatingDurationOnNotificationEverySecond() {
+        val service = startAction("456")
+
+        scheduler.runForeground(0)
+        assertThat(
+            service.getForegroundNotification()!!.contentText,
+            equalTo("00:00")
+        )
+
+        scheduler.runForeground(1000)
+        assertThat(
+            service.getForegroundNotification()!!.contentText,
+            equalTo("00:01")
+        )
+
+        restartAction()
+
+        scheduler.runForeground(2000)
+        assertThat(
+            service.getForegroundNotification()!!.contentText,
+            equalTo("00:02")
+        )
+    }
+
+    @Test
     fun stopAction_stopsSelf() {
         startAction("123")
         val service = stopAction()
@@ -268,6 +293,12 @@ class AudioRecorderServiceTest {
         resumeAction()
 
         assertThat(scheduler.isRepeatRunning(), equalTo(false))
+    }
+
+    private fun restartAction() {
+        val restartIntent = Intent(application, AudioRecorderService::class.java)
+        restartIntent.action = AudioRecorderService.ACTION_RESTART
+        startService(restartIntent)
     }
 
     private fun pauseAction() {
