@@ -14,7 +14,7 @@
             style="@style/Widget.Collect.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@mipmap/ic_nav" />
+            app:navigationIcon="@mipmap/ic_nav_foreground" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

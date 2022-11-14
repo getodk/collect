@@ -53,7 +53,6 @@ import org.odk.collect.android.adapters.ViewPagerAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.configure.SettingsImporter;
 import org.odk.collect.android.configure.legacy.LegacySettingsFileImporter;
-import org.odk.collect.android.database.Location;
 import org.odk.collect.android.fragments.SmapFormListFragment;
 import org.odk.collect.android.fragments.SmapTaskListFragment;
 import org.odk.collect.android.fragments.SmapTaskMapFragment;
@@ -191,7 +190,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.app_name));
-        toolbar.setNavigationIcon(R.mipmap.ic_nav);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav_foreground);
         setSupportActionBar(toolbar);
     }
 
@@ -295,7 +294,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_nav);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav_foreground);
         stateChanged();
     }
 

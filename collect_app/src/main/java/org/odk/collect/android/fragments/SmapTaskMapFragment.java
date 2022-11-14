@@ -44,7 +44,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -400,7 +399,7 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onResume() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_nav);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav_foreground);
         model.loadData();   // Update the user trail display with latest points
         super.onResume();
     }

@@ -1,14 +1,11 @@
 package org.odk.collect.android.notifications;
 
 import android.app.Application;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 
@@ -185,7 +182,7 @@ public class NotificationManagerNotifier implements Notifier {
                 .setContentText(contentText)
                 .setSmallIcon(start ? R.drawable.notification_icon_go : IconUtils.getNotificationAppIcon())     // smap add start
                 .setLargeIcon(BitmapFactory.decodeResource(Collect.getInstance().getBaseContext().getResources(),
-                        R.mipmap.ic_nav))        // added for smap
+                        R.mipmap.ic_nav_foreground))        // added for smap
                 .setAutoCancel(true)
                 .setChannelId(COLLECT_NOTIFICATION_CHANNEL);
 
