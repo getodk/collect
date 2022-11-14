@@ -33,6 +33,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.PRO
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SOURCE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.TASKS_ONLY;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.READ_ONLY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SEARCH_LOCAL_DATA;
 
 public class DatabaseFormsRepositorySmap implements FormsRepositorySmap {
@@ -123,6 +124,7 @@ public class DatabaseFormsRepositorySmap implements FormsRepositorySmap {
         v.put(JR_FORM_ID, form.getJrFormId());
         v.put(PROJECT, form.getProject());      // smap
         v.put(TASKS_ONLY, form.getTasksOnly());      // smap
+        v.put(READ_ONLY, form.getReadOnly());      // smap
         v.put(SEARCH_LOCAL_DATA, form.getSearchLocalData());      // smap
         v.put(SOURCE, form.getSource());      // smap
         v.put(SUBMISSION_URI, form.getSubmissionUri());

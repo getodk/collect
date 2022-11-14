@@ -34,6 +34,7 @@ public class ServerFormDetailsSmap implements Serializable {
     private final String manifestUrl;
     private boolean isFormDownloaded;
     private boolean tasks_only;
+    private boolean read_only;          // Form is for reading only and will not create a submission file
     private boolean searchLocalData;
     private String formPath;
     private String project;
@@ -48,6 +49,7 @@ public class ServerFormDetailsSmap implements Serializable {
                                  String manifestUrl,    // smap
                                  boolean isFormDownloaded,
                                  boolean tasks_only,
+                                 boolean read_only,
                                  boolean searchLocalData,
                                  String formPath,
                                  String project,
@@ -63,6 +65,7 @@ public class ServerFormDetailsSmap implements Serializable {
         this.manifestUrl = manifestUrl;
         this.isFormDownloaded = isFormDownloaded;
         this.tasks_only = tasks_only;
+        this.read_only = read_only;
         this.searchLocalData = searchLocalData;
         this.formPath = formPath;
         this.project = project;
@@ -95,6 +98,10 @@ public class ServerFormDetailsSmap implements Serializable {
 
     public boolean getTasksOnly() {
         return tasks_only;
+    }
+
+    public boolean getReadOnly() {
+        return read_only;
     }
 
     public boolean getSearchLocalData() {

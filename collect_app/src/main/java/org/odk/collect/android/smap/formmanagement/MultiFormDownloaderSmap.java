@@ -168,6 +168,7 @@ public class MultiFormDownloaderSmap {
                 UriResult uriResult = findExistingOrCreateNewUri(fileResult.file, parsedFields,
                         STFileUtils.getSource(fd.getDownloadUrl()),
                         fd.getTasksOnly(),
+                        fd.getReadOnly(),
                         fd.getSearchLocalData(),
                         fd.getProject());  // smap add source, tasks_only, searchLocalData,project
             }
@@ -240,7 +241,8 @@ public class MultiFormDownloaderSmap {
      * @return a {@link UriResult} object
      */
     private UriResult findExistingOrCreateNewUri(File formFile, Map<String, String> formInfo,
-                                                 String source, boolean tasks_only, boolean searchLocalData, String project) {   // smap add source, tasks_only, project
+                                                 String source, boolean tasks_only, boolean read_only,
+                                                 boolean searchLocalData, String project) {   // smap add source, tasks_only, project
         final Uri uri;
         final String formFilePath = formFile.getAbsolutePath();
         String mediaPath = FileUtils.constructMediaPath(formFilePath);
@@ -251,7 +253,7 @@ public class MultiFormDownloaderSmap {
         Form form = formsRepository.getOneByPath(formFile.getAbsolutePath());
 
         if (form == null) {
-            uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, searchLocalData, source, project);       // smap add tasks_only and source
+            uri = saveNewForm(formInfo, formFile, mediaPath, tasks_only, read_only, searchLocalData, source, project);       // smap add tasks_only and source
             return new UriResult(uri, mediaPath, true);
         } else {
             uri = Uri.withAppendedPath(FormsColumns.CONTENT_URI, form.getId().toString());
@@ -266,7 +268,8 @@ public class MultiFormDownloaderSmap {
     }
 
     private Uri saveNewForm(Map<String, String> formInfo, File formFile, String mediaPath,
-                            boolean tasks_only, boolean searchLocalData, String source, String project) {    // smap add tasks_only, searchLocalData, source project
+                            boolean tasks_only, boolean read_only,
+                            boolean searchLocalData, String source, String project) {    // smap add tasks_only, searchLocalData, source project
         Form form = new Form.Builder()
                 .formFilePath(formFile.getAbsolutePath())
                 .formMediaPath(mediaPath)
@@ -275,6 +278,7 @@ public class MultiFormDownloaderSmap {
                 .jrFormId(formInfo.get(FileUtils.FORMID))
                 .project(project)      // smap
                 .tasksOnly(tasks_only ? "yes" : "no")   // smap
+                .readOnly(read_only ? "yes" : "no")   // smap
                 .searchLocalData(searchLocalData ? "yes" : "no")   // smap
                 .source(source)       // smap
                 .submissionUri(formInfo.get(FileUtils.SUBMISSIONURI))

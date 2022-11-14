@@ -284,7 +284,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
         //}
         Gson gson = new GsonBuilder().disableHtmlEscaping().setDateFormat("yyyy-MM-dd HH:mm").create();
         String resp = gson.toJson(updateResponse);
-        Timber.i("###########################################" + resp);
+        Timber.i("########################################### %s", resp);
 
         RequestBody formBody = new FormBody.Builder()
                 .add("assignInput", resp)
@@ -377,7 +377,7 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
 
         int code = response.code();
         String body = response.body().string();
-        Timber.i("%%%%%%%%%%%%%%%%%%%%: " + body);
+        Timber.i("%%%%%%%%%%%%%%%%%%%%: %s", body);
         String resp = null;
         if(code == 201 || code == 200) {
             resp = body;

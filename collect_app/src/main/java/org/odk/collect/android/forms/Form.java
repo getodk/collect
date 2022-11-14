@@ -32,6 +32,7 @@ public final class Form {
     private final String jrVersion;
     private final String project;       // smap
     private final String tasksOnly;     // smap
+    private final String readOnly;     // smap
     private final String searchLocalData;     // smap
     private final String source;        // smap
     private final String formFilePath;
@@ -54,6 +55,7 @@ public final class Form {
         jrFormId = builder.jrFormId;
         project = builder.project;  // smap
         tasksOnly = builder.tasksOnly;  // smap
+        readOnly = builder.readOnly;  // smap
         searchLocalData = builder.searchLocalData;  // smap
         source = builder.source;        // smap
         jrVersion = builder.jrVersion;
@@ -79,6 +81,7 @@ public final class Form {
         private String jrVersion;
         private String project;     // smap
         private String tasksOnly;   // smap
+        private String readOnly;   // smap
         private String searchLocalData;  // smap
         private String source;      // smap
         private String formFilePath;
@@ -104,6 +107,7 @@ public final class Form {
             jrFormId = form.jrFormId;
             project = form.project;         // smap
             tasksOnly = form.tasksOnly;     // smap
+            readOnly = form.readOnly;     // smap
             source = form.source;           // smap
             jrVersion = form.jrVersion;
             formFilePath = form.formFilePath;
@@ -149,6 +153,12 @@ public final class Form {
         // smap
         public Builder tasksOnly(String tasksOnly) {
             this.tasksOnly = tasksOnly;
+            return this;
+        }
+
+        // smap
+        public Builder readOnly(String readOnly) {
+            this.readOnly = readOnly;
             return this;
         }
 
@@ -257,6 +267,10 @@ public final class Form {
 
     public String getTasksOnly() {
         return tasksOnly;
+    }     // smap
+
+    public String getReadOnly() {
+        return readOnly;
     }     // smap
 
     public String getSearchLocalData() {
