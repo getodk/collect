@@ -29,6 +29,15 @@ abstract class AudioRecorderTest {
     }
 
     @Test
+    fun isRecording_afterRestart_isTrue() {
+        viewModel.start("session1", Output.AAC)
+        viewModel.restart()
+
+        runBackground()
+        assertThat(viewModel.isRecording(), equalTo(true))
+    }
+
+    @Test
     fun isRecording_afterStop_isFalse() {
         viewModel.start("session1", Output.AAC)
         viewModel.stop()
@@ -64,6 +73,16 @@ abstract class AudioRecorderTest {
     }
 
     @Test
+    fun getCurrentSession_afterRestart_returnsSessionWithId() {
+        val recording = viewModel.getCurrentSession()
+        viewModel.start("session1", Output.AAC)
+        viewModel.restart()
+
+        runBackground()
+        assertThat(recording.getOrAwaitValue(), equalTo(RecordingSession("session1", null, 0, 0, false)))
+    }
+
+    @Test
     fun getCurrentSession_afterStop_hasRecordedFile() {
         val recording = viewModel.getCurrentSession()
         viewModel.start("session1", Output.AAC)
@@ -87,6 +106,16 @@ abstract class AudioRecorderTest {
     fun getCurrentSession_whenRecording_isNotPaused() {
         val session = viewModel.getCurrentSession()
         viewModel.start("session", Output.AAC)
+
+        runBackground()
+        assertThat(session.getOrAwaitValue()?.paused, equalTo(false))
+    }
+
+    @Test
+    fun getCurrentSession_afterRestart_isNotPaused() {
+        val session = viewModel.getCurrentSession()
+        viewModel.start("session", Output.AAC)
+        viewModel.restart()
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.paused, equalTo(false))
