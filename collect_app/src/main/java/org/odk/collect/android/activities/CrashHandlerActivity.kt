@@ -13,14 +13,18 @@ class CrashHandlerActivity : LocalizedActivity() {
         val crashHandler = CrashHandler.getInstance(this)!!
         val crashView = crashHandler.getCrashView(this) {
             ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
-        }!!
+        }
 
-        setContentView(crashView)
+        if (crashView != null) {
+            setContentView(crashView)
+        } else {
+            finish()
+        }
 
         onBackPressedDispatcher.addCallback(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    crashView.dismiss()
+                    crashView?.dismiss()
                 }
             }
         )
