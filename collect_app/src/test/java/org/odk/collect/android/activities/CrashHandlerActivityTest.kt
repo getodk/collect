@@ -23,14 +23,17 @@ class CrashHandlerActivityTest {
 
     @Test
     fun `pressing back dismisses crash view`() {
-        val crashHandler = CrashHandler.getInstance(context)
-        crashHandler!!.createMockViews = true
-        crashHandler.registerCrash(context, RuntimeException("BAM"))
+        CrashHandler.getInstance(context)!!.also {
+            it.createMockViews = true
+            it.registerCrash(context, RuntimeException("BAM"))
+        }
 
         launcherRule.launch(CrashHandlerActivity::class.java).onActivity {
+            val crashView = it.getContextView<MockCrashView>()
+            assertThat(crashView.wasDismissed, equalTo(false))
+
             it.onBackPressedDispatcher.onBackPressed()
 
-            val crashView = it.getContextView<MockCrashView>()
             assertThat(crashView.wasDismissed, equalTo(true))
         }
     }

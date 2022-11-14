@@ -96,7 +96,6 @@ public class Collect extends Application implements
     private GeoDependencyComponent geoDependencyComponent;
     private OsmDroidDependencyComponent osmDroidDependencyComponent;
     private EntitiesDependencyComponent entitiesDependencyComponent;
-    public CrashHandler crashHandler;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -132,9 +131,7 @@ public class Collect extends Application implements
         singleton = this;
 
         CrashHandler.install(this).launchApp(
-                () -> {
-                    ExternalFilesUtils.testExternalFilesAccess(this);
-                },
+                () -> ExternalFilesUtils.testExternalFilesAccess(this),
                 () -> {
                     setupDagger();
                     DaggerUtils.getComponent(this).inject(this);
