@@ -14,7 +14,7 @@ class StubAudioRecorderTest : AudioRecorderTest() {
         StubAudioRecorder(tempFile.absolutePath)
     }
 
-    override val viewModel: AudioRecorder by lazy {
+    override val audioRecorder: AudioRecorder by lazy {
         stubViewAudioRecorderViewModel
     }
 

@@ -10,54 +10,54 @@ import java.io.Serializable
 
 abstract class AudioRecorderTest {
 
-    abstract val viewModel: AudioRecorder
+    abstract val audioRecorder: AudioRecorder
     abstract fun runBackground()
     abstract fun getLastRecordedFile(): File?
 
     @Test
     fun isRecording_whenNoSession_isFalse() {
         runBackground()
-        assertThat(viewModel.isRecording(), equalTo(false))
+        assertThat(audioRecorder.isRecording(), equalTo(false))
     }
 
     @Test
     fun isRecording_whenRecording_isTrue() {
-        viewModel.start("session1", Output.AAC)
+        audioRecorder.start("session1", Output.AAC)
 
         runBackground()
-        assertThat(viewModel.isRecording(), equalTo(true))
+        assertThat(audioRecorder.isRecording(), equalTo(true))
     }
 
     @Test
     fun isRecording_afterRestart_isTrue() {
-        viewModel.start("session1", Output.AAC)
-        viewModel.restart()
+        audioRecorder.start("session1", Output.AAC)
+        audioRecorder.restart()
 
         runBackground()
-        assertThat(viewModel.isRecording(), equalTo(true))
+        assertThat(audioRecorder.isRecording(), equalTo(true))
     }
 
     @Test
     fun isRecording_afterStop_isFalse() {
-        viewModel.start("session1", Output.AAC)
-        viewModel.stop()
+        audioRecorder.start("session1", Output.AAC)
+        audioRecorder.stop()
 
         runBackground()
-        assertThat(viewModel.isRecording(), equalTo(false))
+        assertThat(audioRecorder.isRecording(), equalTo(false))
     }
 
     @Test
     fun isRecording_afterCleanUp_isFalse() {
-        viewModel.start("session1", Output.AAC)
-        viewModel.cleanUp()
+        audioRecorder.start("session1", Output.AAC)
+        audioRecorder.cleanUp()
 
         runBackground()
-        assertThat(viewModel.isRecording(), equalTo(false))
+        assertThat(audioRecorder.isRecording(), equalTo(false))
     }
 
     @Test
     fun getCurrentSession_beforeRecording_isNull() {
-        val recording = viewModel.getCurrentSession()
+        val recording = audioRecorder.getCurrentSession()
 
         runBackground()
         assertThat(recording.getOrAwaitValue(), equalTo(null))
@@ -65,8 +65,8 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_whenRecording_returnsSessionWithId() {
-        val recording = viewModel.getCurrentSession()
-        viewModel.start("session1", Output.AAC)
+        val recording = audioRecorder.getCurrentSession()
+        audioRecorder.start("session1", Output.AAC)
 
         runBackground()
         assertThat(recording.getOrAwaitValue(), equalTo(RecordingSession("session1", null, 0, 0, false)))
@@ -74,9 +74,9 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterRestart_returnsSessionWithId() {
-        val recording = viewModel.getCurrentSession()
-        viewModel.start("session1", Output.AAC)
-        viewModel.restart()
+        val recording = audioRecorder.getCurrentSession()
+        audioRecorder.start("session1", Output.AAC)
+        audioRecorder.restart()
 
         runBackground()
         assertThat(recording.getOrAwaitValue(), equalTo(RecordingSession("session1", null, 0, 0, false)))
@@ -84,9 +84,9 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterStop_hasRecordedFile() {
-        val recording = viewModel.getCurrentSession()
-        viewModel.start("session1", Output.AAC)
-        viewModel.stop()
+        val recording = audioRecorder.getCurrentSession()
+        audioRecorder.start("session1", Output.AAC)
+        audioRecorder.stop()
 
         runBackground()
         assertThat(recording.getOrAwaitValue(), equalTo(RecordingSession("session1", getLastRecordedFile(), 0, 0, false)))
@@ -94,9 +94,9 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterCleanUp_isNull() {
-        val recording = viewModel.getCurrentSession()
-        viewModel.start("session1", Output.AAC)
-        viewModel.cleanUp()
+        val recording = audioRecorder.getCurrentSession()
+        audioRecorder.start("session1", Output.AAC)
+        audioRecorder.cleanUp()
 
         runBackground()
         assertThat(recording.getOrAwaitValue(), equalTo(null))
@@ -104,8 +104,8 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_whenRecording_isNotPaused() {
-        val session = viewModel.getCurrentSession()
-        viewModel.start("session", Output.AAC)
+        val session = audioRecorder.getCurrentSession()
+        audioRecorder.start("session", Output.AAC)
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.paused, equalTo(false))
@@ -113,9 +113,9 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterRestart_isNotPaused() {
-        val session = viewModel.getCurrentSession()
-        viewModel.start("session", Output.AAC)
-        viewModel.restart()
+        val session = audioRecorder.getCurrentSession()
+        audioRecorder.start("session", Output.AAC)
+        audioRecorder.restart()
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.paused, equalTo(false))
@@ -123,10 +123,10 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterStop_isNotPaused() {
-        val session = viewModel.getCurrentSession()
+        val session = audioRecorder.getCurrentSession()
 
-        viewModel.start("session", Output.AAC)
-        viewModel.stop()
+        audioRecorder.start("session", Output.AAC)
+        audioRecorder.stop()
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.paused, equalTo(false))
@@ -134,10 +134,10 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterPause_isPaused() {
-        val session = viewModel.getCurrentSession()
+        val session = audioRecorder.getCurrentSession()
 
-        viewModel.start("session", Output.AAC)
-        viewModel.pause()
+        audioRecorder.start("session", Output.AAC)
+        audioRecorder.pause()
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.paused, equalTo(true))
@@ -145,11 +145,11 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterPauseAndResume_isNotPaused() {
-        val session = viewModel.getCurrentSession()
+        val session = audioRecorder.getCurrentSession()
 
-        viewModel.start("session", Output.AAC)
-        viewModel.pause()
-        viewModel.resume()
+        audioRecorder.start("session", Output.AAC)
+        audioRecorder.pause()
+        audioRecorder.resume()
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.paused, equalTo(false))
@@ -157,11 +157,11 @@ abstract class AudioRecorderTest {
 
     @Test
     fun getCurrentSession_afterPauseAndStop_isNotPaused() {
-        val session = viewModel.getCurrentSession()
+        val session = audioRecorder.getCurrentSession()
 
-        viewModel.start("session", Output.AAC)
-        viewModel.pause()
-        viewModel.stop()
+        audioRecorder.start("session", Output.AAC)
+        audioRecorder.pause()
+        audioRecorder.stop()
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.paused, equalTo(false))
@@ -170,8 +170,8 @@ abstract class AudioRecorderTest {
     @Test
     fun supportsSerializableSessionIds() {
         val sessionId = SerializableId()
-        val session = viewModel.getCurrentSession()
-        viewModel.start(sessionId, Output.AAC)
+        val session = audioRecorder.getCurrentSession()
+        audioRecorder.start(sessionId, Output.AAC)
 
         runBackground()
         assertThat(session.getOrAwaitValue()!!.id, equalTo(sessionId))
@@ -179,9 +179,9 @@ abstract class AudioRecorderTest {
 
     @Test
     fun start_whenAlreadyRecording_doesNothing() {
-        val session = viewModel.getCurrentSession()
-        viewModel.start("session1", Output.AAC)
-        viewModel.start("session2", Output.AAC)
+        val session = audioRecorder.getCurrentSession()
+        audioRecorder.start("session1", Output.AAC)
+        audioRecorder.start("session2", Output.AAC)
 
         runBackground()
         assertThat(session.getOrAwaitValue()?.id, equalTo("session1"))
