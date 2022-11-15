@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -80,7 +81,17 @@ public class MainMenuActivity extends LocalizedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.installSplashScreen(this);
+        /*
+          We don't need the `installSplashScreen` call on Android 12+ (the system handles the
+          splash screen for us) and it causes problems if we later switch between dark/light themes
+          with the ThemeUtils#setDarkModeForCurrentProject call.
+         */
+        if (Build.VERSION.SDK_INT < 31) {
+            SplashScreen.installSplashScreen(this);
+        } else {
+            setTheme(R.style.Theme_Collect);
+        }
+
         super.onCreate(savedInstanceState);
 
         CrashHandler crashHandler = CrashHandler.getInstance(this);
