@@ -76,6 +76,7 @@ class BlankFormListViewModelTest {
         doReturn(true).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
         scheduler.runBackground()
+        scheduler.runBackground()
         assertThat(result.value, `is`(true))
     }
 
@@ -85,6 +86,7 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(false).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
+        scheduler.runBackground()
         scheduler.runBackground()
         assertThat(result.value, `is`(false))
     }
