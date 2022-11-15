@@ -106,19 +106,6 @@ class BlankFormListViewModelTest {
     }
 
     @Test
-    fun `isSyncingWithServer follows repository isSyncing`() {
-        createViewModel()
-
-        val liveData = MutableLiveData(true)
-        whenever(syncRepository.isSyncing(projectId)).thenReturn(liveData)
-
-        val isSyncing = viewModel.isSyncingWithServer()
-        assertThat(isSyncing.getOrAwaitValue(), `is`(true))
-        liveData.value = false
-        assertThat(isSyncing.getOrAwaitValue(), `is`(false))
-    }
-
-    @Test
     fun `isOutOfSyncWithServer follows repository syncError`() {
         createViewModel()
 
@@ -346,6 +333,7 @@ class BlankFormListViewModelTest {
     }
 
     private fun createViewModel(runAllBackgroundTasks: Boolean = true, shouldHideOldFormVersions: Boolean = true) {
+        whenever(syncRepository.isSyncing(projectId)).thenReturn(MutableLiveData(false))
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
         generalSettings.save(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, shouldHideOldFormVersions)
 

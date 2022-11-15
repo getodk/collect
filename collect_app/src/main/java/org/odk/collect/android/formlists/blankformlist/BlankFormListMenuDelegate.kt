@@ -21,8 +21,8 @@ class BlankFormListMenuDelegate(
     private var syncing = false
 
     init {
-        viewModel.isSyncingWithServer().observe(activity) { syncing: Boolean ->
-            this.syncing = syncing
+        viewModel.isLoading.observe(activity) { isLoading: Boolean ->
+            this.syncing = isLoading
             activity.invalidateOptionsMenu()
         }
 

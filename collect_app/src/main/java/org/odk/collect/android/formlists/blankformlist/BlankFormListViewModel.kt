@@ -50,13 +50,12 @@ class BlankFormListViewModel(
 
     private val isFormLoadingRunning = MutableNonNullLiveData(false)
     private val isSyncingWithStorageRunning = MutableNonNullLiveData(false)
-    private val isSyncingWithServerRunning = MutableNonNullLiveData(false)
 
     val isLoading: LiveData<Boolean> = Transformations.map(
         LiveDataUtils.zip3(
             isFormLoadingRunning,
             isSyncingWithStorageRunning,
-            isSyncingWithServerRunning,
+            syncRepository.isSyncing(projectId),
         )
     ) { (one, two, three) -> one || two || three }
 
@@ -180,15 +179,6 @@ class BlankFormListViewModel(
             application,
             generalSettings
         ) == FormUpdateMode.MATCH_EXACTLY
-    }
-
-    fun isSyncingWithServer(): LiveData<Boolean> {
-        return Transformations.map(
-            syncRepository.isSyncing(projectId)
-        ) { isSyncing ->
-            isSyncingWithServerRunning.value = isSyncing
-            isSyncing
-        }
     }
 
     fun isOutOfSyncWithServer(): LiveData<Boolean> {
