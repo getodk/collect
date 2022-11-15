@@ -155,6 +155,14 @@ class AudioRecorderServiceTest {
     }
 
     @Test
+    fun restartAction_continuesRecording() {
+        startAction("123")
+        restartAction()
+
+        assertThat(recorder.isRecording(), equalTo(true))
+    }
+
+    @Test
     fun stopAction_stopsSelf() {
         startAction("123")
         val service = stopAction()
