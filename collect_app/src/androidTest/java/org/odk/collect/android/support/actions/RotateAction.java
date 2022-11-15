@@ -1,5 +1,7 @@
 package org.odk.collect.android.support.actions;
 
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -11,8 +13,6 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 
 import org.hamcrest.Matcher;
-
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
 public class RotateAction implements ViewAction {
 
@@ -43,7 +43,6 @@ public class RotateAction implements ViewAction {
         } else {
             throw new IllegalStateException("We don't know how to get the current Activity in this scenario");
         }
-
     }
 
     private Activity getCurrentActivity(View view) {

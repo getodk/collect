@@ -181,7 +181,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void updateAnswersForScreen_flushesAuditLoggerAfterSaving() throws Exception {
-        viewModel.updateAnswersForScreen(new HashMap<>());
+        viewModel.updateAnswersForScreen(new HashMap<>(), false);
 
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(any(), anyBoolean());

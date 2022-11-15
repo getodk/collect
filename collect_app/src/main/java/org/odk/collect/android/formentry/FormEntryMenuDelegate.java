@@ -102,7 +102,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
-                formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers());
+                formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers(), false);
                 formEntryViewModel.promptForNewRepeat();
             }
 
@@ -123,7 +123,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
-                formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers());
+                formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers(), false);
                 formEntryViewModel.openHierarchy();
                 Intent i = new Intent(activity, FormHierarchyActivity.class);
                 i.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, formEntryViewModel.getSessionId());

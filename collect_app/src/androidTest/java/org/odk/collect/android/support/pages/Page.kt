@@ -252,7 +252,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun <D : Page<D>?> rotateToLandscape(destination: D): D {
-        currentActivity!!.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        onView(isRoot()).perform(rotateToLandscape())
         waitForRotationToEnd()
         return destination!!.assertOnPage()
     }

@@ -789,6 +789,18 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 outState.putString(KEY_XPATH_WAITING_FOR_DATA,
                         formController.getXPath(waiting));
             }
+
+            // make sure we're not already saving to disk. if we are, currentPrompt
+            // is getting constantly updated
+            if (!formSaveViewModel.isSaving()) {
+                if (currentView != null && formController != null
+                        && formController.currentPromptIsQuestion()) {
+
+                    // Update answers before creating save point
+                    formEntryViewModel.saveScreenAnswersToFormController(getAnswers(), false);
+                }
+            }
+
             // save the instance to a temp path...
             nonblockingCreateSavePointData();
         }
@@ -1085,7 +1097,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         // mFormEntryController is static so we don't need to pass it.
         if (formController != null && formController.currentPromptIsQuestion()) {
-            formEntryViewModel.updateAnswersForScreen(getAnswers());
+            formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
         }
         return null;
     }
@@ -1788,7 +1800,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 switch (i) {
                     case BUTTON_POSITIVE: // yes
                         clearAnswer(qw);
-                        formEntryViewModel.updateAnswersForScreen(getAnswers());
+                        formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
                         break;
                 }
             }
@@ -1831,7 +1843,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                             getFormController().setLanguage(languages[whichButton]);
                             dialog.dismiss();
                             if (getFormController().currentPromptIsQuestion()) {
-                                formEntryViewModel.updateAnswersForScreen(getAnswers());
+                                formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
                             }
                             onScreenRefresh();
                         })
@@ -1881,17 +1893,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     protected void onPause() {
         Timber.w("onPause %s", Md5.getMd5Hash(getIntent().getData().toString()));
         backgroundLocationViewModel.activityHidden();
-
-        FormController formController = getFormController();
-
-        // make sure we're not already saving to disk. if we are, currentPrompt
-        // is getting constantly updated
-        if (!formSaveViewModel.isSaving()) {
-            if (currentView != null && formController != null
-                    && formController.currentPromptIsQuestion()) {
-                formEntryViewModel.updateAnswersForScreen(getAnswers());
-            }
-        }
 
         super.onPause();
     }

@@ -1,11 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import androidx.annotation.NonNull;
-import androidx.test.espresso.contrib.RecyclerViewActions;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.WaitFor;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -14,6 +8,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.odk.collect.testshared.RecyclerViewMatcher.withRecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.test.espresso.contrib.RecyclerViewActions;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.WaitFor;
 
 import java.util.concurrent.Callable;
 
@@ -48,6 +48,11 @@ public class FormHierarchyPage extends Page<FormHierarchyPage> {
     public FormEntryPage clickGoToStart() {
         onView(withId(R.id.jumpBeginningButton)).perform(click());
         return new FormEntryPage(formName).assertOnPage();
+    }
+
+    public FormEndPage clickGoToEnd() {
+        return clickOnString(R.string.jump_to_end)
+                .assertOnPage(new FormEndPage(formName));
     }
 
     public FormEntryPage addGroup() {

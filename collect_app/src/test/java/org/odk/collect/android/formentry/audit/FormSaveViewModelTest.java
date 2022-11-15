@@ -564,7 +564,6 @@ public class FormSaveViewModelTest {
 
     private void whenReasonRequiredToSave() {
         when(logger.isChangeReasonRequired()).thenReturn(true);
-        when(logger.isChangesMade()).thenReturn(true);
         when(logger.isEditing()).thenReturn(true);
     }
 

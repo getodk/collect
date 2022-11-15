@@ -45,7 +45,7 @@ public class IdentifyUserTest {
                 .clickSaveAndExit();
 
         List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
-        CSVRecord formStartEvent = auditLog.get(1);
+        CSVRecord formStartEvent = auditLog.get(0);
         assertThat(formStartEvent.get(0), equalTo("form start"));
         assertThat(formStartEvent.get(4), equalTo("Lucius"));
     }
@@ -69,7 +69,7 @@ public class IdentifyUserTest {
                 .clickSaveAndExit();
 
             List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
-            CSVRecord formResumeEvent = auditLog.get(7);
+            CSVRecord formResumeEvent = auditLog.get(6);
             assertThat(formResumeEvent.get(0), equalTo("form resume"));
             assertThat(formResumeEvent.get(4), equalTo("Jack"));
     }

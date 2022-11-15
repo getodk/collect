@@ -37,24 +37,21 @@ class AuditTest {
             )
 
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
-        assertThat(auditLog.size, equalTo(14))
+        assertThat(auditLog.size, equalTo(13))
 
-        val header = auditLog[0]
-        assertThat(header.get(0), equalTo("event"))
+        assertThat(auditLog[0].get("event"), equalTo("form start"))
+        assertThat(auditLog[1].get("event"), equalTo("question"))
+        assertThat(auditLog[2].get("event"), equalTo("end screen"))
+        assertThat(auditLog[3].get("event"), equalTo("form save"))
+        assertThat(auditLog[4].get("event"), equalTo("form exit"))
+        assertThat(auditLog[5].get("event"), equalTo("form finalize"))
 
-        assertThat(auditLog[1].get(0), equalTo("form start"))
-        assertThat(auditLog[2].get(0), equalTo("question"))
-        assertThat(auditLog[3].get(0), equalTo("end screen"))
-        assertThat(auditLog[4].get(0), equalTo("form save"))
-        assertThat(auditLog[5].get(0), equalTo("form exit"))
-        assertThat(auditLog[6].get(0), equalTo("form finalize"))
-
-        assertThat(auditLog[7].get(0), equalTo("form resume"))
-        assertThat(auditLog[8].get(0), equalTo("jump"))
-        assertThat(auditLog[9].get(0), equalTo("question"))
-        assertThat(auditLog[10].get(0), equalTo("end screen"))
-        assertThat(auditLog[11].get(0), equalTo("form save"))
-        assertThat(auditLog[12].get(0), equalTo("form exit"))
-        assertThat(auditLog[13].get(0), equalTo("form finalize"))
+        assertThat(auditLog[6].get("event"), equalTo("form resume"))
+        assertThat(auditLog[7].get("event"), equalTo("jump"))
+        assertThat(auditLog[8].get("event"), equalTo("question"))
+        assertThat(auditLog[9].get("event"), equalTo("end screen"))
+        assertThat(auditLog[10].get("event"), equalTo("form save"))
+        assertThat(auditLog[11].get("event"), equalTo("form exit"))
+        assertThat(auditLog[12].get("event"), equalTo("form finalize"))
     }
 }

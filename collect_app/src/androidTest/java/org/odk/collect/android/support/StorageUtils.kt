@@ -135,7 +135,7 @@ object StorageUtils {
             .get()
 
         val records = FileReader(auditLog).use { auditLogReader ->
-            CSVFormat.DEFAULT.parse(auditLogReader).use { parser ->
+            CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(auditLogReader).use { parser ->
                 parser.records
             }
         }

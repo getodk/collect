@@ -41,7 +41,6 @@ public class AuditEventLogger {
     private final AuditConfig auditConfig;
     private final FormController formController;
     private String user;
-    private boolean changesMade;
     private boolean editing;
 
     public AuditEventLogger(AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
@@ -130,11 +129,7 @@ public class AuditEventLogger {
 
     private void addNewValueToQuestionAuditEvent(AuditEvent aev, FormController formController) {
         IAnswerData answerData = formController.getQuestionPrompt(aev.getFormIndex()).getAnswerValue();
-        boolean valueChanged = aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
-
-        if (valueChanged) {
-            this.changesMade = true;
-        }
+        aev.recordValueChange(answerData != null ? answerData.getDisplayText() : null);
     }
 
     // If location provider are enabled/disabled it sometimes fires the BroadcastReceiver multiple
@@ -298,10 +293,6 @@ public class AuditEventLogger {
 
     public boolean isChangeReasonRequired() {
         return auditConfig != null && auditConfig.isTrackChangesReasonEnabled();
-    }
-
-    public boolean isChangesMade() {
-        return changesMade;
     }
 
     public void setEditing(boolean editing) {
