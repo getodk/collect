@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.odk.collect.android.R
+import java.util.function.Consumer
 
 class FormListSortingBottomSheetDialog(
     context: Context,
     private val options: List<FormListSortingOption>,
     private val selectedOption: Int,
-    private val onSelectedOptionChanged: (option: Int) -> Unit
+    private val onSelectedOptionChanged: Consumer<Int>
 ) : BottomSheetDialog(context) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +27,7 @@ class FormListSortingBottomSheetDialog(
                 options,
                 selectedOption
             ) { position ->
-                onSelectedOptionChanged(position)
+                onSelectedOptionChanged.accept(position)
                 dismiss()
             }
             layoutManager = LinearLayoutManager(context)
