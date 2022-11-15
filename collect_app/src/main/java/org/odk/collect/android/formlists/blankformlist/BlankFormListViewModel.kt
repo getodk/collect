@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -79,9 +80,17 @@ class BlankFormListViewModel(
             return generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
         }
 
+    private val syncWithServerObserver = Observer<Boolean> {
+        if (!it) {
+            loadFromDatabase()
+        }
+    }
+
     init {
         loadFromDatabase()
         syncWithStorage()
+
+        syncRepository.isSyncing(projectId).observeForever(syncWithServerObserver)
     }
 
     fun getAllForms(): List<BlankFormListItem> {
@@ -247,5 +256,10 @@ class BlankFormListViewModel(
                 projectId
             ) as T
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        syncRepository.isSyncing(projectId).removeObserver(syncWithServerObserver)
     }
 }
