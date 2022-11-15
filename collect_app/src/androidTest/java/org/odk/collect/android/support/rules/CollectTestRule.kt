@@ -2,9 +2,10 @@ package org.odk.collect.android.support.rules
 
 import android.app.Activity
 import android.app.Instrumentation
+import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import org.odk.collect.android.activities.FirstLaunchActivity
+import org.odk.collect.android.BuildConfig.APPLICATION_ID
 import org.odk.collect.android.external.AndroidShortcutsActivity
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -14,17 +15,14 @@ import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import java.util.function.Consumer
 
 class CollectTestRule @JvmOverloads constructor(
-    private val useDemoProject: Boolean = true
+    private val useDemoProject: Boolean = true,
 ) : ActivityScenarioLauncherRule() {
 
     override fun before() {
         super.before()
 
         val firstLaunchPage = launch(
-            Intent(
-                ApplicationProvider.getApplicationContext(),
-                FirstLaunchActivity::class.java
-            ),
+            getLaunchIntent(),
             FirstLaunchPage()
         ).assertOnPage()
 
@@ -48,6 +46,10 @@ class CollectTestRule @JvmOverloads constructor(
         return ShortcutsPage(scenario).assertOnPage()
     }
 
+    fun <D : Page<D>> relaunch(destination: D): D {
+        return launch(getLaunchIntent(), destination)
+    }
+
     fun <T : Page<T>> launch(intent: Intent, destination: T): T {
         launch<Activity>(intent)
         return destination.assertOnPage()
@@ -56,11 +58,21 @@ class CollectTestRule @JvmOverloads constructor(
     fun <T : Page<T>> launchForResult(
         intent: Intent,
         destination: T,
-        actions: Consumer<T>
+        actions: Consumer<T>,
     ): Instrumentation.ActivityResult {
         val scenario = launchForResult<Activity>(intent)
         destination.assertOnPage()
         actions.accept(destination)
         return scenario.result
+    }
+
+    private fun getLaunchIntent(): Intent {
+        return ApplicationProvider
+            .getApplicationContext<Context>()
+            .packageManager
+            .getLaunchIntentForPackage(APPLICATION_ID)!!
+            .apply {
+                this.addCategory(Intent.CATEGORY_LAUNCHER)
+            }
     }
 }

@@ -266,6 +266,7 @@ dependencies {
     implementation project(':maps')
     implementation project(':osmdroid')
     implementation project(':entities')
+    implementation project(':crash-handler')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')

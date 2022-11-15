@@ -1,13 +1,14 @@
 package org.odk.collect.android.activities.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.verify
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.projects.Project
@@ -29,9 +30,10 @@ class CurrentProjectViewModelTest {
 
     @Test
     fun `Initial current project should be set`() {
+        assertThat(currentProjectViewModel.hasCurrentProject(), equalTo(true))
         assertThat(
             currentProjectViewModel.currentProject.value,
-            `is`(Project.Saved("123", "Project X", "X", "#cccccc"))
+            equalTo(Project.Saved("123", "Project X", "X", "#cccccc"))
         )
     }
 
@@ -49,5 +51,16 @@ class CurrentProjectViewModelTest {
 
         currentProjectViewModel.setCurrentProject(project)
         verify(analyticsInitializer).initialize()
+    }
+
+    @Test
+    fun `hasCurrentProject returns false when there is no current project`() {
+        whenever(currentProjectProvider.getCurrentProject()).thenThrow(IllegalStateException())
+        val currentProjectViewModel = CurrentProjectViewModel(
+            currentProjectProvider,
+            analyticsInitializer
+        )
+
+        assertThat(currentProjectViewModel.hasCurrentProject(), equalTo(false))
     }
 }

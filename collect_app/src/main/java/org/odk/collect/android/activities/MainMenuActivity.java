@@ -17,6 +17,7 @@ package org.odk.collect.android.activities;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
@@ -41,9 +43,11 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.crash_handler.CrashHandler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import javax.inject.Inject;
 
@@ -54,7 +58,7 @@ import javax.inject.Inject;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class MainMenuActivity extends CollectAbstractActivity {
+public class MainMenuActivity extends LocalizedActivity {
     // buttons
     private Button manageFilesButton;
     private Button sendDataButton;
@@ -77,16 +81,40 @@ public class MainMenuActivity extends CollectAbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        new ThemeUtils(this).setDarkModeForCurrentProject();
+        /*
+          We don't need the `installSplashScreen` call on Android 12+ (the system handles the
+          splash screen for us) and it causes problems if we later switch between dark/light themes
+          with the ThemeUtils#setDarkModeForCurrentProject call.
+         */
+        if (Build.VERSION.SDK_INT < 31) {
+            SplashScreen.installSplashScreen(this);
+        } else {
+            setTheme(R.style.Theme_Collect);
+        }
 
         super.onCreate(savedInstanceState);
+
+        CrashHandler crashHandler = CrashHandler.getInstance(this);
+        if (crashHandler != null && crashHandler.hasCrashed(this)) {
+            ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity.class);
+            return;
+        }
+
+        new ThemeUtils(this).setDarkModeForCurrentProject();
         DaggerUtils.getComponent(this).inject(this);
+
+        mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
+        currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
+
+        if (!currentProjectViewModel.hasCurrentProject()) {
+            ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity.class);
+            return;
+        }
+
         setContentView(R.layout.main_menu);
 
         settingsProvider.getMetaSettings().save(MetaKeys.FIRST_LAUNCH, false);
 
-        mainMenuViewModel = new ViewModelProvider(this, viewModelFactory).get(MainMenuViewModel.class);
-        currentProjectViewModel = new ViewModelProvider(this, currentProjectViewModelFactory).get(CurrentProjectViewModel.class);
         currentProjectViewModel.getCurrentProject().observe(this, project -> {
             invalidateOptionsMenu();
             setTitle(project.getName());

@@ -98,7 +98,11 @@ the specific language governing permissions and limitations under the License.
         </provider>
 
         <activity
-            android:name=".activities.FirstLaunchActivity"
+            android:name=".activities.FirstLaunchActivity">
+        </activity>
+
+        <activity
+            android:name=".activities.MainMenuActivity"
             android:theme="@style/Theme.Collect.SplashScreen"
             android:exported="true">
             <intent-filter>
@@ -107,7 +111,9 @@ the specific language governing permissions and limitations under the License.
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.MainMenuActivity" />
+
+        <activity android:name="org.odk.collect.android.activities.CrashHandlerActivity" />
+
         <activity
             android:name=".activities.ScannerWithFlashlightActivity"
             android:screenOrientation="portrait"

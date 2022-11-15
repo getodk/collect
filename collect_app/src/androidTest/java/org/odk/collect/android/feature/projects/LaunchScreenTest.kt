@@ -69,4 +69,10 @@ class LaunchScreenTest {
             .openProjectSettingsDialog()
             .assertCurrentProject("my-server.com", "adam / my-server.com")
     }
+
+    @Test
+    fun whenThereAreProjects_goesToMainMenu() {
+        rule.withProject("https://example.com")
+        rule.relaunch(MainMenuPage())
+    }
 }

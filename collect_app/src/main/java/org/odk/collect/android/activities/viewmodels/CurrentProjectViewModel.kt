@@ -12,11 +12,11 @@ import org.odk.collect.projects.Project
 
 class CurrentProjectViewModel(
     private val currentProjectProvider: CurrentProjectProvider,
-    private val analyticsInitializer: AnalyticsInitializer
+    private val analyticsInitializer: AnalyticsInitializer,
 ) : ViewModel() {
 
-    private val _currentProject = MutableNonNullLiveData(currentProjectProvider.getCurrentProject())
-    val currentProject: NonNullLiveData<Project.Saved> = _currentProject
+    private val _currentProject by lazy { MutableNonNullLiveData(currentProjectProvider.getCurrentProject()) }
+    val currentProject: NonNullLiveData<Project.Saved> by lazy { _currentProject }
 
     fun setCurrentProject(project: Project.Saved) {
         currentProjectProvider.setCurrentProject(project.uuid)
@@ -31,9 +31,18 @@ class CurrentProjectViewModel(
         }
     }
 
+    fun hasCurrentProject(): Boolean {
+        return try {
+            currentProjectProvider.getCurrentProject()
+            true
+        } catch (e: IllegalStateException) {
+            false
+        }
+    }
+
     open class Factory(
         private val currentProjectProvider: CurrentProjectProvider,
-        private val analyticsInitializer: AnalyticsInitializer
+        private val analyticsInitializer: AnalyticsInitializer,
     ) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

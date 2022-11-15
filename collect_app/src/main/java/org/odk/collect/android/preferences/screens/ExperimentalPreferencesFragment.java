@@ -24,6 +24,11 @@ public class ExperimentalPreferencesFragment extends BaseProjectPreferencesFragm
             activity.startActivity(new Intent(activity, EntityBrowserActivity.class));
             return true;
         });
+
+        findPreference("dev_tools").setOnPreferenceClickListener(preference -> {
+            displayPreferences(new DevToolsPreferencesFragment());
+            return true;
+        });
     }
 
     @Override
