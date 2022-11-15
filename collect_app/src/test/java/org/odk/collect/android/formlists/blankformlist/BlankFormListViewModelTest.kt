@@ -174,6 +174,28 @@ class BlankFormListViewModelTest {
     }
 
     @Test
+    fun `after finished syncing with server forms should be loaded from database`() {
+        createViewModel(false)
+        val liveData = MutableLiveData(true)
+        whenever(syncRepository.isSyncing(projectId)).thenReturn(liveData)
+
+        scheduler.runBackground() // load from database
+        scheduler.runBackground() // sync with storage
+
+        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(0))
+
+        saveForms(
+            form(dbId = 1, formId = "1")
+        )
+
+        liveData.value = false
+
+        scheduler.runBackground() // load from database after syncing with server
+
+        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(1))
+    }
+
+    @Test
     fun `deleted forms should be ignored`() {
         saveForms(
             form(dbId = 1, formId = "1"),
