@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -23,6 +22,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.AuthRequired
 import org.odk.collect.forms.FormsRepository
+import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.Md5.getMd5Hash
@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream
 
 class BlankFormListViewModel(
     private val formsRepository: FormsRepository,
+    private val instancesRepository: InstancesRepository,
     private val application: Application,
     private val syncRepository: SyncStatusAppState,
     private val formsUpdater: FormsUpdater,
@@ -89,16 +90,7 @@ class BlankFormListViewModel(
         return formsRepository
             .all
             .map { form ->
-                BlankFormListItem(
-                    databaseId = form.dbId,
-                    formId = form.formId,
-                    formName = form.displayName,
-                    formVersion = form.version ?: "",
-                    geometryPath = form.geometryXpath ?: "",
-                    dateOfCreation = form.date,
-                    dateOfLastUsage = 0,
-                    contentUri = FormsContract.getUri(projectId, form.dbId)
-                )
+                form.toBlankFormListItem(projectId, instancesRepository)
             }
     }
 
@@ -111,16 +103,7 @@ class BlankFormListViewModel(
                     .filter {
                         !it.isDeleted
                     }.map { form ->
-                        BlankFormListItem(
-                            databaseId = form.dbId,
-                            formId = form.formId,
-                            formName = form.displayName,
-                            formVersion = form.version ?: "",
-                            geometryPath = form.geometryXpath ?: "",
-                            dateOfCreation = form.date,
-                            dateOfLastUsage = 0,
-                            contentUri = FormsContract.getUri(projectId, form.dbId)
-                        )
+                        form.toBlankFormListItem(projectId, instancesRepository)
                     }
 
                 if (shouldHideOldFormVersions) {
@@ -224,6 +207,7 @@ class BlankFormListViewModel(
             1 -> _allForms.value.sortedByDescending { it.formName.lowercase() }
             2 -> _allForms.value.sortedByDescending { it.dateOfCreation }
             3 -> _allForms.value.sortedBy { it.dateOfCreation }
+            4 -> _allForms.value.sortedByDescending { it.dateOfLastUsage }
             else -> { _allForms.value }
         }.filter {
             filterText.isBlank() || it.formName.contains(filterText, true)
@@ -232,6 +216,7 @@ class BlankFormListViewModel(
 
     class Factory(
         private val formsRepository: FormsRepository,
+        private val instancesRepository: InstancesRepository,
         private val application: Application,
         private val syncRepository: SyncStatusAppState,
         private val formsUpdater: FormsUpdater,
@@ -246,6 +231,7 @@ class BlankFormListViewModel(
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return BlankFormListViewModel(
                 formsRepository,
+                instancesRepository,
                 application,
                 syncRepository,
                 formsUpdater,

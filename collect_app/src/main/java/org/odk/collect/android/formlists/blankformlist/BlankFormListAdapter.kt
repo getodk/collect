@@ -12,9 +12,9 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class FormListAdapter(
+class BlankFormListAdapter(
     val listener: OnFormItemClickListener
-) : RecyclerView.Adapter<FormListAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<BlankFormListAdapter.ViewHolder>() {
 
     private var formItems = emptyList<BlankFormListItem>()
 

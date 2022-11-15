@@ -39,6 +39,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
 import org.odk.collect.android.formentry.RefreshFormListDialogFragment;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper;
@@ -64,6 +65,7 @@ import org.odk.collect.forms.FormSourceException;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -246,9 +248,16 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         listView.setItemsCanFocus(false);
 
-        sortingOptions = new int[]{
-                R.string.sort_by_name_asc, R.string.sort_by_name_desc
-        };
+        sortingOptions = Arrays.asList(
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_asc
+                ),
+                new FormListSortingOption(
+                        R.drawable.ic_sort_by_alpha,
+                        R.string.sort_by_name_desc
+                )
+        );
     }
 
     private void clearChoices() {

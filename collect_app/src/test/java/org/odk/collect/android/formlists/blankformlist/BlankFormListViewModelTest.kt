@@ -16,7 +16,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -25,8 +24,10 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
+import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.testshared.BooleanChangeLock
@@ -35,6 +36,7 @@ import org.odk.collect.testshared.FakeScheduler
 @RunWith(AndroidJUnit4::class)
 class BlankFormListViewModelTest {
     private val formsRepository = InMemFormsRepository()
+    private val instancesRepository = InMemInstancesRepository()
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val syncRepository: SyncStatusAppState = mock()
     private val formsUpdater: FormsUpdater = mock()
@@ -227,7 +229,7 @@ class BlankFormListViewModelTest {
     }
 
     @Test
-    fun `list of forms should be sorted when sorting order is changed`() {
+    fun `when list of forms sorted 'by name ASC', saved should forms be ordered properly`() {
         saveForms(
             form(dbId = 1, formId = "1", formName = "1Form"),
             form(dbId = 2, formId = "2", formName = "BForm"),
@@ -238,37 +240,175 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        // Sort by name ASC
         viewModel.sortingOrder = 0
+
         assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", formName = "1Form"))
         assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 5, formId = "5", formName = "2Form"))
         assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
         assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
         assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 2, formId = "2", formName = "BForm"))
+    }
 
-        // Sort by name DESC
+    @Test
+    fun `when list of forms sorted 'by name DESC', saved should forms be ordered properly`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "1Form"),
+            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 3, formId = "3", formName = "aForm"),
+            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 5, formId = "5", formName = "2Form")
+        )
+
+        createViewModel()
+
         viewModel.sortingOrder = 1
+
         assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2", formName = "BForm"))
         assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 3, formId = "3", formName = "aForm"))
         assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 4, formId = "4", formName = "AForm"))
         assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 5, formId = "5", formName = "2Form"))
         assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 1, formId = "1", formName = "1Form"))
+    }
 
-        // Sort by date newest first
+    @Test
+    fun `when list of forms sorted 'by date newest first', saved should forms be ordered properly`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "1Form"),
+            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 3, formId = "3", formName = "aForm"),
+            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 5, formId = "5", formName = "2Form")
+        )
+
+        createViewModel()
+
         viewModel.sortingOrder = 2
+
         assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 5, formId = "5", formName = "2Form"))
         assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 4, formId = "4", formName = "AForm"))
         assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
         assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 2, formId = "2", formName = "BForm"))
         assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 1, formId = "1", formName = "1Form"))
+    }
 
-        // Sort by date oldest first
+    @Test
+    fun `when list of forms sorted 'by date oldest first', saved should forms be ordered properly`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "1Form"),
+            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 3, formId = "3", formName = "aForm"),
+            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 5, formId = "5", formName = "2Form")
+        )
+
+        createViewModel()
+
         viewModel.sortingOrder = 3
+
         assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", formName = "1Form"))
         assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2", formName = "BForm"))
         assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
         assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
         assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 5, formId = "5", formName = "2Form"))
+    }
+
+    @Test
+    fun `when list of forms sorted 'by last saved', should forms be ordered properly`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "1Form"),
+            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 3, formId = "3", formName = "aForm"),
+            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 5, formId = "5", formName = "2Form")
+        )
+
+        saveInstances(
+            instance(formId = "1", lastStatusChangeDate = 1L),
+            instance(formId = "3", lastStatusChangeDate = 2L),
+            instance(formId = "5", lastStatusChangeDate = 3L),
+            instance(formId = "4", lastStatusChangeDate = 4L),
+            instance(formId = "2", lastStatusChangeDate = 5L),
+        )
+
+        createViewModel()
+
+        viewModel.sortingOrder = 4
+
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2", formName = "BForm"), 5L)
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 4, formId = "4", formName = "AForm"), 4L)
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 5, formId = "5", formName = "2Form"), 3L)
+        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 3, formId = "3", formName = "aForm"), 2L)
+        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 1, formId = "1", formName = "1Form"), 1L)
+    }
+
+    @Test
+    fun `when list of forms sorted 'by last saved' and there are no saved instances, should the order from database be preserved`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "1Form"),
+            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 3, formId = "3", formName = "aForm"),
+            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 5, formId = "5", formName = "2Form")
+        )
+
+        createViewModel()
+
+        viewModel.sortingOrder = 4
+
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", formName = "1Form"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2", formName = "BForm"))
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
+        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
+        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 5, formId = "5", formName = "2Form"))
+    }
+
+    @Test
+    fun `when list of forms sorted 'by last saved', forms with no saved instances should be displayed at the bottom`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "1Form"),
+            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 3, formId = "3", formName = "aForm"),
+            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 5, formId = "5", formName = "2Form")
+        )
+
+        saveInstances(
+            instance(formId = "1", lastStatusChangeDate = 1L),
+            instance(formId = "3", lastStatusChangeDate = 2L),
+        )
+
+        createViewModel()
+
+        viewModel.sortingOrder = 4
+
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 3, formId = "3", formName = "aForm"), 2L)
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 1, formId = "1", formName = "1Form"), 1L)
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 2, formId = "2", formName = "BForm"))
+        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
+        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 5, formId = "5", formName = "2Form"))
+    }
+
+    @Test
+    fun `when list of forms sorted 'by last saved', and there are different versions of the same form, sorting should distinguish different form versions`() {
+        saveForms(
+            form(dbId = 1, formId = "1", formName = "AForm v1", version = "1"),
+            form(dbId = 2, formId = "1", formName = "AForm v2", version = "2"),
+            form(dbId = 3, formId = "2", formName = "BForm")
+        )
+
+        saveInstances(
+            instance(formId = "1", lastStatusChangeDate = 1L, version = "1"),
+            instance(formId = "2", lastStatusChangeDate = 2L),
+            instance(formId = "1", lastStatusChangeDate = 3L, version = "2"),
+        )
+
+        createViewModel(shouldHideOldFormVersions = false)
+
+        viewModel.sortingOrder = 4
+
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "1", formName = "AForm v2", version = "2"), 3L)
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 3, formId = "2", formName = "BForm"), 2L)
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 1, formId = "1", formName = "AForm v1", version = "1"), 1L)
     }
 
     @Test
@@ -345,12 +485,21 @@ class BlankFormListViewModelTest {
         }
     }
 
+    private fun saveInstances(vararg instances: Instance) {
+        instancesRepository.deleteAll()
+
+        instances.forEach {
+            instancesRepository.save(it)
+        }
+    }
+
     private fun createViewModel(runAllBackgroundTasks: Boolean = true, shouldHideOldFormVersions: Boolean = true) {
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
         generalSettings.save(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, shouldHideOldFormVersions)
 
         viewModel = BlankFormListViewModel(
             formsRepository,
+            instancesRepository,
             context,
             syncRepository,
             formsUpdater,
@@ -368,20 +517,11 @@ class BlankFormListViewModelTest {
         }
     }
 
-    private fun assertFormItem(blankFormListItem: BlankFormListItem, form: Form) {
+    private fun assertFormItem(blankFormListItem: BlankFormListItem, form: Form, lastStatusChangeDate: Long = 0) {
         assertThat(
             blankFormListItem,
             `is`(
-                BlankFormListItem(
-                    databaseId = form.dbId,
-                    formId = form.formId,
-                    formName = form.displayName,
-                    formVersion = form.version ?: "",
-                    geometryPath = form.geometryXpath ?: "",
-                    dateOfCreation = form.date,
-                    dateOfLastUsage = 0,
-                    contentUri = FormsContract.getUri(projectId, form.dbId)
-                )
+                form.toBlankFormListItem(projectId, instancesRepository)
             )
         )
     }
@@ -389,7 +529,7 @@ class BlankFormListViewModelTest {
     private fun form(
         dbId: Long,
         formId: String = "1",
-        version: String = "1",
+        version: String? = null,
         formName: String = "Form $formId",
         deleted: Boolean = false
     ) = Form.Builder()
@@ -400,5 +540,15 @@ class BlankFormListViewModelTest {
         .date(dbId)
         .deleted(deleted)
         .formFilePath(FormUtils.createXFormFile(formId, version).absolutePath)
+        .build()
+
+    private fun instance(
+        formId: String,
+        lastStatusChangeDate: Long,
+        version: String? = null
+    ) = Instance.Builder()
+        .formId(formId)
+        .formVersion(version)
+        .lastStatusChangeDate(lastStatusChangeDate)
         .build()
 }

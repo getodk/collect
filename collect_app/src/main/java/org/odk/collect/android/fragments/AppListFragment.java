@@ -30,18 +30,11 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.ListFragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
-import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
 
@@ -51,19 +44,16 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
-
 public abstract class AppListFragment extends ListFragment {
 
     @Inject
     SettingsProvider settingsProvider;
 
-    protected int[] sortingOptions;
+    protected List<FormListSortingOption> sortingOptions;
     protected SimpleCursorAdapter listAdapter;
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     protected View rootView;
     private Integer selectedSortingOrder;
-    private BottomSheetDialog bottomSheetDialog;
     private String filterText;
 
     // toggles to all checked or all unchecked
@@ -169,52 +159,19 @@ public abstract class AppListFragment extends ListFragment {
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_sort:
-                bottomSheetDialog.show();
-                return true;
+        if (item.getItemId() == R.id.menu_sort) {
+            new FormListSortingBottomSheetDialog(
+                    requireContext(),
+                    sortingOptions,
+                    selectedSortingOrder,
+                    selectedOption -> {
+                        saveSelectedSortingOrder(selectedOption);
+                        updateAdapter();
+                    }
+            ).show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void performSelectedSearch(int position) {
-        saveSelectedSortingOrder(position);
-        updateAdapter();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (bottomSheetDialog == null) {
-            setupBottomSheet();
-        }
-    }
-
-    private void setupBottomSheet() {
-        CollectAbstractActivity activity = (CollectAbstractActivity) getActivity();
-        if (activity == null) {
-            Timber.e(new Error("Activity is null"));
-            return;
-        }
-
-        bottomSheetDialog = new BottomSheetDialog(activity);
-        View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
-        final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
-
-        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), recyclerView, sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
-            @Override
-            public void onItemClicked(SortDialogAdapter.ViewHolder holder, int position) {
-                holder.updateItemColor(selectedSortingOrder);
-                performSelectedSearch(position);
-                bottomSheetDialog.dismiss();
-            }
-        });
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        bottomSheetDialog.setContentView(sheetView);
     }
 
     protected void checkPreviouslyCheckedItems() {

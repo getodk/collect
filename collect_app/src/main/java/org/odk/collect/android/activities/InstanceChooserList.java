@@ -38,6 +38,7 @@ import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.external.InstancesContract;
+import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -45,6 +46,8 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -79,18 +82,53 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
 
             setTitle(getString(R.string.review_data));
             editMode = true;
-            sortingOptions = new int[]{
-                    R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                    R.string.sort_by_date_desc, R.string.sort_by_date_asc,
-                    R.string.sort_by_status_asc, R.string.sort_by_status_desc
-            };
+            sortingOptions = Arrays.asList(
+                    new FormListSortingOption(
+                            R.drawable.ic_sort_by_alpha,
+                            R.string.sort_by_name_asc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_sort_by_alpha,
+                            R.string.sort_by_name_desc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_access_time,
+                            R.string.sort_by_date_desc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_access_time,
+                            R.string.sort_by_date_asc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_assignment_turned_in,
+                            R.string.sort_by_status_asc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_assignment_late,
+                            R.string.sort_by_status_desc
+                    )
+            );
         } else {
             setTitle(getString(R.string.view_sent_forms));
 
-            sortingOptions = new int[]{
-                    R.string.sort_by_name_asc, R.string.sort_by_name_desc,
-                    R.string.sort_by_date_desc, R.string.sort_by_date_asc
-            };
+            sortingOptions = Arrays.asList(
+                    new FormListSortingOption(
+                            R.drawable.ic_sort_by_alpha,
+                            R.string.sort_by_name_asc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_sort_by_alpha,
+                            R.string.sort_by_name_desc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_access_time,
+                            R.string.sort_by_date_desc
+                    ),
+                    new FormListSortingOption(
+                            R.drawable.ic_access_time,
+                            R.string.sort_by_date_asc
+                    )
+            );
             ((TextView) findViewById(android.R.id.empty)).setText(R.string.no_items_display_sent_forms);
         }
 
