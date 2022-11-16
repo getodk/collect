@@ -4,9 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.formstest.InMemFormsRepository;
 import org.odk.collect.formstest.InMemInstancesRepository;
 
 import java.util.HashMap;
@@ -14,7 +12,6 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.odk.collect.formstest.FormUtils.createXFormFile;
 
 @RunWith(AndroidJUnit4.class)
 public class InstanceUploaderUtilsTest {
@@ -23,64 +20,6 @@ public class InstanceUploaderUtilsTest {
      * SQLiteException: Expression tree is too large if we didn't split it into parts.
      */
     private static final int NUMBER_OF_INSTANCES_TO_SEND = 1000;
-
-    @Test
-    public void shouldFormBeDeletedFunction_shouldReturnFalseIfAutoDeleteNotSpecifiedOnFormLevelAndDisabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .dbId(1L)
-                .formId("1")
-                .version("1")
-                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", false), is(false));
-    }
-
-    @Test
-    public void shouldFormBeDeletedFunction_shouldReturnTrueIfAutoDeleteNotSpecifiedOnFormLevelButEnabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .dbId(1L)
-                .formId("1")
-                .version("1")
-                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", true), is(true));
-    }
-
-    @Test
-    public void shouldFormBeDeletedFunction_shouldReturnFalseIfAutoDeleteSpecifiedAsFalseOnFormLevelButEnabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .dbId(1L)
-                .formId("1")
-                .version("1")
-                .autoDelete("false")
-                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", true), is(false));
-    }
-
-    @Test
-    public void shouldFormBeDeletedFunction_shouldReturnTrueIfAutoDeleteSpecifiedAsTrueOnFormLevelButDisabledInSettings() {
-        InMemFormsRepository formsRepository = new InMemFormsRepository();
-
-        formsRepository.save(new Form.Builder()
-                .dbId(1L)
-                .formId("1")
-                .version("1")
-                .autoDelete("true")
-                .formFilePath(createXFormFile("1", "1").getAbsolutePath())
-                .build());
-
-        assertThat(InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, "1", "1", false), is(true));
-    }
 
     @Test
     public void getUploadResultMessageTest() {
