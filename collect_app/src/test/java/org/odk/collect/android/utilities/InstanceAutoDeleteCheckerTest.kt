@@ -14,86 +14,67 @@ class InstanceAutoDeleteCheckerTest {
 
     @Test
     fun `Instance should be deleted if auto-delete enabled in project settings and not set on a form level`() {
-        formsRepository.save(
-            Form.Builder()
-                .formId("1")
-                .version("1")
-                .formFilePath(FormUtils.createXFormFile("1", "1").absolutePath)
-                .build()
-        )
-
-        val instance = Instance.Builder()
-            .formId("1")
-            .formVersion("1")
-            .instanceFilePath(TempFiles.createTempDir().absolutePath)
-            .build()
-
+        val instance = saveInstance()
         assertTrue(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, true, instance))
     }
 
     @Test
     fun `Instance should be deleted if auto-delete enabled in project settings and set on a form level but with an unsupported value`() {
-        formsRepository.save(
-            Form.Builder()
-                .formId("1")
-                .version("1")
-                .autoDelete("anything")
-                .formFilePath(FormUtils.createXFormFile("1", "1").absolutePath)
-                .build()
-        )
-
-        val instance = Instance.Builder()
-            .formId("1")
-            .formVersion("1")
-            .instanceFilePath(TempFiles.createTempDir().absolutePath)
-            .build()
-
+        val instance = saveInstance("anything")
         assertTrue(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, true, instance))
     }
 
     @Test
     fun `Instance should not be deleted if auto-delete enabled in project settings but disabled on a form level`() {
-        formsRepository.save(
-            Form.Builder()
-                .formId("1")
-                .version("1")
-                .autoDelete("false")
-                .formFilePath(FormUtils.createXFormFile("1", "1").absolutePath)
-                .build()
-        )
-
-        val instance = Instance.Builder()
-            .formId("1")
-            .formVersion("1")
-            .instanceFilePath(TempFiles.createTempDir().absolutePath)
-            .build()
-
+        val instance = saveInstance("false")
         assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, true, instance))
     }
 
     @Test
+    fun `Disabling aut-delete should not be case sensitive`() {
+        val instance = saveInstance(" FaLsE ")
+        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, true, instance))
+    }
+
+    @Test
+    fun `Instance should be deleted if auto-delete enabled in project settings and on a form level`() {
+        val instance = saveInstance("true")
+        assertTrue(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, true, instance))
+    }
+
+    @Test
     fun `Instance should be deleted if auto-delete disabled in project settings but enabled on a form level`() {
-        formsRepository.save(
-            Form.Builder()
-                .formId("1")
-                .version("1")
-                .autoDelete("true")
-                .formFilePath(FormUtils.createXFormFile("1", "1").absolutePath)
-                .build()
-        )
+        val instance = saveInstance("true")
+        assertTrue(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
+    }
 
-        val instance = Instance.Builder()
-            .formId("1")
-            .formVersion("1")
-            .instanceFilePath(TempFiles.createTempDir().absolutePath)
-            .build()
-
+    @Test
+    fun `Enabling auto-delete should not be case sensitive`() {
+        val instance = saveInstance(" TrUe ")
         assertTrue(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
     }
 
     @Test
     fun `Instance should not be deleted if auto-delete disabled in project settings and disabled on a form level`() {
-        formsRepository.save(
+        val instance = saveInstance("false")
+        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
+    }
+
+    @Test
+    fun `Instance should not be deleted if auto-delete disabled in project settings and not set on a form level`() {
+        val instance = saveInstance()
+        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
+    }
+
+    @Test
+    fun `Instance should not be deleted if auto-delete disabled in project settings and set on a form level with unsupported value`() {
+        val instance = saveInstance("anything")
+        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
+    }
+
+    @Test
+    fun `Only instances of a form version with auto-delete enabled should be deleted`() {
+        val formV1 = formsRepository.save(
             Form.Builder()
                 .formId("1")
                 .version("1")
@@ -102,51 +83,43 @@ class InstanceAutoDeleteCheckerTest {
                 .build()
         )
 
-        val instance = Instance.Builder()
-            .formId("1")
-            .formVersion("1")
+        val instanceV1 = Instance.Builder()
+            .formId(formV1.formId)
+            .formVersion(formV1.version)
             .instanceFilePath(TempFiles.createTempDir().absolutePath)
             .build()
 
-        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
+        val formV2 = formsRepository.save(
+            Form.Builder(formV1)
+                .version("2")
+                .autoDelete("true")
+                .build()
+        )
+
+        val instanceV2 = Instance.Builder()
+            .formId(formV2.formId)
+            .formVersion(formV2.version)
+            .instanceFilePath(TempFiles.createTempDir().absolutePath)
+            .build()
+
+        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instanceV1))
+        assertTrue(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instanceV2))
     }
 
-    @Test
-    fun `Instance should not be deleted if auto-delete disabled in project settings and not set on a form level`() {
-        formsRepository.save(
+    private fun saveInstance(autoDelete: String = ""): Instance {
+        val form = formsRepository.save(
             Form.Builder()
                 .formId("1")
                 .version("1")
+                .autoDelete(autoDelete)
                 .formFilePath(FormUtils.createXFormFile("1", "1").absolutePath)
                 .build()
         )
 
-        val instance = Instance.Builder()
-            .formId("1")
-            .formVersion("1")
+        return Instance.Builder()
+            .formId(form.formId)
+            .formVersion(form.version)
             .instanceFilePath(TempFiles.createTempDir().absolutePath)
             .build()
-
-        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
-    }
-
-    @Test
-    fun `Instance should not be deleted if auto-delete disabled in project settings and set on a form level with unsupported value`() {
-        formsRepository.save(
-            Form.Builder()
-                .formId("1")
-                .version("1")
-                .autoDelete("anything")
-                .formFilePath(FormUtils.createXFormFile("1", "1").absolutePath)
-                .build()
-        )
-
-        val instance = Instance.Builder()
-            .formId("1")
-            .formVersion("1")
-            .instanceFilePath(TempFiles.createTempDir().absolutePath)
-            .build()
-
-        assertFalse(InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, false, instance))
     }
 }

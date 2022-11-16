@@ -3,6 +3,7 @@ package org.odk.collect.android.instancemanagement.autosend
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
+import java.util.Locale
 
 class InstanceAutoSendFetcher(private val autoSendSettingsProvider: AutoSendSettingsProvider) {
 
@@ -12,13 +13,13 @@ class InstanceAutoSendFetcher(private val autoSendSettingsProvider: AutoSendSett
         return if (autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)) {
             allFinalizedForms.filter {
                 formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
-                    form.autoSend != "false"
+                    form.autoSend == null || form.autoSend.trim().lowercase(Locale.US) != "false"
                 } ?: false
             }
         } else {
             allFinalizedForms.filter {
                 formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
-                    form.autoSend.toBoolean()
+                    form.autoSend != null && form.autoSend.trim().lowercase(Locale.US).toBoolean()
                 } ?: false
             }
         }

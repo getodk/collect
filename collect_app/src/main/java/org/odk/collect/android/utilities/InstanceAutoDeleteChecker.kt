@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities
 
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
+import java.util.Locale
 
 object InstanceAutoDeleteChecker {
 
@@ -19,9 +20,9 @@ object InstanceAutoDeleteChecker {
     ): Boolean {
         formsRepository.getLatestByFormIdAndVersion(instance.formId, instance.formVersion)?.let { form ->
             return if (isAutoDeleteEnabledInProjectSettings) {
-                form.autoDelete != "false"
+                form.autoDelete == null || form.autoDelete.trim().lowercase(Locale.US) != "false"
             } else {
-                form.autoDelete.toBoolean()
+                form.autoDelete != null && form.autoDelete.trim().lowercase(Locale.US).toBoolean()
             }
         }
 
