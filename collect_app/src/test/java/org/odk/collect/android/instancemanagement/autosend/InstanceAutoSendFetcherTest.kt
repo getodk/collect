@@ -43,11 +43,19 @@ class InstanceAutoSendFetcherTest {
     private val instanceOfFormWithDisabledAutoSendSubmissionFailed = buildInstance("3", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
     private val instanceOfFormWithDisabledAutoSendSubmitted = buildInstance("3", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
 
+    private val formWithCustomAutoSend = buildForm("4", "1", createTempDir().absolutePath, autosend = "anything").build()
+
+    private val instanceOfFormWithCustomAutoSendIncomplete = buildInstance("4", "1", "instance 1", Instance.STATUS_INCOMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithCustomAutoSendComplete = buildInstance("4", "1", "instance 2", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithCustomAutoSendSubmissionFailed = buildInstance("4", "1", "instance 3", Instance.STATUS_SUBMISSION_FAILED, null, createTempDir().absolutePath).build()
+    private val instanceOfFormWithCustomAutoSendSubmitted = buildInstance("4", "1", "instance 4", Instance.STATUS_SUBMITTED, null, createTempDir().absolutePath).build()
+
     @Before
     fun setup() {
         formsRepository.save(formWithEnabledAutoSend)
         formsRepository.save(formWithoutSpecifiedAutoSend)
         formsRepository.save(formWithDisabledAutoSend)
+        formsRepository.save(formWithCustomAutoSend)
 
         instancesRepository.apply {
             save(instanceOfFormWithEnabledAutoSendIncomplete)
@@ -64,20 +72,30 @@ class InstanceAutoSendFetcherTest {
             save(instanceOfFormWithDisabledAutoSendComplete)
             save(instanceOfFormWithDisabledAutoSendSubmissionFailed)
             save(instanceOfFormWithDisabledAutoSendSubmitted)
+
+            save(instanceOfFormWithCustomAutoSendIncomplete)
+            save(instanceOfFormWithCustomAutoSendComplete)
+            save(instanceOfFormWithCustomAutoSendSubmissionFailed)
+            save(instanceOfFormWithCustomAutoSendSubmitted)
         }
     }
 
     @Test
-    fun `when autosend enabled in settings return all finalized instances of forms that do not have auto send disabled ona a form level`() {
+    fun `when autosend enabled in settings return all finalized instances of forms that do not have auto send disabled on a form level`() {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(true)
 
         val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
 
-        assertThat(instancesToSend.size, `is`(4))
+        assertThat(instancesToSend.size, `is`(6))
+
         assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendComplete))
         assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendSubmissionFailed))
+
         assertTrue(instancesToSend.contains(instanceOfFormWithoutSpecifiedAutoSendComplete))
         assertTrue(instancesToSend.contains(instanceOfFormWithoutSpecifiedAutoSendSubmissionFailed))
+
+        assertTrue(instancesToSend.contains(instanceOfFormWithCustomAutoSendComplete))
+        assertTrue(instancesToSend.contains(instanceOfFormWithCustomAutoSendSubmissionFailed))
     }
 
     @Test
