@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -51,13 +52,12 @@ class BlankFormListViewModel(
 
     private val isFormLoadingRunning = MutableNonNullLiveData(false)
     private val isSyncingWithStorageRunning = MutableNonNullLiveData(false)
-    private val isSyncingWithServerRunning = MutableNonNullLiveData(false)
 
     val isLoading: LiveData<Boolean> = Transformations.map(
         LiveDataUtils.zip3(
             isFormLoadingRunning,
             isSyncingWithStorageRunning,
-            isSyncingWithServerRunning,
+            syncRepository.isSyncing(projectId),
         )
     ) { (one, two, three) -> one || two || three }
 
@@ -81,9 +81,17 @@ class BlankFormListViewModel(
             return generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
         }
 
+    private val syncWithServerObserver = Observer<Boolean> {
+        if (!it) {
+            loadFromDatabase()
+        }
+    }
+
     init {
         loadFromDatabase()
         syncWithStorage()
+
+        syncRepository.isSyncing(projectId).observeForever(syncWithServerObserver)
     }
 
     fun getAllForms(): List<BlankFormListItem> {
@@ -165,15 +173,6 @@ class BlankFormListViewModel(
         ) == FormUpdateMode.MATCH_EXACTLY
     }
 
-    fun isSyncingWithServer(): LiveData<Boolean> {
-        return Transformations.map(
-            syncRepository.isSyncing(projectId)
-        ) { isSyncing ->
-            isSyncingWithServerRunning.value = isSyncing
-            isSyncing
-        }
-    }
-
     fun isOutOfSyncWithServer(): LiveData<Boolean> {
         return Transformations.map(
             syncRepository.getSyncError(projectId)
@@ -243,5 +242,10 @@ class BlankFormListViewModel(
                 projectId
             ) as T
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        syncRepository.isSyncing(projectId).removeObserver(syncWithServerObserver)
     }
 }

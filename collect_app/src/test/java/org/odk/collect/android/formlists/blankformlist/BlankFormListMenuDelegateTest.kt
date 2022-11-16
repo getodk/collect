@@ -41,7 +41,7 @@ class BlankFormListMenuDelegateTest {
     @Before
     fun setup() {
         whenever(networkStateProvider.isDeviceOnline).thenReturn(true)
-        whenever(viewModel.isSyncingWithServer()).thenReturn(MutableLiveData(false))
+        whenever(viewModel.isLoading).thenReturn(MutableLiveData(false))
         whenever(viewModel.isOutOfSyncWithServer()).thenReturn(MutableLiveData(false))
 
         activity = CollectHelpers.createThemedActivity(FragmentActivity::class.java)
@@ -78,8 +78,8 @@ class BlankFormListMenuDelegateTest {
     }
 
     @Test
-    fun `onPrepareOptionsMenu when syncing disables refresh button`() {
-        whenever(viewModel.isSyncingWithServer()).thenReturn(MutableLiveData(true))
+    fun `onPrepareOptionsMenu when loading disables refresh button`() {
+        whenever(viewModel.isLoading).thenReturn(MutableLiveData(true))
 
         val menuDelegate = createMenuDelegate()
         val menu = createdMenu()
@@ -91,7 +91,7 @@ class BlankFormListMenuDelegateTest {
     }
 
     @Test
-    fun `onPrepareOptionsMenu when not syncing enables refresh button`() {
+    fun `onPrepareOptionsMenu when not loading enables refresh button`() {
         val menuDelegate = createMenuDelegate()
         val menu = createdMenu()
 

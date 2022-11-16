@@ -78,6 +78,7 @@ class BlankFormListViewModelTest {
         doReturn(true).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
         scheduler.runBackground()
+        scheduler.runBackground()
         assertThat(result.value, `is`(true))
     }
 
@@ -87,6 +88,7 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(false).whenever(formsUpdater).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
+        scheduler.runBackground()
         scheduler.runBackground()
         assertThat(result.value, `is`(false))
     }
@@ -105,19 +107,6 @@ class BlankFormListViewModelTest {
         )
 
         assertThat(viewModel.isMatchExactlyEnabled(), `is`(true))
-    }
-
-    @Test
-    fun `isSyncingWithServer follows repository isSyncing`() {
-        createViewModel()
-
-        val liveData = MutableLiveData(true)
-        whenever(syncRepository.isSyncing(projectId)).thenReturn(liveData)
-
-        val isSyncing = viewModel.isSyncingWithServer()
-        assertThat(isSyncing.getOrAwaitValue(), `is`(true))
-        liveData.value = false
-        assertThat(isSyncing.getOrAwaitValue(), `is`(false))
     }
 
     @Test
@@ -186,6 +175,28 @@ class BlankFormListViewModelTest {
 
         assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
         assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
+    }
+
+    @Test
+    fun `after finished syncing with server forms should be loaded from database`() {
+        createViewModel(false)
+        val liveData = MutableLiveData(true)
+        whenever(syncRepository.isSyncing(projectId)).thenReturn(liveData)
+
+        scheduler.runBackground() // load from database
+        scheduler.runBackground() // sync with storage
+
+        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(0))
+
+        saveForms(
+            form(dbId = 1, formId = "1")
+        )
+
+        liveData.value = false
+
+        scheduler.runBackground() // load from database after syncing with server
+
+        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(1))
     }
 
     @Test
@@ -494,6 +505,7 @@ class BlankFormListViewModelTest {
     }
 
     private fun createViewModel(runAllBackgroundTasks: Boolean = true, shouldHideOldFormVersions: Boolean = true) {
+        whenever(syncRepository.isSyncing(projectId)).thenReturn(MutableLiveData(false))
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
         generalSettings.save(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, shouldHideOldFormVersions)
 
