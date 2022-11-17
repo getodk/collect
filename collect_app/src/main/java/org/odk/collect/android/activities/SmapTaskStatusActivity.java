@@ -257,8 +257,7 @@ public class SmapTaskStatusActivity extends CollectAbstractActivity implements O
 		Cursor cInstanceProvider = managedQuery(InstanceColumns.CONTENT_URI, 
 				null, where, whereArgs, null);
 		if(cInstanceProvider.getCount() != 1) {
-			Log.e("TaskAddressActivity", "Unique instance not found: count is:" +
-					cInstanceProvider.getCount());
+            Timber.e("Unique instance not found: count is:%s", cInstanceProvider.getCount());
 		} else {
 			cInstanceProvider.moveToFirst();
 			Uri instanceUri = ContentUris.withAppendedId(InstanceColumns.CONTENT_URI,

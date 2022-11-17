@@ -667,7 +667,7 @@ public class Utilities {
                         where.append(",");
                     }
                     where.append("?");
-                    whereArgs[i + 1] = assignmentsToKeep.get(i).task.update_id;
+                    whereArgs[i + 2] = assignmentsToKeep.get(i).task.update_id;
                 }
                 where.append(")");
             }
