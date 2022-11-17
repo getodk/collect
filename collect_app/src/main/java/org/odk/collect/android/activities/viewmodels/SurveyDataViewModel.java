@@ -25,6 +25,9 @@ import timber.log.Timber;
 
 public class SurveyDataViewModel extends ViewModel {
 
+    private static final String TASK_MANAGER_LIST_SORTING_ORDER = "taskManagerListSortingOrder";
+    private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
+
     private final SharedPreferences sharedPreferences;
     private MutableLiveData<SurveyData> surveyData;
 
@@ -150,9 +153,6 @@ public class SurveyDataViewModel extends ViewModel {
 
         return sortOrderExpr;
     }
-
-    private static final String TASK_MANAGER_LIST_SORTING_ORDER = "taskManagerListSortingOrder";
-    private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
 
     public void saveTaskSelectedSortingOrder(int selectedStringOrder) {
         saveSortOrder(TASK_MANAGER_LIST_SORTING_ORDER, selectedStringOrder);
