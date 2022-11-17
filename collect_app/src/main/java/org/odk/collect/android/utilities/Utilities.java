@@ -658,22 +658,23 @@ public class Utilities {
         where.append(" and " + T_TASK_STATUS + " != ?");
 
         String[] whereArgs = new String[casesToKeep.size() + 2];
-            whereArgs[0] = Utilities.getSource();
-            whereArgs[1] = Utilities.STATUS_T_CLOSED;
-            if(casesToKeep.size() > 0) {
-                where.append(" and " + InstanceColumns.T_UPDATEID + " not in (");
-                for (int i = 0; i < casesToKeep.size(); i++) {
-                    if (i > 0) {
-                        where.append(",");
-                    }
-                    where.append("?");
-                    whereArgs[i + 2] = assignmentsToKeep.get(i).task.update_id;
+        int idx = 0;
+        whereArgs[idx++] = Utilities.getSource();
+        whereArgs[idx++] = Utilities.STATUS_T_CLOSED;
+        if(casesToKeep.size() > 0) {
+            where.append(" and " + InstanceColumns.T_UPDATEID + " not in (");
+            for (int i = 0; i < casesToKeep.size(); i++) {
+                if (i > 0) {
+                    where.append(",");
                 }
-                where.append(")");
+                where.append("?");
+                whereArgs[idx++] = assignmentsToKeep.get(i).task.update_id;
             }
+            where.append(")");
+        }
 
 
-            InstanceProvider ip = new InstanceProvider();
+        InstanceProvider ip = new InstanceProvider();
 
         String obsoleteUpdateId;
         Cursor c = null;
