@@ -30,7 +30,7 @@
             android:layout_width="72dip"
             android:layout_height="72dip"
             android:contentDescription="@string/app_name"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher_foreground" />
 
         <LinearLayout
             android:layout_width="wrap_content"

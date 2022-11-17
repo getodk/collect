@@ -661,8 +661,9 @@ public class Utilities {
         where.append(" and " + T_TASK_STATUS + " != ?");
 
         String[] whereArgs = new String[casesToKeep.size() + 2];
-        whereArgs[0] = Utilities.getSource();
-        whereArgs[1] = Utilities.STATUS_T_CLOSED;
+        int idx = 0;
+        whereArgs[idx++] = Utilities.getSource();
+        whereArgs[idx++] = Utilities.STATUS_T_CLOSED;
         if (casesToKeep.size() > 0) {
             where.append(" and " + InstanceColumns.T_UPDATEID + " not in (");
             for (int i = 0; i < casesToKeep.size(); i++) {
@@ -670,7 +671,7 @@ public class Utilities {
                     where.append(",");
                 }
                 where.append("?");
-                whereArgs[i + 1] = assignmentsToKeep.get(i).task.update_id;
+                whereArgs[idx++] = assignmentsToKeep.get(i).task.update_id;
             }
             where.append(")");
         }

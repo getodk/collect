@@ -29,7 +29,7 @@ the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="0dp"
-            app:navigationIcon="@mipmap/ic_nav" />
+            app:navigationIcon="@mipmap/ic_nav_foreground" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/audio_recording_controller"
