@@ -172,12 +172,7 @@ public class SmapFormListFragment extends ListFragment {
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc,
                 R.string.smap_sort_by_project_asc, R.string.smap_sort_by_project_desc
         };
-
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        SurveyDataViewModelFactory viewModelFactory = new SurveyDataViewModelFactory(sharedPreferences);
-
-        model = new ViewModelProvider(this, viewModelFactory).get(SurveyDataViewModel.class);
+        model = getViewMode();
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
             Timber.i("-------------------------------------- Form List Fragment got Data ");
             setData(surveyData);
@@ -190,6 +185,10 @@ public class SmapFormListFragment extends ListFragment {
     public void onDestroyView() {
         rootView = null;
         super.onDestroyView();
+    }
+
+    public SurveyDataViewModel getViewMode() {
+        return ((SmapMain) getActivity()).getViewModel();
     }
 
     @Override
@@ -424,18 +423,9 @@ public class SmapFormListFragment extends ListFragment {
 
     protected CharSequence getFilterText() {
         return filterText != null ? filterText : "";
-        //return inputSearch != null ? inputSearch.getText() : "";
     }
 
     protected void reloadData() {
-
-        //MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();   // loader
-        //if(taskLoader != null) {                                                  // loader
-        //    taskLoader.updateFormSortOrder(getFormSortingOrder());                // loader
-        //    taskLoader.updateFilter(getFilterText());                             // loader
-        //    taskLoader.forceLoad();                                               // loader
-        //}                                                                         // loader
-
         if (model != null) {
             model.updateFilter(getFilterText());
             model.loadData();

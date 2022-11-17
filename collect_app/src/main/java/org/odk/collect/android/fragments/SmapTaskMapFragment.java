@@ -165,16 +165,16 @@ public class SmapTaskMapFragment extends Fragment
         return rootView;
     }
 
+    public SurveyDataViewModel getViewMode() {
+        return ((SmapMain) getActivity()).getViewModel();
+    }
+
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
 
         Timber.i("######## onViewCreated");
         super.onViewCreated(rootView, savedInstanceState);
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        SurveyDataViewModelFactory viewModelFactory = new SurveyDataViewModelFactory(sharedPreferences);
-
-        model = new ViewModelProvider(this, viewModelFactory).get(SurveyDataViewModel.class);
+        model = getViewMode();
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
             Timber.i("-------------------------------------- Task Map Fragment got Data ");
             setData(surveyData);
@@ -202,12 +202,6 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onViewStateRestored(@Nullable Bundle bundle) {
         super.onViewStateRestored(bundle);
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -408,11 +402,6 @@ public class SmapTaskMapFragment extends Fragment
         toolbar.setNavigationIcon(R.mipmap.ic_nav);
         model.loadData();   // Update the user trail display with latest points
         super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     private void clearTasks() {

@@ -127,19 +127,16 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private static final int PASSWORD_DIALOG = 3;
     private static final int COMPLETE_FORM = 4;
 
-    private AlertDialog mAlertDialog;
     private ProgressDialog mProgressDialog;
     private String mAlertMsg;
     private boolean mPaused = false;
 
-    //private MapEntry mData;
-
     public static final String EXTRA_REFRESH = "refresh";
     public static final String LOGIN_STATUS = "login_status";
 
-    private SmapFormListFragment formManagerList = SmapFormListFragment.newInstance();
-    private SmapTaskListFragment taskManagerList = SmapTaskListFragment.newInstance();
-    private SmapTaskMapFragment taskManagerMap = SmapTaskMapFragment.newInstance();
+    private final SmapFormListFragment formManagerList = SmapFormListFragment.newInstance();
+    private final SmapTaskListFragment taskManagerList = SmapTaskListFragment.newInstance();
+    private final SmapTaskMapFragment taskManagerMap = SmapTaskMapFragment.newInstance();
 
     private NfcAdapter mNfcAdapter;        // NFC
     public PendingIntent mNfcPendingIntent;
@@ -277,7 +274,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             });
         }
 
-
         LegacySettingsFileImporter legacySettingsFileImporter = new LegacySettingsFileImporter(storagePathProvider, null, settingsImporter);
         if (legacySettingsFileImporter.importFromFile()) {
             new MaterialAlertDialogBuilder(this)
@@ -290,6 +286,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                     .setCancelable(false)
                     .create().show();
         }
+    }
+
+    public SurveyDataViewModel getViewModel() {
+        return model;
     }
 
     @Override
@@ -451,7 +451,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 mProgressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
                 return mProgressDialog;
             case ALERT_DIALOG:
-                mAlertDialog = new AlertDialog.Builder(this).create();
+                AlertDialog mAlertDialog = new AlertDialog.Builder(this).create();
                 mAlertDialog.setMessage(mAlertMsg);
                 mAlertDialog.setTitle(getString(R.string.smap_get_tasks));
                 DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
@@ -552,6 +552,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
     }
 
+    @Override
     public void taskDownloadingComplete(HashMap<String, String> result) {
 
         Timber.i("Complete - Send intent");
@@ -939,19 +940,13 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
      * Update fragments that use data sourced from the loader that called this method
      */
     public void updateData(SurveyData data) {
-       // mData = data;
-        //formManagerList.setData(data); // loader
-        //taskManagerList.setData(data);
-        //taskManagerMap.setData(data);
+        formManagerList.setData(data); // loader
+        taskManagerList.setData(data);
+        taskManagerMap.setData(data);
         if(data != null) {
             setLocationTriggers(data.tasks);      // NFC and geofence triggers
         }
     }
-
-    // loader
-    //public MapEntry getData() {
-    //    return mData;
-    //}
 
     protected class MainTaskListener extends BroadcastReceiver {
 
@@ -1077,7 +1072,6 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             Timber.i("Intent received: %s", intent.getAction());
 
             model.loadData();
-
         }
     }
 }

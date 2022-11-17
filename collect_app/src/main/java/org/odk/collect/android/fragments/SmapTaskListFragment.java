@@ -122,7 +122,6 @@ public class SmapTaskListFragment extends ListFragment {
 
         mAdapter = new TaskListArrayAdapter(getActivity(), false);
         setListAdapter(mAdapter);
-        //getLoaderManager().initLoader(TASK_LOADER_ID, null, this);   // loader
 
         // Handle long item clicks
         ListView lv = getListView();
@@ -146,11 +145,7 @@ public class SmapTaskListFragment extends ListFragment {
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc,
                 R.string.sort_by_status_asc, R.string.sort_by_status_desc
         };
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        SurveyDataViewModelFactory viewModelFactory = new SurveyDataViewModelFactory(sharedPreferences);
-
-        model = new ViewModelProvider(this, viewModelFactory).get(SurveyDataViewModel.class);
+        model = getViewMode();
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
             Timber.i("-------------------------------------- Task List Fragment got Data ");
             setData(surveyData);
@@ -209,35 +204,8 @@ public class SmapTaskListFragment extends ListFragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
     }
-
-    //@Override loader
-    //public Loader<MapEntry> onCreateLoader(int id, Bundle args) {
-    //    MapDataLoader taskLoader = new MapDataLoader(getContext());
-    //    ((SmapMain) getActivity()).setTaskLoader(taskLoader);
-    //    updateAdapter();
-    //    return taskLoader;
-    //}
-
-    /*
-     * Load data in the taskListFragment, then update all fragments that show the data in this activity
-     * Apparently Loader does not work when invoked from an activity only a fragment
-     */
-    //@Override   // loader
-    //public void onLoadFinished(Loader<MapEntry> loader, MapEntry data) {
-    //    ((SmapMain) getActivity()).updateData(data);
-    //}
-
-    //@Override   loader
-    //public void onLoaderReset(Loader<MapEntry> loader) {
-    //    ((SmapMain) getActivity()).updateData(null);
-    //}
 
     public void setData(SurveyData data) {
         int count = 0;
@@ -248,7 +216,6 @@ public class SmapTaskListFragment extends ListFragment {
                 mAdapter.setData(null);
             }
         }
-        //((SmapMain) getActivity()).updateData(data);  Loader
 
         FragmentActivity activity = (SmapMain) getActivity();
         if (activity != null) {
@@ -283,6 +250,10 @@ public class SmapTaskListFragment extends ListFragment {
                 ((SmapMain) getActivity()).completeForm(entry, false, null);
             }
         }
+    }
+
+    public SurveyDataViewModel getViewMode() {
+        return ((SmapMain) getActivity()).getViewModel();
     }
 
     @Override
@@ -433,17 +404,9 @@ public class SmapTaskListFragment extends ListFragment {
 
     protected CharSequence getFilterText() {
         return filterText != null ? filterText : "";
-        //return inputSearch != null ? inputSearch.getText() : "";
     }
 
     protected void reloadData() {
-        //MapDataLoader taskLoader =  ((SmapMain) getActivity()).getTaskLoader();
-        //if(taskLoader != null) {
-        //    taskLoader.updateTaskSortOrder(getSortingOrder());
-        //    taskLoader.updateFilter(getFilterText());
-        //    taskLoader.forceLoad();
-        //}
-
         if (model != null) {
             model.updateFilter(getFilterText());
             model.loadData();
