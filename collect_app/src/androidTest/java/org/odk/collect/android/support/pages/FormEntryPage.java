@@ -200,6 +200,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage clickSaveWithError(int errorMsg) {
+        onView(withId(R.id.menu_save)).perform(click());
+        assertText(errorMsg);
+        clickOKOnDialog();
+        return this;
+    }
+
     public ChangesReasonPromptPage clickSaveWithChangesReasonPrompt() {
         onView(withId(R.id.menu_save)).perform(click());
         return new ChangesReasonPromptPage(formName).assertOnPage();

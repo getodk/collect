@@ -24,6 +24,13 @@ public class SaveOrIgnoreDialog<D extends Page<D>> extends Page<SaveOrIgnoreDial
         return destination.assertOnPage();
     }
 
+    public D clickSaveChangesWithError(int errorMsg) {
+        clickOnString(R.string.keep_changes);
+        assertText(errorMsg);
+        clickOKOnDialog();
+        return destination.assertOnPage();
+    }
+
     public D clickIgnoreChanges() {
         clickOnString(R.string.do_not_save);
         return destination.assertOnPage();

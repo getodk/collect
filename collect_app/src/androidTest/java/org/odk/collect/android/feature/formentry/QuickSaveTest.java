@@ -92,7 +92,7 @@ public class QuickSaveTest {
                 .swipeToNextQuestion("What is your age?", true)
                 .longPressOnQuestion("What is your age?", true)
                 .removeResponse()
-                .clickSave()
+                .clickSaveWithError(R.string.required_answer_error)
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_error)
 
                 .pressBackAndIgnoreChanges()
