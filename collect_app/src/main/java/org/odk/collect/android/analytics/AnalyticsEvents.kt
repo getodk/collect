@@ -44,13 +44,6 @@ object AnalyticsEvents {
     const val SAVE_INCOMPLETE = "WidgetAttribute"
 
     /**
-     * Used to measure how popular the refresh button on Fill Blank Forms is. The button
-     * only displays when Match Exactly is enabled. Right now the action passed is "Manual". This
-     * means that we could extend the event to track auto or other syncs in the future.
-     */
-    const val MATCH_EXACTLY_SYNC = "MatchExactlySync"
-
-    /**
      * Tracks if any forms are being used as part of a workflow where instances are imported
      * from disk
      */
