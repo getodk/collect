@@ -111,7 +111,7 @@ public class FormListAdapter extends SimpleCursorAdapter {
                 ).format(date);
             }
         } catch (IllegalArgumentException e) {
-            Timber.e(e);
+            Timber.e(e, "Current locale: %s", Locale.getDefault());
         }
         return "";
     }
