@@ -56,7 +56,6 @@ class OpenRosaXmlFetcher {
             if (inputStreamResult.getStatusCode() != HttpURLConnection.HTTP_OK) {
                 String error = "getXML failed while accessing "
                         + urlString + " with status code: " + inputStreamResult.getStatusCode();
-                Timber.e(new Error(error));
                 return new DocumentFetchResult(error, inputStreamResult.getStatusCode());
             }
 
