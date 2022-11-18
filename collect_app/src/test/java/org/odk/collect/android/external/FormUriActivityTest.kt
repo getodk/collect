@@ -78,7 +78,7 @@ class FormUriActivityTest {
 
     @Test
     fun `When there are no projects then display alert dialog`() {
-        val scenario = launcherRule.launch(FormUriActivity::class.java)
+        val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
         onView(withText(R.string.app_not_configured)).inRoot(isDialog())
             .check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
@@ -90,7 +90,7 @@ class FormUriActivityTest {
     fun `When there is project id specified in uri and it does not match current project id then display alert dialog`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launch<FormUriActivity>(getIntent(secondProject.uuid))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getIntent(secondProject.uuid))
 
         onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
             .check(matches(isDisplayed()))
@@ -129,7 +129,7 @@ class FormUriActivityTest {
 
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(secondProject)
 
-        val scenario = launcherRule.launch<FormUriActivity>(getIntent())
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getIntent())
 
         onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
             .check(matches(isDisplayed()))
