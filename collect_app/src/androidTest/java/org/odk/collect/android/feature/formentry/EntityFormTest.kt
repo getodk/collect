@@ -26,6 +26,6 @@ class EntityFormTest {
             .fillOutAndSave(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
             .clickOnDataset("people")
-            .assertEntity("name: Logan Roy")
+            .assertEntity("full_name: Logan Roy")
     }
 }

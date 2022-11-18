@@ -9,16 +9,19 @@
 					<meta>
 						<instanceID/>
 						<instanceName/>
-						<entities:entity entities:dataset="people">
-							<entities:create/>
-							<entities:label/>
-						</entities:entity>
+						<entity dataset="people" create="1" id="">
+							<label/>
+						</entity>
 					</meta>
 				</data>
 			</instance>
-			<bind nodeset="/data/name" type="string" entities:saveto="name"/>
+			<bind nodeset="/data/name" type="string" entities:saveto="full_name"/>
+
 			<bind jr:preload="uid" nodeset="/data/meta/instanceID" readonly="true()" type="string"/>
-			<bind calculate="/data/name" nodeset="/data/meta/entities:entity/entities:label" type="string"/>
+
+			<bind nodeset="/data/meta/entity/@id" type="string"/>
+			<setvalue event="odk-instance-first-load" ref="/data/meta/entity/@id" value="uuid()"/>
+			<bind calculate="/data/name" nodeset="/data/meta/entity/label" type="string"/>
 		</model>
 	</h:head>
 	<h:body>
