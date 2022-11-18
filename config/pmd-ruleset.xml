@@ -112,8 +112,10 @@
         <exclude name="AvoidInstanceofChecksInCatchClause" />
         <exclude name="AvoidLiteralsInIfCondition" />
         <exclude name="BeanMembersShouldSerialize" />
+        <exclude name="CloseResource" />
         <exclude name="ConstructorCallsOverridableMethod" />
         <exclude name="DataflowAnomalyAnalysis" />
+        <exclude name="DetachedTestCase" />
         <exclude name="EmptyCatchBlock" />
         <exclude name="EmptyIfStmt" />
         <exclude name="EmptyWhileStmt" />
@@ -123,8 +125,7 @@
         <exclude name="MissingSerialVersionUID" />
         <exclude name="NullAssignment" />
         <exclude name="ReturnEmptyCollectionRatherThanNull" />
-        <exclude name="DetachedTestCase" />
-        <exclude name="CloseResource" />
+        <exclude name="TestClassWithoutTestCases" />
     </rule>
 
     <rule ref="category/java/multithreading.xml">
