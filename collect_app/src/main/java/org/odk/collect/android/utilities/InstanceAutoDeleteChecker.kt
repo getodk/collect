@@ -22,7 +22,7 @@ object InstanceAutoDeleteChecker {
             return if (isAutoDeleteEnabledInProjectSettings) {
                 form.autoDelete == null || form.autoDelete.trim().lowercase(Locale.US) != "false"
             } else {
-                form.autoDelete != null && form.autoDelete.trim().lowercase(Locale.US).toBoolean()
+                form.autoDelete != null && form.autoDelete.trim().lowercase(Locale.US) == "true"
             }
         }
 

@@ -19,7 +19,7 @@ class InstanceAutoSendFetcher(private val autoSendSettingsProvider: AutoSendSett
         } else {
             allFinalizedForms.filter {
                 formsRepository.getLatestByFormIdAndVersion(it.formId, it.formVersion)?.let { form ->
-                    form.autoSend != null && form.autoSend.trim().lowercase(Locale.US).toBoolean()
+                    form.autoSend != null && form.autoSend.trim().lowercase(Locale.US) == "true"
                 } ?: false
             }
         }
