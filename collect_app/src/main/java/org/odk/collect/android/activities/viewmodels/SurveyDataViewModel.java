@@ -77,7 +77,8 @@ public class SurveyDataViewModel extends ViewModel {
                 FormsProviderAPI.FormsColumns.JR_FORM_ID,
                 FormsProviderAPI.FormsColumns.JR_VERSION,
                 FormsProviderAPI.FormsColumns.PROJECT,
-                FormsProviderAPI.FormsColumns.DISPLAY_NAME};
+                FormsProviderAPI.FormsColumns.DISPLAY_NAME,
+                FormsProviderAPI.FormsColumns.READ_ONLY};
         //FormsProviderAPI.FormsColumns.GEOMETRY_XPATH};  // smap
 
 
@@ -110,6 +111,10 @@ public class SurveyDataViewModel extends ViewModel {
                 entry.project = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.PROJECT));
                 //entry.geometryXPath = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.GEOMETRY_XPATH));   // smap
                 entry.id = formListCursor.getLong(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns._ID));
+                String ro = formListCursor.getString(formListCursor.getColumnIndex(FormsProviderAPI.FormsColumns.READ_ONLY));
+                if(ro != null && ro.equals("yes")) {
+                    entry.readOnly = true;
+                }
 
                 entries.add(entry);
                 formListCursor.moveToNext();

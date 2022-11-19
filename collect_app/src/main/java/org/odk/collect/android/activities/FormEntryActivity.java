@@ -243,9 +243,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     public static final String KEY_SURVEY_NOTES = "surveyNotes";        // smap
     public static final String KEY_INITIAL_DATA = "initialData";        // smap
     public static final String KEY_CAN_UPDATE = "canUpdate";            // smap
+    public static final String KEY_READ_ONLY = "readOnly";            // smap
     private long mTaskId;                                               // smap
     private String mSurveyNotes = null;                                 // smap
-    private boolean mCanUpdate = true;                                  // smap
+    private boolean mCanUpdate = true;                                  // smap - False if the instance data should not be updated, comments can still be updated
+    private boolean mReadOnly = true;                                   // smap - True if this is a readonly form
     private int mUpdated = 0;                                           // smap, greater than 0 if the user has already edited this instance
     private ProgressDialog progressBar = null;                          // smap
     Direction swipeDirection;                                           // smap
@@ -772,6 +774,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         mTaskId = intent.getLongExtra(KEY_TASK, -1);                   // smap
         mSurveyNotes = intent.getStringExtra(KEY_SURVEY_NOTES);                   // smap
         mCanUpdate = intent.getBooleanExtra(KEY_CAN_UPDATE, true);     // smap
+        mReadOnly = intent.getBooleanExtra(KEY_READ_ONLY, false);     // smap
 
 
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
@@ -1401,7 +1404,8 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true), new FormEndView.Listener() {
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, 
+                formController.getReadOnly(), InstancesDaoHelper.isInstanceComplete(true), new FormEndView.Listener() {
             @Override
             public void onSaveAsChanged(String saveAs) {
                 // Seems like this is needed for rotation?
@@ -1415,6 +1419,20 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 } else {
                     formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
                 }
+            }
+
+            @Override
+            public void onExitClicked() {
+                formSaveViewModel.ignoreChanges();
+                String action = getActivity().getIntent().getAction();
+                if (Intent.ACTION_PICK.equals(action) || Intent.ACTION_EDIT.equals(action)) {
+                    // caller is waiting on a picked form
+                    Uri uri = InstancesDaoHelper.getLastInstanceUri(formSaveViewModel.getAbsoluteInstancePath());
+                    if (uri != null) {
+                        getActivity().setResult(RESULT_OK, new Intent().setData(uri));
+                    }
+                }
+                getActivity().finish();
             }
         });
 
@@ -1881,13 +1899,17 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 break;
 
             case SAVED:
-                if(result.getShowSavedMessage()) {	// smap
+                if(result.getShowSavedMessage()) {	// smap TODO
                     ToastUtils.showShortToast(R.string.data_saved_ok);
                 }
                 DialogUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 DialogUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
-                showShortToast(R.string.data_saved_ok);
+                if(mCanUpdate) {
+                    showShortToast(R.string.data_saved_ok);
+                } else {
+                    showShortToast(R.string.comments_saved_ok);
+                }
 
                 if (result.getRequest().viewExiting()) {
                     /* Smap use broadcast not autoworker to refresh
@@ -2317,6 +2339,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         if (formController != null) {
             formController.setSurveyNotes(mSurveyNotes);        // smap
             formController.setCanUpdate(mCanUpdate);            // smap
+            formController.setReadOnly(mReadOnly);            // smap
             formController.setTaskId(mTaskId);                  // smap
             if (readPhoneStatePermissionRequestNeeded) {
                 permissionsProvider.requestReadPhoneStatePermission(this, true, new PermissionListener() {

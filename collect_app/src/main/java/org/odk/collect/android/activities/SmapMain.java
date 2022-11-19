@@ -837,6 +837,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
             // Use an explicit intent
             Intent i = new Intent(this, org.odk.collect.android.activities.FormEntryActivity.class);
             i.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+            i.putExtra(FormEntryActivity.KEY_READ_ONLY, entry.readOnly);
             i.setData(formUri);
             if(initialData != null) {
                 i.putExtra(FormEntryActivity.KEY_INITIAL_DATA, initialData);

@@ -79,9 +79,10 @@ public class FormController {
     public static final boolean STEP_INTO_GROUP = true;
     public static final boolean STEP_OVER_GROUP = false;
 
-    // smap this seems like a convenient place to store data related to completiong of a form
+    // smap this seems like a convenient place to store data related to completing a form
     private String surveyNotes = null;      // smap
     private boolean canUpdate = true;       // smap
+    private boolean readOnly = false;       // smap
     private long taskId;                    // smap
     private String formPath = null;         // smap
     private boolean saveMessage;            // smap
@@ -1329,6 +1330,13 @@ public class FormController {
     }
     public boolean getCanUpdate() {
         return canUpdate;
+    }
+
+    public void setReadOnly(boolean v) {
+        readOnly = v;
+    }
+    public boolean getReadOnly() {
+        return readOnly;
     }
 
     public void setTaskId(long v) {

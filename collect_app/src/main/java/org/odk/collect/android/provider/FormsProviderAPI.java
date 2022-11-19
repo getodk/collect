@@ -61,6 +61,7 @@ public final class FormsProviderAPI {
         public static final String JR_VERSION = "jrVersion"; // can be null
         public static final String PROJECT = "project"; // smap (can be null)
         public static final String TASKS_ONLY = "tasks_only"; // smap Set to "yes" if the form should not be available to the user
+        public static final String READ_ONLY = "read_only"; // smap Set to "yes" if the form should not be able to save to an instance
         public static final String SEARCH_LOCAL_DATA = "search_local_data"; // smap Set to "yes" if the form should lookup local data when doing pulldata or search requests
         public static final String SOURCE = "source"; // smap (shouldn't be null but for migration can be)
         public static final String FORM_FILE_PATH = "formFilePath";

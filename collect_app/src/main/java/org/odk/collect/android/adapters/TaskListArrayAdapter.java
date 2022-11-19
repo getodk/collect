@@ -75,7 +75,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     	 */
         Drawable d = null;
     	if(item.type.equals("form")) {
-            d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank_circle);
+    	    if(item.readOnly) {
+                d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_finalized_circle);
+            } else {
+                d = ContextCompat.getDrawable(getContext(), R.drawable.form_state_blank_circle);
+            }
     	} else if (item.taskStatus != null) {
     		if(item.taskStatus.equals(Utilities.STATUS_T_ACCEPTED)) {
 				if(item.locationTrigger != null && !item.repeat) {

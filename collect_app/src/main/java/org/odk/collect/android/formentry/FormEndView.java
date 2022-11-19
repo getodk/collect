@@ -6,6 +6,7 @@ import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -17,10 +18,13 @@ public class FormEndView extends FrameLayout {
     private final Listener listener;
     private final String formTitle;
     private final String defaultInstanceName;
+    private final boolean readOnly;
 
-    public FormEndView(Context context, String formTitle, String defaultInstanceName, boolean instanceComplete, Listener listener) {
+    public FormEndView(Context context, String formTitle, String defaultInstanceName,
+                       boolean readOnly, boolean instanceComplete, Listener listener) {
         super(context);
         this.formTitle = formTitle;
+        this.readOnly = readOnly;
         this.defaultInstanceName = defaultInstanceName;
         this.listener = listener;
         init(context, instanceComplete);
@@ -32,6 +36,7 @@ public class FormEndView extends FrameLayout {
         ((TextView) findViewById(R.id.description)).setText(context.getString(R.string.save_enter_data_description, formTitle));
 
         EditText saveAs = findViewById(R.id.save_name);
+        Button saveButton = findViewById(R.id.save_exit_button);
 
         // disallow carriage returns in the name
         InputFilter returnFilter = (source, start, end, dest, dstart, dend) -> FormNameUtils.normalizeFormName(source.toString().substring(start, end), true);
@@ -56,14 +61,27 @@ public class FormEndView extends FrameLayout {
         final CheckBox markAsFinalized = findViewById(R.id.mark_finished);
         markAsFinalized.setChecked(instanceComplete);
 
-        findViewById(R.id.save_exit_button).setOnClickListener(v -> {
-            listener.onSaveClicked(markAsFinalized.isChecked());
-        });
+        if(!readOnly) {
+            // Note even instances that cannot be updated have to be saved as the comments are saved
+            saveButton.setOnClickListener(v -> {
+                listener.onSaveClicked(markAsFinalized.isChecked());
+            });
+        } else {
+            // Readonly do not save
+            saveButton.setText(R.string.exit);
+            saveButton.setOnClickListener(v -> {
+                listener.onExitClicked();
+            });
+        }
+
+
     }
 
     public interface Listener {
         void onSaveAsChanged(String string);
 
         void onSaveClicked(boolean markAsFinalized);
+
+        void onExitClicked();
     }
 }

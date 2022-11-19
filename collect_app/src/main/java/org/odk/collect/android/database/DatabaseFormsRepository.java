@@ -33,6 +33,7 @@ import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.PRO
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SOURCE;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SUBMISSION_URI;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.TASKS_ONLY;
+import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.READ_ONLY;
 import static org.odk.collect.android.provider.FormsProviderAPI.FormsColumns.SEARCH_LOCAL_DATA;
 
 public class DatabaseFormsRepository implements FormsRepository {
@@ -124,6 +125,10 @@ public class DatabaseFormsRepository implements FormsRepository {
         if (tasksOnly == null) {
             tasksOnly = "no";
         }
+        String readOnly = form.getReadOnly();
+        if (readOnly == null) {
+            readOnly = "no";
+        }
         // end smap
         final ContentValues v = new ContentValues();
         v.put(FORM_FILE_PATH, storagePathProvider.getFormDbPath(form.getFormFilePath()));
@@ -133,6 +138,7 @@ public class DatabaseFormsRepository implements FormsRepository {
         v.put(JR_FORM_ID, form.getJrFormId());
         v.put(PROJECT, project);      // smap
         v.put(TASKS_ONLY, tasksOnly);      // smap
+        v.put(READ_ONLY, readOnly);      // smap
         v.put(SEARCH_LOCAL_DATA, form.getSearchLocalData());      // smap
         v.put(SOURCE, Utilities.getSource());      // smap
         v.put(SUBMISSION_URI, form.getSubmissionUri());
