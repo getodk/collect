@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -59,6 +60,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
+import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -162,13 +164,16 @@ public class SmapTaskMapFragment extends Fragment
         return rootView;
     }
 
+    public SurveyDataViewModel getViewMode() {
+        return ((SmapMain) getActivity()).getViewModel();
+    }
+
     @Override
     public void onViewCreated(View rootView, Bundle savedInstanceState) {
 
         Timber.i("######## onViewCreated");
         super.onViewCreated(rootView, savedInstanceState);
-
-        model = new ViewModelProvider(requireActivity()).get(SurveyDataViewModel.class);
+        model = getViewMode();
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {
             Timber.i("-------------------------------------- Task Map Fragment got Data ");
             setData(surveyData);
@@ -196,12 +201,6 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onViewStateRestored(@Nullable Bundle bundle) {
         super.onViewStateRestored(bundle);
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -402,11 +401,6 @@ public class SmapTaskMapFragment extends Fragment
         toolbar.setNavigationIcon(R.mipmap.ic_nav_foreground);
         model.loadData();   // Update the user trail display with latest points
         super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     private void clearTasks() {

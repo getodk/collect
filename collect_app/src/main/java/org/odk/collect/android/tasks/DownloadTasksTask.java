@@ -1,11 +1,11 @@
 /*
  * Copyright (C) 2011 Cloudtec Pty Ltd
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -67,6 +67,7 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
@@ -91,8 +92,8 @@ import timber.log.Timber;
 
 
 /**
- * Background task for downloading tasks 
- * 
+ * Background task for downloading tasks
+ *
  * @author Neil Penman (neilpenman@gmail.com)
  *
  * Instance Status Values
@@ -256,15 +257,15 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             mStateListener = sl;
         }
     }
-  
-  
+
+
     /*
      * Synchronise the tasks stored on the phone with those on the server
      */
     private void synchronise() {
 
     	Timber.i("Synchronise()");
-        
+
         if(source != null) {
 	        try {
 
@@ -298,7 +299,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 /*
                  * Get an array of the existing server tasks on the phone and create a hashmap indexed on the assignment id
                  */
-                Utilities.getTasks(tasks, false, "", "", true, false, true);
+                Utilities.getTasks(tasks, false, ApplicationConstants.SortingOrder.BY_NAME_ASC, "", true, false, true);
                 for(TaskEntry t : tasks) {
                     taskMap.put(getTaskCaseString(t.taskType, t.assId, t.updateId), new TaskStatus(t.id, t.taskStatus));
                 }
@@ -413,31 +414,31 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 refDao.updateReferences(tr.refSurveys);
 
 	        } catch(JsonSyntaxException e) {
-	        	
+
 	        	Timber.e("JSON Syntax Error:" + " for URL " + taskURL);
 	        	publishProgress(e.getMessage());
 	        	e.printStackTrace();
 	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", e.getMessage());
-	        	
-	        } catch (CancelException e) {	
-	        	
+
+	        } catch (CancelException e) {
+
 	        	Timber.i("Info: Download cancelled by user.");
 
-	        } catch (Exception e) {	
+	        } catch (Exception e) {
 
 	        	Timber.e("Error:" + " for URL " + taskURL);
                 e.printStackTrace();
                 String msg = Utilities.translateMsg(e, null);
 	        	publishProgress(msg);
 	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg );
-	
+
 	        }
         }
     }
 
     private InstanceUploaderTask.Outcome submitCompletedForms() {
-       
-        String selection = InstanceColumns.SOURCE + "=? and (" + InstanceColumns.STATUS + "=? or " + 
+
+        String selection = InstanceColumns.SOURCE + "=? and (" + InstanceColumns.STATUS + "=? or " +
         		InstanceColumns.STATUS + "=?)" +
                 " and " + InstanceColumns.DELETED_DATE + " is null ";
         String selectionArgs[] = {
@@ -451,7 +452,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
         try {
             c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, null, selection,
                 selectionArgs, null);
-            
+
             if (c != null && c.getCount() > 0) {
                 c.move(-1);
                 while (c.moveToNext()) {
@@ -483,7 +484,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             } else {
             	return null;
             }
-        
+
     }
 
     /*
@@ -494,14 +495,14 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	private void updateTaskStatusToServer() throws Exception {
 
         TaskResponse updateResponse = new TaskResponse();
-        
+
         // Add device id to response
         updateResponse.deviceId = new PropertyManager(Collect.getInstance().getApplicationContext())
                 .getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
 
         // Get tasks that have not been synchronised
         ArrayList<TaskEntry> nonSynchTasks = new ArrayList<TaskEntry>();
-        Utilities.getTasks(nonSynchTasks, true, "", "", true, false, true);
+        Utilities.getTasks(nonSynchTasks, true, ApplicationConstants.SortingOrder.BY_NAME_ASC, "", true, false, true);
 
         /*
          * Set updates to task status
@@ -580,7 +581,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             TraceUtilities.deleteSource(lastTraceIdSent);
         }
 	}
-	
+
 	/*
      * Loop through the entries from the source
      *   (1) Add entries that have a status of "new", "accepted" and are not already on the phone
@@ -669,10 +670,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
     	// Clean up the history table and remove old deleted instances
         Utilities.cleanHistory();
-    	
+
     	return;
 	}
-	
+
 	/*
      * Synchronise the forms on the server with those on the phone
      *   (1) Download forms on the server that are not on the phone
@@ -680,18 +681,18 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
      *       unless there is an uncompleted data instance using that form
      */
 	private Map<ServerFormDetailsSmap, String> synchroniseForms(List<FormLocator> forms) throws Exception {
-    	
+
 
 		Map<ServerFormDetailsSmap, String> dfResults = null;
-    	
+
     	if(forms == null) {
         	publishProgress(Collect.getInstance().getString(R.string.smap_no_forms));
     	} else {
-    		
+
     		HashMap <String, String> formMap = new HashMap <String, String> ();
           	ManageForm mf = new ManageForm();
     		ArrayList<ServerFormDetailsSmap> toDownload = new ArrayList<> ();
-    		
+
     		// Create an array of ODK form details
         	for(FormLocator form : forms) {
         		String formVersionString = String.valueOf(form.version);
@@ -749,7 +750,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 
         	processSharedFiles();   // Remove shared files no longer used, load shared sql files
     	}
-    	
+
     	return dfResults;
 	}
 
@@ -1068,5 +1069,5 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
     private TaskStatus getExistingTaskStatus(String taskType, long assId, String updateId) {
         return taskMap.get(getTaskCaseString(taskType, assId, updateId));
     }
-    
+
 }

@@ -18,5 +18,5 @@ import org.odk.collect.android.adapters.SortDialogAdapter;
 
 public interface RecyclerViewClickListener {
 
-    void onItemClicked(SortDialogAdapter.ViewHolder holder, int position);
+    void onItemClicked(SortDialogAdapter adapter, int position);
 }
