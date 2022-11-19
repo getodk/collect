@@ -57,6 +57,7 @@ google-services.json
 collect_app/src/release/
 collect_app/src/debug/
 collect_app/standard/
+collect_app/bps/
 
 # built application files
 *.apk
