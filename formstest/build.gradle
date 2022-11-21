@@ -18,6 +18,6 @@ dependencies {
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.commons_io
     implementation Dependencies.junit
-    implementation Dependencies.mockito_core
+    implementation Dependencies.mockito_kotlin
     implementation Dependencies.hamcrest
 }

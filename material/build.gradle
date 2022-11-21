@@ -56,6 +56,6 @@ dependencies {
     testImplementation Dependencies.androidx_test_ext_junit
     testImplementation Dependencies.androidx_test_espresso_core
     testImplementation Dependencies.hamcrest
-    testImplementation Dependencies.mockito_core
+    testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.robolectric
 }

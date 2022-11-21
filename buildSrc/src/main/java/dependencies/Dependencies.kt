@@ -77,7 +77,6 @@ object Dependencies {
     // Test dependencies
     const val junit = "junit:junit:4.13.2"
     const val mockito_android = "org.mockito:mockito-android:${Versions.mockito}"
-    const val mockito_core = "org.mockito:mockito-core:${Versions.mockito}"
     const val mockito_inline = "org.mockito:mockito-inline:${Versions.mockito}"
     const val mockito_kotlin = "org.mockito.kotlin:mockito-kotlin:4.1.0"
     const val androidx_fragment_testing = "androidx.fragment:fragment-testing:${Versions.androidx_fragment}"

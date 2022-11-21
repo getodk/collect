@@ -59,7 +59,7 @@ dependencies {
     testImplementation project(':testshared')
     testImplementation project(':servicetest')
     testImplementation Dependencies.junit
-    testImplementation Dependencies.mockito_core
+    testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.hamcrest
     testImplementation Dependencies.androidx_test_ext_junit
 }
