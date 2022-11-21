@@ -85,7 +85,7 @@ class SwitchProjectTest {
 
             .openEntityBrowser()
             .clickOnDataset("people")
-            .assertEntity("name: Alice")
+            .assertEntity("full_name: Alice")
             .pressBack(EntitiesPage())
             .pressBack(ExperimentalPage())
             .pressBack(ProjectSettingsPage())
