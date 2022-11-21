@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -36,7 +35,6 @@ class BlankFormListViewModel(
     private val formsUpdater: FormsUpdater,
     private val scheduler: Scheduler,
     private val generalSettings: Settings,
-    private val analytics: Analytics,
     private val changeLockProvider: ChangeLockProvider,
     private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
     private val projectId: String
@@ -219,7 +217,6 @@ class BlankFormListViewModel(
         private val formsUpdater: FormsUpdater,
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
-        private val analytics: Analytics,
         private val changeLockProvider: ChangeLockProvider,
         private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
         private val projectId: String
@@ -234,7 +231,6 @@ class BlankFormListViewModel(
                 formsUpdater,
                 scheduler,
                 generalSettings,
-                analytics,
                 changeLockProvider,
                 formsDirDiskFormsSynchronizer,
                 projectId

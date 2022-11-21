@@ -15,7 +15,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -42,7 +41,6 @@ class BlankFormListViewModelTest {
     private val formsUpdater: FormsUpdater = mock()
     private val scheduler = FakeScheduler()
     private val generalSettings = InMemSettings()
-    private val analytics: Analytics = mock()
     private val changeLockProvider: ChangeLockProvider = mock()
     private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer = mock()
     private val projectId = "projectId"
@@ -517,7 +515,6 @@ class BlankFormListViewModelTest {
             formsUpdater,
             scheduler,
             generalSettings,
-            analytics,
             changeLockProvider,
             formsDirDiskFormsSynchronizer,
             projectId
