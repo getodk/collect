@@ -465,9 +465,6 @@
   <string name="geopoint_instruction">Pulsar prolongadamente para colocar la marca o tocar el botón marcador.</string>
   <string name="geopoint_no_draggable_instruction">Tap botón de agregar marker</string>
   <string name="discard">Descartar</string>
-  <string name="zoom_to_where">Ampliar a...</string>
-  <string name="zoom_to_location">Zoom a la localización actual</string>
-  <string name="zoom_to_feature">Zoom a característica guardada</string>
   <string name="geoshape_view_change_location">Ver o cambiar GeoArea</string>
   <string name="geotrace_view_change_location">Ver o cambiar GeoLínea</string>
   <string name="geometry_status">Form. Guardados: %d (%d se muestran en el mapa)</string>
