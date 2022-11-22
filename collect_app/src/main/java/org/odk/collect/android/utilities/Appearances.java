@@ -139,10 +139,10 @@ public final class Appearances {
                         }
                     }
                 } catch (Exception e) {
-                    Timber.e(new Error(EXCEPTION_PARSING_COLUMNS));
+                    Timber.e(new Error(EXCEPTION_PARSING_COLUMNS + columnsAppearance));
                 }
             } catch (Exception e) {
-                Timber.e(new Error(EXCEPTION_PARSING_COLUMNS));
+                Timber.e(new Error(EXCEPTION_PARSING_COLUMNS + appearance));
             }
         } else if (appearance.contains(COLUMNS)) {
             switch (screenUtils.getScreenSizeConfiguration()) {

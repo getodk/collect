@@ -176,7 +176,7 @@ public class InstanceProvider extends ContentProvider {
                         Locale.getDefault()).format(date);
             }
         } catch (IllegalArgumentException e) {
-            Timber.e(e);
+            Timber.e(e, "Current locale: %s", Locale.getDefault());
             return "";
         }
     }

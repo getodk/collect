@@ -59,6 +59,7 @@
     <string name="sort_by_name_desc">Name, Z-A</string>
     <string name="sort_by_date_desc">Date, newest first</string>
     <string name="sort_by_date_asc">Date, oldest first</string>
+    <!-- A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first. -->
     <string name="sort_by_last_saved">Last saved first</string>
     <string name="sort_by_status_asc">Status, finalized first</string>
     <string name="sort_by_status_desc">Status, unfinalized first</string>
@@ -1181,9 +1182,11 @@
     # Developer tools
     ##############################################
     -->
-
+    <!-- Section title in settings -->
     <string name="dev_tools">Developer tools</string>
+    <!-- Option provided in the Developer tools settings to force an application crash -->
     <string name="crash_app">Crash app</string>
+    <!-- An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close -->
     <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
 
 </resources>
