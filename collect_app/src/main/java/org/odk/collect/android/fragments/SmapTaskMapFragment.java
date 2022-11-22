@@ -398,7 +398,7 @@ public class SmapTaskMapFragment extends Fragment
     @Override
     public void onResume() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_nav_foreground);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);
         model.loadData();   // Update the user trail display with latest points
         super.onResume();
     }
@@ -539,7 +539,7 @@ public class SmapTaskMapFragment extends Fragment
         } else if(status.equals(Utilities.STATUS_T_NEW)) {
             return newtask;
         } else {
-            Timber.i("Unknown task status: " + status);
+            Timber.i("Unknown task status: %s", status);
             return accepted;
         }
     }

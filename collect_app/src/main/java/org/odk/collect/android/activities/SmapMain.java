@@ -188,7 +188,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle(getString(R.string.app_name));
-        toolbar.setNavigationIcon(R.mipmap.ic_nav_foreground);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);
         setSupportActionBar(toolbar);
     }
 
@@ -295,7 +295,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_nav_foreground);
+        toolbar.setNavigationIcon(R.mipmap.ic_nav);
         stateChanged();
     }
 
