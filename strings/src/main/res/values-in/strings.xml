@@ -45,6 +45,7 @@
   <string name="sort_by_name_desc">Nama, Z-A</string>
   <string name="sort_by_date_desc">Tanggal, baru ke lama</string>
   <string name="sort_by_date_asc">Tanggal, lama ke baru</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">Status, terfinalisasi paling atas</string>
   <string name="sort_by_status_desc">Status, belum terfinalisasi paling atas</string>
   <string name="filter_the_list">Pilah daftar</string>
@@ -58,7 +59,6 @@
   <string name="storage_runtime_permission_denied_title">Perizinan penyimpanan</string>
   <string name="storage_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses formulir Anda atau pun menyimpan jawabannya. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="location_runtime_permissions_denied_title">Izin untuk mengakses lokasi</string>
-  <string name="location_runtime_permissions_denied_desc">Tanpa perizinan tadi, Collect tidak dapat merekam lokasi Anda. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="camera_runtime_permission_denied_title">Izin untuk mengakses Kamera</string>
   <string name="camera_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses kamera. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="record_audio_runtime_permission_denied_title">Izin untuk merekam suara</string>
@@ -70,6 +70,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">Formulir %1$d ditambahkan.</string>
   <string name="finished_disk_scan">Seluruh formulir telah berhasil dimuat.</string>
   <string name="xform_parse_error">XForm parse bermasalah pada %1$s: %2$s hilang atau tidak valid</string>
@@ -474,6 +475,11 @@
   <string name="location_tracking_notification_title">Lokasi pelacakan</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Minta bantuan untuk Lapisan Referensi</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Jeda</string>
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -908,4 +914,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

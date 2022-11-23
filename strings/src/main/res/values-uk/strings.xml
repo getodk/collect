@@ -45,6 +45,7 @@
   <string name="sort_by_name_desc">За ім\'ям, Я-А</string>
   <string name="sort_by_date_desc">За датою, найновіший перший</string>
   <string name="sort_by_date_asc">За датою, найстарший перший</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">За статусом, завершені перші</string>
   <string name="sort_by_status_desc">За статусом, незавершені перші</string>
   <string name="filter_the_list">Фільтрувати список</string>
@@ -57,7 +58,6 @@
   <string name="storage_runtime_permission_denied_title">Дозволи сховища</string>
   <string name="storage_runtime_permission_denied_desc">Без цих дозволів Collect не матиме дотупу до ваших анкет (читання, запис відповідей). Відкрийте програму знову, ящо ви вже їх надали.</string>
   <string name="location_runtime_permissions_denied_title">Місцеві дозволи</string>
-  <string name="location_runtime_permissions_denied_desc">Без цих дозволів Collect не зможе записати ваше розташування. Будь ласка, спробуйте знову коли будете готові надати їх.</string>
   <string name="camera_runtime_permission_denied_title">Дозвіл використання камери</string>
   <string name="camera_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до камери. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="record_audio_runtime_permission_denied_title">Дозвіл на аудіозапис</string>
@@ -69,6 +69,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">%1$d анкет додано.</string>
   <string name="finished_disk_scan">Сканування завершене. Всі анкети завантажені.</string>
   <string name="xform_parse_error">Помилка XForm парсингу в %1$s: %2$s пропущений або некоректний. </string>
@@ -411,6 +412,10 @@
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -750,4 +755,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

@@ -46,6 +46,7 @@
   <string name="sort_by_name_desc">Název, Z-A</string>
   <string name="sort_by_date_desc">Datum, nejnovější první</string>
   <string name="sort_by_date_asc">Datum, nejstarší první</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">Stav, dokončen první</string>
   <string name="sort_by_status_desc">Stav, nedokončen první</string>
   <string name="filter_the_list">Filtrovat výpis</string>
@@ -59,7 +60,6 @@
   <string name="storage_runtime_permission_denied_title">Povolení pro ukládání dat</string>
   <string name="storage_runtime_permission_denied_desc">Bez těchto oprávnění nelze přistupovat k formulářům nebo ukládat odpovědi. Opětovně otevřete aplikaci, až budete připraveni je udělit.</string>
   <string name="location_runtime_permissions_denied_title">Oprávnění umístění</string>
-  <string name="location_runtime_permissions_denied_desc">Bez těchto oprávnění nelze zaznamenat vaši polohu. Zkuste to prosím znovu, až budete připraveni je udělit.</string>
   <string name="camera_runtime_permission_denied_title">Oprávnění k fotoaparátu</string>
   <string name="camera_runtime_permission_denied_desc">Bez tohoto povolení nelze přistupovat k fotoaparátu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
   <string name="record_audio_runtime_permission_denied_title">Oprávnění k nahrávání zvuku</string>
@@ -71,6 +71,8 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">Otevřít mapu formulářů</string>
   <string name="instance_scan_count">%1$d formulářů přidáno. </string>
   <string name="finished_disk_scan">Prohledávání dokončeno. Všechny dotazníky načteny.</string>
   <string name="xform_parse_error">Chyba analýzy XForm pro %1$s : %2$s chybí nebo je neplatná.</string>
@@ -500,6 +502,14 @@
   <string name="location_tracking_notification_title">Sledování polohy…</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Získejte nápovědu k referenčním vrstvám</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Zobrazit mou polohu</string>
+  <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">Přiblížení pro plné zobrazení</string>
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Pauza</string>
+  <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">Odebrat poslední bod</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -947,4 +957,14 @@
     # Permissions
     ##############################################-->
   <string name="open_settings">Otevřít nastavení</string>
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

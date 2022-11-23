@@ -45,6 +45,7 @@
   <string name="sort_by_name_desc">పేరు, Z-A</string>
   <string name="sort_by_date_desc">తేదీ, కొత్తది ముందు</string>
   <string name="sort_by_date_asc">తేదీ, పాతది ముందు</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">స్టేటస్, మొదట ఖరారు చేయబడింది</string>
   <string name="sort_by_status_desc">స్టేటస్, మొదట అన్‌ఫైనలైజ్ చేయబడింది</string>
   <string name="filter_the_list">జాబితాను ఫిల్టర్ చేయండి</string>
@@ -58,7 +59,6 @@
   <string name="storage_runtime_permission_denied_title">నిల్వ ఉంచటానికి అనుమతులు</string>
   <string name="storage_runtime_permission_denied_desc">ఈ అనుమతులు లేకుండా మీ ఫారమ్‌లను యాక్సెస్ చేయలేరు లేదా సమాధానాలను సేవ్ చేయలేరు. మీరు వాటిని మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు ఆప్ ని తిరిగి తెరవండి.</string>
   <string name="location_runtime_permissions_denied_title">ప్రదేశ అనుమతులు</string>
-  <string name="location_runtime_permissions_denied_desc">ఈ అనుమతులు లేకుండా మీ స్థానాన్ని రికార్డ్ చేయదు. మీరు వాటిని మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్లీ ప్రయత్నించండి.</string>
   <string name="camera_runtime_permission_denied_title">కెమెరా అనుమతి</string>
   <string name="camera_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా కెమెరాను యాక్సెస్ చేయలేరు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="record_audio_runtime_permission_denied_title">ఆడియో అనుమతి రికార్డ్ చేయండి</string>
@@ -70,6 +70,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">%1$dఫారంలు జోడించబడ్డాయి.</string>
   <string name="finished_disk_scan">స్కానింగ్ పూర్తయింది. అన్ని ఫారంలు లోడ్ చేయబడ్డాయి.</string>
   <string name="xform_parse_error">XForm పార్స్ లోపం%1$s:%2$sమిస్సింగ్ లేదా చెల్లదు.</string>
@@ -444,6 +445,10 @@
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -799,4 +804,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

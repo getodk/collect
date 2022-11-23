@@ -46,6 +46,7 @@
   <string name="sort_by_name_desc">Descendente por Nombre, Z-A</string>
   <string name="sort_by_date_desc">Fecha, más reciente de primero</string>
   <string name="sort_by_date_asc">Fecha, más antiguo de primero</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">Por status, primero los finalizados</string>
   <string name="sort_by_status_desc">Por Status, primero los no finalizados</string>
   <string name="filter_the_list">Filtrar la lista</string>
@@ -59,7 +60,6 @@
   <string name="storage_runtime_permission_denied_title">Permisos de Almacenamiento</string>
   <string name="storage_runtime_permission_denied_desc">Sin estos permisos no se puede accesar los formularios o guardar las respuetas. Abra la aplicación de nuevo cuando esté listo para dar acceso</string>
   <string name="location_runtime_permissions_denied_title">Permisos de Ubicación</string>
-  <string name="location_runtime_permissions_denied_desc">Sin este permiso la aplicación no puede registrar su ubicación.  Intente de nuevo cuando esté el permiso.</string>
   <string name="camera_runtime_permission_denied_title">Permiso de Cámara</string>
   <string name="camera_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder a la cámara. Intente de nuevo cuando esté el permiso.</string>
   <string name="record_audio_runtime_permission_denied_title">Permiso de Grabación de Audio</string>
@@ -71,6 +71,8 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">Abrir mapa de formulario</string>
   <string name="instance_scan_count">%1$d formularios añadidos.</string>
   <string name="finished_disk_scan">Exploración finalizada. Todos los formularios cargados.</string>
   <string name="xform_parse_error">XForm error de análisis para %1$s: %2$s es inválido o no se encuentra.</string>
@@ -475,7 +477,7 @@
   <string name="location_status_acceptable">Precisión de ubicación: %.2f m (aceptable)</string>
   <string name="location_status_unacceptable">Precisión de ubicación: %.2f m (inaceptable)</string>
   <string name="collection_status_paused">Puntos ingresados: %d</string>
-  <string name="collection_status_placement">Puntos ingresados: %d (toque para ublicar puntos)</string>
+  <string name="collection_status_placement">Puntos ingresados: %d (toque para ubicar puntos)</string>
   <string name="collection_status_manual">Puntos ingresados: %d (registro manual)</string>
   <string name="collection_status_auto_seconds">Puntos ingresados: %1$d (registrando cada %2$d seg)</string>
   <string name="collection_status_auto_minutes">Puntos ingresados: %1$d (registrando cada %2$d min)</string>
@@ -497,6 +499,14 @@
   <string name="location_tracking_notification_title">Monitoreando ubicación…</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Obtenga ayuda con las capas de referencia</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Mostrar mi ubicación</string>
+  <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">Zoom para mostrar todo</string>
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Pausar</string>
+  <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">Remover el último punto</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -945,4 +955,14 @@
     # Permissions
     ##############################################-->
   <string name="open_settings">Abrir Configuración</string>
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

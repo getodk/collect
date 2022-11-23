@@ -46,6 +46,8 @@
   <string name="sort_by_name_desc">Name, Z-A</string>
   <string name="sort_by_date_desc">Datum, neuestes zuerst</string>
   <string name="sort_by_date_asc">Datum, ältestes zuerst</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Zuletzt gespeichertes zuerst</string>
   <string name="sort_by_status_asc">Status, vollständig zuerst</string>
   <string name="sort_by_status_desc">Status, unvollständig zuerst</string>
   <string name="filter_the_list">Liste filtern</string>
@@ -59,7 +61,6 @@
   <string name="storage_runtime_permission_denied_title">Speicher-Berechtigungen</string>
   <string name="storage_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf Formulare zugreifen und Antworten speichern. Starten Sie die App erneut, wenn sie bereit dazu sind die Berechtigung zu erteilen.</string>
   <string name="location_runtime_permissions_denied_title">Standort-Berechtigungen</string>
-  <string name="location_runtime_permissions_denied_desc">Ohne diese Berechtigungen kann Collect Ihren Standort nicht erfassen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
   <string name="camera_runtime_permission_denied_title">Kamera-Berechtigung</string>
   <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
   <string name="record_audio_runtime_permission_denied_title">Audioaufnahmeberechtigung</string>
@@ -71,6 +72,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="open_form_map">Formularkarte öffnen</string>
   <string name="instance_scan_count">%1$d Formular(e) hinzugefügt.</string>
   <string name="finished_disk_scan">Suche beendet. Alle Formulare wurden geladen.</string>
@@ -495,6 +497,14 @@
   <string name="location_tracking_notification_title">Standort wird aufgezeichnet… </string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Hilfe zu Referenzebenen</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Meinen Standort anzeigen</string>
+  <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">Zoom auf alles</string>
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Pause</string>
+  <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">Letzten Punkt entfernen</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -942,4 +952,20 @@
     # Permissions
     ##############################################-->
   <string name="open_settings">Einstellungen öffnen</string>
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Objekte</string>
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <string name="crash_last_run">Es gab einen Absturz beim letzten Lauf der App!</string>
+  <string name="cant_start_app">Kann die App nicht starten!</string>
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <string name="dev_tools">Entwicklerwerkzeuge</string>
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">App abstürzen lassen</string>
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">Unbehandelte Ausnahme erzwingen um die App abstürzen zu lassen</string>
 </resources>
