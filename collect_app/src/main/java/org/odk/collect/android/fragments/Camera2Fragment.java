@@ -52,7 +52,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.dialogs.ErrorDialog;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -530,8 +530,8 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
         } catch (NullPointerException e) {
             // Currently an NPE is thrown when the Camera2API is used but not supported on the
             // device this code runs.
-            ErrorDialog.newInstance(getString(R.string.camera_error))
-                    .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+            ToastUtils.showLongToast(activity, R.string.camera_error);
+            activity.finish();
         }
     }
 
