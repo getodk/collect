@@ -37,6 +37,7 @@
   <string name="encrypted_form">Šifriran obrazec</string>
   <string name="sort_by_date_desc">Datum, najprej najnovejši</string>
   <string name="sort_by_date_asc">Datum, najprej najstarejši</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">Status, najprej zaključeni</string>
   <string name="sort_by_status_desc">Status, najprej ne-zaključeni</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
@@ -45,13 +46,13 @@
   <string name="no_items_display_sent_forms">Ničesar ni za prikaz.\n\nPoskusi poslati zaključen obrazec pred pregledovanjem.</string>
   <string name="no_items_display_instances">Ničesar ni za prikaz.\n\nPoskusi zaključiti shranjene obrazce pred pošiljanjem.</string>
   <string name="storage_runtime_permission_denied_desc">Brez teh dovoljenj, Collect ne more dostopati do vaših obrazcev ali shraniti odgovorov. Aplikacijo znova odprite, ko ste jih pripravljeni odobriti.</string>
-  <string name="location_runtime_permissions_denied_desc">Brez teh dovoljenj Collect ne more zabeležiti vaše lokacije. Prosim, poskusite znova, ko ste jih pripravljeni odobriti.</string>
   <string name="camera_runtime_permission_denied_title">Dovljenje za fotoaparat</string>
   <string name="camera_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do fotoaparata. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
   <string name="record_audio_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do mikrofona. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">%1$d obrazcev dodanih.</string>
   <string name="finished_disk_scan">Končano skeniranje. Vsi obrazci so naloženi.</string>
   <string name="xform_parse_error">Xform napaka obravnave za %1$s: %2$s manjka ali je napačen.</string>
@@ -255,6 +256,10 @@
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -504,4 +509,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

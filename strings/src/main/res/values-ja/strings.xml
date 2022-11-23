@@ -45,6 +45,7 @@
   <string name="sort_by_name_desc">名前順、Z-A</string>
   <string name="sort_by_date_desc">日付順、新しいものが最初</string>
   <string name="sort_by_date_asc">日付順、古いものが最初</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">ステータス順、確定済が最初</string>
   <string name="sort_by_status_desc">ステータス順、未確定が最初</string>
   <string name="filter_the_list">一覧をフィルター</string>
@@ -58,7 +59,6 @@
   <string name="storage_runtime_permission_denied_title">ストレージのアクセス許可</string>
   <string name="storage_runtime_permission_denied_desc">これらのアクセス許可がないと、Collect はフォームにアクセスしたり、回答を保存することができません。 アクセス許可を付与する準備ができたら、アプリをもう一度開いてください。</string>
   <string name="location_runtime_permissions_denied_title">位置情報アクセス許可</string>
-  <string name="location_runtime_permissions_denied_desc">これらのアクセス許可がないと、Collect はあなたの場所を記録できません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="camera_runtime_permission_denied_title">カメラアクセス許可</string>
   <string name="camera_runtime_permission_denied_desc">このアクセス許可がないと、Collect はカメラにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="record_audio_runtime_permission_denied_title">オーディオ録音アクセス許可</string>
@@ -70,6 +70,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">%1$d フォームを追加しました。</string>
   <string name="finished_disk_scan">スキャンが終了しました。すべてのフォームがロードされました。</string>
   <string name="xform_parse_error">%1$s の XForm 解析エラー: %2$s が不足しているか正しくありません。 </string>
@@ -468,6 +469,11 @@
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">一時停止</string>
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -837,4 +843,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

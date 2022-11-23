@@ -20,6 +20,7 @@
   <string name="get_forms">Pata fomu iliyowazi</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Futa fomu zilizohifadhiwa</string>
+  <string name="saved_forms">Fomu zilizohifadhiwa</string>
   <string name="version_number">Toleo: %s</string>
   <string name="id_number">Utambulisho: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -45,6 +46,7 @@
   <string name="sort_by_name_desc">Jina, Z-A</string>
   <string name="sort_by_date_desc">Tarehe, mpya zaidi kwanza</string>
   <string name="sort_by_date_asc">Tarehe, zamani kwanza</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">Hadhi, malizia kwanza</string>
   <string name="sort_by_status_desc">Hadhi, ambayo haijamaliziwa kwanza</string>
   <string name="filter_the_list">Chuja orodha</string>
@@ -54,10 +56,10 @@
   <string name="no_items_display_forms">Hakuna kitu cha kuonyesha.\n\njaribu kuchukua na kujaza fomu tupu</string>
   <string name="no_items_display_sent_forms">Hakuna kitu cha kuonyesha. \ N \ n Jaribu kutuma fomu zilizokamilika kabla ya kutazama.</string>
   <string name="no_items_display_instances">Hakuna kitu cha kuonyesha.\n\n Jaribu kukamilisha fomu kabla ya kuzituma</string>
+  <string name="not_granted_permission">Kitendo unachijaribu kufanya kinahitaji ruhusa ambayo bado haijatolewa.</string>
   <string name="storage_runtime_permission_denied_title">Ruhusa ya kuhifadhi</string>
   <string name="storage_runtime_permission_denied_desc">Bila hizi ruhusa Collect haiwezi kufikia fomu au kuhifadhi majibu. Fungua tena program ukiwa tayari kuziruhusu.</string>
   <string name="location_runtime_permissions_denied_title">Ruhusa ya kuonesha eneo </string>
-  <string name="location_runtime_permissions_denied_desc">Bila hizi ruhusa Collect haiwezi kurekodi taarifa za eneo. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <string name="camera_runtime_permission_denied_title">Ruhusa ya camera</string>
   <string name="camera_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kutumia kamera. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <string name="record_audio_runtime_permission_denied_title">Ruhusa ya kurekodi sauti</string>
@@ -69,6 +71,8 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">Fungua ramani ya fomu</string>
   <string name="instance_scan_count">%1$dfomu zimeongezwa.</string>
   <string name="finished_disk_scan">Imemaliza kuskani. Fomu zote zimewekwa.</string>
   <string name="xform_parse_error">XFomu imesoma kimakosa kwa%1$s: %2$simepotea au batili.</string>
@@ -120,6 +124,7 @@
   <string name="required_answer_error">Samahani, jibu hili linahitajika!</string>
   <string name="invalid_space_in_answer_singular">Onyo: thamani ya chini%sina nafasi</string>
   <string name="invalid_space_in_answer_plural">Onyo: thamani za chini %szina nafasi</string>
+  <string name="too_complex_form">Fomu hii ni ngumu sana kwa uwezo wa kifaa hiki. Jaribu kuirahisisha au omba msaada katika jukwaa.</string>
   <string name="survey_internal_error">Kosa la ndani: hatua ya kutoa taarifa imeshindikana.</string>
   <string name="save_enter_data_description">Upo mwishoni mwa %s.</string>
   <string name="save_form_as">Andika jina la fomu</string>
@@ -152,10 +157,14 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">URI  Isiyotambulika: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Haikuwezekana kuanza kurekodi</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Kinasa sauti tayari kinatumika</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Kurekodi kumezimwa. Washa hapa %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Fomu iliyojazwa ilishafutwa</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <!--##############################################
     # FORM FEATURES
@@ -177,7 +186,9 @@
   <string name="get_barcode">Pata barcode</string>
   <string name="replace_barcode">Badili barcode</string>
   <string name="barcode_scanner_prompt">Panga msimbo pau ndani ya mstatili</string>
+  <string name="open_file">Fungua faili</string>
   <string name="rank_items">Pangilia vitu</string>
+  <string name="number_picker_title">Kichaguzi cha nambari</string>
   <string name="invalid_range_widget">Widget hii  ina vigezo batili!</string>
   <string name="svg_file_does_not_exist">Kabrasha la SVG halipo</string>
   <string name="capture_image">Chukua picha</string>
@@ -400,6 +411,10 @@
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -749,4 +764,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

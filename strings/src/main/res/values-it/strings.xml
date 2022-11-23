@@ -45,6 +45,7 @@
   <string name="sort_by_name_desc">Nome, Z-A</string>
   <string name="sort_by_date_desc">Per data, prima i più recenti</string>
   <string name="sort_by_date_asc">Per data, prima i meno recenti</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
   <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
   <string name="filter_the_list">Filtra la lista</string>
@@ -58,7 +59,6 @@
   <string name="storage_runtime_permission_denied_title">Autorizzazione all\'uso della memoria</string>
   <string name="storage_runtime_permission_denied_desc">Senza questi permessi Collect non può accedere ai tuoi questionari o salvare le risposte. Riapri la applicazione quando sei pronto ad autorizzarli.</string>
   <string name="location_runtime_permissions_denied_title">Autorizzazione all\'uso dei servizi di localizzazione</string>
-  <string name="location_runtime_permissions_denied_desc">Senza queste autorizzazioni Collect non può registrare la tua posizione. Prova di nuovo quando hai autorizzato l\'uso dei servizi di localizzazione</string>
   <string name="camera_runtime_permission_denied_title">Autorizzazione uso fotocamera</string>
   <string name="camera_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può usare la fotocamera. Prova di nuovo quando hai autorizzato l\'uso della fotocamera</string>
   <string name="record_audio_runtime_permission_denied_title">Autorizzazione uso microfono</string>
@@ -70,6 +70,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">%1$d moduli aggiunti.</string>
   <string name="finished_disk_scan">Scansione terminata. Tutti i moduli caricati.</string>
   <string name="xform_parse_error">XForm errore di parsing per %1$s: %2$s mancante o non valido.</string>
@@ -490,6 +491,11 @@
   <string name="location_tracking_notification_title">Monitoraggio della posizione…</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Ottieni aiuto con i livelli di riferimento</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Metti in pausa</string>
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -935,4 +941,14 @@
     # Permissions
     ##############################################-->
   <string name="open_settings">Apri impostazioni</string>
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

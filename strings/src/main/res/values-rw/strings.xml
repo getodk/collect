@@ -45,6 +45,7 @@
   <string name="sort_by_name_desc">Urutonde rwamazina, uva kuri Z ujya kuri A </string>
   <string name="sort_by_date_desc">Itariki yanyuma iheruka </string>
   <string name="sort_by_date_asc">Itariki, yabanjirije iyanyuma iheruka.</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">Ukobimeze, byarangiye bwambere</string>
   <string name="sort_by_status_desc">Aho bigeze, ntibyarangiye</string>
   <string name="filter_the_list">Hisha urutonde</string>
@@ -58,7 +59,6 @@
   <string name="storage_runtime_permission_denied_title">Uburenganzira ku bubiko</string>
   <string name="storage_runtime_permission_denied_desc">Udafite ubwo burenganzira Collect ntabwo ishobora kwemera form cg ibike amakuru. Ongera ufungure iyo application mugihe ufite ubwo burenganzira</string>
   <string name="location_runtime_permissions_denied_title">Uburenganzira bwokwerekana location </string>
-  <string name="location_runtime_permissions_denied_desc">Udafite ubwo burenganzira, Collect ntiyarikodinga location yawe. Mwongere igihe muzaba mubasha gutanga ubwo burenganzira</string>
   <string name="camera_runtime_permission_denied_title">Ha uruhushya Camera</string>
   <string name="camera_runtime_permission_denied_desc">Utatanze uruhushya porogaramu ntibasha gukoresha Camera bityo ongera kugerageza nyuma yuko uhaye uruhushya porogaramu</string>
   <string name="record_audio_runtime_permission_denied_title">Rikodinga uburenganzira bwa odiyo </string>
@@ -70,6 +70,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">%1$d Form zashyizwemo</string>
   <string name="finished_disk_scan">Kugenzura byarangiye. Ibyo mwatanze byose byabitswe.</string>
   <string name="xform_parse_error">Ingorane z\'ikosa kuri fomu %1$s : %2$s ni ibitabonetse cyangwa bituzuye</string>
@@ -475,6 +476,11 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Hagarika </string>
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -875,4 +881,14 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

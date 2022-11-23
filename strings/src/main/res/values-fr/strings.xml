@@ -46,6 +46,8 @@
   <string name="sort_by_name_desc">Nom, Z-A</string>
   <string name="sort_by_date_desc">Date, la plus récente en premier</string>
   <string name="sort_by_date_asc">Date, la plus ancienne en premier</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Dernière sauvegarde en premier</string>
   <string name="sort_by_status_asc">Statut, les finalisés en premier</string>
   <string name="sort_by_status_desc">Statut, les non finalisés en premier</string>
   <string name="filter_the_list">Filtrer la liste</string>
@@ -59,7 +61,7 @@
   <string name="storage_runtime_permission_denied_title">Autorisations de stockage</string>
   <string name="storage_runtime_permission_denied_desc">Sans ces permissions Collect ne peut pas accéder à vos formulaires ou enregistrer des réponses. Ré-ouvrez l\'application quand vous êtes prêt à donner les permissions requises. </string>
   <string name="location_runtime_permissions_denied_title">Autorisations liées à la localisation</string>
-  <string name="location_runtime_permissions_denied_desc">Sans ces permissions, Collect ne peut pas enregistrer votre localisation. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
+  <string name="location_runtime_permissions_denied_desc">Sans la permission de <b>Position Exacte</b>, Collect ne peut pas enregistrer votre localisation. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
   <string name="camera_runtime_permission_denied_title">Autorisation d\'enregistrement vidéo</string>
   <string name="camera_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder à la caméra. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
   <string name="record_audio_runtime_permission_denied_title">Autorisation d\'enregistrement audio</string>
@@ -71,6 +73,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="open_form_map">Voir les formulaires remplis sur une carte</string>
   <string name="instance_scan_count">%1$d formulaires ajoutés.</string>
   <string name="finished_disk_scan">Le scan est fini. Tous les formulaires sont chargés.</string>
@@ -498,6 +501,14 @@
   <string name="location_tracking_notification_title">Enregistrement de la localisation…</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Obtenir de l\'aide au sujet des couches de référence</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Montrer ma position</string>
+  <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">Zoomer pour tout voir</string>
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Pause</string>
+  <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">Supprimer le dernier point</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -945,4 +956,20 @@
     # Permissions
     ##############################################-->
   <string name="open_settings">Ouvrir les paramètres</string>
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Entités</string>
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <string name="crash_last_run">L\'application a rencontré un problème durant l\'usage précédant!</string>
+  <string name="cant_start_app">Impossible de démarrer l\'application!</string>
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <string name="dev_tools">Outils pour développeurs</string>
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">Faire planter l\'application</string>
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">Forcer une exception qui fera planter l\'application </string>
 </resources>

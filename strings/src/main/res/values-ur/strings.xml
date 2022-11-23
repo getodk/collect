@@ -44,6 +44,7 @@
   <string name="sort_by_name_desc">نام، زیڈ-اے </string>
   <string name="sort_by_date_desc">تاریخ، سب سے پہلےنئی</string>
   <string name="sort_by_date_asc">تاریخ، سب سے پہلے پرانی </string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">سٹیٹس، پہلے سے طے شدہ</string>
   <string name="sort_by_status_desc">سٹیٹس، پہلے سے غیر طے شدہ </string>
   <string name="filter_the_list">فہرست فلٹر کریں</string>
@@ -56,7 +57,6 @@
   <string name="storage_runtime_permission_denied_title">سٹوریج پرمیشن</string>
   <string name="storage_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ آپ کے فارم تک رسائی حاصل نہیں کرسکتایا جواب محفوظ نہیں کر سکتا جب آپ پرمیشن دینے کے لئے تیار ہو تو ایپلکیشن دوبارہ کھولیں.</string>
   <string name="location_runtime_permissions_denied_title">لوکیشن پرمیشن</string>
-  <string name="location_runtime_permissions_denied_desc">اس اجازت کے بغیر کولیکٹ آپ کی لوکیشن ریکارڈ نہیں کرسکتا۔ برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو </string>
   <string name="camera_runtime_permission_denied_title">کمیرہ پرمیشن </string>
   <string name="camera_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو کیمرے تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ  پرمیشن دینے کے لئے تیار ہو</string>
   <string name="record_audio_runtime_permission_denied_title">ریکارڈ آڈیو پرمیشن</string>
@@ -68,6 +68,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="instance_scan_count">%1$dفارم شامل ہیں.</string>
   <string name="finished_disk_scan">سکیننگ ختم ہو گئ ۔ تمام فارمز لوڈ ہو گئے</string>
   <string name="xform_parse_error">%1$s میں ایکس فارم پارس کی خرابی: %2$s غائب یا غلط ہے</string>
@@ -376,6 +377,10 @@
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -714,4 +719,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

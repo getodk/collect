@@ -29,6 +29,7 @@
   <string name="sort_by_name_asc">പേര്, A - Z </string>
   <string name="sort_by_date_desc">തിയതി, പുതിയത് ആദ്യം </string>
   <string name="sort_by_date_asc">തിയതി, പഴയത് ആദ്യം</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_status_asc">സ്റ്റാറ്റസ് , അവസാനിപ്പിച്ചത് ആദ്യം </string>
   <string name="sort_by_status_desc">സ്റ്റാറ്റസ്, അവസാനിപ്പിക്കാത്തത് ആദ്യം </string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
@@ -38,12 +39,12 @@
   <string name="storage_runtime_permission_denied_title">സ്റ്റോറേജ് അനുമതികൾ </string>
   <string name="storage_runtime_permission_denied_desc">ഈ അനുമതികൾ ഇല്ലാതെ കളക്ടിന് നിങ്ങളുടെ ഫോമിലേക്ക് പ്രവേശിക്കുകയോ ഉത്തരങ്ങൾ സേവ് ചെയ്യുകയോ ചെയ്യാൻ ആകുന്നതല്ല. അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ ആപ്പ് വീണ്ടും തുറക്കുക.</string>
   <string name="location_runtime_permissions_denied_title">സ്ഥാന നിർണയത്തിനുള്ള അനുമതി.</string>
-  <string name="location_runtime_permissions_denied_desc">ഈ അനുമതികൾ ഇല്ലാതെ കളക്ടിന് നിങ്ങളുടെ സ്ഥാനം നിർണയിക്കാൻ ആകുന്നതല്ല. ദയവു ചെയ്ത് അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ വീണ്ടും ശ്രമിക്കുക.</string>
   <string name="camera_runtime_permission_denied_title">ക്യാമറ അനുമതി</string>
   <string name="camera_runtime_permission_denied_desc">ഈ അനുമതി ഇല്ലാതെ കളക്ടിന് ക്യാമറ നിയന്ത്രിക്കാൻ കഴിയുകയില്ല. ദയവു ചെയ്ത് അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ വീണ്ടും ശ്രമിക്കുക.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="finished_disk_scan">തിരച്ചിൽ അവസാനിച്ചിരിക്കുന്നു. എല്ലാ ഫോമുകളും ലോഡ് ചെയ്‌തിരിക്കുന്നു.</string>
   <string name="loading_form">ഫോം ലോഡ് ചെയ്തുകൊണ്ടിരിക്കുന്നു</string>
   <string name="survey_loading_reading_data_message">സർവ്വേ വിവരങ്ങൾ വായിച്ചുകൊണ്ടിരിക്കുന്നു…</string>
@@ -186,6 +187,10 @@
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <!--Description for button that zooms to the user's current location on a map-->
+  <!--Description for button that zooms a map so that it shows all items-->
+  <!--Description for button that pauses automatic location recording-->
+  <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -323,4 +328,14 @@
   <!--##############################################
     # Permissions
     ##############################################-->
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
 </resources>

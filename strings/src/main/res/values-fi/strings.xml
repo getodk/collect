@@ -46,6 +46,8 @@
   <string name="sort_by_name_desc">Nimi, Ö-A</string>
   <string name="sort_by_date_desc">Päivämäärä, uusin ensin</string>
   <string name="sort_by_date_asc">Päivämäärä, vanhin ensin</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Viimeisenä tallennettu ensimmäisenä</string>
   <string name="sort_by_status_asc">Tila, viimeistellyt ensin</string>
   <string name="sort_by_status_desc">Tila, viimeistelemättömät ensin</string>
   <string name="filter_the_list">Suodata listaa</string>
@@ -59,7 +61,7 @@
   <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
   <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>
   <string name="location_runtime_permissions_denied_title">Sijaintitiedon käyttöluvat</string>
-  <string name="location_runtime_permissions_denied_desc">Ilman näitä käyttölupia Collect ei pysty tallentamaan sijaintiasi. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään ne.</string>
+  <string name="location_runtime_permissions_denied_desc">Ilman lupaa <b>Tarkka sijainti</b> Collect ei pysty tallentamaan sijaintiasi. Yritä uudestaan kun olet valmis sallimaan sen.</string>
   <string name="camera_runtime_permission_denied_title">Kameran käyttölupa</string>
   <string name="camera_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään kameraa. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
   <string name="record_audio_runtime_permission_denied_title">Äänen tallentamisen käyttölupa</string>
@@ -71,6 +73,7 @@
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
   <string name="open_form_map">Avaa lomakekartta</string>
   <string name="instance_scan_count">%1$d lomaketta lisätty.</string>
   <string name="finished_disk_scan">Skannaus valmis. Kaikki lomakkeet ladattu.</string>
@@ -495,6 +498,14 @@
   <string name="location_tracking_notification_title">Sijaintia seurataan…</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Viitekerrosten ohje</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Näytä sijaintini</string>
+  <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">Suurenna sisällyttämään kaikki</string>
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Tauko</string>
+  <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">Poista viimeinen sijainti</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -942,4 +953,20 @@
     # Permissions
     ##############################################-->
   <string name="open_settings">Avaa asetukset</string>
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Entiteettejä</string>
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <string name="crash_last_run">Sovellus kaatui viime käyttökerralla!</string>
+  <string name="cant_start_app">Sovelluksen käynnistys ei onnistu!</string>
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <string name="dev_tools">Kehitystyökalut</string>
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">Kaada sovellus</string>
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">Pakota havaitsematon poikkeus, joka aiheuttaa sovelluksen kaatumisen</string>
 </resources>
