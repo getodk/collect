@@ -40,7 +40,6 @@ import android.media.ImageReader;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import androidx.annotation.NonNull;
 import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
@@ -49,9 +48,11 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
-import org.odk.collect.android.storage.StoragePathProvider;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -68,6 +69,8 @@ import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
 public class Camera2Fragment extends Fragment implements View.OnClickListener {
+
+    public static final String ARG_TMP_IMAGE_PATH = "tmpImagePath";
 
     /**
      * Conversion from screen rotation to JPEG orientation. For front camera only.
@@ -218,6 +221,7 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
      */
     private ImageReader imageReader;
 
+    private String tmpImageFilePath;
     /**
      * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
@@ -228,7 +232,7 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
         @Override
         public void onImageAvailable(ImageReader reader) {
             try {
-                backgroundHandler.post(new ImageSaver(reader.acquireNextImage()));
+                backgroundHandler.post(new ImageSaver(reader.acquireNextImage(), tmpImageFilePath));
             } catch (IllegalStateException e) {
                 Timber.e(e);
             }
@@ -383,8 +387,10 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public static Camera2Fragment newInstance() {
-        return new Camera2Fragment();
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tmpImageFilePath = getArguments().getString(ARG_TMP_IMAGE_PATH);
     }
 
     @Override
@@ -844,9 +850,11 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
          * The JPEG image
          */
         private final Image image;
+        private final String tmpImageFilePath;
 
-        ImageSaver(Image image) {
+        ImageSaver(Image image, String tmpImageFilePath) {
             this.image = image;
+            this.tmpImageFilePath = tmpImageFilePath;
         }
 
         @Override
@@ -855,7 +863,7 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
 
-            File tempFile = new File(new StoragePathProvider().getTmpImageFilePath());
+            File tempFile = new File(tmpImageFilePath);
             try (FileOutputStream fos = new FileOutputStream(tempFile)) {
                 fos.write(bytes);
                 fos.flush();

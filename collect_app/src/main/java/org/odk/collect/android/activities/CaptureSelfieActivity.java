@@ -22,6 +22,7 @@ import android.view.WindowManager;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.Camera2Fragment;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
 public class CaptureSelfieActivity extends CollectAbstractActivity {
@@ -40,8 +41,13 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
                 .LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_capture_selfie);
         if (null == savedInstanceState) {
+            Camera2Fragment fragment = new Camera2Fragment();
+            Bundle args = new Bundle();
+            args.putString(Camera2Fragment.ARG_TMP_IMAGE_PATH, new StoragePathProvider().getTmpImageFilePath());
+            fragment.setArguments(args);
+
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2Fragment.newInstance())
+                    .replace(R.id.container, fragment)
                     .commit();
         }
         ToastUtils.showLongToast(this, R.string.take_picture_instruction);
