@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.androidshared.system;
 
 /*
 Copyright 2018 Theodoros Tyrovouzis
@@ -22,12 +22,6 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 
-import org.odk.collect.android.application.Collect;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import timber.log.Timber;
 
 public class CameraUtils {
@@ -44,11 +38,10 @@ public class CameraUtils {
         return -1;
     }
 
-    public boolean isFrontCameraAvailable() {
+    public boolean isFrontCameraAvailable(Context context) {
         try {
             //https://developer.android.com/reference/android/hardware/camera2/CameraCharacteristics.html
-            CameraManager cameraManager = (CameraManager) Collect.getInstance()
-                    .getSystemService(Context.CAMERA_SERVICE);
+            CameraManager cameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
             if (cameraManager != null) {
                 String[] cameraId = cameraManager.getCameraIdList();
                 for (String id : cameraId) {
@@ -63,15 +56,5 @@ public class CameraUtils {
             Timber.e(e);
         }
         return false; // No front-facing camera found
-    }
-
-    public static void savePhoto(String path, byte[] data) {
-        File tempFile = new File(path);
-        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-            fos.write(data);
-            fos.flush();
-        } catch (IOException e) {
-            Timber.e(e);
-        }
     }
 }

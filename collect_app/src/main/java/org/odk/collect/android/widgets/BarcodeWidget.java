@@ -32,7 +32,7 @@ import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -131,7 +131,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
 
     private void setCameraIdIfNeeded(FormEntryPrompt prompt, IntentIntegrator intent) {
         if (Appearances.isFrontCameraAppearance(prompt)) {
-            if (cameraUtils.isFrontCameraAvailable()) {
+            if (cameraUtils.isFrontCameraAvailable(getContext())) {
                 intent.addExtra(FRONT, true);
             } else {
                 ToastUtils.showLongToast(getContext(), R.string.error_front_camera_unavailable);

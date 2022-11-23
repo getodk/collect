@@ -35,7 +35,7 @@ import com.journeyapps.barcodescanner.camera.CameraSettings;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.utilities.CodeCaptureManagerFactory;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.views.BarcodeViewDecoder;

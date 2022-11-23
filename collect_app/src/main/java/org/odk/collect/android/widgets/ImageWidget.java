@@ -28,7 +28,7 @@ import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -88,7 +88,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         errorTextView.setVisibility(View.GONE);
 
         if (selfie) {
-            if (!new CameraUtils().isFrontCameraAvailable()) {
+            if (!new CameraUtils().isFrontCameraAvailable(getContext())) {
                 captureButton.setEnabled(false);
                 errorTextView.setText(R.string.error_front_camera_unavailable);
                 errorTextView.setVisibility(View.VISIBLE);

@@ -38,7 +38,7 @@ import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -107,7 +107,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         hideButtonsIfNeeded();
 
         if (selfie) {
-            if (!cameraUtils.isFrontCameraAvailable()) {
+            if (!cameraUtils.isFrontCameraAvailable(getContext())) {
                 captureButton.setEnabled(false);
                 ToastUtils.showLongToast(getContext(), R.string.error_front_camera_unavailable);
             }

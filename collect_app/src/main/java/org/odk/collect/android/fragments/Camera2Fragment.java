@@ -52,9 +52,10 @@ import android.view.ViewGroup;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.utilities.CameraUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -854,7 +855,13 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
             byte[] bytes = new byte[buffer.remaining()];
             buffer.get(bytes);
 
-            CameraUtils.savePhoto(new StoragePathProvider().getTmpImageFilePath(), bytes);
+            File tempFile = new File(new StoragePathProvider().getTmpImageFilePath());
+            try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                fos.write(bytes);
+                fos.flush();
+            } catch (IOException e) {
+                Timber.e(e);
+            }
         }
     }
 
