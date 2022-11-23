@@ -11,6 +11,7 @@ import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.upload.InstanceServerUploader
 import org.odk.collect.android.upload.InstanceUploader
 import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstanceAutoDeleteChecker
 import org.odk.collect.android.utilities.InstanceUploaderUtils
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.WebCredentialsUtils
@@ -109,11 +110,7 @@ class InstanceSubmitter(
         // TODO: this could take some time so might be better to do in a separate process,
         // perhaps another worker. It also feels like this could fail and if so should be
         // communicated to the user. Maybe successful delete should also be communicated?
-        if (InstanceUploaderUtils.shouldFormBeDeleted(
-                formsRepository, instance.formId, instance.formVersion,
-                generalSettings.getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND)
-            )
-        ) {
+        if (InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, generalSettings.getBoolean(ProjectKeys.KEY_DELETE_AFTER_SEND), instance)) {
             InstanceDeleter(
                 InstancesRepositoryProvider(Collect.getInstance()).get(),
                 FormsRepositoryProvider(Collect.getInstance()).get()

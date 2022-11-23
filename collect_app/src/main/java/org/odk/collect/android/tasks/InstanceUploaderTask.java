@@ -16,13 +16,12 @@
 
 package org.odk.collect.android.tasks;
 
-import static org.odk.collect.android.utilities.InstanceUploaderUtils.shouldFormBeDeleted;
-
 import android.net.Uri;
 import android.os.AsyncTask;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
+import org.odk.collect.android.utilities.InstanceAutoDeleteChecker;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
@@ -69,7 +68,7 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                     Stream<Instance> instancesToDelete = instanceIds.stream()
                             .map(id -> new InstancesRepositoryProvider(Collect.getInstance()).get().get(Long.parseLong(id)))
                             .filter(instance -> instance.getStatus().equals(Instance.STATUS_SUBMITTED))
-                            .filter(instance -> shouldFormBeDeleted(formsRepository, instance.getFormId(), instance.getFormVersion(), isFormAutoDeleteOptionEnabled));
+                            .filter(instance -> InstanceAutoDeleteChecker.shouldInstanceBeDeleted(formsRepository, isFormAutoDeleteOptionEnabled, instance));
 
                     DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
                     dit.execute(instancesToDelete.map(Instance::getDbId).toArray(Long[]::new));
