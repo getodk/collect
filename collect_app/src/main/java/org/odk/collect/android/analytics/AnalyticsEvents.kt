@@ -170,4 +170,14 @@ object AnalyticsEvents {
      * Tracks how often finalized forms are edited
      */
     const val EDIT_FINALIZED_FORM = "EditFinalizedForm"
+
+    /**
+     * Tracks how often manually specified instance name is used
+     */
+    const val MANUALLY_SPECIFIED_INSTANCE_NAME = "ManuallySpecifiedInstanceName"
+
+    /**
+     * Tracks how often automatically specified instance name is used
+     */
+    const val AUTOMATICALLY_SPECIFIED_INSTANCE_NAME = "AutomaticallySpecifiedInstanceName"
 }

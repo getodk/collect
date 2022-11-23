@@ -1277,6 +1277,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (saveName.length() < 1) {
                     showShortToast(FormEntryActivity.this, R.string.save_as_error);
                 } else {
+                    if (saveName.equals(formSaveViewModel.getFormName()) || saveName.equals(formController.getSubmissionMetadata().instanceName)) {
+                        AnalyticsUtils.logFormEvent(AnalyticsEvents.AUTOMATICALLY_SPECIFIED_INSTANCE_NAME);
+                    } else {
+                        AnalyticsUtils.logFormEvent(AnalyticsEvents.MANUALLY_SPECIFIED_INSTANCE_NAME);
+                    }
                     formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
                 }
             }
