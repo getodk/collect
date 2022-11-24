@@ -18,6 +18,7 @@ package org.odk.collect.android.preferences
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.settings.BuildConfig
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -96,7 +97,7 @@ class PreferenceVisibilityHandler(
                 ProjectKeys.KEY_FORM_METADATA -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_CHANGE_FORM_METADATA)
                 ProjectKeys.KEY_ANALYTICS -> preference.isVisible = state == ProjectPreferencesViewModel.State.UNLOCKED || isOptionEnabled(ProtectedProjectKeys.KEY_ANALYTICS)
 
-                "experimental" -> preference.isVisible = !versionInformation.isRelease
+                "experimental" -> preference.isVisible = !versionInformation.isRelease || BuildConfig.DEBUG
 
                 "admin_password" -> preference.isVisible = state != ProjectPreferencesViewModel.State.LOCKED
                 "project_management" -> preference.isVisible = state != ProjectPreferencesViewModel.State.LOCKED
