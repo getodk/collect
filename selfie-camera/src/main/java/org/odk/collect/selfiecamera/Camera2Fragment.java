@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.fragments;
+package org.odk.collect.selfiecamera;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -51,7 +51,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.odk.collect.android.R;
+import org.odk.collect.androidshared.ui.CompareSizesByArea;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
@@ -61,7 +61,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -76,7 +75,6 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
      * Conversion from screen rotation to JPEG orientation. For front camera only.
      */
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-    private static final String FRAGMENT_DIALOG = "dialog";
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 0);
@@ -825,12 +823,9 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.texture: {
-                textureView.setClickable(false);
-                takePicture();
-                break;
-            }
+        if (view.getId() == R.id.texture) {
+            textureView.setClickable(false);
+            takePicture();
         }
     }
 
@@ -870,19 +865,6 @@ public class Camera2Fragment extends Fragment implements View.OnClickListener {
             } catch (IOException e) {
                 Timber.e(e);
             }
-        }
-    }
-
-    /**
-     * Compares two {@code Size}s based on their areas.
-     */
-    static class CompareSizesByArea implements Comparator<Size> {
-
-        @Override
-        public int compare(Size lhs, Size rhs) {
-            // We cast here to ensure the multiplications won't overflow
-            return Long.signum((long) lhs.getWidth() * lhs.getHeight()
-                    - (long) rhs.getWidth() * rhs.getHeight());
         }
     }
 }

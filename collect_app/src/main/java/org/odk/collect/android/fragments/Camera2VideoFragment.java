@@ -49,6 +49,7 @@ import androidx.annotation.NonNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.ErrorDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.androidshared.ui.CompareSizesByArea;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
@@ -253,7 +254,7 @@ public class Camera2VideoFragment extends Fragment implements View.OnClickListen
 
         // Pick the smallest of those, assuming we found any
         if (!bigEnough.isEmpty()) {
-            return Collections.min(bigEnough, new Camera2Fragment.CompareSizesByArea());
+            return Collections.min(bigEnough, new CompareSizesByArea());
         } else {
             Timber.e(new Error("Couldn't find any suitable preview size"));
             return choices[0];

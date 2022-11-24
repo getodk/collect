@@ -21,7 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.fragments.Camera2Fragment;
+import org.odk.collect.selfiecamera.Camera2Fragment;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
