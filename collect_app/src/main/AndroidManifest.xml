@@ -176,7 +176,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
-        <activity android:name=".activities.CaptureSelfieActivity" />
+        <activity android:name="org.odk.collect.selfiecamera.CaptureSelfieActivity" />
         <activity android:name=".activities.WebViewActivity" />
         <activity android:name=".activities.CaptureSelfieVideoActivity" />
 

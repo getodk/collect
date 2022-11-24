@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -24,24 +27,22 @@ import android.widget.Button;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CaptureSelfieActivity;
+import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.CameraUtils;
 
 import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -151,6 +152,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         Intent intent;
         if (selfie) {
             intent = new Intent(getContext(), CaptureSelfieActivity.class);
+            intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_IMAGE_PATH, new StoragePathProvider().getTmpImageFilePath());
         } else {
             intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             // We give the camera an absolute filename/path where to put the

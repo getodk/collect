@@ -14,22 +14,28 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.selfiecamera;
 
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import org.odk.collect.android.R;
-import org.odk.collect.selfiecamera.Camera2Fragment;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.shared.injection.ObjectProvider;
+import org.odk.collect.shared.injection.ObjectProviderHost;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
-public class CaptureSelfieActivity extends CollectAbstractActivity {
+public class CaptureSelfieActivity extends LocalizedActivity {
+
+    public static final String EXTRA_TMP_IMAGE_PATH = "tmpImagePath";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ObjectProvider objectProvider = ((ObjectProviderHost) getApplication()).getObjectProvider();
+        PermissionsProvider permissionsProvider = objectProvider.provide(PermissionsProvider.class);
 
         if (!permissionsProvider.isCameraPermissionGranted()) {
             finish();
@@ -43,7 +49,7 @@ public class CaptureSelfieActivity extends CollectAbstractActivity {
         if (null == savedInstanceState) {
             Camera2Fragment fragment = new Camera2Fragment();
             Bundle args = new Bundle();
-            args.putString(Camera2Fragment.ARG_TMP_IMAGE_PATH, new StoragePathProvider().getTmpImageFilePath());
+            args.putString(Camera2Fragment.ARG_TMP_IMAGE_PATH, getIntent().getStringExtra(EXTRA_TMP_IMAGE_PATH));
             fragment.setArguments(args);
 
             getFragmentManager().beginTransaction()

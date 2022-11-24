@@ -16,7 +16,6 @@ android {
         targetSdkVersion Versions.android_target_sdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
@@ -34,7 +33,7 @@ android {
 
 dependencies {
     implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.androidx_appcompat
+    api Dependencies.androidx_appcompat
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
