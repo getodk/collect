@@ -44,12 +44,4 @@
         tools:ignore="RtlHardcoded">
 
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/space_box"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_below="@+id/help_text"
-        android:visibility="gone"/>
-
 </RelativeLayout>

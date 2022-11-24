@@ -57,14 +57,12 @@ public abstract class GeneralExStringWidgetTest<W extends ExStringWidget, A exte
         StringWidget widget = createWidget();
         List<View> viewsRegisterForContextMenu = ((WidgetTestActivity) activity).viewsRegisterForContextMenu;
 
-        assertThat(viewsRegisterForContextMenu.size(), is(3));
+        assertThat(viewsRegisterForContextMenu.size(), is(2));
 
         assertTrue(viewsRegisterForContextMenu.contains(widget.findViewWithTag(R.id.question_label)));
         assertTrue(viewsRegisterForContextMenu.contains(widget.findViewWithTag(R.id.help_text)));
-        assertTrue(viewsRegisterForContextMenu.contains(widget.findViewWithTag(R.id.space_box)));
 
         assertThat(viewsRegisterForContextMenu.get(0).getId(), is(widget.getId()));
         assertThat(viewsRegisterForContextMenu.get(1).getId(), is(widget.getId()));
-        assertThat(viewsRegisterForContextMenu.get(2).getId(), is(widget.getId()));
     }
 }
