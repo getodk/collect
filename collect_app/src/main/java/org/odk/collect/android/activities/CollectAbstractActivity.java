@@ -22,6 +22,9 @@ import android.os.Build;
 import android.os.Bundle;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.fragments.SmapFormListFragment;
+import org.odk.collect.android.fragments.SmapTaskListFragment;
+import org.odk.collect.android.fragments.SmapTaskMapFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.LocaleHelper;
 import org.odk.collect.android.permissions.PermissionsProvider;
@@ -154,6 +157,9 @@ public abstract class CollectAbstractActivity extends AppCompatActivity {
         activities.add(InstanceUploaderActivity.class);
         activities.add(SmapLoginActivity.class);    // smap
         activities.add(SmapMain.class);             // smap
+        activities.add(SmapFormListFragment.class);             // smap
+        activities.add(SmapTaskListFragment.class);             // smap
+        activities.add(SmapTaskMapFragment.class);             // smap
 
         for (Class<?> act : activities) {
             if (activity.getClass().equals(act)) {
