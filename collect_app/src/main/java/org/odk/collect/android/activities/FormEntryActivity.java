@@ -385,7 +385,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
+        formEntryViewModelFactory.setSessionId(sessionId);
         formSaveViewModelFactoryFactory.setSessionId(sessionId);
+        backgroundAudioViewModelFactory.setSessionId(sessionId);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(sessionId))
@@ -445,14 +447,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionRepository, sessionId)
         ).get(BackgroundLocationViewModel.class);
 
-        backgroundAudioViewModelFactory.setSessionId(sessionId);
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
         backgroundAudioViewModel.isPermissionRequired().observe(this, isPermissionRequired -> {
             if (isPermissionRequired) {
                 showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
             }
         });
-
 
         identityPromptViewModel = new ViewModelProvider(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
@@ -467,7 +467,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        formEntryViewModelFactory.setSessionId(sessionId);
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
 
