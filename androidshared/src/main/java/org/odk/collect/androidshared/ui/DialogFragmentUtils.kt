@@ -21,6 +21,10 @@ object DialogFragmentUtils {
         args: Bundle?,
         fragmentManager: FragmentManager
     ) {
+        if (fragmentManager.isDestroyed) {
+            return
+        }
+
         val fragmentFactory = fragmentManager.fragmentFactory
         val instance = fragmentFactory.instantiate(dialogClass.classLoader, dialogClass.name) as T
         instance.arguments = args
