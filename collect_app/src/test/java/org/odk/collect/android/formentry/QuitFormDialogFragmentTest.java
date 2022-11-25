@@ -15,32 +15,22 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.savedstate.SavedStateRegistryOwner;
+import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
-import org.odk.collect.android.injection.config.AppDependencyModule;
-import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
-import org.odk.collect.async.Scheduler;
-import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
@@ -51,22 +41,17 @@ public class QuitFormDialogFragmentTest {
     private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
     private final FormEntryViewModel formEntryViewModel = mock(FormEntryViewModel.class);
 
-    private FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory = new FormSaveViewModel.FactoryFactory() {
+    private ViewModelProvider.Factory viewModelFactory = new ViewModelProvider.Factory() {
+        @NonNull
         @Override
-        public void setSessionId(String sessionId) {
-
-        }
-
-        @Override
-        public ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs) {
-            return new ViewModelProvider.Factory() {
-
-                @NonNull
-                @Override
-                public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                    return (T) formSaveViewModel;
-                }
-            };
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
+            if (modelClass == FormEntryViewModel.class) {
+                return (T) formEntryViewModel;
+            } else if (modelClass == FormSaveViewModel.class) {
+                return (T) formSaveViewModel;
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
     };
 
@@ -74,31 +59,9 @@ public class QuitFormDialogFragmentTest {
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
             R.style.Theme_MaterialComponents,
             new FragmentFactoryBuilder()
-                    .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(formSaveViewModelFactoryFactory))
+                    .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(viewModelFactory))
                     .build()
     );
-
-    @Before
-    public void setup() {
-        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-            @Override
-            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
-                return formSaveViewModelFactoryFactory;
-            }
-
-            @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
-                return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionRepository) {
-                    @NonNull
-                    @Override
-                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                        return (T) formEntryViewModel;
-                    }
-                };
-            }
-        });
-
-    }
 
     @Test
     public void shouldShowCorrectButtons() {

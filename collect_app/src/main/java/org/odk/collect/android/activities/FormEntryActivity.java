@@ -66,7 +66,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -397,7 +399,19 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(sessionId))
-                .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(formSaveViewModelFactoryFactory))
+                .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(new ViewModelProvider.Factory() {
+                    @NonNull
+                    @Override
+                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
+                        if (modelClass == FormEntryViewModel.class) {
+                            return formEntryViewModelFactory.create(modelClass, extras);
+                        } else if (modelClass == FormSaveViewModel.class) {
+                            return formSaveViewModelFactoryFactory.create(FormEntryActivity.this, null).create(modelClass, extras);
+                        } else {
+                            throw new IllegalArgumentException();
+                        }
+                    }
+                }))
                 .build());
 
         super.onCreate(savedInstanceState);

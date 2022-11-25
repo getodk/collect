@@ -26,7 +26,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
@@ -38,25 +37,19 @@ import javax.inject.Inject;
 public class QuitFormDialogFragment extends DialogFragment {
 
     @Inject
-    Scheduler scheduler;
-
-    @Inject
     SettingsProvider settingsProvider;
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
 
-    @Inject
-    FormEntryViewModel.Factory formEntryViewModelFactory;
-
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
     private Listener listener;
 
-    private final FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
+    private final ViewModelProvider.Factory viewModelFactory;
 
-    public QuitFormDialogFragment(FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory) {
-        this.formSaveViewModelFactoryFactory = formSaveViewModelFactoryFactory;
+    public QuitFormDialogFragment(ViewModelProvider.Factory viewModelFactory) {
+        this.viewModelFactory = viewModelFactory;
     }
 
     @Override
@@ -64,9 +57,9 @@ public class QuitFormDialogFragment extends DialogFragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        ViewModelProvider.Factory factory = formSaveViewModelFactoryFactory.create(requireActivity(), null);
-        formSaveViewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
-        formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
+        ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity(), viewModelFactory);
+        formSaveViewModel = viewModelProvider.get(FormSaveViewModel.class);
+        formEntryViewModel = viewModelProvider.get(FormEntryViewModel.class);
 
         if (context instanceof Listener) {
             listener = (Listener) context;
