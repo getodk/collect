@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.AboutListAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -37,7 +39,6 @@ import javax.inject.Inject;
 public class AboutActivity extends CollectAbstractActivity implements
         AboutListAdapter.AboutItemClickListener {
 
-    private static final String LICENSES_HTML_PATH = "file:///android_asset/open_source_licenses.html";
     private static final String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=";
 
     private ExternalWebPageHelper websiteTabHelper;
@@ -112,9 +113,7 @@ public class AboutActivity extends CollectAbstractActivity implements
                     });
                     break;
                 case 4:
-                    intent = new Intent(this, WebViewActivity.class);
-                    intent.putExtra(ExternalWebPageHelper.OPEN_URL, LICENSES_HTML_PATH);
-                    startActivity(intent);
+                    startActivity(new Intent(this, OssLicensesMenuActivity.class));
                     break;
             }
         }
