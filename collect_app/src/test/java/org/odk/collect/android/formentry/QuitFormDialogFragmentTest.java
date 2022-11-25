@@ -39,6 +39,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
@@ -51,9 +52,31 @@ public class QuitFormDialogFragmentTest {
     private final FormSaveViewModel formSaveViewModel = mock(FormSaveViewModel.class);
     private final FormEntryViewModel formEntryViewModel = mock(FormEntryViewModel.class);
 
+    private FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory = new FormSaveViewModel.FactoryFactory() {
+        @Override
+        public void setSessionId(String sessionId) {
+
+        }
+
+        @Override
+        public ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs) {
+            return new ViewModelProvider.Factory() {
+
+                @NonNull
+                @Override
+                public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                    return (T) formSaveViewModel;
+                }
+            };
+        }
+    };
+
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            R.style.Theme_MaterialComponents
+            R.style.Theme_MaterialComponents,
+            new FragmentFactoryBuilder()
+                    .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(formSaveViewModelFactoryFactory))
+                    .build()
     );
 
     @Before
@@ -61,24 +84,7 @@ public class QuitFormDialogFragmentTest {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
             public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
-                return new FormSaveViewModel.FactoryFactory() {
-                    @Override
-                    public void setSessionId(String sessionId) {
-
-                    }
-
-                    @Override
-                    public ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs) {
-                        return new ViewModelProvider.Factory() {
-
-                            @NonNull
-                            @Override
-                            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                                return (T) formSaveViewModel;
-                            }
-                        };
-                    }
-                };
+                return formSaveViewModelFactoryFactory;
             }
 
             @Override

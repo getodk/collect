@@ -385,8 +385,11 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
+        formSaveViewModelFactoryFactory.setSessionId(sessionId);
+
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(sessionId))
+                .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(formSaveViewModelFactoryFactory))
                 .build());
 
         super.onCreate(savedInstanceState);
@@ -500,7 +503,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        formSaveViewModelFactoryFactory.setSessionId(sessionId);
         formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
