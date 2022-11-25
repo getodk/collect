@@ -79,16 +79,11 @@ public class QRCodeUtils implements QRCodeDecoder {
     @Override
     public String decode(InputStream inputStream) throws InvalidException, NotFoundException {
         Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-        return decode(bitmap);
-    }
 
-    private String decode(Bitmap bitmap) throws InvalidException, NotFoundException {
         Map<DecodeHintType, Object> tmpHintsMap = new EnumMap<>(DecodeHintType.class);
         tmpHintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
         tmpHintsMap.put(DecodeHintType.POSSIBLE_FORMATS, BarcodeFormat.QR_CODE);
         tmpHintsMap.put(DecodeHintType.PURE_BARCODE, Boolean.FALSE);
-
-
 
         try {
             QRCodeMultiReader reader = new QRCodeMultiReader();
