@@ -364,7 +364,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 Intent nfcIntent = new Intent(getApplicationContext(), getClass());
                 nfcIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 if(mNfcPendingIntent == null) {
-                    mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent, 0);
+                    mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent,
+                            PendingIntent.FLAG_IMMUTABLE);
                 }
 
                 if(mNfcFilters == null) {

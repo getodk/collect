@@ -206,7 +206,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.toString().trim());
             PendingIntent pendingNotify = PendingIntent.getActivity(Collect.getInstance(), 0,
-                    notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             notifier.showNotification(pendingNotify,
                     NotificationActivity.NOTIFICATION_ID,

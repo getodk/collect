@@ -76,7 +76,8 @@ public class NotificationManagerNotifier implements Notifier {
 
         Intent intent = new Intent(application, FormDownloadListActivity.class);
         intent.putExtra(DISPLAY_ONLY_UPDATED_FORMS, true);
-        PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_UPDATES_AVAILABLE_NOTIFICATION, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                 .setContentIntent(contentIntent)
@@ -97,7 +98,8 @@ public class NotificationManagerNotifier implements Notifier {
         Intent intent = new Intent(application, NotificationActivity.class);
         intent.putExtra(NotificationActivity.NOTIFICATION_TITLE, TranslationHandler.getString(application, R.string.download_forms_result));
         intent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, FormDownloadListActivity.getDownloadResultMessage(result));
-        PendingIntent contentIntent = PendingIntent.getActivity(application, FORMS_DOWNLOADED_NOTIFICATION, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent contentIntent = PendingIntent.getActivity(application, FORMS_DOWNLOADED_NOTIFICATION, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         String content = TranslationHandler.getString(application, allFormsDownloadedSuccessfully(result) ?
                 R.string.success :
@@ -117,7 +119,8 @@ public class NotificationManagerNotifier implements Notifier {
     public void onSync(@Nullable FormSourceException exception) {
         if (exception != null) {
             Intent intent = new Intent(application, FillBlankFormActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent contentIntent = PendingIntent.getActivity(application, FORM_SYNC_NOTIFICATION_ID, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(application, COLLECT_NOTIFICATION_CHANNEL)
                     .setContentIntent(contentIntent)
@@ -140,7 +143,7 @@ public class NotificationManagerNotifier implements Notifier {
         notifyIntent.putExtra(NotificationActivity.NOTIFICATION_MESSAGE, message.trim());
 
         PendingIntent pendingNotify = PendingIntent.getActivity(application, FORMS_UPLOADED_NOTIFICATION,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         String content = failure
                 ? TranslationHandler.getString(application, R.string.failures)

@@ -33,6 +33,8 @@ import org.odk.collect.android.tasks.NdefReaderTask;
 
 import java.text.DecimalFormat;
 
+import timber.log.Timber;
+
 public class NFCActivity extends Activity implements NFCListener {
 
     private ProgressDialog mNfcDialog;
@@ -78,7 +80,8 @@ public class NFCActivity extends Activity implements NFCListener {
             // Pending intent
             Intent nfcIntent = new Intent(getApplicationContext(), getClass());
             nfcIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent, 0);
+            mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent,
+                    PendingIntent.FLAG_IMMUTABLE);
 
             // Filter
             IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
@@ -182,7 +185,7 @@ public class NFCActivity extends Activity implements NFCListener {
     @Override
     public void readComplete(String result) {
 
-        Log.i(TAG, "NFC tag read: " + result);
+        Timber.i("NFC tag read: %s", result);
         returnNfc(result);
 
     }
@@ -197,7 +200,7 @@ public class NFCActivity extends Activity implements NFCListener {
      */
     private void handleNFCIntent(Intent intent) {
 
-        Log.i(TAG, "NFC tag discovered");
+        Timber.i("NFC tag discovered");
         String action = intent.getAction();
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
