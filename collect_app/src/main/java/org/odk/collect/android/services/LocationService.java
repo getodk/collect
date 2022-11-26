@@ -194,7 +194,8 @@ public class LocationService extends Service implements GoogleApiClient.Connecti
     private PendingIntent getPendingIntent() {
         Intent intent = new Intent(this, LocationReceiver.class);
         intent.setAction(LocationReceiver.ACTION_PROCESS_UPDATES);
-        return PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
 }
