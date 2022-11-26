@@ -164,35 +164,36 @@ public class Utilities {
             entry = new TaskEntry();
 
             entry.type = "task";
-            entry.taskType = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_TYPE));
-            entry.id = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-            entry.name = c.getString(c.getColumnIndex(InstanceColumns.T_TITLE));
-            entry.taskStatus = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_STATUS));
-            entry.repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
-            entry.taskStart = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_START));
-            entry.taskFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_FINISH));
-            entry.taskAddress = c.getString(c.getColumnIndex(InstanceColumns.T_ADDRESS));
-            entry.taskForm = c.getString(c.getColumnIndex(InstanceColumns.FORM_PATH));
-            entry.jrFormId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-            entry.instancePath = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-            entry.schedLon = c.getDouble(c.getColumnIndex(InstanceColumns.SCHED_LON));
-            entry.schedLat = c.getDouble(c.getColumnIndex(InstanceColumns.SCHED_LAT));
-            entry.showDist = c.getInt(c.getColumnIndex(InstanceColumns.T_SHOW_DIST));
-            entry.actLon = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LON));
-            entry.actLat = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LAT));
-            entry.actFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_ACT_FINISH));
-            entry.isSynced = c.getString(c.getColumnIndex(InstanceColumns.T_IS_SYNC));
-            entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
-            entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
+            entry.taskType = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_TASK_TYPE));
+            entry.id = c.getLong(c.getColumnIndexOrThrow(InstanceColumns._ID));
+            entry.name = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_TITLE));
+            entry.taskStatus = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_TASK_STATUS));
+            entry.repeat = (c.getInt(c.getColumnIndexOrThrow(InstanceColumns.T_REPEAT)) > 0);
+            entry.taskStart = c.getLong(c.getColumnIndexOrThrow(InstanceColumns.T_SCHED_START));
+            entry.taskFinish = c.getLong(c.getColumnIndexOrThrow(InstanceColumns.T_SCHED_FINISH));
+            entry.taskAddress = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_ADDRESS));
+            entry.taskForm = c.getString(c.getColumnIndexOrThrow(InstanceColumns.FORM_PATH));
+            entry.jrFormId = c.getString(c.getColumnIndexOrThrow(InstanceColumns.JR_FORM_ID));
+            entry.instancePath = c.getString(c.getColumnIndexOrThrow(InstanceColumns.INSTANCE_FILE_PATH));
+            entry.schedLon = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.SCHED_LON));
+            entry.schedLat = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.SCHED_LAT));
+            entry.showDist = c.getInt(c.getColumnIndexOrThrow(InstanceColumns.T_SHOW_DIST));
+            entry.actLon = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.ACT_LON));
+            entry.actLat = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.ACT_LAT));
+            entry.actFinish = c.getLong(c.getColumnIndexOrThrow(InstanceColumns.T_ACT_FINISH));
+            entry.isSynced = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_IS_SYNC));
+            entry.locationTrigger = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_LOCATION_TRIGGER));
+            entry.uuid = c.getString(c.getColumnIndexOrThrow(InstanceColumns.UUID));
 
         } catch (Exception e) {
-            Timber.i("Get task with ID or path: ID: " + id + " Path: " + instancePath);
+            Timber.i(String.format("Get task with ID or path: ID: %d Path: %s", id, instancePath));
             Timber.e(e);
         } finally {
             if (c != null) {
                 try {
                     c.close();
                 } catch (Exception e) {
+                    // ignore
                 }
             }
         }
@@ -488,32 +489,32 @@ public class Utilities {
                 TaskEntry entry = new TaskEntry();
 
                 entry.type = "task";
-                entry.taskType = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_TYPE));
-                entry.name = c.getString(c.getColumnIndex(InstanceColumns.T_TITLE));
-                entry.displayName = c.getString(c.getColumnIndex(InstanceColumns.DISPLAY_NAME));
-                entry.taskStatus = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_STATUS));
-                entry.taskComment = c.getString(c.getColumnIndex(InstanceColumns.T_TASK_COMMENT));
-                entry.repeat = (c.getInt(c.getColumnIndex(InstanceColumns.T_REPEAT)) > 0);
-                entry.taskStart = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_START));
-                entry.taskFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_SCHED_FINISH));
-                entry.taskAddress = c.getString(c.getColumnIndex(InstanceColumns.T_ADDRESS));
-                entry.taskForm = c.getString(c.getColumnIndex(InstanceColumns.FORM_PATH));
-                entry.jrFormId = c.getString(c.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                entry.formVersion = c.getInt(c.getColumnIndex(InstanceColumns.JR_VERSION));
-                entry.instancePath = c.getString(c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                entry.id = c.getLong(c.getColumnIndex(InstanceColumns._ID));
-                entry.schedLon = c.getDouble(c.getColumnIndex(InstanceColumns.SCHED_LON));
-                entry.schedLat = c.getDouble(c.getColumnIndex(InstanceColumns.SCHED_LAT));
-                entry.actLon = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LON));
-                entry.actLat = c.getDouble(c.getColumnIndex(InstanceColumns.ACT_LAT));
-                entry.showDist = c.getInt(c.getColumnIndex(InstanceColumns.T_SHOW_DIST));
-                entry.actFinish = c.getLong(c.getColumnIndex(InstanceColumns.T_ACT_FINISH));
-                entry.isSynced = c.getString(c.getColumnIndex(InstanceColumns.T_IS_SYNC));
-                entry.assId = c.getLong(c.getColumnIndex(InstanceColumns.T_ASS_ID));
-                entry.uuid = c.getString(c.getColumnIndex(InstanceColumns.UUID));
-                entry.source = c.getString(c.getColumnIndex(InstanceColumns.SOURCE));
-                entry.locationTrigger = c.getString(c.getColumnIndex(InstanceColumns.T_LOCATION_TRIGGER));
-                entry.updateId = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
+                entry.taskType = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_TASK_TYPE));
+                entry.name = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_TITLE));
+                entry.displayName = c.getString(c.getColumnIndexOrThrow(InstanceColumns.DISPLAY_NAME));
+                entry.taskStatus = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_TASK_STATUS));
+                entry.taskComment = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_TASK_COMMENT));
+                entry.repeat = (c.getInt(c.getColumnIndexOrThrow(InstanceColumns.T_REPEAT)) > 0);
+                entry.taskStart = c.getLong(c.getColumnIndexOrThrow(InstanceColumns.T_SCHED_START));
+                entry.taskFinish = c.getLong(c.getColumnIndexOrThrow(InstanceColumns.T_SCHED_FINISH));
+                entry.taskAddress = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_ADDRESS));
+                entry.taskForm = c.getString(c.getColumnIndexOrThrow(InstanceColumns.FORM_PATH));
+                entry.jrFormId = c.getString(c.getColumnIndexOrThrow(InstanceColumns.JR_FORM_ID));
+                entry.formVersion = c.getInt(c.getColumnIndexOrThrow(InstanceColumns.JR_VERSION));
+                entry.instancePath = c.getString(c.getColumnIndexOrThrow(InstanceColumns.INSTANCE_FILE_PATH));
+                entry.id = c.getLong(c.getColumnIndexOrThrow(InstanceColumns._ID));
+                entry.schedLon = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.SCHED_LON));
+                entry.schedLat = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.SCHED_LAT));
+                entry.actLon = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.ACT_LON));
+                entry.actLat = c.getDouble(c.getColumnIndexOrThrow(InstanceColumns.ACT_LAT));
+                entry.showDist = c.getInt(c.getColumnIndexOrThrow(InstanceColumns.T_SHOW_DIST));
+                entry.actFinish = c.getLong(c.getColumnIndexOrThrow(InstanceColumns.T_ACT_FINISH));
+                entry.isSynced = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_IS_SYNC));
+                entry.assId = c.getLong(c.getColumnIndexOrThrow(InstanceColumns.T_ASS_ID));
+                entry.uuid = c.getString(c.getColumnIndexOrThrow(InstanceColumns.UUID));
+                entry.source = c.getString(c.getColumnIndexOrThrow(InstanceColumns.SOURCE));
+                entry.locationTrigger = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_LOCATION_TRIGGER));
+                entry.updateId = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_UPDATEID));
 
                 if (useGeofenceFilter && location != null) {
                     if (entry.showDist > 0 && entry.schedLat != 0.0 && entry.schedLon != 0.0) {
@@ -685,7 +686,7 @@ public class Utilities {
             c = Collect.getInstance().getContentResolver().query(dbUri, null, where.toString(), whereArgs, null);
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                obsoleteUpdateId = c.getString(c.getColumnIndex(InstanceColumns.T_UPDATEID));
+                obsoleteUpdateId = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_UPDATEID));
                 markOldCaseCancelled(obsoleteUpdateId);
 
                 // Delete the file
@@ -762,10 +763,10 @@ public class Utilities {
             c = Collect.getInstance().getContentResolver().query(dbUri, null, where, whereArgs, null);
             if (c != null && c.getCount() > 0) {
                 c.moveToFirst();
-                status = c.getString(c.getColumnIndex(InstanceColumns.STATUS));
+                status = c.getString(c.getColumnIndexOrThrow(InstanceColumns.STATUS));
                 do {
                     String instanceFile = c.getString(
-                            c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
+                            c.getColumnIndexOrThrow(InstanceColumns.INSTANCE_FILE_PATH));
                     File instanceDir = (new File(instanceFile)).getParentFile();
                     ip.deleteAllFilesInDirectory(instanceDir);
 
@@ -1129,7 +1130,7 @@ public class Utilities {
             }
         }
         if (out == null) {
-            out = Collect.getInstance().getString(R.string.smap_unknown_error);
+            out = Collect.getInstance().getString(R.string.smap_unknown_error) + ": " + in;
         }
         return out;
     }
@@ -1174,9 +1175,9 @@ public class Utilities {
                     results.moveToPosition(-1);
                     while (results.moveToNext()) {
                         String name = results.getString(results
-                                .getColumnIndex(InstanceColumns.DISPLAY_NAME));
+                                .getColumnIndexOrThrow(InstanceColumns.DISPLAY_NAME));
                         String id = results.getString(results
-                                .getColumnIndex(InstanceColumns._ID));
+                                .getColumnIndexOrThrow(InstanceColumns._ID));
                         message
                                 .append(name)
                                 .append(" - ")

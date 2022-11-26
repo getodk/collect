@@ -365,7 +365,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 nfcIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 if(mNfcPendingIntent == null) {
                     mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent,
-                            PendingIntent.FLAG_IMMUTABLE);
+                            PendingIntent.FLAG_MUTABLE);    // Must be mutable
                 }
 
                 if(mNfcFilters == null) {
@@ -780,11 +780,11 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
                 }
 
                 if (cInstanceProvider.moveToFirst()) {
-                    long idx = cInstanceProvider.getLong(cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns._ID));
+                    long idx = cInstanceProvider.getLong(cInstanceProvider.getColumnIndexOrThrow(InstanceProviderAPI.InstanceColumns._ID));
                     if (idx > 0) {
                         Uri instanceUri = ContentUris.withAppendedId(InstanceProviderAPI.InstanceColumns.CONTENT_URI, idx);
                         surveyNotes = cInstanceProvider.getString(
-                                cInstanceProvider.getColumnIndex(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
+                                cInstanceProvider.getColumnIndexOrThrow(InstanceProviderAPI.InstanceColumns.T_SURVEY_NOTES));
                         // Start activity to complete form
 
                         // Use an explicit intent

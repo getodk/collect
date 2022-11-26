@@ -84,7 +84,7 @@ public class NotificationService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(String token) {
-        Timber.i("Refreshed token: " + token);
+        Timber.i("Refreshed token: %s", token);
         sendRegistrationToServer(token);
     }
 
