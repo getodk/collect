@@ -92,13 +92,13 @@ public class TraceUtilities {
 
                 org.odk.collect.android.loaders.PointEntry entry = new PointEntry();
 
-                entry.lat = pointListCursor.getDouble(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LAT));
-                entry.lon = pointListCursor.getDouble(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LON));
-                entry.time = pointListCursor.getLong(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.TIME));
+                entry.lat = pointListCursor.getDouble(pointListCursor.getColumnIndexOrThrow(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LAT));
+                entry.lon = pointListCursor.getDouble(pointListCursor.getColumnIndexOrThrow(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.LON));
+                entry.time = pointListCursor.getLong(pointListCursor.getColumnIndexOrThrow(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns.TIME));
 
-                id = pointListCursor.getLong(pointListCursor.getColumnIndex(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID));
+                id = pointListCursor.getLong(pointListCursor.getColumnIndexOrThrow(org.odk.collect.android.provider.TraceProviderAPI.TraceColumns._ID));
 
-                if(!logged) {  // Hack to prevent the time being optimised away so it is not present in the class. Keep this!
+                if(!logged) {  // Hack to prevent the time being optimised away so it is not present in the class. Keep this! Important.
                     Timber.i("First Entry %f, %f, %d", entry.lat, entry.lon, entry.time);
                     logged = true;
                 }

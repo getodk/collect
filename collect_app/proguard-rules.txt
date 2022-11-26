@@ -35,6 +35,11 @@
 -dontwarn org.apache.commons.logging.impl.**
 -dontwarn org.apache.http.conn.scheme.**
 
+# gson
+
+-keep class org.odk.collect.android.taskModel.** { *; }
+-keep class org.odk.collect.android.database.** { *; }
+
 # recommended okhttp rules
 # https://github.com/square/okhttp#r8--proguard
 -dontwarn javax.annotation.**
