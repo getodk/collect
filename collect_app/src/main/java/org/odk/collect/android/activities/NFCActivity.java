@@ -80,8 +80,7 @@ public class NFCActivity extends Activity implements NFCListener {
             // Pending intent
             Intent nfcIntent = new Intent(getApplicationContext(), getClass());
             nfcIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent,
-                    PendingIntent.FLAG_IMMUTABLE);
+            mNfcPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, nfcIntent, PendingIntent.FLAG_MUTABLE);    // Must be mutable
 
             // Filter
             IntentFilter filter = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
