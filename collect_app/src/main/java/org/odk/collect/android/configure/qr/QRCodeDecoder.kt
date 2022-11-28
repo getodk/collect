@@ -55,6 +55,8 @@ class QRCodeDecoderImpl : QRCodeDecoder {
             throw QRCodeNotFoundException()
         } catch (e: ChecksumException) {
             throw QRCodeNotFoundException()
+        } catch (e: Throwable) {
+            throw QRCodeNotFoundException()
         }
     }
 
