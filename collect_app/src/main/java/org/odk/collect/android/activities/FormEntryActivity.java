@@ -38,6 +38,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -1216,8 +1217,9 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
 
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
         ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(
-                new ViewModelProvider(this, viewModelFactory).get(AudioClipViewModel.class),
+                new ViewModelProvider(this, factory).get(AudioClipViewModel.class),
                 odkViewLifecycle
         );
 
