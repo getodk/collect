@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentDialog
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -24,7 +26,6 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
-import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
@@ -34,6 +35,7 @@ import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Comp
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.support.NoOpMapFragment
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.geo.selection.MappableSelectItem
@@ -80,9 +82,21 @@ class SelectOneFromMapDialogFragmentTest {
     private val application = ApplicationProvider.getApplicationContext<Application>()
     private val scheduler = FakeScheduler()
 
+    private val viewModelFactory = object : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+            return formEntryViewModel as T
+        }
+    }
+
     @get:Rule
     val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
+        FragmentScenarioLauncherRule(
+            defaultThemeResId = R.style.Theme_MaterialComponents,
+            FragmentFactoryBuilder()
+                .forClass(SelectOneFromMapDialogFragment::class.java) {
+                    SelectOneFromMapDialogFragment(viewModelFactory)
+                }.build()
+        )
 
     @Before
     fun setup() {
@@ -91,15 +105,6 @@ class SelectOneFromMapDialogFragmentTest {
                 return object : MapFragmentFactory {
                     override fun createMapFragment(): MapFragment {
                         return NoOpMapFragment()
-                    }
-                }
-            }
-
-            override fun providesFormEntryViewModelFactory(scheduler: Scheduler, formSessionStore: FormSessionRepository): FormEntryViewModel.Factory {
-                return object : FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionStore) {
-                    @Suppress("UNCHECKED_CAST")
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return formEntryViewModel as T
                     }
                 }
             }

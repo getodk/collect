@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 
 public abstract class SelectMinimalDialog extends MaterialFullScreenDialogFragment {
+
     private SelectMinimalDialogLayoutBinding binding;
 
     private boolean isFlex;

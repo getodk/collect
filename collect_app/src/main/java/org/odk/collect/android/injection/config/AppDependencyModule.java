@@ -8,17 +8,8 @@ import static java.util.Collections.singletonList;
 import android.app.Application;
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.webkit.MimeTypeMap;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.AbstractSavedStateViewModelFactory;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.SavedStateHandle;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.savedstate.SavedStateRegistryOwner;
 import androidx.work.WorkManager;
 
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -54,13 +45,9 @@ import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRep
 import org.odk.collect.android.draw.PenColorPickerViewModel;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.formentry.AppStateFormSessionRepository;
-import org.odk.collect.android.formentry.BackgroundAudioViewModel;
-import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.media.ScreenContextAudioHelperFactory;
-import org.odk.collect.android.formentry.saving.DiskFormSaver;
-import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
@@ -79,7 +66,6 @@ import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvi
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher;
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSender;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.metadata.SharedPreferencesInstallIDProvider;
@@ -416,30 +402,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
-        return new FormSaveViewModel.FactoryFactory() {
-
-            private LiveData<FormController> formSession;
-
-            @Override
-            public void setSessionId(String sessionId) {
-                this.formSession = formSessionRepository.get(sessionId);
-            }
-
-            @Override
-            public ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs) {
-                return new AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                    @NonNull
-                    @Override
-                    protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-                        return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepositoryProvider.get(currentProjectProvider.getCurrentProject().getUuid()));
-                    }
-                };
-            }
-        };
-    }
-
-    @Provides
     public SoftKeyboardController provideSoftKeyboardController() {
         return new SoftKeyboardController();
     }
@@ -464,16 +426,6 @@ public class AppDependencyModule {
     @Provides
     public FormSessionRepository providesFormSessionStore(Application application) {
         return new AppStateFormSessionRepository(application);
-    }
-
-    @Provides
-    public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
-        return new FormEntryViewModel.Factory(System::currentTimeMillis, scheduler, formSessionRepository);
-    }
-
-    @Provides
-    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, FormSessionRepository formSessionRepository) {
-        return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis, formSessionRepository);
     }
 
     @Provides

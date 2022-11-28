@@ -6,7 +6,6 @@ import static org.odk.collect.shared.strings.StringUtils.isBlank;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +13,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.savedstate.SavedStateRegistryOwner;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
@@ -506,19 +503,5 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
             void onComplete(SaveToDiskResult saveToDiskResult);
         }
-    }
-
-    /**
-     * The ViewModel factory here needs a reference to the Activity (the SavedStateRegistry) so
-     * we need factory to be able to create it in Dagger (as we won't have access to the Activity).
-     * <p>
-     * Could potentially be solved using Dagger's per Activity scopes.
-     */
-
-    public interface FactoryFactory {
-
-        void setSessionId(String sessionId);
-
-        ViewModelProvider.Factory create(@NonNull SavedStateRegistryOwner owner, @Nullable Bundle defaultArgs);
     }
 }

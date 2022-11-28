@@ -38,7 +38,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.location.LocationManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -66,9 +65,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -95,6 +92,7 @@ import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
+import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
@@ -119,6 +117,7 @@ import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager;
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.loading.FormInstanceFileCreator;
+import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.repeats.AddRepeatDialog;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
@@ -154,14 +153,16 @@ import org.odk.collect.android.utilities.ControllableLifecyleOwner;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
+import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
 import org.odk.collect.android.widgets.range.RangePickerDecimalWidget;
 import org.odk.collect.android.widgets.range.RangePickerIntegerWidget;
-import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FormControllerWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
@@ -180,6 +181,7 @@ import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.location.LocationClient;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
@@ -199,6 +201,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import timber.log.Timber;
 
@@ -286,6 +289,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     private WaitingForDataRegistry waitingForDataRegistry;
     private InternalRecordingRequester internalRecordingRequester;
     private ExternalAppRecordingRequester externalAppRecordingRequester;
+    private FormEntryViewModelFactory viewModelFactory;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -318,12 +322,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     AudioRecorder audioRecorder;
 
     @Inject
-    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
-
-    @Inject
-    FormEntryViewModel.Factory formEntryViewModelFactory;
-
-    @Inject
     SoftKeyboardController softKeyboardController;
 
     @Inject
@@ -331,9 +329,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     @Inject
     ExternalAppIntentProvider externalAppIntentProvider;
-
-    @Inject
-    BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
 
     @Inject
     CurrentProjectProvider currentProjectProvider;
@@ -349,6 +344,19 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    MediaUtils mediaUtils;
+
+    @Inject
+    EntitiesRepositoryProvider entitiesRepositoryProvider;
+
+    @Inject
+    @Named("fused")
+    LocationClient fusedLocatonClient;
+
+    @Inject
+    public AudioHelperFactory audioHelperFactory;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -393,38 +401,27 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        formEntryViewModelFactory.setSessionId(sessionId);
-        formSaveViewModelFactoryFactory.setSessionId(sessionId);
-        backgroundAudioViewModelFactory.setSessionId(sessionId);
+        viewModelFactory = new FormEntryViewModelFactory(this, null, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
-                .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(sessionId))
-                .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(new ViewModelProvider.Factory() {
-                    @NonNull
-                    @Override
-                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
-                        if (modelClass == FormEntryViewModel.class) {
-                            return formEntryViewModelFactory.create(modelClass, extras);
-                        } else if (modelClass == FormSaveViewModel.class) {
-                            return formSaveViewModelFactoryFactory.create(FormEntryActivity.this, null).create(modelClass, extras);
-                        } else {
-                            throw new IllegalArgumentException();
-                        }
-                    }
-                }))
+                .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
+                .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(viewModelFactory))
+                .forClass(SaveFormProgressDialogFragment.class, () -> new SaveFormProgressDialogFragment(viewModelFactory))
+                .forClass(DeleteRepeatDialogFragment.class, () -> new DeleteRepeatDialogFragment(viewModelFactory))
+                .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
+                .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
 
         super.onCreate(savedInstanceState);
         formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
-        setupViewModels();
+        setupViewModels(viewModelFactory);
 
         // https://github.com/getodk/collect/issues/5469
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
             getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         }
-
         swipeHandler = new SwipeHandler(this, settingsProvider.getUnprotectedSettings());
 
         errorMessage = null;
@@ -467,20 +464,22 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         loadForm();
     }
 
-    private void setupViewModels() {
-        backgroundLocationViewModel = new ViewModelProvider(
+    private void setupViewModels(FormEntryViewModelFactory formEntryViewModelFactory) {
+        ViewModelProvider viewModelProvider = new ViewModelProvider(
                 this,
-                new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionRepository, sessionId)
-        ).get(BackgroundLocationViewModel.class);
+                formEntryViewModelFactory
+        );
 
-        backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
+        backgroundLocationViewModel = viewModelProvider.get(BackgroundLocationViewModel.class);
+
+        backgroundAudioViewModel = viewModelProvider.get(BackgroundAudioViewModel.class);
         backgroundAudioViewModel.isPermissionRequired().observe(this, isPermissionRequired -> {
             if (isPermissionRequired) {
                 showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
             }
         });
 
-        identityPromptViewModel = new ViewModelProvider(this).get(IdentityPromptViewModel.class);
+        identityPromptViewModel = viewModelProvider.get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
             if (requiresIdentity) {
                 showIfNotShowing(IdentifyUserPromptDialogFragment.class, getSupportFragmentManager());
@@ -493,8 +492,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             }
         });
 
-        formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
-                .get(FormEntryViewModel.class);
+        formEntryViewModel = viewModelProvider.get(FormEntryViewModel.class);
 
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             formIndexAnimationHandler.handle(index);
@@ -528,7 +526,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             }
         });
 
-        formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
+        formSaveViewModel = viewModelProvider.get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
             if (isSavingAnswerFile) {
@@ -1218,13 +1216,12 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
 
-        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
         ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(
-                new ViewModelProvider(this, factory).get(AudioClipViewModel.class),
+                new ViewModelProvider(this, viewModelFactory).get(AudioClipViewModel.class),
                 odkViewLifecycle
         );
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this));
     }
 
     @Override

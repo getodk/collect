@@ -19,6 +19,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.viewmodel.CreationExtras;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -27,11 +29,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.FormEntryViewModel;
-import org.odk.collect.android.formentry.FormSessionRepository;
-import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.async.Scheduler;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.shadows.ShadowDialog;
 
@@ -47,18 +46,6 @@ public class DeleteRepeatDialogFragmentTest {
     @Before
     public void setup() {
         FormEntryViewModel formEntryViewModel = mock(FormEntryViewModel.class);
-        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-            @Override
-            public FormEntryViewModel.Factory providesFormEntryViewModelFactory(Scheduler scheduler, FormSessionRepository formSessionRepository) {
-                return new FormEntryViewModel.Factory(null, null, null) {
-                    @NonNull
-                    @Override
-                    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-                        return (T) formEntryViewModel;
-                    }
-                };
-            }
-        });
 
         when(formEntryViewModel.getFormController()).thenReturn(formController);
         when(formController.getLastRepeatedGroupName()).thenReturn("blah");
@@ -66,7 +53,13 @@ public class DeleteRepeatDialogFragmentTest {
 
         activity = CollectHelpers.createThemedActivity(TestActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
-        dialogFragment = new DeleteRepeatDialogFragment();
+        dialogFragment = new DeleteRepeatDialogFragment(new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
+                return (T) formEntryViewModel;
+            }
+        });
     }
 
     @Test

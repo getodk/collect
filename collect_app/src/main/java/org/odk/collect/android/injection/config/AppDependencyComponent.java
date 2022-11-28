@@ -37,7 +37,6 @@ import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
-import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
@@ -288,8 +287,6 @@ public interface AppDependencyComponent {
     void inject(PenColorPickerDialog colorPickerDialog);
 
     void inject(BlankFormListActivity blankFormListActivity);
-
-    void inject(BackgroundLocationViewModel.Factory factory);
 
     void inject(DeleteRepeatDialogFragment deleteRepeatDialogFragment);
 

@@ -8,25 +8,22 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.material.MaterialProgressDialogFragment;
-
-import javax.inject.Inject;
 
 public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragment {
 
-    @Inject
-    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
-
+    private final ViewModelProvider.Factory viewModelFactory;
     private FormSaveViewModel viewModel;
+
+    public SaveFormProgressDialogFragment(ViewModelProvider.Factory viewModelFactory) {
+        this.viewModelFactory = viewModelFactory;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
 
-        ViewModelProvider.Factory factory = formSaveViewModelFactoryFactory.create(requireActivity(), null);
-        viewModel = new ViewModelProvider(requireActivity(), factory).get(FormSaveViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormSaveViewModel.class);
 
         setCancelable(false);
         setTitle(getString(R.string.saving_form));
