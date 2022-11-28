@@ -51,16 +51,13 @@ public class QRCodeActivityResultDelegate implements ActivityResultDelegate {
 
                 try {
                     String response = qrCodeDecoder.decode(imageStream);
-                    if (response != null) {
-                        if (settingsImporter.fromJSON(response, project)) {
-                            Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT);
-                            showToast(R.string.successfully_imported_settings);
-                            startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
-                        } else {
-                            showToast(R.string.invalid_qrcode);
-                        }
+                    if (settingsImporter.fromJSON(response, project)) {
+                        Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT);
+                        showToast(R.string.successfully_imported_settings);
+                        startActivityAndCloseAllOthers(activity, MainMenuActivity.class);
+                    } else {
+                        showToast(R.string.invalid_qrcode);
                     }
-
                 } catch (QRCodeDecoder.InvalidException e) {
                     showToast(R.string.invalid_qrcode);
                 } catch (QRCodeDecoder.NotFoundException e) {
