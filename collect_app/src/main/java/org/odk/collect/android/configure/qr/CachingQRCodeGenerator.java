@@ -22,6 +22,12 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
 
     private static final String SETTINGS_MD5_FILE = ".collect-settings-hash";
 
+    private QRCodeEncoder qrCodeEncoder;
+
+    public CachingQRCodeGenerator(QRCodeEncoder qrCodeEncoder) {
+        this.qrCodeEncoder = qrCodeEncoder;
+    }
+
     @Override
     public String generateQRCode(Collection<String> includedPasswordKeys, AppConfigurationGenerator appConfigurationGenerator) throws NoSuchAlgorithmException, IOException, WriterException {
         String preferencesString = appConfigurationGenerator.getAppConfigurationAsJson(includedPasswordKeys);
@@ -58,7 +64,7 @@ public class CachingQRCodeGenerator implements QRCodeGenerator {
         if (shouldWriteToDisk) {
             Timber.i("Generating QRCode...");
             final long time = System.currentTimeMillis();
-            Bitmap bmp = new QRCodeUtils().encode(preferencesString);
+            Bitmap bmp = qrCodeEncoder.encode(preferencesString);
             Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time);
 
             Timber.i("Saving QR Code to disk... : %s", getQRCodeFilepath());

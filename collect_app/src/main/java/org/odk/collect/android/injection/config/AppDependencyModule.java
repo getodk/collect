@@ -47,6 +47,7 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeDecoder;
+import org.odk.collect.android.configure.qr.QRCodeEncoderImpl;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
@@ -279,7 +280,7 @@ public class AppDependencyModule {
 
     @Provides
     public QRCodeGenerator providesQRCodeGenerator(Context context) {
-        return new CachingQRCodeGenerator();
+        return new CachingQRCodeGenerator(new QRCodeEncoderImpl());
     }
 
     @Provides
