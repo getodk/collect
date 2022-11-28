@@ -14,7 +14,6 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
-import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
