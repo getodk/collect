@@ -45,13 +45,13 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.logic.HierarchyElement;
@@ -170,10 +170,10 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Collect.getInstance().getComponent().inject(this);
+        DaggerUtils.getComponent(this).inject(this);
 
         String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
-        FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this, null, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocationClient, permissionsProvider);
+        FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocationClient, permissionsProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(DeleteRepeatDialogFragment.class, () -> new DeleteRepeatDialogFragment(viewModelFactory))

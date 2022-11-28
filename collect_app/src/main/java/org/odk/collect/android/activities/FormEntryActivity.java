@@ -401,7 +401,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        viewModelFactory = new FormEntryViewModelFactory(this, null, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider);
+        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
