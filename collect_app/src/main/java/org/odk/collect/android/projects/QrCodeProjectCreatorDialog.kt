@@ -96,13 +96,13 @@ class QrCodeProjectCreatorDialog :
                                 requireActivity().contentResolver.openInputStream(imageUri).use {
                                     val settingsJson = try {
                                         qrCodeDecoder.decode(it)
-                                    } catch (e: QRCodeDecoder.InvalidException) {
+                                    } catch (e: QRCodeDecoder.QRCodeInvalidException) {
                                         showShortToast(
                                             requireContext(),
                                             R.string.invalid_qrcode
                                         )
                                         ""
-                                    } catch (e: QRCodeDecoder.NotFoundException) {
+                                    } catch (e: QRCodeDecoder.QRCodeNotFoundException) {
                                         showShortToast(
                                             requireContext(),
                                             R.string.qr_code_not_found

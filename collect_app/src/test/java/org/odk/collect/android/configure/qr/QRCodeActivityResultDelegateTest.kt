@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
-import org.odk.collect.android.configure.qr.QRCodeDecoder.InvalidException
+import org.odk.collect.android.configure.qr.QRCodeDecoder.QRCodeInvalidException
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.Project.Saved
@@ -90,7 +90,7 @@ class QRCodeActivityResultDelegateTest {
     private fun importSettingsFromQrCode_withInvalidQrCode() {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         val data = intentWithData("file://qr", "qr")
-        fakeQRDecoder.failsWith(InvalidException())
+        fakeQRDecoder.failsWith(QRCodeInvalidException())
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(false)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
@@ -104,7 +104,7 @@ class QRCodeActivityResultDelegateTest {
     private fun importSettingsFromImage_withoutQrCode() {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         val data = intentWithData("file://qr", "qr")
-        fakeQRDecoder.failsWith(QRCodeDecoder.NotFoundException())
+        fakeQRDecoder.failsWith(QRCodeDecoder.QRCodeNotFoundException())
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(false)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
@@ -140,13 +140,13 @@ class QRCodeActivityResultDelegateTest {
         private val data: MutableMap<String, String> = HashMap()
         private var failsWith: Exception? = null
 
-        @Throws(InvalidException::class, QRCodeDecoder.NotFoundException::class)
+        @Throws(QRCodeInvalidException::class, QRCodeDecoder.QRCodeNotFoundException::class)
         override fun decode(inputStream: InputStream?): String {
             if (failsWith != null) {
-                if (failsWith is InvalidException) {
-                    throw (failsWith as InvalidException?)!!
+                if (failsWith is QRCodeInvalidException) {
+                    throw (failsWith as QRCodeInvalidException?)!!
                 } else {
-                    throw (failsWith as QRCodeDecoder.NotFoundException?)!!
+                    throw (failsWith as QRCodeDecoder.QRCodeNotFoundException?)!!
                 }
             }
             return try {

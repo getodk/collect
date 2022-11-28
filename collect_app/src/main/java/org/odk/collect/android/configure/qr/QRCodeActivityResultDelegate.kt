@@ -8,7 +8,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
-import org.odk.collect.android.configure.qr.QRCodeDecoder.InvalidException
+import org.odk.collect.android.configure.qr.QRCodeDecoder.QRCodeInvalidException
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.ODKAppSettingsImporter
 import java.io.FileNotFoundException
@@ -42,9 +42,9 @@ class QRCodeActivityResultDelegate(
                     } else {
                         showToast(R.string.invalid_qrcode)
                     }
-                } catch (e: InvalidException) {
+                } catch (e: QRCodeInvalidException) {
                     showToast(R.string.invalid_qrcode)
-                } catch (e: QRCodeDecoder.NotFoundException) {
+                } catch (e: QRCodeDecoder.QRCodeNotFoundException) {
                     showToast(R.string.qr_code_not_found)
                 }
             }
