@@ -169,7 +169,7 @@ public class NotificationManagerNotifier implements Notifier {
     }
 
     /*
-     * Smap - this method is called explicitely by smap extensions
+     * Smap - this method is called explicitly by smap extensions
      */
     @Override
     public void showNotification(PendingIntent contentIntent,

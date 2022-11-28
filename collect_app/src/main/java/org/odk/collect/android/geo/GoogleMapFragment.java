@@ -165,13 +165,22 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onStart() {
         super.onStart();
         mapProvider.onMapFragmentStart(this);
+    }
+
+    @Override public void onResume() {
+        super.onResume();
         enableLocationUpdates(clientWantsLocationUpdates);
     }
 
     @Override public void onStop() {
-        enableLocationUpdates(false);
-        mapProvider.onMapFragmentStop(this);
         super.onStop();
+        mapProvider.onMapFragmentStop(this);
+
+    }
+
+    @Override public void onPause() {
+        super.onPause();
+        enableLocationUpdates(false);
     }
 
     @Override public void applyConfig(Bundle config) {
@@ -579,13 +588,19 @@ public class GoogleMapFragment extends SupportMapFragment implements
                     () -> new GoogleFusedLocationClient(getActivity().getApplication()), GoogleApiAvailability
                             .getInstance());
             locationClient.setListener(this);
-        }
-        if (enable) {
-            Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
-            locationClient.start();
+
+            if (enable) {
+                Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
+                locationClient.start();
+            }
         } else {
-            Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
-            locationClient.stop();
+            if (enable) {
+                Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
+                locationClient.start();
+            } else if (locationClient.isLocationAvailable()) {
+                Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
+                locationClient.stop();
+            }
         }
     }
 

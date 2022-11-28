@@ -318,8 +318,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         map.setClickListener(this::onClick);
         // Also allow long press to place point to match prior versions
         map.setLongPressListener(this::onClick);
-        map.setGpsLocationEnabled(true);
         map.setGpsLocationListener(this::onGpsLocation);
+        map.setGpsLocationEnabled(true);
         if (restoredMapCenter != null && restoredMapZoom != null) {
             map.zoomToPoint(restoredMapCenter, restoredMapZoom, false);
         } else if (!points.isEmpty()) {

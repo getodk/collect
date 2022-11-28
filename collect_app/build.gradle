@@ -294,7 +294,7 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-auth:20.4.0"
     implementation "com.google.android.gms:play-services-maps:18.1.0"
-    implementation "com.google.android.gms:play-services-location:21.0.1"
+    implementation "com.google.android.gms:play-services-location:20.0.0"  // Downgraded from 21.0.1 due to location errors in mapbobox and google maps, https://developers.google.com/android/guides/releases#october_13_2022
     implementation "com.google.firebase:firebase-messaging:23.1.0"      // smap synchronisation
 
     implementation 'com.google.firebase:firebase-analytics:21.2.0'
