@@ -1,9 +1,9 @@
-package org.odk.collect.crash_handler
+package org.odk.collect.crashhandler
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import org.odk.collect.crash_handler.databinding.CrashLayoutBinding
+import org.odk.collect.crashhandler.databinding.CrashLayoutBinding
 
 open class CrashView(context: Context) : FrameLayout(context) {
 

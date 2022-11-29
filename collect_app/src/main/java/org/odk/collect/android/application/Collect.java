@@ -42,7 +42,7 @@ import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
-import org.odk.collect.crash_handler.CrashHandler;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.entities.DaggerEntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponentProvider;

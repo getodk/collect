@@ -1,4 +1,4 @@
-package org.odk.collect.crash_handler
+package org.odk.collect.crashhandler
 
 import android.content.Context
 import android.view.View
