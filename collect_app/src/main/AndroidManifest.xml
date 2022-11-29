@@ -12,6 +12,8 @@ the specific language governing permissions and limitations under the License.
     package="org.odk.collect.android"
     tools:ignore="GoogleAppIndexingWarning">
 
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+
     <!-- smap for maps directions -->
     <queries>
         <package android:name="com.google.android.apps.maps" />
