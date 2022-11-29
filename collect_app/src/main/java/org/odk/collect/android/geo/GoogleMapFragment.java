@@ -175,7 +175,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onStop() {
         super.onStop();
         mapProvider.onMapFragmentStop(this);
-
     }
 
     @Override public void onPause() {

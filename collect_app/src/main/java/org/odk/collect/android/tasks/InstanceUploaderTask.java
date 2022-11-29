@@ -113,10 +113,10 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                                 String formId;
                                 String formVersion;
                                 while (results.moveToNext()) {
-                                    formId = results.getString(results.getColumnIndex(InstanceColumns.JR_FORM_ID));
-                                    formVersion = results.getString(results.getColumnIndex(InstanceColumns.JR_VERSION));
+                                    formId = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_FORM_ID));
+                                    formVersion = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_VERSION));
                                     if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, formId, formVersion, isFormAutoDeleteOptionEnabled)) {
-                                        toDelete.add(results.getLong(results.getColumnIndex(InstanceColumns._ID)));
+                                        toDelete.add(results.getLong(results.getColumnIndexOrThrow(InstanceColumns._ID)));
                                     }
                                 }
 

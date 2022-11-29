@@ -29,7 +29,7 @@ public class ResponseMessageParser {
         return messageResponse;
     }
 
-    public void setMessageResponse(String response) {
+    public void setMessageResponse(String response, String instanceName) {
         isValid = false;
         try {
             if (response.contains("OpenRosaResponse")) {
@@ -44,15 +44,16 @@ public class ResponseMessageParser {
             } else {        // smap
                 messageResponse = response;
                 isValid = true;
-                if(messageResponse != null) {
-                    String [] parts = messageResponse.split("::");
-                    if(parts.length > 1) {
-                        if(parts[0].equals("blocked")) {
-                            messageResponse = Collect.getInstance().getBaseContext().getString(R.string.smap_survey_blocked, String.valueOf(parts[1]));
-                        } else if(parts[0].equals("deleted")) {
-                            messageResponse = Collect.getInstance().getBaseContext().getString(R.string.smap_survey_deleted, String.valueOf(parts[1]));
-                        }
-
+                String [] parts = messageResponse.split("::");
+                if(parts.length > 1) {
+                    if (parts[0].equals("blocked")) {
+                        messageResponse = Collect.getInstance().getBaseContext().getString(R.string.smap_survey_blocked, String.valueOf(parts[1]));
+                    } else if (parts[0].equals("deleted")) {
+                        messageResponse = Collect.getInstance().getBaseContext().getString(R.string.smap_survey_deleted, String.valueOf(parts[1]));
+                    }
+                } else if(parts.length == 1) {
+                    if(parts[0].equals("Forbidden")) {
+                        messageResponse = Collect.getInstance().getBaseContext().getString(R.string.smap_forbidden, instanceName);
                     }
                 }
             }

@@ -107,7 +107,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	private TaskDownloaderListener mStateListener;
 	HashMap<String, String> results = null;
     SharedPreferences sharedPreferences = null;
-    ArrayList<TaskEntry> tasks = new ArrayList<TaskEntry>();
+    ArrayList<TaskEntry> tasks = new ArrayList<>();
     HashMap<String, TaskStatus> taskMap = new HashMap<>();
     Gson gson = null;
     TaskResponse tr = null;                         // Data returned from the server
@@ -456,7 +456,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             if (c != null && c.getCount() > 0) {
                 c.move(-1);
                 while (c.moveToNext()) {
-                    Long l = c.getLong(c.getColumnIndex(InstanceColumns._ID));
+                    Long l = c.getLong(c.getColumnIndexOrThrow(InstanceColumns._ID));
                     toUpload.add(Long.valueOf(l));
                 }
             }
@@ -792,7 +792,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     while (cursor.moveToNext()) {
                         // Get the media files for each form
                         String f = cursor.getString(
-                                cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
+                                cursor.getColumnIndexOrThrow(FormsProviderAPI.FormsColumns.FORM_FILE_PATH));
                         if (f != null) {
                             int idx = f.lastIndexOf('.');
                             if (idx >= 0) {

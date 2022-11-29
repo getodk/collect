@@ -33,7 +33,7 @@ public class LocalSQLiteOpenHelperSmap extends SQLiteOpenHelper {
         sortIdx = 0.0;
     }
 
-    // Open the database
+    // Add local data
     public void append(ArrayList<ContentValues> data, FormLoaderTask formLoaderTask) throws java.lang.Exception {
         this.formLoaderTask = formLoaderTask;
 

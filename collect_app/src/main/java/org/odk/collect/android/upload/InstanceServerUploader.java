@@ -199,7 +199,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     contentLength);
 
             int responseCode = postResult.getResponseCode();
-            messageParser.setMessageResponse(postResult.getHttpResponse());
+            messageParser.setMessageResponse(postResult.getHttpResponse(), instance.getDisplayName());
 
             if (responseCode != HttpsURLConnection.HTTP_CREATED && responseCode != HttpsURLConnection.HTTP_ACCEPTED) {
                 UploadException exception;
