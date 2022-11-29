@@ -102,11 +102,8 @@ public class Utilities {
 
     // Get the task source
     public static String getSource() {
-        SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(Collect.getInstance()
-                        .getBaseContext());
-        String serverUrl = sharedPreferences.getString(
-                GeneralKeys.KEY_SERVER_URL, null);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Collect.getInstance().getBaseContext());
+        String serverUrl = sharedPreferences.getString(GeneralKeys.KEY_SERVER_URL, null);
         String source = STFileUtils.getSource(serverUrl);
 
 
@@ -116,8 +113,7 @@ public class Utilities {
     public static String getOrgMediaPath() {
         String source = getSource();
         String currentOrg = (String) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_SMAP_CURRENT_ORGANISATION);
-        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator
-                + "smap_media" + File.separator + source + File.separator + currentOrg;
+        return new StoragePathProvider().getDirPath(StorageSubdirectory.FORMS) + File.separator + "smap_media" + File.separator + source + File.separator + currentOrg;
     }
 
     public static TaskEntry getTaskWithIdOrPath(long id, String instancePath) {
@@ -125,28 +121,7 @@ public class Utilities {
         TaskEntry entry = null;
 
         // Get cursor
-        String[] proj = {
-                InstanceColumns._ID,
-                InstanceColumns.T_TITLE,
-                InstanceColumns.T_TASK_STATUS,
-                InstanceColumns.T_TASK_TYPE,
-                InstanceColumns.T_REPEAT,
-                InstanceColumns.T_SCHED_START,
-                InstanceColumns.T_SCHED_FINISH,
-                InstanceColumns.T_ADDRESS,
-                InstanceColumns.FORM_PATH,
-                InstanceColumns.JR_FORM_ID,
-                InstanceColumns.INSTANCE_FILE_PATH,
-                InstanceColumns.SCHED_LON,
-                InstanceColumns.SCHED_LAT,
-                InstanceColumns.ACT_LON,
-                InstanceColumns.ACT_LAT,
-                InstanceColumns.T_SHOW_DIST,
-                InstanceColumns.T_ACT_FINISH,
-                InstanceColumns.T_IS_SYNC,
-                InstanceColumns.T_ASS_ID,
-                InstanceColumns.T_LOCATION_TRIGGER,
-                InstanceColumns.UUID
+        String[] proj = {InstanceColumns._ID, InstanceColumns.T_TITLE, InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_TYPE, InstanceColumns.T_REPEAT, InstanceColumns.T_SCHED_START, InstanceColumns.T_SCHED_FINISH, InstanceColumns.T_ADDRESS, InstanceColumns.FORM_PATH, InstanceColumns.JR_FORM_ID, InstanceColumns.INSTANCE_FILE_PATH, InstanceColumns.SCHED_LON, InstanceColumns.SCHED_LAT, InstanceColumns.ACT_LON, InstanceColumns.ACT_LAT, InstanceColumns.T_SHOW_DIST, InstanceColumns.T_ACT_FINISH, InstanceColumns.T_IS_SYNC, InstanceColumns.T_ASS_ID, InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.UUID
 
         };
 
@@ -326,8 +301,7 @@ public class Utilities {
                     } else if (instance.files != null && instance.files.size() > 0) {       // Deprecate instance.files
                         for (String media : instance.files) {
                             SmapInfoDownloader fd = new SmapInfoDownloader();
-                            String mediaUrl = serverUrl + "/attachments/" +
-                                    formId + "/" + media;
+                            String mediaUrl = serverUrl + "/attachments/" + formId + "/" + media;
                             String mediaPath = file.getParent() + "/" + media;
                             try {
                                 // assume the downloadUrl is escaped properly
@@ -362,8 +336,7 @@ public class Utilities {
                     try {
                         // ensure stream is consumed...
                         final long count = 1024L;
-                        while (is.skip(count) == count)
-                            ;
+                        while (is.skip(count) == count) ;
                     } catch (Exception e) {
                         // no-op
                     }
@@ -391,57 +364,19 @@ public class Utilities {
      *  set recalculateGeofences to false if the data has not changed and location has not changed (For example the filter has been changed)
      *  set useGeofenceFilter to true if you want to filter out tasks which show distance is less than the distance of the user to the task
      */
-    public static void getTasks(
-            ArrayList<TaskEntry> tasks,
-            boolean all_non_synchronised,
-            int sortOrder,
-            String filter,
-            boolean serverOnly,
-            boolean useGeofenceFilter,
-            boolean getDeletedTasks) {
+    public static void getTasks(ArrayList<TaskEntry> tasks, boolean all_non_synchronised, int sortOrder, String filter, boolean serverOnly, boolean useGeofenceFilter, boolean getDeletedTasks) {
 
         // Get cursor
-        String[] proj = {
-                InstanceColumns._ID,
-                InstanceColumns.T_TITLE,
-                InstanceColumns.DISPLAY_NAME,
-                InstanceColumns.T_TASK_STATUS,
-                InstanceColumns.T_TASK_TYPE,
-                InstanceColumns.T_TASK_COMMENT,
-                InstanceColumns.T_REPEAT,
-                InstanceColumns.T_SCHED_START,
-                InstanceColumns.T_SCHED_FINISH,
-                InstanceColumns.T_ADDRESS,
-                InstanceColumns.FORM_PATH,
-                InstanceColumns.JR_FORM_ID,
-                InstanceColumns.JR_VERSION,
-                InstanceColumns.INSTANCE_FILE_PATH,
-                InstanceColumns.SCHED_LON,
-                InstanceColumns.SCHED_LAT,
-                InstanceColumns.ACT_LON,
-                InstanceColumns.ACT_LAT,
-                InstanceColumns.T_SHOW_DIST,
-                InstanceColumns.T_ACT_FINISH,
-                InstanceColumns.T_IS_SYNC,
-                InstanceColumns.T_ASS_ID,
-                InstanceColumns.UUID,
-                InstanceColumns.SOURCE,
-                InstanceColumns.T_LOCATION_TRIGGER,
-                InstanceColumns.T_UPDATEID
-        };
+        String[] proj = {InstanceColumns._ID, InstanceColumns.T_TITLE, InstanceColumns.DISPLAY_NAME, InstanceColumns.T_TASK_STATUS, InstanceColumns.T_TASK_TYPE, InstanceColumns.T_TASK_COMMENT, InstanceColumns.T_REPEAT, InstanceColumns.T_SCHED_START, InstanceColumns.T_SCHED_FINISH, InstanceColumns.T_ADDRESS, InstanceColumns.FORM_PATH, InstanceColumns.JR_FORM_ID, InstanceColumns.JR_VERSION, InstanceColumns.INSTANCE_FILE_PATH, InstanceColumns.SCHED_LON, InstanceColumns.SCHED_LAT, InstanceColumns.ACT_LON, InstanceColumns.ACT_LAT, InstanceColumns.T_SHOW_DIST, InstanceColumns.T_ACT_FINISH, InstanceColumns.T_IS_SYNC, InstanceColumns.T_ASS_ID, InstanceColumns.UUID, InstanceColumns.SOURCE, InstanceColumns.T_LOCATION_TRIGGER, InstanceColumns.T_UPDATEID};
 
         String selectClause = null;
         if (all_non_synchronised) {
-            selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
-                    " or " + InstanceColumns.SOURCE + " = 'local')" +
-                    " and " + InstanceColumns.T_IS_SYNC + " = ? ";
+            selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" + " or " + InstanceColumns.SOURCE + " = 'local')" + " and " + InstanceColumns.T_IS_SYNC + " = ? ";
             if (!getDeletedTasks) {
                 selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
             }
         } else {
-            selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
-                    " or " + InstanceColumns.SOURCE + " = 'local')" +
-                    " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
+            selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" + " or " + InstanceColumns.SOURCE + " = 'local')" + " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
             if (!getDeletedTasks) {
                 selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
             }
@@ -549,7 +484,9 @@ public class Utilities {
                 c.moveToNext();
             }
 
-            if (getTaskSortOrderExpr(sortOrder).contains("schedLat")) {
+            if (sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
+                    || sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC
+                    && location != null) {
                 Location finalLocation = location;
                 Collections.sort(tasks, (t1, t2) -> {
                     Location location1 = new Location("");
@@ -562,11 +499,11 @@ public class Utilities {
                     float distanceFromTask1 = finalLocation.distanceTo(location1);
                     float distanceFromTask2 = finalLocation.distanceTo(location2);
 
-                    if (getTaskSortOrderExpr(sortOrder).contains("ASC")) {
-                        return (int)(distanceFromTask1 - distanceFromTask2);
-                    }
-                    else {
-                        return (int)(distanceFromTask2 - distanceFromTask1);
+                    String sortedExpr = getTaskSortOrderExpr(sortOrder);
+                    if (sortedExpr.contains("ASC")) {
+                        return (int) (distanceFromTask1 - distanceFromTask2);
+                    } else {
+                        return (int) (distanceFromTask2 - distanceFromTask1);
                     }
                 });
             }
