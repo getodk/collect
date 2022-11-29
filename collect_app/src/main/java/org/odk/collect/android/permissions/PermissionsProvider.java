@@ -104,7 +104,7 @@ public class PermissionsProvider {
                 }
 
                 showAdditionalExplanation(activity, R.string.storage_runtime_permission_denied_title,
-                        R.string.storage_runtime_permission_denied_desc, R.drawable.sd, action);
+                        R.string.smap_storage_runtime_permission_denied_desc, R.drawable.sd, action);
             }
         }, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
