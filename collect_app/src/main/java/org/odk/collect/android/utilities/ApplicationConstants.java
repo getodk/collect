@@ -43,6 +43,8 @@ public class ApplicationConstants {
         hashMap.put(R.string.sort_by_date_desc, R.drawable.ic_access_time);
         hashMap.put(R.string.sort_by_status_asc, R.drawable.ic_assignment_turned_in);
         hashMap.put(R.string.sort_by_status_desc, R.drawable.ic_assignment_late);
+        hashMap.put(R.string.sort_by_distance_asc, R.drawable.compass21);
+        hashMap.put(R.string.sort_by_distance_desc, R.drawable.compass21);
         //hashMap.put(R.string.smap_sort_by_project_asc, R.drawable.ic_sort_by_alpha);     // smap keep as commented out
         //hashMap.put(R.string.smap_sort_by_project_desc, R.drawable.ic_sort_by_alpha);    // smap
         return hashMap;
@@ -73,6 +75,8 @@ public class ApplicationConstants {
         public static final int BY_DATE_ASC = 3;
         public static final int BY_STATUS_ASC = 4;
         public static final int BY_STATUS_DESC = 5;
+        public static final int BY_DISTANCE_ASC = 6;
+        public static final int BY_DISTANCE_DESC = 7;
     }
 
     public abstract static class RequestCodes {

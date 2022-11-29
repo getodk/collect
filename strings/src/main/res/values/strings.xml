@@ -54,6 +54,8 @@
     <string name="sort_the_list">Sort the list</string>
     <string name="sort_by">Sort by</string>
     <string name="sort_by_name_asc">Name, A-Z</string>
+    <string name="sort_by_distance_asc">Distance, closest first</string>
+    <string name="sort_by_distance_desc">Distance, farthest first</string>
     <string name="sort_by_name_desc">Name, Z-A</string>
     <string name="sort_by_date_asc">Date, newest first</string>
     <string name="sort_by_date_desc">Date, oldest first</string>
