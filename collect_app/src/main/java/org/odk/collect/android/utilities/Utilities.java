@@ -66,6 +66,7 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
@@ -546,6 +547,28 @@ public class Utilities {
                 }
 
                 c.moveToNext();
+            }
+
+            if (getTaskSortOrderExpr(sortOrder).contains("schedLat")) {
+                Location finalLocation = location;
+                Collections.sort(tasks, (t1, t2) -> {
+                    Location location1 = new Location("");
+                    Location location2 = new Location("");
+                    location1.setLatitude(t1.schedLat);
+                    location1.setLongitude(t1.schedLon);
+                    location2.setLatitude(t2.schedLat);
+                    location2.setLongitude(t2.schedLon);
+
+                    float distanceFromTask1 = finalLocation.distanceTo(location1);
+                    float distanceFromTask2 = finalLocation.distanceTo(location2);
+
+                    if (getTaskSortOrderExpr(sortOrder).contains("ASC")) {
+                        return (int)(distanceFromTask1 - distanceFromTask2);
+                    }
+                    else {
+                        return (int)(distanceFromTask2 - distanceFromTask1);
+                    }
+                });
             }
 
             Collect.getInstance().setGeofences(geofences);
@@ -1350,10 +1373,10 @@ public class Utilities {
                 sortOrderExpr = InstanceColumns.T_TASK_STATUS + " DESC, " + InstanceColumns.T_TITLE + " DESC";
                 break;
             case ApplicationConstants.SortingOrder.BY_DISTANCE_ASC:
-                sortOrderExpr = InstanceColumns.GEOMETRY + " ASC";
+                sortOrderExpr = InstanceColumns.SCHED_LAT + " ASC, " + InstanceColumns.SCHED_LON + " ASC";
                 break;
             case ApplicationConstants.SortingOrder.BY_DISTANCE_DESC:
-                sortOrderExpr = InstanceColumns.GEOMETRY + " DESC";
+                sortOrderExpr = InstanceColumns.SCHED_LAT + " DESC, " + InstanceColumns.SCHED_LON + " DESC";
                 break;
         }
         return sortOrderExpr;
