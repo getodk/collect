@@ -1349,6 +1349,12 @@ public class Utilities {
             case ApplicationConstants.SortingOrder.BY_STATUS_DESC:
                 sortOrderExpr = InstanceColumns.T_TASK_STATUS + " DESC, " + InstanceColumns.T_TITLE + " DESC";
                 break;
+            case ApplicationConstants.SortingOrder.BY_DISTANCE_ASC:
+                sortOrderExpr = InstanceColumns.GEOMETRY + " ASC";
+                break;
+            case ApplicationConstants.SortingOrder.BY_DISTANCE_DESC:
+                sortOrderExpr = InstanceColumns.GEOMETRY + " DESC";
+                break;
         }
         return sortOrderExpr;
     }
