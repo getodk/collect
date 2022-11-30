@@ -366,7 +366,6 @@
   <!--Button text to select a place from a list presented on a map-->
   <string name="select_place">Sélectionner un emplacement</string>
   <string name="choices">Choix</string>
-  <string name="invalid_geometry">Le choix avec le label \"%1$s\" a une géométrie invalide (\"%2$s\")</string>
   <!--##############################################
     # GEO
     ##############################################-->

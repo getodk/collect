@@ -340,7 +340,6 @@
   <!--Button text to select a place from a list presented on a map-->
   <string name="select_place">مکان را انتخاب کنید</string>
   <string name="choices">برگزیده</string>
-  <string name="invalid_geometry">انتخاب با برچسب \"%1$s\" دارای هندسی نامعتبر است (\"%2$s\")</string>
   <!--##############################################
     # GEO
     ##############################################-->
