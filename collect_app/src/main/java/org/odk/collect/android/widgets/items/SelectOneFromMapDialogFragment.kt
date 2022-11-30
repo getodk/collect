@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
@@ -25,19 +24,13 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
-import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
-import org.odk.collect.material.MaterialAlertDialogFragment
-import org.odk.collect.material.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
 import org.odk.collect.material.MaterialFullScreenDialogFragment
-import org.odk.collect.shared.result.Result
-import org.odk.collect.shared.result.Result.Companion.toError
-import org.odk.collect.shared.result.Result.Companion.toSuccess
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
@@ -58,24 +51,6 @@ class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), Fragm
         val selectedIndex = requireArguments().getSerializable(ARG_SELECTED_INDEX) as Int?
         val prompt = formEntryViewModel.getQuestionPrompt(formIndex)
         val selectionMapData = SelectChoicesMapData(resources, scheduler, prompt, selectedIndex)
-
-        selectionMapData.hasInvalidGeometry().observe(this) {
-            if (it != null) {
-                DialogFragmentUtils.showIfNotShowing(
-                    MaterialAlertDialogFragment::class.java,
-                    bundleOf(
-                        ARG_MESSAGE to getString(
-                            R.string.invalid_geometry,
-                            it.label,
-                            it.geometry
-                        )
-                    ),
-                    parentFragmentManager
-                )
-
-                dismiss()
-            }
-        }
 
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(SelectionMapFragment::class.java) {
@@ -139,7 +114,6 @@ internal class SelectChoicesMapData(
     private val itemCount = MutableNonNullLiveData(0)
     private val items = MutableLiveData<List<MappableSelectItem>?>(null)
     private val isLoading = MutableNonNullLiveData(true)
-    private val invalidGeometry = MutableLiveData<InvalidGeometry?>(null)
 
     init {
         isLoading.value = true
@@ -149,17 +123,9 @@ internal class SelectChoicesMapData(
                 loadItemsFromChoices(prompt.selectChoices, prompt)
             },
             foreground = {
-                when (it) {
-                    is Result.Success -> {
-                        itemCount.value = prompt.selectChoices.size
-                        items.value = it.value
-                        isLoading.value = false
-                    }
-
-                    is Result.Error -> {
-                        invalidGeometry.value = it.value
-                    }
-                }
+                itemCount.value = prompt.selectChoices.size
+                items.value = it
+                isLoading.value = false
             }
         )
     }
@@ -167,8 +133,8 @@ internal class SelectChoicesMapData(
     private fun loadItemsFromChoices(
         selectChoices: MutableList<SelectChoice>,
         prompt: FormEntryPrompt,
-    ): Result<List<MappableSelectItem>, InvalidGeometry> {
-        return selectChoices.foldIndexed(emptyList<MappableSelectItem>()) { index, list, selectChoice ->
+    ): List<MappableSelectItem> {
+        return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild("geometry")
 
             if (geometry != null) {
@@ -179,44 +145,42 @@ internal class SelectChoicesMapData(
                     latitude = geometry.split(" ")[0].toDouble()
                     longitude = geometry.split(" ")[1].toDouble()
 
-                    if (latitude.absoluteValue > 90 || longitude.absoluteValue > 180) {
-                        return InvalidGeometry(prompt.getSelectChoiceText(selectChoice), geometry)
-                            .toError()
+                    if (latitude.absoluteValue <= 90 && longitude.absoluteValue <= 180) {
+                        val properties = selectChoice.additionalChildren.filter {
+                            it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
+                        }.map {
+                            MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
+                        }
+
+                        val markerColor = selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
+                        val markerSymbol = selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
+
+                        list + MappableSelectItem.WithAction(
+                            index.toLong(),
+                            latitude,
+                            longitude,
+                            if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
+                            if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
+                            prompt.getSelectChoiceText(selectChoice),
+                            properties,
+                            MappableSelectItem.IconifiedText(
+                                R.drawable.ic_save,
+                                resources.getString(R.string.select_item)
+                            ),
+                            selectChoice.index == selectedIndex,
+                            markerColor,
+                            markerSymbol
+                        )
+                    } else {
+                        list
                     }
-                } catch (e: NumberFormatException) {
-                    return InvalidGeometry(prompt.getSelectChoiceText(selectChoice), geometry)
-                        .toError()
+                } catch (_: NumberFormatException) {
+                    list
                 }
-
-                val properties = selectChoice.additionalChildren.filter {
-                    it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
-                }.map {
-                    MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
-                }
-
-                val markerColor = selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
-                val markerSymbol = selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
-
-                list + MappableSelectItem.WithAction(
-                    index.toLong(),
-                    latitude,
-                    longitude,
-                    if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
-                    if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
-                    prompt.getSelectChoiceText(selectChoice),
-                    properties,
-                    MappableSelectItem.IconifiedText(
-                        R.drawable.ic_save,
-                        resources.getString(R.string.select_item)
-                    ),
-                    selectChoice.index == selectedIndex,
-                    markerColor,
-                    markerSymbol
-                )
             } else {
                 list
             }
-        }.toSuccess()
+        }
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {
@@ -238,10 +202,4 @@ internal class SelectChoicesMapData(
     override fun getMappableItems(): LiveData<List<MappableSelectItem>?> {
         return items
     }
-
-    fun hasInvalidGeometry(): LiveData<InvalidGeometry?> {
-        return invalidGeometry
-    }
-
-    data class InvalidGeometry(val label: String, val geometry: String)
 }
