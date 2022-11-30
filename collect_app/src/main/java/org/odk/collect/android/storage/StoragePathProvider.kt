@@ -61,7 +61,7 @@ class StoragePathProvider(
     }
 
     @Deprecated(
-        message = "Should specific temp file or create a new file in StorageSubdirectory.CACHE instead",
+        message = "Should use specific temp file or create a new file in StorageSubdirectory.CACHE instead",
         ReplaceWith(
             "getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + \"tmp.jpg\""
         )
@@ -71,7 +71,7 @@ class StoragePathProvider(
     }
 
     @Deprecated(
-        message = "Should specific temp file or create a new file in StorageSubdirectory.CACHE instead",
+        message = "Should use specific temp file or create a new file in StorageSubdirectory.CACHE instead",
         ReplaceWith(
             "getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + \"tmp.mp4\""
         )
