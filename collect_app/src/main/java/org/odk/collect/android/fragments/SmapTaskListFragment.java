@@ -149,8 +149,8 @@ public class SmapTaskListFragment extends ListFragment {
 
             @Override
             public void onSMSClicked(long taskId) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                startActivity(intent);
+                String number = "12346556";
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
             }
 
             @Override
