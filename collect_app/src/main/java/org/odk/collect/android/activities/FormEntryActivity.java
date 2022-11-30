@@ -859,7 +859,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 if (intent.getClipData() != null
                         && intent.getClipData().getItemCount() > 0
                         && intent.getClipData().getItemAt(0) != null) {
-                    loadFile(intent.getClipData().getItemAt(0).getUri());
+                    loadMedia(intent.getClipData().getItemAt(0).getUri());
                 } else {
                     setWidgetData(null);
                 }
@@ -879,7 +879,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.ANNOTATE_IMAGE:
             case RequestCodes.SIGNATURE_CAPTURE:
             case RequestCodes.IMAGE_CAPTURE:
-                loadFile(Uri.fromFile(new File(storagePathProvider.getTmpImageFilePath())));
+                loadMedia(Uri.fromFile(new File(storagePathProvider.getTmpImageFilePath())));
                 break;
             case RequestCodes.ALIGNED_IMAGE:
             case RequestCodes.ARBITRARY_FILE_CHOOSER:
@@ -888,7 +888,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.VIDEO_CAPTURE:
             case RequestCodes.VIDEO_CHOOSER:
             case RequestCodes.IMAGE_CHOOSER:
-                loadFile(intent.getData());
+                loadMedia(intent.getData());
                 break;
             case RequestCodes.LOCATION_CAPTURE:
             case RequestCodes.GEOSHAPE_CAPTURE:
@@ -900,10 +900,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             case RequestCodes.EX_DECIMAL_CAPTURE:
                 setWidgetData(ExternalAppUtils.getReturnedSingleValue(intent));
                 break;
+            case RequestCodes.MEDIA_FILE_PATH:
+                loadMedia(Uri.fromFile(new File((String) ExternalAppUtils.getReturnedSingleValue(intent))));
+                break;
         }
     }
 
-    private void loadFile(Uri uri) {
+    private void loadMedia(Uri uri) {
         permissionsProvider.requestReadUriPermission(this, uri, getContentResolver(), () -> {
             MaterialProgressDialogFragment progressDialog = new MaterialProgressDialogFragment();
             progressDialog.setMessage(getString(R.string.please_wait));

@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":permissions"))
+    implementation(project(":externalapp"))
 
     implementation(Dependencies.timber)
     implementation("androidx.camera:camera-core:1.1.0")

@@ -88,6 +88,7 @@ public class ApplicationConstants {
         public static final int EX_IMAGE_CHOOSER  = 25;
         public static final int EX_AUDIO_CHOOSER  = 26;
         public static final int CHANGE_SETTINGS = 27;
+        public static final int MEDIA_FILE_PATH = 28;
 
         public static final int FORMS_UPLOADED_NOTIFICATION = 97;
         public static final int FORMS_DOWNLOADED_NOTIFICATION = 98;

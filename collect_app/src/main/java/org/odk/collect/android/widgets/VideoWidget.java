@@ -37,13 +37,14 @@ import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -206,12 +207,15 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
 
     private void captureVideo() {
         Intent i;
+        int requestCode;
         if (selfie) {
             i = new Intent(getContext(), CaptureSelfieActivity.class);
-            i.putExtra(CaptureSelfieActivity.EXTRA_TMP_FILE_PATH, new StoragePathProvider().getTmpVideoFilePath());
+            i.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
             i.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true);
+            requestCode = RequestCodes.MEDIA_FILE_PATH;
         } else {
             i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            requestCode = RequestCodes.VIDEO_CAPTURE;
         }
 
         // request high resolution if configured for that...
@@ -224,8 +228,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         }
         try {
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            ((Activity) getContext()).startActivityForResult(i,
-                    RequestCodes.VIDEO_CAPTURE);
+            ((Activity) getContext()).startActivityForResult(i, requestCode);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),

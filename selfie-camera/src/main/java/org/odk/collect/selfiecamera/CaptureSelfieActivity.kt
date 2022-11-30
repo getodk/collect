@@ -16,7 +16,6 @@
 package org.odk.collect.selfiecamera
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
@@ -33,6 +32,7 @@ import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
+import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.shared.injection.ObjectProviderHost
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -92,7 +92,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
         val videoCapture = VideoCapture.withOutput(recorder)
 
-        val outputFile = File(intent.getStringExtra(EXTRA_TMP_FILE_PATH))
+        val outputFile = File(intent.getStringExtra(EXTRA_TMP_PATH), "tmp.mp4")
         val outputFileOptions = FileOutputOptions.Builder(outputFile).build()
         previewView.setOnClickListener {
             recording.let {
@@ -102,9 +102,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
                         .withAudioEnabled()
                         .start(ContextCompat.getMainExecutor(this)) { event ->
                             if (event is VideoRecordEvent.Finalize) {
-                                val data = Intent().setData(event.outputResults.outputUri)
-                                setResult(RESULT_OK, data)
-                                finish()
+                                ExternalAppUtils.returnSingleValue(this, outputFile.absolutePath)
                             }
                         }
 
@@ -129,7 +127,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
             .setTargetRotation(previewView.display.rotation)
             .build()
 
-        val outputFile = File(intent.getStringExtra(EXTRA_TMP_FILE_PATH))
+        val outputFile = File(intent.getStringExtra(EXTRA_TMP_PATH), "tmp.jpg")
         val outputFileOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
         previewView.setOnClickListener {
             imageCapture.takePicture(
@@ -141,8 +139,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
                     }
 
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        setResult(RESULT_OK)
-                        finish()
+                        ExternalAppUtils.returnSingleValue(this@CaptureSelfieActivity, outputFile.absolutePath)
                     }
                 }
             )
@@ -158,7 +155,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
     }
 
     companion object {
-        const val EXTRA_TMP_FILE_PATH = "tmpImagePath"
+        const val EXTRA_TMP_PATH = "tmpPath"
         const val EXTRA_VIDEO = "video"
     }
 }
