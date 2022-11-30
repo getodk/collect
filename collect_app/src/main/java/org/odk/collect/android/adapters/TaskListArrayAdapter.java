@@ -176,6 +176,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 
         View imageButton = view.findViewById(R.id.menu_button);
         Button accept = popupTaskView.findViewById(R.id.accept);
+        Button locate = popupTaskView.findViewById(R.id.locate);
         Button sms = popupTaskView.findViewById(R.id.sms);
         Button phone = popupTaskView.findViewById(R.id.phone);
         Button reject = popupTaskView.findViewById(R.id.reject);
@@ -195,7 +196,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                taskClickLisener.onPhoneClicked(item.id);
+                taskClickLisener.onPhoneClicked(item);
             }
         });
         reject.setOnClickListener(new View.OnClickListener() {
@@ -203,6 +204,12 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
             public void onClick(View view) {
                 alertDialog.dismiss();
                 taskClickLisener.onRejectClicked(item);
+            }
+        });
+        locate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskClickLisener.onLocateClick(item);
             }
         });
 

@@ -159,12 +159,17 @@ public class SmapFormListFragment extends ListFragment {
             }
 
             @Override
-            public void onPhoneClicked(long taskId) {
+            public void onPhoneClicked(TaskEntry taskEntry) {
 
             }
 
             @Override
             public void onRejectClicked(TaskEntry taskEntry) {
+
+            }
+
+            @Override
+            public void onLocateClick(TaskEntry taskEntry) {
 
             }
         };

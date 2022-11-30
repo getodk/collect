@@ -16,11 +16,15 @@ package org.odk.collect.android.fragments;
 
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -145,12 +149,14 @@ public class SmapTaskListFragment extends ListFragment {
 
             @Override
             public void onSMSClicked(long taskId) {
-
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                startActivity(intent);
             }
 
             @Override
-            public void onPhoneClicked(long taskId) {
-
+            public void onPhoneClicked(TaskEntry taskEntry) {
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+34666777888"));
+                startActivity(intent);
             }
 
             @Override
@@ -163,6 +169,7 @@ public class SmapTaskListFragment extends ListFragment {
                 Button ok = reject_popup.findViewById(R.id.ok);
                 Button cancel = reject_popup.findViewById(R.id.cancel);
                 String reason = editText.getText().toString();
+                dialog.show();
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -175,21 +182,16 @@ public class SmapTaskListFragment extends ListFragment {
                         dialog.dismiss();
                     }
                 });
-                dialog.show();
+            }
+
+            @Override
+            public void onLocateClick(TaskEntry taskEntry) {
+
             }
         };
 
         mAdapter = new TaskListArrayAdapter(getActivity(), false, taskClickLisener);
         setListAdapter(mAdapter);
-
-        // Handle long item clicks
-        ListView lv = getListView();
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
-                return onLongListItemClick(v, pos, id);
-            }
-        });
 
         adminPreferences = getActivity().getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
