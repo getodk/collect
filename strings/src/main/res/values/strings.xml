@@ -254,7 +254,7 @@
     <string name="selected_invalid_image">Selected file is not a valid image</string>
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
-    <string name="camera_error">This device doesn\'t support the Camera2 API.</string>
+    <string name="camera_error" tools:ignore="UnusedResources">This device doesn\'t support the Camera2 API.</string>
     <string name="annotate_image">Annotate Image</string>
     <string name="invalid_file_type">Application returned an invalid file type</string>
     <!-- Dialog heading for saving annotated image -->

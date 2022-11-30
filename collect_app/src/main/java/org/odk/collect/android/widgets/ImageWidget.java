@@ -152,7 +152,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         Intent intent;
         if (selfie) {
             intent = new Intent(getContext(), CaptureSelfieActivity.class);
-            intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_IMAGE_PATH, new StoragePathProvider().getTmpImageFilePath());
+            intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_FILE_PATH, new StoragePathProvider().getTmpImageFilePath());
         } else {
             intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             // We give the camera an absolute filename/path where to put the
