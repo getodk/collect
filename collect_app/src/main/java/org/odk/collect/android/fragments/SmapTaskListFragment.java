@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.fragments;
 
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
+
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,6 +28,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,6 +39,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,6 +59,7 @@ import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
+import org.odk.collect.android.listeners.TaskClickLisener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -62,6 +70,7 @@ import org.odk.collect.android.smap.utilities.LocationRegister;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.utilities.Utilities;
 
 import timber.log.Timber;
 
@@ -120,7 +129,57 @@ public class SmapTaskListFragment extends ListFragment {
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        mAdapter = new TaskListArrayAdapter(getActivity(), false);
+        TaskClickLisener taskClickLisener = new TaskClickLisener() {
+            @Override
+            public void onAcceptClicked(TaskEntry taskEntry) {
+                if(Utilities.canAccept(taskEntry.taskStatus)) {
+                    Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED, "");
+                    Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                    LocalBroadcastManager.getInstance(requireActivity().getApplication()).sendBroadcast(intent);
+                    Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity2");
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_accept),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onSMSClicked(long taskId) {
+
+            }
+
+            @Override
+            public void onPhoneClicked(long taskId) {
+
+            }
+
+            @Override
+            public void onRejectClicked(TaskEntry taskEntry) {
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setView(R.layout.reject_task)
+                        .create();
+                View reject_popup = getLayoutInflater().inflate(R.layout.reject_task, null);
+                EditText editText = reject_popup.findViewById(R.id.input_reason);
+                Button ok = reject_popup.findViewById(R.id.ok);
+                Button cancel = reject_popup.findViewById(R.id.cancel);
+                String reason = editText.getText().toString();
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        rejectTask(reason, taskEntry);
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        };
+
+        mAdapter = new TaskListArrayAdapter(getActivity(), false, taskClickLisener);
         setListAdapter(mAdapter);
 
         // Handle long item clicks
@@ -175,7 +234,7 @@ public class SmapTaskListFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_nav);
+        toolbar.setNavigationIcon(R.drawable.ic_launcher_foreground);
 
         if (bottomSheetDialog == null) {
             setupBottomSheet();
@@ -453,6 +512,22 @@ public class SmapTaskListFragment extends ListFragment {
             startActivity(i);
         }
         return true;
+    }
+    private void rejectTask(String reason, TaskEntry taskEntry) {
+        if(Utilities.canReject(taskEntry.taskStatus)) {
+            if(!taskEntry.taskStatus.equals("new") && reason != null && reason.trim().length() < 5) {
+                Toast.makeText(getApplicationContext(), getString(R.string.smap_reason_not_specified),
+                        Toast.LENGTH_LONG).show();
+            } else {
+                Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED, reason);
+                Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                LocalBroadcastManager.getInstance(requireActivity().getApplication()).sendBroadcast(intent);
+                Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
 

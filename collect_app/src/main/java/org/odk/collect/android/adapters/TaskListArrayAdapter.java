@@ -20,11 +20,13 @@
 package org.odk.collect.android.adapters;
 
 import static androidx.core.content.ContentProviderCompat.requireContext;
+import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,11 +36,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.listeners.TaskClickLisener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.Utilities;
@@ -47,17 +52,23 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import okhttp3.internal.concurrent.Task;
+import timber.log.Timber;
 
 public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     
     private int mLayout;
     boolean mFormView;
+    TaskClickLisener taskClickLisener;
     LayoutInflater mInflater;
     static String TAG = "TaskListArrayAdapter";
 	
-    public TaskListArrayAdapter(Context context, boolean formView) {
+    public TaskListArrayAdapter(Context context, boolean formView, TaskClickLisener taskClickLisener) {
 		super(context, R.layout.main_list);
 		mLayout = R.layout.task_row;
+        this.taskClickLisener = taskClickLisener;
 		mInflater = LayoutInflater.from(context);
 		mFormView = formView;
 	}
@@ -163,14 +174,38 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 .setView(popupTaskView)
                 .create();
 
-        ImageButton imageButton = view.findViewById(R.id.menu_button);
+        View imageButton = view.findViewById(R.id.menu_button);
         Button accept = popupTaskView.findViewById(R.id.accept);
+        Button sms = popupTaskView.findViewById(R.id.sms);
+        Button phone = popupTaskView.findViewById(R.id.phone);
+        Button reject = popupTaskView.findViewById(R.id.reject);
+
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                taskClickLisener.onAcceptClicked(item);
             }
         });
+        sms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskClickLisener.onSMSClicked(item.id);
+            }
+        });
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskClickLisener.onPhoneClicked(item.id);
+            }
+        });
+        reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                taskClickLisener.onRejectClicked(item);
+            }
+        });
+
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,4 +235,5 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         }
         return count;
       }
+
 }
