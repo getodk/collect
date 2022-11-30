@@ -15,6 +15,7 @@
  */
 package org.odk.collect.selfiecamera
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Window
@@ -33,8 +34,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
-import org.odk.collect.permissions.PermissionsProvider
-import org.odk.collect.shared.injection.ObjectProviderHost
+import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.strings.localization.LocalizedActivity
 import java.io.File
 
@@ -45,10 +45,12 @@ class CaptureSelfieActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val objectProvider = (application as ObjectProviderHost).getObjectProvider()
-        val permissionsProvider = objectProvider.provide(PermissionsProvider::class.java)
-
-        if (!permissionsProvider.isCameraPermissionGranted) {
+        if (
+            !PermissionsChecker(this).isPermissionGranted(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            )
+        ) {
             finish()
             return
         }
@@ -75,7 +77,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
         showLongToast(this, R.string.take_picture_instruction)
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission") // Checked on Activity launch
     private fun setupVideo(cameraProvider: ProcessCameraProvider) {
         val previewView = findViewById<PreviewView>(R.id.preview)
 
@@ -139,7 +141,10 @@ class CaptureSelfieActivity : LocalizedActivity() {
                     }
 
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        ExternalAppUtils.returnSingleValue(this@CaptureSelfieActivity, outputFile.absolutePath)
+                        ExternalAppUtils.returnSingleValue(
+                            this@CaptureSelfieActivity,
+                            outputFile.absolutePath
+                        )
                     }
                 }
             )
