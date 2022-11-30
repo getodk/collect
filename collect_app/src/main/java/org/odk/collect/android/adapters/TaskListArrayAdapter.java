@@ -19,15 +19,22 @@
  */
 package org.odk.collect.android.adapters;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -148,6 +155,28 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 }
             }
         }
+        View popupTaskView = mInflater.inflate(R.layout.popup_task_window, parent, false);
+        TextView textView = popupTaskView.findViewById(R.id.task_name);
+        textView.setText(taskNameText.getText());
+
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setView(popupTaskView)
+                .create();
+
+        ImageButton imageButton = view.findViewById(R.id.menu_button);
+        Button accept = popupTaskView.findViewById(R.id.accept);
+        accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.show();
+            }
+        });
 
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
         view.startAnimation(animation);
@@ -171,6 +200,4 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         }
         return count;
       }
-    
-
 }

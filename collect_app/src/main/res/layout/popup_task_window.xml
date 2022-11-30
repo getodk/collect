@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/task_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/mapPointCircle"
+        android:textSize="16sp"
+        tools:text="Task 1"/>
+    <Button
+        android:id="@+id/locate"
+        android:text="Locate"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/phone"
+        android:text="Phone"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/sms"
+        android:text="SMS"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/accept"
+        android:text="Accept"
+        android:background="@android:color/transparent"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/reject"
+        android:text="Reject"
+        android:background="@android:color/transparent"
+        android:layout_marginBottom="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
