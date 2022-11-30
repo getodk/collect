@@ -155,7 +155,6 @@
   <string name="choose_image">इमेज चुनें</string>
   <string name="selected_invalid_image">चयनित फाइल मान्य इमेज नहीं है</string>
   <string name="take_picture_instruction">तस्वीर लेने के लिए स्क्रीन को टैप करें</string>
-  <string name="camera_error">यह डिवाइस Camera2 API का समर्थन नहीं करता है</string>
   <string name="annotate_image">इमेज पर टिप्पणी करें</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">संरक्षित करें और बंद करें</string>

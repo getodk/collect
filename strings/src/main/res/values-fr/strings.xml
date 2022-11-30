@@ -198,7 +198,6 @@
   <string name="selected_invalid_image">Le fichier choisi n\'est pas une image valide</string>
   <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
   <string name="error_front_camera_unavailable">Caméra frontale non disponible sur cet appareil</string>
-  <string name="camera_error">Cet appareil ne prend pas en charge l\'API Camera2.</string>
   <string name="annotate_image">Annoter l\'image</string>
   <string name="invalid_file_type">Le type de fichier fourni par l\'application n\'es pas valide</string>
   <!--Dialog heading for saving annotated image-->

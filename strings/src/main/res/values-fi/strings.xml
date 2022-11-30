@@ -198,7 +198,6 @@
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
-  <string name="camera_error">Tämä laite ei tue Camera2 API:a (ohjelmarajapintaa).</string>
   <string name="annotate_image">Lisää merkinnät kuvaan</string>
   <string name="invalid_file_type">Sovellus ilmoitti epäkelvon tiedostotyypin</string>
   <!--Dialog heading for saving annotated image-->

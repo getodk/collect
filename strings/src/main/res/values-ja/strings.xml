@@ -193,7 +193,6 @@
   <string name="selected_invalid_image">選択したファイルは有効な画像ではありません</string>
   <string name="take_picture_instruction">画面をタップすると写真を撮ります</string>
   <string name="error_front_camera_unavailable">このデバイスは前面カメラが利用できません</string>
-  <string name="camera_error">このデバイスは Camera2 API をサポートしていません。</string>
   <string name="annotate_image">画像に注釈をつける</string>
   <string name="invalid_file_type">アプリケーションが無効なファイル形式を返しました</string>
   <!--Dialog heading for saving annotated image-->

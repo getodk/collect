@@ -198,7 +198,6 @@
   <string name="selected_invalid_image">Ausgewählte Datei ist kein gültiges Bild.</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
-  <string name="camera_error">Dieses Gerät unterstützt die Camera2-API nicht.</string>
   <string name="annotate_image">Bild beschreiben</string>
   <string name="invalid_file_type">App gab einen ungültigen Dateityp zurück</string>
   <!--Dialog heading for saving annotated image-->

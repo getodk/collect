@@ -183,7 +183,6 @@
   <string name="selected_invalid_image">Обраний файл не є коректним зображенням</string>
   <string name="take_picture_instruction">Щоб зробити знімок торкніться екрану</string>
   <string name="error_front_camera_unavailable">Фронтальна камера на цьому пристрої не доступна</string>
-  <string name="camera_error">Цей пристрій не підтримує Camera2 API.</string>
   <string name="annotate_image">Додати Анотацію</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Зберегти та закрити</string>

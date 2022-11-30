@@ -189,8 +189,7 @@
   <string name="selected_invalid_image">ఎంచుకున్న ఫైల్ చెల్లుబాటు అయ్యే చిత్రం కాదు</string>
   <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
   <string name="error_front_camera_unavailable">ముందు వైపు కెమెరా ఈ పరికరంలో లేదు</string>
-  <string name="camera_error">ఈ పరికరం కెమెరా2 API కి మద్దతు ఇవ్వదు.</string>
-  <string name="annotate_image">ఫోటో మీద వ్యాఖ్యానం వ్రాయండి </string>
+    <string name="annotate_image">ఫోటో మీద వ్యాఖ్యానం వ్రాయండి </string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">సేవ్ చేసి క్లోజ్ చెయ్యండి </string>
   <string name="signature_capture">సంతకం పెట్టండి</string>

@@ -179,8 +179,7 @@
   <string name="selected_invalid_image">منتخب فائل ایک درست تصویر نہیں ہے</string>
   <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
   <string name="error_front_camera_unavailable">اس ڈیوائس پر فرنٹ کمیرہ دستیاب نہیں ہے</string>
-  <string name="camera_error">یہ ڈیوائس اے پی آئ کمیرہ 2 سپورٹ نہیں کرتا </string>
-  <string name="annotate_image">تصویر کی تفصیل لکھیے </string>
+    <string name="annotate_image">تصویر کی تفصیل لکھیے </string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="signature_capture">دستخط محفوظ کریں </string>

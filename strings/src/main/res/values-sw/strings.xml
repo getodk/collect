@@ -186,8 +186,7 @@
   <string name="selected_invalid_image">Faili lillilochaguliwa sio picha sahihi</string>
   <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
   <string name="error_front_camera_unavailable">Kamera ya mbele haipo katika kifaa hiki</string>
-  <string name="camera_error">Kifaa hiki hakina uwezo wa kutumia Kamera2 API.</string>
-  <string name="annotate_image">Elezea picha</string>
+    <string name="annotate_image">Elezea picha</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Hifadhi na funga</string>
   <string name="signature_capture">Chukua sahihi</string>

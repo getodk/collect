@@ -176,7 +176,6 @@
   <string name="selected_invalid_image">Выбрайнный файл не является изображением</string>
   <string name="take_picture_instruction">Нажмите на экран, чтобы сделать фото</string>
   <string name="error_front_camera_unavailable">Передняя камера недоступна на данном устройстве</string>
-  <string name="camera_error">Это устройство не поддерживает API Camera2.</string>
   <string name="annotate_image">Добавить примечание</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Сохранить и закрыть</string>
