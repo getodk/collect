@@ -6,6 +6,7 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ImageFileUtils.saveBitmapToFile
+import org.odk.collect.qrcode.QRCodeEncoder
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

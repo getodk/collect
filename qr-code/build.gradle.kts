@@ -48,5 +48,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
 
+    implementation(Dependencies.zxing_android_embedded)
 }
