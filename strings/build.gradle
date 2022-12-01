@@ -33,6 +33,10 @@ android {
 
 dependencies {
     implementation Dependencies.androidx_core_ktx
+
+    /**
+     * We need to expose [AppCompatActivity] for classes that extend [LocalizedActivity]
+     */
     api Dependencies.androidx_appcompat
 
     testImplementation Dependencies.junit
