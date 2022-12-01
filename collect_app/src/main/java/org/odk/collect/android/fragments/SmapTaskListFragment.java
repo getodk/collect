@@ -14,12 +14,14 @@
 
 package org.odk.collect.android.fragments;
 
+import static android.Manifest.permission.CALL_PHONE;
 import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
@@ -155,8 +158,13 @@ public class SmapTaskListFragment extends ListFragment {
 
             @Override
             public void onPhoneClicked(TaskEntry taskEntry) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "+34666777888"));
-                startActivity(intent);
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:123456789"));
+                if (ContextCompat.checkSelfPermission(getActivity(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(callIntent);
+                } else {
+                    requestPermissions(new String[]{CALL_PHONE}, 1);
+                }
             }
 
             @Override
