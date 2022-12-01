@@ -26,6 +26,20 @@ class QRCodeEncodeDecodeTest {
         assertThat(decodedData, equalTo(data))
     }
 
+    @Test
+    fun `When there are no more than 4k characters passed to encode, should not throw an exception`() {
+        val data = "Q".repeat(4000)
+
+        QRCodeEncoderImpl().encode(data)
+    }
+
+    @Test(expected = QRCodeEncoder.MaximumCharactersLimitException::class)
+    fun `When there are more than 4k characters passed to encode, throw an exception`() {
+        val data = "Q".repeat(4001)
+
+        QRCodeEncoderImpl().encode(data)
+    }
+
     private fun toStream(bitmap: Bitmap): ByteArrayInputStream {
         val bos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos)
