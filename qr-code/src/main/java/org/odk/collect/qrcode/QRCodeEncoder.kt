@@ -49,6 +49,7 @@ class QRCodeEncoderImpl : QRCodeEncoder {
 }
 
 interface QRCodeEncoder {
+    @Throws(MaximumCharactersLimitException::class)
     fun encode(data: String): Bitmap
 
     class MaximumCharactersLimitException : Exception()
