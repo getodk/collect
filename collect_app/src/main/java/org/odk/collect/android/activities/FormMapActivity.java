@@ -130,7 +130,7 @@ public class FormMapActivity extends BaseGeoMapActivity {
         MapFragment mapToAdd = mapProvider.createMapFragment(getApplicationContext());
 
         if (mapToAdd != null) {
-            mapToAdd.addTo(this, R.id.map_container, this::initMap, this::finish);
+            mapToAdd.addTo(getSupportFragmentManager(), R.id.map_container, this::initMap, this::finish);
         } else {
             finish(); // The configured map provider is not available
         }

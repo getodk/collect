@@ -15,13 +15,17 @@
 package org.odk.collect.android.geo;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringDef;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import org.odk.collect.android.geo.models.CompoundMarker;
+import org.odk.collect.android.views.CustomMarker;
+import org.odk.collect.android.views.MeasurableInAdvanceView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -80,8 +84,8 @@ public interface MapFragment {
      * problem initializing the map.
      */
     void addTo(
-        @NonNull FragmentActivity activity, int containerId,
-        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
+            @NonNull FragmentManager fragmentManager, int containerId,
+            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener);
 
     /** Gets the point currently shown at the center of the map view. */
     @NonNull MapPoint getCenter();
@@ -127,6 +131,15 @@ public interface MapFragment {
      * Returns a positive integer, the featureId for the newly added shape.
      */
     int addMarker(MapPoint point, boolean draggable, @IconAnchor String iconAnchor);
+
+    /**
+     * Adds a marker to the map at the given location.
+     * Returns a positive integer, the featureId for the newly added shape.
+     *
+     * @param point - a [MapPoint] to place a marker at
+     * @param customView - a custom [View] to display as an icon
+     */
+    int addMarker(MapPoint point, MeasurableInAdvanceView customView);
 
     /**
      * smap add a previous marker and poly
