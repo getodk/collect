@@ -20,6 +20,7 @@ import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 import static java.lang.StrictMath.abs;
 
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -549,7 +550,9 @@ public class Utilities {
                 c.moveToNext();
             }
 
-            if (getTaskSortOrderExpr(sortOrder).contains("schedLat")) {
+            if (sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
+                    || sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC
+                    && location != null) {
                 Location finalLocation = location;
                 Collections.sort(tasks, (t1, t2) -> {
                     Location location1 = new Location("");
@@ -562,13 +565,18 @@ public class Utilities {
                     float distanceFromTask1 = finalLocation.distanceTo(location1);
                     float distanceFromTask2 = finalLocation.distanceTo(location2);
 
-                    if (getTaskSortOrderExpr(sortOrder).contains("ASC")) {
-                        return (int)(distanceFromTask1 - distanceFromTask2);
-                    }
-                    else {
-                        return (int)(distanceFromTask2 - distanceFromTask1);
+                    String sortedExpr = getTaskSortOrderExpr(sortOrder);
+                    if (sortedExpr.contains("ASC")) {
+                        return (int) (distanceFromTask1 - distanceFromTask2);
+                    } else {
+                        return (int) (distanceFromTask2 - distanceFromTask1);
                     }
                 });
+            } else {
+                AlertDialog error = new AlertDialog.Builder(Collect.getInstance().getBaseContext())
+                        .setMessage(Collect.getInstance().getBaseContext().getString(R.string.smap_location_not_found))
+                        .create();
+                error.show();
             }
 
             Collect.getInstance().setGeofences(geofences);
