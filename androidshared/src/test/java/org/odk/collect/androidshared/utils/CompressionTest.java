@@ -1,4 +1,4 @@
-package org.odk.collect.shared;
+package org.odk.collect.androidshared.utils;
 
 import org.junit.After;
 import org.junit.Before;

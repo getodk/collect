@@ -9,7 +9,7 @@ import com.google.zxing.LuminanceSource
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.multi.qrcode.QRCodeMultiReader
-import org.odk.collect.shared.CompressionUtils
+import org.odk.collect.androidshared.utils.CompressionUtils
 import java.io.IOException
 import java.io.InputStream
 import java.lang.Boolean.FALSE

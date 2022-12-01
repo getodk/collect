@@ -6,7 +6,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
-import org.odk.collect.shared.CompressionUtils
+import org.odk.collect.androidshared.utils.CompressionUtils
 
 class QRCodeEncoderImpl : QRCodeEncoder {
     @Throws(QRCodeEncoder.MaximumCharactersLimitException::class)

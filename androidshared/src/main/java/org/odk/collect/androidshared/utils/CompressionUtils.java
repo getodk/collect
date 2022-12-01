@@ -12,12 +12,11 @@
  * the License.
  */
 
-package org.odk.collect.shared;
+package org.odk.collect.androidshared.utils;
 
-import com.google.api.client.util.Base64;
+import android.util.Base64;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -55,7 +54,7 @@ public final class CompressionUtils {
         byte[] output = outputStream.toByteArray();
 
         // Encode to base64
-        return Base64.encodeBase64String(output);
+        return Base64.encodeToString(output, Base64.DEFAULT);
     }
 
     public static String decompress(String compressedString) throws IOException, DataFormatException, IllegalArgumentException {
@@ -64,7 +63,7 @@ public final class CompressionUtils {
         }
 
         // Decode from base64
-        byte[] output = Base64.decodeBase64(compressedString);
+        byte[] output = Base64.decode(compressedString, Base64.DEFAULT);
 
         Inflater inflater = new Inflater();
         inflater.setInput(output);
