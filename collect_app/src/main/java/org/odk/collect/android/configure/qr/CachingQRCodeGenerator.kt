@@ -6,6 +6,7 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.ImageFileUtils.saveBitmapToFile
+import org.odk.collect.qrcode.QRCodeDecoder
 import org.odk.collect.qrcode.QRCodeEncoder
 import timber.log.Timber
 import java.io.File
@@ -16,7 +17,12 @@ import java.util.Arrays
 
 class CachingQRCodeGenerator(private val qrCodeEncoder: QRCodeEncoder) : QRCodeGenerator {
 
-    @Throws(NoSuchAlgorithmException::class, IOException::class, WriterException::class)
+    @Throws(
+        QRCodeDecoder.QRCodeInvalidException::class,
+        NoSuchAlgorithmException::class,
+        IOException::class,
+        WriterException::class
+    )
     override fun generateQRCode(
         selectedPasswordKeys: Collection<String>,
         appConfigurationGenerator: AppConfigurationGenerator

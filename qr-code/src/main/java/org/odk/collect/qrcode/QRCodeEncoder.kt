@@ -9,13 +9,14 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import org.odk.collect.shared.CompressionUtils
 
 class QRCodeEncoderImpl : QRCodeEncoder {
+    @Throws(QRCodeEncoder.MaximumCharactersLimitException::class)
     override fun encode(data: String): Bitmap {
         val compressedData = CompressionUtils.compress(data)
 
         // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
-//        if (compressedData.length > 4000) {
-//            throw IOException(Collect.getInstance().getLocalizedString(R.string.encoding_max_limit))
-//        }
+        if (compressedData.length > 4000) {
+            throw QRCodeEncoder.MaximumCharactersLimitException()
+        }
 
         val hints: Map<EncodeHintType, ErrorCorrectionLevel> = mapOf(EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.L)
 
@@ -49,4 +50,6 @@ class QRCodeEncoderImpl : QRCodeEncoder {
 
 interface QRCodeEncoder {
     fun encode(data: String): Bitmap
+
+    class MaximumCharactersLimitException : Exception()
 }
