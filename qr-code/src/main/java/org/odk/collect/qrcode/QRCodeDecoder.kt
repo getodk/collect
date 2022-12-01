@@ -4,11 +4,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.BinaryBitmap
-import com.google.zxing.ChecksumException
 import com.google.zxing.DecodeHintType
-import com.google.zxing.FormatException
 import com.google.zxing.LuminanceSource
-import com.google.zxing.NotFoundException
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.multi.qrcode.QRCodeMultiReader
@@ -47,12 +44,6 @@ class QRCodeDecoderImpl : QRCodeDecoder {
             throw QRCodeDecoder.QRCodeInvalidException()
         } catch (e: IllegalArgumentException) {
             throw QRCodeDecoder.QRCodeInvalidException()
-        } catch (e: FormatException) {
-            throw QRCodeDecoder.QRCodeNotFoundException()
-        } catch (e: NotFoundException) {
-            throw QRCodeDecoder.QRCodeNotFoundException()
-        } catch (e: ChecksumException) {
-            throw QRCodeDecoder.QRCodeNotFoundException()
         } catch (e: Throwable) {
             throw QRCodeDecoder.QRCodeNotFoundException()
         }
