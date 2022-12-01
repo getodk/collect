@@ -18,8 +18,6 @@ package org.odk.collect.selfiecamera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -32,6 +30,8 @@ import androidx.camera.video.VideoCapture
 import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
@@ -55,11 +55,8 @@ class CaptureSelfieActivity : LocalizedActivity() {
             return
         }
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        insetsController.hide(WindowInsetsCompat.Type.statusBars())
         setContentView(R.layout.activity_capture_selfie)
 
         val cameraProvider = ProcessCameraProvider.getInstance(this)
