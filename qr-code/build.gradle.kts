@@ -51,4 +51,7 @@ dependencies {
     implementation(project(":shared"))
 
     implementation(Dependencies.zxing_android_embedded)
+
+    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.hamcrest)
 }
