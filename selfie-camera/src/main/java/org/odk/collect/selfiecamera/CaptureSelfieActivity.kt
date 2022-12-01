@@ -70,8 +70,6 @@ class CaptureSelfieActivity : LocalizedActivity() {
             },
             ContextCompat.getMainExecutor(this)
         )
-
-        showLongToast(this, R.string.take_picture_instruction)
     }
 
     @SuppressLint("MissingPermission") // Checked on Activity launch
