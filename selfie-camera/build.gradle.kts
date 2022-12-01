@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":permissions"))
