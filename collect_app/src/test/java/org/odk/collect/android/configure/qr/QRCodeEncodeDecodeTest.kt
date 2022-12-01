@@ -7,6 +7,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.qrcode.QRCodeEncoderImpl
+import org.odk.collect.qrcode.QRCodeDecoderImpl
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 

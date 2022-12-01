@@ -15,10 +15,10 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
-import org.odk.collect.android.configure.qr.QRCodeDecoder.QRCodeInvalidException
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.Project.Saved
+import org.odk.collect.qrcode.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
@@ -90,7 +90,7 @@ class QRCodeActivityResultDelegateTest {
     private fun importSettingsFromQrCode_withInvalidQrCode() {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         val data = intentWithData("file://qr", "qr")
-        fakeQRDecoder.failsWith(QRCodeInvalidException())
+        fakeQRDecoder.failsWith(QRCodeDecoder.QRCodeInvalidException())
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(false)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
@@ -140,11 +140,11 @@ class QRCodeActivityResultDelegateTest {
         private val data: MutableMap<String, String> = HashMap()
         private var failsWith: Exception? = null
 
-        @Throws(QRCodeInvalidException::class, QRCodeDecoder.QRCodeNotFoundException::class)
+        @Throws(QRCodeDecoder.QRCodeInvalidException::class, QRCodeDecoder.QRCodeNotFoundException::class)
         override fun decode(inputStream: InputStream?): String {
             if (failsWith != null) {
-                if (failsWith is QRCodeInvalidException) {
-                    throw (failsWith as QRCodeInvalidException?)!!
+                if (failsWith is QRCodeDecoder.QRCodeInvalidException) {
+                    throw (failsWith as QRCodeDecoder.QRCodeInvalidException?)!!
                 } else {
                     throw (failsWith as QRCodeDecoder.QRCodeNotFoundException?)!!
                 }

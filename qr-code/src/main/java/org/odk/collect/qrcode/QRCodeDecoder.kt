@@ -1,4 +1,4 @@
-package org.odk.collect.android.configure.qr
+package org.odk.collect.qrcode
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -12,8 +12,6 @@ import com.google.zxing.NotFoundException
 import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.multi.qrcode.QRCodeMultiReader
-import org.odk.collect.android.configure.qr.QRCodeDecoder.QRCodeInvalidException
-import org.odk.collect.android.configure.qr.QRCodeDecoder.QRCodeNotFoundException
 import org.odk.collect.shared.CompressionUtils
 import java.io.IOException
 import java.io.InputStream
@@ -27,7 +25,7 @@ import kotlin.String
 import kotlin.Throws
 
 class QRCodeDecoderImpl : QRCodeDecoder {
-    @Throws(QRCodeInvalidException::class, QRCodeNotFoundException::class)
+    @Throws(QRCodeDecoder.QRCodeInvalidException::class, QRCodeDecoder.QRCodeNotFoundException::class)
     override fun decode(inputStream: InputStream?): String {
         return try {
             val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -42,21 +40,21 @@ class QRCodeDecoderImpl : QRCodeDecoder {
                     )
                 )
 
-            CompressionUtils.decompress(decodedQrCode.text) ?: throw QRCodeInvalidException()
+            CompressionUtils.decompress(decodedQrCode.text) ?: throw QRCodeDecoder.QRCodeInvalidException()
         } catch (e: DataFormatException) {
-            throw QRCodeInvalidException()
+            throw QRCodeDecoder.QRCodeInvalidException()
         } catch (e: IOException) {
-            throw QRCodeInvalidException()
+            throw QRCodeDecoder.QRCodeInvalidException()
         } catch (e: IllegalArgumentException) {
-            throw QRCodeInvalidException()
+            throw QRCodeDecoder.QRCodeInvalidException()
         } catch (e: FormatException) {
-            throw QRCodeNotFoundException()
+            throw QRCodeDecoder.QRCodeNotFoundException()
         } catch (e: NotFoundException) {
-            throw QRCodeNotFoundException()
+            throw QRCodeDecoder.QRCodeNotFoundException()
         } catch (e: ChecksumException) {
-            throw QRCodeNotFoundException()
+            throw QRCodeDecoder.QRCodeNotFoundException()
         } catch (e: Throwable) {
-            throw QRCodeNotFoundException()
+            throw QRCodeDecoder.QRCodeNotFoundException()
         }
     }
 
