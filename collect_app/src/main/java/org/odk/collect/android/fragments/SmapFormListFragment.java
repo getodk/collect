@@ -154,7 +154,7 @@ public class SmapFormListFragment extends ListFragment {
             }
 
             @Override
-            public void onSMSClicked(long taskId) {
+            public void onSMSClicked(TaskEntry taskEntry) {
 
             }
 

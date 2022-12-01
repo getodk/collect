@@ -66,6 +66,8 @@ import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.TaskClickLisener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
@@ -137,6 +139,7 @@ public class SmapTaskListFragment extends ListFragment {
         super.onActivityCreated(b);
 
         TaskClickLisener taskClickLisener = new TaskClickLisener() {
+            final DatabaseInstancesRepository di = new DatabaseInstancesRepository();
             @Override
             public void onAcceptClicked(TaskEntry taskEntry) {
                 if(Utilities.canAccept(taskEntry.taskStatus)) {
@@ -153,15 +156,24 @@ public class SmapTaskListFragment extends ListFragment {
             }
 
             @Override
-            public void onSMSClicked(long taskId) {
+            public void onSMSClicked(TaskEntry taskEntry) {
+                Instance instance = di.getInstanceById(taskEntry.assId);
                 String number = "12346556";
+                if (instance != null) {
+                    number = instance.getPhone();
+                }
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
             }
 
             @Override
             public void onPhoneClicked(TaskEntry taskEntry) {
+                Instance instance = di.getInstanceById(taskEntry.assId);
+                String number = "123456789";
+                if (instance != null) {
+                   number = instance.getPhone();
+                }
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:123456789"));
+                callIntent.setData(Uri.parse("tel:" + number));
                 if (ContextCompat.checkSelfPermission(getActivity(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                     startActivity(callIntent);
                 } else {

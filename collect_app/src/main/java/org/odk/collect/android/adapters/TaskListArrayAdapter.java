@@ -43,6 +43,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.TaskClickLisener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
@@ -79,6 +81,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
     	View view;
+        DatabaseInstancesRepository di = new DatabaseInstancesRepository();
     	
     	if (convertView == null) {
     		view = mInflater.inflate(mLayout, parent, false);
@@ -166,6 +169,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
                 }
             }
         }
+        Instance instance = di.getInstanceById(item.assId);
         View popupTaskView = mInflater.inflate(R.layout.popup_task_window, parent, false);
         TextView textView = popupTaskView.findViewById(R.id.task_name);
         textView.setText(taskNameText.getText());
@@ -181,6 +185,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         Button phone = popupTaskView.findViewById(R.id.phone);
         Button reject = popupTaskView.findViewById(R.id.reject);
 
+        if (instance == null || instance.getPhone() == null) {
+            sms.setEnabled(false);
+            phone.setEnabled(false);
+        }
+
         accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,7 +200,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         sms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                taskClickLisener.onSMSClicked(item.id);
+                taskClickLisener.onSMSClicked(item);
             }
         });
         phone.setOnClickListener(new View.OnClickListener() {
