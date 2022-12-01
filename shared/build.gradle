@@ -15,6 +15,8 @@ java {
 dependencies {
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.emoji_java
+    implementation Dependencies.commons_io
+    implementation Dependencies.google_api_client_android
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest

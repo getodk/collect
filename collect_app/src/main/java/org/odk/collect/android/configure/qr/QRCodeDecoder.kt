@@ -14,7 +14,7 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.multi.qrcode.QRCodeMultiReader
 import org.odk.collect.android.configure.qr.QRCodeDecoder.QRCodeInvalidException
 import org.odk.collect.android.configure.qr.QRCodeDecoder.QRCodeNotFoundException
-import org.odk.collect.android.utilities.CompressionUtils
+import org.odk.collect.shared.CompressionUtils
 import java.io.IOException
 import java.io.InputStream
 import java.lang.Boolean.FALSE

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.utilities;
+package org.odk.collect.shared;
 
 import com.google.api.client.util.Base64;
 
@@ -23,12 +23,9 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import timber.log.Timber;
-
 /**
  * Created by shobhit on 12/4/17.
  */
-
 public final class CompressionUtils {
 
     private CompressionUtils() {
@@ -58,11 +55,7 @@ public final class CompressionUtils {
         byte[] output = outputStream.toByteArray();
 
         // Encode to base64
-        String base64String = Base64.encodeBase64String(output);
-        Timber.i("Original : %d", data.length());
-        Timber.i("Compressed : %d", base64String.length());
-        Timber.i("Compression ratio : %2f", ((data.length() * 1.0) / base64String.length()) * 100);
-        return base64String;
+        return Base64.encodeBase64String(output);
     }
 
     public static String decompress(String compressedString) throws IOException, DataFormatException, IllegalArgumentException {
@@ -88,10 +81,6 @@ public final class CompressionUtils {
         byte[] result = outputStream.toByteArray();
 
         // Decode the bytes into a String
-        String outputString = new String(result, "UTF-8");
-        Timber.i("Compressed : %d", output.length);
-        Timber.i("Decompressed : %d", result.length);
-        return outputString;
-
+        return new String(result, "UTF-8");
     }
 }
