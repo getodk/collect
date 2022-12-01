@@ -34,7 +34,7 @@
     <EditText
         android:id="@+id/input_reason"
         android:layout_width="200dp"
-        android:layout_height="65dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/edit_borders"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

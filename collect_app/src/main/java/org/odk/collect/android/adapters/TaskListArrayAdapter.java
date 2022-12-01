@@ -185,6 +185,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
             @Override
             public void onClick(View view) {
                 taskClickLisener.onAcceptClicked(item);
+                alertDialog.dismiss();
             }
         });
         sms.setOnClickListener(new View.OnClickListener() {

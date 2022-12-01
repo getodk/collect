@@ -145,8 +145,10 @@ public class SmapTaskListFragment extends ListFragment {
                     LocalBroadcastManager.getInstance(requireActivity().getApplication()).sendBroadcast(intent);
                     Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity2");
                 } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_accept),
-                            Toast.LENGTH_LONG).show();
+                    AlertDialog error = new AlertDialog.Builder(requireContext())
+                            .setMessage(getString(R.string.smap_cannot_accept))
+                            .create();
+                    error.show();
                 }
             }
 
@@ -169,19 +171,22 @@ public class SmapTaskListFragment extends ListFragment {
 
             @Override
             public void onRejectClicked(TaskEntry taskEntry) {
-                AlertDialog dialog = new AlertDialog.Builder(getContext())
-                        .setView(R.layout.reject_task)
-                        .create();
                 View reject_popup = getLayoutInflater().inflate(R.layout.reject_task, null);
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setNegativeButton(null,null)
+                        .setPositiveButton(null, null)
+                        .setView(reject_popup)
+                        .create();
+                dialog.show();
                 EditText editText = reject_popup.findViewById(R.id.input_reason);
                 Button ok = reject_popup.findViewById(R.id.ok);
                 Button cancel = reject_popup.findViewById(R.id.cancel);
-                String reason = editText.getText().toString();
-                dialog.show();
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        String reason = editText.getText().toString();
                         rejectTask(reason, taskEntry);
+                        dialog.dismiss();
                     }
                 });
                 cancel.setOnClickListener(new View.OnClickListener() {
@@ -190,12 +195,14 @@ public class SmapTaskListFragment extends ListFragment {
                         dialog.dismiss();
                     }
                 });
+
             }
 
             @Override
             public void onLocateClick(TaskEntry taskEntry) {
 
             }
+
         };
 
         mAdapter = new TaskListArrayAdapter(getActivity(), false, taskClickLisener);
@@ -526,8 +533,10 @@ public class SmapTaskListFragment extends ListFragment {
     private void rejectTask(String reason, TaskEntry taskEntry) {
         if(Utilities.canReject(taskEntry.taskStatus)) {
             if(!taskEntry.taskStatus.equals("new") && reason != null && reason.trim().length() < 5) {
-                Toast.makeText(getApplicationContext(), getString(R.string.smap_reason_not_specified),
-                        Toast.LENGTH_LONG).show();
+                AlertDialog error = new AlertDialog.Builder(requireContext())
+                        .setMessage(getString(R.string.smap_reason_not_specified))
+                        .create();
+                error.show();
             } else {
                 Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED, reason);
                 Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
@@ -535,8 +544,10 @@ public class SmapTaskListFragment extends ListFragment {
                 Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");
             }
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.smap_cannot_reject),
-                    Toast.LENGTH_LONG).show();
+            AlertDialog error = new AlertDialog.Builder(requireContext())
+                    .setMessage(getString(R.string.smap_cannot_reject))
+                    .create();
+            error.show();
         }
     }
 
