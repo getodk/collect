@@ -38,8 +38,8 @@ import org.odk.collect.android.views.BarcodeViewDecoder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
-import org.robolectric.shadows.ShadowToast
 import org.odk.collect.shared.CompressionUtils
+import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
 class QrCodeProjectCreatorDialogTest {
