@@ -51,9 +51,9 @@ dependencies {
     implementation(project(":externalapp"))
 
     implementation(Dependencies.timber)
-    implementation("androidx.camera:camera-core:1.1.0")
-    implementation("androidx.camera:camera-view:1.1.0")
-    implementation("androidx.camera:camera-lifecycle:1.1.0")
-    implementation("androidx.camera:camera-camera2:1.1.0")
-    implementation("androidx.camera:camera-video:1.1.0")
+    implementation(Dependencies.camerax_core)
+    implementation(Dependencies.camerax_view)
+    implementation(Dependencies.camerax_lifecycle)
+    implementation(Dependencies.camerax_video)
+    implementation(Dependencies.camerax_camera2)
 }
