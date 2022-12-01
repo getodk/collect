@@ -13,7 +13,7 @@ import java.io.ByteArrayOutputStream
 class QRCodeEncodeDecodeTest {
 
     @Test
-    fun encodeDecodeTest() {
+    fun `Encoded and decoded text should be unchanged`() {
         val data = "Some random text"
 
         val qrCodeEncoder = QRCodeEncoderImpl()
@@ -26,16 +26,9 @@ class QRCodeEncodeDecodeTest {
         assertThat(decodedData, equalTo(data))
     }
 
-    @Test
-    fun `When there are no more than 4k characters passed to encode, should not throw an exception`() {
-        val data = "Q".repeat(4000)
-
-        QRCodeEncoderImpl().encode(data)
-    }
-
     @Test(expected = QRCodeEncoder.MaximumCharactersLimitException::class)
     fun `When there are more than 4k characters passed to encode, throw an exception`() {
-        val data = "Q".repeat(4001)
+        val data = List(5000) { ('a'..'z').random() }.joinToString("")
 
         QRCodeEncoderImpl().encode(data)
     }
