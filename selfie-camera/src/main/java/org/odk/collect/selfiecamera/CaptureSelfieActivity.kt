@@ -34,7 +34,8 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
-import org.odk.collect.permissions.ContextCompatPermissionChecker
+import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.shared.injection.ObjectProviderHost
 import org.odk.collect.strings.localization.LocalizedActivity
 import java.io.File
 
@@ -45,12 +46,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (
-            !ContextCompatPermissionChecker(this).isPermissionGranted(
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
-            )
-        ) {
+        if (!permissionsGranted()) {
             finish()
             return
         }
@@ -70,6 +66,20 @@ class CaptureSelfieActivity : LocalizedActivity() {
             },
             ContextCompat.getMainExecutor(this)
         )
+    }
+
+    private fun permissionsGranted(): Boolean {
+        val objectProvider = (application as ObjectProviderHost).getObjectProvider()
+        val permissionsChecker = objectProvider.provide(PermissionsChecker::class.java)
+
+        return if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
+            permissionsChecker.isPermissionGranted(
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+            )
+        } else {
+            permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)
+        }
     }
 
     @SuppressLint("MissingPermission") // Checked on Activity launch

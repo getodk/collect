@@ -44,10 +44,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":permissions"))
     implementation(project(":externalapp"))
+    implementation(project(":androidtest"))
 
     implementation(Dependencies.timber)
     implementation(Dependencies.camerax_core)
@@ -55,4 +57,9 @@ dependencies {
     implementation(Dependencies.camerax_lifecycle)
     implementation(Dependencies.camerax_video)
     implementation(Dependencies.camerax_camera2)
+
+    testImplementation(Dependencies.junit)
+    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.robolectric)
+    testImplementation(Dependencies.hamcrest)
 }
