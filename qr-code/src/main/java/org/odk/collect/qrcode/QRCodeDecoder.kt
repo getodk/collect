@@ -37,7 +37,7 @@ class QRCodeDecoderImpl : QRCodeDecoder {
                     )
                 )
 
-            CompressionUtils.decompress(decodedQrCode.text) ?: throw QRCodeDecoder.QRCodeInvalidException()
+            CompressionUtils.decompress(decodedQrCode.text)
         } catch (e: DataFormatException) {
             throw QRCodeDecoder.QRCodeInvalidException()
         } catch (e: IOException) {
