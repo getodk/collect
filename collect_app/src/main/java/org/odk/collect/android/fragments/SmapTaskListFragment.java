@@ -15,25 +15,20 @@
 package org.odk.collect.android.fragments;
 
 import static android.Manifest.permission.CALL_PHONE;
-import static androidx.test.core.app.ApplicationProvider.getApplicationContext;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -46,7 +41,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -68,7 +62,7 @@ import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.listeners.TaskClickLisener;
+import org.odk.collect.android.listeners.OnTaskOptionsClickLisener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -138,7 +132,7 @@ public class SmapTaskListFragment extends ListFragment {
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        TaskClickLisener taskClickLisener = new TaskClickLisener() {
+        OnTaskOptionsClickLisener taskClickLisener = new OnTaskOptionsClickLisener() {
             final DatabaseInstancesRepository di = new DatabaseInstancesRepository();
             @Override
             public void onAcceptClicked(TaskEntry taskEntry) {
@@ -157,25 +151,39 @@ public class SmapTaskListFragment extends ListFragment {
 
             @Override
             public void onSMSClicked(TaskEntry taskEntry) {
-                Instance instance = di.getInstanceById(taskEntry.assId);
-                String number = "12346556";
+                Instance instance = di.getInstanceByTaskId(taskEntry.assId);
+                String number = null;
                 if (instance != null) {
                     number = instance.getPhone();
                 }
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+                if (number != null) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+                } else {
+                    AlertDialog error = new AlertDialog.Builder(requireContext())
+                            .setMessage("Can't find phone number")
+                            .create();
+                    error.show();
+                }
             }
 
             @Override
             public void onPhoneClicked(TaskEntry taskEntry) {
-                Instance instance = di.getInstanceById(taskEntry.assId);
-                String number = "123456789";
+                Instance instance = di.getInstanceByTaskId(taskEntry.assId);
+                String number = null;
                 if (instance != null) {
                    number = instance.getPhone();
                 }
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:" + number));
                 if (ContextCompat.checkSelfPermission(getActivity(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    startActivity(callIntent);
+                    if (number != null) {
+                        startActivity(callIntent);
+                    } else {
+                        AlertDialog error = new AlertDialog.Builder(requireContext())
+                                .setMessage("Can't find phone number")
+                                .create();
+                        error.show();
+                    }
                 } else {
                     requestPermissions(new String[]{CALL_PHONE}, 1);
                 }

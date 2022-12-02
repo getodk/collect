@@ -58,7 +58,6 @@ import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
-import org.odk.collect.android.listeners.TaskClickLisener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.permissions.PermissionsProvider;
@@ -147,34 +146,7 @@ public class SmapFormListFragment extends ListFragment {
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        TaskClickLisener taskClickLisener = new TaskClickLisener() {
-            @Override
-            public void onAcceptClicked(TaskEntry taskEntry) {
-
-            }
-
-            @Override
-            public void onSMSClicked(TaskEntry taskEntry) {
-
-            }
-
-            @Override
-            public void onPhoneClicked(TaskEntry taskEntry) {
-
-            }
-
-            @Override
-            public void onRejectClicked(TaskEntry taskEntry) {
-
-            }
-
-            @Override
-            public void onLocateClick(TaskEntry taskEntry) {
-
-            }
-        };
-
-        mAdapter = new TaskListArrayAdapter(getActivity(), true, taskClickLisener);
+        mAdapter = new TaskListArrayAdapter(getActivity(), true, null);
         setListAdapter(mAdapter);
 
         // Handle long item clicks

@@ -51,8 +51,8 @@
 
     <ImageView
         android:id="@+id/menu_button"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_more_vert_24"
         android:background="@null">
     </ImageView>

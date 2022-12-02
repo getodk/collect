@@ -27,7 +27,7 @@ public interface InstancesRepository {
 
     List<Instance> getAllFinalized();
 
-    Instance getInstanceById(long tTaskId);
+    Instance getInstanceByTaskId(long taskId);
 
     List<Instance> getAllByFormId(String formId);
 

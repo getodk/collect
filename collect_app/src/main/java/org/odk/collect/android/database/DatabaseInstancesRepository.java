@@ -60,9 +60,9 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     @Override
-    public Instance getInstanceById(long tTaskId) {
+    public Instance getInstanceByTaskId(long taskId) {
         Cursor c = dao.getInstancesCursor(InstanceColumns.T_ASS_ID + "=?",
-                new String[]{String.valueOf(tTaskId)});
+                new String[]{String.valueOf(taskId)});
         List<Instance> instances = dao.getInstancesFromCursor(c);
         if (instances.size()==1) {
             return instances.get(0);
