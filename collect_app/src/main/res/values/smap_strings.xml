@@ -111,7 +111,7 @@
     <string name="smap_login_unauthorized">Login failed</string>
     <string name="smap_geofence_tasks">New local tasks</string>
     <string name="smap_reason">Reason to reject task</string>
-    <string name="smap_reject_title">REJECT TASK</string>
+    <string name="smap_reject_title">Reject Task</string>
     <string name="smap_reason_title">Reason</string>
     <string name="smap_locate">Locate</string>
     <string name="smap_phone">Call</string>
