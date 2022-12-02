@@ -19,7 +19,7 @@
         tools:text="Task 1"/>
     <Button
         android:id="@+id/locate"
-        android:text="Locate"
+        android:text="@string/smap_locale"
         android:background="@android:color/transparent"
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/phone"
-        android:text="Phone"
+        android:text="@string/smap_phone"
         android:background="@android:color/transparent"
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
 
     <Button
         android:id="@+id/sms"
-        android:text="SMS"
+        android:text="@string/smap_sms"
         android:background="@android:color/transparent"
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
 
     <Button
         android:id="@+id/accept"
-        android:text="Accept"
+        android:text="@string/smap_accept"
         android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_marginBottom="5dp"
@@ -51,7 +51,7 @@
 
     <Button
         android:id="@+id/reject"
-        android:text="Reject"
+        android:text="@string/smap_reject"
         android:background="@android:color/transparent"
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"
