@@ -483,6 +483,11 @@ public class Utilities {
             }
         }
 
+        if (location == null && sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC ||
+        sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC) {
+            c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, proj,
+                    selectClause, selectArgs, getTaskSortOrderExpr(ApplicationConstants.SortingOrder.BY_DATE_DESC));
+        }
 
         try {
             c.moveToFirst();
@@ -572,13 +577,7 @@ public class Utilities {
                         return (int) (distanceFromTask2 - distanceFromTask1);
                     }
                 });
-            } else {
-                AlertDialog error = new AlertDialog.Builder(Collect.getInstance().getBaseContext())
-                        .setMessage(Collect.getInstance().getBaseContext().getString(R.string.smap_location_not_found))
-                        .create();
-                error.show();
             }
-
             Collect.getInstance().setGeofences(geofences);
 
         } catch (Exception e) {
