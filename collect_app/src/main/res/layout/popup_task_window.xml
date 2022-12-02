@@ -19,7 +19,7 @@
         tools:text="Task 1"/>
     <Button
         android:id="@+id/locate"
-        android:text="@string/smap_locale"
+        android:text="@string/smap_locate"
         android:background="@android:color/transparent"
         android:layout_marginBottom="5dp"
         android:layout_width="wrap_content"

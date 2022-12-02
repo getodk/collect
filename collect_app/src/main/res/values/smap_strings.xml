@@ -95,6 +95,7 @@
     <string name="smap_visit_website">Visit the website</string>
     <string name="smap_get_media">"Getting media file: %s"</string>
     <string name="smap_lookup">"Requesting remote data"</string>
+    <string name="smap_phone_number_not_found">Cannot find phone number</string>
     <string name="smap_unknown_error">"Unknown error"</string>
     <string name="smap_forbidden">"The upload of %s was not accepted. It may have been marked as blocked or deleted on the server."</string>
     <string name="smap_form_not_specified">"The form identifier has not been specified as a parameter."</string>
@@ -112,7 +113,7 @@
     <string name="smap_reason">Reason to reject task</string>
     <string name="smap_reject_title">REJECT TASK</string>
     <string name="smap_reason_title">Reason</string>
-    <string name="smap_locale">Locale</string>
+    <string name="smap_locate">Locate</string>
     <string name="smap_phone">Phone</string>
     <string name="smap_sms">SMS</string>
     <string name="smap_accept">Accept</string>

@@ -160,7 +160,7 @@ public class SmapTaskListFragment extends ListFragment {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
                 } else {
                     AlertDialog error = new AlertDialog.Builder(requireContext())
-                            .setMessage("Can't find phone number")
+                            .setMessage(requireContext().getString(R.string.smap_phone_number_not_found))
                             .create();
                     error.show();
                 }
@@ -180,7 +180,7 @@ public class SmapTaskListFragment extends ListFragment {
                         startActivity(callIntent);
                     } else {
                         AlertDialog error = new AlertDialog.Builder(requireContext())
-                                .setMessage("Can't find phone number")
+                                .setMessage(requireContext().getString(R.string.smap_phone_number_not_found))
                                 .create();
                         error.show();
                     }
