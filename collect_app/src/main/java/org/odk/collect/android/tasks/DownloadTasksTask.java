@@ -359,8 +359,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                     results.put(Collect.getInstance().getString(R.string.smap_warning) + ":", msg );
                 }
 
-                getInitialDataForTask();
-
                 if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
                 updateSettings();       // Update device settings with values returned from server
@@ -385,6 +383,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  *  Update the status of tasks on the phone that have been cancelled on the server
                  */
                 addAndUpdateEntries();
+                getInitialDataForTask();
 
             	/*
             	 * Notify the server of the phone state
