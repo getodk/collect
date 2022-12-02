@@ -116,6 +116,7 @@
     <string name="smap_locate">Locate</string>
     <string name="smap_phone">Call</string>
     <string name="smap_sms">SMS</string>
+    <string name="smap_directions">Directions</string>
     <string name="smap_accept">Accept Task</string>
     <string name="smap_reject">Reject Task</string>
     <string name="smap_history">History</string>

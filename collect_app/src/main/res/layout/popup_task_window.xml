@@ -42,6 +42,14 @@
         android:text="@string/smap_sms" />
 
     <Button
+        android:id="@+id/directions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="?selectableItemBackground"
+        android:text="@string/smap_directions" />
+
+    <Button
         android:id="@+id/accept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

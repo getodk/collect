@@ -169,6 +169,7 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         Button accept = popupTaskView.findViewById(R.id.accept);
         Button locate = popupTaskView.findViewById(R.id.locate);
         Button sms = popupTaskView.findViewById(R.id.sms);
+        Button directions = popupTaskView.findViewById(R.id.directions);
         Button phone = popupTaskView.findViewById(R.id.phone);
         Button reject = popupTaskView.findViewById(R.id.reject);
 
@@ -181,45 +182,20 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
             phone.setEnabled(false);
         }
 
-        accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                taskClickLisener.onAcceptClicked(item);
-                alertDialog.dismiss();
-            }
+        accept.setOnClickListener(view1 -> {
+            taskClickLisener.onAcceptClicked(item);
+            alertDialog.dismiss();
         });
-        sms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                taskClickLisener.onSMSClicked(item);
-            }
+        phone.setOnClickListener(view13 -> taskClickLisener.onPhoneClicked(item));
+        sms.setOnClickListener(view12 -> taskClickLisener.onSMSClicked(item));
+        sms.setOnClickListener(view17 -> taskClickLisener.onDirectionsClicked(item));
+        reject.setOnClickListener(view14 -> {
+            alertDialog.dismiss();
+            taskClickLisener.onRejectClicked(item);
         });
-        phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                taskClickLisener.onPhoneClicked(item);
-            }
-        });
-        reject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-                taskClickLisener.onRejectClicked(item);
-            }
-        });
-        locate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                taskClickLisener.onLocateClick(item);
-            }
-        });
+        locate.setOnClickListener(view15 -> taskClickLisener.onLocateClick(item));
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.show();
-            }
-        });
+        imageButton.setOnClickListener(view16 -> alertDialog.show());
 
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
         view.startAnimation(animation);

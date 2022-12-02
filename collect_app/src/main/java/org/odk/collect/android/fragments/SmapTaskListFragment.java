@@ -137,9 +137,10 @@ public class SmapTaskListFragment extends ListFragment {
 
         OnTaskOptionsClickLisener taskClickLisener = new OnTaskOptionsClickLisener() {
             final DatabaseInstancesRepository di = new DatabaseInstancesRepository();
+
             @Override
             public void onAcceptClicked(TaskEntry taskEntry) {
-                if(Utilities.canAccept(taskEntry.taskStatus)) {
+                if (Utilities.canAccept(taskEntry.taskStatus)) {
                     Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED, "");
                     Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
                     LocalBroadcastManager.getInstance(requireActivity().getApplication()).sendBroadcast(intent);
@@ -174,7 +175,7 @@ public class SmapTaskListFragment extends ListFragment {
                 Instance instance = di.getInstanceByTaskId(taskEntry.assId);
                 String number = null;
                 if (instance != null) {
-                   number = instance.getPhone();
+                    number = instance.getPhone();
                 }
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
                 callIntent.setData(Uri.parse("tel:" + number));
@@ -196,7 +197,7 @@ public class SmapTaskListFragment extends ListFragment {
             public void onRejectClicked(TaskEntry taskEntry) {
                 View reject_popup = getLayoutInflater().inflate(R.layout.reject_task, null);
                 AlertDialog dialog = new AlertDialog.Builder(getContext())
-                        .setNegativeButton(null,null)
+                        .setNegativeButton(null, null)
                         .setPositiveButton(null, null)
                         .setView(reject_popup)
                         .create();
@@ -204,28 +205,23 @@ public class SmapTaskListFragment extends ListFragment {
                 EditText editText = reject_popup.findViewById(R.id.input_reason);
                 Button ok = reject_popup.findViewById(R.id.ok);
                 Button cancel = reject_popup.findViewById(R.id.cancel);
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String reason = editText.getText().toString();
-                        rejectTask(reason, taskEntry);
-                        dialog.dismiss();
-                    }
+                ok.setOnClickListener(view -> {
+                    String reason = editText.getText().toString();
+                    rejectTask(reason, taskEntry);
+                    dialog.dismiss();
                 });
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
+                cancel.setOnClickListener(view -> dialog.dismiss());
+            }
 
+            @Override
+            public void onDirectionsClicked(TaskEntry taskEntry) {
+                // TODO: 02.12.2022
             }
 
             @Override
             public void onLocateClick(TaskEntry taskEntry) {
-
+                // TODO: 02.12.2022
             }
-
         };
 
         mAdapter = new TaskListArrayAdapter(getActivity(), false, taskClickLisener);
@@ -576,9 +572,10 @@ public class SmapTaskListFragment extends ListFragment {
         }
         return true;
     }
+
     private void rejectTask(String reason, TaskEntry taskEntry) {
-        if(Utilities.canReject(taskEntry.taskStatus)) {
-            if(!taskEntry.taskStatus.equals("new") && reason != null && reason.trim().length() < 5) {
+        if (Utilities.canReject(taskEntry.taskStatus)) {
+            if (!taskEntry.taskStatus.equals("new") && reason != null && reason.trim().length() < 5) {
                 AlertDialog error = new AlertDialog.Builder(requireContext())
                         .setMessage(getString(R.string.smap_reason_not_specified))
                         .create();
