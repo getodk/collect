@@ -41,8 +41,6 @@ import java.io.File
 
 class CaptureSelfieActivity : LocalizedActivity() {
 
-    private var recording: Recording? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -101,6 +99,8 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
         val outputFile = File(intent.getStringExtra(EXTRA_TMP_PATH), "tmp.mp4")
         val outputFileOptions = FileOutputOptions.Builder(outputFile).build()
+
+        var recording: Recording? = null
         previewView.setOnClickListener {
             recording.let {
                 if (it == null) {
