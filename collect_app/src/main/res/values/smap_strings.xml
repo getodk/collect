@@ -114,10 +114,10 @@
     <string name="smap_reject_title">REJECT TASK</string>
     <string name="smap_reason_title">Reason</string>
     <string name="smap_locate">Locate</string>
-    <string name="smap_phone">Phone</string>
+    <string name="smap_phone">Call</string>
     <string name="smap_sms">SMS</string>
-    <string name="smap_accept">Accept</string>
-    <string name="smap_reject">Reject</string>
+    <string name="smap_accept">Accept Task</string>
+    <string name="smap_reject">Reject Task</string>
     <string name="smap_history">History</string>
     <string name="smap_reason_not_specified">A reason longer than 5 characters must be specified</string>
     <string name="smap_continue_tracking">Exit has been disabled.  To stop tracking of the phone it should be turned off.</string>

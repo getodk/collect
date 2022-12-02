@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -74,6 +75,8 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.Utilities;
+
+import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -185,7 +188,7 @@ public class SmapTaskListFragment extends ListFragment {
                         error.show();
                     }
                 } else {
-                    requestPermissions(new String[]{CALL_PHONE}, 1);
+                    requestPermissions(new String[]{CALL_PHONE, String.valueOf(taskEntry.assId)}, 1);
                 }
             }
 
@@ -231,6 +234,29 @@ public class SmapTaskListFragment extends ListFragment {
         adminPreferences = getActivity().getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1 && Objects.equals(permissions[0], CALL_PHONE)) {
+            DatabaseInstancesRepository di = new DatabaseInstancesRepository();
+            Instance instance = di.getInstanceByTaskId(Long.parseLong(permissions[1]));
+            String number = null;
+            if (instance != null) {
+                number = instance.getPhone();
+            }
+            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+            callIntent.setData(Uri.parse("tel:" + number));
+            if (number != null) {
+                startActivity(callIntent);
+            } else {
+                AlertDialog error = new AlertDialog.Builder(requireContext())
+                        .setMessage(requireContext().getString(R.string.smap_phone_number_not_found))
+                        .create();
+                error.show();
+            }
+        }
     }
 
     @Override
