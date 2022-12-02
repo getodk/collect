@@ -110,7 +110,6 @@
     <string name="smap_login_unauthorized">Login failed</string>
     <string name="smap_geofence_tasks">New local tasks</string>
     <string name="smap_reason">Reason to reject task</string>
-    <string name="smap_location_not_found">The activity you are trying to start requires a permission which is not granted</string>
     <string name="smap_history">History</string>
     <string name="smap_reason_not_specified">A reason longer than 5 characters must be specified</string>
     <string name="smap_continue_tracking">Exit has been disabled.  To stop tracking of the phone it should be turned off.</string>

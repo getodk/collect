@@ -417,7 +417,7 @@ public class SmapTaskListFragment extends ListFragment {
             if (location == null && (taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
             || taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC)) {
                 AlertDialog error = new AlertDialog.Builder(requireContext())
-                        .setMessage(Collect.getInstance().getBaseContext().getString(R.string.smap_location_not_found))
+                        .setMessage(Collect.getInstance().getBaseContext().getString(R.string.not_granted_permission))
                         .create();
                 error.show();
             }
