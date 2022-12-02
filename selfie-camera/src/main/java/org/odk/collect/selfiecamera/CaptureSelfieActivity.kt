@@ -34,7 +34,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
-import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.permissions.ContextCompatPermissionChecker
 import org.odk.collect.strings.localization.LocalizedActivity
 import java.io.File
 
@@ -46,7 +46,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
         super.onCreate(savedInstanceState)
 
         if (
-            !PermissionsChecker(this).isPermissionGranted(
+            !ContextCompatPermissionChecker(this).isPermissionGranted(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
             )

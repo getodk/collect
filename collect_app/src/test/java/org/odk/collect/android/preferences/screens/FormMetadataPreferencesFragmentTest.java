@@ -26,6 +26,7 @@ import org.odk.collect.android.metadata.InstallIDProvider;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
+import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -110,7 +111,7 @@ public class FormMetadataPreferencesFragmentTest {
         private boolean granted;
 
         private FakePhoneStatePermissionsProvider() {
-            super(new PermissionsChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()));
+            super(new ContextCompatPermissionChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()));
         }
 
         @Override

@@ -136,6 +136,7 @@ import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
@@ -427,7 +428,7 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public PermissionsChecker providesPermissionsChecker(Context context) {
-        return new PermissionsChecker(context);
+        return new ContextCompatPermissionChecker(context);
     }
 
     @Provides

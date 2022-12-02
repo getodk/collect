@@ -2,8 +2,8 @@ package org.odk.collect.android.fakes
 
 import android.app.Activity
 import androidx.test.platform.app.InstrumentationRegistry
+import org.odk.collect.permissions.ContextCompatPermissionChecker
 import org.odk.collect.permissions.PermissionListener
-import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 
 /**
@@ -13,7 +13,7 @@ import org.odk.collect.permissions.PermissionsProvider
  * @author Shobhit Agarwal
  */
 class FakePermissionsProvider :
-    PermissionsProvider(PermissionsChecker(InstrumentationRegistry.getInstrumentation().targetContext)) {
+    PermissionsProvider(ContextCompatPermissionChecker(InstrumentationRegistry.getInstrumentation().targetContext)) {
     private var isPermissionGranted = false
 
     var cameraPermissionRequested = false
