@@ -185,6 +185,10 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         Button phone = popupTaskView.findViewById(R.id.phone);
         Button reject = popupTaskView.findViewById(R.id.reject);
 
+        if(item.type.equals("form")) {
+            imageButton.setVisibility(View.GONE);
+        }
+
         if (instance == null || instance.getPhone() == null) {
             sms.setEnabled(false);
             phone.setEnabled(false);

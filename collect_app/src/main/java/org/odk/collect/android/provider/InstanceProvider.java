@@ -454,5 +454,6 @@ public class InstanceProvider extends ContentProvider {
         sInstancesProjectionMap.put(InstanceColumns.DELETED_DATE, InstanceColumns.DELETED_DATE);
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY, InstanceColumns.GEOMETRY);
         sInstancesProjectionMap.put(InstanceColumns.GEOMETRY_TYPE, InstanceColumns.GEOMETRY_TYPE);
+        sInstancesProjectionMap.put(InstanceColumns.PHONE, InstanceColumns.PHONE);
     }
 }

@@ -9,12 +9,12 @@
         android:id="@+id/reject_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="20dp"
         android:text="REJECT TASK"
         android:textColor="@color/mapPointCircle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/input_reason"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.15"/>
 

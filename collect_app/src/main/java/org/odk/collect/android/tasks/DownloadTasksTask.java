@@ -472,7 +472,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             if(initialData != null) {
                ta.task.phone = values.getString("Phone");
                 ContentValues contentValues = new ContentValues();
-                contentValues.put("phone", ta.task.phone);
+                contentValues.put(InstanceColumns.PHONE, ta.task.phone);
                 String where = "tTitle = ?";
                 dao.updateInstance(contentValues, where, new String[]{ta.task.title});
             }
