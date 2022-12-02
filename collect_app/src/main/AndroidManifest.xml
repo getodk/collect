@@ -176,7 +176,6 @@ the specific language governing permissions and limitations under the License.
 
         <activity android:name=".activities.FormMapActivity" />
         <activity android:name=".activities.BearingActivity" />
-        <activity android:name="org.odk.collect.selfiecamera.CaptureSelfieActivity" />
         <activity android:name=".activities.WebViewActivity" />
 
         <!-- Configure this key by setting GOOGLE_MAPS_API_KEY in secrets.properties. -->
