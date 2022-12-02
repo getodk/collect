@@ -17,7 +17,6 @@ package org.odk.collect.android.fragments;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -196,6 +195,14 @@ public class SmapTaskListFragment extends ListFragment {
                     model.saveTaskSelectedSortingOrder(position);
                     itAdapter.updateSelectedPosition(position);
                     reloadData();
+                    int taskSortOrder = model.getTaskSortingOrder();
+                    if (Collect.getInstance().getLocation() == null && (taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
+                            || taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC)) {
+                        AlertDialog error = new AlertDialog.Builder(requireContext())
+                                .setMessage(Collect.getInstance().getBaseContext().getString(R.string.not_granted_permission))
+                                .create();
+                        error.show();
+                    }
                     bottomSheetDialog.dismiss();
                 });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -410,17 +417,8 @@ public class SmapTaskListFragment extends ListFragment {
     }
 
     protected void reloadData() {
-        Location location = Collect.getInstance().getLocation();
-        int taskSortOrder = model.getTaskSortingOrder();
         if (model != null) {
             model.updateFilter(getFilterText());
-            if (location == null && (taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
-            || taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC)) {
-                AlertDialog error = new AlertDialog.Builder(requireContext())
-                        .setMessage(Collect.getInstance().getBaseContext().getString(R.string.not_granted_permission))
-                        .create();
-                error.show();
-            }
             model.loadData();
         }
     }
