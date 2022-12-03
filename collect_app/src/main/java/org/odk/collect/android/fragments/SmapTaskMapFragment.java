@@ -50,17 +50,40 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.geo.MapFragment;
+import org.odk.collect.android.geo.MapPoint;
+import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.TaskMapMarker;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -544,6 +567,9 @@ public class SmapTaskMapFragment extends Fragment
         }
     }
 
+    public void locateTask(TaskEntry task) {
+        // TODO: 03.12.2022
+    }
     /*
      * Convert an xml drawable to a bitmap
      * From: https://stackoverflow.com/questions/18053156/set-image-from-drawable-as-marker-in-google-map-version-2

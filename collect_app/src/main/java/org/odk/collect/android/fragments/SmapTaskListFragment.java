@@ -234,7 +234,7 @@ public class SmapTaskListFragment extends ListFragment {
 
             @Override
             public void onLocateClick(TaskEntry taskEntry) {
-                // TODO: 02.12.2022
+                ((SmapMain) getActivity()).locateTaskOnMap(taskEntry);
             }
         };
 

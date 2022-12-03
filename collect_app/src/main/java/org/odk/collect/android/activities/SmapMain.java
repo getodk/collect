@@ -949,6 +949,10 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
         }
     }
 
+    public void locateTaskOnMap(TaskEntry task) {
+        taskManagerMap.locateTask(task);
+    }
+
     protected class MainTaskListener extends BroadcastReceiver {
 
         private SmapMain mActivity = null;
