@@ -14,9 +14,9 @@
 
 package org.odk.collect.android.adapters;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,17 +59,31 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        viewHolder.txtViewTitle.setText(sortList[position]);
-        int color = position == selectedSortingOrder ? themeUtils.getAccentColor() : themeUtils.getColorOnSurface();
-        viewHolder.txtViewTitle.setTextColor(color);
-        try {
-            int iconId = ApplicationConstants.getSortLabelToIconMap().get(sortList[position]);
-            viewHolder.imgViewIcon.setImageResource(iconId);
-            viewHolder.imgViewIcon.setTag(iconId);
-            viewHolder.imgViewIcon.setImageDrawable(DrawableCompat.wrap(viewHolder.imgViewIcon.getDrawable()).mutate());
-            DrawableCompat.setTintList(viewHolder.imgViewIcon.getDrawable(), position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
-        } catch (NullPointerException e) {
-            Timber.i(e);
+        Context context = viewHolder.itemView.getContext();
+
+        int sortTextId = sortList[position];
+        viewHolder.txtViewTitle.setText(sortTextId);
+
+        Location location = Collect.getInstance().getLocation();
+        if (location == null
+                && (sortTextId == R.string.sort_by_distance_asc
+                || sortTextId == R.string.sort_by_distance_desc)) {
+            viewHolder.itemView.setEnabled(false);
+
+            int disabledColor = ResourcesCompat.getColor(
+                    context.getResources(),
+                    R.color.disabled_view,
+                    context.getTheme()
+            );
+            setImageView(viewHolder.imgViewIcon, position, ColorStateList.valueOf(disabledColor));
+            tintTextView(viewHolder.txtViewTitle, disabledColor);
+
+        } else {
+            viewHolder.itemView.setEnabled(true);
+            int color = position == selectedSortingOrder ? themeUtils.getAccentColor()
+                    : themeUtils.getColorOnSurface();
+            setImageView(viewHolder.imgViewIcon, position, position == selectedSortingOrder ? ColorStateList.valueOf(color) : null);
+            tintTextView(viewHolder.txtViewTitle, color);
         }
     }
 
@@ -83,6 +98,21 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         notifyDataSetChanged();
     }
 
+    private void setImageView(ImageView imageView, int position, ColorStateList color) {
+        try {
+            int iconId = ApplicationConstants.getSortLabelToIconMap().get(sortList[position]);
+            imageView.setImageResource(iconId);
+            imageView.setImageDrawable(DrawableCompat.wrap(imageView.getDrawable()).mutate());
+            DrawableCompat.setTintList(imageView.getDrawable(), color);
+        } catch (NullPointerException e) {
+            Timber.i(e);
+        }
+    }
+
+    private void tintTextView(TextView textView, int color) {
+        textView.setTextColor(color);
+    }
+
     // inner class to hold a reference to each item of RecyclerView
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -94,16 +124,8 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
             txtViewTitle = itemLayoutView.findViewById(R.id.title);
             imgViewIcon = itemLayoutView.findViewById(R.id.icon);
 
-            itemLayoutView.setOnClickListener(v -> {
-                listener.onItemClicked(SortDialogAdapter.this, getLayoutPosition());
-                if (Collect.getInstance().getLocation() == null && (selectedSortingOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
-                        || selectedSortingOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC)) {
-                    AlertDialog error = new AlertDialog.Builder(itemLayoutView.getContext())
-                            .setMessage(Collect.getInstance().getBaseContext().getString(R.string.not_granted_permission))
-                            .create();
-                    error.show();
-                }
-            }
+            itemLayoutView.setOnClickListener(
+                    v -> listener.onItemClicked(SortDialogAdapter.this, getLayoutPosition())
             );
         }
     }

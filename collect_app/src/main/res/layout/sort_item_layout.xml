@@ -18,12 +18,10 @@ the License.
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
+    android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:paddingBottom="8dp"
-    android:paddingTop="8dp">
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/icon"

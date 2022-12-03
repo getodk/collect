@@ -15,12 +15,13 @@
 package org.odk.collect.android.utilities;
 
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.T_TASK_STATUS;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DISTANCE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DISTANCE_DESC;
 import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 import static java.lang.StrictMath.abs;
 
-import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -431,21 +432,18 @@ public class Utilities {
                 InstanceColumns.T_UPDATEID
         };
 
-        String selectClause = null;
+        String selectClause;
         if (all_non_synchronised) {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_IS_SYNC + " = ? ";
-            if (!getDeletedTasks) {
-                selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
-            }
         } else {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
                     " and " + InstanceColumns.T_TASK_STATUS + " != ? ";
-            if (!getDeletedTasks) {
-                selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
-            }
+        }
+        if (!getDeletedTasks) {
+            selectClause += " and " + InstanceColumns.DELETED_DATE + " is null ";
         }
 
         if (serverOnly) {
@@ -468,28 +466,18 @@ public class Utilities {
         String[] selectArgs = new String[selectArgsList.size()];
         selectArgs = selectArgsList.toArray(selectArgs);
 
-        Cursor c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, proj,
-                selectClause, selectArgs, getTaskSortOrderExpr(sortOrder));
-
         // Set up geofencing
 
-        Location location = null;
-        ArrayList<GeofenceEntry> geofences = new ArrayList<GeofenceEntry>();
-        if (useGeofenceFilter) {
-            Timber.i("############ use geofence filter");
-            location = Collect.getInstance().getLocation();
-            if (location == null) {
-                Timber.i("############ location is null");
-            }
-        }
+        try (Cursor c = Collect.getInstance().getContentResolver().query(
+                InstanceColumns.CONTENT_URI,
+                proj,
+                selectClause,
+                selectArgs,
+                getTaskSortOrderExpr(sortOrder)
+        )) {
+            Location location = Collect.getInstance().getLocation();
+            ArrayList<GeofenceEntry> geofences = new ArrayList<>();
 
-        if (location == null && sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC ||
-        sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC) {
-            c = Collect.getInstance().getContentResolver().query(InstanceColumns.CONTENT_URI, proj,
-                    selectClause, selectArgs, getTaskSortOrderExpr(ApplicationConstants.SortingOrder.BY_DATE_DESC));
-        }
-
-        try {
             c.moveToFirst();
             while (!c.isAfterLast()) {
 
@@ -554,43 +542,36 @@ public class Utilities {
 
                 c.moveToNext();
             }
-
-            if (sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
-                    || sortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC
-                    && location != null) {
-                Location finalLocation = location;
-                Collections.sort(tasks, (t1, t2) -> {
-                    Location location1 = new Location("");
-                    Location location2 = new Location("");
-                    location1.setLatitude(t1.schedLat);
-                    location1.setLongitude(t1.schedLon);
-                    location2.setLatitude(t2.schedLat);
-                    location2.setLongitude(t2.schedLon);
-
-                    float distanceFromTask1 = finalLocation.distanceTo(location1);
-                    float distanceFromTask2 = finalLocation.distanceTo(location2);
-
-                    String sortedExpr = getTaskSortOrderExpr(sortOrder);
-                    if (sortedExpr.contains("ASC")) {
-                        return (int) (distanceFromTask1 - distanceFromTask2);
-                    } else {
-                        return (int) (distanceFromTask2 - distanceFromTask1);
-                    }
-                });
-            }
             Collect.getInstance().setGeofences(geofences);
+
+            if (sortOrder == BY_DISTANCE_ASC || sortOrder == BY_DISTANCE_DESC) {
+                if (location != null) {
+                    Collections.sort(tasks, (t1, t2) -> {
+                        Location location1 = new Location("");
+                        Location location2 = new Location("");
+                        location1.setLatitude(t1.schedLat);
+                        location1.setLongitude(t1.schedLon);
+                        location2.setLatitude(t2.schedLat);
+                        location2.setLongitude(t2.schedLon);
+
+                        float distanceFromTask1 = location.distanceTo(location1);
+                        float distanceFromTask2 = location.distanceTo(location2);
+
+                        switch (sortOrder) {
+                            case BY_DISTANCE_ASC:
+                                return (int) (distanceFromTask1 - distanceFromTask2);
+                            case BY_DISTANCE_DESC:
+                                return (int) (distanceFromTask2 - distanceFromTask1);
+                            default:
+                                throw new IllegalStateException("must be one of BY_DISTANCE_ASC or BY_DISTANCE_DESC");
+                        }
+                    });
+                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (c != null) {
-                try {
-                    c.close();
-                } catch (Exception e) {
-                }
-            }
         }
-
     }
 
     /*
@@ -1378,12 +1359,6 @@ public class Utilities {
                 break;
             case ApplicationConstants.SortingOrder.BY_STATUS_DESC:
                 sortOrderExpr = InstanceColumns.T_TASK_STATUS + " DESC, " + InstanceColumns.T_TITLE + " DESC";
-                break;
-            case ApplicationConstants.SortingOrder.BY_DISTANCE_ASC:
-                sortOrderExpr = InstanceColumns.SCHED_LAT + " ASC, " + InstanceColumns.SCHED_LON + " ASC";
-                break;
-            case ApplicationConstants.SortingOrder.BY_DISTANCE_DESC:
-                sortOrderExpr = InstanceColumns.SCHED_LAT + " DESC, " + InstanceColumns.SCHED_LON + " DESC";
                 break;
         }
         return sortOrderExpr;
