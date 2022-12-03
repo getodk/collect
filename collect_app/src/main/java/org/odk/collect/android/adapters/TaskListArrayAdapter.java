@@ -188,22 +188,28 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         }
 
         accept.setOnClickListener(view1 -> {
+            alertDialog.dismiss();
             taskClickLisener.onAcceptClicked(item);
-            alertDialog.dismiss();
         });
-        phone.setOnClickListener(view13 -> taskClickLisener.onPhoneClicked(item));
-        sms.setOnClickListener(view12 -> taskClickLisener.onSMSClicked(item));
-        directions.setOnClickListener(view17 -> {
-            taskClickLisener.onDirectionsClicked(item);
+        phone.setOnClickListener(view13 -> {
             alertDialog.dismiss();
+            taskClickLisener.onPhoneClicked(item);
+        });
+        sms.setOnClickListener(view12 -> {
+            alertDialog.dismiss();
+            taskClickLisener.onSMSClicked(item);
+        });
+        directions.setOnClickListener(view17 -> {
+            alertDialog.dismiss();
+            taskClickLisener.onDirectionsClicked(item);
         });
         reject.setOnClickListener(view14 -> {
             alertDialog.dismiss();
             taskClickLisener.onRejectClicked(item);
         });
         locate.setOnClickListener(view15 -> {
-            taskClickLisener.onLocateClick(item);
             alertDialog.dismiss();
+            taskClickLisener.onLocateClick(item);
         });
 
         imageButton.setOnClickListener(view16 -> alertDialog.show());
