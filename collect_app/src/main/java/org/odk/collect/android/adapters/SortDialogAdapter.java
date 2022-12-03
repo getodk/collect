@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -93,8 +95,15 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
             imgViewIcon = itemLayoutView.findViewById(R.id.icon);
 
             itemLayoutView.setOnClickListener(v -> {
-                        listener.onItemClicked(SortDialogAdapter.this, getLayoutPosition());
-                    }
+                listener.onItemClicked(SortDialogAdapter.this, getLayoutPosition());
+                if (Collect.getInstance().getLocation() == null && (selectedSortingOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
+                        || selectedSortingOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC)) {
+                    AlertDialog error = new AlertDialog.Builder(itemLayoutView.getContext())
+                            .setMessage(Collect.getInstance().getBaseContext().getString(R.string.not_granted_permission))
+                            .create();
+                    error.show();
+                }
+            }
             );
         }
     }

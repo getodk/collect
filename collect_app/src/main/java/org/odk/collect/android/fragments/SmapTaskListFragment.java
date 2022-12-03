@@ -195,14 +195,6 @@ public class SmapTaskListFragment extends ListFragment {
                     model.saveTaskSelectedSortingOrder(position);
                     itAdapter.updateSelectedPosition(position);
                     reloadData();
-                    int taskSortOrder = model.getTaskSortingOrder();
-                    if (Collect.getInstance().getLocation() == null && (taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_ASC
-                            || taskSortOrder == ApplicationConstants.SortingOrder.BY_DISTANCE_DESC)) {
-                        AlertDialog error = new AlertDialog.Builder(requireContext())
-                                .setMessage(Collect.getInstance().getBaseContext().getString(R.string.not_granted_permission))
-                                .create();
-                        error.show();
-                    }
                     bottomSheetDialog.dismiss();
                 });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
