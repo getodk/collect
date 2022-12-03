@@ -214,27 +214,24 @@ public class SmapTaskListFragment extends ListFragment {
             }
 
             @Override
-            public boolean onDirectionsClicked(TaskEntry taskEntry) {
-                if (taskEntry.schedLat != 0 && taskEntry.schedLon != 0) {
-                    String uri = String.format(
-                            "geo:0,0?q=%f,%f (%s)",
-                            taskEntry.schedLat,
-                            taskEntry.schedLon,
-                            taskEntry.name
-                    );
-                    Intent intent = new Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(uri)
-                    );
-                    startActivity(intent);
-                    return true;
-                }
-                return false;
+            public void onDirectionsClicked(TaskEntry taskEntry) {
+                String uri = String.format(
+                        "geo:0,0?q=%f,%f (%s)",
+                        taskEntry.schedLat,
+                        taskEntry.schedLon,
+                        taskEntry.name
+                );
+                Intent intent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(uri)
+                );
+                startActivity(intent);
             }
 
             @Override
             public void onLocateClick(TaskEntry taskEntry) {
-                ((SmapMain) getActivity()).locateTaskOnMap(taskEntry);
+                SmapMain activity = ((SmapMain) getActivity());
+                activity.locateTaskOnMap(taskEntry);
             }
         };
 

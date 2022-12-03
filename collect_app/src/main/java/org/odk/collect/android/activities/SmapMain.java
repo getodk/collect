@@ -160,6 +160,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
     private LocationRequest locationRequest;
     private FusedLocationProviderClient fusedLocationClient;
 
+    private ViewPager viewPager;
+
     @Inject
     PermissionsProvider permissionsProvider;
 
@@ -204,7 +206,8 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
         String[] tabNames = {getString(R.string.smap_forms), getString(R.string.smap_tasks), getString(R.string.smap_map)};
         // Get the ViewPager and set its PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = findViewById(R.id.pager);
+        viewPager.setOffscreenPageLimit(2);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(formManagerList);
@@ -951,6 +954,7 @@ public class SmapMain extends CollectAbstractActivity implements TaskDownloaderL
 
     public void locateTaskOnMap(TaskEntry task) {
         taskManagerMap.locateTask(task);
+        viewPager.setCurrentItem(2);
     }
 
     protected class MainTaskListener extends BroadcastReceiver {

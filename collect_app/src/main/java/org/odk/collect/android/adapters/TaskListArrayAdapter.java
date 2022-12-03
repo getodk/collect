@@ -182,6 +182,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
             phone.setEnabled(false);
         }
 
+        if (item.schedLat == 0 && item.schedLon == 0) {
+            locate.setEnabled(false);
+            directions.setEnabled(false);
+        }
+
         accept.setOnClickListener(view1 -> {
             taskClickLisener.onAcceptClicked(item);
             alertDialog.dismiss();
@@ -189,15 +194,17 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
         phone.setOnClickListener(view13 -> taskClickLisener.onPhoneClicked(item));
         sms.setOnClickListener(view12 -> taskClickLisener.onSMSClicked(item));
         directions.setOnClickListener(view17 -> {
-                    boolean consumed = taskClickLisener.onDirectionsClicked(item);
-                    if (consumed) alertDialog.dismiss();
-                }
-        );
+            taskClickLisener.onDirectionsClicked(item);
+            alertDialog.dismiss();
+        });
         reject.setOnClickListener(view14 -> {
             alertDialog.dismiss();
             taskClickLisener.onRejectClicked(item);
         });
-        locate.setOnClickListener(view15 -> taskClickLisener.onLocateClick(item));
+        locate.setOnClickListener(view15 -> {
+            taskClickLisener.onLocateClick(item);
+            alertDialog.dismiss();
+        });
 
         imageButton.setOnClickListener(view16 -> alertDialog.show());
 
