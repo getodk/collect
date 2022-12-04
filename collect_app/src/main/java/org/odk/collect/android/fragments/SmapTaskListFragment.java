@@ -14,12 +14,9 @@
 
 package org.odk.collect.android.fragments;
 
-import static android.Manifest.permission.CALL_PHONE;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -34,16 +31,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,7 +52,6 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
-import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
@@ -75,8 +68,6 @@ import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.Utilities;
-
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -173,14 +164,11 @@ public class SmapTaskListFragment extends ListFragment {
             @Override
             public void onPhoneClicked(TaskEntry taskEntry) {
                 Instance instance = di.getInstanceByTaskId(taskEntry.assId);
-                String number = null;
                 if (instance != null) {
-                    number = instance.getPhone();
-                }
-                Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                callIntent.setData(Uri.parse("tel:" + number));
-                if (ContextCompat.checkSelfPermission(getActivity(), CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    String number = instance.getPhone();
                     if (number != null) {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:" + number));
                         startActivity(callIntent);
                     } else {
                         AlertDialog error = new AlertDialog.Builder(requireContext())
@@ -188,8 +176,6 @@ public class SmapTaskListFragment extends ListFragment {
                                 .create();
                         error.show();
                     }
-                } else {
-                    requestPermissions(new String[]{CALL_PHONE, String.valueOf(taskEntry.assId)}, 1);
                 }
             }
 
@@ -244,29 +230,6 @@ public class SmapTaskListFragment extends ListFragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 && Objects.equals(permissions[0], CALL_PHONE)) {
-            DatabaseInstancesRepository di = new DatabaseInstancesRepository();
-            Instance instance = di.getInstanceByTaskId(Long.parseLong(permissions[1]));
-            String number = null;
-            if (instance != null) {
-                number = instance.getPhone();
-            }
-            Intent callIntent = new Intent(Intent.ACTION_DIAL);
-            callIntent.setData(Uri.parse("tel:" + number));
-            if (number != null) {
-                startActivity(callIntent);
-            } else {
-                AlertDialog error = new AlertDialog.Builder(requireContext())
-                        .setMessage(requireContext().getString(R.string.smap_phone_number_not_found))
-                        .create();
-                error.show();
-            }
-        }
-    }
-
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         sortingOptions = new int[]{
@@ -304,7 +267,7 @@ public class SmapTaskListFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_launcher_foreground);
+        toolbar.setNavigationIcon(R.drawable.ic_launcher);
 
         if (bottomSheetDialog == null) {
             setupBottomSheet();
