@@ -96,6 +96,15 @@ public class SqlFrag {
             if(idx2 > -1) {
                 SqlFragParam p = new SqlFragParam();
                 p.setType("text");
+                /*
+                 * If this quote encloses a timestamp value then include the case in the parameter value
+                 */
+                if(idx2 < in.length() - 1) {
+                    String tsCast = "::timestamptz";
+                    if(in.substring(idx2 + 1).startsWith(tsCast)) {
+                        idx2 += tsCast.length() + 1;
+                    }
+                }
                 p.sValue = in.substring(idx1 + 1, idx2);	// Remove quotation marks
                 tempParams.add(p);
                 addedChars = idx2 + 1;							// Skip over quote
