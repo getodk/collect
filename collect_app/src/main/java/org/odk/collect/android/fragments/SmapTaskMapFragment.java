@@ -14,25 +14,12 @@
 
 package org.odk.collect.android.fragments;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,11 +34,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.odk.collect.android.R;
@@ -62,8 +44,6 @@ import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
 import org.odk.collect.android.geo.TaskMapMarker;
-import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.loaders.PointEntry;
@@ -74,6 +54,7 @@ import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.utilities.Utilities;
+import org.odk.collect.android.views.CustomMarker;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,12 +65,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 /**
@@ -305,7 +280,7 @@ public class SmapTaskMapFragment extends Fragment {
     }
 
     private void showTasks(List<TaskEntry> data) {
-        if(mapFragment != null) {
+        if (mapFragment != null) {
 
             clearTasks();   // remove existing markers
 
@@ -336,26 +311,17 @@ public class SmapTaskMapFragment extends Fragment {
     }
 
     private void showPoints(List<PointEntry> data) {
-        if(mapFragment != null) {
+        if (mapFragment != null) {
             if (polyFeatureId != -1) {
                 mapFragment.removeFeature(polyFeatureId);
             }
 
             List<MapPoint> mapPoints = new ArrayList<>();
-            for(int i = data.size() - 1; i >= 0; i--) {
+            for (int i = data.size() - 1; i >= 0; i--) {
                 PointEntry p = data.get(i);
                 mapPoints.add(new MapPoint(p.lat, p.lon));
             }
             polyFeatureId = mapFragment.addDraggablePoly(mapPoints, false, null);
-        }
-    }
-
-    public void updatePath(LatLng point) {
-        if(polyFeatureId != -1) {
-            mapFragment.appendPointToPoly(
-                    polyFeatureId,
-                    new MapPoint(point.latitude, point.longitude)
-            );
         }
     }
 
