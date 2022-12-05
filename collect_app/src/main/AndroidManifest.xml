@@ -92,7 +92,7 @@ the specific language governing permissions and limitations under the License.
     <!-- smap replace icon with ic_launcher -->
     <application
         android:name=".application.Collect"
-        android:icon="@mipmap/ic_launcher_foreground"
+        android:icon="@mipmap/ic_launcher"
         android:installLocation="auto"
         android:label="@string/app_name"
         android:largeHeap="true"

@@ -75,11 +75,11 @@ public class AndroidShortcuts extends AppCompatActivity {
             if (c.getCount() > 0) {
                 c.moveToPosition(-1);
                 while (c.moveToNext()) {
-                    String formName = c.getString(c.getColumnIndex(FormsColumns.DISPLAY_NAME));
+                    String formName = c.getString(c.getColumnIndexOrThrow(FormsColumns.DISPLAY_NAME));
                     names.add(formName);
                     Uri uri =
                             Uri.withAppendedPath(FormsColumns.CONTENT_URI,
-                                    c.getString(c.getColumnIndex(FormsColumns._ID)));
+                                    c.getString(c.getColumnIndexOrThrow(FormsColumns._ID)));
                     commands.add(uri);
                 }
             }
@@ -120,7 +120,7 @@ public class AndroidShortcuts extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
-        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this, R.mipmap.ic_launcher_foreground);
+        Parcelable iconResource = Intent.ShortcutIconResource.fromContext(this, R.mipmap.ic_nav);
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 
         // Now, return the result to the launcher
