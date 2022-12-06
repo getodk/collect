@@ -18,6 +18,8 @@ package org.odk.collect.selfiecamera
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -53,17 +55,31 @@ class CaptureSelfieActivity : LocalizedActivity() {
         insetsController.hide(WindowInsetsCompat.Type.statusBars())
         setContentView(R.layout.activity_capture_selfie)
 
-        val cameraProvider = ProcessCameraProvider.getInstance(this)
-        cameraProvider.addListener(
-            {
-                if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
+        if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
+            val cameraProvider = ProcessCameraProvider.getInstance(this)
+            cameraProvider.addListener(
+                {
                     setupVideo(cameraProvider.get())
-                } else {
-                    setupStillImage(cameraProvider.get())
-                }
-            },
-            ContextCompat.getMainExecutor(this)
-        )
+                },
+                ContextCompat.getMainExecutor(this)
+            )
+        } else {
+            val camera = Camera()
+
+            val previewView = findViewById<View>(R.id.preview)
+            camera.initialize(this, previewView)
+
+            val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"
+            previewView.setOnClickListener {
+                camera.takePicture(
+                    imagePath,
+                    { ExternalAppUtils.returnSingleValue(this, imagePath) },
+                    {}
+                )
+            }
+
+            showLongToast(this, R.string.take_picture_instruction)
+        }
     }
 
     private fun permissionsGranted(): Boolean {
@@ -124,48 +140,56 @@ class CaptureSelfieActivity : LocalizedActivity() {
         showLongToast(this, getString(R.string.start_video_capture_instruction))
     }
 
-    private fun setupStillImage(cameraProvider: ProcessCameraProvider) {
-        val previewView = findViewById<PreviewView>(R.id.preview)
-
-        val preview = Preview.Builder().build()
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-
-        val imageCapture = ImageCapture.Builder()
-            .setTargetRotation(previewView.display.rotation)
-            .build()
-
-        val outputFile = File(intent.getStringExtra(EXTRA_TMP_PATH), "tmp.jpg")
-        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
-        previewView.setOnClickListener {
-            imageCapture.takePicture(
-                outputFileOptions,
-                ContextCompat.getMainExecutor(this),
-                object : ImageCapture.OnImageSavedCallback {
-                    override fun onError(error: ImageCaptureException) {
-                        // Ignored
-                    }
-
-                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        ExternalAppUtils.returnSingleValue(
-                            this@CaptureSelfieActivity,
-                            outputFile.absolutePath
-                        )
-                    }
-                }
-            )
-        }
-
-        val cameraSelector = CameraSelector.Builder()
-            .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-            .build()
-
-        cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-
-        showLongToast(this, R.string.take_picture_instruction)
-    }
-
     companion object {
         const val EXTRA_TMP_PATH = "tmpPath"
         const val EXTRA_VIDEO = "video"
+    }
+}
+
+private class Camera {
+
+    private var imageCapture: ImageCapture? = null
+    private var activity: ComponentActivity? = null
+
+    fun initialize(activity: ComponentActivity, previewView: View) {
+        this.activity = activity
+
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
+        cameraProviderFuture.addListener(
+            {
+                val preview = Preview.Builder().build()
+                preview.setSurfaceProvider((previewView as PreviewView).surfaceProvider)
+
+                imageCapture = ImageCapture.Builder()
+                    .build()
+
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                    .build()
+
+                cameraProviderFuture.get()
+                    .bindToLifecycle(activity, cameraSelector, preview, imageCapture)
+            },
+            ContextCompat.getMainExecutor(activity)
+        )
+    }
+
+    fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit) {
+        val outputFile = File(imagePath)
+        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
+
+        imageCapture!!.takePicture(
+            outputFileOptions,
+            ContextCompat.getMainExecutor(activity!!),
+            object : ImageCapture.OnImageSavedCallback {
+                override fun onError(error: ImageCaptureException) {
+                    onImageSaveError()
+                }
+
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    onImageSaved()
+                }
+            }
+        )
     }
 }
