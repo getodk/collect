@@ -36,6 +36,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.location.SystemLocationProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
@@ -311,7 +312,7 @@ abstract class AppListActivity extends CollectAbstractActivity {
                 performSelectedSearch(position);
                 bottomSheetDialog.dismiss();
             }
-        });
+        }, new SystemLocationProvider(this));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
