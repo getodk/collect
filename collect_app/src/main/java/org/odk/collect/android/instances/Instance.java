@@ -50,6 +50,7 @@ public final class Instance {
     private final String assignment_id;     // smap
     private final String geometryType;
     private final String geometry;
+    private final String phone;
 
     private final Long databaseId;
 
@@ -71,6 +72,7 @@ public final class Instance {
         isCase = builder.isCase;                        // smap
         geometryType = builder.geometryType;
         geometry = builder.geometry;
+        phone = builder.phone;
 
         databaseId = builder.databaseId;
     }
@@ -93,6 +95,7 @@ public final class Instance {
         private boolean isCase;             // smap
         private String geometryType;
         private String geometry;
+        private String phone;
 
         private Long databaseId;
 
@@ -128,6 +131,11 @@ public final class Instance {
 
         public Builder status(String status) {
             this.status = status;
+            return this;
+        }
+
+        public Builder phone(String phone) {
+            this.phone = phone;
             return this;
         }
 
@@ -193,6 +201,8 @@ public final class Instance {
             return new Instance(this);
         }
     }
+
+    public String getPhone() { return phone; }
 
     public String getDisplayName() {
         return displayName;

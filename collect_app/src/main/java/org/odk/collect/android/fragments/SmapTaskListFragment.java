@@ -17,6 +17,7 @@ package org.odk.collect.android.fragments;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -25,7 +26,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,7 +54,9 @@ import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.database.DatabaseInstancesRepository;
+import org.odk.collect.android.instances.Instance;
+import org.odk.collect.android.listeners.OnTaskOptionsClickLisener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -63,6 +68,7 @@ import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
+import org.odk.collect.android.utilities.Utilities;
 
 import timber.log.Timber;
 
@@ -121,17 +127,103 @@ public class SmapTaskListFragment extends ListFragment {
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        mAdapter = new TaskListArrayAdapter(getActivity(), false);
-        setListAdapter(mAdapter);
+        OnTaskOptionsClickLisener taskClickLisener = new OnTaskOptionsClickLisener() {
+            final DatabaseInstancesRepository di = new DatabaseInstancesRepository();
 
-        // Handle long item clicks
-        ListView lv = getListView();
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
-                return onLongListItemClick(v, pos, id);
+            public void onAcceptClicked(TaskEntry taskEntry) {
+                if (Utilities.canAccept(taskEntry.taskStatus)) {
+                    Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_ACCEPTED, "");
+                    Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                    LocalBroadcastManager.getInstance(requireActivity().getApplication()).sendBroadcast(intent);
+                    Timber.i("######## send org.smap.smapTask.refresh from instanceUploaderActivity2");
+                } else {
+                    AlertDialog error = new AlertDialog.Builder(requireContext())
+                            .setMessage(getString(R.string.smap_cannot_accept))
+                            .create();
+                    error.show();
+                }
             }
-        });
+
+            @Override
+            public void onSMSClicked(TaskEntry taskEntry) {
+                Instance instance = di.getInstanceByTaskId(taskEntry.assId);
+                String number = null;
+                if (instance != null) {
+                    number = instance.getPhone();
+                }
+                if (number != null) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", number, null)));
+                } else {
+                    AlertDialog error = new AlertDialog.Builder(requireContext())
+                            .setMessage(requireContext().getString(R.string.smap_phone_number_not_found))
+                            .create();
+                    error.show();
+                }
+            }
+
+            @Override
+            public void onPhoneClicked(TaskEntry taskEntry) {
+                Instance instance = di.getInstanceByTaskId(taskEntry.assId);
+                if (instance != null) {
+                    String number = instance.getPhone();
+                    if (number != null) {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:" + number));
+                        startActivity(callIntent);
+                    } else {
+                        AlertDialog error = new AlertDialog.Builder(requireContext())
+                                .setMessage(requireContext().getString(R.string.smap_phone_number_not_found))
+                                .create();
+                        error.show();
+                    }
+                }
+            }
+
+            @Override
+            public void onRejectClicked(TaskEntry taskEntry) {
+                View reject_popup = getLayoutInflater().inflate(R.layout.reject_task, null);
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setNegativeButton(null, null)
+                        .setPositiveButton(null, null)
+                        .setView(reject_popup)
+                        .create();
+                dialog.show();
+                EditText editText = reject_popup.findViewById(R.id.input_reason);
+                Button ok = reject_popup.findViewById(R.id.ok);
+                Button cancel = reject_popup.findViewById(R.id.cancel);
+                ok.setOnClickListener(view -> {
+                    String reason = editText.getText().toString();
+                    rejectTask(reason, taskEntry);
+                    dialog.dismiss();
+                });
+                cancel.setOnClickListener(view -> dialog.dismiss());
+            }
+
+            @Override
+            public void onDirectionsClicked(TaskEntry taskEntry) {
+                String uri = String.format(
+                        "geo:0,0?q=%f,%f (%s)",
+                        taskEntry.schedLat,
+                        taskEntry.schedLon,
+                        taskEntry.name
+                );
+                Intent intent = new Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(uri)
+                );
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLocateClick(TaskEntry taskEntry) {
+                SmapMain activity = ((SmapMain) getActivity());
+                activity.locateTaskOnMap(taskEntry);
+            }
+        };
+
+        mAdapter = new TaskListArrayAdapter(getActivity(), false, taskClickLisener);
+        setListAdapter(mAdapter);
 
         adminPreferences = getActivity().getSharedPreferences(
                 AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
@@ -455,6 +547,27 @@ public class SmapTaskListFragment extends ListFragment {
             startActivity(i);
         }
         return true;
+    }
+
+    private void rejectTask(String reason, TaskEntry taskEntry) {
+        if (Utilities.canReject(taskEntry.taskStatus)) {
+            if (!taskEntry.taskStatus.equals("new") && reason != null && reason.trim().length() < 5) {
+                AlertDialog error = new AlertDialog.Builder(requireContext())
+                        .setMessage(getString(R.string.smap_reason_not_specified))
+                        .create();
+                error.show();
+            } else {
+                Utilities.setStatusForTask(taskEntry.id, Utilities.STATUS_T_REJECTED, reason);
+                Intent intent = new Intent("org.smap.smapTask.refresh");      // Notify map and task list of change
+                LocalBroadcastManager.getInstance(requireActivity().getApplication()).sendBroadcast(intent);
+                Timber.i("######## send org.smap.smapTask.refresh from taskAddressActivity");
+            }
+        } else {
+            AlertDialog error = new AlertDialog.Builder(requireContext())
+                    .setMessage(getString(R.string.smap_cannot_reject))
+                    .create();
+            error.show();
+        }
     }
 
 

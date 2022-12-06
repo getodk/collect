@@ -30,7 +30,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -45,6 +44,13 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -60,7 +66,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
-import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -83,19 +88,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import timber.log.Timber;
 
 /**
  * Responsible for displaying tasks on the main fieldTask screen
  */
 public class SmapTaskMapFragment extends Fragment
-        implements  OnMapReadyCallback,
+        implements OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener {
 
@@ -117,7 +116,7 @@ public class SmapTaskMapFragment extends Fragment
 
     ArrayList<Marker> markers = null;
     HashMap<Marker, Integer> markerMap = null;
-    ArrayList<LatLng> mPoints = new ArrayList<LatLng> ();
+    ArrayList<LatLng> mPoints = new ArrayList<LatLng>();
 
     BitmapDescriptor complete = null;
     BitmapDescriptor accepted = null;
@@ -277,7 +276,7 @@ public class SmapTaskMapFragment extends Fragment
     @SuppressLint("MissingPermission")
     private void mapReadyPermissionGranted() {
 
-        if(mo == null) {
+        if (mo == null) {
 
             mMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener(this);
@@ -387,7 +386,7 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     public void setData(SurveyData data) {
-        if(data != null) {
+        if (data != null) {
             showTasks(data.tasks);
             showPoints(data.points);
         } else {
@@ -405,7 +404,7 @@ public class SmapTaskMapFragment extends Fragment
 
     private void clearTasks() {
 
-        if(markers != null && markers.size() > 0) {
+        if (markers != null && markers.size() > 0) {
             for (int i = 0; i < markers.size(); i++) {
                 markers.get(i).remove();
             }
@@ -414,7 +413,7 @@ public class SmapTaskMapFragment extends Fragment
 
     private void showTasks(List<TaskEntry> data) {
 
-        if(mMap != null) {
+        if (mMap != null) {
 
             clearTasks();   // remove existing markers
 
@@ -450,7 +449,7 @@ public class SmapTaskMapFragment extends Fragment
 
     private void showPoints(List<PointEntry> data) {
 
-        if(mMap != null) {
+        if (mMap != null) {
             mPoints = new ArrayList<LatLng>();
             if (mPath != null) {
                 mPath.remove();
@@ -458,7 +457,7 @@ public class SmapTaskMapFragment extends Fragment
             mPath = mMap.addPolyline((new PolylineOptions()));
 
             //Add in reverse order
-            for(int i = data.size() - 1; i >= 0; i--) {
+            for (int i = data.size() - 1; i >= 0; i--) {
                 PointEntry p = data.get(i);
                 mPoints.add(new LatLng(p.lat, p.lon));
             }
@@ -467,7 +466,7 @@ public class SmapTaskMapFragment extends Fragment
     }
 
     public void updatePath(LatLng point) {
-        if(mPath != null && mPoints != null) {
+        if (mPath != null && mPoints != null) {
             mPoints.add(point);
             mPath.setPoints(mPoints);
         }
@@ -482,26 +481,26 @@ public class SmapTaskMapFragment extends Fragment
         double lon = 0.0;
         LatLng locn = null;
 
-        if((t.actLat == 0.0) && (t.actLon == 0.0)) {
+        if ((t.actLat == 0.0) && (t.actLon == 0.0)) {
             lat = t.schedLat;       // Scheduled coordinates of task
             lon = t.schedLon;
-        } else  {
+        } else {
             lat = t.actLat;         // Actual coordinates of task
             lon = t.actLon;
         }
 
-        if(lat != 0.0 && lon != 0.0) {
+        if (lat != 0.0 && lon != 0.0) {
             // Update bounding box
-            if(lat > tasksNorth) {
+            if (lat > tasksNorth) {
                 tasksNorth = lat;
             }
-            if(lat < tasksSouth) {
+            if (lat < tasksSouth) {
                 tasksSouth = lat;
             }
-            if(lon > tasksEast) {
+            if (lon > tasksEast) {
                 tasksEast = lon;
             }
-            if(lat < tasksWest) {
+            if (lat < tasksWest) {
                 tasksWest = lon;
             }
 
@@ -518,30 +517,39 @@ public class SmapTaskMapFragment extends Fragment
      */
     private BitmapDescriptor getIcon(String status, boolean isRepeat, boolean hasTrigger, long taskFinish) {
 
-        if(status.equals(Utilities.STATUS_T_REJECTED) || status.equals(Utilities.STATUS_T_CANCELLED)) {
+        if (status.equals(Utilities.STATUS_T_REJECTED) || status.equals(Utilities.STATUS_T_CANCELLED)) {
             return rejected;
-        } else if(status.equals(Utilities.STATUS_T_ACCEPTED)) {
-            if(hasTrigger && !isRepeat) {
+        } else if (status.equals(Utilities.STATUS_T_ACCEPTED)) {
+            if (hasTrigger && !isRepeat) {
                 return triggered;
             } else if (hasTrigger && isRepeat) {
                 return triggered_repeat;
-            } else if(isRepeat) {
+            } else if (isRepeat) {
                 return repeat;
-            } else if(taskFinish != 0 && taskFinish < (new Date()).getTime()) {
+            } else if (taskFinish != 0 && taskFinish < (new Date()).getTime()) {
                 return late;
             } else {
                 return accepted;
             }
-        } else if(status.equals(Utilities.STATUS_T_COMPLETE)) {
+        } else if (status.equals(Utilities.STATUS_T_COMPLETE)) {
             return complete;
-        } else if(status.equals(Utilities.STATUS_T_SUBMITTED)) {
+        } else if (status.equals(Utilities.STATUS_T_SUBMITTED)) {
             return submitted;
-        } else if(status.equals(Utilities.STATUS_T_NEW)) {
+        } else if (status.equals(Utilities.STATUS_T_NEW)) {
             return newtask;
         } else {
             Timber.i("Unknown task status: %s", status);
             return accepted;
         }
+    }
+
+    public void locateTask(TaskEntry task) {
+        mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(task.schedLat, task.schedLon),
+                        16f
+                )
+        );
     }
 
     /*
@@ -555,12 +563,12 @@ public class SmapTaskMapFragment extends Fragment
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
+            if (bitmapDrawable.getBitmap() != null) {
                 bitmap = bitmapDrawable.getBitmap();
             }
         }
 
-        if(bitmap == null) {
+        if (bitmap == null) {
             if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
                 bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
             } else {
@@ -572,11 +580,11 @@ public class SmapTaskMapFragment extends Fragment
             float maxHeight = displaymetrics.heightPixels / 15;
 
             int intHeight = drawable.getIntrinsicHeight();
-            if(bitmap.getHeight() > maxHeight) {
+            if (bitmap.getHeight() > maxHeight) {
                 double ratio = (double) drawable.getIntrinsicHeight() / (double) drawable.getIntrinsicWidth();
-                int width =   (int) Math.round(maxHeight / ratio);
+                int width = (int) Math.round(maxHeight / ratio);
 
-                if(Build.VERSION.SDK_INT > 18 ) {
+                if (Build.VERSION.SDK_INT > 18) {
                     bitmap.setHeight((int) maxHeight);
                     bitmap.setWidth(width);
                 }
