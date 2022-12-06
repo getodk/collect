@@ -60,7 +60,6 @@ import org.odk.collect.android.views.CustomMarker;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -72,8 +71,6 @@ import timber.log.Timber;
  * Responsible for displaying tasks on the main fieldTask screen
  */
 public class SmapTaskMapFragment extends Fragment {
-
-    protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
 
     private final MapProvider mapProvider = new MapTabMapProvider();
 
