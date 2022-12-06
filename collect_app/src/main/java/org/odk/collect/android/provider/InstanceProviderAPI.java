@@ -79,5 +79,6 @@ public final class InstanceProviderAPI {
 
         public static final String GEOMETRY = "tGeom";              // Full geometry for location of task - Smap Aligned with Collect
         public static final String GEOMETRY_TYPE = "tGeomType";     // Geometry type; Polygon, linestring, - Smap Aligned with Collect
+        public static final String PHONE = "phone";                 // Phone number of task
     }
 }

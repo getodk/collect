@@ -9,7 +9,7 @@ the specific language governing permissions and limitations under the License. -
     <!-- strings that should not be translated -->
     <string name="action_name" translatable="false">FieldTask Form</string>
     <string name="app_name" translatable="false">FieldTask</string>
-    <string name="app_version" translatable="false">6.804</string>
+    <string name="app_version" translatable="false">6.807</string>
     <string name="default_username" translatable="false">gplay</string>
     <string name="default_password" translatable="false">gplay</string>
     <string name="default_server_url" translatable="false">https://sg.smap.com.au</string>

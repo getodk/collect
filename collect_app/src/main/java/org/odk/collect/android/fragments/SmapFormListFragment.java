@@ -146,7 +146,7 @@ public class SmapFormListFragment extends ListFragment {
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        mAdapter = new TaskListArrayAdapter(getActivity(), true);
+        mAdapter = new TaskListArrayAdapter(getActivity(), true, null);
         setListAdapter(mAdapter);
 
         // Handle long item clicks

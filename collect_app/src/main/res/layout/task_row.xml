@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,7 +17,6 @@
         android:layout_marginRight="16dp"
         />
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -46,7 +46,16 @@
             android:layout_toRightOf="@id/icon"
             android:visibility="gone"
         />
+
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/menu_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        android:background="@null">
+    </ImageView>
 
     <FrameLayout
         android:id="@+id/map_view"

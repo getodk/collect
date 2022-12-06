@@ -23,6 +23,7 @@ import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColum
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_FORM_ID;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.JR_VERSION;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE;
+import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.PHONE;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SCHED_LAT;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SCHED_LON;
 import static org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns.SOURCE;
@@ -66,6 +67,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToLatestVersion(SQLiteDatabase db) {
+        SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, PHONE, "text");
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, GEOMETRY, "text");
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, GEOMETRY_TYPE, "text");
         SQLiteUtils.addColumn(db, INSTANCES_TABLE_NAME, T_IS_SYNC, "text");
@@ -134,6 +136,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
                 + T_UPDATED + " integer, "      // smap
                 + T_SHOW_DIST + " integer, "    // smap
                 + T_HIDE + " integer, "         // smap
+                + PHONE + " text, "             // smap
 
                 + "displaySubtext text "   // Smap keep for downgrading
                 + ");");

@@ -19,6 +19,7 @@ public class TrTask {
 	public String address;			// Key value pairs representing an unstructured address
 	public String status;
 	public int show_dist;
+	public String phone;
 
 	// Backward compatability
 	public String type;

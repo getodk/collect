@@ -400,6 +400,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         Collect.getInstance().setFormEntryActivity(this);   // smap
         Collect.getInstance().initRemoteServiceCaches();   // smap
         Collect.getInstance().getComponent().inject(this);
+        propertyManager.reload();
         setContentView(R.layout.form_entry);
         setupViewModels();
         swipeHandler = new SwipeHandler(this);

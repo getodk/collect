@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/task_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/mapPointCircle"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="Task 1" />
+
+    <Button
+        android:id="@+id/locate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="?selectableItemBackground"
+        android:text="@string/smap_locate" />
+
+    <Button
+        android:id="@+id/phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="?selectableItemBackground"
+        android:text="@string/smap_phone" />
+
+    <Button
+        android:id="@+id/sms"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="?selectableItemBackground"
+        android:text="@string/smap_sms" />
+
+    <Button
+        android:id="@+id/directions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="?selectableItemBackground"
+        android:text="@string/smap_directions" />
+
+    <Button
+        android:id="@+id/accept"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="?selectableItemBackground"
+        android:text="@string/smap_accept" />
+
+    <Button
+        android:id="@+id/reject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:background="?selectableItemBackground"
+        android:text="@string/smap_reject" />
+
+</LinearLayout>

@@ -48,4 +48,5 @@ the License.
     <color name="prevMapPointFill">#ff0000ff</color>
     <color name="mapLine">#ffff0000</color>
     <color name="prevMapLine">#ff0000ff</color>
+    <color name="disabled_view">#4D000000</color>
 </resources>

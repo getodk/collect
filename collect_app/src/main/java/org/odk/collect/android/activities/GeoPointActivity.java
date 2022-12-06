@@ -18,6 +18,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.GnssStatus;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
@@ -50,7 +51,7 @@ import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester
 import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
-        LocationClient.LocationClientListener, GpsStatus.Listener {
+        LocationClient.LocationClientListener {
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
@@ -143,7 +144,8 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager != null) {
-            locationManager.removeGpsStatusListener(this);
+            //locationManager.unregisterGnssStatusCallback(this);  TODO
+            //locationManager.removeGpsStatusListener(this);
         }
 
         locationClient.stop();
@@ -176,7 +178,8 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager != null) {
-            locationManager.addGpsStatusListener(this);
+            //locationManager.registerGnssStatusCallback(this);  TODO
+            //locationManager.addGpsStatusListener(this);
         }
 
         if (locationClient.isLocationAvailable()) {
@@ -286,6 +289,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         }
     }
 
+    /*
     @Override
     @SuppressLint("MissingPermission")
     public void onGpsStatusChanged(int event) {
@@ -306,6 +310,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
             }
         }
     }
+    */
 
     public String getAccuracyMessage(@NonNull Location location) {
         return getString(R.string.location_accuracy, truncateDouble(location.getAccuracy()));
