@@ -43,6 +43,7 @@ import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
 import org.odk.collect.android.geo.MapFragment;
 import org.odk.collect.android.geo.MapPoint;
 import org.odk.collect.android.geo.MapProvider;
+import org.odk.collect.android.geo.MapTabMapProvider;
 import org.odk.collect.android.geo.TaskMapMarker;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
@@ -74,8 +75,7 @@ public class SmapTaskMapFragment extends Fragment {
 
     protected LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
 
-    @Inject
-    MapProvider mapProvider;
+    private final MapProvider mapProvider = new MapTabMapProvider();
 
     private SharedPreferences adminPreferences;
 
