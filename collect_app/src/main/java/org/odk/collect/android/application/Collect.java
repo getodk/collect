@@ -56,6 +56,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
 import org.odk.collect.osmdroid.OsmDroidDependencyComponent;
 import org.odk.collect.osmdroid.OsmDroidDependencyComponentProvider;
+import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
@@ -179,6 +180,9 @@ public class Collect extends Application implements
         objectProvider.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
         objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
         objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
+
+        // Selfie camera dependencies
+        objectProvider.addSupplier(PermissionsChecker.class, applicationComponent::permissionsChecker);
     }
 
     @NotNull
