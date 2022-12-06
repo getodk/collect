@@ -27,6 +27,8 @@ public interface InstancesRepository {
 
     List<Instance> getAllFinalized();
 
+    Instance getInstanceByTaskId(long taskId);
+
     List<Instance> getAllByFormId(String formId);
 
     List<Instance> getAllNotDeletedByFormIdAndVersion(String formId, String version);

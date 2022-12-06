@@ -15,6 +15,7 @@
 package org.odk.collect.android.tasks;
 
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,10 +33,12 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
+import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.NotificationActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.FormsDao;
+import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dao.SmapReferencesDao;
 import org.odk.collect.android.database.TrAssignment;
 import org.odk.collect.android.database.TaskResponseAssignment;
@@ -380,6 +383,7 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                  *  Update the status of tasks on the phone that have been cancelled on the server
                  */
                 addAndUpdateEntries();
+                getInitialDataForTask();
 
             	/*
             	 * Notify the server of the phone state
@@ -433,6 +437,44 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg );
 
 	        }
+        }
+    }
+
+    private void getInitialDataForTask() throws Exception {
+        HashMap<String, String> headers = new HashMap<String, String> ();
+        LocationRegister lr = new LocationRegister();
+        if(lr.taskLocationEnabled()) {
+            try {
+                Location locn = Collect.getInstance().getLocation();
+                if (locn != null) {
+                    String lat = String.valueOf(locn.getLatitude());
+                    String lon = String.valueOf(locn.getLongitude());
+                    headers.put("lat", lat);
+                    headers.put("lon", lon);
+                }
+            } catch (Exception e) {
+                Timber.i("Failed to getlocations :%s", e.getMessage());
+            }
+        }
+        InstancesDao dao = new InstancesDao();
+        for (TaskResponseAssignment ta : tr.taskAssignments) {
+            taskURL = serverUrl + "/api/v1/tasks/" + ta.task.id;
+            URI uri = URI.create(taskURL);
+            String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
+            JSONObject jObject = new JSONObject(resp);
+            JSONObject initialData = null;
+            JSONObject values = null;
+            if (jObject.has("initial_data")) {
+                initialData = jObject.getJSONObject("initial_data");
+                values = initialData.getJSONObject("values");
+            }
+            if(initialData != null) {
+               ta.task.phone = values.getString("Phone");
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(InstanceColumns.PHONE, ta.task.phone);
+                String where = "tTitle = ?";
+                dao.updateInstance(contentValues, where, new String[]{ta.task.title});
+            }
         }
     }
 

@@ -381,6 +381,7 @@ public class InstancesDao {
                     int taskTypeColumnIndex = cursor.getColumnIndex(InstanceColumns.T_TASK_TYPE);                  // smap
                     int geometryTypeColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY_TYPE);
                     int geometryColumnIndex = cursor.getColumnIndex(InstanceColumns.GEOMETRY);
+                    int phoneColumnIndex = cursor.getColumnIndex(InstanceColumns.PHONE);
 
                     int databaseIdIndex = cursor.getColumnIndex(InstanceColumns._ID);
 
@@ -396,6 +397,7 @@ public class InstancesDao {
                             .deletedDate(cursor.isNull(deletedDateColumnIndex) ? null : cursor.getLong(deletedDateColumnIndex))
                             .geometryType(cursor.getString(geometryTypeColumnIndex))
                             .geometry(cursor.getString(geometryColumnIndex))
+                            .phone(cursor.getString(phoneColumnIndex))
                             .repeat(cursor.getInt(repeatColumnIndex) > 0)                       // smap
                             .updateid(cursor.getString(updateidColumnIndex))                    // smap
                             .location_trigger(cursor.getString(locationTriggerColumnIndex))     // smap
@@ -433,6 +435,7 @@ public class InstancesDao {
         values.put(InstanceColumns.DELETED_DATE, instance.getDeletedDate());
         values.put(InstanceColumns.GEOMETRY, instance.getGeometry());
         values.put(InstanceColumns.GEOMETRY_TYPE, instance.getGeometryType());
+        values.put(InstanceColumns.PHONE, instance.getPhone());
         return values;
     }
 }

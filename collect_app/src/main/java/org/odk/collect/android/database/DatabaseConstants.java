@@ -8,7 +8,7 @@ public class DatabaseConstants {
 
     public static final String INSTANCES_DATABASE_NAME = "instances.db";
     public static final String INSTANCES_TABLE_NAME = "instances";
-    public static final int INSTANCES_DATABASE_VERSION = 25;    // smap
+    public static final int INSTANCES_DATABASE_VERSION = 26;    // smap
 
     private DatabaseConstants() {
 
