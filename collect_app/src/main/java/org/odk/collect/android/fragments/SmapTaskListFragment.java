@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.fragments;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,7 +35,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.ListFragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,9 +49,9 @@ import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.SmapMain;
 import org.odk.collect.android.activities.SmapTaskStatusActivity;
 import org.odk.collect.android.activities.viewmodels.SurveyDataViewModel;
-import org.odk.collect.android.activities.viewmodels.SurveyDataViewModelFactory;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
+import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.preferences.AdminKeys;
@@ -59,6 +59,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.smap.utilities.LocationRegister;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -143,7 +144,8 @@ public class SmapTaskListFragment extends ListFragment {
         sortingOptions = new int[]{
                 R.string.sort_by_name_asc, R.string.sort_by_name_desc,
                 R.string.sort_by_date_asc, R.string.sort_by_date_desc,
-                R.string.sort_by_status_asc, R.string.sort_by_status_desc
+                R.string.sort_by_status_asc, R.string.sort_by_status_desc,
+                R.string.sort_by_distance_asc, R.string.sort_by_distance_desc
         };
         model = getViewMode();
         model.getSurveyData().observe(getViewLifecycleOwner(), surveyData -> {

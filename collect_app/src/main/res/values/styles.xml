@@ -35,7 +35,7 @@
     </style>
 
     <style name="Widget.Collect.BottomSheet.Modal" parent="Widget.Design.BottomSheet.Modal">
-        <item name="behavior_peekHeight">300dp</item>
+        <item name="behavior_peekHeight">400dp</item>
     </style>
 
     <!-- smap -->
