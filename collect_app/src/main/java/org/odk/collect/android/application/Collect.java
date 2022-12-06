@@ -60,6 +60,8 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
+import org.odk.collect.selfiecamera.Camera;
+import org.odk.collect.selfiecamera.CameraXCamera;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.injection.ObjectProvider;
 import org.odk.collect.shared.injection.ObjectProviderHost;
@@ -183,6 +185,7 @@ public class Collect extends Application implements
 
         // Selfie camera dependencies
         objectProvider.addSupplier(PermissionsChecker.class, applicationComponent::permissionsChecker);
+        objectProvider.addSupplier(Camera.class, CameraXCamera::new);
     }
 
     @NotNull

@@ -19,10 +19,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
-import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.FileOutputOptions
@@ -37,6 +34,7 @@ import androidx.core.view.WindowInsetsCompat
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.shared.injection.ObjectProvider
 import org.odk.collect.shared.injection.ObjectProviderHost
 import org.odk.collect.strings.localization.LocalizedActivity
 import java.io.File
@@ -46,7 +44,9 @@ class CaptureSelfieActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!permissionsGranted()) {
+        val objectProvider = (application as ObjectProviderHost).getObjectProvider()
+
+        if (!permissionsGranted(objectProvider)) {
             finish()
             return
         }
@@ -64,7 +64,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
                 ContextCompat.getMainExecutor(this)
             )
         } else {
-            val camera = Camera()
+            val camera = objectProvider.provide(Camera::class.java)
 
             val previewView = findViewById<View>(R.id.preview)
             camera.initialize(this, previewView)
@@ -82,8 +82,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
         }
     }
 
-    private fun permissionsGranted(): Boolean {
-        val objectProvider = (application as ObjectProviderHost).getObjectProvider()
+    private fun permissionsGranted(objectProvider: ObjectProvider): Boolean {
         val permissionsChecker = objectProvider.provide(PermissionsChecker::class.java)
 
         return if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
@@ -143,53 +142,5 @@ class CaptureSelfieActivity : LocalizedActivity() {
     companion object {
         const val EXTRA_TMP_PATH = "tmpPath"
         const val EXTRA_VIDEO = "video"
-    }
-}
-
-private class Camera {
-
-    private var imageCapture: ImageCapture? = null
-    private var activity: ComponentActivity? = null
-
-    fun initialize(activity: ComponentActivity, previewView: View) {
-        this.activity = activity
-
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
-        cameraProviderFuture.addListener(
-            {
-                val preview = Preview.Builder().build()
-                preview.setSurfaceProvider((previewView as PreviewView).surfaceProvider)
-
-                imageCapture = ImageCapture.Builder()
-                    .build()
-
-                val cameraSelector = CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                    .build()
-
-                cameraProviderFuture.get()
-                    .bindToLifecycle(activity, cameraSelector, preview, imageCapture)
-            },
-            ContextCompat.getMainExecutor(activity)
-        )
-    }
-
-    fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit) {
-        val outputFile = File(imagePath)
-        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
-
-        imageCapture!!.takePicture(
-            outputFileOptions,
-            ContextCompat.getMainExecutor(activity!!),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(error: ImageCaptureException) {
-                    onImageSaveError()
-                }
-
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    onImageSaved()
-                }
-            }
-        )
     }
 }

@@ -1,0 +1,9 @@
+package org.odk.collect.selfiecamera
+
+import android.view.View
+import androidx.activity.ComponentActivity
+
+interface Camera {
+    fun initialize(activity: ComponentActivity, previewView: View)
+    fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit)
+}
