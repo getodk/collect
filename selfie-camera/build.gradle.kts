@@ -62,4 +62,5 @@ dependencies {
     testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.robolectric)
     testImplementation(Dependencies.hamcrest)
+    testImplementation(Dependencies.androidx_test_espresso_core)
 }

@@ -31,6 +31,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
@@ -74,7 +75,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
                 camera.takePicture(
                     imagePath,
                     { ExternalAppUtils.returnSingleValue(this, imagePath) },
-                    {}
+                    { ToastUtils.showShortToast(this, R.string.camera_error) }
                 )
             }
 
