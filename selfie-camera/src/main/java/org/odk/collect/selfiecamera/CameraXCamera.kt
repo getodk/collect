@@ -17,7 +17,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import java.io.File
 
-class CameraXCamera : Camera {
+internal class CameraXCamera : Camera {
 
     private var imageCapture: ImageCapture? = null
     private var videoCapture: VideoCapture<Recorder>? = null

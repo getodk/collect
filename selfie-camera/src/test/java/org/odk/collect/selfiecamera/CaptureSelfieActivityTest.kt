@@ -35,10 +35,18 @@ class CaptureSelfieActivityTest {
 
     @Before
     fun setup() {
-        application.testObjectProvider.also {
-            it.addSupplier(PermissionsChecker::class.java) { permissionsChecker }
-            it.addSupplier(Camera::class.java) { camera }
-        }
+
+        application.selfieCameraDependencyComponent = DaggerSelfieCameraDependencyComponent.builder()
+            .selfieCameraDependencyModule(object : SelfieCameraDependencyModule() {
+                override fun providesPermissionChecker(): PermissionsChecker {
+                    return permissionsChecker
+                }
+
+                override fun providesCamera(): Camera {
+                    return camera
+                }
+            })
+            .build()
     }
 
     @Test

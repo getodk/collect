@@ -1,15 +1,10 @@
 package org.odk.collect.selfiecamera.support
 
 import android.app.Application
-import org.odk.collect.shared.injection.ObjectProvider
-import org.odk.collect.shared.injection.ObjectProviderHost
-import org.odk.collect.shared.injection.SupplierObjectProvider
+import org.odk.collect.selfiecamera.SelfieCameraDependencyComponent
+import org.odk.collect.selfiecamera.SelfieCameraDependencyComponentProvider
 
-class RobolectricApplication : Application(), ObjectProviderHost {
+class RobolectricApplication : Application(), SelfieCameraDependencyComponentProvider {
 
-    val testObjectProvider = SupplierObjectProvider()
-
-    override fun getObjectProvider(): ObjectProvider {
-        return testObjectProvider
-    }
+    override lateinit var selfieCameraDependencyComponent: SelfieCameraDependencyComponent
 }

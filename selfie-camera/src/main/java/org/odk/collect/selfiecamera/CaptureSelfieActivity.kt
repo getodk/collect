@@ -24,18 +24,25 @@ import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
-import org.odk.collect.shared.injection.ObjectProvider
-import org.odk.collect.shared.injection.ObjectProviderHost
 import org.odk.collect.strings.localization.LocalizedActivity
+import javax.inject.Inject
 
 class CaptureSelfieActivity : LocalizedActivity() {
 
+    @Inject
+    internal lateinit var camera: Camera
+
+    @Inject
+    lateinit var permissionsChecker: PermissionsChecker
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as SelfieCameraDependencyComponentProvider)
+            .selfieCameraDependencyComponent
+            .inject(this)
+
         super.onCreate(savedInstanceState)
 
-        val objectProvider = (application as ObjectProviderHost).getObjectProvider()
-
-        if (!permissionsGranted(objectProvider)) {
+        if (!permissionsGranted()) {
             finish()
             return
         }
@@ -45,7 +52,6 @@ class CaptureSelfieActivity : LocalizedActivity() {
         setContentView(R.layout.activity_capture_selfie)
 
         val previewView = findViewById<View>(R.id.preview)
-        val camera = objectProvider.provide(Camera::class.java)
         camera.initialize(this, previewView)
 
         if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
@@ -79,9 +85,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
         }
     }
 
-    private fun permissionsGranted(objectProvider: ObjectProvider): Boolean {
-        val permissionsChecker = objectProvider.provide(PermissionsChecker::class.java)
-
+    private fun permissionsGranted(): Boolean {
         return if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
             permissionsChecker.isPermissionGranted(
                 Manifest.permission.CAMERA,

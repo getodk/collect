@@ -4,6 +4,7 @@ import dependencies.Versions
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-kapt")
 }
 
 apply(from = "../config/quality.gradle")
@@ -44,7 +45,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":permissions"))
@@ -57,6 +57,8 @@ dependencies {
     implementation(Dependencies.camerax_lifecycle)
     implementation(Dependencies.camerax_video)
     implementation(Dependencies.camerax_camera2)
+    implementation(Dependencies.dagger)
+    kapt(Dependencies.dagger_compiler)
 
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.androidx_test_ext_junit)
