@@ -41,7 +41,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         setUpWidgetParameters();
-        displayedValuesForNumberPicker = RangeWidgetUtils.getDisplayedValuesForNumberPicker(
+        displayedValuesForNumberPicker = RangePickerWidgetUtils.getNumbersFromRangeAsc(
                 rangeStart, rangeStep, rangeEnd, false);
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
 
@@ -85,6 +85,9 @@ public class RangePickerDecimalWidget extends QuestionWidget {
     }
 
     public void setNumberPickerValue(int value) {
-        progress = RangeWidgetUtils.getNumberPickerProgress(binding, rangeStart, rangeStep, rangeEnd, value);
+        progress = value;
+
+        binding.widgetAnswerText.setText(displayedValuesForNumberPicker[value]);
+        binding.widgetButton.setText(R.string.edit_value);
     }
 }

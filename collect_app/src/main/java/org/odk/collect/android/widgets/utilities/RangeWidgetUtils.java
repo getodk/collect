@@ -199,34 +199,6 @@ public class RangeWidgetUtils {
         return actualValue;
     }
 
-    public static String[] getDisplayedValuesForNumberPicker(BigDecimal rangeStart, BigDecimal rangeStep, BigDecimal rangeEnd, Boolean isIntegerDataType) {
-        int index = 0;
-        int elementCount = rangeEnd.subtract(rangeStart).abs().divide(rangeStep).intValue();
-        String[] displayedValuesForNumberPicker = new String[elementCount + 1];
-
-        if (rangeEnd.compareTo(rangeStart) > -1) {
-            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) > -1; i = i.subtract(rangeStep.abs())) {
-                displayedValuesForNumberPicker[index] = getDisplayValue(i, isIntegerDataType);
-                index++;
-            }
-        } else {
-            for (BigDecimal i = rangeEnd; i.compareTo(rangeStart) < 1; i = i.add(rangeStep.abs())) {
-                displayedValuesForNumberPicker[index] = getDisplayValue(i, isIntegerDataType);
-                index++;
-            }
-        }
-        return displayedValuesForNumberPicker;
-    }
-
-    private static String getDisplayValue(BigDecimal value, Boolean isIntegerDataType) {
-        if (isIntegerDataType) {
-            int intValue = value.intValue();
-            return String.valueOf(intValue);
-        } else {
-            return String.valueOf(value.doubleValue());
-        }
-    }
-
     public static void showNumberPickerDialog(FragmentActivity activity, String[] displayedValuesForNumberPicker, int id, int progress) {
         NumberPickerDialog dialog = NumberPickerDialog.newInstance(id, displayedValuesForNumberPicker, progress);
         try {

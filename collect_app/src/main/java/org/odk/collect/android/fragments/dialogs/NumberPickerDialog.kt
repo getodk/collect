@@ -47,7 +47,7 @@ class NumberPickerDialog : DialogFragment() {
             minValue = 0
             wrapSelectorWheel = false
             displayedValues = numbers
-            value = numbers.size - 1 - requireArguments().getInt(PROGRESS)
+            value = requireArguments().getInt(PROGRESS)
         }
 
         return MaterialAlertDialogBuilder(requireActivity())
