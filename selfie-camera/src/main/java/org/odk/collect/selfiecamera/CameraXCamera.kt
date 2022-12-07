@@ -57,22 +57,28 @@ class CameraXCamera : Camera {
         onImageSaved: () -> Unit,
         onImageSaveError: () -> Unit,
     ) {
-        val outputFile = File(imagePath)
-        val outputFileOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
-
-        imageCapture!!.takePicture(
-            outputFileOptions,
-            ContextCompat.getMainExecutor(activity!!),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(error: ImageCaptureException) {
-                    onImageSaveError()
-                }
-
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    onImageSaved()
-                }
+        Pair(imageCapture, activity).let { (i, a) ->
+            if (i == null || a == null) {
+                return
             }
-        )
+
+            val outputFile = File(imagePath)
+            val outputFileOptions = ImageCapture.OutputFileOptions.Builder(outputFile).build()
+
+            i.takePicture(
+                outputFileOptions,
+                ContextCompat.getMainExecutor(a),
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onError(error: ImageCaptureException) {
+                        onImageSaveError()
+                    }
+
+                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                        onImageSaved()
+                    }
+                }
+            )
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -81,21 +87,27 @@ class CameraXCamera : Camera {
         onVideoSaved: () -> Unit,
         onVideoSaveError: () -> Unit,
     ) {
-        val outputFile = File(videoPath)
-        val outputFileOptions = FileOutputOptions.Builder(outputFile).build()
+        Pair(videoCapture, activity).let { (v, a) ->
+            if (v == null || a == null) {
+                return
+            }
 
-        recording = videoCapture!!.output
-            .prepareRecording(activity!!, outputFileOptions)
-            .withAudioEnabled()
-            .start(ContextCompat.getMainExecutor(activity!!)) { event ->
-                if (event is VideoRecordEvent.Finalize) {
-                    if (event.hasError()) {
-                        onVideoSaveError()
-                    } else {
-                        onVideoSaved()
+            val outputFile = File(videoPath)
+            val outputFileOptions = FileOutputOptions.Builder(outputFile).build()
+
+            recording = v.output
+                .prepareRecording(a, outputFileOptions)
+                .withAudioEnabled()
+                .start(ContextCompat.getMainExecutor(a)) { event ->
+                    if (event is VideoRecordEvent.Finalize) {
+                        if (event.hasError()) {
+                            onVideoSaveError()
+                        } else {
+                            onVideoSaved()
+                        }
                     }
                 }
-            }
+        }
     }
 
     override fun stopVideo() {
