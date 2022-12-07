@@ -17,7 +17,6 @@ package org.odk.collect.android.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -204,7 +203,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     @Override protected void onDestroy() {
         if (schedulerHandler != null && !schedulerHandler.isCancelled()) {
             schedulerHandler.cancel(true);
-            Log.i("info23", "scheduler canceled");
         }
 
         locationTracker.stop();
@@ -227,7 +225,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
             inputActive = false;
             try {
                 schedulerHandler.cancel(true);
-                Log.i("info23", "scheduler canceled");
             } catch (Exception e) {
                 // Do nothing
             }
@@ -424,11 +421,8 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
                     );
 
                     recordPoint(currentMapPoint);
-                } else {
-                    Log.i("info23", "location is null - skipping");
                 }
             }), 500, INTERVAL_OPTIONS[intervalIndex] * 1000, TimeUnit.MILLISECONDS);
-            Log.i("info23", "scheduler started");
         }
         updateUi();
     }
@@ -492,7 +486,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
     private void recordPoint(MapPoint point) {
         if (point != null && isLocationAcceptable(point)) {
-            Log.i("info23", "point added: " + point);
             map.appendPointToPoly(featureId, point);
             updateUi();
         }
