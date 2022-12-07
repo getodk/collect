@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.range;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,11 +13,12 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
-public class RangePickerIntegerWidget extends QuestionWidget  {
+public class RangePickerIntegerWidget extends QuestionWidget {
     RangePickerWidgetAnswerBinding binding;
     String[] displayedValuesForNumberPicker;
 

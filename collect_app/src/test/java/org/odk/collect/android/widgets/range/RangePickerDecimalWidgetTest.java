@@ -1,4 +1,4 @@
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.range;
 
 import android.view.View;
 
@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+
 import java.math.BigDecimal;
 
 import static org.hamcrest.MatcherAssert.assertThat;

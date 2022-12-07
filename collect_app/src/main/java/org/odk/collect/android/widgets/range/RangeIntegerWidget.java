@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.widgets;
+package org.odk.collect.android.widgets.range;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,23 +25,24 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.slider.Slider;
 
-import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.views.TrackingTouchSlider;
+import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.utilities.RangeWidgetUtils;
 
 import java.math.BigDecimal;
 
 @SuppressLint("ViewConstructor")
-public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChangeListener {
+public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChangeListener {
     TrackingTouchSlider slider;
     TextView currentValue;
 
     private int visibleThumbRadius;
 
-    public RangeDecimalWidget(Context context, QuestionDetails prompt) {
+    public RangeIntegerWidget(Context context, QuestionDetails prompt) {
         super(context, prompt);
         render();
     }
@@ -53,7 +54,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
         currentValue = layoutElements.getCurrentValue();
 
         visibleThumbRadius = slider.getThumbRadius();
-        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, false));
+        setUpActualValueLabel(RangeWidgetUtils.setUpSlider(prompt, slider, true));
 
         if (slider.isEnabled()) {
             slider.addOnChangeListener(this);
@@ -64,7 +65,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
     @Override
     public IAnswerData getAnswer() {
         String stringAnswer = currentValue.getText().toString();
-        return stringAnswer.isEmpty() ? null : new DecimalData(Double.parseDouble(stringAnswer));
+        return stringAnswer.isEmpty() ? null : new IntegerData(Integer.parseInt(stringAnswer));
     }
 
     @Override
@@ -94,7 +95,7 @@ public class RangeDecimalWidget extends QuestionWidget implements Slider.OnChang
 
     private void setUpActualValueLabel(BigDecimal actualValue) {
         if (actualValue != null) {
-            currentValue.setText(String.valueOf(actualValue.doubleValue()));
+            currentValue.setText(String.valueOf(actualValue.intValue()));
             slider.setThumbRadius(visibleThumbRadius);
         } else {
             slider.setValue(slider.getValueFrom());
