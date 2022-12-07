@@ -341,8 +341,10 @@ public class AllWidgetsFormTest {
     public void testSelfieVideoWidget() {
         Screengrab.screenshot("selfie-video");
 
-        onView(withText("Selfie video widget")).perform(swipeLeft());
+        onView(withText("Record Video")).perform(click());
+        pressBack();
 
+        onView(withText("Selfie video widget")).perform(swipeLeft());
     }
 
     public void testFileWidget() {

@@ -69,7 +69,7 @@ class CaptureSelfieActivityTest {
 
         launcher.launch<CaptureSelfieActivity>(intent)
         onView(withId(R.id.preview)).perform(click())
-        assertThat(camera.imageSavedPath, equalTo("blah/tmp.jpg"))
+        assertThat(camera.savedPath, equalTo("blah/tmp.jpg"))
     }
 
     @Test
@@ -100,6 +100,55 @@ class CaptureSelfieActivityTest {
         val latestToast = ShadowToast.getTextOfLatestToast()
         assertThat(latestToast, equalTo(application.getString(R.string.camera_error)))
     }
+
+    @Test
+    fun whenTakingVideo_clickingPreview_startsRecordingToFileInPath() {
+        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
+            it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
+            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
+        }
+
+        launcher.launch<CaptureSelfieActivity>(intent)
+        onView(withId(R.id.preview)).perform(click())
+
+        assertThat(camera.isRecording(), equalTo(true))
+        assertThat(camera.savedPath, equalTo("blah/tmp.mp4"))
+    }
+
+    @Test
+    fun whenTakingVideo_whenVideoIsSaved_finishesWithPath() {
+        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
+            it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
+            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
+        }
+
+        val scenario = launcher.launch<CaptureSelfieActivity>(intent)
+        onView(withId(R.id.preview)).perform(click())
+        onView(withId(R.id.preview)).perform(click())
+        camera.finalizeVideo()
+
+        assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
+        val returnedValue = ExternalAppUtils.getReturnedSingleValue(scenario.result.resultData)
+        assertThat(returnedValue, equalTo("blah/tmp.mp4"))
+    }
+
+    @Test
+    fun whenTakingVideo_whenErrorOccursSavingVideo_showsToast() {
+        camera.failToSave = true
+
+        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
+            it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
+            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
+        }
+
+        launcher.launch<CaptureSelfieActivity>(intent)
+        onView(withId(R.id.preview)).perform(click())
+        onView(withId(R.id.preview)).perform(click())
+        camera.finalizeVideo()
+
+        val latestToast = ShadowToast.getTextOfLatestToast()
+        assertThat(latestToast, equalTo(application.getString(R.string.camera_error)))
+    }
 }
 
 private class FakePermissionsChecker : PermissionsChecker {
@@ -118,9 +167,12 @@ private class FakePermissionsChecker : PermissionsChecker {
 private class FakeCamera : Camera {
 
     var failToSave = false
-    var imageSavedPath: String? = null
+    var savedPath: String? = null
+    var recording = false
 
     private var initialized = false
+    private var onVideoSaved: (() -> Unit)? = null
+    private var onVideoSaveError: (() -> Unit)? = null
 
     override fun initialize(activity: ComponentActivity, previewView: View) {
         initialized = true
@@ -135,12 +187,43 @@ private class FakeCamera : Camera {
             throw IllegalStateException()
         }
 
-        imageSavedPath = imagePath
+        savedPath = imagePath
 
         if (failToSave) {
             onImageSaveError()
         } else {
             onImageSaved()
+        }
+    }
+
+    override fun startVideo(
+        videoPath: String,
+        onVideoSaved: () -> Unit,
+        onVideoSaveError: () -> Unit,
+    ) {
+        recording = true
+        savedPath = videoPath
+        this.onVideoSaved = onVideoSaved
+        this.onVideoSaveError = onVideoSaveError
+    }
+
+    override fun stopVideo() {
+        recording = false
+    }
+
+    override fun isRecording(): Boolean {
+        return recording
+    }
+
+    fun finalizeVideo() {
+        if (recording) {
+            throw IllegalStateException()
+        }
+
+        if (failToSave) {
+            onVideoSaveError?.invoke()
+        } else {
+            onVideoSaved?.invoke()
         }
     }
 }
