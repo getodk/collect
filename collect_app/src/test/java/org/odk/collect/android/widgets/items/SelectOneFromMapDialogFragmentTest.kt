@@ -42,11 +42,8 @@ import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
-import org.odk.collect.material.MaterialAlertDialogFragment
-import org.odk.collect.material.MaterialAlertDialogFragment.Companion.ARG_MESSAGE
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.FakeScheduler
-import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class SelectOneFromMapDialogFragmentTest {
@@ -272,49 +269,5 @@ class SelectOneFromMapDialogFragmentTest {
             prompt.index,
             SelectOneData(selectChoices[1].selection())
         )
-    }
-
-    @Test
-    fun `show error and dismisses when there is invalid geometry`() {
-        val selectChoices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(children = listOf(treeElement("geometry", "WRONG")))
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(
-                selectChoices
-            )
-            .withSelectChoiceText(
-                mapOf(
-                    selectChoices[0] to "A"
-                )
-            )
-            .build()
-
-        whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).thenReturn(prompt)
-
-        launcherRule.launch(
-            SelectOneFromMapDialogFragment::class.java,
-            Bundle().also {
-                it.putSerializable(ARG_FORM_INDEX, prompt.index)
-            }
-        ).onFragment {
-            scheduler.runBackground()
-            assertThat(it.isVisible, equalTo(false))
-
-            val dialog = RobolectricHelpers.getFragmentByClass(
-                it.parentFragmentManager,
-                MaterialAlertDialogFragment::class.java
-            )
-
-            assertThat(
-                dialog?.arguments?.getString(ARG_MESSAGE),
-                equalTo(application.getString(R.string.invalid_geometry, "A", "WRONG"))
-            )
-        }
     }
 }

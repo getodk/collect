@@ -364,7 +364,6 @@
   <!--Button text to select a place from a list presented on a map-->
   <string name="select_place">Vybrat místo</string>
   <string name="choices">Možnosti</string>
-  <string name="invalid_geometry">Volba s označením \"%1$s\" má neplatnou geometrii (\"%2$s\")</string>
   <!--##############################################
     # GEO
     ##############################################-->

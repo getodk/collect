@@ -12,7 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
-import org.odk.collect.android.widgets.items.SelectChoicesMapData.InvalidGeometry
 import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
 import org.odk.collect.androidtest.getOrAwaitValue
@@ -95,14 +94,21 @@ class SelectChoicesMapDataTest {
     }
 
     @Test
-    fun `geometry with latitude greater than bounds is invalid`() {
+    fun `choices with geometry with latitude greater than bounds are ignored`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "90.01 0 0 0"),
-                        treeElement("property", "blah")
+                        treeElement("geometry", "90.01 0 0 0")
+                    )
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "80.00 0 0 0")
                     )
                 )
             )
@@ -111,22 +117,29 @@ class SelectChoicesMapDataTest {
         val prompt = MockFormEntryPromptBuilder()
             .withLongText("Which is your favourite place?")
             .withSelectChoices(choices)
-            .withSelectChoiceText(mapOf(choices[0] to "A"))
             .build()
 
         val data = loadDataForPrompt(prompt)
-        assertThat(data.hasInvalidGeometry().value, equalTo(InvalidGeometry("A", "90.01 0 0 0")))
+        assertThat(data.getMappableItems().value!!.size, equalTo(1))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
     }
 
     @Test
-    fun `geometry with latitude less than bounds is invalid`() {
+    fun `choices with geometry with latitude less than bounds are ignored`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "-90.01 0 0 0"),
-                        treeElement("property", "blah")
+                        treeElement("geometry", "-90.01 0 0 0")
+                    )
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "80.00 0 0 0")
                     )
                 )
             )
@@ -135,22 +148,29 @@ class SelectChoicesMapDataTest {
         val prompt = MockFormEntryPromptBuilder()
             .withLongText("Which is your favourite place?")
             .withSelectChoices(choices)
-            .withSelectChoiceText(mapOf(choices[0] to "A"))
             .build()
 
         val data = loadDataForPrompt(prompt)
-        assertThat(data.hasInvalidGeometry().value, equalTo(InvalidGeometry("A", "-90.01 0 0 0")))
+        assertThat(data.getMappableItems().value!!.size, equalTo(1))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
     }
 
     @Test
-    fun `geometry with longitude greater than bounds is invalid`() {
+    fun `choices with geometry with longitude greater than bounds are ignored`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 180.01 0 0"),
-                        treeElement("property", "blah")
+                        treeElement("geometry", "0 180.01 0 0")
+                    )
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "0 170.00 0 0")
                     )
                 )
             )
@@ -159,22 +179,29 @@ class SelectChoicesMapDataTest {
         val prompt = MockFormEntryPromptBuilder()
             .withLongText("Which is your favourite place?")
             .withSelectChoices(choices)
-            .withSelectChoiceText(mapOf(choices[0] to "A"))
             .build()
 
         val data = loadDataForPrompt(prompt)
-        assertThat(data.hasInvalidGeometry().value, equalTo(InvalidGeometry("A", "0 180.01 0 0")))
+        assertThat(data.getMappableItems().value!!.size, equalTo(1))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
     }
 
     @Test
-    fun `geometry with longitude less than bounds is invalid`() {
+    fun `choices with geometry with longitude less than bounds are ignored`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 -180.01 0 0"),
-                        treeElement("property", "blah")
+                        treeElement("geometry", "0 -180.01 0 0")
+                    )
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "0 170.00 0 0")
                     )
                 )
             )
@@ -183,11 +210,42 @@ class SelectChoicesMapDataTest {
         val prompt = MockFormEntryPromptBuilder()
             .withLongText("Which is your favourite place?")
             .withSelectChoices(choices)
-            .withSelectChoiceText(mapOf(choices[0] to "A"))
             .build()
 
         val data = loadDataForPrompt(prompt)
-        assertThat(data.hasInvalidGeometry().value, equalTo(InvalidGeometry("A", "0 -180.01 0 0")))
+        assertThat(data.getMappableItems().value!!.size, equalTo(1))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
+    }
+
+    @Test
+    fun `choices with incorrect geometry are ignored`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "blah")
+                    )
+                )
+            ),
+            selectChoice(
+                value = "b",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "0 170.00 0 0")
+                    )
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        assertThat(data.getMappableItems().value!!.size, equalTo(1))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
     }
 
     /**
