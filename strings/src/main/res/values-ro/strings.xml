@@ -38,6 +38,7 @@
   <string name="no_items_display">Nimic disponibil pentru afișare.</string>
   <string name="no_items_display_forms">Nimic disponibil pentru afișare.\n\nÎncercați să preluați și să completați un formular gol.</string>
   <string name="no_items_display_instances">Nimic disponibil pentru afișare.\n\nÎncercați să finalizați formularele salvate înaintea trimiterii.</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

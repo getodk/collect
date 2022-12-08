@@ -36,6 +36,7 @@
   <string name="no_items_display">Niks beskikbaar om te vertoon nie</string>
   <string name="no_items_display_forms">Niks beskikbaar om te vertoon nie.\n\nProbeer om \'n leë vorm te haal en in te vul.</string>
   <string name="no_items_display_instances">Niks beskikbaar om te vertoon nie.\n\nProbeer om gestoorde vorms te finaliseer voordat u stuur.</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

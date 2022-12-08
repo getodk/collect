@@ -59,6 +59,7 @@
   <string name="storage_runtime_permission_denied_title">Autorizzazione all\'uso della memoria</string>
   <string name="storage_runtime_permission_denied_desc">Senza questi permessi Collect non può accedere ai tuoi questionari o salvare le risposte. Riapri la applicazione quando sei pronto ad autorizzarli.</string>
   <string name="location_runtime_permissions_denied_title">Autorizzazione all\'uso dei servizi di localizzazione</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Autorizzazione uso fotocamera</string>
   <string name="camera_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può usare la fotocamera. Prova di nuovo quando hai autorizzato l\'uso della fotocamera</string>
   <string name="record_audio_runtime_permission_denied_title">Autorizzazione uso microfono</string>

@@ -61,6 +61,7 @@
   <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
   <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>
   <string name="location_runtime_permissions_denied_title">Sijaintitiedon käyttöluvat</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="location_runtime_permissions_denied_desc">Ilman lupaa <b>Tarkka sijainti</b> Collect ei pysty tallentamaan sijaintiasi. Yritä uudestaan kun olet valmis sallimaan sen.</string>
   <string name="camera_runtime_permission_denied_title">Kameran käyttölupa</string>
   <string name="camera_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään kameraa. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>

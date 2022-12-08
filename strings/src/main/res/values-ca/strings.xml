@@ -44,6 +44,7 @@
   <string name="no_items_display_forms">Res disponible per visualitzar.\n\nProva de seleccionar i omplir un formulari en blanc.</string>
   <string name="no_items_display_sent_forms">Res disponible per veure.\n\nProva enviant formularis finalitzats abans de visualitzar.</string>
   <string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva finalitzant formularis desats abans d\'enviar.</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

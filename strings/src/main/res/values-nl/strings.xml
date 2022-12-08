@@ -52,6 +52,7 @@
   <string name="no_items_display_forms">Leeg.\n\nDownload eerst een formulier en vul dat in.</string>
   <string name="no_items_display_sent_forms">Leeg.\n\nVerstuur eerst afgeronde formulieren om deze te kunnen bekijken.</string>
   <string name="no_items_display_instances">Leeg\n\nEen formulier moet als voltooid zijn gemarkeerd voordat u het kunt verzenden.</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

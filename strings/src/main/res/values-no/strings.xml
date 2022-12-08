@@ -36,6 +36,7 @@
   <string name="no_items_display">Ingenting å vise.</string>
   <string name="no_items_display_forms">Ingen elementer å vise.\n\nForsøk å hente ned og fylle ut et nytt skjema.</string>
   <string name="no_items_display_instances">Ingen elementer å vise.\n\nEventuelle lagrede skjemaer må fullføres før du kan sende dem. </string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

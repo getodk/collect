@@ -42,6 +42,7 @@
   <string name="no_items_display_forms">देखाउनको लागि केहि उपलब्ध छैन | \n\n खाली फारम खोलेर भर्न प्रयास गर्नुहोला |</string>
   <string name="no_items_display_sent_forms">देखाउनको लागि केहि उपलब्ध छैन | \n\n संचित फारमलाई हेर्न अघि पठाउन प्रयास गर्नुहोला |</string>
   <string name="no_items_display_instances">देखाउनको लागि केहि उपलब्ध छैन | \n\n संचित फारमलाई पठाउनु अघि अन्तिम रुप दिन प्रयास गर्नुहोला |</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

@@ -35,6 +35,7 @@
   <string name="no_items_display">دکھانے کیلے کچھ بھی نہیں ہے</string>
   <string name="no_items_display_forms">دکھانے کیلئےکچھ نہیں ہے؟؟ خالی فارم حاصل کرنے اور پر کرنے کی کوشش کریں</string>
   <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے؟؟ْ۔ محفوظ شدہ فارم (ز) کو بھیجنےسے پہلےمکمل کریں</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

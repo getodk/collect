@@ -46,6 +46,7 @@
   <string name="no_items_display_forms">ምንም የሚታይ ነገር የለም:: \n\n አንድ ባዶ ቅጽ በማግኘትና በመሙላት ይሞክሩ::</string>
   <string name="no_items_display_sent_forms">ምንም የሚታይ ነገር የለም:: \n\n ከማየትዎ በፊት የተጠናቀቁ ቅጾችን ይላኩ::</string>
   <string name="no_items_display_instances">ምንም የሚታይ ነገር የለም:: \n\n ከመላኩ በፊት የተቀመጡ ቅጾች ማጠናቀቅ ይሞክሩ</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

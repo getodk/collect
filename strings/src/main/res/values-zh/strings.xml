@@ -20,6 +20,9 @@
   <string name="get_forms">下载空表格</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">删除已保存表格</string>
+  <string name="saved_forms">已保存的表格</string>
+  <string name="version_number">版本: %s</string>
+  <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'添加于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -31,19 +34,58 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'发送失败于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">EEE, MMM dd, yyyy \'的\' HH:mm \'删除\' </string>
+  <string name="submission_deleted">提交已删除</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'修改日期\' EEE, MMM dd, yyyy \'，\' HH:mm</string>
+  <string name="encrypted_form">加密的表单</string>
+  <string name="deleted_form">删除的表单</string>
+  <string name="sort_the_list">排序列表</string>
+  <string name="sort_by">排序</string>
+  <string name="sort_by_name_asc">名称, A-Z</string>
+  <string name="sort_by_name_desc">名称, Z-A</string>
+  <string name="sort_by_date_desc">日期, 最新的排第一个</string>
+  <string name="sort_by_date_asc">日期, 最旧的排第一个</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">上次保存排第一个</string>
+  <string name="sort_by_status_asc">状态，完成的优先</string>
+  <string name="sort_by_status_desc">状态，未完成优先</string>
+  <string name="filter_the_list">筛选列表</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">搜索</string>
   <string name="no_items_display">没有可显示内容.</string>
   <string name="no_items_display_forms">无可显示内容。\n\n 请尝试获取并填写一个空白表格</string>
+  <string name="no_items_display_sent_forms">没有可显示的内容。\n\n在查看之前，请尝试发送已完成的表单</string>
+  <string name="no_items_display_instances">没有可显示的内容。.\n\n在发送前尝试完成保存的表单。</string>
+  <string name="not_granted_permission">您尝试启动的活动需要未授予的权限。</string>
+  <string name="storage_runtime_permission_denied_title">存储权限</string>
+  <string name="storage_runtime_permission_denied_desc">没有这些权限，应用无法访问您的表单或保存答案。当您准备好授予他们时，请重新打开应用程序。</string>
+  <string name="location_runtime_permissions_denied_title">位置权限</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">没有 <b>精确位置</b> 权限， 应用无法记录您的位置。请在准备好授予时重试。</string>
+  <string name="camera_runtime_permission_denied_title">相机权限</string>
+  <string name="camera_runtime_permission_denied_desc">没有此权限，应用无法访问相机。请在准备好授予时重试。</string>
+  <string name="record_audio_runtime_permission_denied_title">录制音频权限</string>
+  <string name="record_audio_runtime_permission_denied_desc">没有此权限，应用无法访问麦克风。请在准备好授予时重试。</string>
+  <string name="get_accounts_runtime_permission_denied_title">获取帐户权限</string>
+  <string name="get_accounts_runtime_permission_denied_desc">没有此权限，应用无法访问帐户。请在准备好授予时重试。</string>
+  <string name="read_phone_state_runtime_permission_denied_title">读取手机状态权限</string>
+  <string name="read_phone_state_runtime_permission_denied_desc">应用不进行呼叫，但它需要访问有关设备的某些属性，如电话号码和设备ID。</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
   <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">打开表单地图</string>
+  <string name="instance_scan_count">添加了%1$d 个表单.</string>
   <string name="finished_disk_scan">文件扫描结束. 所有表格已经被加载.</string>
+  <string name="xform_parse_error"> %1$s解析出错: %2$s 缺少或无效。</string>
   <string name="loading_form">正在加载表格</string>
+  <string name="survey_loading_reading_form_message">正在读取表单定义…</string>
+  <string name="survey_loading_reading_data_message">正在读取调查数据…</string>
   <string name="survey_loading_reading_csv_message">正在读取CSV文件…</string>
   <string name="parse_error">无法读取表格.</string>
+  <string name="loading_form_failed">加载表单时出错。请重试。</string>
+  <string name="parent_form_not_present">无法编辑此保存的表单，因为相应的空白表单不存在或已被删除。\n\n表单 ID: %1$s</string>
   <string name="cannot_edit_completed_form">一旦此表格被标记为“最终版”，它便不能再次编辑，因为它可能已被加密。</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">已从自动保存点恢复未保存修改!</string>
@@ -60,8 +102,15 @@
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">返回</string>
   <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">组</string>
   <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">可重复组</string>
+  <string name="exit">退出</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">添加 \"%s\"?</string>
+  <string name="add_repeat">添加</string>
+  <string name="dont_add_repeat">不添加</string>
+  <string name="add_another_menu">添加另一个</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">修改提示</string>
   <string name="clearanswer_confirm">删除针对\"%s\"的回答?</string>
@@ -76,6 +125,10 @@
   <string name="delete_repeat_no">取消</string>
   <string name="invalid_answer_error">回答无效!</string>
   <string name="required_answer_error">此问题为必答题!</string>
+  <string name="invalid_space_in_answer_singular">警告：下划线的 %s 有空白字符</string>
+  <string name="invalid_space_in_answer_plural">警告：下划线的 %s 有空白字符</string>
+  <string name="too_complex_form">此表单对于此设备太复杂。尝试简化表达或在论坛上寻求帮助。</string>
+  <string name="survey_internal_error">内部错误：提示步骤失败。</string>
   <string name="save_enter_data_description">您已在 %s 的末尾.</string>
   <string name="save_form_as">重命名表格:</string>
   <string name="save_as_error">保存的名字不能为空!</string>
@@ -87,18 +140,37 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">退出 %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="no_form_loaded">&lt;未加载表单&gt;</string>
   <string name="do_not_save">忽略修改</string>
   <string name="keep_changes">保存修改</string>
   <string name="saving_form">正在保存表格</string>
+  <string name="survey_saving_validating_message">正在验证答案…</string>
+  <string name="survey_saving_collecting_message">正在收集数据…</string>
   <string name="survey_saving_saving_message">正在保存至SD卡…</string>
+  <string name="survey_saving_finalizing_message">正保存到SD卡…</string>
+  <string name="survey_saving_encrypting_message">加密数据</string>
+  <string name="not_exactly_one_record_for_this_instance">此实例中没有一条记录！</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">并非只有一个空白表单与此jr_form_id匹配。</string>
+  <string name="no_form_id_specified">未指定表单id???</string>
+  <string name="phone_does_not_support_rsa">手机不支持RSA加密。</string>
+  <string name="invalid_rsa_public_key">RSA公钥无效。</string>
+  <string name="encryption_error_message">%s 表单尚未保存为完成状态。</string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">错误的URI: %s</string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">无法识别的URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">无法开始录制。</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">麦克风已在使用中。</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">无法将媒体附加到表单，但可以在 %1$s获取</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">录制已禁用。在 %s中启用</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">填写的表单已被删除！</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">尝试更新值失败。这通常是因为表单设计中计算单元没有正确配置。\n\n如果您一直存在此问题，请向要求您收集数据的人报告。</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -106,17 +178,36 @@
   <string name="launch_app">运行</string>
   <string name="activity_not_found">没找到与 %s 对应的活动</string>
   <string name="no_app">请求的应用不可用. 请手动填入相应值.</string>
+  <string name="null_intent_value">外部应用程序未提供预期信息。</string>
   <string name="launch_printer">初始化打印</string>
   <string name="no_printer">请求的打印机未被安装. 请安装打印机.</string>
   <string name="open_url">打开Url</string>
   <string name="capture_osm">启动 OpenMapKit</string>
+  <string name="recapture_osm">重做OSM标记</string>
+  <string name="edited_osm_file">已编辑的OSM XML文件：</string>
+  <string name="invalid_osm_data">出了问题。我们没有获得有效的OSM数据。</string>
+  <string name="alert">警告</string>
+  <string name="install_openmapkit">请安装OpenMapKit！</string>
   <string name="get_barcode">获取条形码</string>
   <string name="replace_barcode">替换条形码</string>
+  <string name="barcode_scanner_prompt">将条形码放在矩形内</string>
+  <string name="open_file">打开文件</string>
+  <string name="rank_items">排序元素</string>
+  <string name="number_picker_title">数字选择器</string>
+  <string name="invalid_range_widget">此部件的参数无效！</string>
+  <string name="svg_file_does_not_exist">SVG文件不存在！</string>
   <string name="capture_image">照相</string>
   <string name="choose_image">选择图片</string>
+  <string name="choose_account">选择帐户</string>
+  <string name="selected_invalid_image">所选文件不是有效图像</string>
+  <string name="take_picture_instruction">点击屏幕拍照</string>
+  <string name="error_front_camera_unavailable">前置摄像头在此设备上不可用</string>
+  <string name="camera_error">此设备不支持Camera2 API。</string>
   <string name="annotate_image">注释该图片</string>
+  <string name="invalid_file_type">应用程序返回了无效的文件类型</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">保存并关闭</string>
+  <string name="signature_capture">签名捕获</string>
   <string name="sign_button">收集签名</string>
   <string name="markup_image">修改图像</string>
   <string name="draw_image">生成图像</string>
@@ -124,85 +215,294 @@
   <string name="set_color">选择颜色</string>
   <string name="capture_video">拍摄视频</string>
   <string name="choose_video">选择视频</string>
+  <string name="start_video_capture_instruction">点击屏幕开始录制</string>
+  <string name="stop_video_capture_instruction">录制已开始。再次点击以停止</string>
   <string name="play_video">播放视频</string>
+  <string name="choose_file">选择文件</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">删除</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">录音</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">选择音频</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">暂停</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">恢复</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">录制音频</string>
+  <string name="background_audio_permission_explanation">此窗体在后台录制音频。您必须授予使用麦克风的权限。否则，您将无法打开此表单。</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">此表单请求后台音频录制。禁用它将停止录制并丢弃现有音频。是否确实要继续？</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">屏蔽录制</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">录制不会立即开始。您必须重新打开表单进行记录。</string>
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">删除文件？</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">删除此文件后，您将无法恢复该文件。是否确实要继续？</string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">停止</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">正在录制…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">录音</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">播放声音</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">保存文件</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">离开此屏幕前必须停止录制。</string>
   <string name="error_attaching_binary_file">在访问媒体文件：%s时发生了错误</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_value">选择值</string>
   <string name="select_answer">选择回答</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="edit_value">编辑值</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="no_value_selected">没有选定的值</string>
   <string name="selected">选定: </string>
   <string name="trigger">好的. 请继续.</string>
   <string name="ext_file_no_data_error">此文件不包含数据！</string>
+  <string name="ext_conflicting_columns_error">列 %s 匹配!</string>
+  <string name="ext_sortBy_numeric_error">sortby列应该只包含数值。冲突值为 \'%s\'.</string>
+  <string name="ext_search_wrong_arguments_error">search() 函数语法错误：该函数需要1、4或6个参数。</string>
+  <string name="ext_search_wrong_function_error">search() 函数中的语法错误：未识别的函数 \'%s\'.</string>
+  <string name="ext_search_bad_function_error">search()函数中的语法错误: \'%s\' 未作为函数计算.</string>
+  <string name="ext_search_return_error">搜索处理程序返回了类型为 \'%s\'的对象.</string>
   <string name="ext_import_generic_error">无法从%1$s中导入数据，原因：%2$s</string>
+  <string name="ext_import_progress_message">从中 \'%1$s\'预加载数据, 请稍候… %2$s</string>
+  <string name="ext_import_cancelled_message">读取数据已取消！</string>
+  <string name="ext_import_finalizing_message">正在完成预加载的数据…</string>
   <string name="ext_import_completed_message">读取数据已完成！</string>
+  <string name="ext_not_initialized_error">ExternalDataManager尚未初始化。</string>
+  <string name="ext_import_csv_missing_error">外部数据 %1$s 尚未导入. 也许您忘记在表单中包含 %2$s.csv 文件?</string>
+  <string name="ext_search_generic_error">search() 函数中的语法错误: %s</string>
+  <string name="ext_assign_value_error">无法给 \'%s\' 赋值.</string>
+  <string name="parser_exception">XPathParser 异常: \"%s\"</string>
   <string name="get_bearing">记录方位</string>
   <string name="replace_bearing">替代方位</string>
   <string name="getting_bearing">加载方位</string>
   <string name="accept_bearing">记录方位</string>
+  <string name="bearing">方位: %.3f</string>
+  <string name="direction">方向: %s</string>
+  <string name="bearing_lack_of_sensors">无法收集方位：设备缺少加速计、磁场传感器或两者。</string>
+  <string name="select_date">选择日期</string>
+  <string name="select_time">选择时间</string>
+  <string name="no_date_selected">未选择日期</string>
+  <string name="no_time_selected">未选择时间</string>
+  <string name="ethiopian_month_1">Meskerem</string>
+  <string name="ethiopian_month_2">Tikimt</string>
+  <string name="ethiopian_month_3">Hidar</string>
+  <string name="ethiopian_month_4">Tahsas</string>
+  <string name="ethiopian_month_5">Tir</string>
+  <string name="ethiopian_month_6">Yekatit</string>
+  <string name="ethiopian_month_7">Megabit</string>
+  <string name="ethiopian_month_8">Miazia</string>
+  <string name="ethiopian_month_9">Ginbot</string>
+  <string name="ethiopian_month_10">Senie</string>
+  <string name="ethiopian_month_11">Hamlie</string>
+  <string name="ethiopian_month_12">Nehasie</string>
+  <string name="ethiopian_month_13">Pagumien</string>
+  <string name="coptic_month_1">Thout</string>
+  <string name="coptic_month_2">Paopi</string>
+  <string name="coptic_month_3">Hathor</string>
+  <string name="coptic_month_4">Koiak</string>
+  <string name="coptic_month_5">Tobi</string>
+  <string name="coptic_month_6">Meshir</string>
+  <string name="coptic_month_7">Paremhat</string>
+  <string name="coptic_month_8">Parmouti</string>
+  <string name="coptic_month_9">Pashons</string>
+  <string name="coptic_month_10">Paoni</string>
+  <string name="coptic_month_11">Epip</string>
+  <string name="coptic_month_12">Mesori</string>
+  <string name="coptic_month_13">Pi Kogi Enavot</string>
+  <string name="islamic_month_1">Muharram</string>
+  <string name="islamic_month_2">Safar</string>
+  <string name="islamic_month_3">Rabi\' al-awwal</string>
+  <string name="islamic_month_4">Rabi\' al-thani</string>
+  <string name="islamic_month_5">Jumada al-awwal</string>
+  <string name="islamic_month_6">Jumada al-thani</string>
+  <string name="islamic_month_7">Rajab</string>
+  <string name="islamic_month_8">Sha\'ban</string>
+  <string name="islamic_month_9">Ramadan</string>
+  <string name="islamic_month_10">Shawwal</string>
+  <string name="islamic_month_11">Dhu al-Qidah</string>
+  <string name="islamic_month_12">Dhu al-Hijjah</string>
+  <string name="persian_month_1">Farvardin</string>
+  <string name="persian_month_2">Ordibehesht</string>
+  <string name="persian_month_3">Khordad</string>
+  <string name="persian_month_4">Tir</string>
+  <string name="persian_month_5">Mordad</string>
+  <string name="persian_month_6">Shahrivar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
   <string name="file_invalid">文件: %s 不是有效文件.</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
   <string name="file_missing">文件: %s 不能被找到.</string>
   <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="enter_identity">输入身份</string>
   <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="identity">身份</string>
   <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="enter_identity_description">此表单要求您确认身份</string>
   <!--Action to close a full screen dialog-->
+  <string name="close">关闭</string>
   <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes">变更原因</string>
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason">理由</string>
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes_description">您需要解释更改此表单的原因</string>
   <!--Action to save the contents of a full screen dialog-->
+  <string name="save">保存</string>
   <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">选择地点</string>
+  <string name="choices">选择</string>
   <!--##############################################
     # GEO
     ##############################################-->
   <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">USGS地形图</string>
+  <string name="openmap_usgs_sat">USGS混合地图</string>
+  <string name="openmap_usgs_img">USGS影像地图</string>
+  <string name="openmap_stamen_terrain">Stamen 地形</string>
+  <string name="openmap_cartodb_positron">CartoDB Positron</string>
+  <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
+  <string name="basemap">底图</string>
+  <string name="basemap_source">源</string>
+  <string name="basemap_source_unavailable">抱歉, %s 此设备上没有底图。请在“设置”中选择另一个底图 &gt;  地图.</string>
+  <string name="map_style_label">%s 地图样式</string>
+  <string name="streets">街道</string>
+  <string name="terrain">地形</string>
+  <string name="hybrid">混合</string>
+  <string name="satellite">卫星</string>
+  <string name="light" tools:ignore="UnusedResources">浅色</string>
+  <string name="dark" tools:ignore="UnusedResources">深色</string>
+  <string name="outdoors" tools:ignore="UnusedResources">户外</string>
+  <string name="topographic">地形图</string>
+  <string name="google_play_services_error_occured">无法访问谷歌地图。是否安装了Google Play服务？</string>
+  <string name="carto_map_style_positron">Positron</string>
+  <string name="carto_map_style_dark_matter">Dark Matter</string>
+  <string name="reference_layer">应用图层</string>
+  <string name="layer_data_file">图层数据文件</string>
   <string name="view_change_location">查看或修改位置</string>
   <string name="change_location">更改地点</string>
+  <string name="record_geopoint">记录点</string>
+  <string name="location_accuracy">精确度: %1$s m</string>
+  <string name="location_provider">位置提供程序: %s</string>
   <string name="get_location">获取位置</string>
   <string name="provider_disabled_error">位置服务被关闭!</string>
+  <string name="gps_result">纬度: %1$s\n经度: %2$s\n高程: %3$sm\n精度: %4$sm</string>
+  <string name="google_play_services_not_available">此表单希望跟踪您的位置，但Google Play服务不可用。</string>
+  <string name="location_providers_disabled_dialog_message">此表单希望跟踪您的位置，但位置提供程序被禁用。请在Android设置中启用。</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <string name="go_to_settings">转到设置</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="track_location">跟踪位置</string>
+  <string name="background_location_disabled">此表单希望跟踪您的位置，但已禁用跟踪. 请在菜单 %1$s 上启用他</string>
+  <string name="background_location_enabled">此表单跟踪您的位置. 您可以在上面的菜单 %1$s 中禁用跟踪。</string>
+  <string name="get_point">开始GeoPoint</string>
+  <string name="geopoint_view_read_only">查看GeoPoint</string>
+  <string name="geoshape_view_read_only">查看 GeoShape</string>
+  <string name="geotrace_view_read_only">查看 GeoTrace</string>
+  <string name="get_shape">开始 GeoShape</string>
+  <string name="get_trace">开始 GeoTrace</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">已用时间: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">点将保存在 %1$s</string>
   <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">卫星: %1$s</string>
+  <string name="waiting_for_location">正在尝试获取位置，请稍候。</string>
+  <string name="poor_accuracy">精度差，请稍候。</string>
+  <string name="unacceptable_accuracy">精度不可接受，请稍候。</string>
+  <string name="improving_accuracy">提高准确性，请稍候。</string>
+  <string name="accuracy_status_title">正在获取位置</string>
   <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$sm</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">W %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">N %1$s%2$s%3$s</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">输入方法</string>
+  <string name="start">开始</string>
+  <string name="enable_gps">启用GPS</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <string name="gps_enable_message">设备上的GPS已禁用。是否要启用它？</string>
+  <string name="geo_clear_warning">对象已创建。是否要清除该对象？</string>
+  <string name="geo_exit_warning">放弃更改并返回应用？</string>
+  <string name="polygon_validator">必须至少有3个点才能创建多边形</string>
+  <string name="polyline_validator">必须至少有2个点才能创建多段线</string>
+  <string name="clear">清除</string>
+  <string name="placement_mode">轻敲放置</string>
+  <string name="manual_mode">手动位置记录</string>
+  <string name="automatic_mode">自动位置记录</string>
+  <string name="recording_interval">记录间隔：</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_seconds">
+    <item quantity="other">%d 秒</item>
+  </plurals>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_minutes">
+    <item quantity="other">%d 分钟</item>
+  </plurals>
+  <string name="accuracy_requirement">精度要求：</string>
+  <string name="none">没有</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <plurals name="number_of_meters">
+    <item quantity="other">%d 米</item>
+  </plurals>
+  <string name="location_status_searching">正在搜索位置，请稍候…</string>
+  <string name="location_status_accuracy">位置精度: %.2f m</string>
+  <string name="location_status_acceptable">位置精度: %.2f m (可接受)</string>
+  <string name="location_status_unacceptable">位置精度: %.2f m (不可接受)</string>
+  <string name="collection_status_paused">输入的点数: %d</string>
+  <string name="collection_status_placement">输入的点数: %d (点击以放置点)</string>
+  <string name="collection_status_manual">输入的点数: %d (手动记录)</string>
+  <string name="collection_status_auto_seconds">输入的点数: %1$d (每隔%2$d 秒记录)</string>
+  <string name="collection_status_auto_minutes">输入的点数: %1$d (每隔 %2$d 分钟记录)</string>
+  <string name="collection_status_auto_seconds_accuracy">输入的点数: %1$d (每隔 %2$d 秒记录, 精度%3$d m)</string>
+  <string name="collection_status_auto_minutes_accuracy">输入的点数: %1$d (每隔 %2$d 分钟记录, 精度 %3$d m)</string>
+  <string name="geopoint_instruction">长按放置标记或点击添加标记按钮。</string>
+  <string name="geopoint_no_draggable_instruction">点击添加标记按钮。</string>
+  <string name="discard">丢弃</string>
+  <string name="geoshape_view_change_location">查看或更改GeoShape</string>
+  <string name="geotrace_view_change_location">查看或更改GeoTrace</string>
+  <string name="select_item_count">%s: %d (%d 在图上)</string>
+  <string name="select_item">选择</string>
+  <string name="new_item">新元素</string>
   <!--Name of an action button-->
+  <string name="view_data">查看已保存的表格</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">位置跟踪</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">跟踪位置…</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">获取引用图层帮助</string>
   <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">显示位置</string>
   <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">缩放以适应所有</string>
   <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">暂停</string>
   <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">删除最后一点</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -219,26 +519,54 @@
   <string name="change_view">修改视图</string>
   <string name="show_sent_and_unsent_forms">显示已发送和未发送表格</string>
   <string name="show_unsent_forms">只显示未发送表格</string>
+  <string name="media_upload_error">无法上载不存在的媒体文件: %1$s</string>
+  <string name="send_in_progress">后台发送正在运行，请稍后重试</string>
+  <string name="odk_permissions_fail">应用自动发送权限失败，请确保您已授予所有必需的权限</string>
+  <string name="forms_upload_succeeded">表单上载成功</string>
+  <string name="forms_upload_failed">表单上载失败</string>
+  <string name="all_uploads_succeeded">所有上传成功！</string>
+  <string name="some_uploads_failed">%1$s / %2$s 上载失败!</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
   <string name="refresh">刷新</string>
   <string name="download">下载选中项</string>
+  <string name="download_forms_result">下载结果</string>
   <string name="downloading_data">连接到服务器</string>
+  <string name="fetching_file">获取 %1$s.\n\n表单 %2$s / %3$s 表单.</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
   <string name="version">版本:</string>
+  <string name="form_updates_available">表单更新可用</string>
+  <string name="newer_version_of_a_form_info">这是对您的表单的更新</string>
+  <string name="form_update_error">表单更新失败</string>
+  <string name="form_update_succeeded">表单更新成功</string>
+  <string name="load_remote_form_error">表单列表下载失败</string>
+  <string name="forms_download_succeeded">表单下载成功</string>
+  <string name="forms_download_failed">表单下载失败</string>
+  <string name="all_downloads_succeeded">所有下载成功！</string>
+  <string name="some_downloads_failed">%1$s / %2$s 下载失败!</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="form_details">ID: %1$s 版本: %2$s</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
+  <string name="report_to_project_lead">如果你一直有这个问题，请向要求你收集数据的人报告。</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="unreachable_error">无法在访问服务器 %s. 您输入的URL是否正确?</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="security_error">无法安全连接到位于 %s的服务器. 您输入的URL是否正确?</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="server_error">服务器%1$s 返回的状态 %2$s.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="invalid_response">服务器 %s 提供了无效的响应.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_no_hash_error">服务器未为此表单提供哈希。</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">无法处理此表单。</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_save_disk_error">下载此表单时，设备上出现磁盘错误。</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_invalid_submission_error">此表单的提交URL无效。</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -251,33 +579,57 @@
   <string name="delete_no">不删除</string>
   <string name="delete_yes">删除表格</string>
   <string name="file_deleted_error">%2$s 中的 %1$s 个选定的表格不能被删除!</string>
+  <string name="form_delete_message">删除所选表单</string>
+  <string name="deleting_form_dialog_update_message">正在删除表单: %1$d /%2$d </string>
   <string name="file_deleted_ok">%s 表格被成功删除!</string>
   <string name="file_delete_in_progress">正在删除表格!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->
+  <string name="project_settings">项目设置</string>
   <!--Title of a settings section-->
+  <string name="server_settings_title">服务器</string>
   <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL、用户名、密码</string>
   <!--Title of a settings section-->
+  <string name="project_display_title">项目显示</string>
   <!--Subtext of a settings section-->
+  <string name="project_display_subtext">名称、图标、颜色</string>
   <!--Title of a settings section-->
   <string name="client">用户界面</string>
   <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">应用程序语言、主题、字体大小</string>
   <!--Title of a settings section-->
+  <string name="maps">地图</string>
   <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">底图、样式、图层</string>
   <!--Title of a settings section-->
+  <string name="form_management_preferences">表单管理</string>
   <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">自动更新、自动发送、自动删除</string>
   <!--Title of a settings section-->
+  <string name="user_and_device_identity_title">用户和设备标识</string>
   <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">用户名、电话号码、设备ID</string>
   <!--Title of a settings section only available in beta or development builds.-->
+  <string name="experimental">实验的</string>
+  <string name="protected_settings">受保护的</string>
   <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">解锁受保护的设置</string>
   <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">更改密码，设置访问控制</string>
+  <string name="set_admin_password">设置管理员密码</string>
   <!--Title of a settings section-->
+  <string name="project_management_section_title">项目管理</string>
   <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">重新配置、重置、删除</string>
   <!--Title of a settings section-->
+  <string name="access_control_section_title">访问控制</string>
   <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">有限用户界面</string>
   <string name="server_preferences">服务器设置</string>
   <!--Label for server type setting-->
+  <string name="type">类型</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">服務器 URL</string>
@@ -286,9 +638,20 @@
   <string name="change_username">用户名</string>
   <string name="password">密码</string>
   <string name="change_password">密码</string>
+  <string name="password_error_whitespace">密码中不允许有前导或尾随空格</string>
+  <string name="username_error_whitespace">用户名中不允许有前导或尾随空格</string>
+  <string name="server_platform_google_sheets">谷歌硬盘，谷歌表格</string>
   <string name="selected_google_account_text">Google账号</string>
   <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <string name="google_sheets_url">回退提交URL</string>
   <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">表单必须设置提交URL。如果没有，将使用此URL。</string>
+  <string name="app_theme">主题</string>
+  <string name="theme_light">浅色主题</string>
+  <string name="theme_dark">深色主题</string>
+  <string name="theme_system">使用设备主题</string>
+  <string name="language">语言</string>
+  <string name="use_device_language">使用设备语言</string>
   <string name="font_size">字体大小</string>
   <string name="change_font_size">字体大小</string>
   <string name="font_size_extra_large">极大</string>
@@ -303,31 +666,86 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">下一个</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_backward">上一个</string>
   <!--Heading for the settings category about updating blank forms-->
+  <string name="form_update_category">表单更新</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <string name="form_update_mode_title">空白表单更新模式</string>
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <string name="manual">手动</string>
   <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <string name="previously_downloaded_only">仅限以前下载的表单</string>
   <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <string name="match_exactly">完全匹配服务器</string>
   <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <string name="form_update_frequency_title">自动更新频率</string>
   <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">每十五分钟</string>
   <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">每小时</string>
   <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_six_hours">每6小时</string>
   <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_24_hours">每24小时</string>
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">自动下载</string>
+  <string name="automatic_download_summary">自动下载表单的更新版本</string>
+  <string name="hide_old_form_versions_setting_title">隐藏旧版本表单</string>
+  <string name="hide_old_form_versions_setting_summary">只有最新版本才会出现在“填写空白表单”中</string>
+  <string name="form_submission_category">表单提交</string>
   <string name="autosend_selector_title">自动发送</string>
   <string name="autosend">自动发送</string>
+  <string name="off">关</string>
+  <string name="wifi_autosend">仅Wifi</string>
+  <string name="cellular_autosend">仅蜂窝</string>
+  <string name="wifi_cellular_autosend">Wifi或蜂窝</string>
   <string name="delete_after_send">发送后自动删除</string>
+  <string name="delete_after_send_summary">发送到服务器后删除已完成的表单和媒体</string>
+  <string name="form_filling_category">表单填写</string>
   <string name="default_completed">默认标记表格为完成</string>
   <string name="default_completed_summary">表格会默认标记为完成</string>
+  <string name="constraint_behavior_title">约束处理</string>
   <string name="constraint_behavior">约束检查</string>
   <string name="constraint_behavior_on_swipe">向前滑动时验证</string>
   <string name="constraint_behavior_on_finalize">推迟检验直到完成</string>
+  <string name="high_resolution_title">高分辨率视频</string>
+  <string name="high_resolution_summary">启用高分辨率视频录制</string>
+  <string name="image_size_title">图像大小</string>
+  <string name="image_size_dialog_title">图像长边的最大像素</string>
+  <string name="image_size_large">大（3072px）</string>
+  <string name="image_size_medium">中（2048px）</string>
+  <string name="image_size_small">小（1024px）</string>
+  <string name="image_size_very_small">非常小（640px）</string>
+  <string name="image_size_original">相机的原始大小（默认）</string>
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_hint_title">显示指南</string>
+  <string name="guidance_no">否</string>
+  <string name="guidance_yes">是-始终显示</string>
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <string name="guidance_yes_collapsed">是-已折叠</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">使用外部应用程序进行音频录制</string>
+  <string name="form_import_category">表单导入</string>
+  <string name="instance_sync">导入时完成表单</string>
+  <string name="instance_sync_summary">影响直接添加到实例文件夹的表单。</string>
+  <string name="analytics_preferences">使用情况数据</string>
+  <string name="analytics">收集匿名使用数据</string>
+  <string name="analytics_summary">匿名使用数据帮助团队确定修复和功能的优先级。</string>
+  <string name="form_metadata_title">表单元数据</string>
+  <string name="form_metadata">表单元数据</string>
+  <string name="form_metadata_summary">这些值将添加到预先加载了用户名、电子邮件和/或电话字段的表单中，以标识提交数据的人。</string>
+  <string name="user_defined">用户定义的</string>
+  <string name="phone_number">电话号码</string>
+  <string name="email">电子邮件地址</string>
+  <string name="invalid_email_address">电子邮件地址无效！</string>
+  <string name="device_defined">设备已定义</string>
+  <string name="device_id">设备ID</string>
   <!--Displayed when a device property such as the phone number is not available-->
+  <string name="preference_not_available">不可用</string>
   <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">解锁设置</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">设置已解锁</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -340,26 +758,109 @@
   <string name="change_admin_password">更改管理员密码</string>
   <string name="show_password">显示密码</string>
   <string name="found_in_main">不选中以从主菜单中隐藏</string>
+  <string name="found_in_settings">取消选中以隐藏不受保护的设置</string>
+  <string name="form_entry">取消选中以隐藏表单条目</string>
   <string name="reset_project_settings_title">重置</string>
+  <string name="reset_project_settings_subtext">从设置、表单和数据中进行选择</string>
+  <string name="delete_project">删除</string>
+  <string name="select_all">全选</string>
+  <string name="clear_all">清空</string>
+  <string name="reset_settings">所有设置（内部设置、保存的设置）</string>
+  <string name="reset_saved_forms">保存的表单（实例文件夹、实例数据库）</string>
+  <string name="reset_blank_forms">空白表单（表单文件夹、表单数据库、元素集数据库）</string>
+  <string name="reset_layers">地图图层（图层文件夹）</string>
+  <string name="reset_cache">表单加载缓存（.cache文件夹）</string>
+  <string name="reset_settings_dialog_title">选择要重置的内容</string>
+  <string name="reset_settings_button_reset">重置</string>
+  <string name="reset_in_progress">正在重置…</string>
+  <string name="reset_app_state_result">重置结果</string>
+  <string name="reset_app_state_warning">所有选定的数据将被永久删除。无法撤消。</string>
+  <string name="reset_settings_result">所有设置 :: %s</string>
+  <string name="reset_saved_forms_result">保存的表单 :: %s</string>
+  <string name="reset_blank_forms_result">空白表单 :: %s</string>
+  <string name="reset_layers_result">地图图层 :: %s</string>
+  <string name="reset_cache_result">表单加载缓存 :: %s</string>
+  <string name="main_menu_settings">主菜单设置</string>
+  <string name="main_menu_settings_summary">显示或隐藏按钮</string>
+  <string name="user_settings">用户设置</string>
+  <string name="user_setting_summary">显示或隐藏设置</string>
+  <string name="form_entry_setting">表单条目设置</string>
+  <string name="form_entry_settings_summary">显示或隐藏操作</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="moving_backwards_title">向后移动</string>
+  <string name="moving_backwards_disabled_title">向后移动已禁用</string>
+  <string name="moving_backwards_disabled_message">配置设备以防止用户绕过此设置？\n\n更改为：\n\u2022禁用编辑保存的表单\n\u2022禁止保存表单\n\u2022禁用转到提示\n\u2022将约束处理设置为向前滑动时验证</string>
+  <string name="yes">是</string>
+  <string name="no">否</string>
+  <string name="moving_backwards_enabled_title">已启用向后移动</string>
+  <string name="moving_backwards_enabled_message">您可能希望查看以下设置：\n\n\u2022编辑保存的表单\n\u2022保存表单\n\u2022转到提示\n\u2022约束处理</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">保存表格</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
+  <string name="go_drive">我的驱动器</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
+  <string name="go_shared">与我共享</string>
   <!--Button for navigating across Google Drive folders-->
+  <string name="download_selected">下载所选内容</string>
+  <string name="go_back">返回</string>
+  <string name="google_auth_io_exception_msg">无法进行API调用。如果您正在运行本地生成，请查看项目自述文件。</string>
+  <string name="reading_files">正在读取文件</string>
+  <string name="drive_get_file">获取 %1$s和媒体文件.</string>
   <string name="no_google_account">无选中的谷歌账号！</string>
+  <string name="google_set_account">您已选择Google Sheets作为服务器，请在“设置”中选择相应的Google帐户，然后继续</string>
+  <string name="google_search_browse">搜索表单。或选择下面的“我的驱动器”进行浏览。</string>
+  <string name="invalid_sheet_id">工作表id无效: %1$s</string>
+  <string name="missing_submission_url">缺失提交URL</string>
+  <string name="google_sheets_access_denied">访问被拒绝。请确保电子表格所有者已授予您编辑权限。</string>
+  <string name="google_sheets_missing_columns">电子表格缺少以下列: %1$s</string>
+  <string name="google_sheets_encrypted_message">加密表单无法提交到Google表单。</string>
+  <string name="missing_google_account_dialog_desc">要通过Google表单提交表单，您必须在服务器设置中设置您的Google帐户。</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="instance_upload_cancelled">实例上载已取消</string>
+  <string name="no_columns_to_upload">在表单中找不到要上载的列</string>
+  <string name="missing_google_account_dialog_title">未设置Google帐户</string>
+  <string name="multiple_media_folders_detected_notification">检测到多个媒体文件夹，请删除一个并重试</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">关于</string>
-  <string name="tell_your_friends">分享ODK Collect</string>
+  <string name="tell_your_friends">分享应用</string>
+  <string name="tell_your_friends_msg">你的同事还在收集纸上的数据吗？与他们共享本应用。</string>
+  <string name="leave_a_review">留下Play Store评论</string>
+  <string name="leave_a_review_msg">你的（希望是正面的）评论提高了应用程序在应用商店中的知名度。</string>
+  <string name="odk_website">访问网站</string>
+  <string name="odk_website_summary">应用用于在具有挑战性的环境中收集社会数据。</string>
+  <string name="odk_forum">加入论坛</string>
+  <string name="odk_forum_summary">加入论坛以获得支持、请求功能、贡献代码/翻译！</string>
+  <string name="all_open_source_licenses">开源库/许可证</string>
+  <string name="all_open_source_licenses_msg">我们站在巨人的肩膀上！</string>
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">使用二维码重新配置</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">替换所有设置</string>
+  <string name="qr_code">二维码配置</string>
+  <string name="scan_qr_code_fragment_title">扫描</string>
+  <string name="view_qr_code_fragment_title">二维码</string>
+  <string name="import_qrcode_sd">导入二维码</string>
+  <string name="successfully_imported_settings">成功导入设置</string>
+  <string name="encoding_max_limit">已达到最大字符数限制：无法为所有设置生成二维码</string>
+  <string name="share">分享</string>
+  <string name="turn_on_flashlight">打开闪光灯</string>
+  <string name="turn_off_flashlight">关闭闪光灯</string>
+  <string name="qrcode_with_both_passwords">包含敏感信息: <b>管理员</b> 和 <b>服务器密码</b></string>
+  <string name="qrcode_without_passwords">二维码不包含 <b>管理员</b> 或 <b>服务器</b> 密码. 点击以配置</string>
+  <string name="qrcode_with_admin_password">包含敏感信息: <b>管理员</b> 密码</string>
+  <string name="qrcode_with_server_password">包含敏感信息: <b>服务器</b> 密码</string>
+  <string name="server_password">服务器密码</string>
+  <string name="include_password_dialog">代码中包含的密码</string>
+  <string name="generate">生成</string>
+  <string name="invalid_qrcode">二维码不包含有效设置</string>
+  <string name="qr_code_not_found">在所选图像中找不到二维码</string>
+  <string name="corrupt_imported_preferences_error">当前设置已损坏。从项目管理设置中，重置设置或导入工作设置。</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -371,47 +872,98 @@
   <string name="do_not_change">取消</string>
   <string name="do_not_exit">取消</string>
   <string name="canceling">正在取消</string>
+  <string name="notification_channel_name">一般通知</string>
   <string name="success">成功</string>
   <string name="error_occured">错误</string>
   <string name="please_wait">请稍候.</string>
   <string name="please_wait_long">请稍候. 这可能需要几分钟.</string>
+  <string name="fs_delete_media_path_if_file_error">无法删除 \'%s\'. 请手动删除文件并重新下载表单.</string>
+  <string name="fs_create_media_folder_error">无法创建媒体文件夹 \'%s\'.</string>
+  <string name="fs_file_copy_error">不能拷贝 \'%1$s\' 到 \'%2$s\'. 原因: %3$s</string>
+  <string name="survey_multiple_forms_error">您下载了两个具有相同表单ID和版本的不同表单。也许它们是在不同的时间或不同的服务器上传的相同表单。无论如何，您都应该删除一个。</string>
+  <string name="select_odk_shortcut">选择快捷方式</string>
+  <string name="background_audio_help">此表单记录设备麦克风的音频。\n\n您可以使用音量指示器来确保麦克风足够接近您需要录制的声音。\n\n若要停止录制，请退出此表单。\n\n有关详细信息，请与要求您收集数据的人员联系。</string>
+  <string name="loading">正在加载…</string>
   <!--##############################################
      # Projects
      ##############################################-->
+  <string name="projects">项目</string>
+  <string name="settings">设置</string>
+  <string name="add_project">添加项目</string>
+  <string name="add">添加</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">重复项目</string>
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">您已经有一个具有这些连接设置的项目。要切换到现有项目还是添加新项目？</string>
   <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">添加重复项目</string>
   <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">切换到现有项目</string>
+  <string name="project_name">项目名称</string>
+  <string name="project_icon">项目图标</string>
+  <string name="project_color">项目颜色</string>
   <!--Toast text shown when the current project is changed-->
+  <string name="switched_project">已切换到 %s</string>
   <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
+  <string name="using_project">使用 %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
+  <string name="switch_to_project">切换到 %s</string>
+  <string name="delete_project_confirm_message">所有空白表单、提交和设置将被永久删除。</string>
+  <string name="delete_project_yes">是</string>
+  <string name="delete_project_no">否</string>
+  <string name="cannot_delete_project_title">无法删除项目</string>
+  <string name="cannot_delete_project_message_one">您有未发送的提交。若要删除项目，必须首先发送或删除这些提交。</string>
+  <string name="cannot_delete_project_message_two">后台作业正在运行。请稍后再试。</string>
+  <string name="or">或</string>
+  <string name="hex_color">十六进制颜色</string>
+  <string name="invalid_hex_code">无效的十六进制代码</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">收集数据\n任何位置</string>
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">使用二维码配置</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">手动输入项目详细信息</string>
+  <string name="project_config_tip">添加项目后，可以在“设置”中对其进行配置</string>
   <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
+  <string name="gdrive_project">我的项目使用Google Drive。</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
+  <string name="gdrive_configure">配置</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">还没有项目？</string>
   <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">尝试演示</string>
+  <string name="scan_configuration_qr_code">扫描配置二维码</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">要打开此表单，必须首先打开应用并切换到包含它的项目。</string>
   <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">尚未配置应用收集。尝试打开应用并对其进行配置。\n\n如果您点击了快捷方式，您可能需要在配置应用后重新创建它。</string>
   <!--##############################################
     # Errors
     ##############################################-->
+  <string name="show_details">显示详细信息</string>
+  <string name="errors">错误</string>
   <!--##############################################
     # Permissions
     ##############################################-->
+  <string name="open_settings">打开设置</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">实体</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <string name="crash_last_run">应用程序上次运行时发生了崩溃！</string>
+  <string name="cant_start_app">无法启动应用程序！</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->
+  <string name="dev_tools">开发人员工具</string>
   <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">崩溃应用程序</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">强制执行导致应用程序崩溃的未捕获异常</string>
 </resources>

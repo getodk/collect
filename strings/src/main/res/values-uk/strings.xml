@@ -58,6 +58,7 @@
   <string name="storage_runtime_permission_denied_title">Дозволи сховища</string>
   <string name="storage_runtime_permission_denied_desc">Без цих дозволів Collect не матиме дотупу до ваших анкет (читання, запис відповідей). Відкрийте програму знову, ящо ви вже їх надали.</string>
   <string name="location_runtime_permissions_denied_title">Місцеві дозволи</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Дозвіл використання камери</string>
   <string name="camera_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до камери. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="record_audio_runtime_permission_denied_title">Дозвіл на аудіозапис</string>

@@ -59,6 +59,7 @@
   <string name="storage_runtime_permission_denied_title">Uprawnienia do przechowywania</string>
   <string name="storage_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do formularzy i nie może zapisywać odpowiedzi. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="location_runtime_permissions_denied_title">Uprawnienia dostępu do lokalizacji</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Uprawnienia dostępu do kamery</string>
   <string name="camera_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do kamery. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="record_audio_runtime_permission_denied_title">Uprawnienia do nagrywania dźwięku</string>

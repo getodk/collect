@@ -60,6 +60,7 @@
   <string name="storage_runtime_permission_denied_title">Ruhusa ya kuhifadhi</string>
   <string name="storage_runtime_permission_denied_desc">Bila hizi ruhusa Collect haiwezi kufikia fomu au kuhifadhi majibu. Fungua tena program ukiwa tayari kuziruhusu.</string>
   <string name="location_runtime_permissions_denied_title">Ruhusa ya kuonesha eneo </string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Ruhusa ya camera</string>
   <string name="camera_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kutumia kamera. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <string name="record_audio_runtime_permission_denied_title">Ruhusa ya kurekodi sauti</string>

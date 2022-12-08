@@ -35,6 +35,7 @@
   <string name="no_items_display">প্রদর্শন করার মত কিছু পাওয়া যায়নি।</string>
   <string name="no_items_display_forms">প্রদর্শন করার মত কিছু পাওয়া যায়নি।\n\nTry নতুন ফরম নামিয়ে আবার পুরন করে চেষ্টা করে দেখুন।</string>
   <string name="no_items_display_instances">প্রদর্শন করার মত কিছু পাওয়া যায়নি।\n\nTry ফরম পাঠানের পূর্বে চূড়ান্ত ফরম নিশ্চিত করে নিন।</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
