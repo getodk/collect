@@ -38,7 +38,7 @@ import androidx.core.content.ContextCompat;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.listeners.OnTaskOptionsClickLisener;
+import org.odk.collect.android.listeners.OnTaskOptionsClickListener;
 import org.odk.collect.android.loaders.TaskEntry;
 import org.odk.collect.android.utilities.KeyValueJsonFns;
 import org.odk.collect.android.utilities.Utilities;
@@ -50,11 +50,11 @@ public class TaskListArrayAdapter extends ArrayAdapter<TaskEntry> {
 
     private int mLayout;
     boolean mFormView;
-    OnTaskOptionsClickLisener taskClickLisener;
+    OnTaskOptionsClickListener taskClickLisener;
     LayoutInflater mInflater;
     static String TAG = "TaskListArrayAdapter";
 
-    public TaskListArrayAdapter(Context context, boolean formView, OnTaskOptionsClickLisener taskClickLisener) {
+    public TaskListArrayAdapter(Context context, boolean formView, OnTaskOptionsClickListener taskClickLisener) {
         super(context, R.layout.main_list);
         mLayout = R.layout.task_row;
         this.taskClickLisener = taskClickLisener;
