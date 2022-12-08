@@ -61,14 +61,14 @@ class FragmentScenarioLauncherRule @JvmOverloads constructor(
                 fragmentClass = fragmentClass,
                 fragmentArgs = fragmentArgs,
                 themeResId = defaultThemeResId,
-                factory = null,
+                factory = defaultFactory,
                 initialState = initialState
             )
         } else {
             FragmentScenario.launch(
                 fragmentClass = fragmentClass,
                 fragmentArgs = fragmentArgs,
-                factory = null,
+                factory = defaultFactory,
                 initialState = initialState
             )
         }

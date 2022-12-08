@@ -21,7 +21,14 @@ object DialogFragmentUtils {
         args: Bundle?,
         fragmentManager: FragmentManager
     ) {
-        showIfNotShowing(createNewInstance(dialogClass, args), dialogClass, fragmentManager)
+        if (fragmentManager.isDestroyed) {
+            return
+        }
+
+        val fragmentFactory = fragmentManager.fragmentFactory
+        val instance = fragmentFactory.instantiate(dialogClass.classLoader, dialogClass.name) as T
+        instance.arguments = args
+        showIfNotShowing(instance, dialogClass, fragmentManager)
     }
 
     @JvmStatic
@@ -77,19 +84,6 @@ object DialogFragmentUtils {
             } catch (e: IllegalStateException) {
                 Timber.w(e)
             }
-        }
-    }
-
-    private fun <T : DialogFragment> createNewInstance(dialogClass: Class<T>, args: Bundle?): T {
-        return try {
-            val instance = dialogClass.newInstance()
-            instance.arguments = args
-            instance
-        } catch (e: IllegalAccessException) {
-            // These would mean we have a non zero arg constructor for a Fragment
-            throw RuntimeException(e)
-        } catch (e: InstantiationException) {
-            throw RuntimeException(e)
         }
     }
 }

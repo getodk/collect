@@ -385,8 +385,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
+        formEntryViewModelFactory.setSessionId(sessionId);
+        formSaveViewModelFactoryFactory.setSessionId(sessionId);
+        backgroundAudioViewModelFactory.setSessionId(sessionId);
+
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(sessionId))
+                .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(formSaveViewModelFactoryFactory))
                 .build());
 
         super.onCreate(savedInstanceState);
@@ -442,14 +447,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                 new BackgroundLocationViewModel.Factory(permissionsProvider, settingsProvider.getUnprotectedSettings(), formSessionRepository, sessionId)
         ).get(BackgroundLocationViewModel.class);
 
-        backgroundAudioViewModelFactory.setSessionId(sessionId);
         backgroundAudioViewModel = new ViewModelProvider(this, backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
         backgroundAudioViewModel.isPermissionRequired().observe(this, isPermissionRequired -> {
             if (isPermissionRequired) {
                 showIfNotShowing(BackgroundAudioPermissionDialogFragment.class, getSupportFragmentManager());
             }
         });
-
 
         identityPromptViewModel = new ViewModelProvider(this).get(IdentityPromptViewModel.class);
         identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
@@ -464,7 +467,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        formEntryViewModelFactory.setSessionId(sessionId);
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory)
                 .get(FormEntryViewModel.class);
 
@@ -500,7 +502,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         });
 
-        formSaveViewModelFactoryFactory.setSessionId(sessionId);
         formSaveViewModel = new ViewModelProvider(this, formSaveViewModelFactoryFactory.create(this, null)).get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {

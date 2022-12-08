@@ -145,6 +145,11 @@ public class FormHierarchyActivity extends CollectAbstractActivity implements De
         formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory).get(FormEntryViewModel.class);
 
         FormController formController = formEntryViewModel.getFormController();
+        if (formController == null) {
+            finish();
+            return;
+        }
+
         startIndex = formController.getFormIndex();
 
         setTitle(formController.getFormTitle());

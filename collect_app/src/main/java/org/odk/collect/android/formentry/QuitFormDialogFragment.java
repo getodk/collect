@@ -45,9 +45,6 @@ public class QuitFormDialogFragment extends DialogFragment {
     Scheduler scheduler;
 
     @Inject
-    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
-
-    @Inject
     SettingsProvider settingsProvider;
 
     @Inject
@@ -59,6 +56,12 @@ public class QuitFormDialogFragment extends DialogFragment {
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
     private Listener listener;
+
+    private final FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
+
+    public QuitFormDialogFragment(FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory) {
+        this.formSaveViewModelFactoryFactory = formSaveViewModelFactoryFactory;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
