@@ -59,6 +59,7 @@
   <string name="storage_runtime_permission_denied_title">Dozvola za pristup memoriji</string>
   <string name="storage_runtime_permission_denied_desc">Bez ovih dozvola Collent ne može pristupiti formularima ili sačuvati odgovore. Ponovo otvorite aplikaciju kada budete spremni da dozvolite pristup.</string>
   <string name="location_runtime_permissions_denied_title">Pristup lokaciji</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Pristup kameri</string>
   <string name="camera_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupiti kameri. Molim ponovo pokušajte kada budete spremni da dozvolite pristup.</string>
   <string name="record_audio_runtime_permission_denied_title">Dozvola za snimanje audija</string>

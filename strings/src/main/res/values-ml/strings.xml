@@ -39,6 +39,7 @@
   <string name="storage_runtime_permission_denied_title">സ്റ്റോറേജ് അനുമതികൾ </string>
   <string name="storage_runtime_permission_denied_desc">ഈ അനുമതികൾ ഇല്ലാതെ കളക്ടിന് നിങ്ങളുടെ ഫോമിലേക്ക് പ്രവേശിക്കുകയോ ഉത്തരങ്ങൾ സേവ് ചെയ്യുകയോ ചെയ്യാൻ ആകുന്നതല്ല. അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ ആപ്പ് വീണ്ടും തുറക്കുക.</string>
   <string name="location_runtime_permissions_denied_title">സ്ഥാന നിർണയത്തിനുള്ള അനുമതി.</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">ക്യാമറ അനുമതി</string>
   <string name="camera_runtime_permission_denied_desc">ഈ അനുമതി ഇല്ലാതെ കളക്ടിന് ക്യാമറ നിയന്ത്രിക്കാൻ കഴിയുകയില്ല. ദയവു ചെയ്ത് അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ വീണ്ടും ശ്രമിക്കുക.</string>
   <!--##############################################

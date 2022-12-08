@@ -56,6 +56,7 @@
   <string name="no_items_display_instances">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​ដែល​​បាន​​រក្សា​​ទុក​​មុន​​នឹង​​ផ្ញើ​​ចេញ</string>
   <string name="storage_runtime_permission_denied_title">សិទ្ធិក្នុងការផ្ទុក</string>
   <string name="storage_runtime_permission_denied_desc">បើគ្មានការអនុញ្ញាតទាំងនេះ Collect មិនអាចចូលប្រើទម្រង់របស់អ្នក ឬរក្សាទុកចម្លើយ​បើក​កម្មវិធី​ឡើង​វិញ​នៅ​ពេល​អ្នក​រួចរាល់​ដើម្បី​ផ្តល់​សិទ្ធិ​ទាំងនេះ។</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

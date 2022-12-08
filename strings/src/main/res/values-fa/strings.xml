@@ -60,6 +60,7 @@
   <string name="storage_runtime_permission_denied_title">مجوزهای برای ذخیره سازی</string>
   <string name="storage_runtime_permission_denied_desc">بدون مجوزها، مجموعه نمی‌تواند به فرم‌های شما دسترسی داشته باشد یا پاسخ‌ها را ذخیره کند. زمانی که برای اعطای برنامه آماده شدید، دوباره آن را باز کنید.</string>
   <string name="location_runtime_permissions_denied_title">مجوز مکان</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">مجوز کامره</string>
   <string name="camera_runtime_permission_denied_desc">بدون این مجوز Collect نمی تواند به دوربین دسترسی داشته باشد. لطفاً هنگامی که آماده اعطای آن هستید دوباره امتحان کنید.</string>
   <string name="record_audio_runtime_permission_denied_title">ثبت مجوز صوتی</string>

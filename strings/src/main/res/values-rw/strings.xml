@@ -23,20 +23,20 @@
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="added_on_date_at_time">Iki gihe Byongeweho.</string>
+  <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">Bibitswe iki gihe</string>
+  <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">Birangije gukorwa iki gihe</string>
+  <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">Byoherejwe iki gihe</string>
+  <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">Kohereza ntibyakunze iki gihe</string>
+  <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="deleted_on_date_at_time">Bisibwe iki gihe</string>
+  <string name="deleted_on_date_at_time">\'Deleted on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <string name="submission_deleted">Ibyo mwohereje byasibwe </string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="modified_on_date_at_time">\'Byahinduwe kuri\' EEE, MMM dd, yyyy\'kuri\' HH: mm</string>
+  <string name="modified_on_date_at_time">\'Byahinduwe kuri\' EEE, MMM dd, yyyy \'kuri\' HH: mm</string>
   <string name="encrypted_form">Inyandiko shingiro cg ngenderwaho itagaragara cg ihishe.</string>
   <string name="deleted_form">Inyandiko shingiro cg ngenderwaho yasibwe</string>
   <string name="sort_the_list">Shyira urutonde ku murongo</string>
@@ -59,6 +59,7 @@
   <string name="storage_runtime_permission_denied_title">Uburenganzira ku bubiko</string>
   <string name="storage_runtime_permission_denied_desc">Udafite ubwo burenganzira Collect ntabwo ishobora kwemera form cg ibike amakuru. Ongera ufungure iyo application mugihe ufite ubwo burenganzira</string>
   <string name="location_runtime_permissions_denied_title">Uburenganzira bwokwerekana location </string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Ha uruhushya Camera</string>
   <string name="camera_runtime_permission_denied_desc">Utatanze uruhushya porogaramu ntibasha gukoresha Camera bityo ongera kugerageza nyuma yuko uhaye uruhushya porogaramu</string>
   <string name="record_audio_runtime_permission_denied_title">Rikodinga uburenganzira bwa odiyo </string>

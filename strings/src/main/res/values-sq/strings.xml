@@ -55,6 +55,7 @@
   <string name="no_items_display_instances">Asgjë nuk mund të shfaqet.\n\nProvoni të ruani një formular përpara se të ngarkoni.</string>
   <string name="storage_runtime_permission_denied_desc">Pa këto leje Collect nuk mund të aksesojë format tuaja apo të ruajë përgjigjet. Rihapeni applikacionin kur të të jeni gati të lejoni ato.</string>
   <string name="location_runtime_permissions_denied_title">Lejo aksesin në vendndodhje</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Lejo aksesin në kamera</string>
   <string name="record_audio_runtime_permission_denied_title">Lejo aksesin në regjistrimin audio</string>
   <!--##############################################

@@ -45,6 +45,7 @@
   <string name="no_items_display_forms">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही. \n\nरिक्त फॉर्म मिळविणे आणि भरण्याचा प्रयत्न करा.</string>
   <string name="no_items_display_sent_forms">प्रदर्शनासाठी काहीही उपलब्ध नाही.\n\n पाहण्या पूर्वी अंतिम स्वरूप पाठविण्याचा प्रयत्न करा.</string>
   <string name="no_items_display_instances">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही.\n\nपाठविण्यापूर्वी जतन केलेले फॉर्म्स ला अंतिम रूप देण्याचा प्रयत्न करा</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

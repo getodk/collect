@@ -35,6 +35,7 @@
   <string name="no_items_display">Akukho ukutholakayo ukuboniswa.</string>
   <string name="no_items_display_forms">Akukho okutholakalayo ukuboniswa.\n\nzama ukuthola futhi ugcwalise ifomu elingenalutho.</string>
   <string name="no_items_display_instances">Akukho okutholakalayo ukuboniswa.\n\nzama ukuphothula ugcine ifomu ngaphambi kokulithumela.</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

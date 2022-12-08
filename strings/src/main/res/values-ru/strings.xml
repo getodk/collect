@@ -58,6 +58,7 @@
   <string name="storage_runtime_permission_denied_title">Доступ к накопителю</string>
   <string name="storage_runtime_permission_denied_desc">Без этих разрешений Collect не сможет получить доступ к опросам или сохранять ответы. Откройте приложение заново когда вы будет готовы предоставить доступ.</string>
   <string name="location_runtime_permissions_denied_title">Доступ к геолокации</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Доступ к камере</string>
   <string name="camera_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать видео-камеру. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="record_audio_runtime_permission_denied_title">Доступ к записи аудио</string>

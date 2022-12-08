@@ -46,6 +46,7 @@
   <string name="no_items_display_sent_forms">Ničesar ni za prikaz.\n\nPoskusi poslati zaključen obrazec pred pregledovanjem.</string>
   <string name="no_items_display_instances">Ničesar ni za prikaz.\n\nPoskusi zaključiti shranjene obrazce pred pošiljanjem.</string>
   <string name="storage_runtime_permission_denied_desc">Brez teh dovoljenj, Collect ne more dostopati do vaših obrazcev ali shraniti odgovorov. Aplikacijo znova odprite, ko ste jih pripravljeni odobriti.</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Dovljenje za fotoaparat</string>
   <string name="camera_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do fotoaparata. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>
   <string name="record_audio_runtime_permission_denied_desc">Brez tega dovoljenja Collect ne more dostopati do mikrofona. Prosimo, poskusite znova, ko ste pripravljeni odobriti.</string>

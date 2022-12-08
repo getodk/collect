@@ -49,6 +49,7 @@
   <string name="storage_runtime_permission_denied_title">Saklama izinleri</string>
   <string name="storage_runtime_permission_denied_desc">Bu izinler olmadan Collect formlarınıza erişemez ya da cevapları saklayamaz. İzinleri vermek için hazır olduğunuzda uygulamayı tekrar açın.</string>
   <string name="location_runtime_permissions_denied_title">Konum izinleri</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Kamera izinleri</string>
   <!--##############################################
     # FILL BLANK FORM

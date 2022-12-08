@@ -36,6 +36,7 @@
   <string name="no_items_display">ບໍ່ມີຂໍ້ມູນໃຫ້ສະແດງເທື່ອ</string>
   <string name="no_items_display_forms">ບໍ່ມີຫຍັງສະແດງ.\n\nລອງດາວໂຫຼດ ແລະ ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
   <string name="no_items_display_instances">ບໍ່ມີຫຍັງທີ່ຈະສະແດງ. \n\nລອງເຮັດເຄື່ອງໜາຍແບບຟອມວ່າສຳເລັດແລ້ວກ່ອນສົ່ງ</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
