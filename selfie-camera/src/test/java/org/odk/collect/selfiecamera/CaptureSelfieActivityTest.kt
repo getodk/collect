@@ -17,6 +17,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
@@ -35,7 +37,6 @@ class CaptureSelfieActivityTest {
 
     @Before
     fun setup() {
-
         application.selfieCameraDependencyComponent = DaggerSelfieCameraDependencyComponent.builder()
             .selfieCameraDependencyModule(object : SelfieCameraDependencyModule() {
                 override fun providesPermissionChecker(): PermissionsChecker {
@@ -178,12 +179,13 @@ private class FakeCamera : Camera {
     var savedPath: String? = null
     var recording = false
 
-    private var initialized = false
     private var onVideoSaved: (() -> Unit)? = null
     private var onVideoSaveError: (() -> Unit)? = null
 
+    private val state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
+
     override fun initialize(activity: ComponentActivity, previewView: View) {
-        initialized = true
+        state.value = Camera.State.INITIALIZED
     }
 
     override fun takePicture(
@@ -191,7 +193,7 @@ private class FakeCamera : Camera {
         onImageSaved: () -> Unit,
         onImageSaveError: () -> Unit,
     ) {
-        if (!initialized) {
+        if (state.value == Camera.State.UNINITIALIZED) {
             throw IllegalStateException()
         }
 
@@ -209,6 +211,10 @@ private class FakeCamera : Camera {
         onVideoSaved: () -> Unit,
         onVideoSaveError: () -> Unit,
     ) {
+        if (state.value == Camera.State.UNINITIALIZED) {
+            throw IllegalStateException()
+        }
+
         recording = true
         savedPath = videoPath
         this.onVideoSaved = onVideoSaved
@@ -216,11 +222,19 @@ private class FakeCamera : Camera {
     }
 
     override fun stopVideo() {
+        if (state.value == Camera.State.UNINITIALIZED) {
+            throw IllegalStateException()
+        }
+
         recording = false
     }
 
     override fun isRecording(): Boolean {
         return recording
+    }
+
+    override fun state(): NonNullLiveData<Camera.State> {
+        return state
     }
 
     fun finalizeVideo() {

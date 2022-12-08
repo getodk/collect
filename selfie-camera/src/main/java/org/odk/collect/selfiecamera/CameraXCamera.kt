@@ -15,6 +15,8 @@ import androidx.camera.video.VideoCapture
 import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 import java.io.File
 
 internal class CameraXCamera : Camera {
@@ -24,6 +26,7 @@ internal class CameraXCamera : Camera {
     private var activity: ComponentActivity? = null
 
     private var recording: Recording? = null
+    private var state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
     override fun initialize(activity: ComponentActivity, previewView: View) {
         this.activity = activity
@@ -47,6 +50,8 @@ internal class CameraXCamera : Camera {
 
                 cameraProviderFuture.get()
                     .bindToLifecycle(activity, cameraSelector, preview, imageCapture, videoCapture)
+
+                state.value = Camera.State.INITIALIZED
             },
             ContextCompat.getMainExecutor(activity)
         )
@@ -116,5 +121,9 @@ internal class CameraXCamera : Camera {
 
     override fun isRecording(): Boolean {
         return recording != null
+    }
+
+    override fun state(): NonNullLiveData<Camera.State> {
+        return state
     }
 }

@@ -2,6 +2,7 @@ package org.odk.collect.selfiecamera
 
 import android.view.View
 import androidx.activity.ComponentActivity
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 
 internal interface Camera {
     fun initialize(activity: ComponentActivity, previewView: View)
@@ -10,4 +11,10 @@ internal interface Camera {
     fun stopVideo()
 
     fun isRecording(): Boolean
+    fun state(): NonNullLiveData<State>
+
+    enum class State {
+        UNINITIALIZED,
+        INITIALIZED
+    }
 }
