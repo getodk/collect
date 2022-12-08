@@ -173,7 +173,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
         Context context = getApplicationContext();
         mapProvider.createMapFragment(context)
-            .addTo(this, R.id.map_container, this::initMap, this::finish);
+            .addTo(getSupportFragmentManager(), R.id.map_container, this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
