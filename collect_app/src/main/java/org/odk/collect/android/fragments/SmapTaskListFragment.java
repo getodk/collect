@@ -59,6 +59,7 @@ import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.listeners.OnTaskOptionsClickLisener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.location.SystemLocationProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -288,7 +289,7 @@ public class SmapTaskListFragment extends ListFragment {
                     itAdapter.updateSelectedPosition(position);
                     reloadData();
                     bottomSheetDialog.dismiss();
-                });
+                }, new SystemLocationProvider(getActivity()));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
