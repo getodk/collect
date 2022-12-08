@@ -255,6 +255,7 @@
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
     <string name="camera_error">There was an error taking picture</string>
+    <string name="camera_failed_to_initialize">Couldn\'t initialize camera!</string>
     <string name="annotate_image">Annotate Image</string>
     <string name="invalid_file_type">Application returned an invalid file type</string>
     <!-- Dialog heading for saving annotated image -->

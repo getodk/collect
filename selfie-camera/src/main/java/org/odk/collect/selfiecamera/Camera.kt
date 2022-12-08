@@ -15,6 +15,7 @@ internal interface Camera {
 
     enum class State {
         UNINITIALIZED,
-        INITIALIZED
+        INITIALIZED,
+        FAILED_TO_INITIALIZE
     }
 }

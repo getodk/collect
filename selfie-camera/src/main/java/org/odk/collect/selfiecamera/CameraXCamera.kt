@@ -48,10 +48,18 @@ internal class CameraXCamera : Camera {
                     .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
                     .build()
 
-                cameraProviderFuture.get()
-                    .bindToLifecycle(activity, cameraSelector, preview, imageCapture, videoCapture)
-
-                state.value = Camera.State.INITIALIZED
+                try {
+                    cameraProviderFuture.get().bindToLifecycle(
+                        activity,
+                        cameraSelector,
+                        preview,
+                        imageCapture,
+                        videoCapture
+                    )
+                    state.value = Camera.State.INITIALIZED
+                } catch (e: IllegalArgumentException) {
+                    state.value = Camera.State.FAILED_TO_INITIALIZE
+                }
             },
             ContextCompat.getMainExecutor(activity)
         )

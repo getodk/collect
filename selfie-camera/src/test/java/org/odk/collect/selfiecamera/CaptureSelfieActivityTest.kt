@@ -158,6 +158,19 @@ class CaptureSelfieActivityTest {
         val latestToast = ShadowToast.getTextOfLatestToast()
         assertThat(latestToast, equalTo(application.getString(R.string.camera_error)))
     }
+
+    @Test
+    fun whenCameraFailsToInitialize_showsToast() {
+        camera.failToInitialize = true
+
+        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
+            it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
+        }
+
+        launcher.launch<CaptureSelfieActivity>(intent)
+        val latestToast = ShadowToast.getTextOfLatestToast()
+        assertThat(latestToast, equalTo(application.getString(R.string.camera_failed_to_initialize)))
+    }
 }
 
 private class FakePermissionsChecker : PermissionsChecker {
@@ -175,6 +188,7 @@ private class FakePermissionsChecker : PermissionsChecker {
 
 private class FakeCamera : Camera {
 
+    var failToInitialize: Boolean = false
     var failToSave = false
     var savedPath: String? = null
     var recording = false
@@ -185,7 +199,11 @@ private class FakeCamera : Camera {
     private val state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
     override fun initialize(activity: ComponentActivity, previewView: View) {
-        state.value = Camera.State.INITIALIZED
+        if (failToInitialize) {
+            state.value = Camera.State.FAILED_TO_INITIALIZE
+        } else {
+            state.value = Camera.State.INITIALIZED
+        }
     }
 
     override fun takePicture(

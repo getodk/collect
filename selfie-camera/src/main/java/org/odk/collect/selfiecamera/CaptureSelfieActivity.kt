@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
@@ -56,8 +55,11 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
         camera.state().observe(this) {
             when (it) {
-                Camera.State.UNINITIALIZED -> { }
+                Camera.State.UNINITIALIZED -> {}
                 Camera.State.INITIALIZED -> setupCamera()
+                Camera.State.FAILED_TO_INITIALIZE -> {
+                    showLongToast(this, R.string.camera_failed_to_initialize)
+                }
             }
         }
     }
@@ -66,33 +68,33 @@ class CaptureSelfieActivity : LocalizedActivity() {
         val previewView = findViewById<View>(R.id.preview)
 
         if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
-                val videoPath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.mp4"
-                previewView.setOnClickListener {
-                    if (!camera.isRecording()) {
-                        camera.startVideo(
-                            videoPath,
-                            { ExternalAppUtils.returnSingleValue(this, videoPath) },
-                            { ToastUtils.showShortToast(this, R.string.camera_error) }
-                        )
-
-                        showLongToast(this, getString(R.string.stop_video_capture_instruction))
-                    } else {
-                        camera.stopVideo()
-                    }
-                }
-
-                showLongToast(this, getString(R.string.start_video_capture_instruction))
-            } else {
-                val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"
-                previewView.setOnClickListener {
-                    camera.takePicture(
-                        imagePath,
-                        { ExternalAppUtils.returnSingleValue(this, imagePath) },
-                        { ToastUtils.showShortToast(this, R.string.camera_error) }
+            val videoPath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.mp4"
+            previewView.setOnClickListener {
+                if (!camera.isRecording()) {
+                    camera.startVideo(
+                        videoPath,
+                        { ExternalAppUtils.returnSingleValue(this, videoPath) },
+                        { showLongToast(this, R.string.camera_error) }
                     )
-                }
 
-                showLongToast(this, R.string.take_picture_instruction)
+                    showLongToast(this, getString(R.string.stop_video_capture_instruction))
+                } else {
+                    camera.stopVideo()
+                }
+            }
+
+            showLongToast(this, getString(R.string.start_video_capture_instruction))
+        } else {
+            val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"
+            previewView.setOnClickListener {
+                camera.takePicture(
+                    imagePath,
+                    { ExternalAppUtils.returnSingleValue(this, imagePath) },
+                    { showLongToast(this, R.string.camera_error) }
+                )
+            }
+
+            showLongToast(this, R.string.take_picture_instruction)
         }
     }
 
