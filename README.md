@@ -72,63 +72,28 @@ Most dependencies are managed using gradle, however some Field Task functionalit
 
 ## Branches
 * production - The latest Field Task code
-* master - The latest unmodifield code from the upstream repository
 
 ## Variants
 The variant in the github repository that you will want to start with is "standard".  This contains some resources and Java code to handle customisable processing around location change.  Background location recording can be enabled on FieldTask and by default this is used only for geo fencing and the location data is not stored.   The register function in the LocationRegister file can be modified to do additional processing of location changes if you need that. 
 
-## Incorporating the latest upstream changes
+Related Repositories
+-------------------
 
-1. Update the master branch to the latest version. On the commnad line
+FieldTask is designed to work with Smap server, the code for which is included in other GitHub repositories.  The complete list of repositories is shown 
+in the table below.
 
-        git checkout master
-        git fetch upstream
-        git merge upstream/master
-        
-1. Create a branch with the version you want to merge into Field Task
-
-        git branch merge_master <tag name>
-        
-   <tag name> is the tag in odk collect identifying the version that you want.  merge_master is the temporary branch that will be created. You can name it as you wish.
- 
- 1. Create a branch in which to merge the code
-
-        git checkout production
-        git checkout -b merge
-        git merge --no-commit merge_master
-        
-    This creates a temporary branch called merge from the latest production branch and then merges code from merge_master without committing the changes
-    
-1. Fix merge issues.  
-
-    There are likely to be many of these.  Smap changes from ODK are either in their own files or marked with the comment "smap".  If there is a difference and no "smap" comment then you can generally accept the version from ODK.  Otherwise a manual merge is required to preserve the smap functionality.
- 
-## Changes in the Field Task fork
-
-The following changes from the upstream implementation will need to be merged and then tested before releasing a new version that includes upstream updates/
-
-*  Login Page.   
-*  One touch synchronisation
-*  Form List, Task List and Map Tabs on the home page.
-*  Automatic synchronisation when a form is changed on the server.
-*  Geofencing for showing and downloading of forms
-*  Chart Widget
-*  Form Launcher Widget
-*  NFC Widget
-*  Auto launching camera, barcode and other widgets
-*  Task Management
-*  Self Assigned Tasks
-*  Navigation to tasks using google maps
-*  Online lookup of choice values
-*  Online pulldata
-*  Online lookup of images for annotation
-*  Online lookup of labels in images
-*  Searching for choice values using "in" and "not in" functions
-*  pulldata acting on multiple records
+|Name          |Github                                        |Purpose    |
+|------------- |--------------------------------------------- |-----------|
+|FieldTas4k    |https://github.com/smap-consulting/fieldTask4 |FieldTask  |
+|JavaRosa      |https://github.com/smap-consulting/javarosa   |FieldTask  |
+|Smap Server 2 |https://github.com/smap-consulting/smapserver2|Server     |
+|WebForm       |https://github.com/nap2000/enketo-core        |Server     |
+|Smap Client   |https://github.com/nap2000/prop-smapserver    |Server     |
+|Documentation |https://github.com/nap2000/docs               |Documentation |
 
 Acknowledgements
 ----------------
 
 This project:
-* forks the odkCollect Library of (http://opendatakit.org/)
 * includes the Android SDK from [MapBox] (https://www.mapbox.com/)
+* forks the odkCollect Library of (http://opendatakit.org/)
