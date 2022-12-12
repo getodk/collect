@@ -35,7 +35,8 @@ dependencies {
     implementation Dependencies.androidx_core_ktx
 
     /**
-     * We need to expose [AppCompatActivity] for classes that extend [LocalizedActivity]
+     * We need to expose [AppCompatActivity] for classes in separate modules that
+     * extend [LocalizedActivity].
      */
     api Dependencies.androidx_appcompat
 
