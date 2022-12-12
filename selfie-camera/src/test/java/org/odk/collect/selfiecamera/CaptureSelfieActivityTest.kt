@@ -20,6 +20,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
+import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.selfiecamera.support.RobolectricApplication
@@ -141,7 +142,7 @@ class CaptureSelfieActivityTest {
         launcher.launch<CaptureSelfieActivity>(intent)
         onView(withId(R.id.preview)).perform(click())
 
-        assertThat(camera.isRecording(), equalTo(true))
+        assertThat(camera.state().getOrAwaitValue(), equalTo(Camera.State.RECORDING))
         assertThat(camera.savedPath, equalTo("blah/tmp.mp4"))
     }
 
@@ -212,7 +213,6 @@ private class FakeCamera : Camera {
     var failToInitialize: Boolean = false
     var failToSave = false
     var savedPath: String? = null
-    var recording = false
 
     private var onVideoSaved: (() -> Unit)? = null
     private var onVideoSaveError: (() -> Unit)? = null
@@ -254,10 +254,11 @@ private class FakeCamera : Camera {
             throw IllegalStateException()
         }
 
-        recording = true
         savedPath = videoPath
         this.onVideoSaved = onVideoSaved
         this.onVideoSaveError = onVideoSaveError
+
+        state.value = Camera.State.RECORDING
     }
 
     override fun stopVideo() {
@@ -265,11 +266,7 @@ private class FakeCamera : Camera {
             throw IllegalStateException()
         }
 
-        recording = false
-    }
-
-    override fun isRecording(): Boolean {
-        return recording
+        state.value = Camera.State.INITIALIZED
     }
 
     override fun state(): NonNullLiveData<Camera.State> {
@@ -277,7 +274,7 @@ private class FakeCamera : Camera {
     }
 
     fun finalizeVideo() {
-        if (recording) {
+        if (state.value == Camera.State.RECORDING) {
             throw IllegalStateException()
         }
 

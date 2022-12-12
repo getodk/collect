@@ -105,6 +105,8 @@ internal class CameraXCamera : Camera {
                 return
             }
 
+            state.value = Camera.State.RECORDING
+
             val outputFile = File(videoPath)
             val outputFileOptions = FileOutputOptions.Builder(outputFile).build()
 
@@ -125,10 +127,6 @@ internal class CameraXCamera : Camera {
 
     override fun stopVideo() {
         recording?.stop()
-    }
-
-    override fun isRecording(): Boolean {
-        return recording != null
     }
 
     override fun state(): NonNullLiveData<Camera.State> {

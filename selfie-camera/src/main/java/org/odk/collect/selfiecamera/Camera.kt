@@ -10,12 +10,12 @@ internal interface Camera {
     fun startVideo(videoPath: String, onVideoSaved: () -> Unit, onVideoSaveError: () -> Unit)
     fun stopVideo()
 
-    fun isRecording(): Boolean
     fun state(): NonNullLiveData<State>
 
     enum class State {
         UNINITIALIZED,
         INITIALIZED,
-        FAILED_TO_INITIALIZE
+        FAILED_TO_INITIALIZE,
+        RECORDING
     }
 }
