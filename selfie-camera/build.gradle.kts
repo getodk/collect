@@ -49,6 +49,7 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":permissions"))
     implementation(project(":externalapp"))
+    implementation(project(":analytics"))
 
     implementation(Dependencies.camerax_core)
     implementation(Dependencies.camerax_view)

@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
@@ -87,6 +88,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
             }
 
             showLongToast(this, getString(R.string.start_video_capture_instruction))
+            Analytics.log(AnalyticsEvents.RECORD_SELFIE_VIDEO, "form")
         } else {
             val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"
             previewView.setOnClickListener {
