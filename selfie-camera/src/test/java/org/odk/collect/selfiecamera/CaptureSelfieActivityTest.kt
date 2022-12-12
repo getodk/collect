@@ -37,17 +37,18 @@ class CaptureSelfieActivityTest {
 
     @Before
     fun setup() {
-        application.selfieCameraDependencyComponent = DaggerSelfieCameraDependencyComponent.builder()
-            .selfieCameraDependencyModule(object : SelfieCameraDependencyModule() {
-                override fun providesPermissionChecker(): PermissionsChecker {
-                    return permissionsChecker
-                }
+        application.selfieCameraDependencyComponent =
+            DaggerSelfieCameraDependencyComponent.builder()
+                .selfieCameraDependencyModule(object : SelfieCameraDependencyModule() {
+                    override fun providesPermissionChecker(): PermissionsChecker {
+                        return permissionsChecker
+                    }
 
-                override fun providesCamera(): Camera {
-                    return camera
-                }
-            })
-            .build()
+                    override fun providesCamera(): Camera {
+                        return camera
+                    }
+                })
+                .build()
     }
 
     @Test
@@ -55,6 +56,26 @@ class CaptureSelfieActivityTest {
         permissionsChecker.deny(Manifest.permission.CAMERA)
 
         val scenario = launcher.launch(CaptureSelfieActivity::class.java)
+        assertThat(scenario.state, equalTo(Lifecycle.State.DESTROYED))
+    }
+
+    @Test
+    fun whenAudioPermissionNotGranted_doesNotFinish() {
+        permissionsChecker.deny(Manifest.permission.RECORD_AUDIO)
+
+        val scenario = launcher.launch(CaptureSelfieActivity::class.java)
+        assertThat(scenario.state, equalTo(Lifecycle.State.RESUMED))
+    }
+
+    @Test
+    fun whenTakingVideo_andCameraPermissionNotGranted_finishes() {
+        permissionsChecker.deny(Manifest.permission.CAMERA)
+
+        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
+            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
+        }
+
+        val scenario = launcher.launch<CaptureSelfieActivity>(intent)
         assertThat(scenario.state, equalTo(Lifecycle.State.DESTROYED))
     }
 

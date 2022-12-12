@@ -100,7 +100,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
     private fun permissionsGranted(): Boolean {
         return if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
-            permissionsChecker.isPermissionGranted(
+            return permissionsChecker.isPermissionGranted(
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
             )
