@@ -49,9 +49,7 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":permissions"))
     implementation(project(":externalapp"))
-    implementation(project(":androidtest"))
 
-    implementation(Dependencies.timber)
     implementation(Dependencies.camerax_core)
     implementation(Dependencies.camerax_view)
     implementation(Dependencies.camerax_lifecycle)
@@ -60,7 +58,8 @@ dependencies {
     implementation(Dependencies.dagger)
     kapt(Dependencies.dagger_compiler)
 
-    testImplementation(Dependencies.junit)
+    testImplementation(project(":androidtest"))
+
     testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.robolectric)
     testImplementation(Dependencies.hamcrest)
