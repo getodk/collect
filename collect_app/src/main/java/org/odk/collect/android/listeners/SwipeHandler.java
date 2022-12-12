@@ -102,7 +102,7 @@ public class SwipeHandler {
                 int xpixellimit = (int) (ScreenUtils.xdpi(view.getContext()) * .25);
                 int ypixellimit = (int) (ScreenUtils.ydpi(view.getContext()) * .25);
 
-                if (view != null && view.shouldSuppressFlingGesture(e1, e2, velocityX, velocityY)) {
+                if (view != null && view.shouldSuppressFlingGesture()) {
                     return false;
                 }
 
@@ -153,7 +153,7 @@ public class SwipeHandler {
             super(context);
         }
 
-        public abstract boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
+        public abstract boolean shouldSuppressFlingGesture();
 
         @Nullable
         public abstract NestedScrollView getVerticalScrollView();

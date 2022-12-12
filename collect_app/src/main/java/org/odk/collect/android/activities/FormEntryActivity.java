@@ -2418,7 +2418,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
         }
 
         @Override
-        public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        public boolean shouldSuppressFlingGesture() {
             return false;
         }
 

@@ -31,7 +31,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.LinearLayout;
@@ -562,10 +561,9 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
     }
 
     @Override
-    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
-                                              float velocityY) {
+    public boolean shouldSuppressFlingGesture() {
         for (QuestionWidget q : widgets) {
-            if (q.shouldSuppressFlingGesture(e1, e2, velocityX, velocityY)) {
+            if (q.shouldSuppressFlingGesture()) {
                 return true;
             }
         }

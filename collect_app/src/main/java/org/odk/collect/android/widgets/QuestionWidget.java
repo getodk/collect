@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -296,8 +295,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
      *
      * @return true if the fling gesture should be suppressed
      */
-    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX,
-                                              float velocityY) {
+    public boolean shouldSuppressFlingGesture() {
         return false;
     }
 

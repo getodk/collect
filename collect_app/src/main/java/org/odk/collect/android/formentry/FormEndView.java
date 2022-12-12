@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -66,7 +65,7 @@ public class FormEndView extends SwipeHandler.View {
     }
 
     @Override
-    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean shouldSuppressFlingGesture() {
         return false;
     }
 

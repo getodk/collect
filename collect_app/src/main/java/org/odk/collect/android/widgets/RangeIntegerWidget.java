@@ -18,7 +18,6 @@ package org.odk.collect.android.widgets;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -73,7 +72,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
     }
 
     @Override
-    public boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+    public boolean shouldSuppressFlingGesture() {
         return slider.isTrackingTouch();
     }
 
