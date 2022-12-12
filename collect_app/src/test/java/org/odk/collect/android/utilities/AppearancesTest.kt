@@ -71,61 +71,61 @@ class AppearancesTest {
 
     @Test
     fun `getNumberOfColumns returns 1 if there is no appearance`() {
-        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("")
-        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
     }
 
     @Test
     fun `getNumberOfColumns returns a correct number for valid appearances`() {
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns-2")
-        assertEquals(2, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(2, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("blah COLUMNS-10")
-        assertEquals(10, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(10, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns-10 quick")
-        assertEquals(10, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(10, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns-5 autocomplete")
-        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("Columns-5 ")
-        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns-5  ")
-        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("  columns-5")
-        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("quick columns-5")
-        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("compact-5")
-        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(5, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("COMPACT-9")
-        assertEquals(9, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(9, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns-9")
-        assertEquals(9, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(9, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
     }
 
     @Test
     fun `getNumberOfColumns returns 1 for invalid appearances`() {
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns-10quick")
-        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns-5autocomplete")
-        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns--1")
-        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns--10")
-        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, null))
+        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
     }
 
     @Test
