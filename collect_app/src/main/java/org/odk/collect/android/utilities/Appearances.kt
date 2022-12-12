@@ -118,23 +118,19 @@ object Appearances {
         if (appearance.contains(COLUMNS_N) || appearance.contains(COMPACT_N)) {
             try {
                 val columnsAppearance = if (appearance.contains(COLUMNS_N)) COLUMNS_N else COMPACT_N
-                try {
-                    appearance = appearance.substring(appearance.indexOf(columnsAppearance))
-                    val idx = appearance.indexOf(columnsAppearance)
-                    if (idx != -1) {
-                        val substringFromNumColumns = appearance.substring(idx + columnsAppearance.length)
-                        numColumns = substringFromNumColumns.substring(
-                            0,
-                            if (substringFromNumColumns.contains(" ")) substringFromNumColumns.indexOf(
-                                ' '
-                            ) else substringFromNumColumns.length
-                        ).toInt()
-                        if (numColumns < 1) {
-                            numColumns = 1
-                        }
+                appearance = appearance.substring(appearance.indexOf(columnsAppearance))
+                val idx = appearance.indexOf(columnsAppearance)
+                if (idx != -1) {
+                    val substringFromNumColumns = appearance.substring(idx + columnsAppearance.length)
+                    numColumns = substringFromNumColumns.substring(
+                        0,
+                        if (substringFromNumColumns.contains(" ")) substringFromNumColumns.indexOf(
+                            ' '
+                        ) else substringFromNumColumns.length
+                    ).toInt()
+                    if (numColumns < 1) {
+                        numColumns = 1
                     }
-                } catch (e: Exception) {
-                    // ignore
                 }
             } catch (e: Exception) {
                 // ignore
