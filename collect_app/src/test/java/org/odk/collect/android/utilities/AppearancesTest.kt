@@ -126,6 +126,9 @@ class AppearancesTest {
 
         whenever(formEntryPrompt.appearanceHint).thenReturn("columns--10")
         assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
+
+        whenever(formEntryPrompt.appearanceHint).thenReturn("columns-")
+        assertEquals(1, Appearances.getNumberOfColumns(formEntryPrompt, mock()))
     }
 
     @Test

@@ -19,13 +19,9 @@ import android.content.res.Configuration
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.externaldata.ExternalDataUtil
 import org.odk.collect.androidshared.utils.ScreenUtils
-import timber.log.Timber
-import java.lang.Error
 import java.lang.Exception
 
 object Appearances {
-    private const val EXCEPTION_PARSING_COLUMNS = "Exception parsing columns"
-
     // Date appearances
     const val ETHIOPIAN = "ethiopian"
     const val COPTIC = "coptic"
@@ -138,10 +134,10 @@ object Appearances {
                         }
                     }
                 } catch (e: Exception) {
-                    Timber.e(Error(EXCEPTION_PARSING_COLUMNS + columnsAppearance))
+                    // ignore
                 }
             } catch (e: Exception) {
-                Timber.e(Error(EXCEPTION_PARSING_COLUMNS + appearance))
+                // ignore
             }
         } else if (appearance.contains(COLUMNS)) {
             numColumns = when (screenUtils.screenSizeConfiguration) {
