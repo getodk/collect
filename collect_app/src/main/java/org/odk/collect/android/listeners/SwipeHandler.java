@@ -119,18 +119,10 @@ public class SwipeHandler {
 
                 if ((diffX > xpixellimit && diffY < ypixellimit) || diffX > xpixellimit * 2) {
                     beenSwiped = true;
-                    if (velocityX > 0) {
-                        if (e1.getX() > e2.getX()) {
-                            onSwipe.onSwipeForward();
-                        } else {
-                            onSwipe.onSwipeBackward();
-                        }
+                    if (e1.getX() > e2.getX()) {
+                        onSwipe.onSwipeForward();
                     } else {
-                        if (e1.getX() < e2.getX()) {
-                            onSwipe.onSwipeBackward();
-                        } else {
-                            onSwipe.onSwipeForward();
-                        }
+                        onSwipe.onSwipeBackward();
                     }
                     return true;
                 }
