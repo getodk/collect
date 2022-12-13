@@ -1,12 +1,6 @@
 package org.odk.collect.analytics
 
 interface Analytics {
-    @Deprecated("")
-    fun logEvent(category: String, action: String)
-
-    @Deprecated("")
-    fun logEvent(category: String, action: String, label: String)
-
     fun logEvent(event: String)
     fun logEventWithParam(event: String, key: String, value: String)
     fun logNonFatal(throwable: Throwable)

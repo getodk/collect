@@ -1529,7 +1529,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            analytics.logEvent(SAVE_INCOMPLETE, "saveIncomplete", AnalyticsUtils.getFormHash(getFormController()));
+                            Analytics.log(SAVE_INCOMPLETE, "form", AnalyticsUtils.getFormHash(getFormController()));
 
                             saveForm(false, false, null, false);
                             autoSaved = true;

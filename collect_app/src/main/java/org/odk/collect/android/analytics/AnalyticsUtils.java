@@ -39,7 +39,8 @@ public final class AnalyticsUtils {
         String scheme = upperCaseURL.split(":")[0];
 
         String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
-        analytics.logEvent(SET_SERVER, scheme + " " + getHostFromUrl(url), urlHash);
+
+        Analytics.log(SET_SERVER, scheme + " " + getHostFromUrl(url), urlHash);
     }
 
     public static void logInvalidFormHash(String url) {

@@ -392,7 +392,7 @@ public class SaveFormToDisk {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;
 
-                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(formController), "");
+                Analytics.log(ENCRYPT_SUBMISSION, "form", AnalyticsUtils.getFormHash(formController));
             }
 
             // At this point, we have:

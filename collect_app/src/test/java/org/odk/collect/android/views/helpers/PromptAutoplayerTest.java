@@ -9,7 +9,6 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
@@ -32,7 +31,6 @@ import static org.odk.collect.android.utilities.Appearances.NO_BUTTONS;
 public class PromptAutoplayerTest {
 
     private final AudioHelper audioHelper = mock(AudioHelper.class);
-    private final Analytics analytics = mock(Analytics.class);
 
     private PromptAutoplayer autoplayer;
 
@@ -242,17 +240,6 @@ public class PromptAutoplayerTest {
 
         assertThat(autoplayer.autoplayIfNeeded(prompt), equalTo(false));
         verify(audioHelper, never()).playInOrder(any());
-    }
-
-    @Test
-    public void whenPromptHasNoAutoplay_doesNotLogEvents() {
-        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withAdditionalAttribute("autoplay", null)
-                .build();
-
-        autoplayer.autoplayIfNeeded(prompt);
-        verify(analytics, never()).logEvent(any(), any());
-        verify(analytics, never()).logEvent(any(), any(), any());
     }
 
     private static final List<Pair<String, String>> REFERENCES = asList(

@@ -80,7 +80,7 @@ public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
                         uploader.uploadOneSubmission(instance, destinationUrl);
                         outcome.messagesByInstanceId.put(instance.getDbId().toString(), DEFAULT_SUCCESSFUL_TEXT);
 
-                        analytics.logEvent(SUBMISSION, "HTTP-Sheets", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
+                        Analytics.log(SUBMISSION, "HTTP-Sheets", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
                     } else {
                         outcome.messagesByInstanceId.put(instance.getDbId().toString(), SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE);
                     }

@@ -10,21 +10,6 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
     private val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(application)
     private val crashlytics: FirebaseCrashlytics = FirebaseCrashlytics.getInstance()
 
-    @Deprecated("")
-    override fun logEvent(category: String, action: String) {
-        val bundle = Bundle()
-        bundle.putString("action", action)
-        firebaseAnalytics.logEvent(category, bundle)
-    }
-
-    @Deprecated("")
-    override fun logEvent(category: String, action: String, label: String) {
-        val bundle = Bundle()
-        bundle.putString("action", action)
-        bundle.putString("label", label)
-        firebaseAnalytics.logEvent(category, bundle)
-    }
-
     override fun logEvent(event: String) {
         firebaseAnalytics.logEvent(event, null)
     }

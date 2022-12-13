@@ -238,7 +238,8 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                         preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
 
                         String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
-                        analytics.logEvent(SET_FALLBACK_SHEETS_URL, urlHash);
+
+                        Analytics.log(SET_FALLBACK_SHEETS_URL, "url", urlHash);
                     } else if (url.length() == 0) {
                         preference.setSummary(getString(R.string.google_sheets_url_hint));
                     } else {
