@@ -14,8 +14,6 @@ import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
-import timber.log.Timber;
-
 public class SwipeHandler {
 
     private final GestureDetector gestureDetector;
@@ -104,7 +102,7 @@ public class SwipeHandler {
                 int xpixellimit = (int) (ScreenUtils.xdpi(view.getContext()) * .25);
                 int ypixellimit = (int) (ScreenUtils.ydpi(view.getContext()) * .25);
 
-                if (view != null && view.shouldSuppressFlingGesture(e1, e2, velocityX, velocityY)) {
+                if (view != null && view.shouldSuppressFlingGesture()) {
                     return false;
                 }
 
@@ -121,20 +119,10 @@ public class SwipeHandler {
 
                 if ((diffX > xpixellimit && diffY < ypixellimit) || diffX > xpixellimit * 2) {
                     beenSwiped = true;
-                    if (velocityX > 0) {
-                        if (e1.getX() > e2.getX()) {
-                            Timber.e(new Error("showNextView VelocityX is bogus! " + e1.getX() + " > " + e2.getX()));
-                            onSwipe.onSwipeForward();
-                        } else {
-                            onSwipe.onSwipeBackward();
-                        }
+                    if (e1.getX() > e2.getX()) {
+                        onSwipe.onSwipeForward();
                     } else {
-                        if (e1.getX() < e2.getX()) {
-                            Timber.e("showPreviousView VelocityX is bogus! " + e1.getX() + " < " + e2.getX());
-                            onSwipe.onSwipeBackward();
-                        } else {
-                            onSwipe.onSwipeForward();
-                        }
+                        onSwipe.onSwipeBackward();
                     }
                     return true;
                 }
@@ -165,7 +153,7 @@ public class SwipeHandler {
             super(context);
         }
 
-        public abstract boolean shouldSuppressFlingGesture(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY);
+        public abstract boolean shouldSuppressFlingGesture();
 
         @Nullable
         public abstract NestedScrollView getVerticalScrollView();
