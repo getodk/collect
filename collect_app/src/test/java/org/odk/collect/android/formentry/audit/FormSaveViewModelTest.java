@@ -34,7 +34,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -82,7 +81,6 @@ public class FormSaveViewModelTest {
         formController = mock(FormController.class);
         logger = mock(AuditEventLogger.class);
         mediaUtils = mock(MediaUtils.class);
-        Analytics analytics = mock(Analytics.class);
 
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
@@ -92,7 +90,7 @@ public class FormSaveViewModelTest {
         when(currentProjectProvider.getCurrentProject()).thenReturn(Project.Companion.getDEMO_PROJECT());
 
         LiveData<FormController> formSession = liveDataOf(formController);
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository);
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository);
     }
 
     @Test
@@ -462,7 +460,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah2");
@@ -484,7 +482,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah1");
@@ -558,7 +556,7 @@ public class FormSaveViewModelTest {
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, null, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 
@@ -589,7 +587,7 @@ public class FormSaveViewModelTest {
 
         @Override
         public SaveToDiskResult save(Uri instanceContentURI, FormController formController, MediaUtils mediaUtils, boolean shouldFinalize,
-                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
             this.tempFiles = tempFiles;
             numberOfTimesCalled++;
 

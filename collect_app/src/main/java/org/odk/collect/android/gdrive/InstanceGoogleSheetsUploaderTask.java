@@ -38,11 +38,9 @@ import timber.log.Timber;
 public class InstanceGoogleSheetsUploaderTask extends InstanceUploaderTask {
 
     private final GoogleApiProvider googleApiProvider;
-    private final Analytics analytics;
 
-    public InstanceGoogleSheetsUploaderTask(GoogleApiProvider googleApiProvider, Analytics analytics) {
+    public InstanceGoogleSheetsUploaderTask(GoogleApiProvider googleApiProvider) {
         this.googleApiProvider = googleApiProvider;
-        this.analytics = analytics;
     }
 
     @Override

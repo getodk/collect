@@ -44,9 +44,6 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
-    @Inject
-    Analytics analytics;
-
     // Custom submission URL, username and password that can be sent via intent extras by external
     // applications
     private String completeDestinationUrl;

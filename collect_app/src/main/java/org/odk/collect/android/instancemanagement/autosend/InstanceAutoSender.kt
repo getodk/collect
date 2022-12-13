@@ -1,7 +1,6 @@
 package org.odk.collect.android.instancemanagement.autosend
 
 import android.content.Context
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.gdrive.GoogleAccountsManager
@@ -18,7 +17,6 @@ class InstanceAutoSender(
     private val instanceAutoSendFetcher: InstanceAutoSendFetcher,
     private val context: Context,
     private val notifier: Notifier,
-    private val analytics: Analytics,
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,
     private val permissionsProvider: PermissionsProvider,
@@ -26,7 +24,6 @@ class InstanceAutoSender(
 ) {
     fun autoSendInstances(projectDependencyProvider: ProjectDependencyProvider): Boolean {
         val instanceSubmitter = InstanceSubmitter(
-            analytics,
             projectDependencyProvider.formsRepository,
             googleAccountsManager,
             googleApiProvider,

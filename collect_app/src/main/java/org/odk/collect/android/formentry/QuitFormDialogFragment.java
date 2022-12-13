@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.collect.ImmutableList;
 
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
@@ -37,9 +36,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class QuitFormDialogFragment extends DialogFragment {
-
-    @Inject
-    Analytics analytics;
 
     @Inject
     Scheduler scheduler;

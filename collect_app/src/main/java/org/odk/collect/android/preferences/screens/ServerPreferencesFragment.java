@@ -68,9 +68,6 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
     GoogleAccountsManager accountsManager;
 
     @Inject
-    Analytics analytics;
-
-    @Inject
     FormUpdateScheduler formUpdateScheduler;
 
     @Inject

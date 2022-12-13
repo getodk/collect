@@ -1,6 +1,5 @@
 package org.odk.collect.android.application
 
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.logic.PropertyManager
@@ -9,8 +8,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 
 class CollectSettingsChangeHandler(
     private val propertyManager: PropertyManager,
-    private val formUpdateScheduler: FormUpdateScheduler,
-    private val analytics: Analytics
+    private val formUpdateScheduler: FormUpdateScheduler
 ) : SettingsChangeHandler {
 
     override fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String) {
@@ -24,7 +22,7 @@ class CollectSettingsChangeHandler(
         }
 
         if (changedKey == ProjectKeys.KEY_SERVER_URL) {
-            AnalyticsUtils.logServerConfiguration(analytics, newValue.toString())
+            AnalyticsUtils.logServerConfiguration(newValue.toString())
         }
     }
 

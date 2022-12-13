@@ -23,7 +23,6 @@ import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 
 class InstanceSubmitter(
-    private val analytics: Analytics,
     private val formsRepository: FormsRepository,
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,

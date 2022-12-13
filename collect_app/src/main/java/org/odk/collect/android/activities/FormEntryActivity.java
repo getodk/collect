@@ -294,9 +294,6 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
     private boolean showNavigationButtons;
 
     @Inject
-    Analytics analytics;
-
-    @Inject
     StoragePathProvider storagePathProvider;
 
     @Inject
@@ -638,7 +635,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
             instancePath = instance.getInstanceFilePath();
             if (!new File(instancePath).exists()) {
-                analytics.logEvent(AnalyticsEvents.OPEN_DELETED_INSTANCE);
+                Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE);
                 new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), formsRepository).delete(instance.getDbId());
                 createErrorDialog(getString(R.string.instance_deleted_message), true);
                 return;

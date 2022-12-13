@@ -3,7 +3,6 @@ package org.odk.collect.android.injection.config;
 import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.activities.AboutActivity;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.DeleteSavedFormActivity;
@@ -299,8 +298,6 @@ public interface AppDependencyComponent {
     OpenRosaHttpInterface openRosaHttpInterface();
 
     ReferenceManager referenceManager();
-
-    Analytics analytics();
 
     SettingsProvider settingsProvider();
 

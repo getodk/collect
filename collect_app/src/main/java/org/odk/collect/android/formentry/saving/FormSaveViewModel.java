@@ -19,7 +19,6 @@ import androidx.savedstate.SavedStateRegistryOwner;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.externaldata.ExternalDataManager;
@@ -79,18 +78,16 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     @Nullable
     private AsyncTask<Void, String, SaveToDiskResult> saveTask;
 
-    private final Analytics analytics;
     private final Scheduler scheduler;
     private final AudioRecorder audioRecorder;
     private final CurrentProjectProvider currentProjectProvider;
     private final EntitiesRepository entitiesRepository;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormController> formSession, EntitiesRepository entitiesRepository) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormController> formSession, EntitiesRepository entitiesRepository) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
         this.mediaUtils = mediaUtils;
-        this.analytics = analytics;
         this.scheduler = scheduler;
         this.audioRecorder = audioRecorder;
         this.currentProjectProvider = currentProjectProvider;
@@ -233,7 +230,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                 handleTaskResult(saveToDiskResult, saveRequest);
                 clearMediaFiles();
             }
-        }, analytics, new ArrayList<>(originalFiles.values()), currentProjectProvider.getCurrentProject().getUuid(), entitiesRepository).execute();
+        }, new ArrayList<>(originalFiles.values()), currentProjectProvider.getCurrentProject().getUuid(), entitiesRepository).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
@@ -469,19 +466,17 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         private final Listener listener;
         private final FormController formController;
         private final MediaUtils mediaUtils;
-        private final Analytics analytics;
         private final ArrayList<String> tempFiles;
         private final String currentProjectId;
         private final EntitiesRepository entitiesRepository;
 
         SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaUtils mediaUtils,
-                 Listener listener, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                 Listener listener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
             this.formController = formController;
             this.mediaUtils = mediaUtils;
-            this.analytics = analytics;
             this.tempFiles = tempFiles;
             this.currentProjectId = currentProjectId;
             this.entitiesRepository = entitiesRepository;
@@ -492,7 +487,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             return formSaver.save(saveRequest.uri, formController,
                     mediaUtils, saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
-                    this::publishProgress, analytics, tempFiles,
+                    this::publishProgress, tempFiles,
                     currentProjectId, entitiesRepository);
         }
 

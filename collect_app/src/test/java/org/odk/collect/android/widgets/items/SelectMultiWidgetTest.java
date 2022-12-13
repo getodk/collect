@@ -1,6 +1,5 @@
 package org.odk.collect.android.widgets.items;
 
-import android.app.Application;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -22,7 +21,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
@@ -73,9 +71,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
 
     @Mock
     public AudioHelper audioHelper;
-
-    @Mock
-    public Analytics analytics;
 
     @Before
     public void setup() throws Exception {
@@ -177,11 +172,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
             @Override
             public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
                 return context -> audioHelper;
-            }
-
-            @Override
-            public Analytics providesAnalytics(Application application) {
-                return analytics;
             }
 
             @Override

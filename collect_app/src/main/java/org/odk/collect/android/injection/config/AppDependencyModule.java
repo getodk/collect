@@ -199,7 +199,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormDownloader providesFormDownloader(FormSourceProvider formSourceProvider, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Analytics analytics) {
+    public FormDownloader providesFormDownloader(FormSourceProvider formSourceProvider, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider) {
         return new ServerFormDownloader(formSourceProvider.get(), formsRepositoryProvider.get(), new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(), System::currentTimeMillis);
     }
 
@@ -314,8 +314,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, Analytics analytics) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, analytics);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler);
     }
 
     @Provides
@@ -392,7 +392,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
+    public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
         return new FormSaveViewModel.FactoryFactory() {
 
             private LiveData<FormController> formSession;
@@ -408,7 +408,7 @@ public class AppDependencyModule {
                     @NonNull
                     @Override
                     protected <T extends ViewModel> T create(@NonNull String key, @NonNull Class<T> modelClass, @NonNull SavedStateHandle handle) {
-                        return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), mediaUtils, analytics, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepositoryProvider.get(currentProjectProvider.getCurrentProject().getUuid()));
+                        return (T) new FormSaveViewModel(handle, System::currentTimeMillis, new DiskFormSaver(), mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepositoryProvider.get(currentProjectProvider.getCurrentProject().getUuid()));
                     }
                 };
             }
@@ -448,7 +448,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, Analytics analytics, FormSessionRepository formSessionRepository) {
+    public BackgroundAudioViewModel.Factory providesBackgroundAudioViewModelFactory(AudioRecorder audioRecorder, SettingsProvider settingsProvider, PermissionsChecker permissionsChecker, FormSessionRepository formSessionRepository) {
         return new BackgroundAudioViewModel.Factory(audioRecorder, settingsProvider.getUnprotectedSettings(), permissionsChecker, System::currentTimeMillis, formSessionRepository);
     }
 
@@ -551,9 +551,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider, Context context, Notifier notifier, Analytics analytics, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState) {
+    public InstanceAutoSender providesInstanceAutoSender(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState) {
         InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(new AutoSendSettingsProvider(networkStateProvider, settingsProvider));
-        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, analytics, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState);
+        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState);
     }
 
     @Provides

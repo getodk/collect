@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
 import static java.util.Arrays.asList;
 
-import android.app.Application;
 import android.content.Context;
 
 import androidx.core.util.Pair;
@@ -23,7 +22,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
@@ -44,9 +42,6 @@ public class QuestionWidgetTest {
 
     @Mock
     public AudioHelper audioHelper;
-
-    @Mock
-    public Analytics analytics;
 
     @Before
     public void setup() throws Exception {
@@ -80,11 +75,6 @@ public class QuestionWidgetTest {
             @Override
             public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
                 return context -> audioHelper;
-            }
-
-            @Override
-            public Analytics providesAnalytics(Application application) {
-                return analytics;
             }
         });
     }

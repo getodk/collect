@@ -84,7 +84,6 @@ public class SaveFormToDisk {
     private final MediaUtils mediaUtils;
     private Uri uri;
     private String instanceName;
-    private final Analytics analytics;
     private final ArrayList<String> tempFiles;
     private final String currentProjectId;
     private final EntitiesRepository entitiesRepository;
@@ -95,14 +94,13 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                          Uri uri, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
         this.formController = formController;
         this.mediaUtils = mediaUtils;
         this.uri = uri;
         this.saveAndExit = saveAndExit;
         this.shouldFinalize = shouldFinalize;
         this.instanceName = updatedName;
-        this.analytics = analytics;
         this.tempFiles = tempFiles;
         this.currentProjectId = currentProjectId;
         this.entitiesRepository = entitiesRepository;

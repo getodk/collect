@@ -38,7 +38,6 @@ import androidx.work.WorkManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
@@ -88,9 +87,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     // Default to true so the send button is disabled until the worker status is updated by the
     // observer
     private boolean autoSendOngoing = true;
-
-    @Inject
-    Analytics analytics;
 
     @Inject
     NetworkStateProvider connectivityProvider;

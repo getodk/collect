@@ -34,7 +34,7 @@ public final class AnalyticsUtils {
         Analytics.log(event, "server", getServerHash(generalSettings));
     }
 
-    public static void logServerConfiguration(Analytics analytics, String url) {
+    public static void logServerConfiguration(String url) {
         String upperCaseURL = url.toUpperCase(Locale.ENGLISH);
         String scheme = upperCaseURL.split(":")[0];
 

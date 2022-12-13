@@ -11,7 +11,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 class CollectSettingsChangeHandlerTest {
     private val propertyManager = mock<PropertyManager>()
     private val formUpdateScheduler = mock<FormUpdateScheduler>()
-    private var handler = CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, mock())
+    private var handler = CollectSettingsChangeHandler(propertyManager, formUpdateScheduler)
 
     @Test
     fun `updates PropertyManager when a single setting is changed`() {

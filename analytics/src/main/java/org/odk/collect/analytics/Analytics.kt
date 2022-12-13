@@ -9,7 +9,6 @@ interface Analytics {
     fun setUserProperty(name: String, value: String)
 
     companion object {
-
         private var instance: Analytics = NoopAnalytics()
         private val params = mutableMapOf<String, String>()
 
