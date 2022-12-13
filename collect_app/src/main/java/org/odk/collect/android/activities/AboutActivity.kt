@@ -24,8 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.odk.collect.android.R
+import org.odk.collect.android.adapters.AboutItemClickListener
 import org.odk.collect.android.adapters.AboutListAdapter
-import org.odk.collect.android.adapters.AboutListAdapter.AboutItemClickListener
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.utilities.ExternalWebPageHelper
 import org.odk.collect.androidshared.system.IntentLauncher
@@ -50,7 +50,7 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
 
         findViewById<RecyclerView>(R.id.recyclerView).apply {
             layoutManager = LinearLayoutManager(this@AboutActivity)
-            adapter = AboutListAdapter(ITEMS, this@AboutActivity, this@AboutActivity)
+            adapter = AboutListAdapter(ITEMS, this@AboutActivity)
             itemAnimator = DefaultItemAnimator()
         }
 
