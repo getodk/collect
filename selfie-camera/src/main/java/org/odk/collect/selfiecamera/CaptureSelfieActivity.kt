@@ -38,8 +38,6 @@ class CaptureSelfieActivity : LocalizedActivity() {
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
 
-    private var recording = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as SelfieCameraDependencyComponentProvider)
             .selfieCameraDependencyComponent
@@ -72,7 +70,6 @@ class CaptureSelfieActivity : LocalizedActivity() {
                 Camera.State.FAILED_TO_INITIALIZE -> {
                     showLongToast(this, R.string.camera_failed_to_initialize)
                 }
-                Camera.State.RECORDING -> this.recording = true
             }
         }
     }
@@ -83,7 +80,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
         if (camera is VideoCamera) {
             val videoPath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.mp4"
             previewView.setOnClickListener {
-                if (!recording) {
+                if (!camera.isRecording()) {
                     camera.startVideo(
                         videoPath,
                         { ExternalAppUtils.returnSingleValue(this, videoPath) },

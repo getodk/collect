@@ -20,7 +20,6 @@ import org.junit.runner.RunWith
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
-import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.selfiecamera.support.RobolectricApplication
@@ -147,7 +146,7 @@ class CaptureSelfieActivityTest {
         launcher.launch<CaptureSelfieActivity>(intent)
         onView(withId(R.id.preview)).perform(click())
 
-        assertThat(videoCamera.state().getOrAwaitValue(), equalTo(Camera.State.RECORDING))
+        assertThat(videoCamera.isRecording(), equalTo(true))
         assertThat(videoCamera.savedPath, equalTo("blah/tmp.mp4"))
     }
 
@@ -263,6 +262,7 @@ private class FakeVideoCamera : FakeCamera(), VideoCamera {
 
     private var onVideoSaved: (() -> Unit)? = null
     private var onVideoSaveError: (() -> Unit)? = null
+    private var recording = false
 
     override fun startVideo(
         videoPath: String,
@@ -277,7 +277,7 @@ private class FakeVideoCamera : FakeCamera(), VideoCamera {
         this.onVideoSaved = onVideoSaved
         this.onVideoSaveError = onVideoSaveError
 
-        state.value = Camera.State.RECORDING
+        recording = true
     }
 
     override fun stopVideo() {
@@ -285,11 +285,11 @@ private class FakeVideoCamera : FakeCamera(), VideoCamera {
             throw IllegalStateException()
         }
 
-        state.value = Camera.State.INITIALIZED
+        recording = false
     }
 
     fun finalizeVideo() {
-        if (state.value == Camera.State.RECORDING) {
+        if (recording) {
             throw IllegalStateException()
         }
 
@@ -298,5 +298,9 @@ private class FakeVideoCamera : FakeCamera(), VideoCamera {
         } else {
             onVideoSaved?.invoke()
         }
+    }
+
+    override fun isRecording(): Boolean {
+        return recording
     }
 }

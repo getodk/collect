@@ -12,8 +12,7 @@ internal interface Camera {
     enum class State {
         UNINITIALIZED,
         INITIALIZED,
-        FAILED_TO_INITIALIZE,
-        RECORDING
+        FAILED_TO_INITIALIZE
     }
 }
 
@@ -22,6 +21,7 @@ internal interface StillCamera : Camera {
 }
 
 internal interface VideoCamera : Camera {
+    fun isRecording(): Boolean
     fun startVideo(videoPath: String, onVideoSaved: () -> Unit, onVideoSaveError: () -> Unit)
     fun stopVideo()
 }

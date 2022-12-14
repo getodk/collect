@@ -23,7 +23,7 @@ import java.io.File
 internal abstract class CameraXCamera : Camera {
 
     protected var activity: ComponentActivity? = null
-    protected var state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
+    private var state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
     protected abstract fun getUseCase(): UseCase
 
@@ -127,8 +127,6 @@ internal class CameraXVideoCamera : CameraXCamera(), VideoCamera {
                 return
             }
 
-            state.value = Camera.State.RECORDING
-
             val outputFile = File(videoPath)
             val outputFileOptions = FileOutputOptions.Builder(outputFile).build()
 
@@ -149,5 +147,9 @@ internal class CameraXVideoCamera : CameraXCamera(), VideoCamera {
 
     override fun stopVideo() {
         recording?.stop()
+    }
+
+    override fun isRecording(): Boolean {
+        return recording != null
     }
 }
