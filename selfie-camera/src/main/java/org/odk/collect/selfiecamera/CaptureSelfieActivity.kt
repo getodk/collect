@@ -30,7 +30,10 @@ import javax.inject.Inject
 class CaptureSelfieActivity : LocalizedActivity() {
 
     @Inject
-    internal lateinit var camera: Camera
+    internal lateinit var stillCamera: StillCamera
+
+    @Inject
+    internal lateinit var videoCamera: VideoCamera
 
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
@@ -55,16 +58,17 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
         val previewView = findViewById<View>(R.id.preview)
 
-        if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
-            camera.initializeVideo(this, previewView)
+        val camera = if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
+            videoCamera
         } else {
-            camera.initializePicture(this, previewView)
+            stillCamera
         }
 
+        camera.initialize(this, previewView)
         camera.state().observe(this) {
             when (it) {
                 Camera.State.UNINITIALIZED -> {}
-                Camera.State.INITIALIZED -> setupCamera()
+                Camera.State.INITIALIZED -> setupCamera(camera)
                 Camera.State.FAILED_TO_INITIALIZE -> {
                     showLongToast(this, R.string.camera_failed_to_initialize)
                 }
@@ -73,10 +77,10 @@ class CaptureSelfieActivity : LocalizedActivity() {
         }
     }
 
-    private fun setupCamera() {
+    private fun setupCamera(camera: Camera) {
         val previewView = findViewById<View>(R.id.preview)
 
-        if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
+        if (camera is VideoCamera) {
             val videoPath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.mp4"
             previewView.setOnClickListener {
                 if (!recording) {
@@ -94,7 +98,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
             showLongToast(this, getString(R.string.start_video_capture_instruction))
             Analytics.log(AnalyticsEvents.RECORD_SELFIE_VIDEO, "form")
-        } else {
+        } else if (camera is StillCamera) {
             val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"
             previewView.setOnClickListener {
                 camera.takePicture(

@@ -5,11 +5,7 @@ import androidx.activity.ComponentActivity
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 
 internal interface Camera {
-    fun initializePicture(activity: ComponentActivity, previewView: View)
-    fun initializeVideo(activity: ComponentActivity, previewView: View)
-    fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit)
-    fun startVideo(videoPath: String, onVideoSaved: () -> Unit, onVideoSaveError: () -> Unit)
-    fun stopVideo()
+    fun initialize(activity: ComponentActivity, previewView: View)
 
     fun state(): NonNullLiveData<State>
 
@@ -19,4 +15,13 @@ internal interface Camera {
         FAILED_TO_INITIALIZE,
         RECORDING
     }
+}
+
+internal interface StillCamera : Camera {
+    fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit)
+}
+
+internal interface VideoCamera : Camera {
+    fun startVideo(videoPath: String, onVideoSaved: () -> Unit, onVideoSaveError: () -> Unit)
+    fun stopVideo()
 }

@@ -7,6 +7,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.UseCase
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.video.FileOutputOptions
 import androidx.camera.video.Recorder
@@ -19,16 +20,14 @@ import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import java.io.File
 
-internal class CameraXCamera : Camera {
+internal abstract class CameraXCamera : Camera {
 
-    private var imageCapture: ImageCapture? = null
-    private var videoCapture: VideoCapture<Recorder>? = null
-    private var activity: ComponentActivity? = null
+    protected var activity: ComponentActivity? = null
+    protected var state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
-    private var recording: Recording? = null
-    private var state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
+    protected abstract fun getUseCase(): UseCase
 
-    override fun initializePicture(activity: ComponentActivity, previewView: View) {
+    override fun initialize(activity: ComponentActivity, previewView: View) {
         this.activity = activity
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
@@ -36,8 +35,6 @@ internal class CameraXCamera : Camera {
             {
                 val preview = Preview.Builder().build()
                 preview.setSurfaceProvider((previewView as PreviewView).surfaceProvider)
-
-                imageCapture = ImageCapture.Builder().build()
 
                 val cameraSelector = CameraSelector.Builder()
                     .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
@@ -48,8 +45,9 @@ internal class CameraXCamera : Camera {
                         activity,
                         cameraSelector,
                         preview,
-                        imageCapture
+                        getUseCase()
                     )
+
                     state.value = Camera.State.INITIALIZED
                 } catch (e: IllegalArgumentException) {
                     state.value = Camera.State.FAILED_TO_INITIALIZE
@@ -59,39 +57,17 @@ internal class CameraXCamera : Camera {
         )
     }
 
-    override fun initializeVideo(activity: ComponentActivity, previewView: View) {
-        this.activity = activity
+    override fun state(): NonNullLiveData<Camera.State> {
+        return state
+    }
+}
 
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
-        cameraProviderFuture.addListener(
-            {
-                val preview = Preview.Builder().build()
-                preview.setSurfaceProvider((previewView as PreviewView).surfaceProvider)
+internal class CameraXStillCamera : CameraXCamera(), StillCamera {
 
-                val recorder = Recorder.Builder()
-                    .setExecutor(ContextCompat.getMainExecutor(activity))
-                    .build()
+    private var imageCapture = ImageCapture.Builder().build()
 
-                videoCapture = VideoCapture.withOutput(recorder)
-
-                val cameraSelector = CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                    .build()
-
-                try {
-                    cameraProviderFuture.get().bindToLifecycle(
-                        activity,
-                        cameraSelector,
-                        preview,
-                        videoCapture
-                    )
-                    state.value = Camera.State.INITIALIZED
-                } catch (e: IllegalArgumentException) {
-                    state.value = Camera.State.FAILED_TO_INITIALIZE
-                }
-            },
-            ContextCompat.getMainExecutor(activity)
-        )
+    override fun getUseCase(): UseCase {
+        return imageCapture
     }
 
     override fun takePicture(
@@ -121,6 +97,23 @@ internal class CameraXCamera : Camera {
                 }
             )
         }
+    }
+}
+
+internal class CameraXVideoCamera : CameraXCamera(), VideoCamera {
+
+    private val videoCapture by lazy {
+        val recorder = Recorder.Builder()
+            .setExecutor(ContextCompat.getMainExecutor(activity!!))
+            .build()
+
+        VideoCapture.withOutput(recorder)
+    }
+
+    private var recording: Recording? = null
+
+    override fun getUseCase(): UseCase {
+        return videoCapture
     }
 
     @SuppressLint("MissingPermission")
@@ -156,9 +149,5 @@ internal class CameraXCamera : Camera {
 
     override fun stopVideo() {
         recording?.stop()
-    }
-
-    override fun state(): NonNullLiveData<Camera.State> {
-        return state
     }
 }
