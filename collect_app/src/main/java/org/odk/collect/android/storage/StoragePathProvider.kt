@@ -60,10 +60,22 @@ class StoragePathProvider(
         return path
     }
 
+    @Deprecated(
+        message = "Should use specific temp file or create a new file in StorageSubdirectory.CACHE instead",
+        ReplaceWith(
+            "getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + \"tmp.jpg\""
+        )
+    )
     fun getTmpImageFilePath(): String {
         return getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.jpg"
     }
 
+    @Deprecated(
+        message = "Should use specific temp file or create a new file in StorageSubdirectory.CACHE instead",
+        ReplaceWith(
+            "getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + \"tmp.mp4\""
+        )
+    )
     fun getTmpVideoFilePath(): String {
         return getOdkDirPath(StorageSubdirectory.CACHE) + File.separator + "tmp.mp4"
     }

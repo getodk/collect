@@ -199,7 +199,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="selected_invalid_image">Ifoto wahisemo mububiko si ifoto yukuri</string>
   <string name="take_picture_instruction">Kora kuri screen ufate ifoto </string>
   <string name="error_front_camera_unavailable">Ifoto y\'imbere ntabwo iboneka kuri iki gikoresho</string>
-  <string name="camera_error">Iyi Tablet ntabwo yemera Camera2 API</string>
   <string name="annotate_image">Andika ku ifoto </string>
   <string name="invalid_file_type">Saba kugarura ubwoko bw\'ububiko butaribwo </string>
   <!--Dialog heading for saving annotated image-->

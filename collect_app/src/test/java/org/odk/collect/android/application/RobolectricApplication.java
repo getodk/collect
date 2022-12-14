@@ -9,7 +9,7 @@ import androidx.work.WorkManager;
 
 import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
-import org.odk.collect.crash_handler.CrashHandler;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.robolectric.shadows.ShadowApplication;
 import org.robolectric.shadows.ShadowEnvironment;
 

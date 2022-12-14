@@ -94,7 +94,7 @@ class SelectionMapFragmentTest {
                 }
 
                 override fun providesPermissionChecker(context: Context): PermissionsChecker {
-                    return object : PermissionsChecker(context) {
+                    return object : PermissionsChecker {
                         override fun isPermissionGranted(vararg permissions: String): Boolean {
                             return true
                         }

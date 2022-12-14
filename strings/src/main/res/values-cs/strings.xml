@@ -200,7 +200,6 @@
   <string name="selected_invalid_image">Vybraný soubor není platný obrázek</string>
   <string name="take_picture_instruction">Klepnutím na obrazovku udělejte snímek</string>
   <string name="error_front_camera_unavailable">Přední fotoaparát není v tomto zařízení k dispozici</string>
-  <string name="camera_error">Toto zařízení nepodporuje API Camera2.</string>
   <string name="annotate_image">Přidat popisek obrázku</string>
   <string name="invalid_file_type">Aplikace vrátila neplatný typ souboru</string>
   <!--Dialog heading for saving annotated image-->

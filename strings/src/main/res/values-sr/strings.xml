@@ -188,7 +188,6 @@
   <string name="selected_invalid_image">Odabrani fajl nije validna slika</string>
   <string name="take_picture_instruction">Dodirni ekran kako bi fotografisao</string>
   <string name="error_front_camera_unavailable">Prednja kamera nije dostupna na ovom uređaju</string>
-  <string name="camera_error">Ovaj uređaj ne podržava Camera2 API.</string>
   <string name="annotate_image">Dodaj detalje o slici</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Sačuvaj i izađi</string>

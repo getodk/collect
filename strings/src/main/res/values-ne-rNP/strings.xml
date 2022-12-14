@@ -140,7 +140,6 @@
   <string name="choose_image">तस्विर छान्नुहोस् </string>
   <string name="take_picture_instruction">फोटो लिन स्क्रीन ट्याप गर्नुहोस्</string>
   <string name="error_front_camera_unavailable">यस यन्त्रमा फ्रन्ट क्यामेरा छैन</string>
-  <string name="camera_error">यस यन्त्रले Camera2 API सपोर्ट गर्देन ।</string>
   <string name="annotate_image">तस्विर एनोटेट गर्नुहोस्।</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">संचित गरी बन्द गर्नुहोस् </string>

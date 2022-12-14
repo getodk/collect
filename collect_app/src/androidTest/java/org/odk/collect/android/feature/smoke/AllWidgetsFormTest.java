@@ -1,6 +1,7 @@
 package org.odk.collect.android.feature.smoke;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
@@ -295,6 +296,9 @@ public class AllWidgetsFormTest {
     public void testSelfieWidget() {
         Screengrab.screenshot("selfie-widget");
 
+        onView(withText("Take Picture")).perform(click());
+        pressBack();
+
         onView(withText("Selfie widget")).perform(swipeLeft());
     }
 
@@ -337,8 +341,10 @@ public class AllWidgetsFormTest {
     public void testSelfieVideoWidget() {
         Screengrab.screenshot("selfie-video");
 
-        onView(withText("Selfie video widget")).perform(swipeLeft());
+        onView(withText("Record Video")).perform(click());
+        pressBack();
 
+        onView(withText("Selfie video widget")).perform(swipeLeft());
     }
 
     public void testFileWidget() {

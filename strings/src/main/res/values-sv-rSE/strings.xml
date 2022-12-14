@@ -181,7 +181,6 @@
   <string name="selected_invalid_image">Vald fil är inte en giltig bild</string>
   <string name="take_picture_instruction">Knacka på skärmen för att ta ett kort</string>
   <string name="error_front_camera_unavailable">Frontkamera inte tillgänglig på denna enhet</string>
-  <string name="camera_error">Denna enhet stöder inte Camera2 API:et.</string>
   <string name="annotate_image">Lägg till text på bild</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Spara och stäng</string>

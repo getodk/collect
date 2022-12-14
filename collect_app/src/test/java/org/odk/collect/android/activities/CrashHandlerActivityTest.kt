@@ -10,8 +10,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
-import org.odk.collect.crash_handler.CrashHandler
-import org.odk.collect.crash_handler.MockCrashView
+import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.crashhandler.MockCrashView
 import org.odk.collect.testshared.ActivityExt.getContextView
 
 @RunWith(AndroidJUnit4::class)

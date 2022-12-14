@@ -16,7 +16,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.CameraUtils;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
@@ -24,6 +24,7 @@ import org.robolectric.shadows.ShadowToast;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -165,7 +166,7 @@ public class BarcodeWidgetTest {
 
     @Test
     public void clickingBarcodeButton_whenFrontCameraIsNotAvailable_showsFrontCameraNotAvailableToast() {
-        when(cameraUtils.isFrontCameraAvailable()).thenReturn(false);
+        when(cameraUtils.isFrontCameraAvailable(any())).thenReturn(false);
         BarcodeWidget widget = createWidget(promptWithAppearance(Appearances.FRONT));
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
@@ -175,7 +176,7 @@ public class BarcodeWidgetTest {
 
     @Test
     public void clickingBarcodeButton_whenFrontCameraIsAvailable_launchesCorrectIntent() {
-        when(cameraUtils.isFrontCameraAvailable()).thenReturn(true);
+        when(cameraUtils.isFrontCameraAvailable(any())).thenReturn(true);
         BarcodeWidget widget = createWidget(promptWithAppearance(Appearances.FRONT));
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();

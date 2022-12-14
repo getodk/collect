@@ -34,3 +34,4 @@ if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
 }
 include ':crash-handler'
 include ':entities'
+include ':selfie-camera'

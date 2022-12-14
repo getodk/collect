@@ -16,7 +16,6 @@ android {
         targetSdkVersion Versions.android_target_sdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
@@ -34,7 +33,12 @@ android {
 
 dependencies {
     implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.androidx_appcompat
+
+    /**
+     * We need to expose [AppCompatActivity] for classes in separate modules that
+     * extend [LocalizedActivity].
+     */
+    api Dependencies.androidx_appcompat
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest

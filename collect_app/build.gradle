@@ -267,6 +267,7 @@ dependencies {
     implementation project(':osmdroid')
     implementation project(':entities')
     implementation project(':crash-handler')
+    implementation project(':selfie-camera')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')

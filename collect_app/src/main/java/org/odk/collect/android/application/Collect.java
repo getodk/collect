@@ -32,6 +32,7 @@ import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
 import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
 import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
+import org.odk.collect.android.injection.config.CollectSelfieCameraDependencyModule;
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.LocaleHelper;
@@ -42,7 +43,7 @@ import org.odk.collect.androidshared.system.ExternalFilesUtils;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
-import org.odk.collect.crash_handler.CrashHandler;
+import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.entities.DaggerEntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponentProvider;
@@ -59,6 +60,9 @@ import org.odk.collect.osmdroid.OsmDroidDependencyComponentProvider;
 import org.odk.collect.projects.DaggerProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponent;
 import org.odk.collect.projects.ProjectsDependencyComponentProvider;
+import org.odk.collect.selfiecamera.DaggerSelfieCameraDependencyComponent;
+import org.odk.collect.selfiecamera.SelfieCameraDependencyComponent;
+import org.odk.collect.selfiecamera.SelfieCameraDependencyComponentProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.injection.ObjectProvider;
 import org.odk.collect.shared.injection.ObjectProviderHost;
@@ -80,7 +84,8 @@ public class Collect extends Application implements
         OsmDroidDependencyComponentProvider,
         StateStore,
         ObjectProviderHost,
-        EntitiesDependencyComponentProvider {
+        EntitiesDependencyComponentProvider,
+        SelfieCameraDependencyComponentProvider {
 
     public static String defaultSysLanguage;
     private static Collect singleton;
@@ -96,6 +101,7 @@ public class Collect extends Application implements
     private GeoDependencyComponent geoDependencyComponent;
     private OsmDroidDependencyComponent osmDroidDependencyComponent;
     private EntitiesDependencyComponent entitiesDependencyComponent;
+    private SelfieCameraDependencyComponent selfieCameraDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -173,6 +179,10 @@ public class Collect extends Application implements
 
         projectsDependencyComponent = DaggerProjectsDependencyComponent.builder()
                 .projectsDependencyModule(new CollectProjectsDependencyModule(applicationComponent.projectsRepository()))
+                .build();
+
+        selfieCameraDependencyComponent = DaggerSelfieCameraDependencyComponent.builder()
+                .selfieCameraDependencyModule(new CollectSelfieCameraDependencyModule(applicationComponent::permissionsChecker))
                 .build();
 
         // Mapbox dependencies
@@ -317,5 +327,11 @@ public class Collect extends Application implements
         }
 
         return entitiesDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public SelfieCameraDependencyComponent getSelfieCameraDependencyComponent() {
+        return selfieCameraDependencyComponent;
     }
 }

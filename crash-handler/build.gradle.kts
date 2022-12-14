@@ -9,7 +9,7 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crash_handler"
+    namespace = "org.odk.collect.crashhandler"
 
     compileSdk = Versions.android_compile_sdk
 

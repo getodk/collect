@@ -14,6 +14,9 @@
 
 package org.odk.collect.android.widgets;
 
+import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
+import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -24,24 +27,23 @@ import android.widget.Button;
 
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CaptureSelfieActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.CameraUtils;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.CameraUtils;
+import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 
 import java.io.File;
 import java.util.Locale;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -88,7 +90,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         errorTextView.setVisibility(View.GONE);
 
         if (selfie) {
-            if (!new CameraUtils().isFrontCameraAvailable()) {
+            if (!new CameraUtils().isFrontCameraAvailable(getContext())) {
                 captureButton.setEnabled(false);
                 errorTextView.setText(R.string.error_front_camera_unavailable);
                 errorTextView.setVisibility(View.VISIBLE);
@@ -148,11 +150,12 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     private void captureImage() {
         errorTextView.setVisibility(View.GONE);
-        Intent intent;
         if (selfie) {
-            intent = new Intent(getContext(), CaptureSelfieActivity.class);
+            Intent intent = new Intent(getContext(), CaptureSelfieActivity.class);
+            intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
+            imageCaptureHandler.captureImage(intent, RequestCodes.MEDIA_FILE_PATH, R.string.capture_image);
         } else {
-            intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             // We give the camera an absolute filename/path where to put the
             // picture because of bug:
             // http://code.google.com/p/android/issues/detail?id=1480
@@ -172,9 +175,9 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
             } catch (IllegalArgumentException e) {
                 Timber.e(e);
             }
-        }
 
-        imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
+            imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
+        }
     }
 
 }

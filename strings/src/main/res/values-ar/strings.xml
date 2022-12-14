@@ -195,7 +195,6 @@
   <string name="selected_invalid_image">الملف المحدد ليس صورة بتنسيق مقبول</string>
   <string name="take_picture_instruction">انقر على الشاشة لإلتقاط صورة</string>
   <string name="error_front_camera_unavailable">الكاميرا الأمامية غير متوفرة على هذا الجهاز</string>
-  <string name="camera_error">خطأ في الكاميرا</string>
   <string name="annotate_image">تعليق على الصورة</string>
   <string name="invalid_file_type">أرجع التطبيق نوع ملف غير صالح</string>
   <!--Dialog heading for saving annotated image-->

@@ -2,7 +2,7 @@ package org.odk.collect.android.activities
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import org.odk.collect.crash_handler.CrashHandler
+import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.strings.localization.LocalizedActivity
 
 class CrashHandlerActivity : LocalizedActivity() {

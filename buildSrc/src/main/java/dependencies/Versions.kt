@@ -14,4 +14,5 @@ object Versions {
     const val robolectric = "4.7.3"
     const val work = "2.7.1"
     const val lifecycle = "2.5.1"
+    const val camerax = "1.1.0"
 }

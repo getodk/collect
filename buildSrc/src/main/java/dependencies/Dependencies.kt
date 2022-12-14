@@ -68,6 +68,11 @@ object Dependencies {
     const val emoji_java = "com.vdurmont:emoji-java:5.1.1"
     const val json_schema_validator = "com.networknt:json-schema-validator:1.0.72"
     const val splashscreen = "androidx.core:core-splashscreen:1.0.0-rc01"
+    const val camerax_core = "androidx.camera:camera-core:${Versions.camerax}"
+    const val camerax_view = "androidx.camera:camera-view:${Versions.camerax}"
+    const val camerax_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
+    const val camerax_camera2 = "androidx.camera:camera-camera2:${Versions.camerax}"
+    const val camerax_video = "androidx.camera:camera-video:${Versions.camerax}"
 
     // Test dependencies
     const val junit = "junit:junit:4.13.2"

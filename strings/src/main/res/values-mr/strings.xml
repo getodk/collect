@@ -152,8 +152,7 @@
   <string name="choose_image">प्रतिमा निवडा</string>
   <string name="selected_invalid_image">निवडलेली फाईल वैध प्रतिमा नाही</string>
   <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
-  <string name="camera_error">हे साधन कॅमेरॅ2 API ला समर्थन देत नाही.</string>
-  <!--Dialog heading for saving annotated image-->
+    <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">जतन करा आणि बंद करा</string>
   <string name="sign_button">स्वाक्षरी एकत्रीकरण</string>
   <string name="markup_image">मार्कअप प्रतिमा</string>

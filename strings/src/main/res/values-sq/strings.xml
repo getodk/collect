@@ -170,7 +170,6 @@
   <string name="selected_invalid_image">File i përzgjedhur nuk është imazh i vlefshëm</string>
   <string name="take_picture_instruction">Prek ekranin për të bërë fotografi</string>
   <string name="error_front_camera_unavailable">Ky aparat nuk ka maera të përparme</string>
-  <string name="camera_error">Ky aparat nuk suporton Camera2 API.</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Ruaj dhe mbyll</string>
   <string name="signature_capture">Firmos</string>
