@@ -28,7 +28,38 @@ internal class CameraXCamera : Camera {
     private var recording: Recording? = null
     private var state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
-    override fun initialize(activity: ComponentActivity, previewView: View) {
+    override fun initializePicture(activity: ComponentActivity, previewView: View) {
+        this.activity = activity
+
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
+        cameraProviderFuture.addListener(
+            {
+                val preview = Preview.Builder().build()
+                preview.setSurfaceProvider((previewView as PreviewView).surfaceProvider)
+
+                imageCapture = ImageCapture.Builder().build()
+
+                val cameraSelector = CameraSelector.Builder()
+                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                    .build()
+
+                try {
+                    cameraProviderFuture.get().bindToLifecycle(
+                        activity,
+                        cameraSelector,
+                        preview,
+                        imageCapture
+                    )
+                    state.value = Camera.State.INITIALIZED
+                } catch (e: IllegalArgumentException) {
+                    state.value = Camera.State.FAILED_TO_INITIALIZE
+                }
+            },
+            ContextCompat.getMainExecutor(activity)
+        )
+    }
+
+    override fun initializeVideo(activity: ComponentActivity, previewView: View) {
         this.activity = activity
 
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
@@ -41,7 +72,6 @@ internal class CameraXCamera : Camera {
                     .setExecutor(ContextCompat.getMainExecutor(activity))
                     .build()
 
-                imageCapture = ImageCapture.Builder().build()
                 videoCapture = VideoCapture.withOutput(recorder)
 
                 val cameraSelector = CameraSelector.Builder()
@@ -53,7 +83,6 @@ internal class CameraXCamera : Camera {
                         activity,
                         cameraSelector,
                         preview,
-                        imageCapture,
                         videoCapture
                     )
                     state.value = Camera.State.INITIALIZED

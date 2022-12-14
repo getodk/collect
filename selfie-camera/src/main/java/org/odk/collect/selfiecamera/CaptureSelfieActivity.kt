@@ -54,7 +54,12 @@ class CaptureSelfieActivity : LocalizedActivity() {
         setContentView(R.layout.activity_capture_selfie)
 
         val previewView = findViewById<View>(R.id.preview)
-        camera.initialize(this, previewView)
+
+        if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
+            camera.initializeVideo(this, previewView)
+        } else {
+            camera.initializePicture(this, previewView)
+        }
 
         camera.state().observe(this) {
             when (it) {

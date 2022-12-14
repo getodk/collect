@@ -216,14 +216,25 @@ private class FakeCamera : Camera {
 
     private var onVideoSaved: (() -> Unit)? = null
     private var onVideoSaveError: (() -> Unit)? = null
-
+    private var initializedPicture = false
+    private var initializedVideo = false
     private val state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
-    override fun initialize(activity: ComponentActivity, previewView: View) {
+    override fun initializePicture(activity: ComponentActivity, previewView: View) {
         if (failToInitialize) {
             state.value = Camera.State.FAILED_TO_INITIALIZE
         } else {
             state.value = Camera.State.INITIALIZED
+            initializedPicture = true
+        }
+    }
+
+    override fun initializeVideo(activity: ComponentActivity, previewView: View) {
+        if (failToInitialize) {
+            state.value = Camera.State.FAILED_TO_INITIALIZE
+        } else {
+            state.value = Camera.State.INITIALIZED
+            initializedVideo = true
         }
     }
 
@@ -232,7 +243,7 @@ private class FakeCamera : Camera {
         onImageSaved: () -> Unit,
         onImageSaveError: () -> Unit,
     ) {
-        if (state.value == Camera.State.UNINITIALIZED) {
+        if (state.value == Camera.State.UNINITIALIZED || !initializedPicture) {
             throw IllegalStateException()
         }
 
@@ -250,7 +261,7 @@ private class FakeCamera : Camera {
         onVideoSaved: () -> Unit,
         onVideoSaveError: () -> Unit,
     ) {
-        if (state.value == Camera.State.UNINITIALIZED) {
+        if (state.value == Camera.State.UNINITIALIZED || !initializedVideo) {
             throw IllegalStateException()
         }
 
