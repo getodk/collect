@@ -14,11 +14,6 @@ object AnalyticsUtils {
     }
 
     @JvmStatic
-    fun logFormEvent(event: String) {
-        Analytics.log(event, "form")
-    }
-
-    @JvmStatic
     fun logFormEvent(event: String, formId: String?, formTitle: String?) {
         Analytics.log(event, "form", getFormHash(formId, formTitle))
     }
@@ -58,8 +53,7 @@ object AnalyticsUtils {
         return host
     }
 
-    @JvmStatic
-    fun getFormHash(formController: FormController?): String {
+    private fun getFormHash(formController: FormController?): String {
         return if (formController != null) {
             val formID = formController.getFormDef()?.mainInstance?.root?.getAttributeValue("", "id") ?: ""
             getFormHash(formID, formController.getFormTitle())

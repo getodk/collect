@@ -847,7 +847,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
         switch (requestCode) {
             case RequestCodes.OSM_CAPTURE:
-                AnalyticsUtils.logFormEvent(OPEN_MAP_KIT_RESPONSE);
+                Analytics.log(OPEN_MAP_KIT_RESPONSE, "form");
                 setWidgetData(intent.getStringExtra("OSM_FILE_NAME"));
                 break;
             case RequestCodes.EX_ARBITRARY_FILE_CHOOSER:
@@ -1279,9 +1279,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     showShortToast(FormEntryActivity.this, R.string.save_as_error);
                 } else {
                     if (saveName.equals(formSaveViewModel.getFormName()) || saveName.equals(formController.getSubmissionMetadata().instanceName)) {
-                        AnalyticsUtils.logFormEvent(AnalyticsEvents.AUTOMATICALLY_SPECIFIED_INSTANCE_NAME);
+                        Analytics.log(AnalyticsEvents.AUTOMATICALLY_SPECIFIED_INSTANCE_NAME, "form");
                     } else {
-                        AnalyticsUtils.logFormEvent(AnalyticsEvents.MANUALLY_SPECIFIED_INSTANCE_NAME);
+                        Analytics.log(AnalyticsEvents.MANUALLY_SPECIFIED_INSTANCE_NAME, "form");
                     }
                     formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
                 }
@@ -1526,7 +1526,7 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            Analytics.log(SAVE_INCOMPLETE, "form", AnalyticsUtils.getFormHash(getFormController()));
+                            Analytics.log(SAVE_INCOMPLETE, "form");
 
                             saveForm(false, false, null, false);
                             autoSaved = true;
