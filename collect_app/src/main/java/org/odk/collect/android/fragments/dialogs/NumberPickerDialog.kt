@@ -28,7 +28,7 @@ class NumberPickerDialog : DialogFragment() {
         fun onNumberPickerValueSelected(widgetId: Int, value: Int)
     }
 
-    private lateinit var listener: NumberPickerListener
+    private var listener: NumberPickerListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,7 +54,7 @@ class NumberPickerDialog : DialogFragment() {
             .setTitle(R.string.number_picker_title)
             .setView(view)
             .setPositiveButton(R.string.ok) { _, _ ->
-                listener.onNumberPickerValueSelected(
+                listener?.onNumberPickerValueSelected(
                     requireArguments().getInt(WIDGET_ID), numberPicker.value
                 )
             }
