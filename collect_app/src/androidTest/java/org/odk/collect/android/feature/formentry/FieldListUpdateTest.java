@@ -20,6 +20,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyAbove;
 import static androidx.test.espresso.assertion.PositionAssertions.isCompletelyBelow;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -40,7 +41,6 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
-import static org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -233,7 +233,7 @@ public class FieldListUpdateTest {
 
         // Selecting A1 for level 2 should reveal options for A1 at level 3
         onView(withText("A1")).perform(click());
-        onView(withText("A1A")).perform(nestedScrollTo());
+        onView(withText("A1A")).perform(scrollTo());
         onView(withText("A1A")).check(matches(isDisplayed()));
         onView(withText("B1")).check(doesNotExist());
         onView(withText("C1")).check(doesNotExist());
@@ -248,10 +248,10 @@ public class FieldListUpdateTest {
 
         onView(withText("A")).perform(click());
 
-        onView(withText("A1")).perform(nestedScrollTo(), click());
-        onView(withText("A1B")).perform(nestedScrollTo(), click());
+        onView(withText("A1")).perform(scrollTo(), click());
+        onView(withText("A1B")).perform(scrollTo(), click());
 
-        onView(withText("Level1")).perform(nestedScrollTo(), longClick());
+        onView(withText("Level1")).perform(scrollTo(), longClick());
         onView(withText(R.string.clear_answer)).perform(click());
         onView(withText(R.string.discard_answer)).perform(click());
 

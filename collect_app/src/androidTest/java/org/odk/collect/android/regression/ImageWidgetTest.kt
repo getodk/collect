@@ -5,6 +5,7 @@ import android.app.Instrumentation
 import android.content.Intent
 import androidx.core.content.FileProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers
@@ -22,7 +23,6 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.FileUtils
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo
 import org.odk.collect.androidtest.RecordedIntentsRule
 import java.io.File
 
@@ -49,7 +49,7 @@ class ImageWidgetTest {
             .clickOnString(R.string.choose_image)
 
         onView(withTagValue(`is`("ImageView")))
-            .perform(nestedScrollTo())
+            .perform(scrollTo())
             .check(matches(isDisplayed()))
     }
 
