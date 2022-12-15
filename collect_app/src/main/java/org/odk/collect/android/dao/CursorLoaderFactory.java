@@ -21,17 +21,13 @@ public class CursorLoaderFactory {
         this.currentProjectProvider = currentProjectProvider;
     }
 
-    public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
-    }
-
     public CursorLoader createSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
-            cursorLoader = createSentInstancesCursorLoader(sortOrder);
+            String selection = DatabaseInstanceColumns.STATUS + " =? ";
+            String[] selectionArgs = {Instance.STATUS_SUBMITTED};
+
+            cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
         } else {
             String selection =
                     DatabaseInstanceColumns.STATUS + " =? and "
