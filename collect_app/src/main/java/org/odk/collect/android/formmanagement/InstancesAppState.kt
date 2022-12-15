@@ -37,7 +37,7 @@ class InstancesAppState(
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED
         )
-        val sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED)
+        val sentInstances = instancesRepository.getCountByStatus(Instance.STATUS_SUBMITTED, Instance.STATUS_SUBMISSION_FAILED)
         val editableInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_COMPLETE
