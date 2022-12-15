@@ -28,61 +28,6 @@ class RangePickerDecimalWidgetTest {
     }
 
     @Test
-    fun `list of numbers should contain only rangeStart when range has equal start and end`() {
-        rangeQuestion.rangeStart = BigDecimal(5.0)
-        rangeQuestion.rangeEnd = BigDecimal(5.0)
-        rangeQuestion.rangeStep = BigDecimal(1.0)
-
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-
-        assertThat(widget.displayedValuesForNumberPicker, equalTo(arrayOf("5.0")))
-    }
-
-    @Test
-    fun `list of numbers should contain only rangeStart when step is bigger than range`() {
-        rangeQuestion.rangeStart = BigDecimal(-5.0)
-        rangeQuestion.rangeEnd = BigDecimal(5.0)
-        rangeQuestion.rangeStep = BigDecimal(100.0)
-
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-
-        assertThat(widget.displayedValuesForNumberPicker, equalTo(arrayOf("-5.0")))
-    }
-
-    @Test
-    fun `list of numbers should contain numbers in ascending order when range is increasing`() {
-        rangeQuestion.rangeStart = BigDecimal(-5.0)
-        rangeQuestion.rangeEnd = BigDecimal(5.0)
-        rangeQuestion.rangeStep = BigDecimal(1.5)
-
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-
-        assertThat(widget.displayedValuesForNumberPicker, equalTo(arrayOf("-5.0", "-3.5", "-2.0", "-0.5", "1.0", "2.5", "4.0")))
-    }
-
-    @Test
-    fun `list of numbers should contain numbers in ascending order when range is decreasing`() {
-        rangeQuestion.rangeStart = BigDecimal(5.0)
-        rangeQuestion.rangeEnd = BigDecimal(-5.0)
-        rangeQuestion.rangeStep = BigDecimal(1.5)
-
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-
-        assertThat(widget.displayedValuesForNumberPicker, equalTo(arrayOf("-5.0", "-3.5", "-2.0", "-0.5", "1.0", "2.5", "4.0")))
-    }
-
-    @Test
-    fun `list of numbers should contain numbers in ascending order when range is decreasing and step is -1,5`() {
-        rangeQuestion.rangeStart = BigDecimal(5.0)
-        rangeQuestion.rangeEnd = BigDecimal(-5.0)
-        rangeQuestion.rangeStep = BigDecimal(-1.5)
-
-        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
-
-        assertThat(widget.displayedValuesForNumberPicker, equalTo(arrayOf("-5.0", "-3.5", "-2.0", "-0.5", "1.0", "2.5", "4.0")))
-    }
-
-    @Test
     fun `answer returns null when prompt does not have answer`() {
         assertThat(
             createWidget(

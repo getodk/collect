@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 
 public class RangePickerDecimalWidget extends QuestionWidget {
     RangePickerWidgetAnswerBinding binding;
-    String[] displayedValuesForNumberPicker;
+    private String[] displayedValuesForNumberPicker;
 
     private BigDecimal rangeStart;
     private BigDecimal rangeEnd;
