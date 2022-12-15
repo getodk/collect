@@ -56,7 +56,7 @@ class RangePickerWidgetUtilsTest {
     }
 
     @Test
-    fun `list of numbers should contain numbers in ascending order when range is decreasing and step is -1,5`() {
+    fun `list of numbers should contain numbers in ascending order when range is decreasing and step is a negative number`() {
         val rangeStart = BigDecimal(5.0)
         val rangeEnd = BigDecimal(-5.0)
         val rangeStep = BigDecimal(-1.5)
