@@ -7,6 +7,11 @@ import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.Md5.getMd5Hash
 import java.io.ByteArrayInputStream
 
+/**
+ * This class should be used to log some specific events that require additional operations, like
+ * determining form hash.
+ * If you want to log a generic event use [org.odk.collect.analytics.Analytics] directly.
+ */
 object AnalyticsUtils {
     @JvmStatic
     fun setForm(formController: FormController) {
