@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -48,7 +49,7 @@ public class ServerFormDownloaderTest {
     private final FormsRepository formsRepository = new InMemFormsRepository();
     private final File cacheDir = Files.createTempDir();
     private final File formsDir = Files.createTempDir();
-    private final Supplier<Long> clock = () -> 0L;
+    private final Supplier<Long> clock = () -> 123L;
 
     @Test
     public void downloadsAndSavesForm() throws Exception {
@@ -573,7 +574,7 @@ public class ServerFormDownloaderTest {
     }
 
     @Test
-    public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_updatesMediaFiles() throws Exception {
+    public void whenFormAlreadyDownloaded_andFormHasNewMediaFiles_updatesMediaFilesAndLastDetectedAttachmentsUpdateDateInForm() throws Exception {
         String xform = createXFormBody("id", "version");
         ServerFormDetails serverFormDetails = new ServerFormDetails(
                 "Form",
@@ -596,6 +597,11 @@ public class ServerFormDownloaderTest {
         // Initial download
         downloader.downloadForm(serverFormDetails, null, null);
 
+        List<Form> allForms = formsRepository.getAll();
+        assertThat(allForms.size(), is(1));
+        Form form = allForms.get(0);
+        assertThat(form.getLastDetectedAttachmentsUpdateDate(), is(nullValue()));
+
         ServerFormDetails serverFormDetailsUpdatedMediaFile = new ServerFormDetails(
                 "Form",
                 "http://downloadUrl",
@@ -614,9 +620,9 @@ public class ServerFormDownloaderTest {
         // Second download
         downloader.downloadForm(serverFormDetailsUpdatedMediaFile, null, null);
 
-        List<Form> allForms = formsRepository.getAll();
+        allForms = formsRepository.getAll();
         assertThat(allForms.size(), is(1));
-        Form form = allForms.get(0);
+        form = allForms.get(0);
         assertThat(form.getFormId(), is("id"));
 
         File formFile = new File(getAbsoluteFilePath(formsDir.getAbsolutePath(), form.getFormFilePath()));
@@ -626,6 +632,8 @@ public class ServerFormDownloaderTest {
         File mediaFile1 = new File(form.getFormMediaPath() + "/file1");
         assertThat(mediaFile1.exists(), is(true));
         assertThat(new String(read(mediaFile1)), is("contents-updated"));
+
+        assertThat(form.getLastDetectedAttachmentsUpdateDate(), is(123L));
     }
 
     @Test
