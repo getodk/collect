@@ -13,6 +13,7 @@ data class BlankFormListItem(
     val geometryPath: String,
     val dateOfCreation: Long,
     val dateOfLastUsage: Long,
+    val dateOfLastDetectedAttachmentsUpdate: Long?,
     val contentUri: Uri
 )
 
@@ -27,5 +28,6 @@ fun Form.toBlankFormListItem(projectId: String, instancesRepository: InstancesRe
         .getAllByFormId(this.formId)
         .filter { it.formVersion == this.version }
         .maxByOrNull { it.lastStatusChangeDate }?.lastStatusChangeDate ?: 0L,
+    dateOfLastDetectedAttachmentsUpdate = this.lastDetectedAttachmentsUpdateDate,
     contentUri = FormsContract.getUri(projectId, this.dbId)
 )
