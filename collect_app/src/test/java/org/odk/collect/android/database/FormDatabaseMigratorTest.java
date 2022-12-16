@@ -18,6 +18,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_DELETE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_SEND;
@@ -33,6 +34,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
@@ -44,7 +46,7 @@ public class FormDatabaseMigratorTest {
     public static final List<String> CURRENT_VERSION_COLUMNS = asList(_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            GEOMETRY_XPATH, DELETED_DATE);
+            GEOMETRY_XPATH, DELETED_DATE, LAST_DETECTED_ATTACHMENTS_UPDATE_DATE);
 
     private SQLiteDatabase database;
 
@@ -60,15 +62,15 @@ public class FormDatabaseMigratorTest {
     }
 
     @Test
-    public void onUpgrade_fromVersion10() {
-        createVersion10Database(database);
-        ContentValues contentValues = createVersion10Form();
+    public void onUpgrade_fromVersion11() {
+        createVersion11Database(database);
+        ContentValues contentValues = createVersion11Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
-        new FormDatabaseMigrator().onUpgrade(database, 10);
+        new FormDatabaseMigrator().onUpgrade(database, 11);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getColumnCount(), is(18));
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToFirst();
@@ -88,6 +90,40 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
+        }
+    }
+
+    @Test
+    public void onUpgrade_fromVersion10() {
+        createVersion10Database(database);
+        ContentValues contentValues = createVersion10Form();
+        database.insert(FORMS_TABLE_NAME, null, contentValues);
+
+        new FormDatabaseMigrator().onUpgrade(database, 10);
+
+        try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
+            assertThat(cursor.getColumnCount(), is(18));
+            assertThat(cursor.getCount(), is(1));
+
+            cursor.moveToFirst();
+            assertThat(cursor.getString(cursor.getColumnIndex(DISPLAY_NAME)), is(contentValues.getAsString(DISPLAY_NAME)));
+            assertThat(cursor.getString(cursor.getColumnIndex(DESCRIPTION)), is(contentValues.getAsString(DESCRIPTION)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_FORM_ID)), is(contentValues.getAsString(JR_FORM_ID)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JR_VERSION)), is(contentValues.getAsString(JR_VERSION)));
+            assertThat(cursor.getString(cursor.getColumnIndex(MD5_HASH)), is(contentValues.getAsString(MD5_HASH)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(DATE)), is(contentValues.getAsInteger(DATE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_MEDIA_PATH)), is(contentValues.getAsString(FORM_MEDIA_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(FORM_FILE_PATH)), is(contentValues.getAsString(FORM_FILE_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(LANGUAGE)), is(contentValues.getAsString(LANGUAGE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(SUBMISSION_URI)), is(contentValues.getAsString(SUBMISSION_URI)));
+            assertThat(cursor.getString(cursor.getColumnIndex(BASE64_RSA_PUBLIC_KEY)), is(contentValues.getAsString(BASE64_RSA_PUBLIC_KEY)));
+            assertThat(cursor.getString(cursor.getColumnIndex(JRCACHE_FILE_PATH)), is(contentValues.getAsString(JRCACHE_FILE_PATH)));
+            assertThat(cursor.getString(cursor.getColumnIndex(AUTO_SEND)), is(contentValues.getAsString(AUTO_SEND)));
+            assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
+            assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(contentValues.getAsInteger(DELETED_DATE)));
+            assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
         }
     }
 
@@ -100,7 +136,7 @@ public class FormDatabaseMigratorTest {
         new FormDatabaseMigrator().onUpgrade(database, 9);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getColumnCount(), is(18));
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToFirst();
@@ -121,6 +157,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.getInt(cursor.getColumnIndex(DELETED_DATE)), is(0));
             assertThat(cursor.getColumnIndex("deleted"), is(-1));
+            assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
         }
     }
 
@@ -133,7 +170,7 @@ public class FormDatabaseMigratorTest {
         new FormDatabaseMigrator().onUpgrade(database, 8);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getColumnCount(), is(18));
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToFirst();
@@ -153,6 +190,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.isNull(cursor.getColumnIndex(DELETED_DATE)), is(true));
+            assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
         }
     }
 
@@ -165,7 +203,7 @@ public class FormDatabaseMigratorTest {
         new FormDatabaseMigrator().onUpgrade(database, 7);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getColumnCount(), is(18));
             assertThat(cursor.getCount(), is(1));
 
             cursor.moveToFirst();
@@ -185,6 +223,7 @@ public class FormDatabaseMigratorTest {
             assertThat(cursor.getString(cursor.getColumnIndex(AUTO_DELETE)), is(contentValues.getAsString(AUTO_DELETE)));
             assertThat(cursor.getString(cursor.getColumnIndex(GEOMETRY_XPATH)), is(contentValues.getAsString(GEOMETRY_XPATH)));
             assertThat(cursor.isNull(cursor.getColumnIndex(DELETED_DATE)), is(true));
+            assertThat(cursor.getString(cursor.getColumnIndex(LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)), is(nullValue()));
         }
     }
 
@@ -200,7 +239,7 @@ public class FormDatabaseMigratorTest {
         formDatabaseMigrator.onDowngrade(database);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getColumnCount(), is(18));
             assertThat(cursor.getCount(), is(0));
             assertThat(asList(cursor.getColumnNames()), is(CURRENT_VERSION_COLUMNS));
         }
@@ -235,7 +274,7 @@ public class FormDatabaseMigratorTest {
         formDatabaseMigrator.onDowngrade(database);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
-            assertThat(cursor.getColumnCount(), is(17));
+            assertThat(cursor.getColumnCount(), is(18));
             assertThat(cursor.getCount(), is(0));
             assertThat(asList(cursor.getColumnNames()), is(CURRENT_VERSION_COLUMNS));
         }
@@ -304,6 +343,27 @@ public class FormDatabaseMigratorTest {
     }
 
     private ContentValues createVersion10Form() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DISPLAY_NAME, "DisplayName");
+        contentValues.put(DESCRIPTION, "Description");
+        contentValues.put(JR_FORM_ID, "FormId");
+        contentValues.put(JR_VERSION, "FormVersion");
+        contentValues.put(MD5_HASH, "Md5Hash");
+        contentValues.put(DATE, 0);
+        contentValues.put(FORM_MEDIA_PATH, "Form/Media/Path");
+        contentValues.put(FORM_FILE_PATH, "Form/File/Path");
+        contentValues.put(LANGUAGE, "Language");
+        contentValues.put(SUBMISSION_URI, "submission.uri");
+        contentValues.put(BASE64_RSA_PUBLIC_KEY, "Base64RsaPublicKey");
+        contentValues.put(JRCACHE_FILE_PATH, "Jr/Cache/File/Path");
+        contentValues.put(AUTO_SEND, "AutoSend");
+        contentValues.put(AUTO_DELETE, "AutoDelete");
+        contentValues.put(GEOMETRY_XPATH, "GeometryXPath");
+        contentValues.put(DELETED_DATE, 0);
+        return contentValues;
+    }
+
+    private ContentValues createVersion11Form() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DISPLAY_NAME, "DisplayName");
         contentValues.put(DESCRIPTION, "Description");
@@ -394,6 +454,27 @@ public class FormDatabaseMigratorTest {
                 + JR_FORM_ID + " text not null, "
                 + JR_VERSION + " text, "
                 + MD5_HASH + " text not null, "
+                + DATE + " integer not null, " // milliseconds
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + GEOMETRY_XPATH + " text, "
+                + DELETED_DATE + " integer);");
+    }
+
+    private void createVersion11Database(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null UNIQUE ON CONFLICT IGNORE, "
                 + DATE + " integer not null, " // milliseconds
                 + FORM_MEDIA_PATH + " text not null, "
                 + FORM_FILE_PATH + " text not null, "
