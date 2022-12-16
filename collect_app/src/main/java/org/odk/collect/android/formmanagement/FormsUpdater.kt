@@ -11,13 +11,15 @@ import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
+import java.util.function.Supplier
 import java.util.stream.Collectors
 
 class FormsUpdater(
     private val context: Context,
     private val notifier: Notifier,
     private val syncStatusAppState: SyncStatusAppState,
-    private val projectDependencyProviderFactory: ProjectDependencyProviderFactory
+    private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
+    private val clock: Supplier<Long>
 ) {
 
     /**
@@ -29,7 +31,7 @@ class FormsUpdater(
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
-        val formDownloader = formDownloader(sandbox)
+        val formDownloader = formDownloader(sandbox, clock)
 
         try {
             val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
@@ -67,7 +69,7 @@ class FormsUpdater(
 
         val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
-        val formDownloader = formDownloader(sandbox)
+        val formDownloader = formDownloader(sandbox, clock)
 
         val serverFormsSynchronizer = ServerFormsSynchronizer(
             serverFormsDetailsFetcher,
@@ -103,13 +105,14 @@ class FormsUpdater(
     }
 }
 
-private fun formDownloader(projectDependencyProvider: ProjectDependencyProvider): ServerFormDownloader {
+private fun formDownloader(projectDependencyProvider: ProjectDependencyProvider, clock: Supplier<Long>): ServerFormDownloader {
     return ServerFormDownloader(
         projectDependencyProvider.formSource,
         projectDependencyProvider.formsRepository,
         File(projectDependencyProvider.cacheDir),
         projectDependencyProvider.formsDir,
-        FormMetadataParser()
+        FormMetadataParser(),
+        clock
     )
 }
 
