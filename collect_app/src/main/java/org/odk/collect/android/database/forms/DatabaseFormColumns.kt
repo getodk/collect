@@ -29,6 +29,7 @@ object DatabaseFormColumns : BaseColumns {
     // this is null on create, and can only be set on an update.
     const val LANGUAGE = "language"
     const val DELETED_DATE = "deleted_date"
+    const val LAST_DETECTED_ATTACHMENTS_UPDATE_DATE = "lastDetectedAttachmentsUpdateDate"
 
     // not used in the newest database version
     const val DISPLAY_SUBTEXT = "displaySubtext"
