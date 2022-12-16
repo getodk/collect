@@ -23,6 +23,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 
@@ -31,7 +32,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            "lastDetectedFormVersionHash"};
+            LAST_DETECTED_FORM_VERSION_HASH};
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
@@ -202,7 +203,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion6(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, "lastDetectedFormVersionHash", "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
@@ -268,7 +269,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + "lastDetectedFormVersionHash" + " text);");
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
     private void createFormsTableV7(SQLiteDatabase db) {
@@ -288,7 +289,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + "lastDetectedFormVersionHash" + " text);");
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
     private void createFormsTableV9(SQLiteDatabase db) {

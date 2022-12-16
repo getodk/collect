@@ -21,7 +21,6 @@ object DatabaseFormColumns : BaseColumns {
     const val GEOMETRY_XPATH = "geometryXpath" // can be null
 
     // these are generated for you (but you can insert something else if you want)
-    const val DISPLAY_SUBTEXT = "displaySubtext" // not used in the newest database version
     const val MD5_HASH = "md5Hash"
     const val DATE = "date"
     const val JRCACHE_FILE_PATH = "jrcacheFilePath"
@@ -30,4 +29,8 @@ object DatabaseFormColumns : BaseColumns {
     // this is null on create, and can only be set on an update.
     const val LANGUAGE = "language"
     const val DELETED_DATE = "deleted_date"
+
+    // not used in the newest database version
+    const val DISPLAY_SUBTEXT = "displaySubtext"
+    const val LAST_DETECTED_FORM_VERSION_HASH = "lastDetectedFormVersionHash"
 }

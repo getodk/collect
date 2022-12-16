@@ -33,6 +33,7 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns._ID;
@@ -224,7 +225,7 @@ public class FormDatabaseMigratorTest {
                 + BASE64_RSA_PUBLIC_KEY + " text, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + "lastDetectedFormVersionHash" + " text, "
+                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
                 + GEOMETRY_XPATH + " text);");
 
         ContentValues contentValues = createVersion8Form();
@@ -256,7 +257,7 @@ public class FormDatabaseMigratorTest {
         contentValues.put(JRCACHE_FILE_PATH, "Jr/Cache/File/Path");
         contentValues.put(AUTO_SEND, "AutoSend");
         contentValues.put(AUTO_DELETE, "AutoDelete");
-        contentValues.put("lastDetectedFormVersionHash", "LastDetectedFormVersionHash");
+        contentValues.put(LAST_DETECTED_FORM_VERSION_HASH, "LastDetectedFormVersionHash");
         contentValues.put(GEOMETRY_XPATH, "GeometryXPath");
         return contentValues;
     }
@@ -277,7 +278,7 @@ public class FormDatabaseMigratorTest {
         contentValues.put(JRCACHE_FILE_PATH, "Jr/Cache/File/Path");
         contentValues.put(AUTO_SEND, "AutoSend");
         contentValues.put(AUTO_DELETE, "AutoDelete");
-        contentValues.put("lastDetectedFormVersionHash", "LastDetectedFormVersionHash");
+        contentValues.put(LAST_DETECTED_FORM_VERSION_HASH, "LastDetectedFormVersionHash");
         return contentValues;
     }
 
@@ -340,7 +341,7 @@ public class FormDatabaseMigratorTest {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + "lastDetectedFormVersionHash" + " text);");
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
     private void createVersion8Database(SQLiteDatabase database) {
@@ -360,7 +361,7 @@ public class FormDatabaseMigratorTest {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + "lastDetectedFormVersionHash" + " text, "
+                + LAST_DETECTED_FORM_VERSION_HASH + " text, "
                 + GEOMETRY_XPATH + " text);");
     }
 
