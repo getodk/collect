@@ -189,7 +189,7 @@ public class Utilities {
             entry.uuid = c.getString(c.getColumnIndexOrThrow(InstanceColumns.UUID));
 
         } catch (Exception e) {
-            Timber.i(String.format("Get task with ID or path: ID: %d Path: %s", id, instancePath));
+            Timber.i("Get task with ID or path: ID: %d Path: %s", id, instancePath);
             Timber.e(e);
         } finally {
             if (c != null) {
@@ -436,7 +436,7 @@ public class Utilities {
         if (all_non_synchronised) {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
-                    " and " + InstanceColumns.T_IS_SYNC + " = ? ";
+                    " and (" + InstanceColumns.T_IS_SYNC + " = ? or " + InstanceColumns.T_TASK_TYPE + " = 'case' ) ";
         } else {
             selectClause = "(lower(" + InstanceColumns.SOURCE + ") = ?" +
                     " or " + InstanceColumns.SOURCE + " = 'local')" +
@@ -683,7 +683,7 @@ public class Utilities {
                     where.append(",");
                 }
                 where.append("?");
-                whereArgs[idx++] = assignmentsToKeep.get(i).task.update_id;
+                whereArgs[idx++] = casesToKeep.get(i).task.update_id;
             }
             where.append(")");
         }
@@ -699,18 +699,6 @@ public class Utilities {
                 c.moveToFirst();
                 obsoleteUpdateId = c.getString(c.getColumnIndexOrThrow(InstanceColumns.T_UPDATEID));
                 markOldCaseCancelled(obsoleteUpdateId);
-
-                // Delete the file
-                    /*
-                    do {
-                        String instanceFile = c.getString(
-                                c.getColumnIndex(InstanceColumns.INSTANCE_FILE_PATH));
-                        File instanceDir = (new File(instanceFile)).getParentFile();
-                        ip.deleteAllFilesInDirectory(instanceDir);
-
-                    } while (c.moveToNext());
-
-                     */
             }
         } finally {
             if (c != null) {

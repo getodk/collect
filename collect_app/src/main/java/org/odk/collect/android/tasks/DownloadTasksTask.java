@@ -42,6 +42,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dao.SmapReferencesDao;
 import org.odk.collect.android.database.TrAssignment;
 import org.odk.collect.android.database.TaskResponseAssignment;
+import org.odk.collect.android.database.TrTask;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
@@ -457,23 +458,27 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
         }
         InstancesDao dao = new InstancesDao();
-        for (TaskResponseAssignment ta : tr.taskAssignments) {
-            taskURL = serverUrl + "/api/v1/tasks/" + ta.task.id;
-            URI uri = URI.create(taskURL);
-            String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
-            JSONObject jObject = new JSONObject(resp);
-            JSONObject initialData = null;
-            JSONObject values = null;
-            if (jObject.has("initial_data")) {
-                initialData = jObject.getJSONObject("initial_data");
-                values = initialData.getJSONObject("values");
-            }
-            if(initialData != null) {
-               ta.task.phone = values.getString("Phone");
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(InstanceColumns.PHONE, ta.task.phone);
-                String where = "tTitle = ?";
-                dao.updateInstance(contentValues, where, new String[]{ta.task.title});
+        if(tr.taskAssignments != null) {
+            for (TaskResponseAssignment ta : tr.taskAssignments) {
+                if (ta.task.id > 0) { // A task not a case
+                    String taskDetailsURL = serverUrl + "/api/v1/tasks/" + ta.task.id;
+                    URI uri = URI.create(taskDetailsURL);
+                    String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
+                    JSONObject jObject = new JSONObject(resp);
+                    JSONObject initialData = null;
+                    JSONObject values = null;
+                    if (jObject.has("initial_data")) {
+                        initialData = jObject.getJSONObject("initial_data");
+                        values = initialData.getJSONObject("values");
+                    }
+                    if (initialData != null) {
+                        ta.task.phone = values.getString("Phone");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(InstanceColumns.PHONE, ta.task.phone);
+                        String where = "tTitle = ?";
+                        dao.updateInstance(contentValues, where, new String[]{ta.task.title});
+                    }
+                }
             }
         }
     }
@@ -551,8 +556,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
          */
         updateResponse.taskAssignments = new ArrayList<TaskResponseAssignment> ();          // Updates to task status
 
+        /*
+         * Get details on non synchronised tasks or on cases
+         */
         for(TaskEntry t : nonSynchTasks) {
-  	  		if(t.taskStatus != null && t.isSynced.equals(Utilities.STATUS_SYNC_NO)) {
+  	  		if(t.taskStatus != null && (t.isSynced.equals(Utilities.STATUS_SYNC_NO)
+                    || (t.taskType != null && t.taskType.equals("case") && t.taskStatus.equals("rejected")))) {
   	  			TaskResponseAssignment ta = new TaskResponseAssignment();
   	  			ta.assignment = new TrAssignment();
   	  			ta.assignment.assignment_id = (int) t.assId;
@@ -560,6 +569,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
   	  			ta.assignment.assignment_status = t.taskStatus;
                 ta.assignment.task_comment = t.taskComment;
                 ta.assignment.uuid = t.uuid;
+
+                // Details required for cases
+                ta.task = new TrTask();
+                ta.task.type = t.taskType;
+                ta.task.update_id = t.updateId;
+                ta.task.form_id = t.jrFormId;
 
 	            updateResponse.taskAssignments.add(ta);
 
@@ -650,9 +665,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 // Find out if this task is already on the phone
                 TaskStatus ts = getExistingTaskStatus(ta.task.type, assignment.assignment_id, ta.task.update_id);
                 /*
-                 * If this is a new task or a case then get it from the server
+                 * If this is a new task or a case that has not been rejected then get it from the server
                  */
-                if(ts == null || ta.task.type != null && ta.task.type.equals("case")) {
+                if(ts == null ||
+                        (ta.task.type != null && ta.task.type.equals("case")) && !ts.status.equals(Utilities.STATUS_T_REJECTED)) {
                     Timber.i("New task: %s", assignment.assignment_id);
                     // New task
                     if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED) ||
