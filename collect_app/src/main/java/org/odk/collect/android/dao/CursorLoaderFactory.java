@@ -21,23 +21,21 @@ public class CursorLoaderFactory {
         this.currentProjectProvider = currentProjectProvider;
     }
 
-    public CursorLoader createSentInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " =? ";
-        String[] selectionArgs = {Instance.STATUS_SUBMITTED};
-
-        return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
-    }
-
     public CursorLoader createSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
-            cursorLoader = createSentInstancesCursorLoader(sortOrder);
+            String selection = DatabaseInstanceColumns.STATUS + "=? or " + DatabaseInstanceColumns.STATUS + "=?";
+            String[] selectionArgs = {Instance.STATUS_SUBMITTED, Instance.STATUS_SUBMISSION_FAILED};
+
+            cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
         } else {
             String selection =
-                    DatabaseInstanceColumns.STATUS + " =? and "
+                    "(" + DatabaseInstanceColumns.STATUS + "=? or "
+                            + DatabaseInstanceColumns.STATUS + "=?) and "
                             + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
                     Instance.STATUS_SUBMITTED,
+                    Instance.STATUS_SUBMISSION_FAILED,
                     "%" + charSequence + "%"};
 
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);

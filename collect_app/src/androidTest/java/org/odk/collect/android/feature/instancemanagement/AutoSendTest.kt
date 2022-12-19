@@ -67,8 +67,8 @@ class AutoSendTest {
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage
-            .clickViewSentForm(0)
-            .assertTextDoesNotExist("One Question")
+            .clickViewSentForm(1)
+            .assertText("One Question")
 
         notificationDrawerRule
             .open()
@@ -129,8 +129,8 @@ class AutoSendTest {
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage
-            .clickViewSentForm(0)
-            .assertTextDoesNotExist("One Question Autosend")
+            .clickViewSentForm(1)
+            .assertText("One Question Autosend")
 
         notificationDrawerRule
             .open()
