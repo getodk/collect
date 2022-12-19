@@ -52,7 +52,9 @@ public class FormListAdapter extends SimpleCursorAdapter {
         setViewBinder((view, cursor, columnIndex) -> {
             String columnName = cursor.getColumnName(columnIndex);
             if (columnName.equals(DatabaseFormColumns.DATE)) {
-                String timestampText = getTimestampText(new Date(cursor.getLong(columnIndex)));
+                Long dateOfCreation = cursor.getLong(columnIndex);
+                Long dateOfLastAttachmentsUpdate = cursor.isNull(cursor.getColumnIndex(DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE)) ? null : cursor.getLong(cursor.getColumnIndex(DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE));
+                String timestampText = getTimestampText(dateOfCreation, dateOfLastAttachmentsUpdate);
                 if (!timestampText.isEmpty()) {
                     TextView v = (TextView) view;
                     v.setText(timestampText);
@@ -103,12 +105,14 @@ public class FormListAdapter extends SimpleCursorAdapter {
         }
     }
 
-    private String getTimestampText(Date date) {
+    private String getTimestampText(Long dateOfCreation, Long dateOfLastAttachmentsUpdate) {
         try {
             if (context != null) {
-                return new SimpleDateFormat(
-                    context.getString(R.string.added_on_date_at_time), Locale.getDefault()
-                ).format(date);
+                if (dateOfLastAttachmentsUpdate != null) {
+                    return new SimpleDateFormat(context.getString(R.string.updated_on_date_at_time), Locale.getDefault()).format(new Date(dateOfLastAttachmentsUpdate));
+                } else {
+                    return new SimpleDateFormat(context.getString(R.string.added_on_date_at_time), Locale.getDefault()).format(new Date(dateOfCreation));
+                }
             }
         } catch (IllegalArgumentException e) {
             Timber.e(e, "Current locale: %s", Locale.getDefault());
