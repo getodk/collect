@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply from: '../config/quality.gradle'
 apply from: '../config/jacoco.gradle'
 apply plugin: 'kotlin-android'
+apply plugin: "com.google.android.gms.oss-licenses-plugin"
 
 import com.android.ddmlib.DdmPreferences
 import dependencies.Dependencies
@@ -291,6 +292,7 @@ dependencies {
     implementation Dependencies.play_services_auth
     implementation Dependencies.play_services_maps
     implementation Dependencies.play_services_location
+    implementation Dependencies.play_services_oss_licenses
 
     implementation Dependencies.firebase_analytics
     implementation Dependencies.firebase_crashlytics
