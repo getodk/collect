@@ -711,8 +711,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 } else {        	// Existing task
                     Timber.i("Existing Task: " + assignment.assignment_id + " : " + assignment.assignment_status);
 
-                    // Update the task if its status is not incomplete
-                    if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)) {
+                    // Update the task if its status is not incomplete and it has not beeen rejected
+                    if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)
+                            && !ts.status.equals(Utilities.STATUS_T_REJECTED)) {
                         Utilities.setStatusForAssignment(assignment.assignment_id, assignment.assignment_status);
                         results.put(ta.task.title, assignment.assignment_status);
                     }
