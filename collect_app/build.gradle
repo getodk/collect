@@ -363,7 +363,6 @@ dependencies {
 
     // Testing-only dependencies
     testImplementation Dependencies.junit
-    testImplementation Dependencies.mockito_core
     testImplementation Dependencies.mockito_inline
     testImplementation Dependencies.mockito_kotlin
 

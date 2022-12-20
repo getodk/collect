@@ -80,7 +80,7 @@ class GeoPointActivityTest {
 
     @Test
     fun `finishes with location when available`() {
-        val scenario = launcherRule.launch(GeoPointActivity::class.java)
+        val scenario = launcherRule.launchForResult(GeoPointActivity::class.java)
 
         val location = Location(0.0, 0.0, 0.0, 0.0f)
         locationLiveData.value = location
@@ -97,7 +97,7 @@ class GeoPointActivityTest {
 
     @Test
     fun `finishes when dialog is cancelled`() {
-        val scenario = launcherRule.launch(GeoPointActivity::class.java)
+        val scenario = launcherRule.launchForResult(GeoPointActivity::class.java)
         scenario.onActivity {
             it.onCancel()
         }

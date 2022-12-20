@@ -66,7 +66,7 @@ public class GeoPointMapActivityTest {
 
     @Test
     public void shouldReturnPointFromSecondLocationFix() {
-        ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launch(GeoPointMapActivity.class);
+        ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launchForResult(GeoPointMapActivity.class);
         mapFragment.ready();
 
         // The very first fix is ignored.
