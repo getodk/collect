@@ -82,6 +82,10 @@ android {
             applicationId "org.smap.smapTask.android.kontrolid"
             versionName "6.807-kontrolid"
         }
+        dogman {
+            applicationId "org.smap.smapTask.android.dogman"
+            versionName "6.807-dogman"
+        }
         kontrolid_corporate {
             applicationId "org.smap.smapTask.android.kontrolid_corporate"
             versionName "6.807-kontrolid"
