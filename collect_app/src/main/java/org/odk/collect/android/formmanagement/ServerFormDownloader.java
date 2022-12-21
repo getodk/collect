@@ -160,6 +160,13 @@ public class ServerFormDownloader implements FormDownloader {
             FileUtils.copyFile(fileResult.file, formFile);
         } else {
             formFile = fileResult.file;
+
+            if (newAttachmentsDetected) {
+                Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
+                if (existingForm != null) {
+                    formsRepository.save(new Form.Builder(existingForm).lastDetectedAttachmentsUpdateDate(clock.get()).build());
+                }
+            }
         }
 
         // Save form in database
@@ -180,13 +187,6 @@ public class ServerFormDownloader implements FormDownloader {
                 }
 
                 throw new FormDownloadException.DiskError();
-            }
-        }
-
-        if (!fileResult.isNew && newAttachmentsDetected) {
-            Form existingForm = formsRepository.getOneByPath(formFile.getAbsolutePath());
-            if (existingForm != null) {
-                formsRepository.save(new Form.Builder(existingForm).lastDetectedAttachmentsUpdateDate(clock.get()).build());
             }
         }
     }
