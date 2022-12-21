@@ -19,6 +19,7 @@ limitations under the License.
         android:layout_height="wrap_content"
         android:descendantFocusability="blocksDescendants"
         android:scrollbars="none"
+        android:layoutDirection="ltr"
         android:layout_gravity="center_horizontal">
     </org.odk.collect.android.views.CustomNumberPicker>
 </FrameLayout>
