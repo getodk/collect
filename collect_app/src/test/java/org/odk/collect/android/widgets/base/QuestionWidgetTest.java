@@ -141,7 +141,6 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
         QuestionWidget widget = (QuestionWidget) getWidget();
         assertThat(widget.findViewById(R.id.answer_container).getVisibility(), is(View.GONE));
-        assertThat(widget.findViewById(R.id.space_box).getVisibility(), is(View.VISIBLE));
     }
 
     @Test
@@ -150,7 +149,6 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
         when(formEntryPrompt.getAnswerValue()).thenReturn(getInitialAnswer());
         QuestionWidget widget = (QuestionWidget) getWidget();
         assertThat(widget.findViewById(R.id.answer_container).getVisibility(), is(View.VISIBLE));
-        assertThat(widget.findViewById(R.id.space_box).getVisibility(), is(View.GONE));
     }
 
     // The whole widget should be registered for context menu to support removing answers/groups
