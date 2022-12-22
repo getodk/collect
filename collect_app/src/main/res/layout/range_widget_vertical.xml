@@ -35,7 +35,8 @@ limitations under the License.
         android:layout_width="50dp"
         android:layout_height="330dp"
         android:clipChildren="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:layoutDirection="ltr">
 
         <org.odk.collect.android.views.TrackingTouchSlider
             android:id="@+id/slider"
