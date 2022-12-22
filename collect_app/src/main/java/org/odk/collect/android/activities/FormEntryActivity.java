@@ -107,6 +107,7 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
@@ -222,7 +223,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
         WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
-        QuitFormDialogFragment.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
+        QuitFormDialog.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
         SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
         CustomTimePickerDialog.TimeChangeListener {
 
