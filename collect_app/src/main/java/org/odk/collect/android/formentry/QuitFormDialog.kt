@@ -97,6 +97,26 @@ object QuitFormDialog {
         return dialog
     }
 
+    fun show(
+        activity: Activity,
+        formSaveViewModel: FormSaveViewModel,
+        formEntryViewModel: FormEntryViewModel,
+        settingsProvider: SettingsProvider,
+        currentProjectProvider: CurrentProjectProvider,
+        listener: Listener?,
+    ): AlertDialog {
+        return create(
+            activity,
+            formSaveViewModel,
+            formEntryViewModel,
+            settingsProvider,
+            currentProjectProvider,
+            listener
+        ).also {
+            it.show()
+        }
+    }
+
     interface Listener {
         fun onSaveChangesClicked()
     }
