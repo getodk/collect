@@ -30,7 +30,7 @@ object QuitFormDialog {
         formEntryViewModel: FormEntryViewModel,
         settingsProvider: SettingsProvider,
         currentProjectProvider: CurrentProjectProvider,
-        listener: Listener?,
+        onSaveChangesClicked: Runnable?,
     ): AlertDialog {
         val title: String =
             if (formSaveViewModel.formName == null) activity.resources.getString(R.string.no_form_loaded) else formSaveViewModel.getFormName()
@@ -63,7 +63,7 @@ object QuitFormDialog {
             OnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
                 val item = adapter.getItem(position) as IconMenuItem
                 if (item.textResId == R.string.keep_changes) {
-                    listener?.onSaveChangesClicked()
+                    onSaveChangesClicked?.run()
                 } else {
                     formSaveViewModel.ignoreChanges()
                     formEntryViewModel.exit()
@@ -97,13 +97,14 @@ object QuitFormDialog {
         return dialog
     }
 
+    @JvmStatic
     fun show(
         activity: Activity,
         formSaveViewModel: FormSaveViewModel,
         formEntryViewModel: FormEntryViewModel,
         settingsProvider: SettingsProvider,
         currentProjectProvider: CurrentProjectProvider,
-        listener: Listener?,
+        onSaveChangesClicked: Runnable?,
     ): AlertDialog {
         return create(
             activity,
@@ -111,13 +112,9 @@ object QuitFormDialog {
             formEntryViewModel,
             settingsProvider,
             currentProjectProvider,
-            listener
+            onSaveChangesClicked
         ).also {
             it.show()
         }
-    }
-
-    interface Listener {
-        fun onSaveChangesClicked()
     }
 }

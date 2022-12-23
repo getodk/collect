@@ -108,7 +108,6 @@ import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialog;
-import org.odk.collect.android.formentry.QuitFormDialogFragment;
 import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -223,7 +222,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
         WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
-        QuitFormDialog.Listener, DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
+        DeleteRepeatDialogFragment.DeleteRepeatDialogCallback,
         SelectMinimalDialog.SelectMinimalDialogListener, CustomDatePickerDialog.DateChangeListener,
         CustomTimePickerDialog.TimeChangeListener {
 
@@ -407,7 +406,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
-                .forClass(QuitFormDialogFragment.class, () -> new QuitFormDialogFragment(viewModelFactory))
                 .forClass(SaveFormProgressDialogFragment.class, () -> new SaveFormProgressDialogFragment(viewModelFactory))
                 .forClass(DeleteRepeatDialogFragment.class, () -> new DeleteRepeatDialogFragment(viewModelFactory))
                 .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
@@ -1797,11 +1795,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         }
     }
 
-    @Override
-    public void onSaveChangesClicked() {
-        saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
-    }
-
     @Nullable
     private String getAbsoluteInstancePath() {
         FormController formController = getFormController();
@@ -2015,7 +2008,9 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                     return true;
                 }
 
-                showIfNotShowing(QuitFormDialogFragment.class, getSupportFragmentManager());
+                QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, currentProjectProvider, () -> {
+                    saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
+                });
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
