@@ -45,7 +45,6 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
     private InstancesRepository instancesRepository;
     private FormsRepository formsRepository;
     private InstanceUploaderListener stateListener;
-    private Boolean deleteInstanceAfterSubmission;
 
     // smap add this function so that doInBackground is public for instantiations
     @Override
@@ -61,72 +60,6 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
                     stateListener.authRequest(outcome.authRequestingServer, outcome.messagesByInstanceId);
                 } else {
                     stateListener.uploadingComplete(outcome.messagesByInstanceId);
-
-                    // Delete instances that were successfully sent and that need to be deleted
-                    // either because app-level auto-delete is enabled or because the form
-                    // specifies it.
-                    Set<String> keys = outcome.messagesByInstanceId.keySet();
-                    Iterator<String> it = keys.iterator();
-                    int count = keys.size();
-                    while (count > 0) {
-                        String[] selectionArgs;
-                        if (count > ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER - 1) {
-                            selectionArgs = new String[
-                                    ApplicationConstants.SQLITE_MAX_VARIABLE_NUMBER];
-                        } else {
-                            selectionArgs = new String[count + 1];
-                        }
-
-                        StringBuilder selection = new StringBuilder();
-
-                        selection.append(InstanceColumns._ID + " IN (");
-                        int i = 0;
-
-                        while (it.hasNext() && i < selectionArgs.length - 1) {
-                            selectionArgs[i] = it.next();
-                            selection.append('?');
-
-                            if (i != selectionArgs.length - 2) {
-                                selection.append(',');
-                            }
-                            i++;
-                        }
-
-                        count -= selectionArgs.length - 1;
-                        selection.append(") and status=?");
-                        selectionArgs[i] = Instance.STATUS_SUBMITTED;
-
-                        try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(),
-                                selectionArgs)) {
-                            if (results != null && results.getCount() > 0) {
-                                List<Long> toDelete = new ArrayList<>();
-                                results.moveToPosition(-1);
-
-                                boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
-
-                                // The custom configuration from the third party app overrides
-                                // the app preferences set for delete after submission
-                                if (deleteInstanceAfterSubmission != null) {
-                                    isFormAutoDeleteOptionEnabled = deleteInstanceAfterSubmission;
-                                }
-
-                                String formId;
-                                String formVersion;
-                                while (results.moveToNext()) {
-                                    formId = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_FORM_ID));
-                                    formVersion = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_VERSION));
-                                    if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, formId, formVersion, isFormAutoDeleteOptionEnabled)) {
-                                        toDelete.add(results.getLong(results.getColumnIndexOrThrow(InstanceColumns._ID)));
-                                    }
-                                }
-
-                                DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
-                                dit.execute(toDelete.toArray(new Long[toDelete.size()]));
-                            }
-                        } catch (SQLException e) {
-                            Timber.e(e);
-                        }
-                    }
                 }
             }
         }
@@ -145,10 +78,6 @@ public abstract class InstanceUploaderTask extends AsyncTask<Long, Integer, Inst
         synchronized (this) {
             stateListener = sl;
         }
-    }
-
-    public void setDeleteInstanceAfterSubmission(Boolean deleteInstanceAfterSubmission) {
-        this.deleteInstanceAfterSubmission = deleteInstanceAfterSubmission;
     }
 
     public void setRepositories(InstancesRepository instancesRepository, FormsRepository formsRepository) {
