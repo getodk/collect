@@ -78,7 +78,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     // Set from intent extras
     private String username;
     private String password;
-    private Boolean deleteInstanceAfterUpload;
 
     @Inject
     InstancesRepository instancesRepository;
@@ -158,10 +157,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
                     && dataBundle.containsKey(ApplicationConstants.BundleKeys.PASSWORD)) {
                 username = dataBundle.getString(ApplicationConstants.BundleKeys.USERNAME);
                 password = dataBundle.getString(ApplicationConstants.BundleKeys.PASSWORD);
-                }
-
-            if (dataBundle.containsKey(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION)) {
-                deleteInstanceAfterUpload = dataBundle.getBoolean(ApplicationConstants.BundleKeys.DELETE_INSTANCE_AFTER_SUBMISSION);
             }
         }
 
@@ -186,10 +181,6 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
 
             if (url != null) {
                 instanceServerUploaderTask.setCompleteDestinationUrl(url + getString(R.string.default_odk_submission));
-
-                if (deleteInstanceAfterUpload != null) {
-                    instanceServerUploaderTask.setDeleteInstanceAfterSubmission(deleteInstanceAfterUpload);
-                }
 
                 String host = Uri.parse(url).getHost();
                 if (host != null) {
