@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -72,6 +73,7 @@ import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
@@ -291,6 +293,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	            if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
                 /*
+                 * Delete any already submitted forms if auto delete has been set
+                 */
+                autoDeleteSubmittedIntances();
+
+                /*
                  * Submit any completed forms
                  */
                 InstanceUploaderTask.Outcome submitOutcome = submitCompletedForms();
@@ -418,13 +425,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 SmapReferencesDao refDao = new SmapReferencesDao();
                 refDao.updateReferences(tr.refSurveys);
 
-	        } catch(JsonSyntaxException e) {
-
-	        	Timber.e("JSON Syntax Error:" + " for URL " + taskURL);
-	        	publishProgress(e.getMessage());
-	        	e.printStackTrace();
-	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", e.getMessage());
-
 	        } catch (CancelException e) {
 
 	        	Timber.i("Info: Download cancelled by user.");
@@ -438,6 +438,48 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg );
 
 	        }
+        }
+    }
+
+    // Delete instances that were successfully sent and that need to be deleted
+    // either because app-level auto-delete is enabled or because the form
+    // specifies it
+    private void autoDeleteSubmittedIntances() {
+
+        StringBuilder selection = new StringBuilder();
+        selection.append("lower(" + FormsProviderAPI.FormsColumns.SOURCE + ")='" + Utilities.getSource());
+        selection.append("' and status=?");
+
+        String[] selectionArgs = new String[1];
+        selectionArgs[0] = Instance.STATUS_SUBMITTED;
+
+        try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(),
+                selectionArgs)) {
+            if (results != null && results.getCount() > 0) {
+                List<Long> toDelete = new ArrayList<>();
+                results.moveToPosition(-1);
+
+                boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
+
+                // The custom configuration from the third party app overrides
+                // the app preferences set for delete after submission
+                isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
+
+                String formId;
+                String formVersion;
+                while (results.moveToNext()) {
+                    formId = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_FORM_ID));
+                    formVersion = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_VERSION));
+                    if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, formId, formVersion, isFormAutoDeleteOptionEnabled)) {
+                        toDelete.add(results.getLong(results.getColumnIndexOrThrow(InstanceColumns._ID)));
+                    }
+                }
+
+                DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
+                dit.execute(toDelete.toArray(new Long[toDelete.size()]));
+            }
+        } catch (SQLException e) {
+            Timber.e(e);
         }
     }
 
