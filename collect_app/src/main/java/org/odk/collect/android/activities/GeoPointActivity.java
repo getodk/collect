@@ -127,7 +127,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
             gnssStatus = new GnssStatus.Callback() {
                 @Override
                 public void onSatelliteStatusChanged(@NonNull GnssStatus status) {
-                    super.onSatelliteStatusChanged(status);
                     numberOfAvailableSatellites = status.getSatelliteCount();
                     updateDialogMessage();
                 }
