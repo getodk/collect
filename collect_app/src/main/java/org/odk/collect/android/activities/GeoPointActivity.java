@@ -126,32 +126,11 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             gnssStatus = new GnssStatus.Callback() {
                 @Override
-                public void onStarted() {
-                    super.onStarted();
-                }
-
-                @Override
-                public void onStopped() {
-                    super.onStopped();
-                }
-
-                @Override
-                public void onFirstFix(int ttffMillis) {
-                    super.onFirstFix(ttffMillis);
-                }
-
-                @Override
                 public void onSatelliteStatusChanged(@NonNull GnssStatus status) {
                     super.onSatelliteStatusChanged(status);
-                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                        if (locationManager != null) {
-                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                return;
-                            }
-                            numberOfAvailableSatellites = status.getSatelliteCount();
-                            updateDialogMessage();
-                        }
-                    }
+                    numberOfAvailableSatellites = status.getSatelliteCount();
+                    updateDialogMessage();
+                }
             };
         }
 
