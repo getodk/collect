@@ -14,10 +14,12 @@
 
 package org.odk.collect.android.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.GnssStatus;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
@@ -31,6 +33,7 @@ import android.text.format.DateUtils;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
@@ -126,6 +129,29 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
                 public void onStarted() {
                     super.onStarted();
                 }
+
+                @Override
+                public void onStopped() {
+                    super.onStopped();
+                }
+
+                @Override
+                public void onFirstFix(int ttffMillis) {
+                    super.onFirstFix(ttffMillis);
+                }
+
+                @Override
+                public void onSatelliteStatusChanged(@NonNull GnssStatus status) {
+                    super.onSatelliteStatusChanged(status);
+                        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                        if (locationManager != null) {
+                            if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                return;
+                            }
+                            numberOfAvailableSatellites = status.getSatelliteCount();
+                            updateDialogMessage();
+                        }
+                    }
             };
         }
 
