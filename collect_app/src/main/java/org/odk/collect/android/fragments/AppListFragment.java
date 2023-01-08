@@ -33,6 +33,7 @@ import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.location.SystemLocationProvider;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
 import org.odk.collect.android.utilities.MultiClickGuard;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -195,14 +196,15 @@ abstract class AppListFragment extends ListFragment {
         View sheetView = getActivity().getLayoutInflater().inflate(R.layout.bottom_sheet, null);
         final RecyclerView recyclerView = sheetView.findViewById(R.id.recyclerView);
 
-        final SortDialogAdapter adapter = new SortDialogAdapter(getActivity(), sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
+        final SortDialogAdapter adapter = new SortDialogAdapter(
+                getActivity(), sortingOptions, getSelectedSortingOrder(), new RecyclerViewClickListener() {
             @Override
             public void onItemClicked(SortDialogAdapter itAdapter, int position) {
                 itAdapter.updateSelectedPosition(position);
                 performSelectedSearch(position);
                 bottomSheetDialog.dismiss();
             }
-        });
+        }, new SystemLocationProvider(getActivity()));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

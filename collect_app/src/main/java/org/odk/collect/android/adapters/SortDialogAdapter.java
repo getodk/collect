@@ -29,8 +29,8 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.listeners.RecyclerViewClickListener;
+import org.odk.collect.android.location.LocationProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ThemeUtils;
 
@@ -38,15 +38,17 @@ import timber.log.Timber;
 
 public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.ViewHolder> {
     private final RecyclerViewClickListener listener;
+    private LocationProvider locationProvider;
     private int selectedSortingOrder;
     private final ThemeUtils themeUtils;
     private final int[] sortList;
 
-    public SortDialogAdapter(Context context, int[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener) {
-        themeUtils = new ThemeUtils(context);
+    public SortDialogAdapter(Context context, int[] sortList, int selectedSortingOrder, RecyclerViewClickListener recyclerViewClickListener, LocationProvider locationProvider) {
+        this.themeUtils = new ThemeUtils(context);
         this.sortList = sortList;
         this.selectedSortingOrder = selectedSortingOrder;
-        listener = recyclerViewClickListener;
+        this.listener = recyclerViewClickListener;
+        this.locationProvider = locationProvider;
     }
 
     @NonNull
@@ -64,7 +66,8 @@ public class SortDialogAdapter extends RecyclerView.Adapter<SortDialogAdapter.Vi
         int sortTextId = sortList[position];
         viewHolder.txtViewTitle.setText(sortTextId);
 
-        Location location = Collect.getInstance().getLocation();
+        Location location = locationProvider.getLastLocation();
+
         if (location == null
                 && (sortTextId == R.string.sort_by_distance_asc
                 || sortTextId == R.string.sort_by_distance_desc)) {

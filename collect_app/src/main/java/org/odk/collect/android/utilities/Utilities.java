@@ -22,12 +22,14 @@ import static org.odk.collect.android.utilities.FileUtils.STUB_XML;
 import static org.odk.collect.android.utilities.FileUtils.write;
 import static java.lang.StrictMath.abs;
 
+import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -43,6 +45,8 @@ import org.odk.collect.android.database.TaskResponseAssignment;
 import org.odk.collect.android.instances.Instance;
 import org.odk.collect.android.loaders.GeofenceEntry;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.location.LocationProvider;
+import org.odk.collect.android.location.SystemLocationProvider;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.GeneralKeys;
 import org.odk.collect.android.preferences.GeneralSharedPreferences;
@@ -475,7 +479,9 @@ public class Utilities {
                 selectArgs,
                 getTaskSortOrderExpr(sortOrder)
         )) {
-            Location location = Collect.getInstance().getLocation();
+            Application app = Collect.getInstance();
+            LocationProvider locationProvider = new SystemLocationProvider(app);
+            Location location = locationProvider.getLastLocation();
             ArrayList<GeofenceEntry> geofences = new ArrayList<>();
 
             c.moveToFirst();

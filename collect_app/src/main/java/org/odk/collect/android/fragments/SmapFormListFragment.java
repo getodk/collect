@@ -60,6 +60,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.PermissionListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.location.SystemLocationProvider;
 import org.odk.collect.android.permissions.PermissionsProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
@@ -226,7 +227,7 @@ public class SmapFormListFragment extends ListFragment {
                     itAdapter.updateSelectedPosition(position);
                     reloadData();
                     bottomSheetDialog.dismiss();
-                });
+                }, new SystemLocationProvider(getActivity()));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

@@ -36,6 +36,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
@@ -43,6 +44,7 @@ import com.google.android.gms.location.LocationListener;
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.models.CompoundMarker;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.views.MeasurableInAdvanceView;
 import org.odk.collect.location.GoogleFusedLocationClient;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.location.LocationClientProvider;
@@ -123,15 +125,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override public void destroy() { }
 
     @Override public void addTo(
-        @NonNull FragmentActivity activity, int containerId,
-        @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
+            @NonNull FragmentManager fragmentManager, int containerId,
+            @Nullable ReadyListener readyListener, @Nullable ErrorListener errorListener) {
         this.readyListener = readyListener;
         // If the containing activity is being re-created upon screen rotation,
         // the FragmentManager will have also re-created a copy of the previous
         // OsmDroidMapFragment.  We don't want these useless copies of old fragments
         // to linger, so the following line calls .replace() instead of .add().
-        activity.getSupportFragmentManager()
-            .beginTransaction().replace(containerId, this).commit();
+        fragmentManager.beginTransaction().replace(containerId, this).commit();
     }
 
     @Override public void onAttach(@NonNull Context context) {
@@ -294,6 +295,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         int featureId = nextFeatureId++;
         features.put(featureId, new MarkerFeature(map, point, draggable, iconAnchor));
         return featureId;
+    }
+
+    @Override
+    public int addMarker(MapPoint point, MeasurableInAdvanceView customView) {
+        throw new IllegalStateException("Custom view markers are not yet supported on OSMDroid map");
     }
 
     /*

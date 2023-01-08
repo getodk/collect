@@ -61,8 +61,13 @@ import javax.inject.Inject;
 
 import static org.odk.collect.android.preferences.MetaKeys.KEY_GOOGLE_BUG_154855417_FIXED;
 
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
+
+import timber.log.Timber;
+
 public class Collect extends Application implements LocalizedApplication,
-        StateStore {
+        StateStore, OnMapsSdkInitializedCallback {
     public static String defaultSysLanguage;
     private static Collect singleton;
 
@@ -151,12 +156,26 @@ public class Collect extends Application implements LocalizedApplication,
         super.onCreate();
         singleton = this;
 
+        MapsInitializer.initialize(getApplicationContext(), MapsInitializer.Renderer.LATEST, this);
+
         setupDagger();
         applicationInitializer.initialize();
         
         fixGoogleBug154855417();
 
         setupStrictMode();
+    }
+
+    @Override
+    public void onMapsSdkInitialized(MapsInitializer.Renderer renderer) {
+        switch (renderer) {
+            case LATEST:
+                Timber.i("The latest version of the renderer is used.");
+                break;
+            case LEGACY:
+                Timber.i("The legacy version of the renderer is used.");
+                break;
+        }
     }
 
     /**

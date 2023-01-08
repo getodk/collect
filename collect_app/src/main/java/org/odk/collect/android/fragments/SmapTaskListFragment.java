@@ -56,9 +56,10 @@ import org.odk.collect.android.adapters.SortDialogAdapter;
 import org.odk.collect.android.adapters.TaskListArrayAdapter;
 import org.odk.collect.android.database.DatabaseInstancesRepository;
 import org.odk.collect.android.instances.Instance;
-import org.odk.collect.android.listeners.OnTaskOptionsClickLisener;
+import org.odk.collect.android.listeners.OnTaskOptionsClickListener;
 import org.odk.collect.android.loaders.SurveyData;
 import org.odk.collect.android.loaders.TaskEntry;
+import org.odk.collect.android.location.SystemLocationProvider;
 import org.odk.collect.android.preferences.AdminKeys;
 import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.GeneralKeys;
@@ -127,7 +128,7 @@ public class SmapTaskListFragment extends ListFragment {
     public void onActivityCreated(Bundle b) {
         super.onActivityCreated(b);
 
-        OnTaskOptionsClickLisener taskClickLisener = new OnTaskOptionsClickLisener() {
+        OnTaskOptionsClickListener taskClickLisener = new OnTaskOptionsClickListener() {
             final DatabaseInstancesRepository di = new DatabaseInstancesRepository();
 
             @Override
@@ -288,7 +289,7 @@ public class SmapTaskListFragment extends ListFragment {
                     itAdapter.updateSelectedPosition(position);
                     reloadData();
                     bottomSheetDialog.dismiss();
-                });
+                }, new SystemLocationProvider(getActivity()));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);

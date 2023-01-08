@@ -78,7 +78,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
     public enum OutputMode { GEOTRACE, GEOSHAPE }
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private ScheduledFuture schedulerHandler;
+    private ScheduledFuture<?> schedulerHandler;
 
     private OutputMode outputMode;
 
@@ -173,7 +173,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
         Context context = getApplicationContext();
         mapProvider.createMapFragment(context)
-            .addTo(this, R.id.map_container, this::initMap, this::finish);
+            .addTo(getSupportFragmentManager(), R.id.map_container, this::initMap, this::finish);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -409,7 +409,6 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
         if (recordingEnabled && recordingAutomatic) {
             locationTracker.start();
 
-            recordPoint(map.getGpsLocation());
             schedulerHandler = scheduler.scheduleAtFixedRate(() -> runOnUiThread(() -> {
                 Location currentLocation = locationTracker.getCurrentLocation();
 
@@ -423,7 +422,7 @@ public class GeoPolyActivity extends BaseGeoMapActivity implements SettingsDialo
 
                     recordPoint(currentMapPoint);
                 }
-            }), 0, INTERVAL_OPTIONS[intervalIndex], TimeUnit.SECONDS);
+            }), 500, INTERVAL_OPTIONS[intervalIndex] * 1000, TimeUnit.MILLISECONDS);
         }
         updateUi();
     }
