@@ -166,6 +166,29 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `shows poly when item has multiple points`() {
+        val items: List<MappableSelectItem> = listOf(
+            Fixtures.actionMappableSelectItem().copy(
+                id = 0,
+                points = listOf(
+                    MapPoint(40.0, 0.0),
+                    MapPoint(41.0, 0.0)
+                )
+            )
+        )
+
+        val itemsLiveData = MutableLiveData(items)
+        whenever(data.getMappableItems()).thenReturn(itemsLiveData)
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        assertThat(map.getPolys(), equalTo(itemsLiveData.value?.map { it.points }))
+        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 1)))
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
     fun `zooms to fit all items`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),

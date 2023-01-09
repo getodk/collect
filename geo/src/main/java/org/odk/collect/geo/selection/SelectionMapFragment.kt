@@ -356,7 +356,10 @@ class SelectionMapFragment(
         map.clearFeatures()
         itemsByFeatureId.clear()
 
-        val markerDescriptions = items.map {
+        val singlePoints = items.filter { it.points.size == 1 }
+        val traces = items.filter { it.points.size != 1 }
+
+        val markerDescriptions = singlePoints.map {
             val point = it.points[0]
 
             MarkerDescription(
@@ -367,8 +370,12 @@ class SelectionMapFragment(
             )
         }
 
-        val featureIds = map.addMarkers(markerDescriptions)
-        items.zip(featureIds).forEach { (item, featureId) ->
+        val pointIds = map.addMarkers(markerDescriptions)
+        val traceIds = traces.fold(listOf<Int>()) { ids, item ->
+            ids + map.addDraggablePoly(item.points, false)
+        }
+
+        items.zip(pointIds + traceIds).forEach { (item, featureId) ->
             val point = item.points[0]
 
             itemsByFeatureId[featureId] = item

@@ -30,6 +30,7 @@ import org.odk.collect.geo.selection.MappableSelectItem
 import org.odk.collect.geo.selection.SelectionMapData
 import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 import kotlin.math.absoluteValue
@@ -138,27 +139,30 @@ internal class SelectChoicesMapData(
             val geometry = selectChoice.getChild("geometry")
 
             if (geometry != null) {
-                val latitude: Double
-                val longitude: Double
-
                 try {
-                    latitude = geometry.split(" ")[0].toDouble()
-                    longitude = geometry.split(" ")[1].toDouble()
+                    val points = geometry.split("; ").map {
+                        MapPoint(it.split(" ")[0].toDouble(), it.split(" ")[1].toDouble())
+                    }
 
-                    if (latitude.absoluteValue <= 90 && longitude.absoluteValue <= 180) {
+                    val withinBounds = points.all {
+                        it.latitude.absoluteValue <= 90 && it.longitude.absoluteValue <= 180
+                    }
+
+                    if (withinBounds) {
                         val properties = selectChoice.additionalChildren.filter {
                             it.first != GeojsonFeature.GEOMETRY_CHILD_NAME
                         }.map {
                             MappableSelectItem.IconifiedText(null, "${it.first}: ${it.second}")
                         }
 
-                        val markerColor = selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
-                        val markerSymbol = selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
+                        val markerColor =
+                            selectChoice.additionalChildren.firstOrNull { it.first == "marker-color" }?.second
+                        val markerSymbol =
+                            selectChoice.additionalChildren.firstOrNull { it.first == "marker-symbol" }?.second
 
                         list + MappableSelectItem.WithAction(
                             index.toLong(),
-                            latitude,
-                            longitude,
+                            points,
                             if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
                             if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
                             prompt.getSelectChoiceText(selectChoice),

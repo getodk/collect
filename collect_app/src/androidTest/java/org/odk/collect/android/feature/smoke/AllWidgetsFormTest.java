@@ -548,6 +548,9 @@ public class AllWidgetsFormTest {
     }
 
     public void testSelectOneFromMapWidget() {
+        onView(withText("Select place")).perform(click());
+        pressBack();
+
         onView(withText("Select one from map widget")).perform(swipeLeft());
     }
 
