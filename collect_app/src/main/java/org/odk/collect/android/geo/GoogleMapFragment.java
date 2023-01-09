@@ -56,10 +56,10 @@ import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
-import org.odk.collect.maps.markers.MarkerDescription;
-import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
+import org.odk.collect.maps.markers.MarkerDescription;
+import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.settings.SettingsProvider;
 
 import java.io.File;
@@ -257,7 +257,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
             } else if (count > 1) {
                 final LatLngBounds bounds = expandBounds(builder.build(), 1 / scaleFactor);
                 new Handler().postDelayed(() -> {
-                    moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
+                    try {
+                        moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
+                    } catch (IllegalArgumentException e) { // https://github.com/getodk/collect/issues/5379
+                        zoomToPoint(getCenter(), map.getMinZoomLevel(), false);
+                    }
                 }, 100);
             }
         }
