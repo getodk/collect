@@ -93,7 +93,7 @@ internal class PolyFeature(
     private fun updateLine() {
         val points = mapPoints
             .map {
-                Point.fromLngLat(it.lon, it.lat, it.alt)
+                Point.fromLngLat(it.longitude, it.latitude, it.altitude)
             }
             .toMutableList()
             .also {

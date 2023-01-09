@@ -512,7 +512,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     private static @NonNull LatLng toLatLng(@NonNull MapPoint point) {
-        return new LatLng(point.lat, point.lon);
+        return new LatLng(point.latitude, point.longitude);
     }
 
     /** Updates the map to reflect the value of referenceLayerFile. */
@@ -641,7 +641,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // deviation values somewhere, so they go in the marker's snippet.
         return map.addMarker(new MarkerOptions()
             .position(toLatLng(markerDescription.getPoint()))
-            .snippet(markerDescription.getPoint().alt + ";" + markerDescription.getPoint().sd)
+            .snippet(markerDescription.getPoint().altitude + ";" + markerDescription.getPoint().sd)
             .draggable(markerDescription.isDraggable())
             .icon(getBitmapDescriptor(markerDescription.getIconDescription()))
             .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position

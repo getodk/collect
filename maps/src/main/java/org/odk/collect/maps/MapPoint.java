@@ -20,9 +20,9 @@ import android.os.Parcelable;
 import java.util.Locale;
 
 public class MapPoint implements Parcelable {
-    public final double lat;
-    public final double lon;
-    public final double alt;
+    public final double latitude;
+    public final double longitude;
+    public final double altitude;
 
     /**
      * This field contains the value that is called "accuracy" in Android APIs,
@@ -34,36 +34,36 @@ public class MapPoint implements Parcelable {
      */
     public final double sd;  // standard deviation in meters (68% confidence radius)
 
-    public MapPoint(double lat, double lon) {
-        this(lat, lon, 0, 0);
+    public MapPoint(double latitude, double longitude) {
+        this(latitude, longitude, 0, 0);
     }
 
-    public MapPoint(double lat, double lon, double alt) {
-        this(lat, lon, alt, 0);
+    public MapPoint(double latitude, double longitude, double altitude) {
+        this(latitude, longitude, altitude, 0);
     }
 
-    public MapPoint(double lat, double lon, double alt, double sd) {
-        this.lat = lat;
-        this.lon = lon;
-        this.alt = alt;
+    public MapPoint(double latitude, double longitude, double altitude, double sd) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.altitude = altitude;
         this.sd = sd;
     }
 
     private MapPoint(Parcel parcel) {
-        this.lat = parcel.readDouble();
-        this.lon = parcel.readDouble();
-        this.alt = parcel.readDouble();
+        this.latitude = parcel.readDouble();
+        this.longitude = parcel.readDouble();
+        this.altitude = parcel.readDouble();
         this.sd = parcel.readDouble();
     }
 
     @Override public String toString() {
-        return String.format(Locale.US, "MapPoint(%+.6f, %+.6f, %.0f, %.0f)", lat, lon, alt, sd);
+        return String.format(Locale.US, "MapPoint(%+.6f, %+.6f, %.0f, %.0f)", latitude, longitude, altitude, sd);
     }
 
     @Override public int hashCode() {
-        int result = Double.valueOf(lat).hashCode();
-        result = result * 31 + Double.valueOf(lon).hashCode();
-        result = result * 31 + Double.valueOf(alt).hashCode();
+        int result = Double.valueOf(latitude).hashCode();
+        result = result * 31 + Double.valueOf(longitude).hashCode();
+        result = result * 31 + Double.valueOf(altitude).hashCode();
         result = result * 31 + Double.valueOf(sd).hashCode();
         return result;
     }
@@ -71,9 +71,9 @@ public class MapPoint implements Parcelable {
     @Override public boolean equals(Object other) {
         return other == this || (
             other instanceof MapPoint &&
-            ((MapPoint) other).lat == this.lat &&
-            ((MapPoint) other).lon == this.lon &&
-            ((MapPoint) other).alt == this.alt &&
+            ((MapPoint) other).latitude == this.latitude &&
+            ((MapPoint) other).longitude == this.longitude &&
+            ((MapPoint) other).altitude == this.altitude &&
             ((MapPoint) other).sd == this.sd
         );
     }
@@ -95,9 +95,9 @@ public class MapPoint implements Parcelable {
     }
 
     @Override public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeDouble(lat);
-        parcel.writeDouble(lon);
-        parcel.writeDouble(alt);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeDouble(altitude);
         parcel.writeDouble(sd);
     }
 

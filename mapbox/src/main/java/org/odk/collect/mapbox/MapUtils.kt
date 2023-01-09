@@ -23,7 +23,7 @@ object MapUtils {
     ): PointAnnotation {
         return pointAnnotationManager.create(
             PointAnnotationOptions()
-                .withPoint(Point.fromLngLat(point.lon, point.lat, point.alt))
+                .withPoint(Point.fromLngLat(point.longitude, point.latitude, point.altitude))
                 .withIconImage(MarkerIconCreator.getMarkerIconBitmap(context, MarkerIconDescription(iconDrawableId)))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)
@@ -40,7 +40,7 @@ object MapUtils {
     ): List<PointAnnotation> {
         val pointAnnotationOptionsList = markerFeatures.map {
             PointAnnotationOptions()
-                .withPoint(Point.fromLngLat(it.point.lon, it.point.lat, it.point.alt))
+                .withPoint(Point.fromLngLat(it.point.longitude, it.point.latitude, it.point.altitude))
                 .withIconImage(MarkerIconCreator.getMarkerIconBitmap(context, it.iconDescription))
                 .withIconSize(1.0)
                 .withSymbolSortKey(10.0)

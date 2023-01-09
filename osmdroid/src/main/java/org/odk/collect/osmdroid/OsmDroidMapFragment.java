@@ -530,7 +530,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private static @NonNull
     GeoPoint toGeoPoint(@NonNull MapPoint point) {
-        return new GeoPoint(point.lat, point.lon, point.alt);
+        return new GeoPoint(point.latitude, point.longitude, point.altitude);
     }
 
     /**

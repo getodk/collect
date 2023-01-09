@@ -33,8 +33,8 @@ public final class GeoUtils {
         for (MapPoint point : points) {
             // TODO(ping): Remove excess precision when we're ready for the output to change.
             result.append(String.format(Locale.US, "%s %s %s %s;",
-                    Double.toString(point.lat), Double.toString(point.lon),
-                    Double.toString(point.alt), Float.toString((float) point.sd)));
+                    Double.toString(point.latitude), Double.toString(point.longitude),
+                    Double.toString(point.altitude), Float.toString((float) point.sd)));
         }
 
         return StringUtils.removeEnd(result.toString().trim(), ";");
