@@ -272,10 +272,12 @@ class SelectionMapFragment(
         val item = itemsByFeatureId[featureId]
         if (item != null) {
             if (!skipSummary) {
+                val point = item.points[0]
+
                 if (maintainZoom) {
-                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
+                    map.zoomToPoint(MapPoint(point.latitude, point.longitude), map.zoom, true)
                 } else {
-                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
+                    map.zoomToPoint(MapPoint(point.latitude, point.longitude), true)
                 }
 
                 map.setMarkerIcon(
@@ -355,8 +357,10 @@ class SelectionMapFragment(
         itemsByFeatureId.clear()
 
         val markerDescriptions = items.map {
+            val point = it.points[0]
+
             MarkerDescription(
-                MapPoint(it.latitude, it.longitude),
+                MapPoint(point.latitude, point.longitude),
                 false,
                 MapFragment.BOTTOM,
                 MarkerIconDescription(it.smallIcon, it.color, it.symbol)
@@ -365,8 +369,10 @@ class SelectionMapFragment(
 
         val featureIds = map.addMarkers(markerDescriptions)
         items.zip(featureIds).forEach { (item, featureId) ->
+            val point = item.points[0]
+
             itemsByFeatureId[featureId] = item
-            points.add(MapPoint(item.latitude, item.longitude))
+            points.add(MapPoint(point.latitude, point.longitude))
         }
     }
 
@@ -401,8 +407,7 @@ interface SelectionMapData {
 sealed interface MappableSelectItem {
 
     val id: Long
-    val latitude: Double
-    val longitude: Double
+    val points: List<MapPoint>
     val smallIcon: Int
     val largeIcon: Int
     val name: String
@@ -413,8 +418,7 @@ sealed interface MappableSelectItem {
 
     data class WithInfo(
         override val id: Long,
-        override val latitude: Double,
-        override val longitude: Double,
+        override val points: List<MapPoint>,
         override val smallIcon: Int,
         override val largeIcon: Int,
         override val name: String,
@@ -422,13 +426,38 @@ sealed interface MappableSelectItem {
         val info: String,
         override val selected: Boolean = false,
         override val color: String? = null,
-        override val symbol: String? = null
-    ) : MappableSelectItem
+        override val symbol: String? = null,
+    ) : MappableSelectItem {
+
+        constructor(
+            id: Long,
+            latitude: Double,
+            longitude: Double,
+            smallIcon: Int,
+            largeIcon: Int,
+            name: String,
+            properties: List<IconifiedText>,
+            info: String,
+            selected: Boolean = false,
+            color: String? = null,
+            symbol: String? = null,
+        ) : this(
+            id,
+            listOf(MapPoint(latitude, longitude)),
+            smallIcon,
+            largeIcon,
+            name,
+            properties,
+            info,
+            selected,
+            color,
+            symbol
+        )
+    }
 
     data class WithAction(
         override val id: Long,
-        override val latitude: Double,
-        override val longitude: Double,
+        override val points: List<MapPoint>,
         override val smallIcon: Int,
         override val largeIcon: Int,
         override val name: String,
@@ -436,8 +465,34 @@ sealed interface MappableSelectItem {
         val action: IconifiedText,
         override val selected: Boolean = false,
         override val color: String? = null,
-        override val symbol: String? = null
-    ) : MappableSelectItem
+        override val symbol: String? = null,
+    ) : MappableSelectItem {
+
+        constructor(
+            id: Long,
+            latitude: Double,
+            longitude: Double,
+            smallIcon: Int,
+            largeIcon: Int,
+            name: String,
+            properties: List<IconifiedText>,
+            action: IconifiedText,
+            selected: Boolean = false,
+            color: String? = null,
+            symbol: String? = null,
+        ) : this(
+            id,
+            listOf(MapPoint(latitude, longitude)),
+            smallIcon,
+            largeIcon,
+            name,
+            properties,
+            action,
+            selected,
+            color,
+            symbol
+        )
+    }
 
     data class IconifiedText(val icon: Int?, val text: String)
 }
