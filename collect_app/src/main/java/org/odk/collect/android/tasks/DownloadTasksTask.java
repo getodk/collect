@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -42,6 +43,7 @@ import org.odk.collect.android.dao.InstancesDao;
 import org.odk.collect.android.dao.SmapReferencesDao;
 import org.odk.collect.android.database.TrAssignment;
 import org.odk.collect.android.database.TaskResponseAssignment;
+import org.odk.collect.android.database.TrTask;
 import org.odk.collect.android.database.TraceUtilities;
 import org.odk.collect.android.forms.FormsRepository;
 import org.odk.collect.android.instances.Instance;
@@ -71,6 +73,7 @@ import org.odk.collect.android.taskModel.FormLocator;
 import org.odk.collect.android.taskModel.TaskCompletionInfo;
 import org.odk.collect.android.taskModel.TaskResponse;
 import org.odk.collect.android.utilities.ApplicationConstants;
+import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.ManageForm;
 import org.odk.collect.android.utilities.ManageForm.ManageFormDetails;
 import org.odk.collect.android.utilities.ManageFormResponse;
@@ -290,6 +293,11 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	            if(isCancelled()) { throw new CancelException("cancelled"); };		// Return if the user cancels
 
                 /*
+                 * Delete any already submitted forms if auto delete has been set
+                 */
+                autoDeleteSubmittedIntances();
+
+                /*
                  * Submit any completed forms
                  */
                 InstanceUploaderTask.Outcome submitOutcome = submitCompletedForms();
@@ -417,13 +425,6 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 SmapReferencesDao refDao = new SmapReferencesDao();
                 refDao.updateReferences(tr.refSurveys);
 
-	        } catch(JsonSyntaxException e) {
-
-	        	Timber.e("JSON Syntax Error:" + " for URL " + taskURL);
-	        	publishProgress(e.getMessage());
-	        	e.printStackTrace();
-	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", e.getMessage());
-
 	        } catch (CancelException e) {
 
 	        	Timber.i("Info: Download cancelled by user.");
@@ -437,6 +438,48 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
 	        	results.put(Collect.getInstance().getString(R.string.smap_error) + ":", msg );
 
 	        }
+        }
+    }
+
+    // Delete instances that were successfully sent and that need to be deleted
+    // either because app-level auto-delete is enabled or because the form
+    // specifies it
+    private void autoDeleteSubmittedIntances() {
+
+        StringBuilder selection = new StringBuilder();
+        selection.append("lower(" + FormsProviderAPI.FormsColumns.SOURCE + ")='" + Utilities.getSource());
+        selection.append("' and status=?");
+
+        String[] selectionArgs = new String[1];
+        selectionArgs[0] = Instance.STATUS_SUBMITTED;
+
+        try (Cursor results = new InstancesDao().getInstancesCursor(selection.toString(),
+                selectionArgs)) {
+            if (results != null && results.getCount() > 0) {
+                List<Long> toDelete = new ArrayList<>();
+                results.moveToPosition(-1);
+
+                boolean isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
+
+                // The custom configuration from the third party app overrides
+                // the app preferences set for delete after submission
+                isFormAutoDeleteOptionEnabled = (boolean) GeneralSharedPreferences.getInstance().get(GeneralKeys.KEY_DELETE_AFTER_SEND);
+
+                String formId;
+                String formVersion;
+                while (results.moveToNext()) {
+                    formId = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_FORM_ID));
+                    formVersion = results.getString(results.getColumnIndexOrThrow(InstanceColumns.JR_VERSION));
+                    if (InstanceUploaderUtils.shouldFormBeDeleted(formsRepository, formId, formVersion, isFormAutoDeleteOptionEnabled)) {
+                        toDelete.add(results.getLong(results.getColumnIndexOrThrow(InstanceColumns._ID)));
+                    }
+                }
+
+                DeleteInstancesTask dit = new DeleteInstancesTask(instancesRepository, formsRepository);
+                dit.execute(toDelete.toArray(new Long[toDelete.size()]));
+            }
+        } catch (SQLException e) {
+            Timber.e(e);
         }
     }
 
@@ -457,23 +500,27 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
             }
         }
         InstancesDao dao = new InstancesDao();
-        for (TaskResponseAssignment ta : tr.taskAssignments) {
-            taskURL = serverUrl + "/api/v1/tasks/" + ta.task.id;
-            URI uri = URI.create(taskURL);
-            String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
-            JSONObject jObject = new JSONObject(resp);
-            JSONObject initialData = null;
-            JSONObject values = null;
-            if (jObject.has("initial_data")) {
-                initialData = jObject.getJSONObject("initial_data");
-                values = initialData.getJSONObject("values");
-            }
-            if(initialData != null) {
-               ta.task.phone = values.getString("Phone");
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(InstanceColumns.PHONE, ta.task.phone);
-                String where = "tTitle = ?";
-                dao.updateInstance(contentValues, where, new String[]{ta.task.title});
+        if(tr.taskAssignments != null) {
+            for (TaskResponseAssignment ta : tr.taskAssignments) {
+                if (ta.task.id > 0) { // A task not a case
+                    String taskDetailsURL = serverUrl + "/api/v1/tasks/" + ta.task.id;
+                    URI uri = URI.create(taskDetailsURL);
+                    String resp = httpInterface.getRequest(uri, "application/json", webCredentialsUtils.getCredentials(uri), headers);
+                    JSONObject jObject = new JSONObject(resp);
+                    JSONObject initialData = null;
+                    JSONObject values = null;
+                    if (jObject.has("initial_data")) {
+                        initialData = jObject.getJSONObject("initial_data");
+                        values = initialData.getJSONObject("values");
+                    }
+                    if (initialData != null) {
+                        ta.task.phone = values.getString("Phone");
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(InstanceColumns.PHONE, ta.task.phone);
+                        String where = "tTitle = ?";
+                        dao.updateInstance(contentValues, where, new String[]{ta.task.title});
+                    }
+                }
             }
         }
     }
@@ -551,8 +598,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
          */
         updateResponse.taskAssignments = new ArrayList<TaskResponseAssignment> ();          // Updates to task status
 
+        /*
+         * Get details on non synchronised tasks or on cases
+         */
         for(TaskEntry t : nonSynchTasks) {
-  	  		if(t.taskStatus != null && t.isSynced.equals(Utilities.STATUS_SYNC_NO)) {
+  	  		if(t.taskStatus != null && (t.isSynced.equals(Utilities.STATUS_SYNC_NO)
+                    || (t.taskType != null && t.taskType.equals("case") && t.taskStatus.equals("rejected")))) {
   	  			TaskResponseAssignment ta = new TaskResponseAssignment();
   	  			ta.assignment = new TrAssignment();
   	  			ta.assignment.assignment_id = (int) t.assId;
@@ -560,6 +611,12 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
   	  			ta.assignment.assignment_status = t.taskStatus;
                 ta.assignment.task_comment = t.taskComment;
                 ta.assignment.uuid = t.uuid;
+
+                // Details required for cases
+                ta.task = new TrTask();
+                ta.task.type = t.taskType;
+                ta.task.update_id = t.updateId;
+                ta.task.form_id = t.jrFormId;
 
 	            updateResponse.taskAssignments.add(ta);
 
@@ -650,9 +707,10 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 // Find out if this task is already on the phone
                 TaskStatus ts = getExistingTaskStatus(ta.task.type, assignment.assignment_id, ta.task.update_id);
                 /*
-                 * If this is a new task or a case then get it from the server
+                 * If this is a new task or a case that has not been rejected then get it from the server
                  */
-                if(ts == null || ta.task.type != null && ta.task.type.equals("case")) {
+                if(ts == null ||
+                        (ta.task.type != null && ta.task.type.equals("case")) && !ts.status.equals(Utilities.STATUS_T_REJECTED)) {
                     Timber.i("New task: %s", assignment.assignment_id);
                     // New task
                     if(assignment.assignment_status.equals(Utilities.STATUS_T_ACCEPTED) ||
@@ -695,8 +753,9 @@ public class DownloadTasksTask extends AsyncTask<Void, String, HashMap<String, S
                 } else {        	// Existing task
                     Timber.i("Existing Task: " + assignment.assignment_id + " : " + assignment.assignment_status);
 
-                    // Update the task if its status is not incomplete
-                    if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)) {
+                    // Update the task if its status is not incomplete and it has not beeen rejected
+                    if(assignment.assignment_status.equals(Utilities.STATUS_T_CANCELLED) && !ts.status.equals(Utilities.STATUS_T_CANCELLED)
+                            && !ts.status.equals(Utilities.STATUS_T_REJECTED)) {
                         Utilities.setStatusForAssignment(assignment.assignment_id, assignment.assignment_status);
                         results.put(ta.task.title, assignment.assignment_status);
                     }

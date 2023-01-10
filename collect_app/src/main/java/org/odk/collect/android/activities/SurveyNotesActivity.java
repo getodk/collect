@@ -23,6 +23,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.javarosawrapper.FormController;
 
+import timber.log.Timber;
+
 public class SurveyNotesActivity extends CollectAbstractActivity {
 
     private static final String COMMENT_TEXT = "commentText";
@@ -37,7 +39,11 @@ public class SurveyNotesActivity extends CollectAbstractActivity {
             public void onClick(View v) {
                 FormController formController = Collect.getInstance().getFormController();
                 EditText editText = findViewById(R.id.survey_notes);
-                formController.setSurveyNotes(editText.getText().toString());
+                if(formController == null) {
+                    Timber.e("formcontroller null");
+                } else {
+                    formController.setSurveyNotes(editText.getText().toString());
+                }
                 finish();
             }
         });

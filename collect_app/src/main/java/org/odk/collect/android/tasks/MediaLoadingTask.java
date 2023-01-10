@@ -18,6 +18,8 @@ import org.odk.collect.android.widgets.QuestionWidget;
 import java.io.File;
 import java.lang.ref.WeakReference;
 
+import timber.log.Timber;
+
 public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     private WeakReference<FormEntryActivity> formEntryActivity;
@@ -59,10 +61,14 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
 
     @Override
     protected void onPostExecute(File result) {
-        Fragment prev = formEntryActivity.get().getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
-        if (prev != null && !formEntryActivity.get().isInstanceStateSaved()) {
-            ((DialogFragment) prev).dismiss();
+        if(formEntryActivity == null) {
+            Timber.e("formEntryActivity in MediaLoadingTask is null");
+        } else {
+            Fragment prev = formEntryActivity.get().getSupportFragmentManager().findFragmentByTag(ProgressDialogFragment.COLLECT_PROGRESS_DIALOG_TAG);
+            if (prev != null && !formEntryActivity.get().isInstanceStateSaved()) {
+                ((DialogFragment) prev).dismiss();
+            }
+            formEntryActivity.get().setWidgetData(result);
         }
-        formEntryActivity.get().setWidgetData(result);
     }
 }
