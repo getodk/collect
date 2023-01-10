@@ -40,6 +40,7 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.geo.geopoint.GeoPointActivity;
 import org.odk.collect.geo.geopoint.GeoPointMapActivity;
 import org.odk.collect.geo.geopoly.GeoPolyActivity;
+import org.odk.collect.maps.MapPoint;
 import org.robolectric.Robolectric;
 import org.robolectric.shadows.ShadowActivity;
 
@@ -130,6 +131,18 @@ public class ActivityGeoDataRequesterTest {
         Bundle bundle = startedIntent.getExtras();
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_ACCURACY_THRESHOLD));
         assertThat(bundle.getFloat(GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD), equalTo(ActivityGeoDataRequester.DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD));
+    }
+
+    @Test
+    public void requestGeoPoint_whenAnswerIsPresent_addsToIntent() {
+        activityGeoDataRequester.requestGeoPoint(prompt, "1.0 2.0 3 4", waitingForDataRegistry);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getParcelable(GeoPointMapActivity.EXTRA_LOCATION), equalTo(new MapPoint(1.0, 2.0, 3, 4)));
     }
 
     @Test

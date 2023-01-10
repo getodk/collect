@@ -14,6 +14,7 @@ import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoly.GeoPolyActivity
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import java.lang.Boolean.parseBoolean
@@ -36,9 +37,11 @@ class ActivityGeoDataRequester(
 
                     val bundle = Bundle().also {
                         if (!answerText.isNullOrEmpty()) {
-                            it.putDoubleArray(
+                            val locationParams =
+                                GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText)
+                            it.putParcelable(
                                 GeoPointMapActivity.EXTRA_LOCATION,
-                                GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText),
+                                MapPoint(locationParams[0], locationParams[1], locationParams[2], locationParams[3]),
                             )
                         }
 

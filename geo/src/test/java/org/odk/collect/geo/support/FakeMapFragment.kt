@@ -96,7 +96,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint {
-        TODO()
+        return markers[featureId]
     }
 
     override fun addDraggablePoly(points: Iterable<MapPoint>, closedPolygon: Boolean): Int {

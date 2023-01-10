@@ -261,13 +261,13 @@ public class GeoPointMapActivity extends LocalizedActivity {
             }
 
             if (intent.hasExtra(EXTRA_LOCATION)) {
-                double[] point = intent.getDoubleArrayExtra(EXTRA_LOCATION);
+                MapPoint point = intent.getParcelableExtra(EXTRA_LOCATION);
 
                 // If the point is initially set from the intent, the "place marker"
                 // button, dragging, and long-pressing are all initially disabled.
                 // To enable them, the user must clear the marker and add a new one.
                 isPointLocked = true;
-                placeMarker(new MapPoint(point[0], point[1], point[2], point[3]));
+                placeMarker(point);
                 placeMarkerButton.setEnabled(false);
 
                 captureLocation = true;
