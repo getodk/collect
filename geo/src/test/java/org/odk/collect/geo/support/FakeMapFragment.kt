@@ -24,6 +24,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private val markers: MutableList<MapPoint> = ArrayList()
     private val markerIcons: MutableList<MarkerIconDescription?> = ArrayList()
     private val polys: MutableList<List<MapPoint>> = ArrayList()
+    private val polyClosed: MutableList<Boolean> = ArrayList()
     private var hasCenter = false
     private val polyPoints = mutableMapOf<Int, MutableList<MapPoint>>()
 
@@ -101,6 +102,7 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun addDraggablePoly(points: Iterable<MapPoint>, closedPolygon: Boolean): Int {
         polys.add(points.toList())
+        polyClosed.add(closedPolygon)
         return polys.size - 1
     }
 
@@ -194,6 +196,10 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     fun getPolys(): List<List<MapPoint>> {
         return polys
+    }
+
+    fun isPolyClosed(featureId: Int): Boolean {
+        return polyClosed[featureId]
     }
 
     companion object {
