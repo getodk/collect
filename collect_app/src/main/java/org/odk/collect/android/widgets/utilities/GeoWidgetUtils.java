@@ -46,7 +46,7 @@ public final class GeoWidgetUtils {
         double[] gp = new double[4];
 
         if (answer != null && !answer.isEmpty()) {
-            String[] sa = answer.split(" ");
+            String[] sa = answer.trim().split(" ");
 
             try {
                 gp[0] = Double.parseDouble(sa[0]);

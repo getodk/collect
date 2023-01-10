@@ -14,7 +14,6 @@ import org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY
 import org.odk.collect.geo.geopoint.GeoPointActivity
 import org.odk.collect.geo.geopoint.GeoPointMapActivity
 import org.odk.collect.geo.geopoly.GeoPolyActivity
-import org.odk.collect.geo.geopoly.GeoPolyActivity.OutputMode
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
@@ -165,23 +164,26 @@ class ActivityGeoDataRequester(
         return Appearances.hasAppearance(prompt, Appearances.PLACEMENT_MAP)
     }
 
-    private fun parsePoints(coords: String?): ArrayList<MapPoint> {
+    private fun parsePoints(answerText: String?): ArrayList<MapPoint> {
         val points = ArrayList<MapPoint>()
-        for (vertex in (coords ?: "").split(";".toRegex()).toTypedArray()) {
-            val words = vertex.trim { it <= ' ' }.split(" ".toRegex()).toTypedArray()
+
+        for (vertex in (answerText ?: "").split(";".toRegex()).toTypedArray()) {
+            val words = GeoWidgetUtils.getLocationParamsFromStringAnswer(vertex)
+
             if (words.size >= 2) {
                 var lat: Double
                 var lon: Double
                 var alt: Double
                 var sd: Double
                 try {
-                    lat = words[0].toDouble()
-                    lon = words[1].toDouble()
-                    alt = if (words.size > 2) words[2].toDouble() else 0.0
-                    sd = if (words.size > 3) words[3].toDouble() else 0.0
+                    lat = words[0]
+                    lon = words[1]
+                    alt = if (words.size > 2) words[2] else 0.0
+                    sd = if (words.size > 3) words[3] else 0.0
                 } catch (e: NumberFormatException) {
                     continue
                 }
+
                 points.add(MapPoint(lat, lon, alt, sd))
             }
         }

@@ -102,6 +102,12 @@ public class GeoWidgetUtilsTest {
         assertEquals(-122.15539166666667, gp[1]);
         assertEquals(0.0, gp[2]);
         assertEquals(0.0, gp[3]);
+
+        gp = GeoWidgetUtils.getLocationParamsFromStringAnswer(" 37.45153333333334 -122.15539166666667 0.0 ");
+        assertEquals(37.45153333333334, gp[0]);
+        assertEquals(-122.15539166666667, gp[1]);
+        assertEquals(0.0, gp[2]);
+        assertEquals(0.0, gp[3]);
     }
 
     @Test
