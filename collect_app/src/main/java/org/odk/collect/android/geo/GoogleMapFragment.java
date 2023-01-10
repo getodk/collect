@@ -260,7 +260,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
                     try {
                         moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
                     } catch (IllegalArgumentException e) { // https://github.com/getodk/collect/issues/5379
-                        zoomToPoint(getCenter(), map.getMinZoomLevel(), false);
+                        LatLng boxCenter = bounds.getCenter();
+                        zoomToPoint(new MapPoint(boxCenter.latitude, boxCenter.longitude), map.getMinZoomLevel(), false);
                     }
                 }, 100);
             }
