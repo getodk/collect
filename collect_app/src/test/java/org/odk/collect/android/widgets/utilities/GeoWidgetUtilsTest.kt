@@ -116,30 +116,15 @@ class GeoWidgetUtilsTest {
         assertEquals(0.0, gp[2])
         assertEquals(0.0, gp[3])
 
-        gp = parseGeometryPoint("")!!
-        assertEquals(0.0, gp[0])
-        assertEquals(0.0, gp[1])
-        assertEquals(0.0, gp[2])
-        assertEquals(0.0, gp[3])
-
-        gp = parseGeometryPoint(null)!!
-        assertEquals(0.0, gp[0])
-        assertEquals(0.0, gp[1])
-        assertEquals(0.0, gp[2])
-        assertEquals(0.0, gp[3])
-
-        gp =
-            parseGeometryPoint("37.45153333333334 -122.15539166666667 0.0 qwerty")!!
-        assertEquals(37.45153333333334, gp[0])
-        assertEquals(-122.15539166666667, gp[1])
-        assertEquals(0.0, gp[2])
-        assertEquals(0.0, gp[3])
-
         gp = parseGeometryPoint(" 37.45153333333334 -122.15539166666667 0.0 ")!!
         assertEquals(37.45153333333334, gp[0])
         assertEquals(-122.15539166666667, gp[1])
         assertEquals(0.0, gp[2])
         assertEquals(0.0, gp[3])
+
+        assertEquals(null, parseGeometryPoint("37.45153333333334 -122.15539166666667 0.0 qwerty"))
+        assertEquals(null, parseGeometryPoint(""))
+        assertEquals(null, parseGeometryPoint(null))
     }
 
     @Test

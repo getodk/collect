@@ -48,9 +48,9 @@ object GeoWidgetUtils {
             val sa = answer.trim { it <= ' ' }.split(" ".toRegex()).toTypedArray()
             return try {
                 gp[0] = sa[0].toDouble()
-                gp[1] = sa[1].toDouble()
-                gp[2] = sa[2].toDouble()
-                gp[3] = sa[3].toDouble()
+                gp[1] = if (sa.size > 1) sa[1].toDouble() else 0.0
+                gp[2] = if (sa.size > 2) sa[2].toDouble() else 0.0
+                gp[3] = if (sa.size > 3) sa[3].toDouble() else 0.0
                 gp
             } catch (e: Exception) {
                 null
@@ -68,14 +68,14 @@ object GeoWidgetUtils {
         for (vertex in (geometry ?: "").split(";".toRegex()).toTypedArray()) {
             val words = parseGeometryPoint(vertex) ?: return ArrayList()
 
-            if (words.size >= 2) {
+            if (words.isNotEmpty()) {
                 var lat: Double
                 var lon: Double
                 var alt: Double
                 var sd: Double
                 try {
                     lat = words[0]
-                    lon = words[1]
+                    lon = if (words.size > 1) words[1] else 0.0
                     alt = if (words.size > 2) words[2] else 0.0
                     sd = if (words.size > 3) words[3] else 0.0
                 } catch (e: NumberFormatException) {
