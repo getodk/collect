@@ -165,6 +165,22 @@ public class GeoPolyActivityTest {
     }
 
     @Test
+    public void whenPolygonExtraPresent_andPolyIsEmpty__andOutputModeIsShape_doesNotShowPoly() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+
+        ArrayList<MapPoint> polygon = new ArrayList<>();
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon);
+        intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
+        launcherRule.<GeoPolyActivity>launch(intent);
+
+        mapFragment.ready();
+
+        List<List<MapPoint>> polys = mapFragment.getPolys();
+        assertThat(polys.size(), equalTo(1));
+        assertThat(polys.get(0).isEmpty(), equalTo(true));
+    }
+
+    @Test
     public void startingInput_usingAutomaticMode_usesRetainMockAccuracyTrueToStartLocationTracker() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
 
