@@ -71,6 +71,7 @@ class SelectionMapFragment(
      */
     private val points: MutableList<MapPoint> = mutableListOf()
     private var itemCount: Int = 0
+    private var featureCount: Int = 0
 
     private var previousState: Bundle? = null
 
@@ -211,7 +212,7 @@ class SelectionMapFragment(
             R.string.select_item_count,
             selectionMapData.getItemType(),
             itemCount,
-            points.size
+            featureCount
         )
     }
 
@@ -376,11 +377,11 @@ class SelectionMapFragment(
         }
 
         items.zip(pointIds + traceIds).forEach { (item, featureId) ->
-            val point = item.points[0]
-
             itemsByFeatureId[featureId] = item
-            points.add(MapPoint(point.latitude, point.longitude))
+            points.addAll(item.points)
         }
+
+        featureCount = items.size
     }
 
     companion object {

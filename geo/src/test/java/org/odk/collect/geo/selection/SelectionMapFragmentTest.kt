@@ -205,6 +205,21 @@ class SelectionMapFragmentTest {
     }
 
     @Test
+    fun `zooms to fit all points in polys`() {
+        val points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
+        val items: List<MappableSelectItem> = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, points = points)
+        )
+
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
+    }
+
+    @Test
     fun `does not zoom to fit all items again when they change`() {
         val originalItems =
             listOf(Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))))
@@ -338,6 +353,21 @@ class SelectionMapFragmentTest {
         onView(withId(R.id.zoom_to_bounds)).perform(click())
 
         val points = items.map { it.toMapPoint() }
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
+    }
+
+    @Test
+    fun `tapping zoom to fit button zooms to fit all polys`() {
+        val points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
+        val items: List<MappableSelectItem> = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, points = points)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        onView(withId(R.id.zoom_to_bounds)).perform(click())
         assertThat(map.getZoomBoundingBox(), equalTo(Pair(points, 0.8)))
     }
 
