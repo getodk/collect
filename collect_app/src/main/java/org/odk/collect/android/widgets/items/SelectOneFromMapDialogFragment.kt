@@ -33,7 +33,6 @@ import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
-import kotlin.math.absoluteValue
 
 class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), FragmentResultListener {
 
@@ -143,7 +142,7 @@ internal class SelectChoicesMapData(
                     val points = GeoWidgetUtils.parseGeometry(geometry)
                     if (points.isNotEmpty()) {
                         val withinBounds = points.all {
-                            it.latitude.absoluteValue <= 90 && it.longitude.absoluteValue <= 180
+                            GeoWidgetUtils.isWithinMapBounds(it)
                         }
 
                         if (withinBounds) {

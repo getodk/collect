@@ -125,145 +125,40 @@ class SelectChoicesMapDataTest {
     }
 
     @Test
-    fun `choices with geometry with latitude greater than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "90.01 0 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "80.00 0 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
-    fun `choices with geometry with latitude less than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "-90.01 0 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "80.00 0 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
-    fun `choices with geometry with longitude greater than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 180.01 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
-    fun `choices with geometry with longitude less than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 -180.01 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
     fun `choices with incorrect geometry are ignored`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "blah")
+                        treeElement("geometry", "0 170.00 0 0")
                     )
                 )
             ),
+            // Invalid
             selectChoice(
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
+                        treeElement("geometry", "blah")
+                    )
+                )
+            ),
+            // Out of bounds
+            selectChoice(
+                value = "c",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "0 180.1 0 0")
+                    )
+                )
+            ),
+            // Second point out of bounds
+            selectChoice(
+                value = "c",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "0 180 0 0; 0 180.1 0 0")
                     )
                 )
             )
@@ -276,7 +171,7 @@ class SelectChoicesMapDataTest {
 
         val data = loadDataForPrompt(prompt)
         assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("a"))
     }
 
     /**

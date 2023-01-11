@@ -8,6 +8,7 @@ import org.odk.collect.shared.strings.StringUtils.removeEnd
 import timber.log.Timber
 import java.text.DecimalFormat
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 
 object GeoWidgetUtils {
 
@@ -86,6 +87,10 @@ object GeoWidgetUtils {
         }
 
         return points
+    }
+
+    fun isWithinMapBounds(point: MapPoint): Boolean {
+        return point.latitude.absoluteValue <= 90 && point.longitude.absoluteValue <= 180
     }
 
     @JvmStatic
