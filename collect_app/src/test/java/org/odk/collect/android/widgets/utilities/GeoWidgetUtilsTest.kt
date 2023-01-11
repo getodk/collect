@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import junit.framework.TestCase.assertEquals
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.data.GeoPointData
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,7 +14,8 @@ import org.odk.collect.android.widgets.support.GeoWidgetHelpers
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.convertCoordinatesIntoDegreeFormat
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.floor
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPointAnswerToDisplay
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getLocationParamsFromStringAnswer
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometryPoint
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometry
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.truncateDouble
 
 @RunWith(AndroidJUnit4::class)
@@ -97,40 +100,40 @@ class GeoWidgetUtilsTest {
     }
 
     @Test
-    fun getLocationParamsFromStringAnswerTest() {
+    fun parseGeometryPointTest() {
         var gp =
-            getLocationParamsFromStringAnswer("37.45153333333334 -122.15539166666667 0.0 20.0")
+            parseGeometryPoint("37.45153333333334 -122.15539166666667 0.0 20.0")!!
         assertEquals(37.45153333333334, gp[0])
         assertEquals(-122.15539166666667, gp[1])
         assertEquals(0.0, gp[2])
         assertEquals(20.0, gp[3])
 
-        gp = getLocationParamsFromStringAnswer("37.45153333333334")
+        gp = parseGeometryPoint("37.45153333333334")!!
         assertEquals(37.45153333333334, gp[0])
         assertEquals(0.0, gp[1])
         assertEquals(0.0, gp[2])
         assertEquals(0.0, gp[3])
 
-        gp = getLocationParamsFromStringAnswer("")
+        gp = parseGeometryPoint("")!!
         assertEquals(0.0, gp[0])
         assertEquals(0.0, gp[1])
         assertEquals(0.0, gp[2])
         assertEquals(0.0, gp[3])
 
-        gp = getLocationParamsFromStringAnswer(null)
+        gp = parseGeometryPoint(null)!!
         assertEquals(0.0, gp[0])
         assertEquals(0.0, gp[1])
         assertEquals(0.0, gp[2])
         assertEquals(0.0, gp[3])
 
         gp =
-            getLocationParamsFromStringAnswer("37.45153333333334 -122.15539166666667 0.0 qwerty")
+            parseGeometryPoint("37.45153333333334 -122.15539166666667 0.0 qwerty")!!
         assertEquals(37.45153333333334, gp[0])
         assertEquals(-122.15539166666667, gp[1])
         assertEquals(0.0, gp[2])
         assertEquals(0.0, gp[3])
 
-        gp = getLocationParamsFromStringAnswer(" 37.45153333333334 -122.15539166666667 0.0 ")
+        gp = parseGeometryPoint(" 37.45153333333334 -122.15539166666667 0.0 ")!!
         assertEquals(37.45153333333334, gp[0])
         assertEquals(-122.15539166666667, gp[1])
         assertEquals(0.0, gp[2])
@@ -148,5 +151,10 @@ class GeoWidgetUtilsTest {
         assertEquals("", truncateDouble(""))
         assertEquals("", truncateDouble(null))
         assertEquals("", truncateDouble("qwerty"))
+    }
+
+    @Test
+    fun parseGeometryTest() {
+        assertThat(parseGeometry("blah"), equalTo(emptyList()))
     }
 }

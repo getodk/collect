@@ -42,6 +42,7 @@ import org.odk.collect.geo.selection.SelectionMapFragment
 import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELECT_ITEM
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.testshared.FakeScheduler
 
@@ -172,8 +173,17 @@ class SelectOneFromMapDialogFragmentTest {
                     listOf(
                         MappableSelectItem.WithAction(
                             0,
-                            selectChoices[0].getChild("geometry")!!.split(" ")[0].toDouble(),
-                            selectChoices[0].getChild("geometry")!!.split(" ")[1].toDouble(),
+                            listOf(
+                                MapPoint(
+                                    selectChoices[0].getChild("geometry")!!
+                                        .split(" ")[0].toDouble(),
+                                    selectChoices[0].getChild("geometry")!!
+                                        .split(" ")[1].toDouble(),
+                                    selectChoices[0].getChild("geometry")!!
+                                        .split(" ")[2].toDouble(),
+                                    selectChoices[0].getChild("geometry")!!.split(" ")[3].toDouble()
+                                )
+                            ),
                             R.drawable.ic_map_marker_with_hole_small,
                             R.drawable.ic_map_marker_with_hole_big,
                             "A",
@@ -184,8 +194,17 @@ class SelectOneFromMapDialogFragmentTest {
                         ),
                         MappableSelectItem.WithAction(
                             1,
-                            selectChoices[1].getChild("geometry")!!.split(" ")[0].toDouble(),
-                            selectChoices[1].getChild("geometry")!!.split(" ")[1].toDouble(),
+                            listOf(
+                                MapPoint(
+                                    selectChoices[1].getChild("geometry")!!
+                                        .split(" ")[0].toDouble(),
+                                    selectChoices[1].getChild("geometry")!!
+                                        .split(" ")[1].toDouble(),
+                                    selectChoices[1].getChild("geometry")!!
+                                        .split(" ")[2].toDouble(),
+                                    selectChoices[1].getChild("geometry")!!.split(" ")[3].toDouble()
+                                )
+                            ),
                             R.drawable.ic_map_marker_with_hole_small,
                             R.drawable.ic_map_marker_with_hole_big,
                             "B",

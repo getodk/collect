@@ -33,7 +33,7 @@ class SelectChoicesMapDataTest {
             selectChoice(
                 value = "a",
                 item = treeElement(
-                    children = listOf(treeElement("geometry", "12.0 -1.0 305 0; 12.1 -1.0 305 0"))
+                    children = listOf(treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
                 )
             )
         )
@@ -51,7 +51,10 @@ class SelectChoicesMapDataTest {
         assertThat(mappableItems.size, equalTo(1))
 
         val points = mappableItems[0].points
-        assertThat(points, equalTo(listOf(MapPoint(12.0, -1.0), MapPoint(12.1, -1.0))))
+        assertThat(
+            points,
+            equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
+        )
     }
 
     @Test

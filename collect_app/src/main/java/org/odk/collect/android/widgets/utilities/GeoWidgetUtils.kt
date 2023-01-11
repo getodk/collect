@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets.utilities
 import android.content.Context
 import android.location.Location
 import org.odk.collect.android.R
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.shared.strings.StringUtils.removeEnd
 import timber.log.Timber
 import java.text.DecimalFormat
@@ -40,23 +41,51 @@ object GeoWidgetUtils {
     }
 
     @JvmStatic
-    fun getLocationParamsFromStringAnswer(answer: String?): DoubleArray {
+    fun parseGeometryPoint(answer: String?): DoubleArray? {
         val gp = DoubleArray(4)
         if (answer != null && answer.isNotEmpty()) {
             val sa = answer.trim { it <= ' ' }.split(" ".toRegex()).toTypedArray()
-            try {
+            return try {
                 gp[0] = sa[0].toDouble()
                 gp[1] = sa[1].toDouble()
                 gp[2] = sa[2].toDouble()
                 gp[3] = sa[3].toDouble()
+                gp
             } catch (e: Exception) {
-                Timber.w(e)
+                null
             } catch (e: Error) {
-                Timber.w(e)
+                null
+            }
+        } else {
+            return null
+        }
+    }
+
+    fun parseGeometry(geometry: String?): ArrayList<MapPoint> {
+        val points = ArrayList<MapPoint>()
+
+        for (vertex in (geometry ?: "").split(";".toRegex()).toTypedArray()) {
+            val words = parseGeometryPoint(vertex)
+
+            if (words != null && words.size >= 2) {
+                var lat: Double
+                var lon: Double
+                var alt: Double
+                var sd: Double
+                try {
+                    lat = words[0]
+                    lon = words[1]
+                    alt = if (words.size > 2) words[2] else 0.0
+                    sd = if (words.size > 3) words[3] else 0.0
+                } catch (e: NumberFormatException) {
+                    continue
+                }
+
+                points.add(MapPoint(lat, lon, alt, sd))
             }
         }
 
-        return gp
+        return points
     }
 
     @JvmStatic
