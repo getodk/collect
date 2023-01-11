@@ -14,9 +14,10 @@ import org.odk.collect.android.widgets.support.GeoWidgetHelpers
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.convertCoordinatesIntoDegreeFormat
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.floor
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPointAnswerToDisplay
-import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometryPoint
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometry
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometryPoint
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.truncateDouble
+import org.odk.collect.maps.MapPoint
 
 @RunWith(AndroidJUnit4::class)
 class GeoWidgetUtilsTest {
@@ -155,6 +156,12 @@ class GeoWidgetUtilsTest {
 
     @Test
     fun parseGeometryTest() {
+        assertThat(parseGeometry("1.0 2.0 3 4; 5.0 6.0 7 8"), equalTo(listOf(
+            MapPoint(1.0, 2.0, 3.0, 4.0),
+            MapPoint(5.0, 6.0, 7.0, 8.0)
+        )))
+
         assertThat(parseGeometry("blah"), equalTo(emptyList()))
+        assertThat(parseGeometry("1.0 2.0 3 4; blah"), equalTo(emptyList()))
     }
 }

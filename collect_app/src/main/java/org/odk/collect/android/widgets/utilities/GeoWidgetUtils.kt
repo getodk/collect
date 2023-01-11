@@ -65,9 +65,9 @@ object GeoWidgetUtils {
         val points = ArrayList<MapPoint>()
 
         for (vertex in (geometry ?: "").split(";".toRegex()).toTypedArray()) {
-            val words = parseGeometryPoint(vertex)
+            val words = parseGeometryPoint(vertex) ?: return ArrayList()
 
-            if (words != null && words.size >= 2) {
+            if (words.size >= 2) {
                 var lat: Double
                 var lon: Double
                 var alt: Double
