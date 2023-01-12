@@ -43,15 +43,15 @@ object GeoWidgetUtils {
 
     @JvmStatic
     fun parseGeometryPoint(answer: String?): DoubleArray? {
-        val gp = DoubleArray(4)
         if (answer != null && answer.isNotEmpty()) {
             val sa = answer.trim { it <= ' ' }.split(" ".toRegex()).toTypedArray()
             return try {
-                gp[0] = sa[0].toDouble()
-                gp[1] = if (sa.size > 1) sa[1].toDouble() else 0.0
-                gp[2] = if (sa.size > 2) sa[2].toDouble() else 0.0
-                gp[3] = if (sa.size > 3) sa[3].toDouble() else 0.0
-                gp
+                DoubleArray(4).also {
+                    it[0] = sa[0].toDouble()
+                    it[1] = if (sa.size > 1) sa[1].toDouble() else 0.0
+                    it[2] = if (sa.size > 2) sa[2].toDouble() else 0.0
+                    it[3] = if (sa.size > 3) sa[3].toDouble() else 0.0
+                }
             } catch (e: Exception) {
                 null
             } catch (e: Error) {
@@ -66,23 +66,11 @@ object GeoWidgetUtils {
         val points = ArrayList<MapPoint>()
 
         for (vertex in (geometry ?: "").split(";".toRegex()).toTypedArray()) {
-            val words = parseGeometryPoint(vertex) ?: return ArrayList()
-
-            if (words.isNotEmpty()) {
-                var lat: Double
-                var lon: Double
-                var alt: Double
-                var sd: Double
-                try {
-                    lat = words[0]
-                    lon = if (words.size > 1) words[1] else 0.0
-                    alt = if (words.size > 2) words[2] else 0.0
-                    sd = if (words.size > 3) words[3] else 0.0
-                } catch (e: NumberFormatException) {
-                    continue
-                }
-
-                points.add(MapPoint(lat, lon, alt, sd))
+            val point = parseGeometryPoint(vertex)
+            if (point != null) {
+                points.add(MapPoint(point[0], point[1], point[2], point[3]))
+            } else {
+                return ArrayList()
             }
         }
 
