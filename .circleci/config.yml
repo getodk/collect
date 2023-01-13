@@ -49,6 +49,20 @@ jobs:
           root: ~/work
           paths:
             - .
+
+  create_dependency_backup:
+    <<: *android_config
+    steps:
+      - attach_workspace:
+          at: ~/work
+      - restore_cache:
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
       - run:
           name: Create Maven repo from dependencies
           command: ./gradlew cacheToMavenLocal
@@ -57,7 +71,6 @@ jobs:
           command: tar -cvzf maven.tar .local-m2
       - store_artifacts:
           path: maven.tar
-
 
   check_quality:
     <<: *android_config
@@ -327,6 +340,9 @@ workflows:
   commit:
     jobs:
       - compile
+      - create_dependency_backup:
+          requires:
+            - compile
       - check_quality:
           requires:
             - compile
