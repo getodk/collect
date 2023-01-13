@@ -343,6 +343,11 @@ workflows:
       - create_dependency_backup:
           requires:
             - compile
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
+            branches:
+              ignore: /.*/
       - check_quality:
           requires:
             - compile
