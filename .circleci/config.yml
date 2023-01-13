@@ -49,6 +49,15 @@ jobs:
           root: ~/work
           paths:
             - .
+      - run:
+          name: Create Maven repo from dependencies
+          command: ./gradlew cacheToMavenLocal
+      - run:
+          name: Compress Maven repo
+          command: tar -cvzf maven.tar .local-m2
+      - store_artifacts:
+          path: maven.tar
+
 
   check_quality:
     <<: *android_config
