@@ -267,3 +267,5 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - write Play Store release notes, include link to forum post
 - upload to Play Store
 - if there was an active beta before release (this can happen with point releases), publish a new beta release to replace the previous one which was disabled by the production release
+- attach APK to previously create Github Release with the name `ODK-Collect-vX.X.X.apk`
+- backup dependencies for building release by downloading the `maven.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) 
