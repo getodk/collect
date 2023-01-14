@@ -14,21 +14,26 @@
 
 package org.odk.collect.android.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.GnssStatus;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.format.DateUtils;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.LocationListener;
@@ -51,7 +56,7 @@ import static org.odk.collect.android.widgets.utilities.ActivityGeoDataRequester
 import static org.odk.collect.android.widgets.utilities.GeoWidgetUtils.DEFAULT_LOCATION_ACCURACY;
 
 public class GeoPointActivity extends CollectAbstractActivity implements LocationListener,
-        LocationClient.LocationClientListener {
+        LocationClient.LocationClientListener, GpsStatus.Listener {
 
     // Default values for requesting Location updates.
     private static final long LOCATION_UPDATE_INTERVAL = 100;
@@ -65,6 +70,7 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
     private LocationClient locationClient;
     private Location location;
+    private GnssStatus.Callback gnssStatus;
 
     private double targetAccuracy;
 
@@ -117,6 +123,16 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         locationClient.setListener(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            gnssStatus = new GnssStatus.Callback() {
+                @Override
+                public void onSatelliteStatusChanged(@NonNull GnssStatus status) {
+                    numberOfAvailableSatellites = status.getSatelliteCount();
+                    updateDialogMessage();
+                }
+            };
+        }
+
         setupLocationDialog();
     }
 
@@ -144,8 +160,11 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager != null) {
-            //locationManager.unregisterGnssStatusCallback(this);  TODO
-            //locationManager.removeGpsStatusListener(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                locationManager.unregisterGnssStatusCallback(gnssStatus);
+            } else {
+                locationManager.removeGpsStatusListener(this);
+            }
         }
 
         locationClient.stop();
@@ -178,8 +197,11 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (locationManager != null) {
-            //locationManager.registerGnssStatusCallback(this);  TODO
-            //locationManager.addGpsStatusListener(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                locationManager.registerGnssStatusCallback(gnssStatus, new Handler());
+            } else {
+                locationManager.addGpsStatusListener(this);
+            }
         }
 
         if (locationClient.isLocationAvailable()) {
@@ -289,7 +311,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
         }
     }
 
-    /*
     @Override
     @SuppressLint("MissingPermission")
     public void onGpsStatusChanged(int event) {
@@ -310,7 +331,6 @@ public class GeoPointActivity extends CollectAbstractActivity implements Locatio
             }
         }
     }
-    */
 
     public String getAccuracyMessage(@NonNull Location location) {
         return getString(R.string.location_accuracy, truncateDouble(location.getAccuracy()));
