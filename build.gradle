@@ -93,7 +93,7 @@ task checkInstrumented(type: GradleBuild) {
 ext {
     androidCompileSdk = 33
     androidMinSdk = 21
-    androidTargetSdk = 33
+    androidTargetSdk = 31
 
     fragmentVersion = '1.5.4'
     daggerVersion = '2.43.2'
