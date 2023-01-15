@@ -70,10 +70,6 @@ android {
             applicationId "org.smap.smapTask.android"
             versionName "6.808"
         }
-        livesoil {
-            applicationId "org.smap.smapTask.android.livesoil"
-            versionName "6.808-livesoil"
-        }
         plan {
             applicationId "org.smap.smapTask.android.plan"
             versionName "6.808-plan"
