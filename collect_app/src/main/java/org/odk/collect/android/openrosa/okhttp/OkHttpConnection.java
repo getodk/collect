@@ -210,10 +210,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
             if(assignment_id != null) {
                 multipartBuilder.addPart(MultipartBody.Part.createFormData("assignment_id", assignment_id));
             }
+            if(status == null) {
+                status = "complete";
+            }
             // end smap
 
             MultipartBody multipartBody = multipartBuilder.build();
-            postResult = executePostRequest(uri, credentials, multipartBody);
+            postResult = executePostRequest(uri, credentials, multipartBody, status);   // Pass status to add to the header
 
             if (postResult.getResponseCode() != HttpURLConnection.HTTP_CREATED &&
                     postResult.getResponseCode() != HttpURLConnection.HTTP_ACCEPTED) {
@@ -226,12 +229,13 @@ public class OkHttpConnection implements OpenRosaHttpInterface {
     }
 
     @NonNull
-    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials, MultipartBody multipartBody) throws Exception {
+    private HttpPostResult executePostRequest(@NonNull URI uri, @Nullable HttpCredentialsInterface credentials, MultipartBody multipartBody, String status) throws Exception {
         OpenRosaServerClient httpClient = clientFactory.get(uri.getScheme(), userAgent, credentials, uri.getHost());    // smap add host
         HttpPostResult postResult;
         Request request = new Request.Builder()
                 .url(uri.toURL())
                 .post(multipartBody)
+                .addHeader("form_status", status)
                 .build();
         Response response = httpClient.makeRequest(request, new Date());
 
