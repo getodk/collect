@@ -28,6 +28,7 @@ object TestRuleChain {
                     Manifest.permission.GET_ACCOUNTS
                 )
             )
+            .around(ResetRotationRule())
             .around(DisableDeviceAnimationsRule())
             .around(ResetStateRule(testDependencies))
             .around(countingTaskExecutorIdlingResource)
