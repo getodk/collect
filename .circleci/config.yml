@@ -43,7 +43,7 @@ jobs:
           key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: compile-deps-{{ checksum "deps.txt" }}
       - persist_to_workspace:
           root: ~/work
@@ -135,7 +135,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: test-modules-deps-{{ checksum "deps.txt" }}
 
   test_app:
@@ -184,7 +184,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: test-app-deps-{{ checksum "deps.txt" }}
 
   build_instrumented:
@@ -211,7 +211,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
   build_release:
@@ -259,7 +259,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
@@ -309,7 +309,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
