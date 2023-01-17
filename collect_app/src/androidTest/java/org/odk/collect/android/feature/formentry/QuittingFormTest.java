@@ -130,7 +130,6 @@ public class QuittingFormTest {
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
                 .clickSaveChangesWithError(R.string.required_answer_error)
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_error)
                 .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)

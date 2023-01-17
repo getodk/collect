@@ -202,8 +202,14 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage clickSaveWithError(int errorMsg) {
         onView(withId(R.id.menu_save)).perform(click());
-        assertText(errorMsg);
-        clickOKOnDialog();
+
+        if (Build.VERSION.SDK_INT < 30) {
+            checkIsToastWithMessageDisplayed(errorMsg);
+        } else {
+            assertText(errorMsg);
+            clickOKOnDialog();
+        }
+
         return this;
     }
 
