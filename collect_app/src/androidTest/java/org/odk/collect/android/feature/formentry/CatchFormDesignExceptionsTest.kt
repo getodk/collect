@@ -1,6 +1,7 @@
 package org.odk.collect.android.feature.formentry
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -19,6 +20,7 @@ class CatchFormDesignExceptionsTest {
     val ruleChain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test // https://github.com/getodk/collect/issues/4750
+    @Ignore("Fails on ARM virtual devices")
     fun whenFormHasDesignErrors_explanationDialogShouldBeDisplayedAndTheFormShouldBeClosed() {
         rule.startAtMainMenu()
             .copyForm("form_design_error.xml")

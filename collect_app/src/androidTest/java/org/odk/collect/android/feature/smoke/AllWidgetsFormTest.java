@@ -12,6 +12,7 @@ import static org.hamcrest.Matchers.startsWith;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -48,6 +49,7 @@ public class AllWidgetsFormTest {
 
     //region Main test block.
     @Test
+    @Ignore("Fails on ARM virtual devices")
     public void testActivityOpen()  {
         skipInitialLabel();
 

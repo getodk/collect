@@ -13,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -35,6 +36,7 @@ class ImageWidgetTest {
         .around(rule)
 
     @Test // https://github.com/getodk/collect/issues/4819
+    @Ignore("Fails on ARM virtual devices")
     fun attachingGifsShouldBePossible() {
         intending(not(IntentMatchers.isInternal())).respondWith(
             Instrumentation.ActivityResult(

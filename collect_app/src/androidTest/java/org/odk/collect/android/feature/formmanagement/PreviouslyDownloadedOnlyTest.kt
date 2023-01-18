@@ -6,6 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -32,6 +33,7 @@ class PreviouslyDownloadedOnlyTest {
         .around(rule)
 
     @Test
+    @Ignore("Fails on ARM virtual devices")
     fun whenPreviouslyDownloadedOnlyEnabled_notifiesOnFormUpdates_automaticallyAndRepeatedly() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
