@@ -33,15 +33,21 @@ internal abstract class CameraXCamera : Camera {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(activity)
         cameraProviderFuture.addListener(
             {
+                val cameraProvider = cameraProviderFuture.get()
+
                 val preview = Preview.Builder().build()
                 preview.setSurfaceProvider((previewView as PreviewView).surfaceProvider)
 
-                val cameraSelector = CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
-                    .build()
+                val cameraInfos = cameraProvider.availableCameraInfos
+                val frontCameras = CameraSelector.DEFAULT_FRONT_CAMERA.filter(cameraInfos)
+                val cameraSelector = if (frontCameras.isNotEmpty()) {
+                    CameraSelector.DEFAULT_FRONT_CAMERA
+                } else {
+                    CameraSelector.DEFAULT_BACK_CAMERA
+                }
 
                 try {
-                    cameraProviderFuture.get().bindToLifecycle(
+                    cameraProvider.bindToLifecycle(
                         activity,
                         cameraSelector,
                         preview,

@@ -37,7 +37,6 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
-import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 
 import java.io.File;
@@ -88,14 +87,6 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
         hideButtonsIfNeeded(appearance);
         errorTextView.setVisibility(View.GONE);
-
-        if (selfie) {
-            if (!new CameraUtils().isFrontCameraAvailable(getContext())) {
-                captureButton.setEnabled(false);
-                errorTextView.setText(R.string.error_front_camera_unavailable);
-                errorTextView.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     @Override
