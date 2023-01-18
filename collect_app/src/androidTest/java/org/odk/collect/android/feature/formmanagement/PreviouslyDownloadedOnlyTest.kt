@@ -33,7 +33,6 @@ class PreviouslyDownloadedOnlyTest {
         .around(rule)
 
     @Test
-    @Ignore("Fails on ARM virtual devices")
     fun whenPreviouslyDownloadedOnlyEnabled_notifiesOnFormUpdates_automaticallyAndRepeatedly() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
