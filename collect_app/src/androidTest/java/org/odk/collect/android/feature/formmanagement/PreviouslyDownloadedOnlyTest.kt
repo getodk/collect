@@ -1,12 +1,11 @@
 package org.odk.collect.android.feature.formmanagement
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.empty
-import org.junit.Ignore
+import org.hamcrest.Matchers.`is`
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -149,7 +148,7 @@ class PreviouslyDownloadedOnlyTest {
         rule.startAtMainMenu()
             .enablePreviouslyDownloadedOnlyUpdates()
             .clickFillBlankForm()
-        onView(withId(R.id.menu_refresh)).check(ViewAssertions.doesNotExist())
+        onView(withId(R.id.menu_refresh)).check(doesNotExist())
     }
 
     @Test
