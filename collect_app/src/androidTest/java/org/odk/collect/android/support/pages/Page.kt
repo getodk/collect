@@ -405,6 +405,11 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun assertTextInDialog(text: Int): T {
+        onView(withText(getTranslatedString(text))).inRoot(isDialog()).check(matches(isDisplayed()))
+        return this as T
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
