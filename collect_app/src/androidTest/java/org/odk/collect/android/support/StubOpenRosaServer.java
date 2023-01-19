@@ -71,6 +71,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
             } else {
                 return new HttpGetResult(null, new HashMap<>(), "", 404);
             }
+        } else if (uri.getPath().equals("/mediaFile")) {
+            return new HttpGetResult(getMediaFile(uri), new HashMap<>(), "", 200);
         } else {
             return new HttpGetResult(null, new HashMap<>(), "", 404);
         }
@@ -259,6 +261,14 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
         AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
         return assetManager.open("forms/" + xmlPath);
+    }
+
+    @NotNull
+    private InputStream getMediaFile(URI uri) throws IOException {
+        String mediaFileName = uri.getQuery().split("=")[1];
+
+        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
+        return assetManager.open("media/" + mediaFileName);
     }
 
     private static class XFormItem {

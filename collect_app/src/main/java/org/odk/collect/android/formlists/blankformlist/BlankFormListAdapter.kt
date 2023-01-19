@@ -32,7 +32,11 @@ class BlankFormListAdapter(
                 binding.formSubtitle.visibility = if (this.formVersion.isNotBlank()) View.VISIBLE else View.GONE
 
                 binding.formSubtitle2.text = try {
-                    SimpleDateFormat(binding.root.context.getString(R.string.added_on_date_at_time), Locale.getDefault()).format(this.dateOfCreation)
+                    if (this.dateOfLastDetectedAttachmentsUpdate != null) {
+                        SimpleDateFormat(binding.root.context.getString(R.string.updated_on_date_at_time), Locale.getDefault()).format(this.dateOfLastDetectedAttachmentsUpdate)
+                    } else {
+                        SimpleDateFormat(binding.root.context.getString(R.string.added_on_date_at_time), Locale.getDefault()).format(this.dateOfCreation)
+                    }
                 } catch (e: IllegalArgumentException) {
                     Timber.e(e)
                     ""
