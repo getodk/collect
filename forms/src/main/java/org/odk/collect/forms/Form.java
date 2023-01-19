@@ -43,6 +43,7 @@ public final class Form {
     private final String autoDelete;
     private final String geometryXPath;
     private final boolean deleted;
+    private final Long lastDetectedAttachmentsUpdateDate;
 
     private Form(Form.Builder builder) {
         dbId = builder.dbId;
@@ -62,6 +63,7 @@ public final class Form {
         autoDelete = builder.autoDelete;
         geometryXPath = builder.geometryXpath;
         deleted = builder.deleted;
+        lastDetectedAttachmentsUpdateDate = builder.lastDetectedAttachmentsUpdateDate;
     }
 
     public static class Builder {
@@ -82,6 +84,7 @@ public final class Form {
         private String autoDelete;
         private String geometryXpath;
         private boolean deleted;
+        private Long lastDetectedAttachmentsUpdateDate;
 
         public Builder() {
         }
@@ -103,7 +106,8 @@ public final class Form {
             autoSend = form.autoSend;
             autoDelete = form.autoDelete;
             geometryXpath = form.geometryXPath;
-            this.deleted = form.deleted;
+            deleted = form.deleted;
+            lastDetectedAttachmentsUpdateDate = form.lastDetectedAttachmentsUpdateDate;
         }
 
         public Builder dbId(Long id) {
@@ -191,6 +195,11 @@ public final class Form {
             return this;
         }
 
+        public Builder lastDetectedAttachmentsUpdateDate(Long lastDetectedAttachmentsUpdateDate) {
+            this.lastDetectedAttachmentsUpdateDate = lastDetectedAttachmentsUpdateDate;
+            return this;
+        }
+
         public Form build() {
             return new Form(this);
         }
@@ -265,6 +274,10 @@ public final class Form {
 
     public boolean isDeleted() {
         return deleted;
+    }
+
+    public Long getLastDetectedAttachmentsUpdateDate() {
+        return lastDetectedAttachmentsUpdateDate;
     }
 
     @Override

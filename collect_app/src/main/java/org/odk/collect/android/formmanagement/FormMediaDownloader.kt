@@ -24,7 +24,8 @@ class FormMediaDownloader(
         tempMediaPath: String,
         tempDir: File,
         stateListener: OngoingWorkListener
-    ) {
+    ): Boolean {
+        var atLeastOneNewMediaFileDetected = false
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
 
         files.forEachIndexed { i, mediaFile ->
@@ -36,11 +37,13 @@ class FormMediaDownloader(
                 if (it != null) {
                     copyFile(it, tempMediaFile)
                 } else {
+                    atLeastOneNewMediaFileDetected = true
                     val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                     interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
                 }
             }
         }
+        return atLeastOneNewMediaFileDetected
     }
 
     private fun searchForExistingMediaFile(

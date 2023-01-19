@@ -23,6 +23,8 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.LANGUAGE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_ATTACHMENTS_UPDATE_DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DETECTED_FORM_VERSION_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 
@@ -31,14 +33,14 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
             JR_FORM_ID, JR_VERSION, MD5_HASH, DATE, FORM_MEDIA_PATH, FORM_FILE_PATH, LANGUAGE,
             SUBMISSION_URI, BASE64_RSA_PUBLIC_KEY, JRCACHE_FILE_PATH, AUTO_SEND, AUTO_DELETE,
-            "lastDetectedFormVersionHash"};
+            LAST_DETECTED_FORM_VERSION_HASH};
 
     // These exist in database versions 2 and 3, but not in 4...
     private static final String TEMP_FORMS_TABLE_NAME = "forms_v4";
     private static final String MODEL_VERSION = "modelVersion";
 
     public void onCreate(SQLiteDatabase db) {
-        createFormsTableV11(db);
+        createFormsTableV12(db);
     }
 
     @SuppressWarnings({"checkstyle:FallThrough"})
@@ -63,12 +65,14 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 upgradeToVersion10(db);
             case 10:
                 upgradeToVersion11(db);
+            case 11:
+                upgradeToVersion12(db);
         }
     }
 
     public void onDowngrade(SQLiteDatabase db) throws SQLException {
         SQLiteUtils.dropTable(db, FORMS_TABLE_NAME);
-        createFormsTableV11(db);
+        createFormsTableV12(db);
     }
 
     private void upgradeToVersion2(SQLiteDatabase db) {
@@ -202,7 +206,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
     }
 
     private void upgradeToVersion6(SQLiteDatabase db) {
-        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, "lastDetectedFormVersionHash", "text");
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_FORM_VERSION_HASH, "text");
     }
 
     private void upgradeToVersion7(SQLiteDatabase db) {
@@ -250,6 +254,10 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
         SQLiteUtils.dropTable(db, temporaryTable);
     }
 
+    private void upgradeToVersion12(SQLiteDatabase db) {
+        SQLiteUtils.addColumn(db, FORMS_TABLE_NAME, LAST_DETECTED_ATTACHMENTS_UPDATE_DATE, "integer");
+    }
+
     private void createFormsTableV4(SQLiteDatabase db, String tableName) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + tableName + " ("
                 + _ID + " integer primary key, "
@@ -268,7 +276,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + "lastDetectedFormVersionHash" + " text);");
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
     private void createFormsTableV7(SQLiteDatabase db) {
@@ -288,7 +296,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + JRCACHE_FILE_PATH + " text not null, "
                 + AUTO_SEND + " text, "
                 + AUTO_DELETE + " text, "
-                + "lastDetectedFormVersionHash" + " text);");
+                + LAST_DETECTED_FORM_VERSION_HASH + " text);");
     }
 
     private void createFormsTableV9(SQLiteDatabase db) {
@@ -352,5 +360,27 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 + AUTO_DELETE + " text, "
                 + GEOMETRY_XPATH + " text, "
                 + DELETED_DATE + " integer);");
+    }
+
+    private void createFormsTableV12(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + FORMS_TABLE_NAME + " ("
+                + _ID + " integer primary key, "
+                + DISPLAY_NAME + " text not null, "
+                + DESCRIPTION + " text, "
+                + JR_FORM_ID + " text not null, "
+                + JR_VERSION + " text, "
+                + MD5_HASH + " text not null UNIQUE ON CONFLICT IGNORE, "
+                + DATE + " integer not null, " // milliseconds
+                + FORM_MEDIA_PATH + " text not null, "
+                + FORM_FILE_PATH + " text not null, "
+                + LANGUAGE + " text, "
+                + SUBMISSION_URI + " text, "
+                + BASE64_RSA_PUBLIC_KEY + " text, "
+                + JRCACHE_FILE_PATH + " text not null, "
+                + AUTO_SEND + " text, "
+                + AUTO_DELETE + " text, "
+                + GEOMETRY_XPATH + " text, "
+                + DELETED_DATE + " integer, "
+                + LAST_DETECTED_ATTACHMENTS_UPDATE_DATE + " integer);"); // milliseconds
     }
 }

@@ -83,7 +83,8 @@ class FormsUpdaterTest {
             context = application,
             notifier = notifier,
             syncStatusAppState = syncStatusAppState,
-            projectDependencyProviderFactory = projectDependencyProviderFactory
+            projectDependencyProviderFactory = projectDependencyProviderFactory,
+            clock = { 0 }
         )
     }
 

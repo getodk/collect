@@ -97,6 +97,20 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun assertTextThatContainsExists(text: String, index: Int = 0): T {
+        onView(
+            withIndex(
+                withText(
+                    containsString(
+                        text
+                    )
+                ),
+                index
+            )
+        ).check(matches(isDisplayed()))
+        return this as T
+    }
+
     fun assertText(vararg text: String?): T {
         closeSoftKeyboard()
         for (t in text) {
