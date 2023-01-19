@@ -4,8 +4,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.empty
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -158,6 +157,6 @@ class PreviouslyDownloadedOnlyTest {
             .enablePreviouslyDownloadedOnlyUpdates()
             .enableManualUpdates()
 
-        assertThat(testDependencies.scheduler.deferredTasks, `is`(empty()))
+        assertThat(testDependencies.scheduler.deferredTasks, equalTo(emptyList()))
     }
 }
