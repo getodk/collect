@@ -91,6 +91,34 @@ public class RangeWidgetUtilsTest {
     }
 
     @Test
+    public void whenPromptHasAnswerInIncreasingRange_sliderValueShouldBeSet() {
+        FormEntryPrompt prompt = mock(FormEntryPrompt.class);
+        IntegerData answerValue = new IntegerData(7);
+        when(prompt.getAnswerValue()).thenReturn(answerValue);
+        when(prompt.getQuestion()).thenReturn(rangeQuestion);
+
+        BigDecimal value = RangeWidgetUtils.setUpSlider(prompt, slider, true);
+        assertThat(value, equalTo(new BigDecimal(7)));
+        assertThat(slider.getValue(), equalTo(7f));
+    }
+
+    @Test
+    public void whenPromptHasAnswerInDecreasingRange_sliderValueShouldBeSet() {
+        when(rangeQuestion.getRangeStart()).thenReturn(BigDecimal.TEN);
+        when(rangeQuestion.getRangeEnd()).thenReturn(BigDecimal.ONE);
+        when(rangeQuestion.getRangeStep()).thenReturn(BigDecimal.ONE);
+
+        FormEntryPrompt prompt = mock(FormEntryPrompt.class);
+        IntegerData answerValue = new IntegerData(7);
+        when(prompt.getAnswerValue()).thenReturn(answerValue);
+        when(prompt.getQuestion()).thenReturn(rangeQuestion);
+
+        BigDecimal value = RangeWidgetUtils.setUpSlider(prompt, slider, true);
+        assertThat(value, equalTo(new BigDecimal(7)));
+        assertThat(slider.getValue(), equalTo(4f));
+    }
+
+    @Test
     public void whenPromptHasAnswerThatIsOutOfRange_sliderValueShouldNotBeSet() {
         slider.setValue(5);
 
