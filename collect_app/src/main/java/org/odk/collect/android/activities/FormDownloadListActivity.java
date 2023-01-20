@@ -34,7 +34,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.FormDownloadListViewModel;
 import org.odk.collect.android.adapters.FormDownloadListAdapter;
@@ -131,9 +130,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
 
     @Inject
     NetworkStateProvider connectivityProvider;
-
-    @Inject
-    Analytics analytics;
 
     @Inject
     FormDownloader formDownloader;

@@ -23,7 +23,6 @@ import org.odk.collect.shared.settings.Settings
 import timber.log.Timber
 
 class InstanceSubmitter(
-    private val analytics: Analytics,
     private val formsRepository: FormsRepository,
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,
@@ -119,8 +118,9 @@ class InstanceSubmitter(
     }
 
     private fun logUploadedForm(instance: Instance) {
-        val action = if (isGoogleSheetsProtocol()) "HTTP-Sheets auto" else "HTTP auto"
-        val label = Collect.getFormIdentifierHash(instance.formId, instance.formVersion)
-        analytics.logEvent(AnalyticsEvents.SUBMISSION, action, label)
+        val key = if (isGoogleSheetsProtocol()) "HTTP-Sheets auto" else "HTTP auto"
+        val value = Collect.getFormIdentifierHash(instance.formId, instance.formVersion)
+
+        Analytics.log(AnalyticsEvents.SUBMISSION, key, value)
     }
 }

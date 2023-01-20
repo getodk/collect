@@ -14,7 +14,6 @@ import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceM
 import static org.odk.collect.testshared.RobolectricHelpers.populateRecyclerView;
 import static java.util.Arrays.asList;
 
-import android.app.Application;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -35,7 +34,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.audio.AudioButton;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
@@ -79,9 +77,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
     @Mock
     public AudioHelper audioHelper;
-
-    @Mock
-    public Analytics analytics;
 
     @Before
     public void setup() throws Exception {
@@ -304,11 +299,6 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
             @Override
             public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
                 return context -> audioHelper;
-            }
-
-            @Override
-            public Analytics providesAnalytics(Application application) {
-                return analytics;
             }
 
             @Override

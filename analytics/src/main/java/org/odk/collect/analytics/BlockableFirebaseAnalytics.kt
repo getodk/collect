@@ -6,27 +6,17 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 class BlockableFirebaseAnalytics(application: Application) : Analytics {
-
-    private val firebaseAnalytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(application)
-    private val crashlytics: FirebaseCrashlytics = FirebaseCrashlytics.getInstance()
-
-    @Deprecated("")
-    override fun logEvent(category: String, action: String) {
-        val bundle = Bundle()
-        bundle.putString("action", action)
-        firebaseAnalytics.logEvent(category, bundle)
-    }
-
-    @Deprecated("")
-    override fun logEvent(category: String, action: String, label: String) {
-        val bundle = Bundle()
-        bundle.putString("action", action)
-        bundle.putString("label", label)
-        firebaseAnalytics.logEvent(category, bundle)
-    }
+    private val firebaseAnalytics = FirebaseAnalytics.getInstance(application)
+    private val crashlytics = FirebaseCrashlytics.getInstance()
 
     override fun logEvent(event: String) {
         firebaseAnalytics.logEvent(event, null)
+    }
+
+    override fun logEventWithParam(event: String, key: String, value: String) {
+        val bundle = Bundle()
+        bundle.putString(key, value)
+        firebaseAnalytics.logEvent(event, bundle)
     }
 
     override fun logNonFatal(throwable: Throwable) {
@@ -35,12 +25,6 @@ class BlockableFirebaseAnalytics(application: Application) : Analytics {
 
     override fun logMessage(message: String) {
         crashlytics.log(message)
-    }
-
-    override fun logEventWithParam(event: String, key: String, value: String) {
-        val bundle = Bundle()
-        bundle.putString(key, value)
-        firebaseAnalytics.logEvent(event, bundle)
     }
 
     override fun setAnalyticsCollectionEnabled(isAnalyticsEnabled: Boolean) {

@@ -44,9 +44,6 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
-    @Inject
-    Analytics analytics;
-
     // Custom submission URL, username and password that can be sent via intent extras by external
     // applications
     private String completeDestinationUrl;
@@ -80,7 +77,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
                         customMessage != null ? customMessage : getLocalizedString(Collect.getInstance(), R.string.success));
 
-                analytics.logEvent(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
+                Analytics.log(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
             } catch (FormUploadAuthRequestedException e) {
                 outcome.authRequestingServer = e.getAuthRequestingServer();
                 // Don't add the instance that caused an auth request to the map because we want to

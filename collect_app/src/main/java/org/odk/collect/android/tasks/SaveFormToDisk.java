@@ -41,7 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
@@ -84,7 +83,6 @@ public class SaveFormToDisk {
     private final MediaUtils mediaUtils;
     private Uri uri;
     private String instanceName;
-    private final Analytics analytics;
     private final ArrayList<String> tempFiles;
     private final String currentProjectId;
     private final EntitiesRepository entitiesRepository;
@@ -95,14 +93,13 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, Analytics analytics, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                          Uri uri, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
         this.formController = formController;
         this.mediaUtils = mediaUtils;
         this.uri = uri;
         this.saveAndExit = saveAndExit;
         this.shouldFinalize = shouldFinalize;
         this.instanceName = updatedName;
-        this.analytics = analytics;
         this.tempFiles = tempFiles;
         this.currentProjectId = currentProjectId;
         this.entitiesRepository = entitiesRepository;
@@ -392,7 +389,7 @@ public class SaveFormToDisk {
                 EncryptionUtils.generateEncryptedSubmission(instanceXml, submissionXml, formInfo);
                 isEncrypted = true;
 
-                analytics.logEvent(ENCRYPT_SUBMISSION, AnalyticsUtils.getFormHash(formController), "");
+                Analytics.log(ENCRYPT_SUBMISSION, "form");
             }
 
             // At this point, we have:

@@ -35,7 +35,6 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
@@ -78,9 +77,6 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     NetworkStateProvider connectivityProvider;
-
-    @Inject
-    Analytics analytics;
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
@@ -134,7 +130,7 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
     }
 
     private void runTask() {
-        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider, analytics);
+        instanceGoogleSheetsUploaderTask = new InstanceGoogleSheetsUploaderTask(googleApiProvider);
         instanceGoogleSheetsUploaderTask.setRepositories(instancesRepositoryProvider.get(), formsRepositoryProvider.get(), settingsProvider);
 
         // ensure we have a google account selected

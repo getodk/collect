@@ -31,7 +31,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
@@ -83,7 +82,7 @@ public class QuitFormDialogFragmentTest {
     public void setup() {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
             @Override
-            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Analytics analytics, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
+            public FormSaveViewModel.FactoryFactory providesFormSaveViewModelFactoryFactory(Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, MediaUtils mediaUtils, FormSessionRepository formSessionRepository, EntitiesRepositoryProvider entitiesRepositoryProvider) {
                 return formSaveViewModelFactoryFactory;
             }
 

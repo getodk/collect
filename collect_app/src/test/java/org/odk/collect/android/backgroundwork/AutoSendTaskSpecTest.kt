@@ -12,7 +12,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.formmanagement.FormSourceProvider
 import org.odk.collect.android.formmanagement.InstancesAppState
@@ -51,7 +50,6 @@ class AutoSendTaskSpecTest {
                 settingsProvider: SettingsProvider?,
                 context: Context?,
                 notifier: Notifier?,
-                analytics: Analytics?,
                 googleAccountsManager: GoogleAccountsManager?,
                 googleApiProvider: GoogleApiProvider?,
                 permissionsProvider: PermissionsProvider?,
