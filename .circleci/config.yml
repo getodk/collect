@@ -68,7 +68,7 @@ jobs:
           command: ./gradlew cacheToMavenLocal
       - run:
           name: Compress Maven repo
-          command: tar -cvzf maven.tar .local-m2
+          command: tar -cvzf $(git describe --tags).tar .local-m2
       - store_artifacts:
           path: maven.tar
 
