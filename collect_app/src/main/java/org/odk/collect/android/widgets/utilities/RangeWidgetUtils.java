@@ -112,7 +112,7 @@ public class RangeWidgetUtils {
         if (prompt.getAnswerValue() != null) {
             actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
 
-            if (actualValue.compareTo(rangeStart) < 0 || actualValue.compareTo(rangeEnd) > 0) {
+            if (!isValueInRange(actualValue, rangeStart, rangeEnd)) {
                 actualValue = null;
             }
         }
@@ -144,6 +144,12 @@ public class RangeWidgetUtils {
         }
 
         return actualValue;
+    }
+
+    private static boolean isValueInRange(BigDecimal value, BigDecimal rangeStart, BigDecimal rangeEnd) {
+        return rangeStart.compareTo(rangeEnd) < 0
+                ? value.compareTo(rangeStart) > -1 && value.compareTo(rangeEnd) < 1
+                : value.compareTo(rangeStart) < 1 && value.compareTo(rangeEnd) > -1;
     }
 
     public static void setUpRangePickerWidget(Context context, RangePickerWidgetAnswerBinding binding, FormEntryPrompt prompt) {
