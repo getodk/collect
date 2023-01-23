@@ -98,9 +98,23 @@ class RangePickerWidgetUtilsTest {
     }
 
     @Test
-    fun `getProgressFromPrompt()  returns 0 if the current value does not exist in the list of values`() {
+    fun `getProgressFromPrompt() returns 0 if the current value does not exist in the list of values`() {
         val prompt = mock<FormEntryPrompt>().apply {
             whenever(this.answerValue).thenReturn(IntegerData(10))
+        }
+
+        val listOfValuesAsc = arrayOf("1", "2", "3", "4", "5")
+
+        assertThat(
+            RangePickerWidgetUtils.getProgressFromPrompt(prompt, listOfValuesAsc),
+            equalTo(0)
+        )
+    }
+
+    @Test
+    fun `getProgressFromPrompt() returns 0 if the current value is null`() {
+        val prompt = mock<FormEntryPrompt>().apply {
+            whenever(this.answerValue).thenReturn(null)
         }
 
         val listOfValuesAsc = arrayOf("1", "2", "3", "4", "5")
