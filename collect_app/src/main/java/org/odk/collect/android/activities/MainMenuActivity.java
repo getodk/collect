@@ -47,6 +47,7 @@ import org.odk.collect.crashhandler.CrashHandler;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import javax.inject.Inject;
@@ -246,6 +247,7 @@ public class MainMenuActivity extends LocalizedActivity {
         currentProjectViewModel.refresh();
         mainMenuViewModel.refreshInstances();
         setButtonsVisibility();
+        manageGoogleDriveDeprecationBanner();
     }
 
     private void setButtonsVisibility() {
@@ -298,6 +300,34 @@ public class MainMenuActivity extends LocalizedActivity {
                     .beginTransaction()
                     .add(R.id.map_box_initialization_fragment, MapboxClassInstanceCreator.createMapBoxInitializationFragment())
                     .commit();
+        }
+    }
+
+    private void manageGoogleDriveDeprecationBanner() {
+        Settings unprotectedSettings = settingsProvider.getUnprotectedSettings();
+        String protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL);
+        if (ProjectKeys.PROTOCOL_GOOGLE_SHEETS.equals(protocol)) {
+            boolean gdBannerAlreadyDismissed = unprotectedSettings.getBoolean(ProjectKeys.GOOGLE_DRIVE_DEPRECATION_BANNER_DISMISSED);
+            if (!gdBannerAlreadyDismissed) {
+                findViewById(R.id.google_drive_deprecation_banner).setVisibility(View.VISIBLE);
+                boolean gdLearnMoreAlreadyClicked = unprotectedSettings.getBoolean(ProjectKeys.GOOGLE_DRIVE_DEPRECATION_LEARN_MORE_CLICKED);
+                if (gdLearnMoreAlreadyClicked) {
+                    findViewById(R.id.dismiss_button).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.dismiss_button).setVisibility(View.GONE);
+                }
+
+                findViewById(R.id.learn_more_button).setOnClickListener(view -> {
+                    Intent intent = new Intent(this, WebViewActivity.class);
+                    intent.putExtra("url", "https://forum.getodk.org/t/40097");
+                    startActivity(intent);
+                    unprotectedSettings.save(ProjectKeys.GOOGLE_DRIVE_DEPRECATION_LEARN_MORE_CLICKED, true);
+                });
+                findViewById(R.id.dismiss_button).setOnClickListener(view -> {
+                    findViewById(R.id.google_drive_deprecation_banner).setVisibility(View.GONE);
+                    unprotectedSettings.save(ProjectKeys.GOOGLE_DRIVE_DEPRECATION_BANNER_DISMISSED, true);
+                });
+            }
         }
     }
 }

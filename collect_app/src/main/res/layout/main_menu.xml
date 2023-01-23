@@ -30,6 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"/>
 
+            <include layout="@layout/google_drive_deprecation_banner" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

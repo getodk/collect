@@ -1182,6 +1182,15 @@
 
     <!--
     ##############################################
+    # Google Drive deprecation
+    ##############################################
+    -->
+    <string name="google_drive_deprecation_message">This project uses Google Drive. This functionality will be removed in the next app update.</string>
+    <string name="learn_more_button_text">Learn more</string>
+    <string name="dismiss_button_text">Dismiss</string>
+
+    <!--
+    ##############################################
     # Developer tools
     ##############################################
     -->
