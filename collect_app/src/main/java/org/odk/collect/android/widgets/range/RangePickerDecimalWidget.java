@@ -44,8 +44,7 @@ public class RangePickerDecimalWidget extends QuestionWidget {
         displayedValuesForNumberPicker = RangePickerWidgetUtils.getNumbersFromRangeAsc(
                 rangeStart, rangeStep, rangeEnd, false);
         RangeWidgetUtils.setUpRangePickerWidget(context, binding, prompt);
-
-        progress = RangeWidgetUtils.getRangePickerProgressFromPrompt(prompt);
+        progress = RangePickerWidgetUtils.getProgressFromPrompt(prompt, displayedValuesForNumberPicker);
         binding.widgetButton.setOnClickListener(v -> RangeWidgetUtils.showNumberPickerDialog(
                 (FormEntryActivity) getContext(), displayedValuesForNumberPicker, getId(), progress));
 

@@ -165,20 +165,6 @@ public class RangeWidgetUtils {
         }
     }
 
-    public static int getRangePickerProgressFromPrompt(FormEntryPrompt prompt) {
-        RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
-        BigDecimal actualValue = null;
-        if (prompt.getAnswerValue() != null) {
-            actualValue = new BigDecimal(prompt.getAnswerValue().getValue().toString());
-        }
-        int progress = 0;
-        if (actualValue != null) {
-            progress = actualValue.subtract(rangeQuestion.getRangeStart()).abs().divide(
-                    rangeQuestion.getRangeStep() == null ? BigDecimal.ONE : rangeQuestion.getRangeStep().abs()).intValue();
-        }
-        return progress;
-    }
-
     public static BigDecimal getActualValue(FormEntryPrompt prompt, Slider slider, float value) {
         RangeQuestion rangeQuestion = (RangeQuestion) prompt.getQuestion();
         BigDecimal rangeStart = rangeQuestion.getRangeStart();
