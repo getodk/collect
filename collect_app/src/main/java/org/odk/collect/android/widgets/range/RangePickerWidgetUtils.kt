@@ -1,5 +1,6 @@
 package org.odk.collect.android.widgets.range
 
+import org.javarosa.form.api.FormEntryPrompt
 import java.math.BigDecimal
 
 object RangePickerWidgetUtils {
@@ -31,5 +32,19 @@ object RangePickerWidgetUtils {
         }
 
         return displayedValuesForNumberPicker.toTypedArray()
+    }
+
+    @JvmStatic
+    fun getProgressFromPrompt(prompt: FormEntryPrompt, listOfValues: Array<String>): Int {
+        var actualValue: BigDecimal? = null
+        val answerValue = prompt.answerValue
+        if (answerValue != null) {
+            actualValue = BigDecimal(answerValue.value.toString())
+        }
+        var progress = 0
+        if (actualValue != null) {
+            progress = listOfValues.indexOf(actualValue.toString())
+        }
+        return if (progress == -1) 0 else progress
     }
 }
