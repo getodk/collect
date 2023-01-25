@@ -200,8 +200,8 @@ class BlankFormListViewModel(
         _formsToDisplay.value = when (sortingOrder) {
             0 -> _allForms.value.sortedBy { it.formName.lowercase() }
             1 -> _allForms.value.sortedByDescending { it.formName.lowercase() }
-            2 -> _allForms.value.sortedByDescending { it.dateOfCreation }
-            3 -> _allForms.value.sortedBy { it.dateOfCreation }
+            2 -> _allForms.value.sortedByDescending { it.dateOfLastDetectedAttachmentsUpdate ?: it.dateOfCreation }
+            3 -> _allForms.value.sortedBy { it.dateOfLastDetectedAttachmentsUpdate ?: it.dateOfCreation }
             4 -> _allForms.value.sortedByDescending { it.dateOfLastUsage }
             else -> { _allForms.value }
         }.filter {

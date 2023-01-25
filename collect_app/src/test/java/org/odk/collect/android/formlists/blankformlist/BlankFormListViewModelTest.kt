@@ -283,9 +283,9 @@ class BlankFormListViewModelTest {
     fun `when list of forms sorted 'by date newest first', saved should forms be ordered properly`() {
         saveForms(
             form(dbId = 1, formId = "1", formName = "1Form"),
-            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6),
             form(dbId = 3, formId = "3", formName = "aForm"),
-            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7),
             form(dbId = 5, formId = "5", formName = "2Form")
         )
 
@@ -293,10 +293,10 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 2
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 5, formId = "5", formName = "2Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 4, formId = "4", formName = "AForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 2, formId = "2", formName = "BForm"))
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6))
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 3, formId = "3", formName = "aForm"))
         assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 1, formId = "1", formName = "1Form"))
     }
 
@@ -304,9 +304,9 @@ class BlankFormListViewModelTest {
     fun `when list of forms sorted 'by date oldest first', saved should forms be ordered properly`() {
         saveForms(
             form(dbId = 1, formId = "1", formName = "1Form"),
-            form(dbId = 2, formId = "2", formName = "BForm"),
+            form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6),
             form(dbId = 3, formId = "3", formName = "aForm"),
-            form(dbId = 4, formId = "4", formName = "AForm"),
+            form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7),
             form(dbId = 5, formId = "5", formName = "2Form")
         )
 
@@ -315,10 +315,10 @@ class BlankFormListViewModelTest {
         viewModel.sortingOrder = 3
 
         assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", formName = "1Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2", formName = "BForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 3, formId = "3", formName = "aForm"))
+        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6))
+        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7))
     }
 
     @Test
@@ -540,7 +540,8 @@ class BlankFormListViewModelTest {
         formId: String = "1",
         version: String? = null,
         formName: String = "Form $formId",
-        deleted: Boolean = false
+        deleted: Boolean = false,
+        lastDetectedAttachmentsUpdateDate: Long? = null
     ) = Form.Builder()
         .dbId(dbId)
         .formId(formId)
@@ -549,6 +550,7 @@ class BlankFormListViewModelTest {
         .date(dbId)
         .deleted(deleted)
         .formFilePath(FormUtils.createXFormFile(formId, version).absolutePath)
+        .lastDetectedAttachmentsUpdateDate(lastDetectedAttachmentsUpdateDate)
         .build()
 
     private fun instance(
