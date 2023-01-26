@@ -100,10 +100,7 @@ class NotificationDrawer {
             pressBack()
         }
 
-        // Exit with back if "Clear all" didn't take care of it
-        if (device.findObject(By.text("Notifications")) != null) {
-            device.findObject(By.text("Clear all"))
-        }
+        device.wait(Until.gone(By.text("Notifications")), 1000L)
 
         isOpen = false
     }
