@@ -141,7 +141,7 @@ class MatchExactlyTest {
             .copyForm("one-question.xml")
             .copyForm("one-question-repeat.xml")
             .enableMatchExactly()
-            .assertTextNotDisplayed(R.string.get_forms)
+            .assertTextDoesNotExist(R.string.get_forms)
             .clickDeleteSavedForm()
             .assertTextDoesNotExist(R.string.forms)
     }

@@ -61,7 +61,7 @@ public class AudioRecordingTest {
                 .clickOnString(R.string.capture_audio)
                 .clickOnContentDescription(R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertTextDoesNotExist(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 
@@ -74,7 +74,7 @@ public class AudioRecordingTest {
                 .clickOnString(R.string.capture_audio)
                 .clickOnContentDescription(R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertTextDoesNotExist(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 

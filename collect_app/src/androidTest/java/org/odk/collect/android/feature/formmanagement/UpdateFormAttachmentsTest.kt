@@ -32,7 +32,7 @@ class UpdateFormAttachmentsTest {
 
         val mainMenuPage = rule.withProject(testDependencies.server.url)
             .clickGetBlankForm()
-            .assertTextNotDisplayed(R.string.newer_version_of_a_form_info)
+            .assertTextDoesNotExist(R.string.newer_version_of_a_form_info)
             .clickGetSelected()
             .assertMessage("All downloads succeeded!")
             .clickOKOnDialog(MainMenuPage())
@@ -78,7 +78,7 @@ class UpdateFormAttachmentsTest {
 
         val mainMenuPage = rule.withProject(testDependencies.server.url)
             .clickGetBlankForm()
-            .assertTextNotDisplayed(R.string.newer_version_of_a_form_info)
+            .assertTextDoesNotExist(R.string.newer_version_of_a_form_info)
             .clickGetSelected()
             .assertMessage("All downloads succeeded!")
             .clickOKOnDialog(MainMenuPage())

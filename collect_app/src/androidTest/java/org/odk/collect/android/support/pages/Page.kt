@@ -363,11 +363,6 @@ abstract class Page<T : Page<T>> {
         waitFor { assertText(text) }
     }
 
-    fun assertTextNotDisplayed(string: Int): T {
-        onView(withText(getTranslatedString(string))).check(matches(not(isDisplayed())))
-        return this as T
-    }
-
     protected fun assertToolbarTitle(title: String?) {
         onView(allOf(withText(title), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()))
     }

@@ -53,7 +53,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     public FillBlankFormPage checkIsFormSubtextDisplayed() {
         return WaitFor.waitFor(() -> {
-            assertTextNotDisplayed(R.string.no_items_display_forms);
+            assertTextDoesNotExist(R.string.no_items_display_forms);
             onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
             return this;
         });
@@ -114,7 +114,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage assertFormExists(String formName) {
         // Seen problems with disk syncing not being waited for even though it's an AsyncTask
         return WaitFor.waitFor(() -> {
-            assertTextNotDisplayed(R.string.no_items_display_forms);
+            assertTextDoesNotExist(R.string.no_items_display_forms);
 
             onView(withId(R.id.form_list))
                     .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()));

@@ -59,7 +59,7 @@ public class ExternalAudioRecordingTest {
                 .startBlankForm("External Audio Question")
                 .clickOnString(R.string.capture_audio)
                 .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextNotDisplayed(R.string.capture_audio)
+                .assertTextDoesNotExist(R.string.capture_audio)
                 .assertContentDescriptionDisplayed(R.string.play_audio);
     }
 }
