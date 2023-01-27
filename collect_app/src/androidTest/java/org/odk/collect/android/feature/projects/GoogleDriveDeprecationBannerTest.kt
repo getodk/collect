@@ -28,7 +28,7 @@ class GoogleDriveDeprecationBannerTest {
     fun bannerIsNotVisibleInNonGoogleDriveProjects() {
         rule
             .startAtMainMenu()
-            .assertTextNotDisplayed(R.string.google_drive_deprecation_message)
+            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
     }
 
     @Test
@@ -74,7 +74,7 @@ class GoogleDriveDeprecationBannerTest {
             .clickAddProject()
             .switchToManualMode()
             .openGooglePickerAndSelect(googleAccount)
-            .assertTextNotDisplayed(R.string.dismiss_button_text)
+            .assertTextDoesNotExist(R.string.dismiss_button_text)
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
             .assertText(R.string.dismiss_button_text)
@@ -93,9 +93,9 @@ class GoogleDriveDeprecationBannerTest {
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
             .clickOnString(R.string.dismiss_button_text)
-            .assertTextNotDisplayed(R.string.google_drive_deprecation_message)
+            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
             .rotateToLandscape(MainMenuPage())
-            .assertTextNotDisplayed(R.string.google_drive_deprecation_message)
+            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
     }
 
     @Test
@@ -111,7 +111,7 @@ class GoogleDriveDeprecationBannerTest {
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
             .clickOnString(R.string.dismiss_button_text)
-            .assertTextNotDisplayed(R.string.google_drive_deprecation_message)
+            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
             .openProjectSettingsDialog()
             .clickSettings()
             .clickProjectManagement()
