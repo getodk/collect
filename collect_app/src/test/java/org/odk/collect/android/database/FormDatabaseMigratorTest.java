@@ -52,7 +52,7 @@ public class FormDatabaseMigratorTest {
 
     @Before
     public void setup() {
-        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(11));
+        assertThat("Test expects different Forms DB version", DatabaseConstants.FORMS_DATABASE_VERSION, is(12));
         database = SQLiteDatabase.create(null);
     }
 
