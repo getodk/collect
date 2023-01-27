@@ -63,7 +63,7 @@ class FormMetadataSettingsTest {
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .startBlankForm("Metadata")
-            .assertText("Chino", "chino@whitepony.com", "664615")
+            .assertTexts("Chino", "chino@whitepony.com", "664615")
     }
 
     @Test // Issue number NODK-238 TestCase4 TestCase5

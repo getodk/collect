@@ -185,6 +185,6 @@ public class FormHierarchyTest {
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickGoUpIcon()
-                .assertText("Repeat", "Repeatable Group");
+                .assertTexts("Repeat", "Repeatable Group");
     }
 }

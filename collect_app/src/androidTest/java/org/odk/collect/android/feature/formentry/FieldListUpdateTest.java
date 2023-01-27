@@ -380,7 +380,7 @@ public class FieldListUpdateTest {
                 .clickOnGroup("Search in field-list")
                 .clickOnQuestion("Source15")
                 .openSelectMinimalDialog()
-                .assertText("Mango", "Oranges", "Strawberries")
+                .assertTexts("Mango", "Oranges", "Strawberries")
                 .clickOnText("Strawberries")
                 .assertText("Target15")
                 .assertSelectMinimalDialogAnswer("Strawberries");

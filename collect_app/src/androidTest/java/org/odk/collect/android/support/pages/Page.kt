@@ -92,6 +92,19 @@ abstract class Page<T : Page<T>> {
         return destination.assertOnPage()
     }
 
+    fun assertTexts(vararg texts: String?): T {
+        closeSoftKeyboard()
+        for (text in texts) {
+            assertText(text)
+        }
+        return this as T
+    }
+
+    fun assertText(stringID: Int, vararg formatArgs: Any): T {
+        assertText(getTranslatedString(stringID, *formatArgs))
+        return this as T
+    }
+
     fun assertText(text: String?): T {
         onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
         return this as T
@@ -108,19 +121,6 @@ abstract class Page<T : Page<T>> {
                 index
             )
         ).check(matches(isDisplayed()))
-        return this as T
-    }
-
-    fun assertText(vararg text: String?): T {
-        closeSoftKeyboard()
-        for (t in text) {
-            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
-        }
-        return this as T
-    }
-
-    fun assertText(stringID: Int, vararg formatArgs: Any): T {
-        assertText(getTranslatedString(stringID, *formatArgs))
         return this as T
     }
 
