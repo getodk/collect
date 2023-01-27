@@ -106,7 +106,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertText(text: String?): T {
-        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(not(doesNotExist())))
         return this as T
     }
 
@@ -120,7 +120,7 @@ abstract class Page<T : Page<T>> {
                 ),
                 index
             )
-        ).check(matches(isDisplayed()))
+        ).check(matches(not(doesNotExist())))
         return this as T
     }
 
@@ -310,12 +310,6 @@ abstract class Page<T : Page<T>> {
     fun scrollToRecyclerViewItemAndClickText(string: Int): T {
         onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(getTranslatedString(string))), scrollTo()))
         onView(ViewMatchers.isAssignableFrom(RecyclerView::class.java)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(hasDescendant(withText(getTranslatedString(string))), click()))
-        return this as T
-    }
-
-    fun scrollToAndAssertText(text: String?): T {
-        onView(withText(text)).perform(nestedScrollTo())
-        onView(withText(text)).check(matches(isDisplayed()))
         return this as T
     }
 

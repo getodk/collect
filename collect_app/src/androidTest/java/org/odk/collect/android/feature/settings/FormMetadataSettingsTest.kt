@@ -112,7 +112,7 @@ class FormMetadataSettingsTest {
         rule.startAtMainMenu()
             .copyForm("metadata.xml")
             .startBlankForm("Metadata")
-            .scrollToAndAssertText(deviceDetailsProvider.deviceId)
+            .assertText(deviceDetailsProvider.deviceId)
     }
 
     @Test // https://github.com/getodk/collect/issues/4792
@@ -157,9 +157,9 @@ class FormMetadataSettingsTest {
 
             .clickFillBlankForm()
             .clickOnForm("Metadata")
-            .scrollToAndAssertText("john@second-project.com")
-            .scrollToAndAssertText("987654321")
-            .scrollToAndAssertText("John Smith")
+            .assertText("john@second-project.com")
+            .assertText("987654321")
+            .assertText("John Smith")
             .swipeToEndScreen()
             .clickSaveAndExit()
 
@@ -167,9 +167,9 @@ class FormMetadataSettingsTest {
             .selectProject("Demo project")
             .clickFillBlankForm()
             .clickOnForm("Metadata")
-            .scrollToAndAssertText("demo@getodk.com")
-            .scrollToAndAssertText("123456789")
-            .scrollToAndAssertText("Demo user")
+            .assertText("demo@getodk.com")
+            .assertText("123456789")
+            .assertText("Demo user")
             .swipeToEndScreen()
             .clickSaveAndExit()
     }

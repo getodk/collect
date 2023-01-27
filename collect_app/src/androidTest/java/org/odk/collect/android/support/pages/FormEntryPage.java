@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
+import static org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo;
 
 import android.os.Build;
 
@@ -262,6 +263,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage answerQuestion(int index, String answer) {
+        onView(withIndex(withClassName(endsWith("Text")), index)).perform(nestedScrollTo());
         onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(answer));
         return this;
     }
