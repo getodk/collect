@@ -140,8 +140,10 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextDoesNotExist(text: String?): T {
-        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
+    fun assertTextsDoNotExist(vararg texts: String?): T {
+        for (text in texts) {
+            assertTextDoesNotExist(text)
+        }
         return this as T
     }
 
@@ -149,10 +151,8 @@ abstract class Page<T : Page<T>> {
         return assertTextDoesNotExist(getTranslatedString(string))
     }
 
-    fun assertTextDoesNotExist(vararg text: String?): T {
-        for (t in text) {
-            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
-        }
+    fun assertTextDoesNotExist(text: String?): T {
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
         return this as T
     }
 
