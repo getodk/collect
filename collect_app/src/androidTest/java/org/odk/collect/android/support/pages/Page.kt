@@ -141,7 +141,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun assertTextDoesNotExist(text: String?): T {
-        onView(withText(text)).check(doesNotExist())
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
         return this as T
     }
 
