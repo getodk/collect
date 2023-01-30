@@ -19,6 +19,7 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertTrue;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_DELETE;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.AUTO_SEND;
@@ -63,11 +64,15 @@ public class FormDatabaseMigratorTest {
 
     @Test
     public void onUpgrade_fromVersion11() {
+        int oldVersion = 11;
+        assertTrue(oldVersion < DatabaseConstants.FORMS_DATABASE_VERSION);
+        database.setVersion(oldVersion);
+
         createVersion11Database(database);
         ContentValues contentValues = createVersion11Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
-        new FormDatabaseMigrator().onUpgrade(database, 11);
+        new FormDatabaseMigrator().onUpgrade(database, oldVersion);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
             assertThat(cursor.getColumnCount(), is(18));
@@ -96,11 +101,15 @@ public class FormDatabaseMigratorTest {
 
     @Test
     public void onUpgrade_fromVersion10() {
+        int oldVersion = 10;
+        assertTrue(oldVersion < DatabaseConstants.FORMS_DATABASE_VERSION);
+        database.setVersion(oldVersion);
+
         createVersion10Database(database);
         ContentValues contentValues = createVersion10Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
-        new FormDatabaseMigrator().onUpgrade(database, 10);
+        new FormDatabaseMigrator().onUpgrade(database, oldVersion);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
             assertThat(cursor.getColumnCount(), is(18));
@@ -129,11 +138,15 @@ public class FormDatabaseMigratorTest {
 
     @Test
     public void onUpgrade_fromVersion9() {
+        int oldVersion = 9;
+        assertTrue(oldVersion < DatabaseConstants.FORMS_DATABASE_VERSION);
+        database.setVersion(oldVersion);
+
         createVersion9Database(database);
         ContentValues contentValues = createVersion9Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
-        new FormDatabaseMigrator().onUpgrade(database, 9);
+        new FormDatabaseMigrator().onUpgrade(database, oldVersion);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
             assertThat(cursor.getColumnCount(), is(18));
@@ -163,11 +176,15 @@ public class FormDatabaseMigratorTest {
 
     @Test
     public void onUpgrade_fromVersion8() {
+        int oldVersion = 8;
+        assertTrue(oldVersion < DatabaseConstants.FORMS_DATABASE_VERSION);
+        database.setVersion(oldVersion);
+
         createVersion8Database(database);
         ContentValues contentValues = createVersion8Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
-        new FormDatabaseMigrator().onUpgrade(database, 8);
+        new FormDatabaseMigrator().onUpgrade(database, oldVersion);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
             assertThat(cursor.getColumnCount(), is(18));
@@ -196,11 +213,15 @@ public class FormDatabaseMigratorTest {
 
     @Test
     public void onUpgrade_fromVersion7() {
+        int oldVersion = 7;
+        assertTrue(oldVersion < DatabaseConstants.FORMS_DATABASE_VERSION);
+        database.setVersion(oldVersion);
+
         createVersion7Database(database);
         ContentValues contentValues = createVersion7Form();
         database.insert(FORMS_TABLE_NAME, null, contentValues);
 
-        new FormDatabaseMigrator().onUpgrade(database, 7);
+        new FormDatabaseMigrator().onUpgrade(database, oldVersion);
 
         try (Cursor cursor = database.rawQuery("SELECT * FROM " + FORMS_TABLE_NAME + ";", new String[]{})) {
             assertThat(cursor.getColumnCount(), is(18));
