@@ -8,12 +8,6 @@ object AnalyticsEvents {
     const val SET_SERVER = "SetServer"
 
     /**
-     * Track changes to the Google Sheets fallback submission URL setting. The action should be
-     * a hash of the URL.
-     */
-    const val SET_FALLBACK_SHEETS_URL = "SetFallbackSheetsUrl"
-
-    /**
      * Track video requests with high resolution setting turned off. The action should be a hash of
      * the form definition.
      */

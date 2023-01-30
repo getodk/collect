@@ -17,7 +17,6 @@
 package org.odk.collect.android.preferences.screens;
 
 import static android.app.Activity.RESULT_OK;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SET_FALLBACK_SHEETS_URL;
 import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
@@ -37,7 +36,6 @@ import androidx.preference.Preference;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
@@ -52,9 +50,6 @@ import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.strings.Md5;
-
-import java.io.ByteArrayInputStream;
 
 import javax.inject.Inject;
 
@@ -233,10 +228,6 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
 
                     if (Validator.isUrlValid(url)) {
                         preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
-
-                        String urlHash = Md5.getMd5Hash(new ByteArrayInputStream(url.getBytes()));
-
-                        Analytics.log(SET_FALLBACK_SHEETS_URL, "url", urlHash);
                     } else if (url.length() == 0) {
                         preference.setSummary(getString(R.string.google_sheets_url_hint));
                     } else {
