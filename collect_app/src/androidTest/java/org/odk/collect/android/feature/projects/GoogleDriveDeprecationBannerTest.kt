@@ -113,13 +113,9 @@ class GoogleDriveDeprecationBannerTest {
             .clickOnString(R.string.dismiss_button_text)
             .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
             .openProjectSettingsDialog()
-            .clickSettings()
-            .clickProjectManagement()
-            .deleteProject()
-            .openProjectSettingsDialog()
             .clickAddProject()
             .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount)
+            .openGooglePickerAndSelect(googleAccount, true)
             .assertText(R.string.google_drive_deprecation_message)
     }
 }
