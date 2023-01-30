@@ -180,4 +180,11 @@ object AnalyticsEvents {
      * Tracks how often automatically specified instance name is used
      */
     const val AUTOMATICALLY_SPECIFIED_INSTANCE_NAME = "AutomaticallySpecifiedInstanceName"
+
+    /**
+     * Tracks how often the Text Number widget appears in forms and how often it's used with the
+     * `thousand-sep` appearance.
+     */
+    const val TEXT_NUMBER_WIDGET = "TextNumberWidget"
+    const val TEXT_NUMBER_WIDGET_WITH_THOUSANDS_SEPARATOR = "TextNumberWidgetWithThousandsSeparator"
 }

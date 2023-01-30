@@ -26,13 +26,14 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.items.LabelWidget;
@@ -61,6 +62,7 @@ import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -179,6 +181,10 @@ public class WidgetFactory {
                         } else if (appearance.startsWith(Appearances.EX)) {
                             questionWidget = new ExStringWidget(activity, questionDetails, waitingForDataRegistry, stringRequester);
                         } else if (appearance.contains(Appearances.NUMBERS)) {
+                            Analytics.log(AnalyticsEvents.TEXT_NUMBER_WIDGET, "form");
+                            if (Appearances.useThousandSeparator(prompt)) {
+                                Analytics.log(AnalyticsEvents.TEXT_NUMBER_WIDGET_WITH_THOUSANDS_SEPARATOR, "form");
+                            }
                             questionWidget = new StringNumberWidget(activity, questionDetails);
                         } else if (appearance.equals(Appearances.URL)) {
                             questionWidget = new UrlWidget(activity, questionDetails, new ExternalWebPageHelper());
