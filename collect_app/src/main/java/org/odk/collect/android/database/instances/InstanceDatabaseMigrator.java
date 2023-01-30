@@ -54,6 +54,9 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
             case 5:
                 upgradeToVersion6(db, INSTANCES_TABLE_NAME);
                 break;
+            case 6:
+                // Remember to bump the database version number in {@link org.odk.collect.android.database.DatabaseConstants}
+                // upgradeToVersion7(db);
             default:
                 Timber.i("Unknown version %d", oldVersion);
         }
