@@ -35,11 +35,6 @@ object AnalyticsUtils {
         Analytics.log(AnalyticsEvents.SET_SERVER, scheme + " " + getHostFromUrl(url), urlHash!!)
     }
 
-    @JvmStatic
-    fun logInvalidFormHash(url: String?) {
-        Analytics.log(AnalyticsEvents.INVALID_FORM_HASH, "host", getHostFromUrl(url))
-    }
-
     private fun getHostFromUrl(url: String?): String {
         if (url == null || url.isEmpty()) {
             return ""
