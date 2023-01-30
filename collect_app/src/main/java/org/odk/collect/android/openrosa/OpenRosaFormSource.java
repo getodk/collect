@@ -1,7 +1,9 @@
 package org.odk.collect.android.openrosa;
 
+import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
+import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
+
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.utilities.DocumentFetchResult;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormListItem;
@@ -17,9 +19,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.net.ssl.SSLException;
-
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.net.HttpURLConnection.HTTP_UNAUTHORIZED;
 
 public class OpenRosaFormSource implements FormSource {
 
@@ -54,22 +53,12 @@ public class OpenRosaFormSource implements FormSource {
             List<FormListItem> formList = openRosaResponseParser.parseFormList(result.doc);
 
             if (formList != null) {
-                checkForInvalidFormHashes(formList);
                 return formList;
             } else {
                 throw new FormSourceException.ParseError(serverURL);
             }
         } else {
             throw new FormSourceException.ServerNotOpenRosaError();
-        }
-    }
-
-    private void checkForInvalidFormHashes(List<FormListItem> formList) {
-        for (FormListItem item : formList) {
-            if (item.getHash() == null) {
-                AnalyticsUtils.logInvalidFormHash(serverURL);
-                break;
-            }
         }
     }
 

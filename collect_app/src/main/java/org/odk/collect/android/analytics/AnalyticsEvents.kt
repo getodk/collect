@@ -146,11 +146,6 @@ object AnalyticsEvents {
     const val ACCURACY_THRESHOLD_DEFAULT = "AccuracyThresholdDefault"
 
     /**
-     * Tracks how often form details with invalid hashes are provided by a server
-     */
-    const val INVALID_FORM_HASH = "InvalidFormHash"
-
-    /**
      * Tracks how often "cellular_only" option is used in auto send
      */
     const val CELLULAR_ONLY = "CellularOnly"
@@ -169,11 +164,6 @@ object AnalyticsEvents {
      * Tracks how often manually specified instance name is used
      */
     const val MANUALLY_SPECIFIED_INSTANCE_NAME = "ManuallySpecifiedInstanceName"
-
-    /**
-     * Tracks how often automatically specified instance name is used
-     */
-    const val AUTOMATICALLY_SPECIFIED_INSTANCE_NAME = "AutomaticallySpecifiedInstanceName"
 
     /**
      * Tracks how often the Text Number widget appears in forms and how often it's used with the
