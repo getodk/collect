@@ -67,6 +67,10 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
                 upgradeToVersion11(db);
             case 11:
                 upgradeToVersion12(db);
+                break;
+            case 12:
+                // Remember to bump the database version number in {@link org.odk.collect.android.database.DatabaseConstants}
+                // upgradeToVersion13(db);
         }
     }
 
