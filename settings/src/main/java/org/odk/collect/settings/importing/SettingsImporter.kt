@@ -19,7 +19,7 @@ internal class SettingsImporter(
     private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
-    fun fromJSON(json: String, project: Project.Saved): Boolean {
+    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: Map<String, String>): Boolean {
         if (!settingsValidator.isValid(json)) {
             return false
         }
@@ -33,10 +33,10 @@ internal class SettingsImporter(
         val jsonObject = JSONObject(json)
 
         // Import unprotected settings
-        importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings, deviceUnsupportedSettings)
 
         // Import protected settings
-        importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings, deviceUnsupportedSettings)
 
         // Import project details
         val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
@@ -67,14 +67,21 @@ internal class SettingsImporter(
         return true
     }
 
-    private fun importToPrefs(mainJsonObject: JSONObject, childJsonObjectName: String, preferences: Settings) {
+    private fun importToPrefs(
+        mainJsonObject: JSONObject,
+        childJsonObjectName: String,
+        preferences: Settings,
+        deviceUnsupportedSettings: Map<String, String>
+    ) {
         val childJsonObject = mainJsonObject.getJSONObject(childJsonObjectName)
 
         childJsonObject.keys().forEach {
             if (settingsValidator.isKeySupported(childJsonObjectName, it)) {
                 val value = childJsonObject[it]
                 if (settingsValidator.isValueSupported(childJsonObjectName, it, value)) {
-                    preferences.save(it, value)
+                    if (!deviceUnsupportedSettings.containsKey(it) || deviceUnsupportedSettings.getValue(it) != value) {
+                        preferences.save(it, value)
+                    }
                 }
             }
         }

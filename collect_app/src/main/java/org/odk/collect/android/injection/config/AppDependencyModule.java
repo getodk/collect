@@ -35,6 +35,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
 import org.odk.collect.android.activities.viewmodels.MainMenuViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
+import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
 import org.odk.collect.android.application.initialization.ApplicationInitializer;
 import org.odk.collect.android.application.initialization.ExistingProjectMigrator;
@@ -147,10 +148,13 @@ import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl;
 import org.odk.collect.settings.importing.SettingsChangeHandler;
 import org.odk.collect.settings.keys.MetaKeys;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -320,13 +324,19 @@ public class AppDependencyModule {
 
     @Provides
     public ODKAppSettingsImporter providesODKAppSettingsImporter(Context context, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsChangeHandler settingsChangeHandler) {
+        Map<String, String> deviceUnsupportedSettings = new HashMap<>();
+        if (!MapboxClassInstanceCreator.isMapboxAvailable()) {
+            deviceUnsupportedSettings.put(ProjectKeys.KEY_BASEMAP_SOURCE, ProjectKeys.BASEMAP_SOURCE_MAPBOX);
+        }
+
         return new ODKAppSettingsImporter(
                 projectsRepository,
                 settingsProvider,
                 Defaults.getUnprotected(),
                 Defaults.getProtected(),
                 asList(context.getResources().getStringArray(R.array.project_colors)),
-                settingsChangeHandler
+                settingsChangeHandler,
+                deviceUnsupportedSettings
         );
     }
 

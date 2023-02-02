@@ -13,7 +13,8 @@ class ODKAppSettingsImporter(
     generalDefaults: Map<String, Any>,
     adminDefaults: Map<String, Any>,
     projectColors: List<String>,
-    settingsChangedHandler: SettingsChangeHandler
+    settingsChangedHandler: SettingsChangeHandler,
+    private val deviceUnsupportedSettings: Map<String, String>
 ) {
 
     private val settingsImporter = SettingsImporter(
@@ -29,7 +30,7 @@ class ODKAppSettingsImporter(
 
     fun fromJSON(json: String, project: Project.Saved): Boolean {
         return try {
-            settingsImporter.fromJSON(json, project)
+            settingsImporter.fromJSON(json, project, deviceUnsupportedSettings)
         } catch (e: Throwable) {
             false
         }
