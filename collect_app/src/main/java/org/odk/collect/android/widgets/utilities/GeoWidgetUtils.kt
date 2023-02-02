@@ -46,12 +46,12 @@ object GeoWidgetUtils {
         if (answer != null && answer.isNotEmpty()) {
             val sa = answer.trim { it <= ' ' }.split(" ".toRegex()).toTypedArray()
             return try {
-                DoubleArray(4).also {
-                    it[0] = sa[0].toDouble()
-                    it[1] = if (sa.size > 1) sa[1].toDouble() else 0.0
-                    it[2] = if (sa.size > 2) sa[2].toDouble() else 0.0
-                    it[3] = if (sa.size > 3) sa[3].toDouble() else 0.0
-                }
+                doubleArrayOf(
+                    sa[0].toDouble(),
+                    if (sa.size > 1) sa[1].toDouble() else 0.0,
+                    if (sa.size > 2) sa[2].toDouble() else 0.0,
+                    if (sa.size > 3) sa[3].toDouble() else 0.0
+                )
             } catch (e: Throwable) {
                 null
             }
