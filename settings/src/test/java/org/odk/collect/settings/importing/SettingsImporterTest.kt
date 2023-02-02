@@ -67,7 +67,7 @@ class SettingsImporterTest {
     @Test
     fun whenJSONSettingsAreInvalid_returnsFalse() {
         whenever(settingsValidator.isValid(emptySettings())).thenReturn(false)
-        assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(false))
+        assertThat(importer.fromJSON(emptySettings(), currentProject, emptyMap()), `is`(false))
     }
 
     @Test
@@ -85,15 +85,48 @@ class SettingsImporterTest {
                 JSONObject().put("key3", 5)
             )
 
-        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
+        assertThat(importer.fromJSON(json.toString(), currentProject, emptyMap()), `is`(true))
 
         assertThat(generalSettings.contains("key3"), `is`(false))
         assertThat(adminSettings.contains("key3"), `is`(false))
     }
 
     @Test
+    fun `device unsupported settings should be ignored`() {
+        val json = emptySettingsObject()
+            .put(
+                AppConfigurationKeys.GENERAL,
+                JSONObject()
+                    .put("key3", "foo")
+                    .put("key4", "foo1")
+            )
+            .put(
+                AppConfigurationKeys.ADMIN,
+                JSONObject()
+                    .put("key5", "bar")
+                    .put("key6", "bar1")
+            )
+
+        assertThat(
+            importer.fromJSON(
+                json.toString(), currentProject,
+                mapOf(
+                    "key4" to "foo1",
+                    "key5" to "bar"
+                )
+            ),
+            `is`(true)
+        )
+
+        assertThat(generalSettings.contains("key3"), `is`(true))
+        assertThat(generalSettings.contains("key4"), `is`(false))
+        assertThat(adminSettings.contains("key5"), `is`(false))
+        assertThat(adminSettings.contains("key6"), `is`(true))
+    }
+
+    @Test
     fun `for supported settings that do not exist in json save defaults`() {
-        assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
+        assertThat(importer.fromJSON(emptySettings(), currentProject, emptyMap()), `is`(true))
         assertSettings(
             generalSettings,
             "key1", "default",
@@ -120,7 +153,7 @@ class SettingsImporterTest {
                 JSONObject().put("key1", 6)
             )
 
-        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
+        assertThat(importer.fromJSON(json.toString(), currentProject, emptyMap()), `is`(true))
         assertSettings(
             generalSettings,
             "key1", "default",
@@ -143,7 +176,7 @@ class SettingsImporterTest {
             adminSettings,
             "key1", 0
         )
-        assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
+        assertThat(importer.fromJSON(emptySettings(), currentProject, emptyMap()), `is`(true))
         assertSettings(
             generalSettings,
             "key1", "default",
@@ -173,7 +206,7 @@ class SettingsImporterTest {
             projectsRepository,
             projectDetailsCreator
         )
-        assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
+        assertThat(importer.fromJSON(emptySettings(), currentProject, emptyMap()), `is`(true))
     }
 
     @Test // Migrations might use old keys that are "unknown" to the app
@@ -199,7 +232,7 @@ class SettingsImporterTest {
             projectsRepository,
             projectDetailsCreator
         )
-        assertThat(importer.fromJSON(json.toString(), currentProject), `is`(true))
+        assertThat(importer.fromJSON(json.toString(), currentProject, emptyMap()), `is`(true))
     }
 
     @Test
@@ -214,7 +247,7 @@ class SettingsImporterTest {
             projectsRepository,
             projectDetailsCreator
         )
-        assertThat(importer.fromJSON(emptySettings(), currentProject), `is`(true))
+        assertThat(importer.fromJSON(emptySettings(), currentProject, emptyMap()), `is`(true))
         verify(settingsChangeHandler).onSettingsChanged("1")
         verifyNoMoreInteractions(settingsChangeHandler)
     }
@@ -241,7 +274,7 @@ class SettingsImporterTest {
             )
         ).thenReturn(newProject)
 
-        importer.fromJSON(settings.toString(), currentProject)
+        importer.fromJSON(settings.toString(), currentProject, emptyMap())
         verify(projectsRepository)
             .save(
                 Project.Saved(
@@ -270,7 +303,7 @@ class SettingsImporterTest {
             )
         ).thenReturn(Project.New("A", "B", "C"))
 
-        importer.fromJSON(settings.toString(), currentProject)
+        importer.fromJSON(settings.toString(), currentProject, emptyMap())
         verify(projectDetailsCreator).createProjectFromDetails("", "", "", "foo")
     }
 
@@ -292,7 +325,7 @@ class SettingsImporterTest {
             )
         ).thenReturn(Project.New("A", "B", "C"))
 
-        importer.fromJSON(settings.toString(), currentProject)
+        importer.fromJSON(settings.toString(), currentProject, emptyMap())
         verify(projectDetailsCreator).createProjectFromDetails("", "", "", "foo@bar.baz")
     }
 
