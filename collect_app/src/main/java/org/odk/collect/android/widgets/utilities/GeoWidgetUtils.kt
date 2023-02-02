@@ -52,9 +52,7 @@ object GeoWidgetUtils {
                     it[2] = if (sa.size > 2) sa[2].toDouble() else 0.0
                     it[3] = if (sa.size > 3) sa[3].toDouble() else 0.0
                 }
-            } catch (e: Exception) {
-                null
-            } catch (e: Error) {
+            } catch (e: Throwable) {
                 null
             }
         } else {
@@ -108,9 +106,7 @@ object GeoWidgetUtils {
         val df = DecimalFormat("#.##")
         try {
             return df.format(java.lang.Double.valueOf(s))
-        } catch (e: Exception) {
-            Timber.w(e)
-        } catch (e: Error) {
+        } catch (e: Throwable) {
             Timber.w(e)
         }
         return ""
