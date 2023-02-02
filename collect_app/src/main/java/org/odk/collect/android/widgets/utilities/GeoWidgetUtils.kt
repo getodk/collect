@@ -16,7 +16,7 @@ object GeoWidgetUtils {
     fun getGeoPointAnswerToDisplay(context: Context, answer: String?): String {
         try {
             if (answer != null && answer.isNotEmpty()) {
-                val parts = answer.split(" ".toRegex()).toTypedArray()
+                val parts = answer.split(" ").toTypedArray()
                 return context.getString(
                     R.string.gps_result,
                     convertCoordinatesIntoDegreeFormat(context, parts[0].toDouble(), "lat"),
@@ -44,7 +44,7 @@ object GeoWidgetUtils {
     @JvmStatic
     fun parseGeometryPoint(answer: String?): DoubleArray? {
         if (answer != null && answer.isNotEmpty()) {
-            val sa = answer.trim { it <= ' ' }.split(" ".toRegex()).toTypedArray()
+            val sa = answer.trim { it <= ' ' }.split(" ").toTypedArray()
             return try {
                 doubleArrayOf(
                     sa[0].toDouble(),
@@ -63,7 +63,7 @@ object GeoWidgetUtils {
     fun parseGeometry(geometry: String?): ArrayList<MapPoint> {
         val points = ArrayList<MapPoint>()
 
-        for (vertex in (geometry ?: "").split(";".toRegex()).toTypedArray()) {
+        for (vertex in (geometry ?: "").split(";").toTypedArray()) {
             val point = parseGeometryPoint(vertex)
             if (point != null) {
                 points.add(MapPoint(point[0], point[1], point[2], point[3]))
@@ -86,7 +86,7 @@ object GeoWidgetUtils {
         type: String,
     ): String {
         val coordinateDegrees = Location.convert(abs(coordinate), Location.FORMAT_SECONDS)
-        val coordinateSplit = coordinateDegrees.split(":".toRegex()).toTypedArray()
+        val coordinateSplit = coordinateDegrees.split(":").toTypedArray()
         val degrees = floor(coordinateSplit[0]) + "°"
         val mins = floor(coordinateSplit[1]) + "'"
         val secs = floor(coordinateSplit[2]) + '"'
