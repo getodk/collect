@@ -102,10 +102,10 @@ object GeoWidgetUtils {
     }
 
     @JvmStatic
-    fun truncateDouble(s: String?): String {
+    fun truncateDouble(string: String?): String {
         val df = DecimalFormat("#.##")
         try {
-            return df.format(java.lang.Double.valueOf(s))
+            return df.format(string?.toDouble())
         } catch (e: Throwable) {
             Timber.w(e)
         }
