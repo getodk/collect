@@ -154,7 +154,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
         AnnotateWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView, notNullValue());
+        assertThat(imageView.getVisibility(), is(View.VISIBLE));
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 
@@ -180,7 +180,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
         AnnotateWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView, notNullValue());
+        assertThat(imageView.getVisibility(), is(View.VISIBLE));
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 

@@ -14,5 +14,6 @@ class SynchronousImageLoader : ImageLoader {
         requestListener: GlideImageLoader.ImageLoaderCallback?
     ) {
         imageView.setImageBitmap(BitmapFactory.decodeFile(imageFile?.absolutePath))
+        requestListener?.onLoadSucceeded()
     }
 }

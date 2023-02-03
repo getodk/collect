@@ -120,7 +120,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
         SignatureWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView, notNullValue());
+        assertThat(imageView.getVisibility(), is(View.VISIBLE));
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 
@@ -146,7 +146,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
         SignatureWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView, notNullValue());
+        assertThat(imageView.getVisibility(), is(View.VISIBLE));
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 
