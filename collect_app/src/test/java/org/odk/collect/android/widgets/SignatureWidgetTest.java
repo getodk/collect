@@ -29,6 +29,7 @@ import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
+import java.io.IOException;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -104,6 +105,30 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         assertThat(widget.getImageView().getDrawable(), nullValue());
 
         assertThat(widget.getErrorTextView().getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenTheAnswerImageCanNotBeLoaded_hideImageViewAndShowErrorMessage() throws IOException {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader(true);
+            }
+        });
+
+        String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
+        currentFile = new File(imagePath);
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
+                .build();
+
+        SignatureWidget widget = createWidget();
+
+        assertThat(widget.getImageView().getVisibility(), is(View.GONE));
+        assertThat(widget.getImageView().getDrawable(), nullValue());
+
+        assertThat(widget.getErrorTextView().getVisibility(), is(View.VISIBLE));
     }
 
     @Test

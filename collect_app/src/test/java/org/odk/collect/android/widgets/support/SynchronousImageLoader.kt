@@ -6,14 +6,18 @@ import org.odk.collect.imageloader.GlideImageLoader
 import org.odk.collect.imageloader.ImageLoader
 import java.io.File
 
-class SynchronousImageLoader : ImageLoader {
+class SynchronousImageLoader(private val fail: Boolean = false) : ImageLoader {
     override fun loadImage(
         imageView: ImageView,
         imageFile: File?,
         scaleType: ImageView.ScaleType,
         requestListener: GlideImageLoader.ImageLoaderCallback?
     ) {
-        imageView.setImageBitmap(BitmapFactory.decodeFile(imageFile?.absolutePath))
-        requestListener?.onLoadSucceeded()
+        if (fail) {
+            requestListener?.onLoadFailed()
+        } else {
+            imageView.setImageBitmap(BitmapFactory.decodeFile(imageFile?.absolutePath))
+            requestListener?.onLoadSucceeded()
+        }
     }
 }
