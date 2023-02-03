@@ -302,4 +302,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     public ImageView getImageView() {
         return imageView;
     }
+
+    public TextView getErrorTextView() {
+        return errorTextView;
+    }
 }
