@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 import android.widget.Button;
 
 import org.odk.collect.android.R;
@@ -47,7 +46,7 @@ public class SignatureWidget extends BaseImageWidget implements ButtonClickListe
 
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE, R.string.signature_capture);
         setUpLayout();
-        addCurrentImageToLayout();
+        updateAnswer();
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
@@ -58,8 +57,7 @@ public class SignatureWidget extends BaseImageWidget implements ButtonClickListe
 
         answerLayout.addView(signButton);
         answerLayout.addView(errorTextView);
-
-        errorTextView.setVisibility(View.GONE);
+        answerLayout.addView(imageView);
     }
 
     @Override

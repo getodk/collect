@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 import android.widget.Button;
 
 import org.odk.collect.android.R;
@@ -47,7 +46,7 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
 
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
         setUpLayout();
-        addCurrentImageToLayout();
+        updateAnswer();
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
@@ -58,8 +57,7 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
 
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);
-
-        errorTextView.setVisibility(View.GONE);
+        answerLayout.addView(imageView);
     }
 
     @Override
