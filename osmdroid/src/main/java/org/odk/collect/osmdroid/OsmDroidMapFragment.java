@@ -329,9 +329,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+    public int addPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(map, points, closedPolygon));
+        features.put(featureId, new PolyFeature(map, points, closedPolygon, draggable));
         return featureId;
     }
 
@@ -786,11 +786,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         final List<Marker> markers = new ArrayList<>();
         final Polyline polyline;
         final boolean closedPolygon;
+        private boolean draggable;
         static final int STROKE_WIDTH = 5;
 
-        PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon) {
+        PolyFeature(MapView map, Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
             this.map = map;
             this.closedPolygon = closedPolygon;
+            this.draggable = draggable;
             polyline = new Polyline();
             polyline.setColor(map.getContext().getResources().getColor(R.color.mapLineColor));
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
@@ -805,7 +807,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             paint.setStrokeWidth(STROKE_WIDTH);
             map.getOverlays().add(polyline);
             for (MapPoint point : points) {
-                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+                markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             }
             update();
         }
@@ -847,7 +849,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+            markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             update();
         }
 

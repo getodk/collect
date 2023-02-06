@@ -299,9 +299,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
     }
 
-    @Override public int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon) {
+    @Override public int addPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(map, points, closedPolygon));
+        features.put(featureId, new PolyFeature(map, points, closedPolygon, draggable));
         return featureId;
     }
 
@@ -759,16 +759,18 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private final GoogleMap map;
         private final List<Marker> markers = new ArrayList<>();
         private final boolean closedPolygon;
+        private boolean draggable;
         private Polyline polyline;
 
-        PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon) {
+        PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
             this.map = map;
             this.closedPolygon = closedPolygon;
+            this.draggable = draggable;
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
             for (MapPoint point : points) {
-                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+                markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             }
             update();
         }
@@ -824,7 +826,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+            markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
             update();
         }
 

@@ -100,7 +100,11 @@ class FakeMapFragment : Fragment(), MapFragment {
         return markers[featureId]
     }
 
-    override fun addDraggablePoly(points: Iterable<MapPoint>, closedPolygon: Boolean): Int {
+    override fun addPoly(
+        points: Iterable<MapPoint>,
+        closedPolygon: Boolean,
+        draggable: Boolean
+    ): Int {
         polys.add(points.toList())
         polyClosed.add(closedPolygon)
         return polys.size - 1

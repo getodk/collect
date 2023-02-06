@@ -22,6 +22,7 @@ internal class PolyFeature(
     private val featureClickListener: MapFragment.FeatureListener?,
     private val featureDragEndListener: MapFragment.FeatureListener?,
     private val closedPolygon: Boolean,
+    private val draggable: Boolean,
     initMapPoints: Iterable<MapPoint>
 ) : MapFeature {
     val mapPoints = mutableListOf<MapPoint>()
@@ -37,7 +38,7 @@ internal class PolyFeature(
                 MapUtils.createPointAnnotation(
                     pointAnnotationManager,
                     it,
-                    true,
+                    draggable,
                     MapFragment.CENTER,
                     R.drawable.ic_map_point,
                     context
@@ -72,7 +73,7 @@ internal class PolyFeature(
             MapUtils.createPointAnnotation(
                 pointAnnotationManager,
                 point,
-                true,
+                draggable,
                 MapFragment.CENTER,
                 R.drawable.ic_map_point,
                 context

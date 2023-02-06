@@ -118,7 +118,7 @@ public interface MapFragment {
      * The vertices will have handles that can be dragged by the user.
      * Returns a positive integer, the featureId for the newly added shape.
      */
-    int addDraggablePoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon);
+    int addPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, boolean draggable);
 
     /** Appends a vertex to the polyline or polygon specified by featureId. */
     void appendPointToPoly(int featureId, @NonNull MapPoint point);

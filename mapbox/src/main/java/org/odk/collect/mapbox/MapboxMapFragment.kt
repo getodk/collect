@@ -327,7 +327,7 @@ class MapboxMapFragment :
         }
     }
 
-    override fun addDraggablePoly(points: MutableIterable<MapPoint>, closedPolygon: Boolean): Int {
+    override fun addPoly(points: MutableIterable<MapPoint>, closedPolygon: Boolean, draggable: Boolean): Int {
         val featureId = nextFeatureId++
         features[featureId] = PolyFeature(
             requireContext(),
@@ -337,6 +337,7 @@ class MapboxMapFragment :
             featureClickListener,
             featureDragEndListener,
             closedPolygon,
+            draggable,
             points
         )
         return featureId
