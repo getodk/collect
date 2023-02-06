@@ -15,62 +15,15 @@ package org.odk.collect.maps
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.util.Locale
 
-class MapPoint : Parcelable {
+data class MapPoint @JvmOverloads constructor(
+    @JvmField val latitude: Double,
+    @JvmField val longitude: Double,
+    @JvmField val altitude: Double = 0.0,
+    @JvmField val sd: Double = 0.0
+) : Parcelable {
 
-    @JvmField
-    val latitude: Double
-
-    @JvmField
-    val longitude: Double
-
-    @JvmField
-    val altitude: Double
-
-    /**
-     * This field contains the value that is called "accuracy" in Android APIs,
-     * but the name "accuracy" is confusing because a higher "accuracy" value
-     * actually represents lower accuracy.  What does an "accuracy" of 6 even mean?
-     * In the Android documentation, this value is specified to be the radius,
-     * in meters, of a 68% confidence circle (i.e. one standard deviation from
-     * the mean); thus we use the more precise name "sd" for "standard deviation".
-     */
-    @JvmField
-    val sd: Double // standard deviation in meters (68% confidence radius)
-
-    @JvmOverloads
-    constructor(latitude: Double, longitude: Double, altitude: Double = 0.0, sd: Double = 0.0) {
-        this.latitude = latitude
-        this.longitude = longitude
-        this.altitude = altitude
-        this.sd = sd
-    }
-
-    private constructor(parcel: Parcel) {
-        latitude = parcel.readDouble()
-        longitude = parcel.readDouble()
-        altitude = parcel.readDouble()
-        sd = parcel.readDouble()
-    }
-
-    override fun toString(): String {
-        return String.format(
-            Locale.US, "MapPoint(%+.6f, %+.6f, %.0f, %.0f)", latitude, longitude, altitude, sd
-        )
-    }
-
-    override fun hashCode(): Int {
-        var result = java.lang.Double.valueOf(latitude).hashCode()
-        result = result * 31 + java.lang.Double.valueOf(longitude).hashCode()
-        result = result * 31 + java.lang.Double.valueOf(altitude).hashCode()
-        result = result * 31 + java.lang.Double.valueOf(sd).hashCode()
-        return result
-    }
-
-    override fun equals(other: Any?): Boolean {
-        return other === this || other is MapPoint && other.latitude == latitude && (other as MapPoint).longitude == longitude && (other as MapPoint).altitude == altitude && (other as MapPoint).sd == sd
-    }
+    private constructor(parcel: Parcel) : this(parcel.readDouble(), parcel.readDouble(), parcel.readDouble(), parcel.readDouble())
 
     override fun describeContents(): Int {
         return 0
