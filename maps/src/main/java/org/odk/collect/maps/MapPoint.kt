@@ -13,40 +13,13 @@
  */
 package org.odk.collect.maps
 
-import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class MapPoint @JvmOverloads constructor(
     @JvmField val latitude: Double,
     @JvmField val longitude: Double,
     @JvmField val altitude: Double = 0.0,
     @JvmField val sd: Double = 0.0
-) : Parcelable {
-
-    private constructor(parcel: Parcel) : this(parcel.readDouble(), parcel.readDouble(), parcel.readDouble(), parcel.readDouble())
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeDouble(latitude)
-        parcel.writeDouble(longitude)
-        parcel.writeDouble(altitude)
-        parcel.writeDouble(sd)
-    }
-
-    companion object {
-        // Implementation of the Parcelable interface.
-        @JvmField
-        val CREATOR: Parcelable.Creator<MapPoint> = object : Parcelable.Creator<MapPoint> {
-            override fun createFromParcel(parcel: Parcel): MapPoint? {
-                return MapPoint(parcel)
-            }
-
-            override fun newArray(size: Int): Array<MapPoint?> {
-                return arrayOfNulls(size)
-            }
-        }
-    }
-}
+) : Parcelable
