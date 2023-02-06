@@ -373,7 +373,7 @@ class SelectionMapFragment(
 
         val pointIds = map.addMarkers(markerDescriptions)
         val traceIds = traces.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPoly(item.points, false, true)
+            ids + map.addPoly(item.points, false, false)
         }
 
         items.zip(pointIds + traceIds).forEach { (item, featureId) ->

@@ -184,6 +184,7 @@ class SelectionMapFragmentTest {
         map.ready()
 
         assertThat(map.getPolys(), equalTo(itemsLiveData.value?.map { it.points }))
+        assertThat(map.isPolyDraggable(0), equalTo(false))
         onView(withText(application.getString(R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }
