@@ -273,7 +273,7 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 ## Compiling a previous release using backed-up dependencies
 
 1. Download the `.tar` for relevant release tag
-2. Extract into the project directory:
+2. Extract `.local-m2` into the project directory:
     ```bash
     tar -xf maven.tar -C <collect project directory>
     ```
