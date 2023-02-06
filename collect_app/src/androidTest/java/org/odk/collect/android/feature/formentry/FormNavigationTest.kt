@@ -39,7 +39,7 @@ class FormNavigationTest {
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
             .assertQuestion("What is your name?")
-            .assertTextNotDisplayed(R.string.form_backward)
+            .assertTextDoesNotExist(R.string.form_backward)
             .clickForwardButton()
             .assertQuestion("What is your age?")
             .clickBackwardButton()
@@ -48,7 +48,7 @@ class FormNavigationTest {
             .assertQuestion("What is your age?")
             .clickForwardButtonToEndScreen()
             .assertText(R.string.form_backward)
-            .assertTextNotDisplayed(R.string.form_forward)
+            .assertTextDoesNotExist(R.string.form_forward)
     }
 
     @Test
@@ -66,13 +66,13 @@ class FormNavigationTest {
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
             .assertQuestion("What is your name?")
-            .assertTextNotDisplayed(R.string.form_backward)
+            .assertTextDoesNotExist(R.string.form_backward)
             .clickForwardButton()
             .assertQuestion("What is your age?")
-            .assertTextNotDisplayed(R.string.form_backward)
+            .assertTextDoesNotExist(R.string.form_backward)
             .clickForwardButtonToEndScreen()
-            .assertTextNotDisplayed(R.string.form_backward)
-            .assertTextNotDisplayed(R.string.form_forward)
+            .assertTextDoesNotExist(R.string.form_backward)
+            .assertTextDoesNotExist(R.string.form_forward)
     }
 
     @Test
@@ -87,14 +87,14 @@ class FormNavigationTest {
             .pressBack(MainMenuPage())
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
-            .assertTextNotDisplayed(R.string.form_backward)
-            .assertTextNotDisplayed(R.string.form_forward)
+            .assertTextDoesNotExist(R.string.form_backward)
+            .assertTextDoesNotExist(R.string.form_forward)
             .swipeToNextQuestion("What is your age?")
-            .assertTextNotDisplayed(R.string.form_backward)
-            .assertTextNotDisplayed(R.string.form_forward)
+            .assertTextDoesNotExist(R.string.form_backward)
+            .assertTextDoesNotExist(R.string.form_forward)
             .swipeToEndScreen()
-            .assertTextNotDisplayed(R.string.form_backward)
-            .assertTextNotDisplayed(R.string.form_forward)
+            .assertTextDoesNotExist(R.string.form_backward)
+            .assertTextDoesNotExist(R.string.form_forward)
     }
 
     @Test

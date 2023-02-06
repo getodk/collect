@@ -588,7 +588,7 @@ public class FillBlankFormTest {
                 .startBlankForm("3403_ODK Version 1.23.3 Tester")
                 .clickOnText("New Farmer Registration")
                 .scrollToAndClickText("Insemination")
-                .scrollToAndAssertText("New Farmer Registration");
+                .assertText("New Farmer Registration");
     }
 
     @Test

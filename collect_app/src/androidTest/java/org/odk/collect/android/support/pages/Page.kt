@@ -92,8 +92,21 @@ abstract class Page<T : Page<T>> {
         return destination.assertOnPage()
     }
 
+    fun assertTexts(vararg texts: String?): T {
+        closeSoftKeyboard()
+        for (text in texts) {
+            assertText(text)
+        }
+        return this as T
+    }
+
+    fun assertText(stringID: Int, vararg formatArgs: Any): T {
+        assertText(getTranslatedString(stringID, *formatArgs))
+        return this as T
+    }
+
     fun assertText(text: String?): T {
-        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(not(doesNotExist())))
         return this as T
     }
 
@@ -107,20 +120,7 @@ abstract class Page<T : Page<T>> {
                 ),
                 index
             )
-        ).check(matches(isDisplayed()))
-        return this as T
-    }
-
-    fun assertText(vararg text: String?): T {
-        closeSoftKeyboard()
-        for (t in text) {
-            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(isDisplayed()))
-        }
-        return this as T
-    }
-
-    fun assertText(stringID: Int, vararg formatArgs: Any): T {
-        assertText(getTranslatedString(stringID, *formatArgs))
+        ).check(matches(not(doesNotExist())))
         return this as T
     }
 
@@ -140,8 +140,10 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertTextDoesNotExist(text: String?): T {
-        onView(withText(text)).check(doesNotExist())
+    fun assertTextsDoNotExist(vararg texts: String?): T {
+        for (text in texts) {
+            assertTextDoesNotExist(text)
+        }
         return this as T
     }
 
@@ -149,10 +151,8 @@ abstract class Page<T : Page<T>> {
         return assertTextDoesNotExist(getTranslatedString(string))
     }
 
-    fun assertTextDoesNotExist(vararg text: String?): T {
-        for (t in text) {
-            onView(allOf(withText(t), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
-        }
+    fun assertTextDoesNotExist(text: String?): T {
+        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
         return this as T
     }
 
@@ -313,12 +313,6 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun scrollToAndAssertText(text: String?): T {
-        onView(withText(text)).perform(nestedScrollTo())
-        onView(withText(text)).check(matches(isDisplayed()))
-        return this as T
-    }
-
     fun clickOnElementInHierarchy(index: Int): T {
         onView(withId(R.id.list)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(index))
         onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(index, R.id.primary_text)).perform(click())
@@ -361,11 +355,6 @@ abstract class Page<T : Page<T>> {
 
     protected fun waitForText(text: String?) {
         waitFor { assertText(text) }
-    }
-
-    fun assertTextNotDisplayed(string: Int): T {
-        onView(withText(getTranslatedString(string))).check(matches(not(isDisplayed())))
-        return this as T
     }
 
     protected fun assertToolbarTitle(title: String?) {

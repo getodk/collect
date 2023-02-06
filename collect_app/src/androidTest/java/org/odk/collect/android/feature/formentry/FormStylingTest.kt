@@ -76,7 +76,7 @@ class FormStylingTest {
             .clickGoToArrow()
             .clickOnGroup("selectOneQuestions")
             .clickOnQuestion("Select one widget")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -89,7 +89,7 @@ class FormStylingTest {
             .clickOnQuestion("Select one minimal widget")
             .assertText("One")
             .openSelectMinimalDialog()
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -111,7 +111,7 @@ class FormStylingTest {
             .clickGoToArrow()
             .clickOnGroup("selectOneQuestions")
             .clickOnQuestion("Select one label widget")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -122,7 +122,7 @@ class FormStylingTest {
             .clickGoToArrow()
             .clickOnGroup("selectOneQuestions")
             .clickOnQuestion("Select one list widget")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -133,7 +133,7 @@ class FormStylingTest {
             .clickGoToArrow()
             .clickOnGroup("selectOneQuestions")
             .clickOnQuestion("Select one likert widget")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -144,7 +144,7 @@ class FormStylingTest {
             .clickGoToArrow()
             .clickOnGroup("selectMultipleQuestions")
             .clickOnQuestion("Select multiple widget")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -157,7 +157,7 @@ class FormStylingTest {
             .clickOnQuestion("Select multiple minimal widget")
             .assertText("One")
             .openSelectMinimalDialog()
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -179,7 +179,7 @@ class FormStylingTest {
             .clickGoToArrow()
             .clickOnGroup("selectMultipleQuestions")
             .clickOnQuestion("Select multiple label widget")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -190,7 +190,7 @@ class FormStylingTest {
             .clickGoToArrow()
             .clickOnGroup("selectMultipleQuestions")
             .clickOnQuestion("Select multiple list widget")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test
@@ -202,7 +202,7 @@ class FormStylingTest {
             .clickOnQuestion("Rank widget")
             .assertText("1. One\n2. Two\n3. Three")
             .clickOnText("Rank items")
-            .assertText("One", "Two", "Three")
+            .assertTexts("One", "Two", "Three")
     }
 
     @Test

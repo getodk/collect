@@ -24,6 +24,6 @@ public class RankingWidgetWithCSVTest {
     public void rankingWidget_shouldDisplayItemsFromSearchFunc() {
         new FormEntryPage("ranking_widget")
                 .clickRankingButton()
-                .assertText("Mango", "Oranges", "Strawberries");
+                .assertTexts("Mango", "Oranges", "Strawberries");
     }
 }

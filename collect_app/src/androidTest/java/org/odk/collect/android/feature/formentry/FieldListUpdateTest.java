@@ -267,10 +267,10 @@ public class FieldListUpdateTest {
                 .clickGoUpIcon()
                 .clickOnGroup("Cascading select minimal")
                 .clickOnQuestion("Level1")
-                .assertTextDoesNotExist("A1", "B1", "C1", "A1A") // No choices should be shown for levels 2 and 3 when no selection is made for level 1
+                .assertTextsDoNotExist("A1", "B1", "C1", "A1A") // No choices should be shown for levels 2 and 3 when no selection is made for level 1
                 .openSelectMinimalDialog(0)
                 .clickOnText("C") // Selecting C for level 1 should only reveal options for C at level 2
-                .assertTextDoesNotExist("A1", "B1")
+                .assertTextsDoNotExist("A1", "B1")
                 .openSelectMinimalDialog(1)
                 .clickOnText("C1")
                 .assertTextDoesNotExist("A1A")
@@ -278,11 +278,11 @@ public class FieldListUpdateTest {
                 .clickOnText("A") // Selecting A for level 1 should reveal options for A at level 2
                 .openSelectMinimalDialog(1)
                 .assertText("A1")
-                .assertTextDoesNotExist("A1A", "B1", "C1")
+                .assertTextsDoNotExist("A1A", "B1", "C1")
                 .clickOnText("A1") // Selecting A1 for level 2 should reveal options for A1 at level 3
                 .openSelectMinimalDialog(2)
                 .assertText("A1A")
-                .assertTextDoesNotExist("B1A", "B1", "C1");
+                .assertTextsDoNotExist("B1A", "B1", "C1");
     }
 
     @Test
@@ -380,7 +380,7 @@ public class FieldListUpdateTest {
                 .clickOnGroup("Search in field-list")
                 .clickOnQuestion("Source15")
                 .openSelectMinimalDialog()
-                .assertText("Mango", "Oranges", "Strawberries")
+                .assertTexts("Mango", "Oranges", "Strawberries")
                 .clickOnText("Strawberries")
                 .assertText("Target15")
                 .assertSelectMinimalDialogAnswer("Strawberries");
