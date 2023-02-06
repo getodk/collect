@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.action.ViewActions.swipeRight;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -15,7 +16,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
-import static org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo;
 
 import android.os.Build;
 
@@ -276,7 +276,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage answerQuestion(int index, String answer) {
-        onView(withIndex(withClassName(endsWith("Text")), index)).perform(nestedScrollTo());
+        onView(withIndex(withClassName(endsWith("Text")), index)).perform(scrollTo());
         onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(answer));
         return this;
     }
