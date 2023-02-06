@@ -37,6 +37,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 
 import java.io.File;
@@ -141,7 +142,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     private void captureImage() {
         errorTextView.setVisibility(View.GONE);
-        if (selfie) {
+        if (selfie && new CameraUtils().isFrontCameraAvailable(getContext())) {
             Intent intent = new Intent(getContext(), CaptureSelfieActivity.class);
             intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
             imageCaptureHandler.captureImage(intent, RequestCodes.MEDIA_FILE_PATH, R.string.capture_image);

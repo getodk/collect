@@ -1,7 +1,6 @@
 package org.odk.collect.android.feature.smoke;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
@@ -9,6 +8,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibilit
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.UiDevice;
 
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -297,7 +299,7 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("selfie-widget");
 
         onView(withText("Take Picture")).perform(click());
-        pressBack();
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack();
 
         onView(withText("Selfie widget")).perform(swipeLeft());
     }
@@ -342,7 +344,7 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("selfie-video");
 
         onView(withText("Record Video")).perform(click());
-        pressBack();
+        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack();
 
         onView(withText("Selfie video widget")).perform(swipeLeft());
     }

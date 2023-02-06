@@ -44,6 +44,7 @@ import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 import org.odk.collect.settings.keys.ProjectKeys;
 
@@ -199,7 +200,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private void captureVideo() {
         Intent i;
         int requestCode;
-        if (selfie) {
+        if (selfie && new CameraUtils().isFrontCameraAvailable(getContext())) {
             i = new Intent(getContext(), CaptureSelfieActivity.class);
             i.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
             i.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true);
