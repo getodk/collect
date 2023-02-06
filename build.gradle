@@ -62,11 +62,6 @@ allprojects {
                 password = getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '')
             }
         }
-
-        // Local repo for dependencies that only existed in the defunct JCenter repo
-        maven {
-          url "${rootDir}/jcenter-local-m2"
-        }
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
