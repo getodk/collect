@@ -11,7 +11,7 @@ import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
 
 @RunWith(AndroidJUnit4.class)
-public class DeleteFilledFormTest {
+public class DeleteSavedFormTest {
 
     public final CollectTestRule rule = new CollectTestRule();
 
