@@ -347,13 +347,13 @@ public class GeoPointMapActivity extends LocalizedActivity {
                     foundFirstLocation = true;
                 }
 
-                locationStatus.setText(formatLocationStatus(map.getLocationProvider(), point.sd));
+                locationStatus.setText(formatLocationStatus(map.getLocationProvider(), point.accuracy));
             }
         }
     }
 
     public String formatResult(MapPoint point) {
-        return String.format("%s %s %s %s", point.latitude, point.longitude, point.altitude, point.sd);
+        return String.format("%s %s %s %s", point.latitude, point.longitude, point.altitude, point.accuracy);
     }
 
     public String formatLocationStatus(String provider, double accuracyRadius) {

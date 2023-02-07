@@ -34,7 +34,7 @@ public final class GeoUtils {
             // TODO(ping): Remove excess precision when we're ready for the output to change.
             result.append(String.format(Locale.US, "%s %s %s %s;",
                     Double.toString(point.latitude), Double.toString(point.longitude),
-                    Double.toString(point.altitude), Float.toString((float) point.sd)));
+                    Double.toString(point.altitude), Float.toString((float) point.accuracy)));
         }
 
         return StringUtils.removeEnd(result.toString().trim(), ";");

@@ -641,7 +641,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         // deviation values somewhere, so they go in the marker's snippet.
         return map.addMarker(new MarkerOptions()
             .position(toLatLng(markerDescription.getPoint()))
-            .snippet(markerDescription.getPoint().altitude + ";" + markerDescription.getPoint().sd)
+            .snippet(markerDescription.getPoint().altitude + ";" + markerDescription.getPoint().accuracy)
             .draggable(markerDescription.isDraggable())
             .icon(getBitmapDescriptor(markerDescription.getIconDescription()))
             .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position

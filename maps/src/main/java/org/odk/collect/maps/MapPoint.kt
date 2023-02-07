@@ -21,5 +21,5 @@ data class MapPoint @JvmOverloads constructor(
     @JvmField val latitude: Double,
     @JvmField val longitude: Double,
     @JvmField val altitude: Double = 0.0,
-    @JvmField val sd: Double = 0.0
+    @JvmField val accuracy: Double = 0.0
 ) : Parcelable

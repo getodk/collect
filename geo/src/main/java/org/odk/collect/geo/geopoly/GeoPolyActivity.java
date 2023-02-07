@@ -419,7 +419,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         if (!isAccuracyThresholdActive()) {
             return true;
         }
-        return point.sd <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        return point.accuracy <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
     }
 
     private boolean isAccuracyThresholdActive() {
@@ -473,9 +473,9 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
         locationStatus.setText(
             location == null ? getString(R.string.location_status_searching)
-                : !usingThreshold ? getString(R.string.location_status_accuracy, location.sd)
-                : acceptable ? getString(R.string.location_status_acceptable, location.sd)
-                : getString(R.string.location_status_unacceptable, location.sd)
+                : !usingThreshold ? getString(R.string.location_status_accuracy, location.accuracy)
+                : acceptable ? getString(R.string.location_status_acceptable, location.accuracy)
+                : getString(R.string.location_status_unacceptable, location.accuracy)
         );
         locationStatus.setBackgroundColor(
                 location == null ? getThemeAttributeValue(this, R.attr.colorPrimary)

@@ -596,7 +596,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         // somewhere, so it goes in the marker's sub-description field.
         Marker marker = new Marker(map);
         marker.setPosition(toGeoPoint(markerDescription.getPoint()));
-        marker.setSubDescription(Double.toString(markerDescription.getPoint().sd));
+        marker.setSubDescription(Double.toString(markerDescription.getPoint().accuracy));
         marker.setDraggable(markerDescription.isDraggable());
         marker.setIcon(MarkerIconCreator.getMarkerIconDrawable(map.getContext(), markerDescription.getIconDescription()));
         marker.setAnchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()));
