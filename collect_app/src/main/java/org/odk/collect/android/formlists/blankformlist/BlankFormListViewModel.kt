@@ -181,6 +181,22 @@ class BlankFormListViewModel(
         }
     }
 
+    fun deleteForms(vararg databaseIds: Long) {
+        scheduler.immediate(
+            background = {
+                databaseIds.forEach {
+                    FormDeleter(
+                        formsRepository,
+                        instancesRepository
+                    ).delete(it)
+                }
+            },
+            foreground = {
+                loadFromDatabase()
+            }
+        )
+    }
+
     fun deleteAllForms() {
         scheduler.immediate(
             background = {

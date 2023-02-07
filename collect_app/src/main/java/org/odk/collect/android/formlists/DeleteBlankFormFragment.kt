@@ -13,16 +13,19 @@ import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.SelectableBlankFormListAdapter
+import org.odk.collect.androidshared.ui.MultiSelectViewModel
 
 class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Factory) :
     Fragment() {
 
-    private lateinit var viewModel: BlankFormListViewModel
+    private lateinit var blankFormListViewModel: BlankFormListViewModel
+    private lateinit var multiSelectViewModel: MultiSelectViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
-        viewModel = viewModelProvider[BlankFormListViewModel::class.java]
+        blankFormListViewModel = viewModelProvider[BlankFormListViewModel::class.java]
+        multiSelectViewModel = viewModelProvider[MultiSelectViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -36,23 +39,38 @@ class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Fa
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = DeleteBlankFormLayoutBinding.bind(view)
         val recyclerView = binding.list
-        val adapter = SelectableBlankFormListAdapter()
-        recyclerView.adapter = adapter
-
-        viewModel.formsToDisplay.observe(viewLifecycleOwner) {
-            if (it != null) {
-                adapter.setData(it)
+        val adapter = SelectableBlankFormListAdapter { databaseId, checked ->
+            if (checked) {
+                multiSelectViewModel.select(databaseId)
+            } else {
+                multiSelectViewModel.unselect(databaseId)
             }
         }
 
-        binding.deleteButton.setOnClickListener {
+        recyclerView.adapter = adapter
+
+        blankFormListViewModel.formsToDisplay.observe(viewLifecycleOwner) {
+            if (it != null) {
+                adapter.formItems = it
+            }
+        }
+
+        binding.selectAll.setOnClickListener {
+            adapter.formItems.forEach {
+                multiSelectViewModel.select(it.databaseId)
+            }
+        }
+
+        binding.deleteSelected.setOnClickListener {
+            val selected = multiSelectViewModel.getSelected()
+
             val alertDialog = MaterialAlertDialogBuilder(requireContext()).create()
-            alertDialog.setMessage(getString(R.string.delete_confirm, "1"))
+            alertDialog.setMessage(getString(R.string.delete_confirm, selected.size.toString()))
             alertDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE,
                 getString(R.string.delete_yes)
             ) { _, _ ->
-                viewModel.deleteAllForms()
+                blankFormListViewModel.deleteForms(*selected.toLongArray())
             }
 
             alertDialog.show()

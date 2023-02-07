@@ -2,6 +2,7 @@ package org.odk.collect.androidshared.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
+import kotlin.reflect.KClass
 
 /**
  * Convenience object for creating [FragmentFactory] instances without needing to use an inner,
@@ -10,6 +11,10 @@ import androidx.fragment.app.FragmentFactory
 class FragmentFactoryBuilder {
 
     private val classesAndFactories = mutableListOf<Pair<Class<*>, () -> Fragment>>()
+
+    fun forClass(fragmentClass: KClass<*>, factory: () -> Fragment): FragmentFactoryBuilder {
+        return forClass(fragmentClass.java, factory)
+    }
 
     fun forClass(fragmentClass: Class<*>, factory: () -> Fragment): FragmentFactoryBuilder {
         classesAndFactories.add(Pair(fragmentClass, factory))

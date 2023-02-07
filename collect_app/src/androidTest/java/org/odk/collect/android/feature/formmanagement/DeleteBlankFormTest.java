@@ -7,10 +7,10 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 @RunWith(AndroidJUnit4.class)
 public class DeleteBlankFormTest {
@@ -92,20 +92,6 @@ public class DeleteBlankFormTest {
                 .clickOKOnDialog(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertFormExists("One Question");
-    }
-
-    @Test // TODO: replace with test lower level test
-    public void selectAllTest() {
-        rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .copyForm("two-question.xml")
-                .clickDeleteSavedForm()
-                .clickBlankForms()
-                .clickOnString(R.string.select_all)
-                .clickDeleteSelected(2)
-                .clickDeleteForms()
-                .assertTextDoesNotExist("One Question")
-                .assertTextDoesNotExist("Two Question");
     }
 
     @Test // TODO: replace with test lower level test

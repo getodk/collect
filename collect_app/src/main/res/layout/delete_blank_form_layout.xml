@@ -8,17 +8,25 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="@id/delete_button"
+        app:layout_constraintBottom_toTopOf="@id/select_all"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/delete_button"
-        style="@style/Widget.Collect.Button.BottomOption"
-        android:layout_width="match_parent"
+        android:id="@+id/select_all"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_extra_small"
-        android:layout_marginRight="@dimen/margin_extra_small"
+        android:text="@string/select_all"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete_selected"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/delete_selected"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/delete_file"
+        app:layout_constraintStart_toEndOf="@id/select_all"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
