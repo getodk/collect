@@ -345,7 +345,7 @@ workflows:
             - compile
           filters:
             tags:
-              only: /^v\d+\.\d+\.\d+$/ # matches semvers like v1.2.3
+              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
             branches:
               ignore: /.*/
       - check_quality:
