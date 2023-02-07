@@ -12,6 +12,7 @@ import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.forms.instances.Instance;
 
+@Deprecated
 public class CursorLoaderFactory {
 
     public static final String INTERNAL_QUERY_PARAM = "internal";
