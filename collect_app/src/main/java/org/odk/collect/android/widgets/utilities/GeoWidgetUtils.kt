@@ -35,7 +35,7 @@ object GeoWidgetUtils {
     @JvmStatic
     fun getGeoPolyAnswerToDisplay(answer: String?): String? {
         return if (answer != null && answer.isNotEmpty()) {
-            removeEnd(answer.replace(";\\s".toRegex(), ";"), ";")
+            removeEnd(answer.trim(), ";")
         } else {
             answer
         }

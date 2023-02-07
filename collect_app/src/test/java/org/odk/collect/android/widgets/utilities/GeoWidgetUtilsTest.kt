@@ -14,6 +14,7 @@ import org.odk.collect.android.widgets.support.GeoWidgetHelpers
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.convertCoordinatesIntoDegreeFormat
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.floor
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPointAnswerToDisplay
+import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.getGeoPolyAnswerToDisplay
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.isWithinMapBounds
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometry
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils.parseGeometryPoint
@@ -39,7 +40,7 @@ class GeoWidgetUtilsTest {
     @Test
     fun getAnswerToDisplay_whenAnswerIsNotNullAndConvertible_returnsAnswer() {
         val stringAnswer = answer.displayText
-        val parts = stringAnswer.split(" ".toRegex()).toTypedArray()
+        val parts = stringAnswer.split(" ").toTypedArray()
         assertEquals(
             getGeoPointAnswerToDisplay(context, stringAnswer),
             context.getString(
@@ -167,5 +168,15 @@ class GeoWidgetUtilsTest {
         assertThat(isWithinMapBounds(MapPoint(-90.1, 0.0, 0.0, 0.0)), equalTo(false))
         assertThat(isWithinMapBounds(MapPoint(0.0, 180.1, 0.0, 0.0)), equalTo(false))
         assertThat(isWithinMapBounds(MapPoint(0.0, -180.1, 0.0, 0.0)), equalTo(false))
+    }
+
+    @Test
+    fun getGeoPolyAnswerToDisplayTest() {
+        assertThat(getGeoPolyAnswerToDisplay(""), equalTo(""))
+        assertThat(getGeoPolyAnswerToDisplay(";"), equalTo(""))
+        assertThat(getGeoPolyAnswerToDisplay("; "), equalTo(""))
+        assertThat(getGeoPolyAnswerToDisplay(";\n"), equalTo(""))
+        assertThat(getGeoPolyAnswerToDisplay(";\r"), equalTo(""))
+        assertThat(getGeoPolyAnswerToDisplay("12.0 13.0 5 6;"), equalTo("12.0 13.0 5 6"))
     }
 }
