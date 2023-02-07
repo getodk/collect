@@ -11,10 +11,12 @@ import org.odk.collect.android.fragments.SavedFormListFragment;
 public class DeleteFormsTabsAdapter extends FragmentStateAdapter {
 
     private final boolean matchExactlyEnabled;
+//    private ViewModelProvider.Factory viewModelFactory;
 
     public DeleteFormsTabsAdapter(FragmentActivity fa, boolean matchExactlyEnabled) {
         super(fa);
         this.matchExactlyEnabled = matchExactlyEnabled;
+//        this.viewModelFactory = viewModelFactory;
     }
 
     @NonNull
@@ -24,6 +26,7 @@ public class DeleteFormsTabsAdapter extends FragmentStateAdapter {
             case 0:
                 return new SavedFormListFragment();
             case 1:
+//                return new DeleteBlankFormFragment(viewModelFactory);
                 return new BlankFormListFragment();
             default:
                 // should never reach here

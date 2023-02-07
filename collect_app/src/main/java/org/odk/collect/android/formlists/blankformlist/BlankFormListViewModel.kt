@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import org.odk.collect.android.formmanagement.FormDeleter
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -178,6 +179,22 @@ class BlankFormListViewModel(
                 false
             }
         }
+    }
+
+    fun deleteAllForms() {
+        scheduler.immediate(
+            background = {
+                getAllForms().forEach {
+                    FormDeleter(
+                        formsRepository,
+                        instancesRepository
+                    ).delete(it.databaseId)
+                }
+            },
+            foreground = {
+                loadFromDatabase()
+            }
+        )
     }
 
     private fun sortAndFilter() {

@@ -45,7 +45,10 @@ class DeleteSavedFormActivity : LocalizedActivity() {
 
     private fun setUpViewPager() {
         val viewPager = binding.viewPager.apply {
-            adapter = DeleteFormsTabsAdapter(this@DeleteSavedFormActivity, viewModel.isMatchExactlyEnabled())
+            adapter = DeleteFormsTabsAdapter(
+                this@DeleteSavedFormActivity,
+                viewModel.isMatchExactlyEnabled()
+            )
         }
 
         TabLayoutMediator(binding.tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
