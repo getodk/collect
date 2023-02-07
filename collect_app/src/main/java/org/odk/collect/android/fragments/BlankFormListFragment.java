@@ -14,6 +14,11 @@
 
 package org.odk.collect.android.fragments;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -31,8 +36,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.FormListAdapter;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormColumns;
-import org.odk.collect.android.utilities.ChangeLockProvider;
-import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.listeners.DeleteFormsListener;
@@ -40,10 +43,12 @@ import org.odk.collect.android.listeners.DiskSyncListener;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.tasks.DeleteFormsTask;
 import org.odk.collect.android.tasks.FormSyncTask;
+import org.odk.collect.android.utilities.ChangeLockProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 
 import javax.inject.Inject;
 
@@ -56,7 +61,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class BlankFormListFragment extends FormListFragment implements DiskSyncListener,
+public class BlankFormListFragment extends FileManagerFragment implements DiskSyncListener,
         DeleteFormsListener, View.OnClickListener {
     private static final String FORM_MANAGER_LIST_SORTING_ORDER = "formManagerListSortingOrder";
     private BackgroundTasks backgroundTasks; // handled across orientation changes
@@ -282,6 +287,25 @@ public class BlankFormListFragment extends FormListFragment implements DiskSyncL
                 deleteButton.setEnabled(allChecked);
                 break;
         }
+    }
+
+    protected String getSortingOrder() {
+        String sortOrder = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+        switch (getSelectedSortingOrder()) {
+            case BY_NAME_ASC:
+                sortOrder = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                break;
+            case BY_NAME_DESC:
+                sortOrder = DatabaseFormColumns.DISPLAY_NAME + " COLLATE NOCASE DESC";
+                break;
+            case BY_DATE_ASC:
+                sortOrder = DatabaseFormColumns.DATE + " ASC";
+                break;
+            case BY_DATE_DESC:
+                sortOrder = DatabaseFormColumns.DATE + " DESC";
+                break;
+        }
+        return sortOrder;
     }
 
     private static class BackgroundTasks {
