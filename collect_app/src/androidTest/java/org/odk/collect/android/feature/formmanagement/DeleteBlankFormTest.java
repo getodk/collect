@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
@@ -92,18 +91,5 @@ public class DeleteBlankFormTest {
                 .clickOKOnDialog(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertFormExists("One Question");
-    }
-
-    @Test // TODO: replace with test lower level test
-    public void searchTest() {
-        rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .copyForm("two-question.xml")
-                .clickDeleteSavedForm()
-                .clickBlankForms()
-                .clickOnContentDescription(R.string.filter_the_list)
-                .inputText(R.string.search, "One")
-                .assertText("One Question")
-                .assertTextDoesNotExist("Two Question");
     }
 }

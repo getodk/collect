@@ -42,6 +42,8 @@ class DeleteBlankFormFragmentTest {
     private val formsToDisplay = MutableLiveData<List<BlankFormListItem>>(null)
     private val blankFormListViewModel = mock<BlankFormListViewModel> {
         on { formsToDisplay } doReturn formsToDisplay
+        on { isLoading } doReturn MutableLiveData()
+        on { isOutOfSyncWithServer() } doReturn MutableLiveData()
     }
 
     private val viewModelFactory = object : ViewModelProvider.Factory {

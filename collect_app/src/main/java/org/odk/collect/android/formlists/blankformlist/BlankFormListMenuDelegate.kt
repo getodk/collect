@@ -16,7 +16,7 @@ import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 class BlankFormListMenuDelegate(
     private val activity: ComponentActivity,
     private val viewModel: BlankFormListViewModel,
-    private val networkStateProvider: NetworkStateProvider
+    private val networkStateProvider: NetworkStateProvider? = null
 ) : MenuDelegate {
     private var outOfSync = false
     private var syncing = false
@@ -85,7 +85,7 @@ class BlankFormListMenuDelegate(
 
         return when (item.itemId) {
             R.id.menu_refresh -> {
-                if (networkStateProvider.isDeviceOnline) {
+                if (networkStateProvider?.isDeviceOnline == true) {
                     viewModel.syncWithServer().observe(activity) { success: Boolean ->
                         if (success) {
                             ToastUtils.showShortToast(activity, R.string.form_update_succeeded)

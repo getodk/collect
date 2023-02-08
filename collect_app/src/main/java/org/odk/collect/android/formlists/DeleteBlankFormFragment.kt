@@ -4,22 +4,28 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
+import org.odk.collect.android.formlists.blankformlist.BlankFormListMenuDelegate
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.SelectableBlankFormListAdapter
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 
 class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Factory) :
-    Fragment() {
+    Fragment(), MenuProvider {
 
     private lateinit var blankFormListViewModel: BlankFormListViewModel
     private lateinit var multiSelectViewModel: MultiSelectViewModel
+    private lateinit var menuDelegate: BlankFormListMenuDelegate
 
     private var selected = emptySet<Long>()
 
@@ -28,6 +34,8 @@ class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Fa
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         blankFormListViewModel = viewModelProvider[BlankFormListViewModel::class.java]
         multiSelectViewModel = viewModelProvider[MultiSelectViewModel::class.java]
+
+        menuDelegate = BlankFormListMenuDelegate(requireActivity(), blankFormListViewModel)
     }
 
     override fun onCreateView(
@@ -90,5 +98,19 @@ class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Fa
 
             alertDialog.show()
         }
+
+        requireActivity().addMenuProvider(this, viewLifecycleOwner)
+    }
+
+    override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
+        menuDelegate.onCreateOptionsMenu(inflater, menu)
+    }
+
+    override fun onPrepareMenu(menu: Menu) {
+        menuDelegate.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        return menuDelegate.onOptionsItemSelected(item)
     }
 }
