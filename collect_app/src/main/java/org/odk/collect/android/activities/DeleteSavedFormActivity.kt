@@ -44,7 +44,7 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         DaggerUtils.getComponent(this).inject(this)
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(DeleteBlankFormFragment::class) {
-                DeleteBlankFormFragment(ViewModelFactory(viewModelFactory))
+                DeleteBlankFormFragment(ViewModelFactory(viewModelFactory), this)
             }
             .build()
 

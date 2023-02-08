@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,8 +17,10 @@ import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.SelectableBlankFormListAdapter
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 
-class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Factory) :
-    Fragment() {
+class DeleteBlankFormFragment(
+    private val viewModelFactory: ViewModelProvider.Factory,
+    private val menuHost: MenuHost
+) : Fragment() {
 
     private lateinit var blankFormListViewModel: BlankFormListViewModel
     private lateinit var multiSelectViewModel: MultiSelectViewModel
@@ -94,6 +97,6 @@ class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Fa
 
         val blankFormListMenuProvider =
             BlankFormListMenuProvider(requireActivity(), blankFormListViewModel)
-        requireActivity().addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner)
+        menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner)
     }
 }

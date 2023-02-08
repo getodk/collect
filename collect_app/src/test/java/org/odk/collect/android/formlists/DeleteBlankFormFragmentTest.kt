@@ -2,6 +2,10 @@ package org.odk.collect.android.formlists
 
 import android.app.Application
 import android.net.Uri
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +22,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.instanceOf
 import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
@@ -27,6 +32,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
+import org.odk.collect.android.formlists.blankformlist.BlankFormListMenuProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
@@ -36,6 +42,7 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 class DeleteBlankFormFragmentTest {
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
+    private val menuHost = RecordingMenuHost()
 
     private val multiSelectViewModel = MultiSelectViewModel()
 
@@ -60,8 +67,9 @@ class DeleteBlankFormFragmentTest {
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
         defaultThemeResId = R.style.Theme_MaterialComponents,
         defaultFactory = FragmentFactoryBuilder()
-            .forClass(DeleteBlankFormFragment::class) { DeleteBlankFormFragment(viewModelFactory) }
-            .build()
+            .forClass(DeleteBlankFormFragment::class) {
+                DeleteBlankFormFragment(viewModelFactory, menuHost)
+            }.build()
     )
 
     @Test
@@ -161,6 +169,15 @@ class DeleteBlankFormFragmentTest {
         onView(withText(R.string.delete_file)).check(matches(not(isEnabled())))
     }
 
+    @Test
+    fun `provides blank form menu`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+
+        val menuProviders = menuHost.getMenuProviders()
+        assertThat(menuProviders.size, equalTo(1))
+        assertThat(menuProviders[0], instanceOf(BlankFormListMenuProvider::class.java))
+    }
+
     private fun blankFormListItem(databaseId: Long = 1, formName: String = "Form 1") =
         BlankFormListItem(
             databaseId = databaseId,
@@ -173,4 +190,35 @@ class DeleteBlankFormFragmentTest {
             dateOfLastDetectedAttachmentsUpdate = null,
             Uri.parse("")
         )
+}
+
+private class RecordingMenuHost : MenuHost {
+
+    private val menuProviders = mutableListOf<MenuProvider>()
+
+    override fun addMenuProvider(menuProvider: MenuProvider) {
+        menuProviders.add(menuProvider)
+    }
+
+    override fun addMenuProvider(menuProvider: MenuProvider, lifecycleOwner: LifecycleOwner) {
+        menuProviders.add(menuProvider)
+    }
+
+    override fun addMenuProvider(
+        menuProvider: MenuProvider,
+        lifecycleOwner: LifecycleOwner,
+        state: Lifecycle.State
+    ) {
+        menuProviders.add(menuProvider)
+    }
+
+    override fun removeMenuProvider(menuProvider: MenuProvider) {
+        menuProviders.add(menuProvider)
+    }
+
+    override fun invalidateMenu() { }
+
+    fun getMenuProviders(): List<MenuProvider> {
+        return menuProviders
+    }
 }
