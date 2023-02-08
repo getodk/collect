@@ -5,19 +5,20 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog
 import org.odk.collect.android.formlists.sorting.FormListSortingOption
-import org.odk.collect.android.utilities.MenuDelegate
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
-class BlankFormListMenuDelegate(
+class BlankFormListMenuProvider(
     private val activity: ComponentActivity,
     private val viewModel: BlankFormListViewModel,
     private val networkStateProvider: NetworkStateProvider? = null
-) : MenuDelegate {
+) : MenuProvider {
+
     private var outOfSync = false
     private var syncing = false
 
@@ -33,8 +34,8 @@ class BlankFormListMenuDelegate(
         }
     }
 
-    override fun onCreateOptionsMenu(menuInflater: MenuInflater, menu: Menu) {
-        menuInflater.inflate(R.menu.form_list_menu, menu)
+    override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.form_list_menu, menu)
 
         menu.findItem(R.id.menu_filter).apply {
             setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
@@ -67,7 +68,7 @@ class BlankFormListMenuDelegate(
         }
     }
 
-    override fun onPrepareOptionsMenu(menu: Menu) {
+    override fun onPrepareMenu(menu: Menu) {
         val refreshItem = menu.findItem(R.id.menu_refresh)
         refreshItem.isVisible = viewModel.isMatchExactlyEnabled()
         refreshItem.isEnabled = !syncing
@@ -78,7 +79,7 @@ class BlankFormListMenuDelegate(
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
         if (!MultiClickGuard.allowClick(javaClass.name)) {
             return true
         }

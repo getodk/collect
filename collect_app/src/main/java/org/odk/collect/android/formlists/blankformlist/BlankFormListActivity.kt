@@ -3,8 +3,6 @@ package org.odk.collect.android.formlists.blankformlist
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -39,8 +37,6 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
 
     private val adapter: BlankFormListAdapter = BlankFormListAdapter(this)
 
-    private lateinit var menuDelegate: BlankFormListMenuDelegate
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
@@ -48,25 +44,12 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
         title = getString(R.string.enter_data)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        menuDelegate = BlankFormListMenuDelegate(this, viewModel, networkStateProvider)
+        val menuProvider = BlankFormListMenuProvider(this, viewModel, networkStateProvider)
+        addMenuProvider(menuProvider, this)
 
         findViewById<RecyclerView>(R.id.form_list).adapter = adapter
 
         initObservers()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        return true
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menuDelegate.onPrepareOptionsMenu(menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return menuDelegate.onOptionsItemSelected(item)
     }
 
     override fun onFormClick(formUri: Uri) {

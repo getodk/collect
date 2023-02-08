@@ -29,7 +29,7 @@ import org.robolectric.shadows.ShadowDialog
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
-class BlankFormListMenuDelegateTest {
+class BlankFormListMenuProviderTest {
     private lateinit var activity: FragmentActivity
 
     private val viewModel: BlankFormListViewModel = mock()
@@ -48,12 +48,12 @@ class BlankFormListMenuDelegateTest {
     }
 
     @Test
-    fun `onPrepareOptionsMenu when not out of sync shows sync icon`() {
+    fun `onPrepareMenu when not out of sync shows sync icon`() {
         val menuDelegate = createMenuDelegate()
         val menu = createdMenu()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        menuDelegate.onPrepareOptionsMenu(menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
+        menuDelegate.onPrepareMenu(menu)
 
         assertThat(
             Shadows.shadowOf(menu.findItem(R.id.menu_refresh).icon).createdFromResId,
@@ -62,14 +62,14 @@ class BlankFormListMenuDelegateTest {
     }
 
     @Test
-    fun `onPrepareOptionsMenu when out of sync shows error sync icon`() {
+    fun `onPrepareMenu when out of sync shows error sync icon`() {
         whenever(viewModel.isOutOfSyncWithServer()).thenReturn(MutableLiveData(true))
 
         val menuDelegate = createMenuDelegate()
         val menu = createdMenu()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        menuDelegate.onPrepareOptionsMenu(menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
+        menuDelegate.onPrepareMenu(menu)
 
         assertThat(
             Shadows.shadowOf(menu.findItem(R.id.menu_refresh).icon).createdFromResId,
@@ -78,25 +78,25 @@ class BlankFormListMenuDelegateTest {
     }
 
     @Test
-    fun `onPrepareOptionsMenu when loading disables refresh button`() {
+    fun `onPrepareMenu when loading disables refresh button`() {
         whenever(viewModel.isLoading).thenReturn(MutableLiveData(true))
 
         val menuDelegate = createMenuDelegate()
         val menu = createdMenu()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        menuDelegate.onPrepareOptionsMenu(menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
+        menuDelegate.onPrepareMenu(menu)
 
         assertThat(menu.findItem(R.id.menu_refresh).isEnabled, `is`(false))
     }
 
     @Test
-    fun `onPrepareOptionsMenu when not loading enables refresh button`() {
+    fun `onPrepareMenu when not loading enables refresh button`() {
         val menuDelegate = createMenuDelegate()
         val menu = createdMenu()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        menuDelegate.onPrepareOptionsMenu(menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
+        menuDelegate.onPrepareMenu(menu)
 
         assertThat(menu.findItem(R.id.menu_refresh).isEnabled, `is`(true))
     }
@@ -106,7 +106,7 @@ class BlankFormListMenuDelegateTest {
         whenever(viewModel.syncWithServer()).thenReturn(MutableLiveData(true))
 
         val menuDelegate = createMenuDelegate()
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_refresh))
+        menuDelegate.onMenuItemSelected(RoboMenuItem(R.id.menu_refresh))
 
         assertThat(
             ShadowToast.getTextOfLatestToast(),
@@ -119,7 +119,7 @@ class BlankFormListMenuDelegateTest {
         whenever(viewModel.syncWithServer()).thenReturn(MutableLiveData(false))
 
         val menuDelegate = createMenuDelegate()
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_refresh))
+        menuDelegate.onMenuItemSelected(RoboMenuItem(R.id.menu_refresh))
 
         assertThat(ShadowToast.getLatestToast(), nullValue())
     }
@@ -129,7 +129,7 @@ class BlankFormListMenuDelegateTest {
         whenever(networkStateProvider.isDeviceOnline).thenReturn(false)
 
         val menuDelegate = createMenuDelegate()
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_refresh))
+        menuDelegate.onMenuItemSelected(RoboMenuItem(R.id.menu_refresh))
 
         assertThat(
             ShadowToast.getTextOfLatestToast(),
@@ -141,7 +141,7 @@ class BlankFormListMenuDelegateTest {
     @Test
     fun `clicking sort displays sorting dialog`() {
         val menuDelegate = createMenuDelegate()
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_sort))
+        menuDelegate.onMenuItemSelected(RoboMenuItem(R.id.menu_sort))
 
         assertThat(ShadowDialog.getLatestDialog(), instanceOf(FormListSortingBottomSheetDialog::class.java))
     }
@@ -151,8 +151,8 @@ class BlankFormListMenuDelegateTest {
         val menu = createdMenu()
         val menuDelegate = createMenuDelegate()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        menuDelegate.onPrepareOptionsMenu(menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
+        menuDelegate.onPrepareMenu(menu)
 
         val searchView = (menu.findItem(R.id.menu_filter).actionView as SearchView).findViewById<SearchView.SearchAutoComplete>(androidx.appcompat.R.id.search_src_text)
         searchView.setText("abc")
@@ -167,8 +167,8 @@ class BlankFormListMenuDelegateTest {
         val menu = createdMenu()
         val menuDelegate = createMenuDelegate()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        menuDelegate.onPrepareOptionsMenu(menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
+        menuDelegate.onPrepareMenu(menu)
 
         menu.findItem(R.id.menu_filter).expandActionView()
 
@@ -188,8 +188,8 @@ class BlankFormListMenuDelegateTest {
         val menu = createdMenu()
         val menuDelegate = createMenuDelegate()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        menuDelegate.onPrepareOptionsMenu(menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
+        menuDelegate.onPrepareMenu(menu)
 
         menu.findItem(R.id.menu_filter).expandActionView()
         menu.findItem(R.id.menu_filter).collapseActionView()
@@ -209,13 +209,13 @@ class BlankFormListMenuDelegateTest {
         val menu = createdMenu()
         val menuDelegate = createMenuDelegate()
 
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
+        menuDelegate.onCreateMenu(menu, menuInflater)
 
         verify(viewModel).filterText = ""
     }
 
-    private fun createMenuDelegate(): BlankFormListMenuDelegate {
-        return BlankFormListMenuDelegate(activity, viewModel, networkStateProvider)
+    private fun createMenuDelegate(): BlankFormListMenuProvider {
+        return BlankFormListMenuProvider(activity, viewModel, networkStateProvider)
     }
 
     private fun createdMenu(): Menu {
