@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.rules.TestRuleChain;
@@ -91,5 +92,44 @@ public class DeleteBlankFormTest {
                 .clickOKOnDialog(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertFormExists("One Question");
+    }
+
+    @Test // TODO: replace with test lower level test
+    public void selectAllTest() {
+        rule.startAtMainMenu()
+                .copyForm("one-question.xml")
+                .copyForm("two-question.xml")
+                .clickDeleteSavedForm()
+                .clickBlankForms()
+                .clickOnString(R.string.select_all)
+                .clickDeleteSelected(2)
+                .clickDeleteForms()
+                .assertTextDoesNotExist("One Question")
+                .assertTextDoesNotExist("Two Question");
+    }
+
+    @Test // TODO: replace with test lower level test
+    public void clearAllTest() {
+        rule.startAtMainMenu()
+                .copyForm("one-question.xml")
+                .copyForm("two-question.xml")
+                .clickDeleteSavedForm()
+                .clickBlankForms()
+                .clickOnString(R.string.select_all)
+                .clickOnString(R.string.clear_all)
+                .assertDisabled(R.string.delete_file);
+    }
+
+    @Test // TODO: replace with test lower level test
+    public void searchTest() {
+        rule.startAtMainMenu()
+                .copyForm("one-question.xml")
+                .copyForm("two-question.xml")
+                .clickDeleteSavedForm()
+                .clickBlankForms()
+                .clickOnContentDescription(R.string.filter_the_list)
+                .inputText(R.string.search, "One")
+                .assertText("One Question")
+                .assertTextDoesNotExist("Two Question");
     }
 }
