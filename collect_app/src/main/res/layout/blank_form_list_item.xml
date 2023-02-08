@@ -22,7 +22,7 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
-        app:layout_constraintEnd_toStartOf="@+id/map_button"
+        app:layout_constraintEnd_toStartOf="@+id/end_view"
         app:layout_constraintStart_toEndOf="@+id/image"
         app:layout_constraintTop_toTopOf="@+id/image"
         tools:text="All widgets" />
@@ -51,23 +51,14 @@
         app:layout_constraintTop_toBottomOf="@+id/form_subtitle"
         tools:text="Added on Thu, Jul 11, 2019 at 15:35" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/map_button"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-        android:layout_width="40sp"
-        android:layout_height="40sp"
+    <FrameLayout
+        android:id="@+id/end_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:minWidth="40dp"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:clickable="false"
-        android:focusable="false"
-        android:insetLeft="0sp"
-        android:insetTop="0sp"
-        android:insetRight="0sp"
-        android:insetBottom="0sp"
-        android:padding="8sp"
-        android:contentDescription="@string/open_form_map"
-        app:icon="@drawable/ic_map"
-        app:iconTint="?attr/colorOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

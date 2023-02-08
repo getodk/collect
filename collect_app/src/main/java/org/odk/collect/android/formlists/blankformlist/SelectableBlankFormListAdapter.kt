@@ -1,12 +1,12 @@
 package org.odk.collect.android.formlists.blankformlist
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
-import org.odk.collect.android.databinding.SelectableBlankFormListItemBinding
+import org.odk.collect.android.R
 
 class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boolean) -> Unit) :
-    RecyclerView.Adapter<SelectableBlankFormListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<BlankFormListItemViewHolder>() {
 
     var formItems = emptyList<BlankFormListItem>()
         set(value) {
@@ -15,28 +15,24 @@ class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boole
         }
     private var isChecked = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = SelectableBlankFormListItemBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return ViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlankFormListItemViewHolder {
+        return BlankFormListItemViewHolder(parent).also {
+            it.setEndView(R.layout.checkbox)
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(holder) {
-            with(formItems[position]) {
-                binding.formTitle.text = this.formName
-                binding.checkbox.setOnCheckedChangeListener { _, checked ->
-                    isChecked = checked
-                    onCheckedListener(this.databaseId, checked)
-                }
+    override fun onBindViewHolder(holder: BlankFormListItemViewHolder, position: Int) {
+        val item = formItems[position]
+        holder.blankFormListItem = item
 
-                binding.root.setOnClickListener {
-                    binding.checkbox.toggle()
-                }
-            }
+        val checkbox = holder.itemView.findViewById<CheckBox>(R.id.checkbox)
+        checkbox.setOnCheckedChangeListener { _, checked ->
+            isChecked = checked
+            onCheckedListener(item.databaseId, checked)
+        }
+
+        holder.itemView.setOnClickListener {
+            checkbox.toggle()
         }
     }
 
@@ -45,7 +41,4 @@ class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boole
     fun isChecked(): Boolean {
         return isChecked
     }
-
-    class ViewHolder(val binding: SelectableBlankFormListItemBinding) :
-        RecyclerView.ViewHolder(binding.root)
 }
