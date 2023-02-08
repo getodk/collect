@@ -21,6 +21,8 @@ class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Fa
     private lateinit var blankFormListViewModel: BlankFormListViewModel
     private lateinit var multiSelectViewModel: MultiSelectViewModel
 
+    private var selected = emptySet<Long>()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
@@ -48,22 +50,35 @@ class DeleteBlankFormFragment(private val viewModelFactory: ViewModelProvider.Fa
         }
 
         recyclerView.adapter = adapter
-
         blankFormListViewModel.formsToDisplay.observe(viewLifecycleOwner) {
             if (it != null) {
                 adapter.formItems = it
             }
         }
 
+        multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.deleteSelected.isEnabled = false
+                binding.selectAll.setText(R.string.select_all)
+            } else {
+                binding.deleteSelected.isEnabled = true
+                binding.selectAll.setText(R.string.clear_all)
+            }
+
+            selected = it
+        }
+
         binding.selectAll.setOnClickListener {
-            adapter.formItems.forEach {
-                multiSelectViewModel.select(it.databaseId)
+            if (selected.isEmpty()) {
+                adapter.formItems.forEach {
+                    multiSelectViewModel.select(it.databaseId)
+                }
+            } else {
+                multiSelectViewModel.unselectAll()
             }
         }
 
         binding.deleteSelected.setOnClickListener {
-            val selected = multiSelectViewModel.getSelected()
-
             val alertDialog = MaterialAlertDialogBuilder(requireContext()).create()
             alertDialog.setMessage(getString(R.string.delete_confirm, selected.size.toString()))
             alertDialog.setButton(

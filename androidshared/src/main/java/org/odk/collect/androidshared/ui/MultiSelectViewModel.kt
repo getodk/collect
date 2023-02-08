@@ -1,20 +1,26 @@
 package org.odk.collect.androidshared.ui
 
 import androidx.lifecycle.ViewModel
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.livedata.NonNullLiveData
 
 class MultiSelectViewModel : ViewModel() {
 
-    private val selected = mutableSetOf<Long>()
+    private val selected = MutableNonNullLiveData(emptySet<Long>())
 
     fun select(item: Long) {
-        selected.add(item)
+        selected.value = selected.value + item
     }
 
-    fun getSelected(): Set<Long> {
+    fun getSelected(): NonNullLiveData<Set<Long>> {
         return selected
     }
 
     fun unselect(item: Long) {
-        selected.remove(item)
+        selected.value = selected.value - item
+    }
+
+    fun unselectAll() {
+        selected.value = emptySet()
     }
 }

@@ -95,18 +95,6 @@ public class DeleteBlankFormTest {
     }
 
     @Test // TODO: replace with test lower level test
-    public void clearAllTest() {
-        rule.startAtMainMenu()
-                .copyForm("one-question.xml")
-                .copyForm("two-question.xml")
-                .clickDeleteSavedForm()
-                .clickBlankForms()
-                .clickOnString(R.string.select_all)
-                .clickOnString(R.string.clear_all)
-                .assertDisabled(R.string.delete_file);
-    }
-
-    @Test // TODO: replace with test lower level test
     public void searchTest() {
         rule.startAtMainMenu()
                 .copyForm("one-question.xml")

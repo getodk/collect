@@ -9,13 +9,16 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,7 +75,7 @@ class DeleteBlankFormFragmentTest {
         onView(withText("Form 1")).perform(click())
         onView(withText("Form 3")).perform(click())
 
-        assertThat(multiSelectViewModel.getSelected(), equalTo(setOf<Long>(1, 3)))
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 3)))
     }
 
     @Test
@@ -89,7 +92,7 @@ class DeleteBlankFormFragmentTest {
 
         onView(withText("Form 2")).perform(click())
 
-        assertThat(multiSelectViewModel.getSelected(), equalTo(setOf<Long>(1)))
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1)))
     }
 
     @Test
@@ -103,7 +106,28 @@ class DeleteBlankFormFragmentTest {
 
         onView(withText(R.string.select_all)).perform(click())
 
-        assertThat(multiSelectViewModel.getSelected(), equalTo(setOf<Long>(1, 2)))
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 2)))
+    }
+
+    @Test
+    fun `clicking clear all selects no forms`() {
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 1, formName = "Form 1"),
+            blankFormListItem(databaseId = 2, formName = "Form 2")
+        )
+
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+
+        onView(withText(R.string.clear_all)).check(doesNotExist())
+        onView(withText(R.string.select_all)).perform(click())
+
+        onView(withText(R.string.select_all)).check(doesNotExist())
+        onView(withText(R.string.clear_all)).perform(click())
+
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(emptySet()))
+
+        onView(withText(R.string.select_all)).check(matches(isDisplayed()))
+        onView(withText(R.string.clear_all)).check(doesNotExist())
     }
 
     @Test
@@ -120,6 +144,19 @@ class DeleteBlankFormFragmentTest {
         onView(withText(R.string.delete_yes)).inRoot(isDialog()).perform(click())
 
         verify(blankFormListViewModel).deleteForms(11, 12)
+    }
+
+    @Test
+    fun `delete selected is disabled and enabled when forms are selects or not`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+
+        onView(withText(R.string.delete_file)).check(matches(not(isEnabled())))
+
+        multiSelectViewModel.select(11)
+        onView(withText(R.string.delete_file)).check(matches(isEnabled()))
+
+        multiSelectViewModel.unselectAll()
+        onView(withText(R.string.delete_file)).check(matches(not(isEnabled())))
     }
 
     private fun blankFormListItem(databaseId: Long = 1, formName: String = "Form 1") =
