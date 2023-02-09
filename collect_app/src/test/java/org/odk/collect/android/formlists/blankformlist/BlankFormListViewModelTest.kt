@@ -238,6 +238,20 @@ class BlankFormListViewModelTest {
     }
 
     @Test
+    fun `all form versions should be visible if hiding old form versions is enabled and show all versions is true`() {
+        saveForms(
+            form(dbId = 1, formId = "1", version = "2"),
+            form(dbId = 2, formId = "1", version = "1")
+        )
+
+        createViewModel(shouldHideOldFormVersions = true, showAllVersions = true)
+
+        assertThat(viewModel.formsToDisplay.value!!.size, `is`(2))
+        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", version = "2"))
+        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "1", version = "1"))
+    }
+
+    @Test
     fun `when list of forms sorted 'by name ASC', saved should forms be ordered properly`() {
         saveForms(
             form(dbId = 1, formId = "1", formName = "1Form"),
@@ -502,7 +516,11 @@ class BlankFormListViewModelTest {
         }
     }
 
-    private fun createViewModel(runAllBackgroundTasks: Boolean = true, shouldHideOldFormVersions: Boolean = true) {
+    private fun createViewModel(
+        runAllBackgroundTasks: Boolean = true,
+        shouldHideOldFormVersions: Boolean = true,
+        showAllVersions: Boolean = false
+    ) {
         whenever(syncRepository.isSyncing(projectId)).thenReturn(MutableLiveData(false))
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
         generalSettings.save(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, shouldHideOldFormVersions)
@@ -517,7 +535,8 @@ class BlankFormListViewModelTest {
             generalSettings,
             changeLockProvider,
             formsDirDiskFormsSynchronizer,
-            projectId
+            projectId,
+            showAllVersions
         )
 
         if (runAllBackgroundTasks) {

@@ -35,7 +35,8 @@ class BlankFormListViewModel(
     private val generalSettings: Settings,
     private val changeLockProvider: ChangeLockProvider,
     private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
-    private val projectId: String
+    private val projectId: String,
+    private val showAllVersions: Boolean = false
 ) : ViewModel() {
 
     private val _allForms: MutableNonNullLiveData<List<BlankFormListItem>> = MutableNonNullLiveData(emptyList())
@@ -107,7 +108,7 @@ class BlankFormListViewModel(
                         form.toBlankFormListItem(projectId, instancesRepository)
                     }
 
-                if (shouldHideOldFormVersions) {
+                if (shouldHideOldFormVersions && !showAllVersions) {
                     newListOfForms = newListOfForms.groupBy {
                         it.formId
                     }.map { (_, itemsWithSameId) ->

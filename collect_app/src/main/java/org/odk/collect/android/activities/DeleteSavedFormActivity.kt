@@ -13,8 +13,8 @@
  */
 package org.odk.collect.android.activities
 
+import android.app.Application
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -25,26 +25,69 @@ import org.odk.collect.android.adapters.DeleteFormsTabsAdapter
 import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.DeleteBlankFormFragment
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
+import org.odk.collect.android.formmanagement.FormsUpdater
+import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectDependencyProviderFactory
+import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
+import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.FormsRepository
+import org.odk.collect.forms.instances.InstancesRepository
+import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
 class DeleteSavedFormActivity : LocalizedActivity() {
     @Inject
-    lateinit var viewModelFactory: BlankFormListViewModel.Factory
+    lateinit var projectDependencyProviderFactory: ProjectDependencyProviderFactory
 
-    private val viewModel: BlankFormListViewModel by viewModels { viewModelFactory }
+    @Inject
+    lateinit var currentProjectProvider: CurrentProjectProvider
+
+    @Inject
+    lateinit var syncStatusAppState: SyncStatusAppState
+
+    @Inject
+    lateinit var formsUpdater: FormsUpdater
+
+    @Inject
+    lateinit var scheduler: Scheduler
 
     private lateinit var binding: TabsLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerUtils.getComponent(this).inject(this)
+
+        val projectId = currentProjectProvider.getCurrentProject().uuid
+        val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
+
+        val viewModelFactory = ViewModelFactory(
+            projectDependencyProvider.formsRepository,
+            projectDependencyProvider.instancesRepository,
+            this.application,
+            syncStatusAppState,
+            formsUpdater,
+            scheduler,
+            projectDependencyProvider.generalSettings,
+            projectDependencyProvider.changeLockProvider,
+            FormsDirDiskFormsSynchronizer(
+                projectDependencyProvider.formsRepository,
+                projectDependencyProvider.formsDir
+            ),
+            projectId
+        )
+
+        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+        val blankFormsListViewModel = viewModelProvider[BlankFormListViewModel::class.java]
+
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(DeleteBlankFormFragment::class) {
-                DeleteBlankFormFragment(ViewModelFactory(viewModelFactory), this)
+                DeleteBlankFormFragment(viewModelFactory, this)
             }
             .build()
 
@@ -52,10 +95,10 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         binding = TabsLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupAppBarLayout(this, getString(R.string.manage_files))
-        setUpViewPager()
+        setUpViewPager(blankFormsListViewModel)
     }
 
-    private fun setUpViewPager() {
+    private fun setUpViewPager(viewModel: BlankFormListViewModel) {
         val viewPager = binding.viewPager.apply {
             adapter = DeleteFormsTabsAdapter(
                 this@DeleteSavedFormActivity,
@@ -68,15 +111,36 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         }.attach()
     }
 
-    private class ViewModelFactory(private val blankFormListViewModelFactory: ViewModelProvider.Factory) :
+    private class ViewModelFactory(
+        private val formsRepository: FormsRepository,
+        private val instancesRepository: InstancesRepository,
+        private val application: Application,
+        private val syncRepository: SyncStatusAppState,
+        private val formsUpdater: FormsUpdater,
+        private val scheduler: Scheduler,
+        private val generalSettings: Settings,
+        private val changeLockProvider: ChangeLockProvider,
+        private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
+        private val projectId: String
+    ) :
         ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             return when (modelClass) {
-                BlankFormListViewModel::class.java -> blankFormListViewModelFactory.create(
-                    modelClass,
-                    extras
+                BlankFormListViewModel::class.java -> BlankFormListViewModel(
+                    formsRepository,
+                    instancesRepository,
+                    application,
+                    syncRepository,
+                    formsUpdater,
+                    scheduler,
+                    generalSettings,
+                    changeLockProvider,
+                    formsDirDiskFormsSynchronizer,
+                    projectId,
+                    showAllVersions = true
                 )
+
                 MultiSelectViewModel::class.java -> MultiSelectViewModel()
                 else -> throw IllegalArgumentException()
             } as T
