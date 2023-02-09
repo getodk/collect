@@ -30,6 +30,14 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url "${rootDir}/.local-m2/"
+            metadataSources {
+                mavenPom()
+                artifact() // Supports artifact only dependencies like those from medicmobile repo
+            }
+        }
+
         // Needs to go first to get specialty libraries https://stackoverflow.com/a/48438866/137744
         google()
 
@@ -51,11 +59,6 @@ allprojects {
                 username = "mapbox"
                 password = getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '')
             }
-        }
-
-        // Local repo for dependencies that only existed in the defunct JCenter repo
-        maven {
-          url "${rootDir}/jcenter-local-m2"
         }
     }
 
@@ -95,4 +98,23 @@ task checkRegression(type: GradleBuild) {
 task checkInstrumented(type: GradleBuild) {
     tasks = ["connectedDebugAndroidTest"]
     startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.instrumented"]
+}
+
+// Create local Maven repo from cached Gradle dependencies
+task cacheToMavenLocal(type: Sync) {
+    from new File(gradle.gradleUserHomeDir, 'caches/modules-2/files-2.1')
+    into "${rootDir}/.local-m2"
+
+    duplicatesStrategy = 'include'
+
+    // Convert from Gradle cache to Maven format
+    eachFile {
+        List<String> parts = it.path.split('/')
+        it.path = parts[0].replace('.','/') +
+                '/' + parts[1] +
+                '/' + parts[2] +
+                '/' + parts[4]
+    }
+
+    includeEmptyDirs false
 }

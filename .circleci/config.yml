@@ -17,7 +17,7 @@ jobs:
       - checkout
       - run:
           name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle .circleci/gradle.properties > deps.txt
+          command: cat build.gradle */build.gradle .circleci/gradle.properties .circleci/config.yml > deps.txt
       - restore_cache:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
@@ -43,12 +43,34 @@ jobs:
           key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: compile-deps-{{ checksum "deps.txt" }}
       - persist_to_workspace:
           root: ~/work
           paths:
             - .
+
+  create_dependency_backup:
+    <<: *android_config
+    steps:
+      - attach_workspace:
+          at: ~/work
+      - restore_cache:
+          keys:
+            - compile-deps-{{ checksum "deps.txt" }}
+            - compile-deps-
+      - restore_cache:
+          keys:
+            - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          name: Create Maven repo from dependencies
+          command: ./gradlew cacheToMavenLocal
+      - run:
+          name: Compress Maven repo
+          command: tar -cvzf $(git describe --tags).tar .local-m2
+      - store_artifacts:
+          path: maven.tar
 
   check_quality:
     <<: *android_config
@@ -113,7 +135,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: test-modules-deps-{{ checksum "deps.txt" }}
 
   test_app:
@@ -162,7 +184,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: test-app-deps-{{ checksum "deps.txt" }}
 
   build_instrumented:
@@ -189,7 +211,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
   build_release:
@@ -237,7 +259,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
@@ -287,7 +309,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/.gradle/caches
+            - ~/.gradle/caches/modules-2/files-2.1
           key: intrumented-deps-{{ checksum "deps.txt" }}
 
       - run:
@@ -318,6 +340,14 @@ workflows:
   commit:
     jobs:
       - compile
+      - create_dependency_backup:
+          requires:
+            - compile
+          filters:
+            tags:
+              only: /^v((20)[0-9]{2})\.\d+\.\d+$/ # matches semvers like v1.2.3
+            branches:
+              ignore: /.*/
       - check_quality:
           requires:
             - compile

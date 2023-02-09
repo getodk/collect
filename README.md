@@ -268,3 +268,16 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - write Play Store release notes, include link to forum post
 - upload to Play Store
 - if there was an active beta before release (this can happen with point releases), publish a new beta release to replace the previous one which was disabled by the production release
+- attach APK to previously created Github Release with the name `ODK-Collect-vX.X.X.apk`
+- backup dependencies for the release by downloading the `vX.X.X.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) and then uploading it to the "Collect Dependency Backups" folder in GetODK's Google Drive
+
+## Compiling a previous release using backed-up dependencies
+
+1. Download the `.tar` for relevant release tag
+2. Extract `.local-m2` into the project directory:
+    ```bash
+    tar -xf maven.tar -C <collect project directory>
+    ```
+   
+The project will now be able to fetch dependencies that are no longer available (but were used to compile the release) from the `.local-m2` Maven repo.
+
