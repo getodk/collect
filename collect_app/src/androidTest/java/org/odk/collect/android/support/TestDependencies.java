@@ -26,7 +26,7 @@ public class TestDependencies extends AppDependencyModule {
     public final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
 
     @Override
-    public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
+    public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, StoragePathProvider storagePathProvider) {
         return server;
     }
 

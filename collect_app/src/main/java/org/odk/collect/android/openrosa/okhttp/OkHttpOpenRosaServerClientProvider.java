@@ -19,6 +19,7 @@ import org.odk.collect.android.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.openrosa.OpenRosaServerClientProvider;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
@@ -32,6 +33,7 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -49,12 +51,18 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     private static final String DATE_HEADER = "Date";
 
     private final OkHttpClient baseClient;
+    private final String cacheDir;
 
     private HttpCredentialsInterface lastCredentials;
     private OkHttpOpenRosaServerClient client;
 
     public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
+        this(baseClient, null);
+    }
+
+    public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient, String cacheDir) {
         this.baseClient = baseClient;
+        this.cacheDir = cacheDir;
     }
 
     @Override
@@ -79,6 +87,13 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .followRedirects(true);
+
+        if (cacheDir != null) {
+            builder.cache(new Cache(
+                    new File(cacheDir, "http"),
+                    50L * 1024L * 1024L // 50 MiB
+            ));
+        }
 
         // Let's Encrypt root used as of Jan 2021 isn't trusted by Android 7.1.1 and below. Android
         // 7.0 and 7.1 (API 24/25) use network_security_config to get support.
