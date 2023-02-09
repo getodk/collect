@@ -38,18 +38,10 @@ internal abstract class CameraXCamera : Camera {
                 val preview = Preview.Builder().build()
                 preview.setSurfaceProvider((previewView as PreviewView).surfaceProvider)
 
-                val cameraInfos = cameraProvider.availableCameraInfos
-                val frontCameras = CameraSelector.DEFAULT_FRONT_CAMERA.filter(cameraInfos)
-                val cameraSelector = if (frontCameras.isNotEmpty()) {
-                    CameraSelector.DEFAULT_FRONT_CAMERA
-                } else {
-                    CameraSelector.DEFAULT_BACK_CAMERA
-                }
-
                 try {
                     cameraProvider.bindToLifecycle(
                         activity,
-                        cameraSelector,
+                        CameraSelector.DEFAULT_FRONT_CAMERA,
                         preview,
                         getUseCase()
                     )
