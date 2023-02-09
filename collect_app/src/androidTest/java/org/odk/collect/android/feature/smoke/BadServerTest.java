@@ -7,10 +7,11 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.TranslatedStringBuilder;
+import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 import java.util.Arrays;
 
@@ -62,5 +63,30 @@ public class BadServerTest {
                 .copyForm("one-question.xml", Arrays.asList("fruits.csv"), false, testDependencies.server.getHostName())
                 .clickGetBlankForm()
                 .assertText(R.string.newer_version_of_a_form_info);
+    }
+
+    @Test
+    /*
+     A server that doesn't return hashes based on the md5 of the file for media files
+     would fool Collect into thinking there was a new one each time. Collect should still redownload
+     the file in this case (there's nothing else it can do), but it should only identify the form
+     as being updated if the file actually changed.
+
+     Open Rosa does not actually specify that the hash should be the literal md5 file hash, but
+     Collect has historically expected that.
+    */
+    public void whenMediaFileHasUnstableHash_butIsIdentical_doesNotShowAsUpdatedAfterRedownload() {
+        testDependencies.server.returnRandomMediaFileHash();
+        testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml", Arrays.asList("fruits.csv"));
+
+        rule.withProject(testDependencies.server.getURL())
+                .copyForm("one-question.xml", Arrays.asList("fruits.csv"), false, testDependencies.server.getHostName())
+                .clickGetBlankForm()
+                .assertText(R.string.newer_version_of_a_form_info)
+                .clickGetSelected()
+                .clickOKOnDialog(new MainMenuPage())
+                .clickFillBlankForm()
+                .assertTextThatContainsDoesNoExist("Updated on")
+                .assertTextThatContainsExists("Added on");
     }
 }
