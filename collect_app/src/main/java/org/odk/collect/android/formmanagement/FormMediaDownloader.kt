@@ -33,16 +33,28 @@ class FormMediaDownloader(
 
             val tempMediaFile = File(tempMediaDir, mediaFile.filename)
 
-            searchForExistingMediaFile(formToDownload, mediaFile).let {
+            val existingFile = searchForExistingMediaFile(formToDownload, mediaFile)
+            existingFile.let {
                 if (it != null) {
-                    copyFile(it, tempMediaFile)
+                    if (getMd5Hash(it).contentEquals(mediaFile.hash)) {
+                        copyFile(it, tempMediaFile)
+                    } else {
+                        val existingFileHash = getMd5Hash(it)
+                        val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
+                        interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+
+                        if (!getMd5Hash(tempMediaFile).contentEquals(existingFileHash)) {
+                            atLeastOneNewMediaFileDetected = true
+                        }
+                    }
                 } else {
-                    atLeastOneNewMediaFileDetected = true
                     val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                     interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
+                    atLeastOneNewMediaFileDetected = true
                 }
             }
         }
+
         return atLeastOneNewMediaFileDetected
     }
 
@@ -54,9 +66,7 @@ class FormMediaDownloader(
         return allFormVersions.map { form: Form ->
             File(form.formMediaPath, mediaFile.filename)
         }.firstOrNull { file: File ->
-            val currentFileHash = getMd5Hash(file)
-            val downloadFileHash = mediaFile.hash
-            file.exists() && currentFileHash.contentEquals(downloadFileHash)
+            file.exists()
         }
     }
 }
