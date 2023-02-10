@@ -185,9 +185,9 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, StoragePathProvider storagePathProvider) {
+    public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, Application application) {
         return new OkHttpConnection(
-                new OkHttpOpenRosaServerClientProvider(new OkHttpClient(), storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)),
+                new OkHttpOpenRosaServerClientProvider(new OkHttpClient(), application.getCacheDir().getAbsolutePath()),
                 new CollectThenSystemContentTypeMapper(mimeTypeMap),
                 userAgentProvider.getUserAgent()
         );
