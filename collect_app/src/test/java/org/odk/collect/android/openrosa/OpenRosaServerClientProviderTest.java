@@ -1,10 +1,10 @@
 package org.odk.collect.android.openrosa;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
 import static org.odk.collect.android.openrosa.support.MockWebServerHelper.buildRequest;
 
 import org.junit.Before;
