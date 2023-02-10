@@ -88,14 +88,6 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
         hideButtonsIfNeeded(appearance);
         errorTextView.setVisibility(View.GONE);
-
-        if (selfie) {
-            if (!new CameraUtils().isFrontCameraAvailable(getContext())) {
-                captureButton.setEnabled(false);
-                errorTextView.setText(R.string.error_front_camera_unavailable);
-                errorTextView.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     @Override
@@ -150,7 +142,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     private void captureImage() {
         errorTextView.setVisibility(View.GONE);
-        if (selfie) {
+        if (selfie && new CameraUtils().isFrontCameraAvailable(getContext())) {
             Intent intent = new Intent(getContext(), CaptureSelfieActivity.class);
             intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
             imageCaptureHandler.captureImage(intent, RequestCodes.MEDIA_FILE_PATH, R.string.capture_image);

@@ -45,7 +45,6 @@ import org.odk.collect.android.widgets.interfaces.FileWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.CameraUtils;
-import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 import org.odk.collect.settings.keys.ProjectKeys;
 
@@ -74,11 +73,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private final boolean selfie;
 
     public VideoWidget(Context context, QuestionDetails prompt,  QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry) {
-        this(context, prompt, waitingForDataRegistry, questionMediaManager, new CameraUtils());
+        this(context, prompt, waitingForDataRegistry, questionMediaManager);
         render();
     }
 
-    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager, CameraUtils cameraUtils) {
+    public VideoWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, QuestionMediaManager questionMediaManager) {
         super(context, questionDetails);
         render();
 
@@ -107,13 +106,6 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
 
         hideButtonsIfNeeded();
-
-        if (selfie) {
-            if (!cameraUtils.isFrontCameraAvailable(getContext())) {
-                captureButton.setEnabled(false);
-                ToastUtils.showLongToast(getContext(), R.string.error_front_camera_unavailable);
-            }
-        }
     }
 
     @Override
@@ -208,7 +200,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
     private void captureVideo() {
         Intent i;
         int requestCode;
-        if (selfie) {
+        if (selfie && new CameraUtils().isFrontCameraAvailable(getContext())) {
             i = new Intent(getContext(), CaptureSelfieActivity.class);
             i.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
             i.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true);

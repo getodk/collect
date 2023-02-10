@@ -278,7 +278,7 @@ jobs:
               --type instrumentation \
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
-              --device model=Pixel2,version=29,locale=en,orientation=portrait \
+              --device model=MediumPhone.arm,version=30,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m \
               --test-targets "package org.odk.collect.android.feature.smoke"
@@ -329,7 +329,7 @@ jobs:
               --num-uniform-shards=25 \
               --app collect_app/build/outputs/apk/debug/*.apk \
               --test collect_app/build/outputs/apk/androidTest/debug/*.apk \
-              --device model=Pixel2,version=29,locale=en,orientation=portrait \
+              --device model=MediumPhone.arm,version=30,locale=en,orientation=portrait \
               --results-bucket opendatakit-collect-test-results \
               --directories-to-pull /sdcard --timeout 20m
             fi

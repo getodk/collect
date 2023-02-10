@@ -17,7 +17,7 @@ public class ShortcutsPage extends Page<ShortcutsPage> {
 
     @Override
     public ShortcutsPage assertOnPage() {
-        assertText(R.string.select_odk_shortcut);
+        assertTextInDialog(R.string.select_odk_shortcut);
         return this;
     }
 

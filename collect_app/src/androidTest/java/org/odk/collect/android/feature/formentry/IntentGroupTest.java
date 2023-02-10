@@ -18,6 +18,7 @@ package org.odk.collect.android.feature.formentry;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intending;
@@ -35,7 +36,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
-import static org.odk.collect.androidtest.NestedScrollToAction.nestedScrollTo;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -121,7 +121,7 @@ public class IntentGroupTest {
         resultIntent.setClipData(clipData);
         resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
-        onView(withText("This is buttonText")).perform(nestedScrollTo(), click());
+        onView(withText("This is buttonText")).perform(scrollTo(), click());
 
         assertImageWidgetWithAnswer();
         assertAudioWidgetWithAnswer();
@@ -155,7 +155,7 @@ public class IntentGroupTest {
         resultIntent.setClipData(clipData);
         resultIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, resultIntent));
-        onView(withText("This is buttonText")).perform(nestedScrollTo(), click());
+        onView(withText("This is buttonText")).perform(scrollTo(), click());
 
         onView(withIndex(withClassName(endsWith("EditText")), 0)).check(matches(withText("")));
         onView(withIndex(withClassName(endsWith("EditText")), 1)).check(matches(withText("")));
@@ -214,7 +214,7 @@ public class IntentGroupTest {
     }
 
     private void assertVideoWidgetWithoutAnswer() {
-        onView(withText(is("Video external"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withText(is("Video external"))).perform(scrollTo()).check(matches(isDisplayed()));
         onView(withId(R.id.play_video)).check(matches(not(isDisplayed())));
     }
 
@@ -223,22 +223,22 @@ public class IntentGroupTest {
     }
 
     private void assertImageWidgetWithAnswer() {
-        onView(withTagValue(is("ImageView"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withTagValue(is("ImageView"))).perform(scrollTo()).check(matches(isDisplayed()));
         onView(withId(R.id.capture_image)).check(doesNotExist());
         onView(withId(R.id.choose_image)).check(doesNotExist());
     }
 
     private void assertAudioWidgetWithAnswer() {
-        onView(withId(R.id.audio_controller)).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.audio_controller)).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     private void assertVideoWidgetWithAnswer() {
-        onView(withId(R.id.play_video)).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withId(R.id.play_video)).perform(scrollTo()).check(matches(isDisplayed()));
         onView(withId(R.id.play_video)).check(matches(isEnabled()));
     }
 
     private void assertFileWidgetWithAnswer() {
-        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).perform(nestedScrollTo()).check(matches(isDisplayed()));
+        onView(withTagValue(is("ArbitraryFileWidgetAnswer"))).perform(scrollTo()).check(matches(isDisplayed()));
     }
 
     private Uri createTempFile(String name, String extension) throws IOException {

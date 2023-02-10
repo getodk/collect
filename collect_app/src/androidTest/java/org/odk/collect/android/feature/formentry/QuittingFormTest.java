@@ -129,8 +129,7 @@ public class QuittingFormTest {
                 .removeResponse()
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
-                .clickSaveChanges()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_error)
+                .clickSaveChangesWithError(R.string.required_answer_error)
                 .pressBackAndIgnoreChanges()
 
                 .clickEditSavedForm(1)
@@ -159,8 +158,7 @@ public class QuittingFormTest {
                 .swipeToPreviousQuestion("What is your name?")
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
-                .clickSaveChanges()
-                .assertConstraintDisplayed("Sorry, this response is required!")
+                .clickSaveChangesWithError(R.string.required_answer_error)
                 .assertQuestion("What is your age?", true)
                 .pressBackAndIgnoreChanges()
 

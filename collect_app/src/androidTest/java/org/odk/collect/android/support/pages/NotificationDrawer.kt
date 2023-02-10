@@ -99,6 +99,9 @@ class NotificationDrawer {
             // "Clear all" doesn't exist because there are notifications to clear - just press back
             pressBack()
         }
+
+        device.wait(Until.gone(By.text("Notifications")), 1000L)
+
         isOpen = false
     }
 
