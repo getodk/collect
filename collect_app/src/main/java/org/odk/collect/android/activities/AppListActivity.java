@@ -41,6 +41,7 @@ import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -50,7 +51,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public abstract class AppListActivity extends CollectAbstractActivity {
+public abstract class AppListActivity extends LocalizedActivity {
 
     protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";

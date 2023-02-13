@@ -186,6 +186,7 @@ import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -209,7 +210,7 @@ import timber.log.Timber;
  */
 
 @SuppressWarnings("PMD.CouplingBetweenObjects")
-public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
+public class FormEntryActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,

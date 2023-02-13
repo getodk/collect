@@ -15,9 +15,10 @@ import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class FirstLaunchActivity : CollectAbstractActivity() {
+class FirstLaunchActivity : LocalizedActivity() {
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
