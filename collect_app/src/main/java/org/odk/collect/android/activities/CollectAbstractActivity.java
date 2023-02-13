@@ -21,7 +21,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
@@ -30,9 +29,6 @@ import javax.inject.Inject;
 public abstract class CollectAbstractActivity extends LocalizedActivity {
 
     private boolean isInstanceStateSaved;
-
-    @Inject
-    protected PermissionsProvider permissionsProvider;
 
     @Inject
     protected SettingsProvider settingsProvider;

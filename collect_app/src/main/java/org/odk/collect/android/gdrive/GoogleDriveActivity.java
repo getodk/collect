@@ -59,6 +59,7 @@ import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 
@@ -125,6 +126,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);

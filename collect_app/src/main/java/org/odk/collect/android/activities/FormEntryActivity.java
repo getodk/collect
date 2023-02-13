@@ -181,6 +181,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
+import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
@@ -338,6 +339,9 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     FormSessionRepository formSessionRepository;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
