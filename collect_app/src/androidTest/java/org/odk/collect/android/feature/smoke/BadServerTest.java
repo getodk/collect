@@ -18,7 +18,6 @@ import java.util.Arrays;
 @RunWith(AndroidJUnit4.class)
 public class BadServerTest {
 
-
     private final CollectTestRule rule = new CollectTestRule(false);
     private final TestDependencies testDependencies = new TestDependencies();
 
@@ -71,9 +70,6 @@ public class BadServerTest {
      would fool Collect into thinking there was a new one each time. Collect should still redownload
      the file in this case (there's nothing else it can do), but it should only identify the form
      as being updated if the file actually changed.
-
-     Open Rosa does not actually specify that the hash should be the literal md5 file hash, but
-     Collect has historically expected that.
     */
     public void whenMediaFileHasUnstableHash_butIsIdentical_doesNotShowAsUpdatedAfterRedownload() {
         testDependencies.server.returnRandomMediaFileHash();
