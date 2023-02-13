@@ -3,7 +3,6 @@ package org.odk.collect.android.openrosa.okhttp;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
@@ -67,7 +66,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     }
 
     @Override
-    public synchronized OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
+    public synchronized OpenRosaServerClient get(String scheme, String userAgent, @NonNull HttpCredentialsInterface credentials) {
         OkHttpOpenRosaServerClient existingClient = clients.get(credentials);
 
         if (existingClient == null) {
@@ -80,7 +79,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     }
 
     @NonNull
-    private OkHttpOpenRosaServerClient createNewClient(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
+    private OkHttpOpenRosaServerClient createNewClient(String scheme, String userAgent, @NonNull HttpCredentialsInterface credentials) {
         OkHttpClient.Builder builder = baseClient.newBuilder()
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -89,7 +88,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
 
         if (cacheDir != null) {
             builder.cache(new Cache(
-                    new File(cacheDir, "http"),
+                    new File(cacheDir, "http_" + credentials.hashCode()),
                     50L * 1024L * 1024L // 50 MiB
             ));
         }
