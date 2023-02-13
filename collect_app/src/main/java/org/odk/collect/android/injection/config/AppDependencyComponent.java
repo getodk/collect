@@ -4,7 +4,7 @@ import android.app.Application;
 
 import org.javarosa.core.reference.ReferenceManager;
 import org.odk.collect.android.activities.AboutActivity;
-import org.odk.collect.android.activities.CollectAbstractActivity;
+import org.odk.collect.android.activities.AppListActivity;
 import org.odk.collect.android.activities.DeleteSavedFormActivity;
 import org.odk.collect.android.activities.FirstLaunchActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
@@ -241,8 +241,6 @@ public interface AppDependencyComponent {
 
     void inject(AudioRecordingErrorDialogFragment audioRecordingErrorDialogFragment);
 
-    void inject(CollectAbstractActivity collectAbstractActivity);
-
     void inject(InstanceChooserList instanceChooserList);
 
     void inject(FormsProvider formsProvider);
@@ -294,6 +292,8 @@ public interface AppDependencyComponent {
     void inject(BackgroundLocationViewModel.Factory factory);
 
     void inject(DeleteRepeatDialogFragment deleteRepeatDialogFragment);
+
+    void inject(AppListActivity appListActivity);
 
     OpenRosaHttpInterface openRosaHttpInterface();
 

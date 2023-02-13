@@ -60,6 +60,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 
@@ -129,6 +130,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Inject
     PermissionsProvider permissionsProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);

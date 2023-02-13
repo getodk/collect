@@ -37,6 +37,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.settings.SettingsProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,6 +86,9 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
     private FormsRepository formsRepository;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

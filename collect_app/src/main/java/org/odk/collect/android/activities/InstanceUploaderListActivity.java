@@ -53,6 +53,7 @@ import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.util.Arrays;
@@ -93,6 +94,9 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Inject
     InstanceSubmitScheduler instanceSubmitScheduler;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

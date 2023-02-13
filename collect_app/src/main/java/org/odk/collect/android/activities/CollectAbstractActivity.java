@@ -18,26 +18,11 @@ package org.odk.collect.android.activities;
 
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
-
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
-
-import javax.inject.Inject;
 
 public abstract class CollectAbstractActivity extends LocalizedActivity {
 
     private boolean isInstanceStateSaved;
-
-    @Inject
-    protected SettingsProvider settingsProvider;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        DaggerUtils.getComponent(this).inject(this);
-    }
 
     @Override
     protected void onPostResume() {
