@@ -4,7 +4,7 @@ import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.StringData
 import org.javarosa.core.model.instance.TreeElement
 
-object FormFixtures {
+object FormElementFixtures {
 
     fun selectChoice(
         value: String = "foo",

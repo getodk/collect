@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils
 import org.odk.collect.forms.Form
 import java.io.File
 import java.io.IOException
-import java.lang.RuntimeException
 import java.nio.charset.Charset
 
 object FormUtils {
@@ -49,6 +48,22 @@ object FormUtils {
         xform: String = createXFormBody(formId, version),
         autosend: String? = null
     ): Form.Builder {
+        val formFilePath = createFormFixtureFile(formId, version, formFilesPath, xform)
+
+        return Form.Builder()
+            .displayName("Test Form")
+            .formId(formId)
+            .version(version)
+            .formFilePath(formFilePath)
+            .autoSend(autosend)
+    }
+
+    fun createFormFixtureFile(
+        formId: String,
+        version: String?,
+        formFilesPath: String,
+        xform: String = createXFormBody(formId, version)
+    ): String {
         val fileName = formId + "-" + version + "-" + Math.random()
         val formFile = File("$formFilesPath/$fileName.xml")
 
@@ -58,11 +73,6 @@ object FormUtils {
             throw RuntimeException(e)
         }
 
-        return Form.Builder()
-            .displayName("Test Form")
-            .formFilePath(formFile.absolutePath)
-            .formId(formId)
-            .version(version)
-            .autoSend(autosend)
+        return formFile.absolutePath
     }
 }
