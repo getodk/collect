@@ -28,7 +28,9 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -53,8 +55,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     private final OkHttpClient baseClient;
     private final String cacheDir;
 
-    private HttpCredentialsInterface lastCredentials;
-    private OkHttpOpenRosaServerClient client;
+    private final Map<HttpCredentialsInterface, OkHttpOpenRosaServerClient> clients = new HashMap<>();
 
     public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
         this(baseClient, null);
@@ -67,17 +68,15 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
 
     @Override
     public synchronized OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
-        if (client == null || credentialsHaveChanged(credentials)) {
-            lastCredentials = credentials;
-            client = createNewClient(scheme, userAgent, credentials);
+        OkHttpOpenRosaServerClient existingClient = clients.get(credentials);
+
+        if (existingClient == null) {
+            OkHttpOpenRosaServerClient newClient = createNewClient(scheme, userAgent, credentials);
+            clients.put(credentials, newClient);
+            return newClient;
+        } else {
+            return existingClient;
         }
-
-        return client;
-    }
-
-    private boolean credentialsHaveChanged(@Nullable HttpCredentialsInterface credentials) {
-        return lastCredentials != null && !lastCredentials.equals(credentials)
-                || lastCredentials == null && credentials != null;
     }
 
     @NonNull
