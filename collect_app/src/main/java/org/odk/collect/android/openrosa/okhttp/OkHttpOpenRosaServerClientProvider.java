@@ -66,7 +66,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     }
 
     @Override
-    public OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
+    public synchronized OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
         if (client == null || credentialsHaveChanged(credentials)) {
             lastCredentials = credentials;
             client = createNewClient(scheme, userAgent, credentials);
