@@ -58,6 +58,36 @@ class SelectChoicesMapDataTest {
     }
 
     @Test
+    fun `choices with geo shape format geometry have multiple points`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4; 12.0 -1.0 3 4"))
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        assertThat(data.getItemCount().getOrAwaitValue(), equalTo(1))
+
+        val mappableItems = data.getMappableItems().getOrAwaitValue()!!
+        assertThat(mappableItems.size, equalTo(1))
+
+        val points = mappableItems[0].points
+        assertThat(
+            points,
+            equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0), MapPoint(12.0, -1.0, 3.0, 4.0)))
+        )
+    }
+
+    @Test
     fun `choices without geometry are not included in mappable items`() {
         val choices = listOf(
             selectChoice(
