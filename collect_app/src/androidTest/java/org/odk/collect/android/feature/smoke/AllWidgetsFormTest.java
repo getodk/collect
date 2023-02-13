@@ -1,6 +1,7 @@
 package org.odk.collect.android.feature.smoke;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.swipeLeft;
 import static androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
@@ -609,10 +610,6 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("trigger-widget");
 
         onView(withText("Trigger widget")).perform(click());
-    }
-
-    public void testSubmission() {
-
     }
     //endregion
 }
