@@ -58,7 +58,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 public class GeoPolyActivity extends LocalizedActivity implements GeoPolySettingsDialogFragment.SettingsDialogCallback {
-    public static final String ANSWER_KEY = "answer";
+    public static final String EXTRA_POLYGON = "answer";
     public static final String OUTPUT_MODE_KEY = "output_mode";
     public static final String POINTS_KEY = "points";
     public static final String INPUT_ACTIVE_KEY = "input_active";
@@ -86,7 +86,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private MapFragment map;
     private int featureId = -1;  // will be a positive featureId once map is ready
-    private String originalAnswerString = "";
+    private List<MapPoint> originalPoly;
 
     private ImageButton zoomButton;
     private ImageButton playButton;
@@ -244,14 +244,23 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
         List<MapPoint> points = new ArrayList<>();
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(ANSWER_KEY)) {
-            originalAnswerString = intent.getStringExtra(ANSWER_KEY);
-            points = parsePoints(originalAnswerString);
+        if (intent != null && intent.hasExtra(EXTRA_POLYGON)) {
+            ArrayList<MapPoint> extraPoly = intent.getParcelableArrayListExtra(EXTRA_POLYGON);
+
+            if (!extraPoly.isEmpty()) {
+                originalPoly = extraPoly;
+
+                if (outputMode == OutputMode.GEOSHAPE) {
+                    points = extraPoly.subList(0, extraPoly.size() - 1);
+                } else {
+                    points = extraPoly;
+                }
+            }
         }
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addDraggablePoly(points, outputMode == OutputMode.GEOSHAPE);
+        featureId = map.addPoly(points, outputMode == OutputMode.GEOSHAPE, true);
 
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -303,47 +312,11 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     }
 
     @Override public void onBackPressed() {
-        if (map != null && !parsePoints(originalAnswerString).equals(map.getPolyPoints(featureId))) {
+        if (map != null && !originalPoly.equals(map.getPolyPoints(featureId))) {
             showBackDialog();
         } else {
             finish();
         }
-    }
-
-    /**
-     * Parses a form result string, as previously formatted by formatPoints,
-     * into a list of vertices.
-     */
-    private List<MapPoint> parsePoints(String coords) {
-        List<MapPoint> points = new ArrayList<>();
-        for (String vertex : (coords == null ? "" : coords).split(";")) {
-            String[] words = vertex.trim().split(" ");
-            if (words.length >= 2) {
-                double lat;
-                double lon;
-                double alt;
-                double sd;
-                try {
-                    lat = Double.parseDouble(words[0]);
-                    lon = Double.parseDouble(words[1]);
-                    alt = words.length > 2 ? Double.parseDouble(words[2]) : 0;
-                    sd = words.length > 3 ? Double.parseDouble(words[3]) : 0;
-                } catch (NumberFormatException e) {
-                    continue;
-                }
-                points.add(new MapPoint(lat, lon, alt, sd));
-            }
-        }
-        if (outputMode == OutputMode.GEOSHAPE) {
-            // Closed polygons are stored with a last point that duplicates the
-            // first point.  To prepare a polygon for display and editing, we
-            // need to remove this duplicate point.
-            int count = points.size();
-            if (count > 1 && points.get(0).equals(points.get(count - 1))) {
-                points.remove(count - 1);
-            }
-        }
-        return points;
     }
 
     @Override
@@ -446,7 +419,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         if (!isAccuracyThresholdActive()) {
             return true;
         }
-        return point.sd <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
+        return point.accuracy <= ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
     }
 
     private boolean isAccuracyThresholdActive() {
@@ -463,7 +436,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addDraggablePoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE);
+        featureId = map.addPoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, true);
         inputActive = false;
         updateUi();
     }
@@ -500,9 +473,9 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
         locationStatus.setText(
             location == null ? getString(R.string.location_status_searching)
-                : !usingThreshold ? getString(R.string.location_status_accuracy, location.sd)
-                : acceptable ? getString(R.string.location_status_acceptable, location.sd)
-                : getString(R.string.location_status_unacceptable, location.sd)
+                : !usingThreshold ? getString(R.string.location_status_accuracy, location.accuracy)
+                : acceptable ? getString(R.string.location_status_acceptable, location.accuracy)
+                : getString(R.string.location_status_unacceptable, location.accuracy)
         );
         locationStatus.setBackgroundColor(
                 location == null ? getThemeAttributeValue(this, R.attr.colorPrimary)

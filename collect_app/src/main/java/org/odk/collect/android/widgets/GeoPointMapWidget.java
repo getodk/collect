@@ -84,7 +84,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     public IAnswerData getAnswer() {
         return answerText == null || answerText.isEmpty()
                 ? null
-                : new GeoPointData(GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText));
+                : new GeoPointData(GeoWidgetUtils.parseGeometryPoint(answerText));
     }
 
     @Override

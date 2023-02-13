@@ -256,7 +256,7 @@ class MapboxMapFragment :
     ) {
         mapPoints?.let {
             val points = mapPoints.map {
-                Point.fromLngLat(it.lon, it.lat, it.alt)
+                Point.fromLngLat(it.longitude, it.latitude, it.altitude)
             }
 
             val screenWidth = ScreenUtils.getScreenWidth(context)
@@ -327,7 +327,7 @@ class MapboxMapFragment :
         }
     }
 
-    override fun addDraggablePoly(points: MutableIterable<MapPoint>, closedPolygon: Boolean): Int {
+    override fun addPoly(points: MutableIterable<MapPoint>, closedPolygon: Boolean, draggable: Boolean): Int {
         val featureId = nextFeatureId++
         features[featureId] = PolyFeature(
             requireContext(),
@@ -337,6 +337,7 @@ class MapboxMapFragment :
             featureClickListener,
             featureDragEndListener,
             closedPolygon,
+            draggable,
             points
         )
         return featureId
@@ -494,7 +495,7 @@ class MapboxMapFragment :
     private fun moveOrAnimateCamera(point: MapPoint, animate: Boolean, zoom: Double = getZoom()) {
         mapboxMap.flyTo(
             cameraOptions {
-                center(Point.fromLngLat(point.lon, point.lat, point.alt))
+                center(Point.fromLngLat(point.longitude, point.latitude, point.altitude))
                 zoom(zoom)
             },
             mapAnimationOptions {

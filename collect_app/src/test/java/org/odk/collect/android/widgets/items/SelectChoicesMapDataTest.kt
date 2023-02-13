@@ -16,6 +16,7 @@ import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
 import org.odk.collect.android.widgets.support.FormFixtures.treeElement
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
+import org.odk.collect.maps.MapPoint
 import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
@@ -25,6 +26,36 @@ class SelectChoicesMapDataTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Test
+    fun `choices with geo trace format geometry have multiple points`() {
+        val choices = listOf(
+            selectChoice(
+                value = "a",
+                item = treeElement(
+                    children = listOf(treeElement("geometry", "12.0 -1.0 3 4; 12.1 -1.0 3 4"))
+                )
+            )
+        )
+
+        val prompt = MockFormEntryPromptBuilder()
+            .withLongText("Which is your favourite place?")
+            .withSelectChoices(choices)
+            .withSelectChoiceText(mapOf(choices[0] to "A"))
+            .build()
+
+        val data = loadDataForPrompt(prompt)
+        assertThat(data.getItemCount().getOrAwaitValue(), equalTo(1))
+
+        val mappableItems = data.getMappableItems().getOrAwaitValue()!!
+        assertThat(mappableItems.size, equalTo(1))
+
+        val points = mappableItems[0].points
+        assertThat(
+            points,
+            equalTo(listOf(MapPoint(12.0, -1.0, 3.0, 4.0), MapPoint(12.1, -1.0, 3.0, 4.0)))
+        )
+    }
 
     @Test
     fun `choices without geometry are not included in mappable items`() {
@@ -94,145 +125,40 @@ class SelectChoicesMapDataTest {
     }
 
     @Test
-    fun `choices with geometry with latitude greater than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "90.01 0 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "80.00 0 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
-    fun `choices with geometry with latitude less than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "-90.01 0 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "80.00 0 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
-    fun `choices with geometry with longitude greater than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 180.01 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
-    fun `choices with geometry with longitude less than bounds are ignored`() {
-        val choices = listOf(
-            selectChoice(
-                value = "a",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 -180.01 0 0")
-                    )
-                )
-            ),
-            selectChoice(
-                value = "b",
-                item = treeElement(
-                    children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
-                    )
-                )
-            )
-        )
-
-        val prompt = MockFormEntryPromptBuilder()
-            .withLongText("Which is your favourite place?")
-            .withSelectChoices(choices)
-            .build()
-
-        val data = loadDataForPrompt(prompt)
-        assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
-    }
-
-    @Test
     fun `choices with incorrect geometry are ignored`() {
         val choices = listOf(
             selectChoice(
                 value = "a",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "blah")
+                        treeElement("geometry", "0 170.00 0 0")
                     )
                 )
             ),
+            // Invalid
             selectChoice(
                 value = "b",
                 item = treeElement(
                     children = listOf(
-                        treeElement("geometry", "0 170.00 0 0")
+                        treeElement("geometry", "blah")
+                    )
+                )
+            ),
+            // Out of bounds
+            selectChoice(
+                value = "c",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "0 180.1 0 0")
+                    )
+                )
+            ),
+            // Second point out of bounds
+            selectChoice(
+                value = "c",
+                item = treeElement(
+                    children = listOf(
+                        treeElement("geometry", "0 180 0 0; 0 180.1 0 0")
                     )
                 )
             )
@@ -245,7 +171,7 @@ class SelectChoicesMapDataTest {
 
         val data = loadDataForPrompt(prompt)
         assertThat(data.getMappableItems().value!!.size, equalTo(1))
-        assertThat(data.getMappableItems().value!![0].name, equalTo("b"))
+        assertThat(data.getMappableItems().value!![0].name, equalTo("a"))
     }
 
     /**

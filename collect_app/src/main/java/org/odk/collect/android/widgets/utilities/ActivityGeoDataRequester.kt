@@ -20,13 +20,13 @@ import java.lang.Boolean.parseBoolean
 
 class ActivityGeoDataRequester(
     private val permissionsProvider: PermissionsProvider,
-    private val activity: Activity
+    private val activity: Activity,
 ) : GeoDataRequester {
 
     override fun requestGeoPoint(
         prompt: FormEntryPrompt,
         answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry
+        waitingForDataRegistry: WaitingForDataRegistry,
     ) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
@@ -36,9 +36,9 @@ class ActivityGeoDataRequester(
 
                     val bundle = Bundle().also {
                         if (!answerText.isNullOrEmpty()) {
-                            it.putDoubleArray(
+                            it.putParcelable(
                                 GeoPointMapActivity.EXTRA_LOCATION,
-                                GeoWidgetUtils.getLocationParamsFromStringAnswer(answerText),
+                                GeoWidgetUtils.parseGeometry(answerText)[0],
                             )
                         }
 
@@ -85,7 +85,7 @@ class ActivityGeoDataRequester(
     override fun requestGeoShape(
         prompt: FormEntryPrompt,
         answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry
+        waitingForDataRegistry: WaitingForDataRegistry,
     ) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
@@ -94,7 +94,10 @@ class ActivityGeoDataRequester(
                     waitingForDataRegistry.waitForData(prompt.index)
 
                     val intent = Intent(activity, GeoPolyActivity::class.java).also {
-                        it.putExtra(GeoPolyActivity.ANSWER_KEY, answerText)
+                        it.putExtra(
+                            GeoPolyActivity.EXTRA_POLYGON,
+                            GeoWidgetUtils.parseGeometry(answerText)
+                        )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
                             GeoPolyActivity.OutputMode.GEOSHAPE,
@@ -115,7 +118,7 @@ class ActivityGeoDataRequester(
     override fun requestGeoTrace(
         prompt: FormEntryPrompt,
         answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry
+        waitingForDataRegistry: WaitingForDataRegistry,
     ) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
@@ -124,7 +127,10 @@ class ActivityGeoDataRequester(
                     waitingForDataRegistry.waitForData(prompt.index)
 
                     val intent = Intent(activity, GeoPolyActivity::class.java).also {
-                        it.putExtra(GeoPolyActivity.ANSWER_KEY, answerText)
+                        it.putExtra(
+                            GeoPolyActivity.EXTRA_POLYGON,
+                            GeoWidgetUtils.parseGeometry(answerText)
+                        )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
                             GeoPolyActivity.OutputMode.GEOTRACE,

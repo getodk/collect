@@ -369,6 +369,11 @@
             <label>B</label>
             <name>b</name>
           </item>
+          <item>
+            <geometry>41.3737384 2.1482904 0 0; 59.8937806 10.6450356 0 0</geometry>
+            <label>C</label>
+            <name>c</name>
+          </item>
         </root>
       </instance>
       <bind nodeset="/data/intro" readonly="true()" type="string"/>

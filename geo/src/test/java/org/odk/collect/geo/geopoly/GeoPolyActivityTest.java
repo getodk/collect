@@ -53,6 +53,9 @@ import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
 import org.robolectric.shadows.ShadowApplication;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RunWith(AndroidJUnit4.class)
 public class GeoPolyActivityTest {
 
@@ -119,6 +122,62 @@ public class GeoPolyActivityTest {
 
         startInput(R.id.manual_mode);
         onView(withId(R.id.record_button)).check(matches(isDisplayed()));
+    }
+
+    @Test
+    public void whenPolygonExtraPresent_showsPoly() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+
+        ArrayList<MapPoint> polygon = new ArrayList<>();
+        polygon.add(new MapPoint(1.0, 2.0, 3, 4));
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon);
+        launcherRule.<GeoPolyActivity>launch(intent);
+
+        mapFragment.ready();
+
+        List<List<MapPoint>> polys = mapFragment.getPolys();
+        assertThat(polys.size(), equalTo(1));
+        assertThat(polys.get(0), equalTo(polygon));
+    }
+
+    @Test
+    public void whenPolygonExtraPresent_andOutputModeIsShape_showsClosedPoly() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+
+        ArrayList<MapPoint> polygon = new ArrayList<>();
+        polygon.add(new MapPoint(1.0, 2.0, 3, 4));
+        polygon.add(new MapPoint(2.0, 3.0, 3, 4));
+        polygon.add(new MapPoint(1.0, 2.0, 3, 4));
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon);
+        intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
+        launcherRule.<GeoPolyActivity>launch(intent);
+
+        mapFragment.ready();
+
+        List<List<MapPoint>> polys = mapFragment.getPolys();
+        assertThat(polys.size(), equalTo(1));
+
+        ArrayList<MapPoint> expectedPolygon = new ArrayList<>();
+        expectedPolygon.add(new MapPoint(1.0, 2.0, 3, 4));
+        expectedPolygon.add(new MapPoint(2.0, 3.0, 3, 4));
+        assertThat(polys.get(0), equalTo(expectedPolygon));
+        assertThat(mapFragment.isPolyClosed(0), equalTo(true));
+    }
+
+    @Test
+    public void whenPolygonExtraPresent_andPolyIsEmpty__andOutputModeIsShape_doesNotShowPoly() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+
+        ArrayList<MapPoint> polygon = new ArrayList<>();
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon);
+        intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
+        launcherRule.<GeoPolyActivity>launch(intent);
+
+        mapFragment.ready();
+
+        List<List<MapPoint>> polys = mapFragment.getPolys();
+        assertThat(polys.size(), equalTo(1));
+        assertThat(polys.get(0).isEmpty(), equalTo(true));
     }
 
     @Test

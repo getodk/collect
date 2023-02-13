@@ -23,6 +23,9 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var featureClickListener: FeatureListener? = null
     private val markers: MutableList<MapPoint> = ArrayList()
     private val markerIcons: MutableList<MarkerIconDescription?> = ArrayList()
+    private val polys: MutableList<List<MapPoint>> = ArrayList()
+    private val polyClosed: MutableList<Boolean> = ArrayList()
+    private val polyDraggable: MutableList<Boolean> = ArrayList()
     private var hasCenter = false
     private val polyPoints = mutableMapOf<Int, MutableList<MapPoint>>()
 
@@ -95,11 +98,18 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint {
-        TODO()
+        return markers[featureId]
     }
 
-    override fun addDraggablePoly(points: Iterable<MapPoint>, closedPolygon: Boolean): Int {
-        return 0
+    override fun addPoly(
+        points: Iterable<MapPoint>,
+        closedPolygon: Boolean,
+        draggable: Boolean
+    ): Int {
+        polys.add(points.toList())
+        polyClosed.add(closedPolygon)
+        polyDraggable.add(draggable)
+        return polys.size - 1
     }
 
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {
@@ -188,6 +198,18 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     fun getZoomBoundingBox(): Pair<Iterable<MapPoint>, Double>? {
         return zoomBoundingBox
+    }
+
+    fun getPolys(): List<List<MapPoint>> {
+        return polys
+    }
+
+    fun isPolyClosed(index: Int): Boolean {
+        return polyClosed[index]
+    }
+
+    fun isPolyDraggable(index: Int): Boolean {
+        return polyDraggable[index]
     }
 
     companion object {

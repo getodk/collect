@@ -2,6 +2,7 @@ package org.odk.collect.geo.geopoint;
 
 import static android.app.Activity.RESULT_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.odk.collect.geo.Constants.EXTRA_RETAIN_MOCK_ACCURACY;
@@ -30,6 +31,8 @@ import org.odk.collect.geo.support.RobolectricApplication;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.MapPoint;
 import org.robolectric.shadows.ShadowApplication;
+
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class GeoPointMapActivityTest {
@@ -93,6 +96,19 @@ public class GeoPointMapActivityTest {
             Intent resultData = scenario.getResult().getResultData();
             assertThat(ExternalAppUtils.getReturnedSingleValue(resultData), is(activity.formatResult(new MapPoint(5, 6, 7, 8))));
         });
+    }
+
+    @Test
+    public void whenLocationExtraIncluded_showsMarker() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPointMapActivity.class);
+        intent.putExtra(GeoPointMapActivity.EXTRA_LOCATION, new MapPoint(1.0, 2.0));
+        launcherRule.launch(intent);
+        mapFragment.ready();
+
+        List<MapPoint> markers = mapFragment.getMarkers();
+        assertThat(markers.size(), equalTo(1));
+        assertThat(markers.get(0).latitude, equalTo(1.0));
+        assertThat(markers.get(0).longitude, equalTo(2.0));
     }
 
     @Test

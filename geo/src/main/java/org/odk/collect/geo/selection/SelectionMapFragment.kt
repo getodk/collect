@@ -71,6 +71,7 @@ class SelectionMapFragment(
      */
     private val points: MutableList<MapPoint> = mutableListOf()
     private var itemCount: Int = 0
+    private var featureCount: Int = 0
 
     private var previousState: Bundle? = null
 
@@ -211,7 +212,7 @@ class SelectionMapFragment(
             R.string.select_item_count,
             selectionMapData.getItemType(),
             itemCount,
-            points.size
+            featureCount
         )
     }
 
@@ -272,10 +273,12 @@ class SelectionMapFragment(
         val item = itemsByFeatureId[featureId]
         if (item != null) {
             if (!skipSummary) {
+                val point = item.points[0]
+
                 if (maintainZoom) {
-                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), map.zoom, true)
+                    map.zoomToPoint(MapPoint(point.latitude, point.longitude), map.zoom, true)
                 } else {
-                    map.zoomToPoint(MapPoint(item.latitude, item.longitude), true)
+                    map.zoomToPoint(MapPoint(point.latitude, point.longitude), true)
                 }
 
                 map.setMarkerIcon(
@@ -354,20 +357,31 @@ class SelectionMapFragment(
         map.clearFeatures()
         itemsByFeatureId.clear()
 
-        val markerDescriptions = items.map {
+        val singlePoints = items.filter { it.points.size == 1 }
+        val traces = items.filter { it.points.size != 1 }
+
+        val markerDescriptions = singlePoints.map {
+            val point = it.points[0]
+
             MarkerDescription(
-                MapPoint(it.latitude, it.longitude),
+                MapPoint(point.latitude, point.longitude),
                 false,
                 MapFragment.BOTTOM,
                 MarkerIconDescription(it.smallIcon, it.color, it.symbol)
             )
         }
 
-        val featureIds = map.addMarkers(markerDescriptions)
-        items.zip(featureIds).forEach { (item, featureId) ->
-            itemsByFeatureId[featureId] = item
-            points.add(MapPoint(item.latitude, item.longitude))
+        val pointIds = map.addMarkers(markerDescriptions)
+        val traceIds = traces.fold(listOf<Int>()) { ids, item ->
+            ids + map.addPoly(item.points, false, false)
         }
+
+        items.zip(pointIds + traceIds).forEach { (item, featureId) ->
+            itemsByFeatureId[featureId] = item
+            points.addAll(item.points)
+        }
+
+        featureCount = items.size
     }
 
     companion object {
@@ -396,48 +410,4 @@ interface SelectionMapData {
     fun getItemType(): String
     fun getItemCount(): NonNullLiveData<Int>
     fun getMappableItems(): LiveData<List<MappableSelectItem>?>
-}
-
-sealed interface MappableSelectItem {
-
-    val id: Long
-    val latitude: Double
-    val longitude: Double
-    val smallIcon: Int
-    val largeIcon: Int
-    val name: String
-    val properties: List<IconifiedText>
-    val selected: Boolean
-    val color: String?
-    val symbol: String?
-
-    data class WithInfo(
-        override val id: Long,
-        override val latitude: Double,
-        override val longitude: Double,
-        override val smallIcon: Int,
-        override val largeIcon: Int,
-        override val name: String,
-        override val properties: List<IconifiedText>,
-        val info: String,
-        override val selected: Boolean = false,
-        override val color: String? = null,
-        override val symbol: String? = null
-    ) : MappableSelectItem
-
-    data class WithAction(
-        override val id: Long,
-        override val latitude: Double,
-        override val longitude: Double,
-        override val smallIcon: Int,
-        override val largeIcon: Int,
-        override val name: String,
-        override val properties: List<IconifiedText>,
-        val action: IconifiedText,
-        override val selected: Boolean = false,
-        override val color: String? = null,
-        override val symbol: String? = null
-    ) : MappableSelectItem
-
-    data class IconifiedText(val icon: Int?, val text: String)
 }
