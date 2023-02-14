@@ -77,7 +77,7 @@ public abstract class OpenRosaServerClientProviderTest {
     }
 
     @Test
-    public void withCredentials_whenBasicChallengeReceived_doesNotRetryWithCredentials() throws Exception {
+    public void withCredentials_whenBasicChallengeReceived_whenHttp_doesNotRetryWithCredentials() throws Exception {
         MockWebServer mockWebServer = mockWebServerRule.start();
         enqueueBasicChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
@@ -265,8 +265,27 @@ public abstract class OpenRosaServerClientProviderTest {
 
         RecordedRequest request = host2.takeRequest();
         assertThat(request.getHeader("Authorization"), equalTo(null));
+    }
 
-        host2.shutdown();
+    @Test
+    public void whenUsingHttpsThenHttp_doesNotRespondToBasicAuthChallengesInSecondInstance() throws Exception {
+        MockWebServer host = mockWebServerRule.start();
+
+        enqueueDigestChallenge(host);
+        enqueueSuccess(host);
+
+        enqueueBasicChallenge(host);
+        enqueueSuccess(host);
+
+        subject.get("https", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host, ""), new Date());
+
+        assertThat(host.getRequestCount(), equalTo(3));
+
+        host.takeRequest();
+        host.takeRequest();
+        RecordedRequest request = host.takeRequest();
+        assertThat(request.getHeader("Authorization"), equalTo(null));
     }
 
     @Test

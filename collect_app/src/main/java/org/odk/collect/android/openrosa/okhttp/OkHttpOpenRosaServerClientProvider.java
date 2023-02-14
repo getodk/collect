@@ -34,6 +34,7 @@ import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import kotlin.Pair;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -54,7 +55,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     private final OkHttpClient baseClient;
     private final String cacheDir;
 
-    private final Map<HttpCredentialsInterface, OkHttpOpenRosaServerClient> clients = new HashMap<>();
+    private final Map<Pair<String, HttpCredentialsInterface>, OkHttpOpenRosaServerClient> clients = new HashMap<>();
 
     public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
         this(baseClient, null);
@@ -67,11 +68,11 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
 
     @Override
     public synchronized OpenRosaServerClient get(String scheme, String userAgent, @NonNull HttpCredentialsInterface credentials) {
-        OkHttpOpenRosaServerClient existingClient = clients.get(credentials);
+        OkHttpOpenRosaServerClient existingClient = clients.get(new Pair<>(scheme, credentials));
 
         if (existingClient == null) {
             OkHttpOpenRosaServerClient newClient = createNewClient(scheme, userAgent, credentials);
-            clients.put(credentials, newClient);
+            clients.put(new Pair<>(scheme, credentials), newClient);
             return newClient;
         } else {
             return existingClient;
