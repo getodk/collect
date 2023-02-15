@@ -31,8 +31,8 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.utilities.Appearances
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_SELECTED_INDEX
-import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
-import org.odk.collect.android.widgets.support.FormFixtures.treeElement
+import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.async.Scheduler
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule

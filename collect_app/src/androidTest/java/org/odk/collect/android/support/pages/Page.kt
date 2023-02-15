@@ -109,6 +109,7 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    @JvmOverloads
     fun assertTextThatContainsExists(text: String, index: Int = 0): T {
         onView(
             withIndex(
@@ -120,6 +121,21 @@ abstract class Page<T : Page<T>> {
                 index
             )
         ).check(matches(not(doesNotExist())))
+        return this as T
+    }
+
+    @JvmOverloads
+    fun assertTextThatContainsDoesNoExist(text: String, index: Int = 0): T {
+        onView(
+            withIndex(
+                withText(
+                    containsString(
+                        text
+                    )
+                ),
+                index
+            )
+        ).check(doesNotExist())
         return this as T
     }
 

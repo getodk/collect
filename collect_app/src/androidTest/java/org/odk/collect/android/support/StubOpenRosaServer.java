@@ -19,6 +19,7 @@ import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.shared.strings.Md5;
+import org.odk.collect.shared.strings.RandomString;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -43,6 +44,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private boolean fetchingFormsError;
     private boolean noHashInFormList;
     private boolean noHashPrefixInMediaFiles;
+    private boolean randomHash;
 
     @NonNull
     @Override
@@ -150,6 +152,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         noHashPrefixInMediaFiles = true;
     }
 
+    public void returnRandomMediaFileHash() {
+        randomHash = true;
+    }
+
     public String getURL() {
         return "https://" + HOST;
     }
@@ -233,7 +239,13 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
             for (String mediaFile : xformItem.getMediaFiles()) {
                 AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-                String mediaFileHash = Md5.getMd5Hash(assetManager.open("media/" + mediaFile));
+                String mediaFileHash;
+
+                if (randomHash) {
+                    mediaFileHash = RandomString.randomString(8);
+                } else {
+                    mediaFileHash = Md5.getMd5Hash(assetManager.open("media/" + mediaFile));
+                }
 
                 stringBuilder
                         .append("<mediaFile>")

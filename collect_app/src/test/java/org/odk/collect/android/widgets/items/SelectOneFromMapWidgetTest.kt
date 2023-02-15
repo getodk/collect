@@ -25,7 +25,7 @@ import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
-import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer

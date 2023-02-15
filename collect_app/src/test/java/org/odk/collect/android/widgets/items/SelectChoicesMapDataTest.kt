@@ -12,8 +12,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
-import org.odk.collect.android.widgets.support.FormFixtures.selectChoice
-import org.odk.collect.android.widgets.support.FormFixtures.treeElement
+import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
+import org.odk.collect.android.widgets.support.FormElementFixtures.treeElement
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.geo.selection.MappableSelectItem.IconifiedText
 import org.odk.collect.maps.MapPoint
