@@ -10,17 +10,12 @@ import java.util.zip.DataFormatException
 
 @RunWith(AndroidJUnit4::class)
 class CompressionUtilsTest {
-    private val text = (
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " +
-            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis " +
-            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " +
-            "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore " +
-            "eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt " +
-            "in culpa qui officia deserunt mollit anim id est laborum."
-        )
-
     @Test
-    fun `compressed text should be shorter than the original one`() {
+    fun `compressed long text should be shorter than the original one`() {
+        val text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor " +
+            "incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis " +
+            "nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+
         val compressedText = CompressionUtils.compress(text)
 
         assertTrue(compressedText.length < text.length)
@@ -36,6 +31,8 @@ class CompressionUtilsTest {
 
     @Test
     fun `text after compressing and decompressing should be unchanged`() {
+        val text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+
         val compressedText = CompressionUtils.compress(text)
         val decompressedText = CompressionUtils.decompress(compressedText)
 
