@@ -1,12 +1,12 @@
 package org.odk.collect.settings.importing
 
-import org.json.JSONArray
 import org.json.JSONObject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.AppConfigurationKeys
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.collections.CollectionExtensions.has
 import org.odk.collect.shared.settings.Settings
 
 internal class SettingsImporter(
@@ -81,21 +81,12 @@ internal class SettingsImporter(
             if (settingsValidator.isKeySupported(childJsonObjectName, it)) {
                 val value = childJsonObject[it]
                 if (settingsValidator.isValueSupported(childJsonObjectName, it, value)) {
-                    if (!deviceUnsupportedSettingsForGivenChildJson.has(it) || !hasValue(deviceUnsupportedSettingsForGivenChildJson.getJSONArray(it), value)) {
+                    if (!deviceUnsupportedSettingsForGivenChildJson.has(it) || !deviceUnsupportedSettingsForGivenChildJson.getJSONArray(it).has(value)) {
                         preferences.save(it, value)
                     }
                 }
             }
         }
-    }
-
-    private fun hasValue(jsonArray: JSONArray, value: Any): Boolean {
-        for (i in 0 until jsonArray.length()) {
-            if (jsonArray[i] == value) {
-                return true
-            }
-        }
-        return false
     }
 
     private fun loadDefaults(preferences: Settings, defaults: Map<String, Any>) {

@@ -7,6 +7,7 @@ import com.networknt.schema.SpecVersion
 import com.networknt.schema.ValidatorTypeCode
 import org.json.JSONObject
 import org.odk.collect.settings.importing.SettingsValidator
+import org.odk.collect.shared.collections.CollectionExtensions.has
 import java.io.InputStream
 
 internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> InputStream) :
@@ -52,14 +53,7 @@ internal class JsonSchemaSettingsValidator(private val schemaProvider: () -> Inp
                 .getJSONObject(key)
 
             return if (settingJsonObject.has("enum")) {
-                val supportedValues = settingJsonObject.getJSONArray("enum")
-
-                for (i in 0 until supportedValues.length()) {
-                    if (supportedValues[i] == value) {
-                        return true
-                    }
-                }
-                false
+                settingJsonObject.getJSONArray("enum").has(value)
             } else {
                 true
             }
