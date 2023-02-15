@@ -19,11 +19,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import org.odk.collect.android.R;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 /**
  * Custom Scannner Activity extending from Activity to display a custom layout form scanner view.
  */
-public class ScannerWithFlashlightActivity extends CollectAbstractActivity {
+public class ScannerWithFlashlightActivity extends LocalizedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

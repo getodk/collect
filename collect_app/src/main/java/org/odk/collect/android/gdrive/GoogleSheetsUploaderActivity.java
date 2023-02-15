@@ -36,7 +36,6 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -48,7 +47,10 @@ import org.odk.collect.android.utilities.InstanceUploaderUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -57,7 +59,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener, GoogleSheetsUploaderProgressDialog.OnSendingFormsCanceledListener {
+public class GoogleSheetsUploaderActivity extends LocalizedActivity implements InstanceUploaderListener, GoogleSheetsUploaderProgressDialog.OnSendingFormsCanceledListener {
 
     private static final int REQUEST_AUTHORIZATION = 1001;
     private static final int GOOGLE_USER_DIALOG = 3;
@@ -83,6 +85,12 @@ public class GoogleSheetsUploaderActivity extends CollectAbstractActivity implem
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

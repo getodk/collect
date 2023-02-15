@@ -29,6 +29,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import androidx.annotation.LayoutRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
@@ -37,15 +38,20 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import timber.log.Timber;
 
-abstract class AppListActivity extends CollectAbstractActivity {
+public abstract class AppListActivity extends LocalizedActivity {
 
     protected static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
@@ -65,6 +71,15 @@ abstract class AppListActivity extends CollectAbstractActivity {
     private boolean isSearchBoxShown;
 
     private SearchView searchView;
+
+    @Inject
+    SettingsProvider settingsProvider;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DaggerUtils.getComponent(this).inject(this);
+    }
 
     // toggles to all checked or all unchecked
     // returns:

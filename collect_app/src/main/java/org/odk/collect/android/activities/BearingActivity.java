@@ -25,10 +25,11 @@ import android.os.Bundle;
 import org.odk.collect.android.R;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.externalapp.ExternalAppUtils;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.Locale;
 
-public class BearingActivity extends CollectAbstractActivity implements SensorEventListener {
+public class BearingActivity extends LocalizedActivity implements SensorEventListener {
     private ProgressDialog bearingDialog;
 
     private SensorManager sensorManager;

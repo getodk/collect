@@ -14,9 +14,9 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.preference.PreferenceDialogFragmentCompat;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.CollectAbstractActivity;
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.utilities.ProjectResetter;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
@@ -124,7 +124,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
             new AsyncTask<Void, Void, List<Integer>>() {
                 @Override
                 protected void onPreExecute() {
-                    DialogFragmentUtils.showIfNotShowing(ResetProgressDialog.class, ((CollectAbstractActivity) context).getSupportFragmentManager());
+                    DialogFragmentUtils.showIfNotShowing(ResetProgressDialog.class, ((ProjectPreferencesActivity) context).getSupportFragmentManager());
                 }
 
                 @Override
@@ -134,7 +134,7 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
 
                 @Override
                 protected void onPostExecute(List<Integer> failedResetActions) {
-                    DialogFragmentUtils.dismissDialog(ResetProgressDialog.class, ((CollectAbstractActivity) context).getSupportFragmentManager());
+                    DialogFragmentUtils.dismissDialog(ResetProgressDialog.class, ((ProjectPreferencesActivity) context).getSupportFragmentManager());
                     handleResult(resetActions, failedResetActions);
                 }
             }.execute();
@@ -195,14 +195,14 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
                 resultMessage.append("\n\n");
             }
         }
-        if (!((CollectAbstractActivity) context).isInstanceStateSaved()) {
-            ((CollectAbstractActivity) context).runOnUiThread(() -> {
+        if (!((ProjectPreferencesActivity) context).isInstanceStateSaved()) {
+            ((ProjectPreferencesActivity) context).runOnUiThread(() -> {
                 if (resetActions.contains(RESET_PREFERENCES)) {
-                    ((CollectAbstractActivity) context).recreate();
+                    ((ProjectPreferencesActivity) context).recreate();
                 }
                 ResetSettingsResultDialog resetSettingsResultDialog = ResetSettingsResultDialog.newInstance(String.valueOf(resultMessage));
                 try {
-                    resetSettingsResultDialog.show(((CollectAbstractActivity) context).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
+                    resetSettingsResultDialog.show(((ProjectPreferencesActivity) context).getSupportFragmentManager(), RESET_SETTINGS_RESULT_DIALOG_TAG);
                 } catch (ClassCastException e) {
                     Timber.i(e);
                 }

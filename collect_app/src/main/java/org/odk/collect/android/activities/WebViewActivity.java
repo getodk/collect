@@ -26,8 +26,9 @@ import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
-public class WebViewActivity extends CollectAbstractActivity {
+public class WebViewActivity extends LocalizedActivity {
 
     private WebView webView;
     private ProgressBar progressBar;

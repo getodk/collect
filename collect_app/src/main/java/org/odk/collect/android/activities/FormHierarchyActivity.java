@@ -56,6 +56,7 @@ import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +65,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class FormHierarchyActivity extends CollectAbstractActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
+public class FormHierarchyActivity extends LocalizedActivity implements DeleteRepeatDialogFragment.DeleteRepeatDialogCallback {
 
     public static final int RESULT_ADD_REPEAT = 2;
     public static final String EXTRA_SESSION_ID = "session_id";

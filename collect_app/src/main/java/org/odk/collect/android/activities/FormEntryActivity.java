@@ -181,9 +181,12 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -207,7 +210,7 @@ import timber.log.Timber;
  */
 
 @SuppressWarnings("PMD.CouplingBetweenObjects")
-public class FormEntryActivity extends CollectAbstractActivity implements AnimationListener,
+public class FormEntryActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
@@ -338,6 +341,12 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
 
     @Inject
     FormSessionRepository formSessionRepository;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 

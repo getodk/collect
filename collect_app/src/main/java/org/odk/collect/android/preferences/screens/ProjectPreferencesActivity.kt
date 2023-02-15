@@ -18,21 +18,23 @@ package org.odk.collect.android.preferences.screens
 import android.os.Bundle
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
-import org.odk.collect.android.activities.CollectAbstractActivity
 import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBackwardsDialogListener
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.OnBackPressedListener
 import org.odk.collect.android.logic.PropertyManager
+import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
 class ProjectPreferencesActivity :
-    CollectAbstractActivity(),
+    LocalizedActivity(),
     ResetSettingsResultDialogListener,
     MovingBackwardsDialogListener {
 
     private var onBackPressedListener: OnBackPressedListener? = null
+
+    private var isInstanceStateSaved = false
 
     @Inject
     lateinit var propertyManager: PropertyManager
@@ -46,6 +48,16 @@ class ProjectPreferencesActivity :
     override fun onPause() {
         super.onPause()
         propertyManager.reload()
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+        isInstanceStateSaved = false
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        isInstanceStateSaved = true
+        super.onSaveInstanceState(outState)
     }
 
     // If the onBackPressedListener is set then onBackPressed is delegated to it.
@@ -69,4 +81,6 @@ class ProjectPreferencesActivity :
     fun setOnBackPressedListener(onBackPressedListener: OnBackPressedListener?) {
         this.onBackPressedListener = onBackPressedListener
     }
+
+    fun isInstanceStateSaved() = isInstanceStateSaved
 }

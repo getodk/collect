@@ -23,9 +23,10 @@ import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
+import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class DeleteSavedFormActivity : CollectAbstractActivity() {
+class DeleteSavedFormActivity : LocalizedActivity() {
     @Inject
     lateinit var viewModelFactory: BlankFormListViewModel.Factory
 
