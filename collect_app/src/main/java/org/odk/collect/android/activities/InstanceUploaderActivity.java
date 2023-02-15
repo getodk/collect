@@ -38,6 +38,7 @@ import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +54,7 @@ import timber.log.Timber;
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceUploaderActivity extends CollectAbstractActivity implements InstanceUploaderListener,
+public class InstanceUploaderActivity extends LocalizedActivity implements InstanceUploaderListener,
         AuthDialogUtility.AuthDialogUtilityResultListener {
     private static final int PROGRESS_DIALOG = 1;
     private static final int AUTH_DIALOG = 2;
@@ -78,6 +79,8 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     private String username;
     private String password;
     private Boolean deleteInstanceAfterUpload;
+
+    private boolean isInstanceStateSaved;
 
     @Inject
     InstancesRepositoryProvider instancesRepositoryProvider;
@@ -209,7 +212,14 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
     }
 
     @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        isInstanceStateSaved = false;
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
+        isInstanceStateSaved = true;
         super.onSaveInstanceState(outState);
         outState.putString(ALERT_MSG, alertMsg);
         outState.putString(AUTH_URI, url);
@@ -250,7 +260,7 @@ public class InstanceUploaderActivity extends CollectAbstractActivity implements
         }
 
         // If the activity is paused or in the process of pausing, don't show the dialog
-        if (!isInstanceStateSaved()) {
+        if (!isInstanceStateSaved) {
             createUploadInstancesResultDialog(InstanceUploaderUtils.getUploadResultMessage(instancesRepository, this, result));
         } else {
             // Clean up
