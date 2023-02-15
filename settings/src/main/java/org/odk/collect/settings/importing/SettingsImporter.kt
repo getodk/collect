@@ -1,5 +1,6 @@
 package org.odk.collect.settings.importing
 
+import org.json.JSONArray
 import org.json.JSONObject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
@@ -19,7 +20,7 @@ internal class SettingsImporter(
     private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
-    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: Map<String, String>): Boolean {
+    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: JSONObject): Boolean {
         if (!settingsValidator.isValid(json)) {
             return false
         }
@@ -71,20 +72,30 @@ internal class SettingsImporter(
         mainJsonObject: JSONObject,
         childJsonObjectName: String,
         preferences: Settings,
-        deviceUnsupportedSettings: Map<String, String>
+        deviceUnsupportedSettings: JSONObject
     ) {
         val childJsonObject = mainJsonObject.getJSONObject(childJsonObjectName)
+        val deviceUnsupportedSettingsForGivenChildJson = if (deviceUnsupportedSettings.has(childJsonObjectName)) deviceUnsupportedSettings.getJSONObject(childJsonObjectName) else JSONObject()
 
         childJsonObject.keys().forEach {
             if (settingsValidator.isKeySupported(childJsonObjectName, it)) {
                 val value = childJsonObject[it]
                 if (settingsValidator.isValueSupported(childJsonObjectName, it, value)) {
-                    if (!deviceUnsupportedSettings.containsKey(it) || deviceUnsupportedSettings.getValue(it) != value) {
+                    if (!deviceUnsupportedSettingsForGivenChildJson.has(it) || !hasValue(deviceUnsupportedSettingsForGivenChildJson.getJSONArray(it), value)) {
                         preferences.save(it, value)
                     }
                 }
             }
         }
+    }
+
+    private fun hasValue(jsonArray: JSONArray, value: Any): Boolean {
+        for (i in 0 until jsonArray.length()) {
+            if (jsonArray[i] == value) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun loadDefaults(preferences: Settings, defaults: Map<String, Any>) {

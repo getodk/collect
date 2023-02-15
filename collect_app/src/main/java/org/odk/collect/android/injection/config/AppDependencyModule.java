@@ -27,6 +27,8 @@ import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 
 import org.javarosa.core.reference.ReferenceManager;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
@@ -147,14 +149,13 @@ import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl;
 import org.odk.collect.settings.importing.SettingsChangeHandler;
+import org.odk.collect.settings.keys.AppConfigurationKeys;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -324,9 +325,16 @@ public class AppDependencyModule {
 
     @Provides
     public ODKAppSettingsImporter providesODKAppSettingsImporter(Context context, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, SettingsChangeHandler settingsChangeHandler) {
-        Map<String, String> deviceUnsupportedSettings = new HashMap<>();
+        JSONObject deviceUnsupportedSettings = new JSONObject();
         if (!MapboxClassInstanceCreator.isMapboxAvailable()) {
-            deviceUnsupportedSettings.put(ProjectKeys.KEY_BASEMAP_SOURCE, ProjectKeys.BASEMAP_SOURCE_MAPBOX);
+            try {
+                deviceUnsupportedSettings.put(
+                        AppConfigurationKeys.GENERAL,
+                        new JSONObject().put(ProjectKeys.KEY_BASEMAP_SOURCE, new JSONArray(singletonList(ProjectKeys.BASEMAP_SOURCE_MAPBOX)))
+                );
+            } catch (Throwable ignored) {
+                // ignore
+            }
         }
 
         return new ODKAppSettingsImporter(
