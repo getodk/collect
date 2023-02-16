@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
@@ -517,9 +516,5 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             .setNegativeButton(R.string.cancel, null)
             .show();
 
-    }
-
-    @VisibleForTesting public MapFragment getMapFragment() {
-        return map;
     }
 }
