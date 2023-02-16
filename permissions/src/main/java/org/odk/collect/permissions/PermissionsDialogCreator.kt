@@ -67,6 +67,7 @@ internal object PermissionsDialogCreatorImpl : PermissionsDialogCreator {
                     data = Uri.fromParts("package", activity.packageName, null)
                     activity.startActivity(this)
                 }
+                action.additionalExplanationClosed()
             }
             .create()
             .show()
