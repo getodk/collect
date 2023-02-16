@@ -248,15 +248,16 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             ArrayList<MapPoint> extraPoly = intent.getParcelableArrayListExtra(EXTRA_POLYGON);
 
             if (!extraPoly.isEmpty()) {
-                originalPoly = extraPoly;
-
                 if (outputMode == OutputMode.GEOSHAPE) {
                     points = extraPoly.subList(0, extraPoly.size() - 1);
                 } else {
                     points = extraPoly;
                 }
             }
+
+            originalPoly = extraPoly;
         }
+
         if (restoredPoints != null) {
             points = restoredPoints;
         }

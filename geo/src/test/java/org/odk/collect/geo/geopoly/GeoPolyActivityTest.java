@@ -25,6 +25,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.odk.collect.androidtest.ActivityScenarioExtensions.isFinishing;
 import static org.robolectric.Shadows.shadowOf;
 
 import android.app.Application;
@@ -34,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
@@ -84,7 +86,8 @@ public class GeoPolyActivityTest {
                     @NonNull
                     @Override
                     public ReferenceLayerSettingsNavigator providesReferenceLayerSettingsNavigator() {
-                        return (activity) -> {};
+                        return (activity) -> {
+                        };
                     }
 
                     @NonNull
@@ -165,7 +168,7 @@ public class GeoPolyActivityTest {
     }
 
     @Test
-    public void whenPolygonExtraPresent_andPolyIsEmpty__andOutputModeIsShape_doesNotShowPoly() {
+    public void whenPolygonExtraPresent_andPolyIsEmpty_andOutputModeIsShape_doesNotShowPoly() {
         Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
 
         ArrayList<MapPoint> polygon = new ArrayList<>();
@@ -178,6 +181,20 @@ public class GeoPolyActivityTest {
         List<List<MapPoint>> polys = mapFragment.getPolys();
         assertThat(polys.size(), equalTo(1));
         assertThat(polys.get(0).isEmpty(), equalTo(true));
+    }
+
+    @Test
+    public void whenPolygonExtraPresent_andPolyIsEmpty_pressingBack_finishes() {
+        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), GeoPolyActivity.class);
+
+        ArrayList<MapPoint> polygon = new ArrayList<>();
+        intent.putExtra(GeoPolyActivity.EXTRA_POLYGON, polygon);
+        intent.putExtra(GeoPolyActivity.OUTPUT_MODE_KEY, GeoPolyActivity.OutputMode.GEOSHAPE);
+        ActivityScenario<GeoPolyActivity> scenario = launcherRule.launch(intent);
+
+        mapFragment.ready();
+        Espresso.pressBack();
+        assertThat(isFinishing(scenario), equalTo(true));
     }
 
     @Test
