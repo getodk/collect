@@ -13,7 +13,6 @@ class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boole
             field = value.toList()
             notifyDataSetChanged()
         }
-    private var isChecked = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlankFormListItemViewHolder {
         return BlankFormListItemViewHolder(parent).also {
@@ -27,7 +26,6 @@ class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boole
 
         val checkbox = holder.itemView.findViewById<CheckBox>(R.id.checkbox)
         checkbox.setOnCheckedChangeListener { _, checked ->
-            isChecked = checked
             onCheckedListener(item.databaseId, checked)
         }
 
@@ -37,8 +35,4 @@ class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boole
     }
 
     override fun getItemCount() = formItems.size
-
-    fun isChecked(): Boolean {
-        return isChecked
-    }
 }
