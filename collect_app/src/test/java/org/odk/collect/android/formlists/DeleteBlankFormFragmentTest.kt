@@ -175,7 +175,8 @@ class DeleteBlankFormFragmentTest {
 
         val menuProviders = menuHost.getMenuProviders()
         assertThat(menuProviders.size, equalTo(1))
-        assertThat(menuProviders[0], instanceOf(BlankFormListMenuProvider::class.java))
+        assertThat(menuProviders[0].first, equalTo(Lifecycle.State.RESUMED))
+        assertThat(menuProviders[0].second, instanceOf(BlankFormListMenuProvider::class.java))
     }
 
     private fun blankFormListItem(databaseId: Long = 1, formName: String = "Form 1") =
@@ -194,14 +195,14 @@ class DeleteBlankFormFragmentTest {
 
 private class RecordingMenuHost : MenuHost {
 
-    private val menuProviders = mutableListOf<MenuProvider>()
+    private val menuProviders = mutableListOf<Pair<Lifecycle.State?, MenuProvider>>()
 
     override fun addMenuProvider(menuProvider: MenuProvider) {
-        menuProviders.add(menuProvider)
+        menuProviders.add(Pair(null, menuProvider))
     }
 
     override fun addMenuProvider(menuProvider: MenuProvider, lifecycleOwner: LifecycleOwner) {
-        menuProviders.add(menuProvider)
+        menuProviders.add(Pair(null, menuProvider))
     }
 
     override fun addMenuProvider(
@@ -209,16 +210,16 @@ private class RecordingMenuHost : MenuHost {
         lifecycleOwner: LifecycleOwner,
         state: Lifecycle.State
     ) {
-        menuProviders.add(menuProvider)
+        menuProviders.add(Pair(state, menuProvider))
     }
 
     override fun removeMenuProvider(menuProvider: MenuProvider) {
-        menuProviders.add(menuProvider)
+        TODO()
     }
 
     override fun invalidateMenu() { }
 
-    fun getMenuProviders(): List<MenuProvider> {
+    fun getMenuProviders(): List<Pair<Lifecycle.State?, MenuProvider>> {
         return menuProviders
     }
 }
