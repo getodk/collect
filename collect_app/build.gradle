@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply from: '../config/quality.gradle'
-apply from: '../config/jacoco.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: "com.google.android.gms.oss-licenses-plugin"
 
@@ -141,7 +140,6 @@ android {
 
         debug {
             debuggable(true)
-            testCoverageEnabled((findProperty("enableJacoco") ?: "false").toBoolean())
             resValue("string", "GOOGLE_MAPS_API_KEY", googleMapsApiKey)
             resValue("string", "mapbox_access_token", mapboxAccessToken)
         }
