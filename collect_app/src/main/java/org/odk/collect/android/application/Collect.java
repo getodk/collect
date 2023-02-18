@@ -64,6 +64,7 @@ import org.odk.collect.selfiecamera.DaggerSelfieCameraDependencyComponent;
 import org.odk.collect.selfiecamera.SelfieCameraDependencyComponent;
 import org.odk.collect.selfiecamera.SelfieCameraDependencyComponentProvider;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.injection.ObjectProvider;
 import org.odk.collect.shared.injection.ObjectProviderHost;
 import org.odk.collect.shared.injection.SupplierObjectProvider;
@@ -258,7 +259,7 @@ public class Collect extends Application implements
     @Override
     public Locale getLocale() {
         if (this.applicationComponent != null) {
-            return new Locale(LocaleHelper.getLocaleCode(applicationComponent.settingsProvider().getUnprotectedSettings()));
+            return LocaleHelper.getLocale(applicationComponent.settingsProvider().getUnprotectedSettings().getString(ProjectKeys.KEY_APP_LANGUAGE));
         } else {
             return getResources().getConfiguration().locale;
         }
