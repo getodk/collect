@@ -23,12 +23,6 @@ public class ApplicationConstants {
     // based on http://www.sqlite.org/limits.html
     public static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
 
-    static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar", "bg", "bn", "ca", "cs", "da",
-            "de", "en", "es", "et", "fa", "fi", "fr", "hi", "in", "it", "ja", "ka", "km", "ln", "lo_LA",
-            "lt", "mg", "ml", "mr", "ms", "my", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "rw",
-            "si", "sl", "so", "sq", "sr", "sv_SE", "sw", "sw_KE", "te", "th_TH", "ti", "tl", "tr",
-            "uk", "ur", "ur_PK", "vi", "zh", "zu"};
-
     private ApplicationConstants() {
 
     }
