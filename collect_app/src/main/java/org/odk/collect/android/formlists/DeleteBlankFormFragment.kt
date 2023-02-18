@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.ViewModelProvider
@@ -53,15 +54,9 @@ class DeleteBlankFormFragment(
             if (it != null) {
                 adapter.formItems = it
 
-                if (it.isEmpty()) {
-                    binding.empty.visibility = View.VISIBLE
-                    binding.selectAll.visibility = View.GONE
-                    binding.deleteSelected.visibility = View.GONE
-                } else {
-                    binding.empty.visibility = View.GONE
-                    binding.selectAll.visibility = View.VISIBLE
-                    binding.deleteSelected.visibility = View.VISIBLE
-                }
+                binding.empty.isVisible = it.isEmpty()
+                binding.selectAll.isVisible = it.isNotEmpty()
+                binding.deleteSelected.isVisible = it.isNotEmpty()
             }
         }
 
