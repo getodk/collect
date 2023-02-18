@@ -35,10 +35,6 @@ public class LocaleHelper {
         return languageList;
     }
 
-    public Locale getLocale(Settings generalSettings) {
-        return getLocale(getLocaleCode(generalSettings));
-    }
-
     private Locale getLocale(String splitLocaleCode) {
         if (splitLocaleCode.contains("_")) {
             String[] arg = splitLocaleCode.split("_");
