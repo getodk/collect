@@ -16,6 +16,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/select_all"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/delete_selected"
         app:layout_constraintBottom_toBottomOf="parent" />
@@ -25,6 +28,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/delete_file"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
         app:layout_constraintStart_toEndOf="@id/select_all"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
