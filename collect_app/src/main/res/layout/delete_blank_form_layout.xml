@@ -11,27 +11,38 @@
         app:layout_constraintBottom_toTopOf="@id/select_all"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_items_display"
+        android:textAppearance="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/select_all"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/select_all"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/select_all"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/delete_selected"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/delete_selected"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/delete_file"
         android:layout_marginEnd="@dimen/margin_standard"
         android:layout_marginBottom="@dimen/margin_standard"
-        app:layout_constraintStart_toEndOf="@id/select_all"
+        android:text="@string/delete_file"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/select_all" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

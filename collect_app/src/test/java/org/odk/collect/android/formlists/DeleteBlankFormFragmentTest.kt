@@ -191,6 +191,17 @@ class DeleteBlankFormFragmentTest {
     }
 
     @Test
+    fun `empty message shows when there are no forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+
+        onView(withText(R.string.no_items_display)).check(matches(isDisplayed()))
+
+        formsToDisplay.value = listOf(blankFormListItem(databaseId = 1, formName = "Form 1"))
+
+        onView(withText(R.string.no_items_display)).check(matches(not(isDisplayed())))
+    }
+
+    @Test
     fun `bottom buttons are hidden when there are no forms`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
