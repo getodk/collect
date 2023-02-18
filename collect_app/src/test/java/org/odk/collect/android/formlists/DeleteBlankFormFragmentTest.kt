@@ -48,7 +48,7 @@ class DeleteBlankFormFragmentTest {
 
     private val multiSelectViewModel = MultiSelectViewModel()
 
-    private val formsToDisplay = MutableLiveData<List<BlankFormListItem>>(null)
+    private val formsToDisplay = MutableLiveData<List<BlankFormListItem>>(emptyList())
     private val blankFormListViewModel = mock<BlankFormListViewModel> {
         on { formsToDisplay } doReturn formsToDisplay
         on { isLoading } doReturn MutableLiveData()
@@ -158,6 +158,11 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `clicking delete selected deletes selected forms`() {
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 11, formName = "Form 1"),
+            blankFormListItem(databaseId = 12, formName = "Form 2")
+        )
+
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         multiSelectViewModel.select(11)
@@ -173,7 +178,7 @@ class DeleteBlankFormFragmentTest {
     }
 
     @Test
-    fun `delete selected is disabled and enabled when forms are selects or not`() {
+    fun `delete selected is disabled and enabled when forms are selected or not`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         onView(withText(R.string.delete_file)).check(matches(not(isEnabled())))
@@ -183,6 +188,19 @@ class DeleteBlankFormFragmentTest {
 
         multiSelectViewModel.unselectAll()
         onView(withText(R.string.delete_file)).check(matches(not(isEnabled())))
+    }
+
+    @Test
+    fun `bottom buttons are hidden when there are no forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+
+        onView(withText(R.string.select_all)).check(matches(not(isDisplayed())))
+        onView(withText(R.string.delete_file)).check(matches(not(isDisplayed())))
+
+        formsToDisplay.value = listOf(blankFormListItem(databaseId = 1, formName = "Form 1"))
+
+        onView(withText(R.string.select_all)).check(matches(isDisplayed()))
+        onView(withText(R.string.delete_file)).check(matches(isDisplayed()))
     }
 
     @Test

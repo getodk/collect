@@ -52,6 +52,14 @@ class DeleteBlankFormFragment(
         blankFormListViewModel.formsToDisplay.observe(viewLifecycleOwner) {
             if (it != null) {
                 adapter.formItems = it
+
+                if (it.isEmpty()) {
+                    binding.selectAll.visibility = View.GONE
+                    binding.deleteSelected.visibility = View.GONE
+                } else {
+                    binding.selectAll.visibility = View.VISIBLE
+                    binding.deleteSelected.visibility = View.VISIBLE
+                }
             }
         }
 
