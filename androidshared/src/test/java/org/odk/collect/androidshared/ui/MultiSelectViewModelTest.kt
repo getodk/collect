@@ -39,4 +39,16 @@ class MultiSelectViewModelTest {
 
         assertThat(viewModel.getSelected().value, equalTo(emptySet()))
     }
+
+    @Test
+    fun `toggle changes item back and forth`() {
+        val viewModel = MultiSelectViewModel()
+
+        viewModel.toggle(1)
+        viewModel.toggle(11)
+        assertThat(viewModel.getSelected().value, equalTo(setOf<Long>(1, 11)))
+
+        viewModel.toggle(11)
+        assertThat(viewModel.getSelected().value, equalTo(setOf<Long>(1)))
+    }
 }

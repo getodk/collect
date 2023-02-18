@@ -5,8 +5,14 @@ import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 
-class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boolean) -> Unit) :
+class SelectableBlankFormListAdapter(private val onItemClickListener: (Long) -> Unit) :
     RecyclerView.Adapter<BlankFormListItemViewHolder>() {
+
+    var selected: Set<Long> = emptySet()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     var formItems = emptyList<BlankFormListItem>()
         set(value) {
@@ -25,12 +31,14 @@ class SelectableBlankFormListAdapter(private val onCheckedListener: (Long, Boole
         holder.blankFormListItem = item
 
         val checkbox = holder.itemView.findViewById<CheckBox>(R.id.checkbox)
-        checkbox.setOnCheckedChangeListener { _, checked ->
-            onCheckedListener(item.databaseId, checked)
+        checkbox.isChecked = selected.contains(item.databaseId)
+
+        checkbox.setOnClickListener {
+            onItemClickListener(item.databaseId)
         }
 
         holder.itemView.setOnClickListener {
-            checkbox.toggle()
+            checkbox.performClick()
         }
     }
 

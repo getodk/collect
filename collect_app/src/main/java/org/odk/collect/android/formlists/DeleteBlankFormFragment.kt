@@ -26,8 +26,6 @@ class DeleteBlankFormFragment(
     private lateinit var blankFormListViewModel: BlankFormListViewModel
     private lateinit var multiSelectViewModel: MultiSelectViewModel
 
-    private var selected = emptySet<Long>()
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
@@ -46,12 +44,8 @@ class DeleteBlankFormFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = DeleteBlankFormLayoutBinding.bind(view)
         val recyclerView = binding.list
-        val adapter = SelectableBlankFormListAdapter { databaseId, checked ->
-            if (checked) {
-                multiSelectViewModel.select(databaseId)
-            } else {
-                multiSelectViewModel.unselect(databaseId)
-            }
+        val adapter = SelectableBlankFormListAdapter { databaseId ->
+            multiSelectViewModel.toggle(databaseId)
         }
 
         recyclerView.adapter = adapter
@@ -70,11 +64,11 @@ class DeleteBlankFormFragment(
                 binding.selectAll.setText(R.string.clear_all)
             }
 
-            selected = it
+            adapter.selected = it
         }
 
         binding.selectAll.setOnClickListener {
-            if (selected.isEmpty()) {
+            if (adapter.selected.isEmpty()) {
                 adapter.formItems.forEach {
                     multiSelectViewModel.select(it.databaseId)
                 }
@@ -85,12 +79,12 @@ class DeleteBlankFormFragment(
 
         binding.deleteSelected.setOnClickListener {
             val alertDialog = MaterialAlertDialogBuilder(requireContext()).create()
-            alertDialog.setMessage(getString(R.string.delete_confirm, selected.size.toString()))
+            alertDialog.setMessage(getString(R.string.delete_confirm, adapter.selected.size.toString()))
             alertDialog.setButton(
                 DialogInterface.BUTTON_POSITIVE,
                 getString(R.string.delete_yes)
             ) { _, _ ->
-                blankFormListViewModel.deleteForms(*selected.toLongArray())
+                blankFormListViewModel.deleteForms(*adapter.selected.toLongArray())
             }
 
             alertDialog.show()

@@ -16,6 +16,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -37,6 +38,7 @@ import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.testshared.RecyclerViewMatcher
 
 @RunWith(AndroidJUnit4::class)
 class DeleteBlankFormFragmentTest {
@@ -71,6 +73,20 @@ class DeleteBlankFormFragmentTest {
                 DeleteBlankFormFragment(viewModelFactory, menuHost)
             }.build()
     )
+
+    @Test
+    fun `selected forms are checked`() {
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 1, formName = "Form 1"),
+            blankFormListItem(databaseId = 2, formName = "Form 2")
+        )
+
+        multiSelectViewModel.select(2)
+
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
+        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
+    }
 
     @Test
     fun `clicking forms selects them`() {

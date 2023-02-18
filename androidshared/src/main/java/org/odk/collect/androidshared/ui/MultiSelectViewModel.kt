@@ -23,4 +23,12 @@ class MultiSelectViewModel : ViewModel() {
     fun unselectAll() {
         selected.value = emptySet()
     }
+
+    fun toggle(item: Long) {
+        if (selected.value.contains(item)) {
+            unselect(item)
+        } else {
+            select(item)
+        }
+    }
 }
