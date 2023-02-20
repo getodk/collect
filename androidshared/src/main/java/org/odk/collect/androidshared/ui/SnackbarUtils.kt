@@ -41,7 +41,7 @@ object SnackbarUtils {
      * @param anchorView    The view this snackbar should be anchored above.
      * @param message       The text to show.  Can be formatted text.
      */
-    private fun showSnackbar(parentView: View, message: String, duration: Int, anchorView: View? = null) {
+    private fun showSnackbar(parentView: View, message: String, duration: Int, anchorView: View?) {
         if (message.isBlank()) {
             return
         }
