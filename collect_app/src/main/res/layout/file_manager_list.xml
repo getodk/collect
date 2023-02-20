@@ -14,48 +14,50 @@ License for the specific language governing permissions and limitations under
 the License.
 
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llParent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:divider="@drawable/list_item_divider"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:scrollbarStyle="outsideOverlay" />
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/select_all"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@android:id/empty"
-        style="@style/Widget.Collect.TextView.Empty"
-        android:text="@string/no_items_display" />
-
-    <LinearLayout
-        android:id="@+id/buttonholder"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="@string/no_items_display"
+        android:textAppearance="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/toggle_button"
-            style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:text="@string/select_all" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/toggle_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:text="@string/select_all"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete_button"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/delete_button"
-            style="@style/Widget.Collect.Button.BottomOption"
-            android:layout_marginLeft="@dimen/margin_extra_small"
-            android:layout_marginRight="@dimen/margin_extra_small"
-            android:text="@string/delete_file" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/delete_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:text="@string/delete_file"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/select_all" />
 
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
