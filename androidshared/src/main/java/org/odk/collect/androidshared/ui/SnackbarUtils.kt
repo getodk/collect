@@ -42,6 +42,10 @@ object SnackbarUtils {
      * @param message       The text to show.  Can be formatted text.
      */
     private fun showSnackbar(parentView: View, message: String, duration: Int, anchorView: View? = null) {
+        if (message.isBlank()) {
+            return
+        }
+
         Snackbar.make(parentView, message.trim(), duration).apply {
             val textView = this.view.findViewById<TextView>(R.id.snackbar_text)
             textView.isSingleLine = false
