@@ -46,7 +46,7 @@ object CompressionUtils {
         val output = outputStream.toByteArray()
 
         // Encode to base64
-        return Base64.encodeToString(output, Base64.DEFAULT)
+        return Base64.encodeToString(output, Base64.NO_WRAP)
     }
 
     @Throws(
@@ -60,7 +60,7 @@ object CompressionUtils {
         }
 
         // Decode from base64
-        val output = Base64.decode(compressedString, Base64.DEFAULT)
+        val output = Base64.decode(compressedString, Base64.NO_WRAP)
         val inflater = Inflater()
         inflater.setInput(output)
 
