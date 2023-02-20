@@ -45,7 +45,6 @@ import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
-import org.odk.collect.android.fragments.BlankFormListFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
@@ -220,8 +219,6 @@ public interface AppDependencyComponent {
     void inject(ServerAuthDialogFragment serverAuthDialogFragment);
 
     void inject(BasePreferencesFragment basePreferencesFragment);
-
-    void inject(BlankFormListFragment blankFormListFragment);
 
     void inject(InstanceUploaderActivity instanceUploaderActivity);
 
