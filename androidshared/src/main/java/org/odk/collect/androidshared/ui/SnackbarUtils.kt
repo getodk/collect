@@ -18,28 +18,35 @@ import android.widget.TextView
 import com.google.android.material.R
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * Convenience wrapper around Android's [Snackbar] API.
+ */
 object SnackbarUtils {
     @JvmStatic
-    fun showShortSnackbar(view: View, message: String) {
-        showSnackbar(view, message, 3500)
+    @JvmOverloads
+    fun showShortSnackbar(parentView: View, message: String, anchorView: View? = null) {
+        showSnackbar(parentView, message, 3500, anchorView)
     }
 
     @JvmStatic
-    fun showLongSnackbar(view: View, message: String) {
-        showSnackbar(view, message, 5500)
+    @JvmOverloads
+    fun showLongSnackbar(parentView: View, message: String, anchorView: View? = null) {
+        showSnackbar(parentView, message, 5500, anchorView)
     }
 
     /**
-     * Displays snackbar with {@param message}
-     * and multi-line message enabled.
+     * Displays snackbar with {@param message} and multi-line message enabled.
      *
-     * @param view    The view to find a parent from.
-     * @param message The text to show.  Can be formatted text.
+     * @param parentView    The view to find a parent from.
+     * @param anchorView    The view this snackbar should be anchored above.
+     * @param message       The text to show.  Can be formatted text.
      */
-    private fun showSnackbar(view: View, message: String, duration: Int) {
-        Snackbar.make(view, message.trim(), duration).apply {
+    private fun showSnackbar(parentView: View, message: String, duration: Int, anchorView: View? = null) {
+        Snackbar.make(parentView, message.trim(), duration).apply {
             val textView = this.view.findViewById<TextView>(R.id.snackbar_text)
             textView.isSingleLine = false
+
+            this.anchorView = anchorView
         }.show()
     }
 }

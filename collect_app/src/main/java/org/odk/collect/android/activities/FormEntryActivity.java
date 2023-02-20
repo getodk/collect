@@ -2487,7 +2487,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
         }
 
-        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), snackBarText);
+        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), snackBarText, findViewById(R.id.buttonholder));
     }
 
     @Override
