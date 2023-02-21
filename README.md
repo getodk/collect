@@ -176,7 +176,7 @@ JavaRosa is the form engine that powers Collect. If you want to debug or change 
 1. Build and install your changes of JavaRosa (into your local Maven repo):
 
 ```bash
-./install-local-version.sh
+./gradlew installLocal
 ```
 
 1. Change `implementation(Dependencies.javarosa)` in Collect's `build.gradle` to `implementation(Dependencies.javarosa_local)`
