@@ -50,6 +50,16 @@ internal class PolyFeature(
 
         pointAnnotationManager.addClickListener(pointAnnotationClickListener)
         pointAnnotationManager.addDragListener(pointAnnotationDragListener)
+        polylineAnnotationManager.addClickListener { annotation ->
+            polylineAnnotation?.let {
+                if (annotation.id == it.id && featureClickListener != null) {
+                    featureClickListener.onFeature(featureId)
+                    true
+                } else {
+                    false
+                }
+            } ?: false
+        }
     }
 
     override fun dispose() {
