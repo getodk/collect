@@ -234,10 +234,10 @@ class SelectionMapFragment(
 
         bottomSheetCallback = object : BottomSheetCallback() {
             override fun onStateChanged(onStateChangedbottomSheet: View, newState: Int) {
-                val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
-                if (newState == STATE_HIDDEN && selectedFeatureId != null) {
+                val selectedItemId = selectedFeatureViewModel.getSelectedFeatureId()
+                if (newState == STATE_HIDDEN && selectedItemId != null) {
                     selectedFeatureViewModel.setSelectedFeatureId(null)
-                    resetIcon(selectedFeatureId)
+                    resetIcon(selectedItemId)
 
                     closeSummarySheet.isEnabled = false
                 } else {
@@ -265,9 +265,9 @@ class SelectionMapFragment(
     }
 
     private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
-        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
-        if (selectedFeatureId != null && selectedFeatureId != featureId) {
-            resetIcon(selectedFeatureId)
+        val selectedItemId = selectedFeatureViewModel.getSelectedFeatureId()
+        if (selectedItemId != null && selectedItemId != itemsByFeatureId[featureId]!!.id) {
+            resetIcon(selectedItemId)
         }
 
         val item = itemsByFeatureId[featureId]
@@ -302,7 +302,7 @@ class SelectionMapFragment(
                     }
                 )
 
-                selectedFeatureViewModel.setSelectedFeatureId(featureId)
+                selectedFeatureViewModel.setSelectedFeatureId(item.id)
             } else {
                 parentFragmentManager.setFragmentResult(
                     REQUEST_SELECT_ITEM,
@@ -327,10 +327,14 @@ class SelectionMapFragment(
 
         val previouslySelectedItem =
             itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
-        val selectedFeatureId = selectedFeatureViewModel.getSelectedFeatureId()
+        val selectedItemId = selectedFeatureViewModel.getSelectedFeatureId()
 
-        if (selectedFeatureId != null) {
-            onFeatureClicked(selectedFeatureId)
+        if (selectedItemId != null) {
+            val (featureId, _) = itemsByFeatureId.entries.find {
+                it.value.id == selectedItemId
+            }!!
+
+            onFeatureClicked(featureId)
         } else if (previouslySelectedItem != null) {
             onFeatureClicked(previouslySelectedItem, maintainZoom = false)
         } else if (!map.hasCenter()) {
@@ -345,10 +349,13 @@ class SelectionMapFragment(
         }
     }
 
-    private fun resetIcon(selectedFeatureId: Int) {
-        val item = itemsByFeatureId[selectedFeatureId]!!
+    private fun resetIcon(selectedItemId: Long) {
+        val (featureId, item) = itemsByFeatureId.entries.find {
+            it.value.id == selectedItemId
+        }!!
+
         map.setMarkerIcon(
-            selectedFeatureId,
+            featureId,
             MarkerIconDescription(item.smallIcon, item.color, item.symbol)
         )
     }
@@ -397,14 +404,14 @@ class SelectionMapFragment(
 
 internal class SelectedFeatureViewModel : ViewModel() {
 
-    private var selectedFeatureId: Int? = null
+    private var selectedItemId: Long? = null
 
-    fun getSelectedFeatureId(): Int? {
-        return selectedFeatureId
+    fun getSelectedFeatureId(): Long? {
+        return selectedItemId
     }
 
-    fun setSelectedFeatureId(itemId: Int?) {
-        selectedFeatureId = itemId
+    fun setSelectedFeatureId(itemId: Long?) {
+        selectedItemId = itemId
     }
 }
 
