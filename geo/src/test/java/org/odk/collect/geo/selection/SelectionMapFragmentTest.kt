@@ -690,8 +690,8 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        map.clickOnFeature(-1)
-        map.clickOnFeature(-2) // First click is fine but second could use the ID and crash
+        map.clickOnFeatureId(-1)
+        map.clickOnFeatureId(-2) // First click is fine but second could use the ID and crash
     }
 
     @Test

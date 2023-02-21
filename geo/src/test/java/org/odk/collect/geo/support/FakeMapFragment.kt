@@ -8,6 +8,7 @@ import org.odk.collect.maps.MapFragment.ReadyListener
 import org.odk.collect.maps.MapPoint
 import org.odk.collect.maps.markers.MarkerDescription
 import org.odk.collect.maps.markers.MarkerIconDescription
+import kotlin.random.Random
 
 class FakeMapFragment : Fragment(), MapFragment {
 
@@ -28,7 +29,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     private val polyDraggable: MutableList<Boolean> = ArrayList()
     private var hasCenter = false
     private val polyPoints = mutableMapOf<Int, MutableList<MapPoint>>()
-    private var featureCount = 0;
+    private val featureIds = mutableListOf<Int>()
 
     override fun init(
         readyListener: ReadyListener?,
@@ -83,9 +84,13 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun addMarker(markerDescription: MarkerDescription): Int {
-        markers[featureCount] = markerDescription.point
-        markerIcons[featureCount] = markerDescription.iconDescription
-        return featureCount++
+        val featureId = generateFeatureId()
+
+        markers[featureId] = markerDescription.point
+        markerIcons[featureId] = markerDescription.iconDescription
+
+        featureIds.add(featureId)
+        return featureId
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
@@ -107,10 +112,14 @@ class FakeMapFragment : Fragment(), MapFragment {
         closedPolygon: Boolean,
         draggable: Boolean
     ): Int {
-        polys[featureCount] = points.toList()
+        val featureId = generateFeatureId()
+
+        polys[featureId] = points.toList()
         polyClosed.add(closedPolygon)
         polyDraggable.add(draggable)
-        return featureCount++
+
+        featureIds.add(featureId)
+        return featureId
     }
 
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {
@@ -186,7 +195,11 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     fun clickOnFeature(index: Int) {
-        featureClickListener!!.onFeature(index)
+        featureClickListener!!.onFeature(featureIds[index])
+    }
+
+    fun clickOnFeatureId(featureId: Int) {
+        featureClickListener!!.onFeature(featureId)
     }
 
     fun getMarkers(): List<MapPoint> {
@@ -211,6 +224,15 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     fun isPolyDraggable(index: Int): Boolean {
         return polyDraggable[index]
+    }
+
+    private fun generateFeatureId(): Int {
+        var featureId = Random.nextInt()
+        while (featureIds.contains(featureId)) {
+            featureId = Random.nextInt()
+        }
+
+        return featureId
     }
 
     companion object {
