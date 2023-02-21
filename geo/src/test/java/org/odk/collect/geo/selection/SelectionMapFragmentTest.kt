@@ -206,7 +206,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `zooms to fit all points in polys`() {
+    fun `zooms to fit all points in for item with multiple points`() {
         val points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
         val items: List<MappableSelectItem> = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = points)
@@ -400,6 +400,22 @@ class SelectionMapFragmentTest {
         map.clickOnFeature(1)
         assertThat(map.center, equalTo(items[1].toMapPoint()))
         assertThat(map.zoom, equalTo(2.0))
+    }
+
+    @Test
+    fun `tapping on item with multiple points zooms to fit all item points`() {
+        val itemPoints = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
+            Fixtures.actionMappableSelectItem().copy(id = 1, points = itemPoints)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeature(1)
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(itemPoints, 0.8)))
     }
 
     @Test

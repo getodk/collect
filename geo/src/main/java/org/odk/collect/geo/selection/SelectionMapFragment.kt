@@ -273,12 +273,16 @@ class SelectionMapFragment(
         val item = itemsByFeatureId[featureId]
         if (item != null) {
             if (!skipSummary) {
-                val point = item.points[0]
-
-                if (maintainZoom) {
-                    map.zoomToPoint(MapPoint(point.latitude, point.longitude), map.zoom, true)
+                if (item.points.size > 1) {
+                    map.zoomToBoundingBox(item.points, 0.8, true)
                 } else {
-                    map.zoomToPoint(MapPoint(point.latitude, point.longitude), true)
+                    val point = item.points[0]
+
+                    if (maintainZoom) {
+                        map.zoomToPoint(MapPoint(point.latitude, point.longitude), map.zoom, true)
+                    } else {
+                        map.zoomToPoint(MapPoint(point.latitude, point.longitude), true)
+                    }
                 }
 
                 map.setMarkerIcon(
