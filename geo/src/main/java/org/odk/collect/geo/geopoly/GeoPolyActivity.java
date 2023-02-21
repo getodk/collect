@@ -26,7 +26,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
@@ -248,15 +247,16 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             ArrayList<MapPoint> extraPoly = intent.getParcelableArrayListExtra(EXTRA_POLYGON);
 
             if (!extraPoly.isEmpty()) {
-                originalPoly = extraPoly;
-
                 if (outputMode == OutputMode.GEOSHAPE) {
                     points = extraPoly.subList(0, extraPoly.size() - 1);
                 } else {
                     points = extraPoly;
                 }
             }
+
+            originalPoly = extraPoly;
         }
+
         if (restoredPoints != null) {
             points = restoredPoints;
         }
@@ -516,9 +516,5 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             .setNegativeButton(R.string.cancel, null)
             .show();
 
-    }
-
-    @VisibleForTesting public MapFragment getMapFragment() {
-        return map;
     }
 }

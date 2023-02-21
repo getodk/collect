@@ -463,11 +463,17 @@ public class AllWidgetsFormTest {
     public void testGeotraceWidget() {
         Screengrab.screenshot("geo-trace");
 
+        onView(withText("Start GeoTrace")).perform(click());
+        pressBack();
+
         onView(withText("Geotrace widget")).perform(swipeLeft());
     }
 
     public void testGeoshapeWidget() {
         Screengrab.screenshot("geo-space");
+
+        onView(withText("Start GeoShape")).perform(click());
+        pressBack();
 
         onView(withText("Geoshape widget")).perform(swipeLeft());
     }
