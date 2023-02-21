@@ -329,7 +329,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping current location button zooms to gps location`() {
+    fun `clicking current location button zooms to gps location`() {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
@@ -341,7 +341,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping zoom to fit button zooms to fit all items`() {
+    fun `clicking zoom to fit button zooms to fit all items`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
             Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(41.0, 0.0)))
@@ -358,7 +358,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping zoom to fit button zooms to fit all polys`() {
+    fun `clicking zoom to fit button zooms to fit all polys`() {
         val points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
         val items: List<MappableSelectItem> = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = points)
@@ -373,7 +373,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping layers button navigates to layers settings`() {
+    fun `clicking layers button navigates to layers settings`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
@@ -385,7 +385,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item centers on that item with current zoom level`() {
+    fun `clicking on item centers on that item with current zoom level`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
             Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(41.0, 0.0)))
@@ -403,7 +403,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item with multiple points zooms to fit all item points`() {
+    fun `clicking on item with multiple points zooms to fit all item points`() {
         val itemPoints = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
@@ -419,7 +419,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item switches item marker to large icon`() {
+    fun `clicking on item switches item marker to large icon`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
@@ -455,7 +455,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item when another has been tapped switches the first one back to its small icon`() {
+    fun `clicking on item when another has been tapped switches the first one back to its small icon`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
@@ -492,7 +492,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item sets item on summary sheet`() {
+    fun `clicking on item sets item on summary sheet`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1"),
             Fixtures.actionMappableSelectItem().copy(id = 1, name = "Blah2"),
@@ -508,7 +508,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item returns item ID as result when skipSummary is true`() {
+    fun `clicking on item returns item ID as result when skipSummary is true`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0),
             Fixtures.actionMappableSelectItem().copy(id = 1),
@@ -619,7 +619,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping action hides summary sheet`() {
+    fun `clicking action hides summary sheet`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
