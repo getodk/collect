@@ -21,13 +21,14 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var readyListener: ReadyListener? = null
     private var gpsLocation: MapPoint? = null
     private var featureClickListener: FeatureListener? = null
-    private val markers: MutableList<MapPoint> = ArrayList()
-    private val markerIcons: MutableList<MarkerIconDescription?> = ArrayList()
-    private val polys: MutableList<List<MapPoint>> = ArrayList()
+    private val markers = mutableMapOf<Int, MapPoint>()
+    private val markerIcons = mutableMapOf<Int, MarkerIconDescription?>()
+    private val polys = mutableMapOf<Int, List<MapPoint>>()
     private val polyClosed: MutableList<Boolean> = ArrayList()
     private val polyDraggable: MutableList<Boolean> = ArrayList()
     private var hasCenter = false
     private val polyPoints = mutableMapOf<Int, MutableList<MapPoint>>()
+    private var featureCount = 0;
 
     override fun init(
         readyListener: ReadyListener?,
@@ -82,9 +83,9 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun addMarker(markerDescription: MarkerDescription): Int {
-        markers.add(markerDescription.point)
-        markerIcons.add(markerDescription.iconDescription)
-        return markers.size - 1
+        markers[featureCount] = markerDescription.point
+        markerIcons[featureCount] = markerDescription.iconDescription
+        return featureCount++
     }
 
     override fun addMarkers(markers: List<MarkerDescription>): List<Int> {
@@ -98,7 +99,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     override fun getMarkerPoint(featureId: Int): MapPoint {
-        return markers[featureId]
+        return markers[featureId]!!
     }
 
     override fun addPoly(
@@ -106,10 +107,10 @@ class FakeMapFragment : Fragment(), MapFragment {
         closedPolygon: Boolean,
         draggable: Boolean
     ): Int {
-        polys.add(points.toList())
+        polys[featureCount] = points.toList()
         polyClosed.add(closedPolygon)
         polyDraggable.add(draggable)
-        return polys.size - 1
+        return featureCount++
     }
 
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {
@@ -189,11 +190,11 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     fun getMarkers(): List<MapPoint> {
-        return markers
+        return markers.values.toList()
     }
 
     fun getMarkerIcons(): List<MarkerIconDescription?> {
-        return markerIcons
+        return markerIcons.values.toList()
     }
 
     fun getZoomBoundingBox(): Pair<Iterable<MapPoint>, Double>? {
@@ -201,7 +202,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     }
 
     fun getPolys(): List<List<MapPoint>> {
-        return polys
+        return polys.values.toList()
     }
 
     fun isPolyClosed(index: Int): Boolean {
