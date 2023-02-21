@@ -33,7 +33,6 @@ class AudioRecorderServiceTest {
     private val application: RobolectricApplication by lazy { ApplicationProvider.getApplicationContext() }
     private val recorder = FakeRecorder()
     private val scheduler = FakeScheduler()
-    private val recordingRepository = RecordingRepository(application.getState())
 
     private var serviceInstance: ServiceScenario<AudioRecorderService>? = null
 
@@ -47,10 +46,6 @@ class AudioRecorderServiceTest {
 
                 override fun providesScheduler(application: Application): Scheduler {
                     return scheduler
-                }
-
-                override fun providesRecordingRepository(application: Application): RecordingRepository {
-                    return recordingRepository
                 }
             }
         )
@@ -258,6 +253,7 @@ class AudioRecorderServiceTest {
         stopAction()
         pauseAction()
 
+        val recordingRepository = RecordingRepository(application.getState())
         assertThat(recordingRepository.currentSession.value!!.paused, equalTo(false))
     }
 
