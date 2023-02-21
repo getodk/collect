@@ -226,6 +226,18 @@ class FakeMapFragment : Fragment(), MapFragment {
         return polyDraggable[index]
     }
 
+    fun getFeatureId(points: List<MapPoint>): Int {
+        return if (points.size == 1) {
+            markers.entries.find {
+                it.value == points[0]
+            }!!.key
+        } else {
+            polys.entries.find {
+                it.value == points
+            }!!.key
+        }
+    }
+
     private fun generateFeatureId(): Int {
         var featureId = Random.nextInt()
         while (featureIds.contains(featureId)) {

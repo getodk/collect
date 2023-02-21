@@ -418,6 +418,25 @@ class SelectionMapFragmentTest {
         assertThat(map.getZoomBoundingBox(), equalTo(Pair(itemPoints, 0.8)))
     }
 
+    /**
+     * This looks like a duplicated test, but it's easy to write an implementation that will work
+     * for everything else and break for interleaved points and traces.
+     */
+    @Test
+    fun `clicking on item always selects correct item`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))),
+            Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(45.0, 0.0))),
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeatureId(map.getFeatureId(items[1].points))
+        assertThat(map.center, equalTo(items[1].points[0]))
+    }
+
     @Test
     fun `clicking on item switches item marker to large icon`() {
         val items = listOf(

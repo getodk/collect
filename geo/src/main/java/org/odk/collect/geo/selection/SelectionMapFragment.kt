@@ -387,7 +387,7 @@ class SelectionMapFragment(
             ids + map.addPoly(item.points, false, false)
         }
 
-        items.zip(pointIds + traceIds).forEach { (item, featureId) ->
+        (singlePoints + traces).zip(pointIds + traceIds).forEach { (item, featureId) ->
             itemsByFeatureId[featureId] = item
             points.addAll(item.points)
         }
