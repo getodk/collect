@@ -22,7 +22,6 @@ import androidx.exifinterface.media.ExifInterface
 import org.odk.collect.android.R
 import org.odk.collect.android.widgets.QuestionWidget
 import timber.log.Timber
-import java.io.IOException
 
 object ImageConverter {
     /**
@@ -36,20 +35,9 @@ object ImageConverter {
         context: Context,
         imageSizeMode: String
     ) {
-        var exif: ExifInterface? = null
-        try {
-            exif = ExifInterface(imagePath)
-        } catch (e: IOException) {
-            Timber.w(e)
-        }
+        backupExifData(imagePath)
         scaleDownImageIfNeeded(imagePath, questionWidget, context, imageSizeMode)
-        if (exif != null) {
-            try {
-                exif.saveAttributes()
-            } catch (e: IOException) {
-                Timber.w(e)
-            }
-        }
+        restoreExifData(imagePath)
     }
 
     private fun scaleDownImageIfNeeded(
@@ -112,4 +100,61 @@ object ImageConverter {
             }
         }
     }
+
+    private fun backupExifData(imagePath: String) {
+        try {
+            val exif = ExifInterface(imagePath)
+            for ((key, _) in exifDataBackup) {
+                exifDataBackup[key] = exif.getAttribute(key)
+            }
+        } catch (e: Throwable) {
+            Timber.w(e)
+        }
+    }
+
+    private fun restoreExifData(imagePath: String) {
+        try {
+            val exif = ExifInterface(imagePath)
+            for ((key, value) in exifDataBackup) {
+                exif.setAttribute(key, value)
+            }
+            exif.saveAttributes()
+        } catch (e: Throwable) {
+            Timber.w(e)
+        }
+    }
+
+    private val exifDataBackup = mutableMapOf<String, String?>(
+        ExifInterface.TAG_DATETIME to null,
+        ExifInterface.TAG_DATETIME_ORIGINAL to null,
+        ExifInterface.TAG_DATETIME_DIGITIZED to null,
+        ExifInterface.TAG_OFFSET_TIME to null,
+        ExifInterface.TAG_OFFSET_TIME_ORIGINAL to null,
+        ExifInterface.TAG_OFFSET_TIME_DIGITIZED to null,
+        ExifInterface.TAG_SUBSEC_TIME to null,
+        ExifInterface.TAG_SUBSEC_TIME_ORIGINAL to null,
+        ExifInterface.TAG_SUBSEC_TIME_DIGITIZED to null,
+        ExifInterface.TAG_IMAGE_DESCRIPTION to null,
+        ExifInterface.TAG_MAKE to null,
+        ExifInterface.TAG_MODEL to null,
+        ExifInterface.TAG_SOFTWARE to null,
+        ExifInterface.TAG_ARTIST to null,
+        ExifInterface.TAG_COPYRIGHT to null,
+        ExifInterface.TAG_MAKER_NOTE to null,
+        ExifInterface.TAG_USER_COMMENT to null,
+        ExifInterface.TAG_IMAGE_UNIQUE_ID to null,
+        ExifInterface.TAG_CAMERA_OWNER_NAME to null,
+        ExifInterface.TAG_BODY_SERIAL_NUMBER to null,
+        ExifInterface.TAG_GPS_ALTITUDE to null,
+        ExifInterface.TAG_GPS_ALTITUDE_REF to null,
+        ExifInterface.TAG_GPS_DATESTAMP to null,
+        ExifInterface.TAG_GPS_TIMESTAMP to null,
+        ExifInterface.TAG_GPS_LATITUDE to null,
+        ExifInterface.TAG_GPS_LATITUDE_REF to null,
+        ExifInterface.TAG_GPS_LONGITUDE to null,
+        ExifInterface.TAG_GPS_LONGITUDE_REF to null,
+        ExifInterface.TAG_GPS_SATELLITES to null,
+        ExifInterface.TAG_GPS_STATUS to null,
+        ExifInterface.TAG_ORIENTATION to null
+    )
 }
