@@ -50,7 +50,9 @@ object SnackbarUtils {
             val textView = this.view.findViewById<TextView>(R.id.snackbar_text)
             textView.isSingleLine = false
 
-            this.anchorView = anchorView
+            if (anchorView?.visibility != View.GONE) {
+                this.anchorView = anchorView
+            }
         }.show()
     }
 }
