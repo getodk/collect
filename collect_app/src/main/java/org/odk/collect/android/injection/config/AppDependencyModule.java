@@ -186,11 +186,9 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, Application application, VersionInformation versionInformation) {
-        String cacheDir;
+        String cacheDir = null;
         if (!versionInformation.isRelease() || BuildConfig.DEBUG) {
             cacheDir = application.getCacheDir().getAbsolutePath();
-        } else {
-            cacheDir = null;
         }
 
         return new OkHttpConnection(
