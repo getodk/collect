@@ -46,9 +46,7 @@ import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
-import org.odk.collect.android.configure.qr.QRCodeDecoder;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
-import org.odk.collect.android.configure.qr.QRCodeUtils;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.draw.PenColorPickerViewModel;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
@@ -141,6 +139,9 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
+import org.odk.collect.qrcode.QRCodeDecoder;
+import org.odk.collect.qrcode.QRCodeDecoderImpl;
+import org.odk.collect.qrcode.QRCodeEncoderImpl;
 import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.settings.SettingsProvider;
@@ -279,7 +280,7 @@ public class AppDependencyModule {
 
     @Provides
     public QRCodeGenerator providesQRCodeGenerator(Context context) {
-        return new CachingQRCodeGenerator();
+        return new CachingQRCodeGenerator(new QRCodeEncoderImpl());
     }
 
     @Provides
@@ -337,7 +338,7 @@ public class AppDependencyModule {
 
     @Provides
     public QRCodeDecoder providesQRCodeDecoder() {
-        return new QRCodeUtils();
+        return new QRCodeDecoderImpl();
     }
 
     @Provides

@@ -6,8 +6,8 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.DecoratedBarcodeView
-import org.odk.collect.android.utilities.CompressionUtils
 import org.odk.collect.android.views.BarcodeViewDecoder
+import org.odk.collect.androidshared.utils.CompressionUtils
 import java.io.IOException
 
 class StubBarcodeViewDecoder : BarcodeViewDecoder() {

@@ -267,6 +267,7 @@ dependencies {
     implementation project(':entities')
     implementation project(':crash-handler')
     implementation project(':selfie-camera')
+    implementation project(':qr-code')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')

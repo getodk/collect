@@ -1036,7 +1036,7 @@
     <string name="view_qr_code_fragment_title">QR Code</string>
     <string name="import_qrcode_sd">Import QR code</string>
     <string name="successfully_imported_settings">Settings imported successfully</string>
-    <string name="encoding_max_limit">Maximum characters limit reached: QR code can\'t be generated for all settings</string>
+    <string name="encoding_max_limit" tools:ignore="UnusedResources">Maximum characters limit reached: QR code can\'t be generated for all settings</string>
     <string name="share">Share</string>
     <string name="turn_on_flashlight">Turn on flashlight</string>
     <string name="turn_off_flashlight">Turn off flashlight</string>
