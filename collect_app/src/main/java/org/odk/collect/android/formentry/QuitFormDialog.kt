@@ -24,7 +24,27 @@ import org.odk.collect.settings.keys.ProtectedProjectKeys
 object QuitFormDialog {
 
     @JvmStatic
-    fun create(
+    fun show(
+        activity: Activity,
+        formSaveViewModel: FormSaveViewModel,
+        formEntryViewModel: FormEntryViewModel,
+        settingsProvider: SettingsProvider,
+        currentProjectProvider: CurrentProjectProvider,
+        onSaveChangesClicked: Runnable?,
+    ): AlertDialog {
+        return create(
+            activity,
+            formSaveViewModel,
+            formEntryViewModel,
+            settingsProvider,
+            currentProjectProvider,
+            onSaveChangesClicked
+        ).also {
+            it.show()
+        }
+    }
+
+    private fun create(
         activity: Activity,
         formSaveViewModel: FormSaveViewModel,
         formEntryViewModel: FormEntryViewModel,
@@ -95,26 +115,5 @@ object QuitFormDialog {
             }
 
         return dialog
-    }
-
-    @JvmStatic
-    fun show(
-        activity: Activity,
-        formSaveViewModel: FormSaveViewModel,
-        formEntryViewModel: FormEntryViewModel,
-        settingsProvider: SettingsProvider,
-        currentProjectProvider: CurrentProjectProvider,
-        onSaveChangesClicked: Runnable?,
-    ): AlertDialog {
-        return create(
-            activity,
-            formSaveViewModel,
-            formEntryViewModel,
-            settingsProvider,
-            currentProjectProvider,
-            onSaveChangesClicked
-        ).also {
-            it.show()
-        }
     }
 }
