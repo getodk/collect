@@ -1,5 +1,6 @@
 package org.odk.collect.settings
 
+import org.json.JSONObject
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.importing.ProjectDetailsCreatorImpl
@@ -13,7 +14,8 @@ class ODKAppSettingsImporter(
     generalDefaults: Map<String, Any>,
     adminDefaults: Map<String, Any>,
     projectColors: List<String>,
-    settingsChangedHandler: SettingsChangeHandler
+    settingsChangedHandler: SettingsChangeHandler,
+    private val deviceUnsupportedSettings: JSONObject
 ) {
 
     private val settingsImporter = SettingsImporter(
@@ -29,7 +31,7 @@ class ODKAppSettingsImporter(
 
     fun fromJSON(json: String, project: Project.Saved): Boolean {
         return try {
-            settingsImporter.fromJSON(json, project)
+            settingsImporter.fromJSON(json, project, deviceUnsupportedSettings)
         } catch (e: Throwable) {
             false
         }

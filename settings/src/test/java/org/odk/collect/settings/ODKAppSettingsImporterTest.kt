@@ -2,6 +2,7 @@ package org.odk.collect.settings
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.json.JSONObject
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
@@ -23,7 +24,8 @@ class ODKAppSettingsImporterTest {
         mapOf("server_url" to "https://demo.getodk.org"),
         emptyMap(),
         listOf("#00000"),
-        settingsChangeHandler
+        settingsChangeHandler,
+        JSONObject()
     )
 
     @Test

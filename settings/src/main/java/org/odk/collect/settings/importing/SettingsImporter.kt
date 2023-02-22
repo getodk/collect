@@ -6,6 +6,7 @@ import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.AppConfigurationKeys
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.collections.CollectionExtensions.has
 import org.odk.collect.shared.settings.Settings
 
 internal class SettingsImporter(
@@ -19,7 +20,7 @@ internal class SettingsImporter(
     private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
-    fun fromJSON(json: String, project: Project.Saved): Boolean {
+    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: JSONObject): Boolean {
         if (!settingsValidator.isValid(json)) {
             return false
         }
@@ -33,10 +34,10 @@ internal class SettingsImporter(
         val jsonObject = JSONObject(json)
 
         // Import unprotected settings
-        importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings, deviceUnsupportedSettings)
 
         // Import protected settings
-        importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings)
+        importToPrefs(jsonObject, AppConfigurationKeys.ADMIN, adminSettings, deviceUnsupportedSettings)
 
         // Import project details
         val projectDetails = if (jsonObject.has(AppConfigurationKeys.PROJECT)) {
@@ -67,14 +68,22 @@ internal class SettingsImporter(
         return true
     }
 
-    private fun importToPrefs(mainJsonObject: JSONObject, childJsonObjectName: String, preferences: Settings) {
+    private fun importToPrefs(
+        mainJsonObject: JSONObject,
+        childJsonObjectName: String,
+        preferences: Settings,
+        deviceUnsupportedSettings: JSONObject
+    ) {
         val childJsonObject = mainJsonObject.getJSONObject(childJsonObjectName)
+        val deviceUnsupportedSettingsForGivenChildJson = if (deviceUnsupportedSettings.has(childJsonObjectName)) deviceUnsupportedSettings.getJSONObject(childJsonObjectName) else JSONObject()
 
         childJsonObject.keys().forEach {
             if (settingsValidator.isKeySupported(childJsonObjectName, it)) {
                 val value = childJsonObject[it]
                 if (settingsValidator.isValueSupported(childJsonObjectName, it, value)) {
-                    preferences.save(it, value)
+                    if (!deviceUnsupportedSettingsForGivenChildJson.has(it) || !deviceUnsupportedSettingsForGivenChildJson.getJSONArray(it).has(value)) {
+                        preferences.save(it, value)
+                    }
                 }
             }
         }
