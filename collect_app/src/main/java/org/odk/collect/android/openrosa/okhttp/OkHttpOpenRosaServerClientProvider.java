@@ -87,7 +87,7 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
                 .readTimeout(READ_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .followRedirects(true);
 
-        if (cacheDir != null) {
+        if (cacheDir != null && new File(cacheDir).exists()) {
             builder.cache(new Cache(
                     new File(cacheDir, "http_" + credentials.hashCode()),
                     50L * 1024L * 1024L // 50 MiB

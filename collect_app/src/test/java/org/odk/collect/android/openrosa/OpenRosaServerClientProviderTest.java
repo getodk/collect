@@ -304,7 +304,7 @@ public abstract class OpenRosaServerClientProviderTest {
         assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
     }
 
-    private void enqueueSuccess(MockWebServer mockWebServer) {
+    protected void enqueueSuccess(MockWebServer mockWebServer) {
         mockWebServer.enqueue(new MockResponse());
     }
 
