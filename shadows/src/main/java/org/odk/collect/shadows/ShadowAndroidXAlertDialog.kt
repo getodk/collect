@@ -1,4 +1,4 @@
-package org.odk.collect.android.support
+package org.odk.collect.shadows
 
 import android.view.View
 import androidx.appcompat.app.AlertDialog

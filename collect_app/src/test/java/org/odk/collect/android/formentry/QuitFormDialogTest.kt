@@ -16,8 +16,8 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.support.ShadowAndroidXAlertDialog
 import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.shadows.ShadowAndroidXAlertDialog
 import org.odk.collect.testshared.RobolectricHelpers.runLooper
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
