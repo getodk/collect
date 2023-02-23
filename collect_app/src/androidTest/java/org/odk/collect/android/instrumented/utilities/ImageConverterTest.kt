@@ -18,76 +18,43 @@ package org.odk.collect.android.instrumented.utilities
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.ExifInterface
+import androidx.exifinterface.media.ExifInterface
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.instance.TreeElement
 import org.javarosa.form.api.FormEntryPrompt
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.odk.collect.android.TestSettingsProvider.getUnprotectedSettings
-import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.rules.RunnableRule
-import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.android.utilities.ApplicationConstants.Namespaces
 import org.odk.collect.android.utilities.ImageConverter
 import org.odk.collect.android.utilities.ImageFileUtils
 import org.odk.collect.android.widgets.ImageWidget
-import org.odk.collect.projects.Project
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.lang.Exception
-import java.util.HashMap
 
 @RunWith(AndroidJUnit4::class)
 class ImageConverterTest {
     private lateinit var testImagePath: String
-    private val generalSettings = getUnprotectedSettings()
     private val context = ApplicationProvider.getApplicationContext<Context>()
-
-    @get:Rule
-    var copyFormChain: RuleChain = TestRuleChain.chain()
-        .around(
-            RunnableRule {
-                // Set up demo project
-                val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Context>())
-                component.projectsRepository().save(Project.DEMO_PROJECT)
-                component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID)
-            }
-        )
-
-    @Before
-    fun setUp() {
-        testImagePath =
-            StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator + "testForm_2017-10-12_19-36-15" + File.separator + "testImage.jpg"
-        File(testImagePath).parentFile.mkdirs()
-    }
 
     @Test
     fun executeConversionWithoutAnySettings() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_ORIGINAL)
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly1() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(4000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -95,14 +62,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(2000, image!!.width)
-        assertEquals(1500, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(2000, equalTo(image.width))
+        assertThat(1500, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly2() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 4000)
         ImageConverter.execute(
             testImagePath,
@@ -110,14 +78,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(1500, image!!.width)
-        assertEquals(2000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(1500, equalTo(image.width))
+        assertThat(2000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly3() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -125,14 +94,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(2000, image!!.width)
-        assertEquals(2000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(2000, equalTo(image.width))
+        assertThat(2000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly4() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -140,14 +110,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly5() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -155,14 +126,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly6() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -170,14 +142,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(2998, image!!.width)
-        assertEquals(2998, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(2998, equalTo(image.width))
+        assertThat(2998, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly7() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -185,14 +158,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly8() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -200,14 +174,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly9() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -215,14 +190,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly10() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -230,14 +206,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly11() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -245,14 +222,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormLevelOnly12() {
-        generalSettings.save("image_size", "original_image_size")
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(
             testImagePath,
@@ -260,64 +238,70 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_ORIGINAL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownSettingsLevelOnly1() {
-        generalSettings.save("image_size", IMAGE_SIZE_VERY_SMALL)
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_VERY_SMALL)
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(640, image!!.width)
-        assertEquals(640, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(640, equalTo(image.width))
+        assertThat(640, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownSettingsLevelOnly2() {
-        generalSettings.save("image_size", IMAGE_SIZE_SMALL)
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_SMALL)
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(1024, image!!.width)
-        assertEquals(1024, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(1024, equalTo(image.width))
+        assertThat(1024, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownSettingsLevelOnly3() {
-        generalSettings.save("image_size", IMAGE_SIZE_MEDIUM)
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_MEDIUM)
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(2048, image!!.width)
-        assertEquals(2048, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(2048, equalTo(image.width))
+        assertThat(2048, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownSettingsLevelOnly4() {
-        generalSettings.save("image_size", IMAGE_SIZE_LARGE)
         saveTestBitmap(3000, 3000)
         ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_LARGE)
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(3000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(3000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownSettingsLevelOnly5() {
-        generalSettings.save("image_size", IMAGE_SIZE_LARGE)
         saveTestBitmap(4000, 4000)
         ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_LARGE)
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3072, image!!.width)
-        assertEquals(3072, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3072, equalTo(image.width))
+        assertThat(3072, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormAndSettingsLevel1() {
-        generalSettings.save("image_size", IMAGE_SIZE_SMALL)
         saveTestBitmap(4000, 4000)
         ImageConverter.execute(
             testImagePath,
@@ -325,14 +309,15 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_SMALL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(2000, image!!.width)
-        assertEquals(2000, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(2000, equalTo(image.width))
+        assertThat(2000, equalTo(image.height))
     }
 
     @Test
     fun scaleImageDownFormAndSettingsLevel2() {
-        generalSettings.save("image_size", "small")
         saveTestBitmap(4000, 4000)
         ImageConverter.execute(
             testImagePath,
@@ -340,101 +325,89 @@ class ImageConverterTest {
             context,
             IMAGE_SIZE_SMALL
         )
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(650, image!!.width)
-        assertEquals(650, image.height)
+
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(650, equalTo(image.width))
+        assertThat(650, equalTo(image.height))
     }
 
     @Test
     fun keepExifAfterScaling() {
-        val attributes: MutableMap<String, String> = HashMap()
-        attributes[ExifInterface.TAG_ARTIST] = ExifInterface.TAG_ARTIST
-        attributes[ExifInterface.TAG_DATETIME] = ExifInterface.TAG_DATETIME
-        attributes[ExifInterface.TAG_DATETIME_ORIGINAL] = ExifInterface.TAG_DATETIME_ORIGINAL
-        attributes[ExifInterface.TAG_DATETIME_DIGITIZED] = ExifInterface.TAG_DATETIME_DIGITIZED
-        attributes[ExifInterface.TAG_GPS_ALTITUDE] = dec2DMS(-17.0)
-        attributes[ExifInterface.TAG_GPS_ALTITUDE_REF] = ExifInterface.TAG_GPS_ALTITUDE_REF
-        attributes[ExifInterface.TAG_GPS_DATESTAMP] = ExifInterface.TAG_GPS_DATESTAMP
-        attributes[ExifInterface.TAG_GPS_LATITUDE] = dec2DMS(25.165173)
-        attributes[ExifInterface.TAG_GPS_LATITUDE_REF] = ExifInterface.TAG_GPS_LATITUDE_REF
-        attributes[ExifInterface.TAG_GPS_LONGITUDE] = dec2DMS(23.988174)
-        attributes[ExifInterface.TAG_GPS_LONGITUDE_REF] = ExifInterface.TAG_GPS_LONGITUDE_REF
-        attributes[ExifInterface.TAG_GPS_PROCESSING_METHOD] = ExifInterface.TAG_GPS_PROCESSING_METHOD
-        attributes[ExifInterface.TAG_MAKE] = ExifInterface.TAG_MAKE
-        attributes[ExifInterface.TAG_MODEL] = ExifInterface.TAG_MODEL
-        attributes[ExifInterface.TAG_SUBSEC_TIME] = ExifInterface.TAG_SUBSEC_TIME
+        val attributes = mutableMapOf(
+            ExifInterface.TAG_DATETIME to "2014:01:23 14:57:18",
+            ExifInterface.TAG_DATETIME_ORIGINAL to "2014:01:23 14:57:18",
+            ExifInterface.TAG_DATETIME_DIGITIZED to "2014:01:23 14:57:18",
+            ExifInterface.TAG_OFFSET_TIME to "+1:00",
+            ExifInterface.TAG_OFFSET_TIME_ORIGINAL to "+1:00",
+            ExifInterface.TAG_OFFSET_TIME_DIGITIZED to "+1:00",
+            ExifInterface.TAG_SUBSEC_TIME to "First photo",
+            ExifInterface.TAG_SUBSEC_TIME_ORIGINAL to "0",
+            ExifInterface.TAG_SUBSEC_TIME_DIGITIZED to "0",
+            ExifInterface.TAG_IMAGE_DESCRIPTION to "Photo from Poland",
+            ExifInterface.TAG_MAKE to "OLYMPUS IMAGING CORP",
+            ExifInterface.TAG_MODEL to "STYLUS1",
+            ExifInterface.TAG_SOFTWARE to "Version 1.0",
+            ExifInterface.TAG_ARTIST to "Grzegorz",
+            ExifInterface.TAG_COPYRIGHT to "G",
+            ExifInterface.TAG_MAKER_NOTE to "OLYMPUS",
+            ExifInterface.TAG_USER_COMMENT to "First photo",
+            ExifInterface.TAG_IMAGE_UNIQUE_ID to "123456789",
+            ExifInterface.TAG_CAMERA_OWNER_NAME to "John",
+            ExifInterface.TAG_BODY_SERIAL_NUMBER to "987654321",
+            ExifInterface.TAG_GPS_ALTITUDE to "41/1",
+            ExifInterface.TAG_GPS_ALTITUDE_REF to "0",
+            ExifInterface.TAG_GPS_DATESTAMP to "2014:01:23",
+            ExifInterface.TAG_GPS_TIMESTAMP to "14:57:18",
+            ExifInterface.TAG_GPS_LATITUDE to "50/1,49/1,8592/1000",
+            ExifInterface.TAG_GPS_LATITUDE_REF to "N",
+            ExifInterface.TAG_GPS_LONGITUDE to "0/1,8/1,12450/1000",
+            ExifInterface.TAG_GPS_LONGITUDE_REF to "W",
+            ExifInterface.TAG_GPS_SATELLITES to "8",
+            ExifInterface.TAG_GPS_STATUS to "A",
+            ExifInterface.TAG_ORIENTATION to "1"
+        )
 
         saveTestBitmap(3000, 4000, attributes)
-        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_ORIGINAL)
-        val exifData = testImageExif
-        assertNotNull(exifData)
+        ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_VERY_SMALL)
 
+        val exifData = ExifInterface(testImagePath)
         for (attributeName in attributes.keys) {
-            when (attributeName) {
-                ExifInterface.TAG_GPS_LATITUDE -> assertThat(
-                    exifData!!.getAttribute(attributeName), `is`("25/1,9/1,54622/1000")
-                )
-                ExifInterface.TAG_GPS_LONGITUDE -> assertThat(
-                    exifData!!.getAttribute(attributeName), `is`("23/1,59/1,17426/1000")
-                )
-                ExifInterface.TAG_GPS_ALTITUDE -> assertThat(
-                    exifData!!.getAttribute(attributeName), `is`("17/1,0/1,0/1000")
-                )
-                else -> assertThat(exifData!!.getAttribute(attributeName), `is`(attributeName))
-            }
+            assertThat(exifData.getAttribute(attributeName), equalTo(attributes[attributeName]))
         }
     }
 
     @Test
     fun verifyNoRotationAppliedForExifRotation() {
-        val attributes: MutableMap<String, String> = HashMap()
-        attributes[ExifInterface.TAG_ORIENTATION] = ExifInterface.ORIENTATION_ROTATE_90.toString()
+        val attributes = mapOf(ExifInterface.TAG_ORIENTATION to ExifInterface.ORIENTATION_ROTATE_90.toString())
         saveTestBitmap(3000, 4000, attributes)
         ImageConverter.execute(testImagePath, getTestImageWidget(), context, IMAGE_SIZE_ORIGINAL)
-        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())
-        assertEquals(3000, image!!.width)
-        assertEquals(4000, image.height)
-    }
 
-    // https://stackoverflow.com/a/55252228/5479029
-    private fun dec2DMS(coord: Double): String {
-        var coord = coord
-        coord = if (coord > 0) coord else -coord
-        var out = "${coord.toInt()}/1,"
-        coord = coord % 1 * 60
-        out = "${out + coord.toInt()}/1,"
-        coord = coord % 1 * 60000
-        out = "${out + coord.toInt()}/1000"
-        return out
+        val image = ImageFileUtils.getBitmap(testImagePath, BitmapFactory.Options())!!
+
+        assertThat(3000, equalTo(image.width))
+        assertThat(4000, equalTo(image.height))
     }
 
     private fun saveTestBitmap(
         width: Int,
         height: Int,
-        attributes: Map<String, String> = HashMap()
+        attributes: Map<String, String> = emptyMap()
     ) {
+        testImagePath = File.createTempFile("test", ".jpg").absolutePath
+
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
         ImageFileUtils.saveBitmapToFile(bitmap, testImagePath)
         try {
             val exifInterface = ExifInterface(testImagePath)
-            for (attributeName in attributes.keys) {
-                exifInterface.setAttribute(attributeName, attributes[attributeName])
+            for ((key, value) in attributes) {
+                exifInterface.setAttribute(key, value)
             }
             exifInterface.saveAttributes()
         } catch (e: IOException) {
             Timber.w(e)
         }
     }
-
-    private val testImageExif: ExifInterface?
-        get() {
-            try {
-                return ExifInterface(testImagePath)
-            } catch (e: Exception) {
-                Timber.w(e)
-            }
-            return null
-        }
 
     private fun getTestImageWidget(namespace: String, name: String, value: String): ImageWidget {
         val bindAttributes: MutableList<TreeElement> = mutableListOf()
