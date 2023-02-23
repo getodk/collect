@@ -16,3 +16,4 @@ errors:testDebug
 crash-handler:testDebug
 entities:testDebug
 qr-code:testDebug
+shadows:testDebug
