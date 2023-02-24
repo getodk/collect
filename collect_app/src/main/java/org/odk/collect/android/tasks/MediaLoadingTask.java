@@ -10,7 +10,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.ImageConverter;
+import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.widgets.BaseImageWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
@@ -26,6 +26,9 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
     private final File instanceFile;
     @Inject
     SettingsProvider settingsProvider;
+
+    @Inject
+    ImageCompressionController imageCompressionController;
 
     private WeakReference<FormEntryActivity> formEntryActivity;
 
@@ -51,7 +54,7 @@ public class MediaLoadingTask extends AsyncTask<Uri, Void, File> {
             // apply image conversion if the widget is an image widget
             if (questionWidget instanceof BaseImageWidget) {
                 String imageSizeMode = settingsProvider.getUnprotectedSettings().getString(KEY_IMAGE_SIZE);
-                ImageConverter.execute(newFile.getPath(), questionWidget, formEntryActivity.get(), imageSizeMode);
+                imageCompressionController.execute(newFile.getPath(), questionWidget, formEntryActivity.get(), imageSizeMode);
             }
             return newFile;
         }

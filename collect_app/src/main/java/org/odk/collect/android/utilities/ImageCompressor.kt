@@ -15,69 +15,20 @@
  */
 package org.odk.collect.android.utilities
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
-import org.odk.collect.android.R
-import org.odk.collect.android.widgets.QuestionWidget
 import timber.log.Timber
 
-object ImageConverter {
+object ImageCompressor {
     /**
      * Before proceed with scaling or rotating, make sure existing exif information is stored/restored.
      * @author Khuong Ninh (khuong.ninh@it-development.com)
      */
-    @JvmStatic
-    fun execute(
-        imagePath: String,
-        questionWidget: QuestionWidget,
-        context: Context,
-        imageSizeMode: String
-    ) {
+    fun execute(imagePath: String, maxPixels: Int) {
         backupExifData(imagePath)
-        scaleDownImageIfNeeded(imagePath, questionWidget, context, imageSizeMode)
+        scaleDownImage(imagePath, maxPixels)
         restoreExifData(imagePath)
-    }
-
-    private fun scaleDownImageIfNeeded(
-        imagePath: String,
-        questionWidget: QuestionWidget,
-        context: Context,
-        imageSizeMode: String
-    ) {
-        var maxPixels: Int?
-        maxPixels = getMaxPixelsFromFormIfDefined(questionWidget)
-        if (maxPixels == null) {
-            maxPixels = getMaxPixelsFromSettings(context, imageSizeMode)
-        }
-        if (maxPixels != null && maxPixels > 0) {
-            scaleDownImage(imagePath, maxPixels)
-        }
-    }
-
-    private fun getMaxPixelsFromFormIfDefined(questionWidget: QuestionWidget): Int? {
-        for (attrs in questionWidget.formEntryPrompt.bindAttributes) {
-            if ("max-pixels" == attrs.name && ApplicationConstants.Namespaces.XML_OPENROSA_NAMESPACE == attrs.namespace) {
-                try {
-                    return attrs.attributeValue.toInt()
-                } catch (e: NumberFormatException) {
-                    Timber.i(e)
-                }
-            }
-        }
-        return null
-    }
-
-    private fun getMaxPixelsFromSettings(context: Context, imageSizeMode: String): Int? {
-        val imageEntryValues = context.resources.getStringArray(R.array.image_size_entry_values)
-        return when (imageSizeMode) {
-            imageEntryValues[1] -> 640
-            imageEntryValues[2] -> 1024
-            imageEntryValues[3] -> 2048
-            imageEntryValues[4] -> 3072
-            else -> null
-        }
     }
 
     /**
@@ -85,6 +36,10 @@ object ImageConverter {
      * maxPixels refers to the max pixels of the long edge, the short edge is scaled proportionately.
      */
     private fun scaleDownImage(imagePath: String, maxPixels: Int) {
+        if (maxPixels <= 0) {
+            return
+        }
+
         var image = ImageFileUtils.getBitmap(imagePath, BitmapFactory.Options())
         if (image != null) {
             val originalWidth = image.width.toDouble()
