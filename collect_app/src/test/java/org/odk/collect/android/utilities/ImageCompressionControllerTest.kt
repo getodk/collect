@@ -12,6 +12,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.androidshared.bitmap.ImageCompressor
 
 @RunWith(AndroidJUnit4::class)
 class ImageCompressionControllerTest {

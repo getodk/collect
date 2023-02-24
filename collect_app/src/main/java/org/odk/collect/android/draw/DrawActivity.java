@@ -46,7 +46,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.DialogUtils;
-import org.odk.collect.android.utilities.ImageFileUtils;
+import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.strings.localization.LocalizedActivity;
 

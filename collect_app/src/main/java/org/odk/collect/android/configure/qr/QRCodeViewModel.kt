@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
-import org.odk.collect.android.utilities.ImageFileUtils.getBitmap
+import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -50,7 +50,7 @@ class QRCodeViewModel(
                         qrCodeGenerator.generateQRCode(includedKeys, appConfigurationGenerator)
                     val options = BitmapFactory.Options()
                     options.inPreferredConfig = Bitmap.Config.ARGB_8888
-                    val bitmap = getBitmap(filePath, options)
+                    val bitmap = ImageFileUtils.getBitmap(filePath, options)
                     return@immediate Pair(filePath, bitmap)
                 } catch (ignored: Exception) {
                     // Ignored

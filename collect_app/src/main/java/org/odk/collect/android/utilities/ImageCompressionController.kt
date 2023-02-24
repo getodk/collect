@@ -3,6 +3,7 @@ package org.odk.collect.android.utilities
 import android.content.Context
 import org.odk.collect.android.R
 import org.odk.collect.android.widgets.QuestionWidget
+import org.odk.collect.androidshared.bitmap.ImageCompressor
 import timber.log.Timber
 
 class ImageCompressionController(private val imageCompressor: ImageCompressor) {
