@@ -231,7 +231,7 @@ public class GeoPolyActivityTest {
         mapFragment.setLocation(new MapPoint(1, 1));
         onView(withId(R.id.record_button)).perform(click());
         onView(withId(R.id.record_button)).perform(click());
-        assertThat(mapFragment.getPolyPoints(0).size(), equalTo(1));
+        assertThat(mapFragment.getPolys().get(0).size(), equalTo(1));
     }
 
     @Test
@@ -243,7 +243,7 @@ public class GeoPolyActivityTest {
 
         mapFragment.click(new MapPoint(1, 1));
         mapFragment.click(new MapPoint(1, 1));
-        assertThat(mapFragment.getPolyPoints(0).size(), equalTo(1));
+        assertThat(mapFragment.getPolys().get(0).size(), equalTo(1));
     }
 
     private void startInput(int mode) {
