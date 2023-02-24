@@ -109,7 +109,7 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     public void setData(Object answer) {
         if (answer instanceof DateTime) {
             selectedTime = DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now());
-            binding.timeAnswerText.setText(new TimeData(selectedTime.toDate()).getDisplayText());
+            binding.timeAnswerText.setText(new TimeData(selectedTime.toDateTime().toDate()).getDisplayText());
         }
     }
 }
