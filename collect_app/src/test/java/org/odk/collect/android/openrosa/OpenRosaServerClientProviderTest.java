@@ -1,5 +1,12 @@
 package org.odk.collect.android.openrosa;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.startsWith;
+import static org.odk.collect.android.openrosa.support.MockWebServerHelper.buildRequest;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,12 +20,6 @@ import java.util.TimeZone;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertThat;
-import static org.odk.collect.android.openrosa.support.MockWebServerHelper.buildRequest;
 
 public abstract class OpenRosaServerClientProviderTest {
 
@@ -76,7 +77,7 @@ public abstract class OpenRosaServerClientProviderTest {
     }
 
     @Test
-    public void withCredentials_whenBasicChallengeReceived_doesNotRetryWithCredentials() throws Exception {
+    public void withCredentials_whenBasicChallengeReceived_whenHttp_doesNotRetryWithCredentials() throws Exception {
         MockWebServer mockWebServer = mockWebServerRule.start();
         enqueueBasicChallenge(mockWebServer);
         enqueueSuccess(mockWebServer);
@@ -229,6 +230,24 @@ public abstract class OpenRosaServerClientProviderTest {
     }
 
     @Test
+    public void whenUsingNullAndThenNonNullCredentials_authenticationIsNotCachedBetweenInstances() throws Exception {
+        MockWebServer mockWebServer = mockWebServerRule.start();
+
+        enqueueSuccess(mockWebServer);
+        enqueueDigestChallenge(mockWebServer);
+        enqueueSuccess(mockWebServer);
+
+        subject.get("http", "Android", null).makeRequest(buildRequest(mockWebServer, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("new-user", "pass")).makeRequest(buildRequest(mockWebServer, "/different"), new Date());
+
+        assertThat(mockWebServer.getRequestCount(), equalTo(3));
+        mockWebServer.takeRequest();
+        mockWebServer.takeRequest();
+        RecordedRequest request = mockWebServer.takeRequest();
+        assertThat(request.getHeader("Authorization"), notNullValue());
+    }
+
+    @Test
     public void whenConnectingToDifferentHosts_authenticationIsNotCachedBetweenInstances() throws Exception {
         MockWebServer host1 = mockWebServerRule.start();
         MockWebServer host2 = mockWebServerRule.start();
@@ -246,8 +265,27 @@ public abstract class OpenRosaServerClientProviderTest {
 
         RecordedRequest request = host2.takeRequest();
         assertThat(request.getHeader("Authorization"), equalTo(null));
+    }
 
-        host2.shutdown();
+    @Test
+    public void whenUsingHttpsThenHttp_doesNotRespondToBasicAuthChallengesInSecondInstance() throws Exception {
+        MockWebServer host = mockWebServerRule.start();
+
+        enqueueDigestChallenge(host);
+        enqueueSuccess(host);
+
+        enqueueBasicChallenge(host);
+        enqueueSuccess(host);
+
+        subject.get("https", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host, ""), new Date());
+        subject.get("http", "Android", new HttpCredentials("user", "pass")).makeRequest(buildRequest(host, ""), new Date());
+
+        assertThat(host.getRequestCount(), equalTo(3));
+
+        host.takeRequest();
+        host.takeRequest();
+        RecordedRequest request = host.takeRequest();
+        assertThat(request.getHeader("Authorization"), equalTo(null));
     }
 
     @Test
@@ -266,7 +304,7 @@ public abstract class OpenRosaServerClientProviderTest {
         assertThat(request.getHeader("Cookie"), isEmptyOrNullString());
     }
 
-    private void enqueueSuccess(MockWebServer mockWebServer) {
+    protected void enqueueSuccess(MockWebServer mockWebServer) {
         mockWebServer.enqueue(new MockResponse());
     }
 

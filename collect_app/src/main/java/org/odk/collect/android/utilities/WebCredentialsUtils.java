@@ -3,7 +3,6 @@ package org.odk.collect.android.utilities;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.HttpCredentials;
@@ -87,21 +86,27 @@ public class WebCredentialsUtils {
      * @param url to find the credentials object
      * @return either null or an instance of HttpCredentialsInterface
      */
-    public @Nullable HttpCredentialsInterface getCredentials(@NonNull URI url) {
+    public @NonNull HttpCredentialsInterface getCredentials(@NonNull URI url) {
         String host = url.getHost();
         String serverPrefsUrl = getServerUrlFromPreferences();
         String prefsServerHost = (serverPrefsUrl == null) ? null : Uri.parse(serverPrefsUrl).getHost();
 
+        HttpCredentialsInterface hostCredentials = HOST_CREDENTIALS.get(host);
+
         // URL host is the same as the host in preferences
         if (prefsServerHost != null && prefsServerHost.equalsIgnoreCase(host)) {
             // Use the temporary credentials if they exist, otherwise use the credentials saved to preferences
-            if (HOST_CREDENTIALS.containsKey(host)) {
-                return HOST_CREDENTIALS.get(host);
+            if (hostCredentials != null) {
+                return hostCredentials;
             } else {
                 return new HttpCredentials(getUserNameFromPreferences(), getPasswordFromPreferences());
             }
         } else {
-            return HOST_CREDENTIALS.get(host);
+            if (hostCredentials != null) {
+                return hostCredentials;
+            } else {
+                return new HttpCredentials("", "");
+            }
         }
     }
 

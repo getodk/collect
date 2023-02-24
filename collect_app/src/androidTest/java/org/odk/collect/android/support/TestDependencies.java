@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import android.app.Application;
 import android.content.Context;
 import android.webkit.MimeTypeMap;
 
@@ -12,6 +13,7 @@ import org.odk.collect.android.gdrive.sheets.SheetsApi;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.utilities.UserAgentProvider;
@@ -26,7 +28,7 @@ public class TestDependencies extends AppDependencyModule {
     public final StubBarcodeViewDecoder stubBarcodeViewDecoder = new StubBarcodeViewDecoder();
 
     @Override
-    public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider) {
+    public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, Application application, VersionInformation versionInformation) {
         return server;
     }
 

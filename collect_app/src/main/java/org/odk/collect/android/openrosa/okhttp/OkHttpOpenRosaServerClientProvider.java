@@ -3,7 +3,6 @@ package org.odk.collect.android.openrosa.okhttp;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.burgstaller.okhttp.AuthenticationCacheInterceptor;
 import com.burgstaller.okhttp.CachingAuthenticatorDecorator;
@@ -19,6 +18,7 @@ import org.odk.collect.android.openrosa.OpenRosaServerClient;
 import org.odk.collect.android.openrosa.OpenRosaServerClientProvider;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
@@ -27,11 +27,15 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import kotlin.Pair;
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -49,36 +53,46 @@ public class OkHttpOpenRosaServerClientProvider implements OpenRosaServerClientP
     private static final String DATE_HEADER = "Date";
 
     private final OkHttpClient baseClient;
+    private final String cacheDir;
 
-    private HttpCredentialsInterface lastCredentials;
-    private OkHttpOpenRosaServerClient client;
+    private final Map<Pair<String, HttpCredentialsInterface>, OkHttpOpenRosaServerClient> clients = new HashMap<>();
 
     public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient) {
+        this(baseClient, null);
+    }
+
+    public OkHttpOpenRosaServerClientProvider(@NonNull OkHttpClient baseClient, String cacheDir) {
         this.baseClient = baseClient;
+        this.cacheDir = cacheDir;
     }
 
     @Override
-    public OpenRosaServerClient get(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
-        if (client == null || credentialsHaveChanged(credentials)) {
-            lastCredentials = credentials;
-            client = createNewClient(scheme, userAgent, credentials);
+    public synchronized OpenRosaServerClient get(String scheme, String userAgent, @NonNull HttpCredentialsInterface credentials) {
+        OkHttpOpenRosaServerClient existingClient = clients.get(new Pair<>(scheme, credentials));
+
+        if (existingClient == null) {
+            OkHttpOpenRosaServerClient newClient = createNewClient(scheme, userAgent, credentials);
+            clients.put(new Pair<>(scheme, credentials), newClient);
+            return newClient;
+        } else {
+            return existingClient;
         }
-
-        return client;
-    }
-
-    public boolean credentialsHaveChanged(@Nullable HttpCredentialsInterface credentials) {
-        return lastCredentials != null && !lastCredentials.equals(credentials)
-                || lastCredentials == null && credentials != null;
     }
 
     @NonNull
-    private OkHttpOpenRosaServerClient createNewClient(String scheme, String userAgent, @Nullable HttpCredentialsInterface credentials) {
+    private OkHttpOpenRosaServerClient createNewClient(String scheme, String userAgent, @NonNull HttpCredentialsInterface credentials) {
         OkHttpClient.Builder builder = baseClient.newBuilder()
                 .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(WRITE_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(READ_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)
                 .followRedirects(true);
+
+        if (cacheDir != null && new File(cacheDir).exists()) {
+            builder.cache(new Cache(
+                    new File(cacheDir, "http_" + credentials.hashCode()),
+                    50L * 1024L * 1024L // 50 MiB
+            ));
+        }
 
         // Let's Encrypt root used as of Jan 2021 isn't trusted by Android 7.1.1 and below. Android
         // 7.0 and 7.1 (API 24/25) use network_security_config to get support.
