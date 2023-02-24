@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.android.instrumented.utilities
+package org.odk.collect.androidshared.bitmap
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.exifinterface.media.ExifInterface
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.utilities.ImageCompressor
-import org.odk.collect.android.utilities.ImageFileUtils
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)

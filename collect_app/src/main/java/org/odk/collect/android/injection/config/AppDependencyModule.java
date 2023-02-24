@@ -111,7 +111,7 @@ import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.ImageCompressor;
+import org.odk.collect.androidshared.bitmap.ImageCompressor;
 import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;

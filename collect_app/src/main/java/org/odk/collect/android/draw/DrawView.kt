@@ -25,7 +25,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.utilities.ImageFileUtils
+import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import java.io.File
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {

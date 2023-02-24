@@ -280,7 +280,6 @@ dependencies {
     implementation Dependencies.androidx_work_runtime
 
     implementation Dependencies.androidx_cardview
-    implementation Dependencies.androidx_exinterface
     implementation Dependencies.androidx_multidex
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.androidx_fragment_ktx
