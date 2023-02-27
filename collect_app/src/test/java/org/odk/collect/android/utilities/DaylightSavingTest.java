@@ -29,7 +29,6 @@ import org.javarosa.core.model.IFormElement;
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -42,6 +41,7 @@ import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.DateWidget;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
+import org.odk.collect.testshared.TimeZoneSetter;
 
 import java.util.TimeZone;
 
@@ -70,15 +70,13 @@ public class DaylightSavingTest {
 
     @After
     public void tearDown() {
-        TimeZone.setDefault(currentTimeZone);
-        DateTimeZone.setDefault(DateTimeZone.forID(currentTimeZone.getID()));
+        TimeZoneSetter.setTimezone(currentTimeZone);
     }
 
     @Test
     // 26 Mar 2017 at 02:00:00 clocks were turned forward to 03:00:00.
     public void testESTTimeZoneWithDateTimeWidget() {
-        TimeZone.setDefault(TimeZone.getTimeZone(CET_TIME_ZONE));
-        DateTimeZone.setDefault(DateTimeZone.forID(CET_TIME_ZONE));
+        TimeZoneSetter.setTimezone(TimeZone.getTimeZone(CET_TIME_ZONE));
 
         DateTimeWidget dateTimeWidget = prepareDateTimeWidget(2017, 3, 26, 2, 30);
 
@@ -92,8 +90,7 @@ public class DaylightSavingTest {
     @Test
     // 1 Jan 1960 at 00:00:00 clocks were turned forward to 00:15:00
     public void testEATTimezoneWithDateWidget() {
-        TimeZone.setDefault(TimeZone.getTimeZone(EAT_IME_ZONE));
-        DateTimeZone.setDefault(DateTimeZone.forID(EAT_IME_ZONE));
+        TimeZoneSetter.setTimezone(TimeZone.getTimeZone(EAT_IME_ZONE));
 
         DateWidget dateWidget = prepareDateWidget(1960, 0, 1);
 

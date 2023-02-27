@@ -20,11 +20,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.data.TimeData;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.chrono.GregorianChronology;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.odk.collect.testshared.TimeZoneSetter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -83,16 +83,14 @@ public class DateTimeUtilsTest {
 
     @Test
     public void skipDaylightSavingGapIfExistsTest() {
-        DateTimeZone originalDefaultTimeZone = DateTimeZone.getDefault();
-        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Warsaw"));
-        DateTimeZone.setDefault(DateTimeZone.forID("Europe/Warsaw"));
+        TimeZone originalDefaultTimeZone = TimeZone.getDefault();
+        TimeZoneSetter.setTimezone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         // 29 March 2020 at 02:00:00 clocks were turned forward to 03:00:00
         LocalDateTime ldtOriginal = new LocalDateTime().withYear(2020).withMonthOfYear(3).withDayOfMonth(29).withHourOfDay(2).withMinuteOfHour(30).withSecondOfMinute(0).withMillisOfSecond(0);
         LocalDateTime ldtExpected = new LocalDateTime().withYear(2020).withMonthOfYear(3).withDayOfMonth(29).withHourOfDay(3).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
 
         assertEquals(ldtExpected, DateTimeUtils.skipDaylightSavingGapIfExists(ldtOriginal));
-        TimeZone.setDefault(TimeZone.getTimeZone(originalDefaultTimeZone.getID()));
-        DateTimeZone.setDefault(originalDefaultTimeZone);
+        TimeZoneSetter.setTimezone(originalDefaultTimeZone);
     }
 }
