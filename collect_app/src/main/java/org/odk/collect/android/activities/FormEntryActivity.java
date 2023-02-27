@@ -154,7 +154,6 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
-import org.odk.collect.android.utilities.SnackbarUtils;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -169,6 +168,7 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
+import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
@@ -2487,7 +2487,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             snackBarText = getString(backgroundLocationMessage.getMessageTextResourceId());
         }
 
-        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), snackBarText);
+        SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), snackBarText, findViewById(R.id.buttonholder));
     }
 
     @Override
