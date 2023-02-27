@@ -28,6 +28,8 @@ import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.TimeZone;
+
 @RunWith(AndroidJUnit4.class)
 public class DateTimeUtilsTest {
     private final LocalDateTime date = new LocalDateTime().withDate(2010, 5, 12);
@@ -82,6 +84,7 @@ public class DateTimeUtilsTest {
     @Test
     public void skipDaylightSavingGapIfExistsTest() {
         DateTimeZone originalDefaultTimeZone = DateTimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Warsaw"));
         DateTimeZone.setDefault(DateTimeZone.forID("Europe/Warsaw"));
 
         // 29 March 2020 at 02:00:00 clocks were turned forward to 03:00:00
@@ -89,6 +92,7 @@ public class DateTimeUtilsTest {
         LocalDateTime ldtExpected = new LocalDateTime().withYear(2020).withMonthOfYear(3).withDayOfMonth(29).withHourOfDay(3).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
 
         assertEquals(ldtExpected, DateTimeUtils.skipDaylightSavingGapIfExists(ldtOriginal));
+        TimeZone.setDefault(TimeZone.getTimeZone(originalDefaultTimeZone.getID()));
         DateTimeZone.setDefault(originalDefaultTimeZone);
     }
 }

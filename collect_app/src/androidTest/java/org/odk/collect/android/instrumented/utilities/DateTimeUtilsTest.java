@@ -19,6 +19,7 @@ package org.odk.collect.android.instrumented.utilities;
 import android.content.Context;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -69,6 +70,7 @@ public class DateTimeUtilsTest {
     public void getDateTimeLabelTest() {
         Locale.setDefault(Locale.ENGLISH);
         TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+        DateTimeZone.setDefault(DateTimeZone.forID("GMT"));
 
         // 20 Oct 1991 14:00 GMT
         Calendar calendar = Calendar.getInstance();
@@ -101,5 +103,6 @@ public class DateTimeUtilsTest {
     public void resetTimeZone() {
         Locale.setDefault(defaultLocale);
         TimeZone.setDefault(defaultTimezone);
+        DateTimeZone.setDefault(DateTimeZone.forID(defaultTimezone.getID()));
     }
 }
