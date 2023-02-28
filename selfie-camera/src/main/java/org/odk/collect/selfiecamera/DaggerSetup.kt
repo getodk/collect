@@ -28,9 +28,4 @@ open class SelfieCameraDependencyModule {
     internal open fun providesStillCamera(): StillCamera {
         return CameraXStillCamera()
     }
-
-    @Provides
-    internal open fun providesVideoCamera(): VideoCamera {
-        return CameraXVideoCamera()
-    }
 }

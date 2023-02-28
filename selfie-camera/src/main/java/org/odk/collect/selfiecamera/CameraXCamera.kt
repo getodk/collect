@@ -1,6 +1,5 @@
 package org.odk.collect.selfiecamera
 
-import android.annotation.SuppressLint
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.camera.core.CameraSelector
@@ -9,11 +8,6 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.core.UseCase
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.FileOutputOptions
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
-import androidx.camera.video.VideoRecordEvent
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -95,59 +89,5 @@ internal class CameraXStillCamera : CameraXCamera(), StillCamera {
                 }
             )
         }
-    }
-}
-
-internal class CameraXVideoCamera : CameraXCamera(), VideoCamera {
-
-    private val videoCapture by lazy {
-        val recorder = Recorder.Builder()
-            .setExecutor(ContextCompat.getMainExecutor(activity!!))
-            .build()
-
-        VideoCapture.withOutput(recorder)
-    }
-
-    private var recording: Recording? = null
-
-    override fun getUseCase(): UseCase {
-        return videoCapture
-    }
-
-    @SuppressLint("MissingPermission")
-    override fun startVideo(
-        videoPath: String,
-        onVideoSaved: () -> Unit,
-        onVideoSaveError: () -> Unit,
-    ) {
-        Pair(videoCapture, activity).let { (v, a) ->
-            if (v == null || a == null) {
-                return
-            }
-
-            val outputFile = File(videoPath)
-            val outputFileOptions = FileOutputOptions.Builder(outputFile).build()
-
-            recording = v.output
-                .prepareRecording(a, outputFileOptions)
-                .withAudioEnabled()
-                .start(ContextCompat.getMainExecutor(a)) { event ->
-                    if (event is VideoRecordEvent.Finalize) {
-                        if (event.hasError()) {
-                            onVideoSaveError()
-                        } else {
-                            onVideoSaved()
-                        }
-                    }
-                }
-        }
-    }
-
-    override fun stopVideo() {
-        recording?.stop()
-    }
-
-    override fun isRecording(): Boolean {
-        return recording != null
     }
 }

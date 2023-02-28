@@ -19,9 +19,3 @@ internal interface Camera {
 internal interface StillCamera : Camera {
     fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit)
 }
-
-internal interface VideoCamera : Camera {
-    fun isRecording(): Boolean
-    fun startVideo(videoPath: String, onVideoSaved: () -> Unit, onVideoSaveError: () -> Unit)
-    fun stopVideo()
-}
