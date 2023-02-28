@@ -212,8 +212,6 @@
   <string name="set_color">Nastavit barvu</string>
   <string name="capture_video">Nahrát video</string>
   <string name="choose_video">Vyberte video</string>
-  <string name="start_video_capture_instruction">Klepnutím na obrazovku spustíte nahrávání</string>
-  <string name="stop_video_capture_instruction">Nahrávání začalo. Klepnutím znovu zastavíte</string>
   <string name="play_video">Přehrát video</string>
   <string name="choose_file">Vybrat soubor</string>
   <!--Text for button that deletes a file that is the answer to a question-->

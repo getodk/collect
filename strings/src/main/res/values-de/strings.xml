@@ -214,8 +214,6 @@
   <string name="set_color">Farbe wählen</string>
   <string name="capture_video">Video aufnehmen</string>
   <string name="choose_video">Video auswählen</string>
-  <string name="start_video_capture_instruction">Bildschirm berühren um eine Aufnahme zu starten</string>
-  <string name="stop_video_capture_instruction">Aufnahme gestartet. Zum Stoppen Bildschirm erneut berühren.</string>
   <string name="play_video">Video abspielen</string>
   <string name="choose_file">Datei auswählen</string>
   <!--Text for button that deletes a file that is the answer to a question-->

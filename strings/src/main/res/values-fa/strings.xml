@@ -213,8 +213,6 @@
   <string name="set_color">تنظیم رنگ</string>
   <string name="capture_video">ثبت ویدیو</string>
   <string name="choose_video">انتخاب ویدیو</string>
-  <string name="start_video_capture_instruction">برای آغاز کردن ثبت روی صفحه را فشار دهید</string>
-  <string name="stop_video_capture_instruction">ثبت آغاز شد. برای توقف آن دوباره روی صفحه را فشار دهید</string>
   <string name="play_video">پخش ویدیو</string>
   <string name="choose_file">انتخاب فایل</string>
   <!--Text for button that deletes a file that is the answer to a question-->
