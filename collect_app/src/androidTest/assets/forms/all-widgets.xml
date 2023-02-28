@@ -293,7 +293,6 @@
             <barcode_widget/>
             <audio_widget/>
             <video_widget/>
-            <selfie_video_widget/>
             <file_widget/>
           </media_widgets>
           <date_time_widgets>
@@ -407,7 +406,6 @@
       <bind nodeset="/data/media_widgets/barcode_widget" type="barcode"/>
       <bind nodeset="/data/media_widgets/audio_widget" type="binary"/>
       <bind nodeset="/data/media_widgets/video_widget" type="binary"/>
-      <bind nodeset="/data/media_widgets/selfie_video_widget" type="binary"/>
       <bind nodeset="/data/media_widgets/file_widget" type="binary"/>
       <bind nodeset="/data/date_time_widgets/date_widget" type="date"/>
       <bind nodeset="/data/date_time_widgets/date_widget_nocalendar" type="date"/>
@@ -605,10 +603,6 @@
       <upload mediatype="video/*" ref="/data/media_widgets/video_widget">
         <label>Video widget</label>
         <hint>video type with no appearance</hint>
-      </upload>
-      <upload appearance="new-front" mediatype="video/*" ref="/data/media_widgets/selfie_video_widget">
-        <label>Selfie video widget</label>
-        <hint>video type with new-front appearance</hint>
       </upload>
       <upload mediatype="application/*" ref="/data/media_widgets/file_widget">
         <label>File widget</label>
