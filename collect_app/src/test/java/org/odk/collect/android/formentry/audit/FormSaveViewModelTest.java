@@ -46,12 +46,14 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.projects.Project;
+import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -72,6 +74,7 @@ public class FormSaveViewModelTest {
     private CurrentProjectProvider currentProjectProvider;
 
     private final EntitiesRepository entitiesRepository = mock(EntitiesRepository.class);
+    private File instanceFile;
 
     @Before
     public void setup() {
@@ -82,6 +85,8 @@ public class FormSaveViewModelTest {
         logger = mock(AuditEventLogger.class);
         mediaUtils = mock(MediaUtils.class);
 
+        instanceFile = new File(TempFiles.getPathInTempDir());
+        when(formController.getInstanceFile()).thenReturn(instanceFile);
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
@@ -562,7 +567,12 @@ public class FormSaveViewModelTest {
 
     private void whenReasonRequiredToSave() {
         when(logger.isChangeReasonRequired()).thenReturn(true);
-        when(logger.isEditing()).thenReturn(true);
+
+        try {
+            instanceFile.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void whenFormSaverFinishes(int result) {

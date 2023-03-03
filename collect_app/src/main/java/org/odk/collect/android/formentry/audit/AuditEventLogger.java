@@ -41,7 +41,6 @@ public class AuditEventLogger {
     private final AuditConfig auditConfig;
     private final FormController formController;
     private String user;
-    private boolean editing;
 
     public AuditEventLogger(AuditConfig auditConfig, AuditEventWriter writer, FormController formController) {
         this.auditConfig = auditConfig;
@@ -293,14 +292,6 @@ public class AuditEventLogger {
 
     public boolean isChangeReasonRequired() {
         return auditConfig != null && auditConfig.isTrackChangesReasonEnabled();
-    }
-
-    public void setEditing(boolean editing) {
-        this.editing = editing;
-    }
-
-    public boolean isEditing() {
-        return editing;
     }
 
     public interface AuditEventWriter {
