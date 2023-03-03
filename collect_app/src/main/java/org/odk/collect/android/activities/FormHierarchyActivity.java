@@ -271,7 +271,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (!MultiClickGuard.allowClick(item.toString())) {
+        if (!MultiClickGuard.allowClickFast(item.toString())) {
             return true;
         }
 
