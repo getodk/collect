@@ -39,8 +39,13 @@ public class SaveOrIgnoreDialog<D extends Page<D>> extends Page<SaveOrIgnoreDial
         return destination.assertOnPage();
     }
 
-    public D clickIgnoreChanges() {
+    public D clickDiscardForm() {
         clickOnString(R.string.do_not_save);
+        return destination.assertOnPage();
+    }
+
+    public D clickDiscardChanges() {
+        clickOnString(R.string.discard_changes);
         return destination.assertOnPage();
     }
 }

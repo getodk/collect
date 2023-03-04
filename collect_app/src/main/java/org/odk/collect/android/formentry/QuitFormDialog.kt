@@ -60,10 +60,10 @@ object QuitFormDialog {
         ) {
             ImmutableList.of(
                 IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
-                IconMenuItem(R.drawable.ic_delete, R.string.do_not_save)
+                getDiscardItem(formSaveViewModel)
             )
         } else {
-            ImmutableList.of(IconMenuItem(R.drawable.ic_delete, R.string.do_not_save))
+            ImmutableList.of(getDiscardItem(formSaveViewModel))
         }
 
         val listView = DialogUtils.createActionListView(activity)
@@ -115,5 +115,13 @@ object QuitFormDialog {
             }
 
         return dialog
+    }
+
+    private fun getDiscardItem(formSaveViewModel: FormSaveViewModel): IconMenuItem {
+        if (formSaveViewModel.isEditing) {
+            return IconMenuItem(R.drawable.ic_delete, R.string.discard_changes)
+        } else {
+            return IconMenuItem(R.drawable.ic_delete, R.string.do_not_save)
+        }
     }
 }

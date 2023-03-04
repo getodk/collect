@@ -30,7 +30,7 @@ public class QuickSaveTest {
                         new QuestionAndAnswer("What is your age?", "32")
                 )
                 .clickSave()
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question")
@@ -46,7 +46,7 @@ public class QuickSaveTest {
                 .answerQuestion("What is your name?", "Reuben")
                 .swipeToNextQuestion("What is your age?", true)
                 .clickSave()
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -60,7 +60,7 @@ public class QuickSaveTest {
                 .startBlankForm("Two Question Required")
                 .answerQuestion("What is your name?", "Reuben")
                 .clickSave()
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -68,7 +68,7 @@ public class QuickSaveTest {
                 .answerQuestion("What is your name?", "Another Reuben")
                 .swipeToNextQuestion("What is your age?", true)
                 .clickSave()
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -94,7 +94,7 @@ public class QuickSaveTest {
                 .removeResponse()
                 .clickSaveWithError(R.string.required_answer_error)
 
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -123,7 +123,7 @@ public class QuickSaveTest {
                 .clickSave()
                 .assertConstraintDisplayed("Sorry, this response is required!")
                 .assertQuestion("What is your age?", true)
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")

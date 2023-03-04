@@ -50,6 +50,6 @@ public class FormValidationTest {
                 .pressBack(new FormEntryPage("OnePageFormShort"))
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("OnePageFormShort", new MainMenuPage()))
-                .clickIgnoreChanges();
+                .clickDiscardForm();
     }
 }

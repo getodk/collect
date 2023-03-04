@@ -365,16 +365,28 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
-    public MainMenuPage pressBackAndIgnoreChanges() {
+    public MainMenuPage pressBackAndDiscardChanges() {
         return closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>(formName, new MainMenuPage()))
-                .clickIgnoreChanges();
+                .clickDiscardChanges();
     }
 
-    public <D extends Page<D>> D pressBackAndIgnoreChanges(D destination) {
+    public <D extends Page<D>> D pressBackAndDiscardChanges(D destination) {
+        return closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>(formName, destination))
+                .clickDiscardChanges();
+    }
+
+    public MainMenuPage pressBackAndDiscardForm() {
+        return closeSoftKeyboard()
+                .pressBack(new SaveOrIgnoreDialog<>(formName, new MainMenuPage()))
+                .clickDiscardForm();
+    }
+
+    public <D extends Page<D>> D pressBackAndDiscardForm(D destination) {
         return closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<D>(formName, destination))
-                .clickIgnoreChanges();
+                .clickDiscardForm();
     }
 
     public FormEntryPage assertBackgroundLocationSnackbarShown() {

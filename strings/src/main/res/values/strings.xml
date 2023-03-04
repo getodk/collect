@@ -176,6 +176,7 @@
     <!-- Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
     <string name="no_form_loaded">&lt;no form loaded&gt;</string>
     <string name="do_not_save">Discard form</string>
+    <string name="discard_changes">Discard changes</string>
     <string name="keep_changes">Save Changes</string>
 
     <string name="saving_form">Saving Form</string>

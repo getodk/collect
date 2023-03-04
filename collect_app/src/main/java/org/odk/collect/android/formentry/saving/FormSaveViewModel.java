@@ -289,6 +289,11 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         return formController.getFormTitle();
     }
 
+    public boolean isEditing() {
+        File instanceFile = formController.getInstanceFile();
+        return instanceFile != null && instanceFile.exists();
+    }
+
     @Override
     public void deleteAnswerFile(String questionIndex, String fileName) {
         if (questionIndex != null && fileName != null) {

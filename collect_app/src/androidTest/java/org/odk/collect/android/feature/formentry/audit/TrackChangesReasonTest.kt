@@ -141,7 +141,7 @@ class TrackChangesReasonTest {
             .clickGoToStart()
             .closeSoftKeyboard()
             .pressBack(SaveOrIgnoreDialog("Track Changes Reason", MainMenuPage()))
-            .clickIgnoreChanges()
+            .clickDiscardChanges()
     }
 
     @Test
