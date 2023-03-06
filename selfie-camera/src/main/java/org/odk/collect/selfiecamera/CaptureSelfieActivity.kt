@@ -29,7 +29,7 @@ import javax.inject.Inject
 class CaptureSelfieActivity : LocalizedActivity() {
 
     @Inject
-    internal lateinit var stillCamera: StillCamera
+    internal lateinit var camera: Camera
 
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
@@ -52,11 +52,11 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
         val previewView = findViewById<View>(R.id.preview)
 
-        stillCamera.initialize(this, previewView)
-        stillCamera.state().observe(this) {
+        camera.initialize(this, previewView)
+        camera.state().observe(this) {
             when (it) {
                 Camera.State.UNINITIALIZED -> {}
-                Camera.State.INITIALIZED -> setupCamera(stillCamera)
+                Camera.State.INITIALIZED -> setupCamera(camera)
                 Camera.State.FAILED_TO_INITIALIZE -> {
                     showLongToast(this, R.string.camera_failed_to_initialize)
                 }
@@ -64,7 +64,7 @@ class CaptureSelfieActivity : LocalizedActivity() {
         }
     }
 
-    private fun setupCamera(camera: StillCamera) {
+    private fun setupCamera(camera: Camera) {
         val previewView = findViewById<View>(R.id.preview)
 
         val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"

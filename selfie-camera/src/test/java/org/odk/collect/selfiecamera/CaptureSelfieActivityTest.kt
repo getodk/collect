@@ -30,7 +30,7 @@ class CaptureSelfieActivityTest {
 
     private val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
     private val permissionsChecker = FakePermissionsChecker()
-    private val stillCamera = FakeStillCamera()
+    private val camera = FakeCamera()
 
     @get:Rule
     val launcher = ActivityScenarioLauncherRule()
@@ -44,8 +44,8 @@ class CaptureSelfieActivityTest {
                         return permissionsChecker
                     }
 
-                    override fun providesStillCamera(): StillCamera {
-                        return stillCamera
+                    override fun providesCamera(): Camera {
+                        return camera
                     }
                 })
                 .build()
@@ -75,7 +75,7 @@ class CaptureSelfieActivityTest {
 
         launcher.launch<CaptureSelfieActivity>(intent)
         onView(withId(R.id.preview)).perform(click())
-        assertThat(stillCamera.savedPath, equalTo("blah/tmp.jpg"))
+        assertThat(camera.savedPath, equalTo("blah/tmp.jpg"))
     }
 
     @Test
@@ -94,7 +94,7 @@ class CaptureSelfieActivityTest {
 
     @Test
     fun clickingPreview_whenThereIsAnErrorSavingImage_showsToast() {
-        stillCamera.failToSave = true
+        camera.failToSave = true
 
         val intent = Intent(application, CaptureSelfieActivity::class.java).also {
             it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
@@ -109,7 +109,7 @@ class CaptureSelfieActivityTest {
 
     @Test
     fun whenCameraFailsToInitialize_showsToast() {
-        stillCamera.failToInitialize = true
+        camera.failToInitialize = true
 
         val intent = Intent(application, CaptureSelfieActivity::class.java).also {
             it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
@@ -134,11 +134,13 @@ private class FakePermissionsChecker : PermissionsChecker {
     }
 }
 
-private abstract class FakeCamera : Camera {
+private class FakeCamera : Camera {
 
     var failToInitialize: Boolean = false
+    var failToSave = false
+    var savedPath: String? = null
 
-    protected val state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
+    private val state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
     override fun initialize(activity: ComponentActivity, previewView: View) {
         if (failToInitialize) {
@@ -151,12 +153,6 @@ private abstract class FakeCamera : Camera {
     override fun state(): NonNullLiveData<Camera.State> {
         return state
     }
-}
-
-private class FakeStillCamera : FakeCamera(), StillCamera {
-
-    var failToSave = false
-    var savedPath: String? = null
 
     override fun takePicture(
         imagePath: String,
