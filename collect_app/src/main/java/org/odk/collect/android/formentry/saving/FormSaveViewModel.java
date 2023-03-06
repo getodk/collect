@@ -278,7 +278,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
     private boolean requiresReasonToSave() {
         return formController != null
-                && formController.getInstanceFile().exists()
+                && formController.isEditing()
                 && formController.getAuditEventLogger().isChangeReasonRequired();
     }
 

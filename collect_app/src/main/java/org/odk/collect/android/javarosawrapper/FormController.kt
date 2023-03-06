@@ -33,6 +33,8 @@ interface FormController {
 
     fun getAuditEventLogger(): AuditEventLogger?
 
+    fun isEditing(): Boolean
+
     /**
      * For logging purposes...
      *

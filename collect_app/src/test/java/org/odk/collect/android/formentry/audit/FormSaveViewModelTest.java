@@ -53,7 +53,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -74,7 +73,6 @@ public class FormSaveViewModelTest {
     private CurrentProjectProvider currentProjectProvider;
 
     private final EntitiesRepository entitiesRepository = mock(EntitiesRepository.class);
-    private File instanceFile;
 
     @Before
     public void setup() {
@@ -85,7 +83,7 @@ public class FormSaveViewModelTest {
         logger = mock(AuditEventLogger.class);
         mediaUtils = mock(MediaUtils.class);
 
-        instanceFile = new File(TempFiles.getPathInTempDir());
+        File instanceFile = new File(TempFiles.getPathInTempDir());
         when(formController.getInstanceFile()).thenReturn(instanceFile);
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
@@ -566,13 +564,8 @@ public class FormSaveViewModelTest {
     }
 
     private void whenReasonRequiredToSave() {
+        when(formController.isEditing()).thenReturn(true);
         when(logger.isChangeReasonRequired()).thenReturn(true);
-
-        try {
-            instanceFile.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void whenFormSaverFinishes(int result) {

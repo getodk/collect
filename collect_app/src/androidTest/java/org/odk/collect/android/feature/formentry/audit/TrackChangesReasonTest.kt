@@ -161,4 +161,15 @@ class TrackChangesReasonTest {
             .clickSave(FormEntryPage("Track Changes Reason"))
             .assertQuestion("What up?")
     }
+
+    @Test
+    fun fillingABlankForm_andClickingSave_andClickingSaveAndExit_doesNotPromptForReason() {
+        rule.startAtMainMenu()
+            .copyForm("track-changes-reason-on-edit.xml")
+            .startBlankForm("Track Changes Reason")
+            .clickSave()
+            .closeSoftKeyboard()
+            .pressBack(SaveOrIgnoreDialog("Track Changes Reason", MainMenuPage()))
+            .clickSaveChanges()
+    }
 }
