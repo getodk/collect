@@ -9,20 +9,36 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.WebViewActivity
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.projects.Project
 
 class GoogleDriveDeprecationBannerTest {
-    val rule = CollectTestRule()
+    private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
     @get:Rule
     val chain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(RecordedIntentsRule())
         .around(rule)
+
+    private val gdProject1 = Project.Saved(
+        "1",
+        "GD Project 1",
+        "G",
+        "#3e9fcc"
+    )
+
+    private val gdProject2 = Project.Saved(
+        "2",
+        "GD Project 2",
+        "G",
+        "#3e9fcc"
+    )
 
     @Test
     fun bannerIsNotVisibleInNonGoogleDriveProjects() {
@@ -33,27 +49,21 @@ class GoogleDriveDeprecationBannerTest {
 
     @Test
     fun bannerIsVisibleInGoogleDriveProjects() {
-        val googleAccount = "steph@curry.basket"
-        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
+        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .clickAddProject()
-            .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount)
+            .selectProject("GD Project 1")
             .assertText(R.string.google_drive_deprecation_message)
     }
 
     @Test
     fun forumThreadIsOpenedAfterClickingLearnMore() {
-        val googleAccount = "steph@curry.basket"
-        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
+        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .clickAddProject()
-            .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount)
+            .selectProject("GD Project 1")
             .clickOnString(R.string.learn_more_button_text)
 
         intended(
@@ -66,14 +76,11 @@ class GoogleDriveDeprecationBannerTest {
 
     @Test
     fun dismissButtonIsVisibleOnlyAfterClickingLearnMore() {
-        val googleAccount = "steph@curry.basket"
-        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
+        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .clickAddProject()
-            .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount)
+            .selectProject("GD Project 1")
             .assertTextDoesNotExist(R.string.dismiss_button_text)
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
@@ -82,14 +89,11 @@ class GoogleDriveDeprecationBannerTest {
 
     @Test
     fun afterClickingDismissTheBannerDisappears() {
-        val googleAccount = "steph@curry.basket"
-        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
+        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .clickAddProject()
-            .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount)
+            .selectProject("GD Project 1")
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
             .clickOnString(R.string.dismiss_button_text)
@@ -100,22 +104,18 @@ class GoogleDriveDeprecationBannerTest {
 
     @Test
     fun dismissingTheBannerInOneProjectDoesNotAffectOtherProjects() {
-        val googleAccount = "steph@curry.basket"
-        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
+        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
+        CollectHelpers.addGDProject(gdProject2, "john@curry.basket", testDependencies)
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .clickAddProject()
-            .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount)
+            .selectProject("GD Project 1")
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
             .clickOnString(R.string.dismiss_button_text)
             .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
             .openProjectSettingsDialog()
-            .clickAddProject()
-            .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount, true)
+            .selectProject("GD Project 2")
             .assertText(R.string.google_drive_deprecation_message)
     }
 }
