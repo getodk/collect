@@ -196,7 +196,6 @@
   <string name="svg_file_does_not_exist">فایل SVG موجود نیست!</string>
   <string name="capture_image">گرفتن عکس</string>
   <string name="choose_image">انتخاب تصویر</string>
-  <string name="choose_account">حساب را انتخاب کنید</string>
   <string name="selected_invalid_image">فایل انتخاب شده تصویر قابل اعتبار ندارد</string>
   <string name="take_picture_instruction">برای گرفتن عکس روی صفحه ضربه بزنید</string>
   <string name="error_front_camera_unavailable">این دستگاه دوربین جلو موجود نیست</string>
@@ -882,10 +881,6 @@
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">جزئیات پروژه را به صورت دستی وارد کنید</string>
   <string name="project_config_tip">پس از اینکه پروژه خود را اضافه کردید، می توانید آن را در تنظیمات تنظیم کنید</string>
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">پروژه من از Google Drive استفاده می کند.</string>
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
-  <string name="gdrive_configure">تنظیم کردن</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">هنوز پروژه ای ندارید؟</string>
   <!--Preceded by "Don't have a project yet?" question-->

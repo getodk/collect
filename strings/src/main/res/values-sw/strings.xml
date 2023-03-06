@@ -194,7 +194,6 @@
   <string name="svg_file_does_not_exist">Kabrasha la SVG halipo</string>
   <string name="capture_image">Chukua picha</string>
   <string name="choose_image">Chagua picha</string>
-  <string name="choose_account">Chagua akaunti</string>
   <string name="selected_invalid_image">Faili lillilochaguliwa sio picha sahihi</string>
   <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
   <string name="error_front_camera_unavailable">Kamera ya mbele haipo katika kifaa hiki</string>
@@ -751,8 +750,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">Mradi wangu unatumia Google Drive.</string>
   <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
