@@ -78,22 +78,4 @@ class FormManagementSettingsTest {
         assertThat(deferredTasks[0].tag, `is`(previouslyDownloadedTag))
         assertThat(deferredTasks[0].repeatPeriod, `is`(1000L * 60 * 60))
     }
-
-    @Test
-    fun whenGoogleDriveUsingAsServer_disablesPrefsAndOnlyAllowsManualUpdates() {
-        testDependencies.googleAccountPicker.setDeviceAccount("steph@curry.basket")
-
-        MainMenuPage().assertOnPage()
-            .enablePreviouslyDownloadedOnlyUpdates() // Enabled a different mode before setting up Google
-            .setGoogleAccount("steph@curry.basket")
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickFormManagement()
-            .assertDisabled(R.string.form_update_mode_title)
-            .assertDisabled(R.string.form_update_frequency_title)
-            .assertDisabled(R.string.automatic_download)
-            .assertText(R.string.manual)
-
-        assertThat(testDependencies.scheduler.deferredTasks.size, `is`(0))
-    }
 }

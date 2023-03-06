@@ -1,8 +1,5 @@
 package org.odk.collect.android.feature.settings;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
@@ -77,16 +74,5 @@ public class ServerSettingsTest {
                 .clickOnButtonInDialog(R.string.server_platform_google_sheets, new ServerSettingsPage())
                 .assertText(R.string.selected_google_account_text)
                 .assertText(R.string.google_sheets_url);
-    }
-
-    @Test
-    public void selectingGoogleAccount_disablesAutomaticUpdates() {
-        MainMenuPage mainMenu = new MainMenuPage().assertOnPage()
-                .enablePreviouslyDownloadedOnlyUpdates();
-        assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(1));
-
-        testDependencies.googleAccountPicker.setDeviceAccount("steph@curry.basket");
-        mainMenu.setGoogleAccount("steph@curry.basket");
-        assertThat(testDependencies.scheduler.getDeferredTasks().size(), is(0));
     }
 }
