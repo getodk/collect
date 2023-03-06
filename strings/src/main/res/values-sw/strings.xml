@@ -209,8 +209,6 @@
   <string name="set_color">Weka rangi</string>
   <string name="capture_video">Rekodi video</string>
   <string name="choose_video">Chagua video</string>
-  <string name="start_video_capture_instruction">Bofya kioo kuanza kurekodi</string>
-  <string name="stop_video_capture_instruction">Imeanza kurekodi. Bofya tena kusitisha</string>
   <string name="play_video">Cheza video</string>
   <string name="choose_file">Chagua faili</string>
   <!--Text for button that deletes a file that is the answer to a question-->

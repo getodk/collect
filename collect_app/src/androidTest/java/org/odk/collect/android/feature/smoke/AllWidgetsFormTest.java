@@ -89,7 +89,6 @@ public class AllWidgetsFormTest {
 
         testAudioWidget();
         testVideoWidget();
-        testSelfieVideoWidget();
 
         testFileWidget();
 
@@ -339,15 +338,6 @@ public class AllWidgetsFormTest {
         Screengrab.screenshot("video");
 
         onView(withText("Video widget")).perform(swipeLeft());
-    }
-
-    public void testSelfieVideoWidget() {
-        Screengrab.screenshot("selfie-video");
-
-        onView(withText("Record Video")).perform(click());
-        UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).pressBack();
-
-        onView(withText("Selfie video widget")).perform(swipeLeft());
     }
 
     public void testFileWidget() {

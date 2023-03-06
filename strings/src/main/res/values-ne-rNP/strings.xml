@@ -151,7 +151,6 @@
   <string name="set_color">रंग छान्नुहोस् </string>
   <string name="capture_video">भिडियो रेकर्ड गर्नुहोस् </string>
   <string name="choose_video">भिडियो छान्नुहोस् </string>
-  <string name="stop_video_capture_instruction">रेकर्डिङ सुरु भयो। रोक्न फेरि छुनुहोस् ।</string>
   <string name="play_video">भिडियो हेर्नुहोस्</string>
   <string name="choose_file">फाइलहरू छान्नुहोस्</string>
   <!--Text for button that deletes a file that is the answer to a question-->

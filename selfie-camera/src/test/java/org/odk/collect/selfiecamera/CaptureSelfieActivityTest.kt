@@ -30,8 +30,7 @@ class CaptureSelfieActivityTest {
 
     private val application = ApplicationProvider.getApplicationContext<RobolectricApplication>()
     private val permissionsChecker = FakePermissionsChecker()
-    private val stillCamera = FakeStillCamera()
-    private val videoCamera = FakeVideoCamera()
+    private val camera = FakeCamera()
 
     @get:Rule
     val launcher = ActivityScenarioLauncherRule()
@@ -45,12 +44,8 @@ class CaptureSelfieActivityTest {
                         return permissionsChecker
                     }
 
-                    override fun providesStillCamera(): StillCamera {
-                        return stillCamera
-                    }
-
-                    override fun providesVideoCamera(): VideoCamera {
-                        return videoCamera
+                    override fun providesCamera(): Camera {
+                        return camera
                     }
                 })
                 .build()
@@ -73,30 +68,6 @@ class CaptureSelfieActivityTest {
     }
 
     @Test
-    fun whenTakingVideo_andCameraPermissionNotGranted_finishes() {
-        permissionsChecker.deny(Manifest.permission.CAMERA)
-
-        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
-            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
-        }
-
-        val scenario = launcher.launch<CaptureSelfieActivity>(intent)
-        assertThat(scenario.state, equalTo(Lifecycle.State.DESTROYED))
-    }
-
-    @Test
-    fun whenTakingVideo_andAudioPermissionNotGranted_finishes() {
-        permissionsChecker.deny(Manifest.permission.RECORD_AUDIO)
-
-        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
-            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
-        }
-
-        val scenario = launcher.launch<CaptureSelfieActivity>(intent)
-        assertThat(scenario.state, equalTo(Lifecycle.State.DESTROYED))
-    }
-
-    @Test
     fun clickingPreview_takesPictureAndSavesToFileInPath() {
         val intent = Intent(application, CaptureSelfieActivity::class.java).also {
             it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
@@ -104,7 +75,7 @@ class CaptureSelfieActivityTest {
 
         launcher.launch<CaptureSelfieActivity>(intent)
         onView(withId(R.id.preview)).perform(click())
-        assertThat(stillCamera.savedPath, equalTo("blah/tmp.jpg"))
+        assertThat(camera.savedPath, equalTo("blah/tmp.jpg"))
     }
 
     @Test
@@ -123,7 +94,7 @@ class CaptureSelfieActivityTest {
 
     @Test
     fun clickingPreview_whenThereIsAnErrorSavingImage_showsToast() {
-        stillCamera.failToSave = true
+        camera.failToSave = true
 
         val intent = Intent(application, CaptureSelfieActivity::class.java).also {
             it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
@@ -131,55 +102,6 @@ class CaptureSelfieActivityTest {
 
         launcher.launch<CaptureSelfieActivity>(intent)
         onView(withId(R.id.preview)).perform(click())
-
-        val latestToast = ShadowToast.getTextOfLatestToast()
-        assertThat(latestToast, equalTo(application.getString(R.string.camera_error)))
-    }
-
-    @Test
-    fun whenTakingVideo_clickingPreview_startsRecordingToFileInPath() {
-        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
-            it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
-            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
-        }
-
-        launcher.launch<CaptureSelfieActivity>(intent)
-        onView(withId(R.id.preview)).perform(click())
-
-        assertThat(videoCamera.isRecording(), equalTo(true))
-        assertThat(videoCamera.savedPath, equalTo("blah/tmp.mp4"))
-    }
-
-    @Test
-    fun whenTakingVideo_whenVideoIsSaved_finishesWithPath() {
-        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
-            it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
-            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
-        }
-
-        val scenario = launcher.launch<CaptureSelfieActivity>(intent)
-        onView(withId(R.id.preview)).perform(click())
-        onView(withId(R.id.preview)).perform(click())
-        videoCamera.finalizeVideo()
-
-        assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
-        val returnedValue = ExternalAppUtils.getReturnedSingleValue(scenario.result.resultData)
-        assertThat(returnedValue, equalTo("blah/tmp.mp4"))
-    }
-
-    @Test
-    fun whenTakingVideo_whenErrorOccursSavingVideo_showsToast() {
-        videoCamera.failToSave = true
-
-        val intent = Intent(application, CaptureSelfieActivity::class.java).also {
-            it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
-            it.putExtra(CaptureSelfieActivity.EXTRA_VIDEO, true)
-        }
-
-        launcher.launch<CaptureSelfieActivity>(intent)
-        onView(withId(R.id.preview)).perform(click())
-        onView(withId(R.id.preview)).perform(click())
-        videoCamera.finalizeVideo()
 
         val latestToast = ShadowToast.getTextOfLatestToast()
         assertThat(latestToast, equalTo(application.getString(R.string.camera_error)))
@@ -187,7 +109,7 @@ class CaptureSelfieActivityTest {
 
     @Test
     fun whenCameraFailsToInitialize_showsToast() {
-        stillCamera.failToInitialize = true
+        camera.failToInitialize = true
 
         val intent = Intent(application, CaptureSelfieActivity::class.java).also {
             it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
@@ -212,11 +134,13 @@ private class FakePermissionsChecker : PermissionsChecker {
     }
 }
 
-private abstract class FakeCamera : Camera {
+private class FakeCamera : Camera {
 
     var failToInitialize: Boolean = false
+    var failToSave = false
+    var savedPath: String? = null
 
-    protected val state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
+    private val state = MutableNonNullLiveData(Camera.State.UNINITIALIZED)
 
     override fun initialize(activity: ComponentActivity, previewView: View) {
         if (failToInitialize) {
@@ -229,12 +153,6 @@ private abstract class FakeCamera : Camera {
     override fun state(): NonNullLiveData<Camera.State> {
         return state
     }
-}
-
-private class FakeStillCamera : FakeCamera(), StillCamera {
-
-    var failToSave = false
-    var savedPath: String? = null
 
     override fun takePicture(
         imagePath: String,
@@ -252,55 +170,5 @@ private class FakeStillCamera : FakeCamera(), StillCamera {
         } else {
             onImageSaved()
         }
-    }
-}
-
-private class FakeVideoCamera : FakeCamera(), VideoCamera {
-
-    var failToSave = false
-    var savedPath: String? = null
-
-    private var onVideoSaved: (() -> Unit)? = null
-    private var onVideoSaveError: (() -> Unit)? = null
-    private var recording = false
-
-    override fun startVideo(
-        videoPath: String,
-        onVideoSaved: () -> Unit,
-        onVideoSaveError: () -> Unit,
-    ) {
-        if (state.value == Camera.State.UNINITIALIZED) {
-            throw IllegalStateException()
-        }
-
-        savedPath = videoPath
-        this.onVideoSaved = onVideoSaved
-        this.onVideoSaveError = onVideoSaveError
-
-        recording = true
-    }
-
-    override fun stopVideo() {
-        if (state.value == Camera.State.UNINITIALIZED) {
-            throw IllegalStateException()
-        }
-
-        recording = false
-    }
-
-    fun finalizeVideo() {
-        if (recording) {
-            throw IllegalStateException()
-        }
-
-        if (failToSave) {
-            onVideoSaveError?.invoke()
-        } else {
-            onVideoSaved?.invoke()
-        }
-    }
-
-    override fun isRecording(): Boolean {
-        return recording
     }
 }

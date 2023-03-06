@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import org.odk.collect.analytics.Analytics
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.permissions.PermissionsChecker
@@ -30,10 +29,7 @@ import javax.inject.Inject
 class CaptureSelfieActivity : LocalizedActivity() {
 
     @Inject
-    internal lateinit var stillCamera: StillCamera
-
-    @Inject
-    internal lateinit var videoCamera: VideoCamera
+    internal lateinit var camera: Camera
 
     @Inject
     lateinit var permissionsChecker: PermissionsChecker
@@ -56,12 +52,6 @@ class CaptureSelfieActivity : LocalizedActivity() {
 
         val previewView = findViewById<View>(R.id.preview)
 
-        val camera = if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
-            videoCamera
-        } else {
-            stillCamera
-        }
-
         camera.initialize(this, previewView)
         camera.state().observe(this) {
             when (it) {
@@ -77,51 +67,23 @@ class CaptureSelfieActivity : LocalizedActivity() {
     private fun setupCamera(camera: Camera) {
         val previewView = findViewById<View>(R.id.preview)
 
-        if (camera is VideoCamera) {
-            val videoPath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.mp4"
-            previewView.setOnClickListener {
-                if (!camera.isRecording()) {
-                    camera.startVideo(
-                        videoPath,
-                        { ExternalAppUtils.returnSingleValue(this, videoPath) },
-                        { showLongToast(this, R.string.camera_error) }
-                    )
-
-                    showLongToast(this, getString(R.string.stop_video_capture_instruction))
-                } else {
-                    camera.stopVideo()
-                }
-            }
-
-            showLongToast(this, getString(R.string.start_video_capture_instruction))
-            Analytics.log(AnalyticsEvents.RECORD_SELFIE_VIDEO, "form")
-        } else if (camera is StillCamera) {
-            val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"
-            previewView.setOnClickListener {
-                camera.takePicture(
-                    imagePath,
-                    { ExternalAppUtils.returnSingleValue(this, imagePath) },
-                    { showLongToast(this, R.string.camera_error) }
-                )
-            }
-
-            showLongToast(this, R.string.take_picture_instruction)
+        val imagePath = intent.getStringExtra(EXTRA_TMP_PATH) + "/tmp.jpg"
+        previewView.setOnClickListener {
+            camera.takePicture(
+                imagePath,
+                { ExternalAppUtils.returnSingleValue(this, imagePath) },
+                { showLongToast(this, R.string.camera_error) }
+            )
         }
+
+        showLongToast(this, R.string.take_picture_instruction)
     }
 
     private fun permissionsGranted(): Boolean {
-        return if (intent.getBooleanExtra(EXTRA_VIDEO, false)) {
-            return permissionsChecker.isPermissionGranted(
-                Manifest.permission.CAMERA,
-                Manifest.permission.RECORD_AUDIO
-            )
-        } else {
-            permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)
-        }
+        return permissionsChecker.isPermissionGranted(Manifest.permission.CAMERA)
     }
 
     companion object {
         const val EXTRA_TMP_PATH = "tmpPath"
-        const val EXTRA_VIDEO = "video"
     }
 }

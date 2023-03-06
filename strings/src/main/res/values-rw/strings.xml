@@ -211,8 +211,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="set_color">Hitamo ibara</string>
   <string name="capture_video">Fata Video </string>
   <string name="choose_video">Hitamo Video</string>
-  <string name="start_video_capture_instruction">Kora kuri screen utangire kurikodinga </string>
-  <string name="stop_video_capture_instruction">Kurikodinga byatangiye. Ongera ukoreho ubihagarike</string>
   <string name="play_video">Kina Video </string>
   <string name="choose_file">Hitamo dokima </string>
   <!--Text for button that deletes a file that is the answer to a question-->

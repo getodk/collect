@@ -9,19 +9,11 @@ internal interface Camera {
 
     fun state(): NonNullLiveData<State>
 
+    fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit)
+
     enum class State {
         UNINITIALIZED,
         INITIALIZED,
         FAILED_TO_INITIALIZE
     }
-}
-
-internal interface StillCamera : Camera {
-    fun takePicture(imagePath: String, onImageSaved: () -> Unit, onImageSaveError: () -> Unit)
-}
-
-internal interface VideoCamera : Camera {
-    fun isRecording(): Boolean
-    fun startVideo(videoPath: String, onVideoSaved: () -> Unit, onVideoSaveError: () -> Unit)
-    fun stopVideo()
 }
