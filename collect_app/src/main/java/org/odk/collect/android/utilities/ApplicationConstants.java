@@ -20,15 +20,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 
 public class ApplicationConstants {
 
-    // based on http://www.sqlite.org/limits.html
-    public static final int SQLITE_MAX_VARIABLE_NUMBER = 999;
-
-    static final String[] TRANSLATIONS_AVAILABLE = {"af", "am", "ar", "bg", "bn", "ca", "cs", "da",
-            "de", "en", "es", "et", "fa", "fi", "fr", "hi", "in", "it", "ja", "ka", "km", "ln", "lo_LA",
-            "lt", "mg", "ml", "mr", "ms", "my", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "rw",
-            "si", "sl", "so", "sq", "sr", "sv_SE", "sw", "sw_KE", "te", "th_TH", "ti", "tl", "tr",
-            "uk", "ur", "ur_PK", "vi", "zh", "zu"};
-
     private ApplicationConstants() {
 
     }
@@ -36,10 +27,8 @@ public class ApplicationConstants {
     public abstract static class BundleKeys {
         public static final String FORM_MODE = "formMode";
         public static final String SUCCESS_KEY = "SUCCESSFUL";
-        public static final String ERROR_REASON = "ERROR_MSG";
         public static final String FORM_IDS = "FORM_IDS";
         public static final String MESSAGE = "MESSAGE";
-        public static final String FORM_ID = "FORM_ID";
         public static final String USERNAME = "USERNAME";
         public static final String PASSWORD = "PASSWORD";
         public static final String URL = "URL";

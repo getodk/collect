@@ -103,8 +103,7 @@ public class UserInterfacePreferencesFragment extends BaseProjectPreferencesFrag
         final ListPreference pref = findPreference(KEY_APP_LANGUAGE);
 
         if (pref != null) {
-            final LocaleHelper localeHelper = new LocaleHelper();
-            TreeMap<String, String> languageList = localeHelper.getEntryListValues();
+            TreeMap<String, String> languageList = LocaleHelper.languageList();
             ArrayList<String> entryValues = new ArrayList<>();
             entryValues.add(0, "");
             entryValues.addAll(languageList.values());
