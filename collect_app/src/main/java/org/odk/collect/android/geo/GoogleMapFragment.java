@@ -895,22 +895,22 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     private static class PolygonFeature implements MapFeature {
 
-        private final int strokeLineColor;
-        private final GoogleMap map;
-        private final Iterable<MapPoint> points;
         private Polygon polygon;
         private final List<Marker> markers = new ArrayList<>();
 
         PolygonFeature(Context context, GoogleMap map, Iterable<MapPoint> points, int strokeLineColor) {
-            this.map = map;
-            this.points = points;
-            this.strokeLineColor = strokeLineColor;
 
             for (MapPoint point : points) {
                 markers.add(createMarker(context, new MarkerDescription(point, false, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
             }
 
-            update();
+            polygon = map.addPolygon(new PolygonOptions()
+                    .addAll(markers.stream().map(Marker::getPosition).collect(Collectors.toList()))
+                    .strokeColor(strokeLineColor)
+                    .strokeWidth(5)
+                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, 150))
+                    .clickable(true)
+            );
         }
 
         @Override
@@ -930,13 +930,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         @Override
         public void update() {
-            polygon = map.addPolygon(new PolygonOptions()
-                    .addAll(markers.stream().map(Marker::getPosition).collect(Collectors.toList()))
-                    .strokeColor(strokeLineColor)
-                    .strokeWidth(5)
-                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, 150))
-                    .clickable(true)
-            );
+
         }
 
         @Override

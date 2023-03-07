@@ -897,14 +897,12 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     private class PolygonFeature implements MapFeature {
 
-        private MapView map;
-        private Iterable<MapPoint> points;
+        private final MapView map;
         private final Polygon polygon = new Polygon();
         private final List<Marker> markers = new ArrayList<>();
 
         PolygonFeature(MapView map, Iterable<MapPoint> points) {
             this.map = map;
-            this.points = points;
 
             map.getOverlays().add(polygon);
             int strokeColor = map.getContext().getResources().getColor(R.color.mapLineColor);
