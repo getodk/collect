@@ -278,7 +278,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(map, markerDescription));
+        features.put(featureId, new MarkerFeature(getActivity(), markerDescription, map));
         return featureId;
     }
 
@@ -307,7 +307,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public int addPolyLine(@NonNull Iterable<MapPoint> points, boolean closed, boolean draggable) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyLineFeature(map, points, closed, draggable));
+        features.put(featureId, new PolyLineFeature(getActivity(), points, closed, draggable, map));
         return featureId;
     }
 
@@ -751,15 +751,17 @@ public class GoogleMapFragment extends SupportMapFragment implements
         void dispose();
     }
 
-    private class MarkerFeature implements MapFeature {
+    private static class MarkerFeature implements MapFeature {
         private Marker marker;
+        private final Context context;
 
-        MarkerFeature(GoogleMap map, MarkerDescription markerDescription) {
-            marker = createMarker(getActivity(), markerDescription, map);
+        MarkerFeature(Context context, MarkerDescription markerDescription, GoogleMap map) {
+            this.context = context;
+            marker = createMarker(context, markerDescription, map);
         }
 
         public void setIcon(MarkerIconDescription markerIconDescription) {
-            marker.setIcon(getBitmapDescriptor(getContext(), markerIconDescription));
+            marker.setIcon(getBitmapDescriptor(context, markerIconDescription));
         }
 
         public MapPoint getPoint() {
@@ -788,25 +790,30 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    private class PolyLineFeature implements MapFeature {
+    private static class PolyLineFeature implements MapFeature {
         public static final int STROKE_WIDTH = 5;
 
+        private final Context context;
         private final GoogleMap map;
         private final List<Marker> markers = new ArrayList<>();
         private final boolean closedPolygon;
-        private boolean draggable;
+        private final boolean draggable;
         private Polyline polyline;
 
-        PolyLineFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
+        PolyLineFeature(Context context, Iterable<MapPoint> points, boolean closedPolygon, boolean draggable, GoogleMap map) {
+            this.context = context;
             this.map = map;
             this.closedPolygon = closedPolygon;
             this.draggable = draggable;
+
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
+
             for (MapPoint point : points) {
-                markers.add(createMarker(getActivity(), new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
+                markers.add(createMarker(context, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
             }
+
             update();
         }
 
@@ -835,7 +842,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(requireContext().getResources().getColor(R.color.mapLineColor))
+                    .color(context.getResources().getColor(R.color.mapLineColor))
                     .zIndex(1)
                     .width(STROKE_WIDTH)
                     .addAll(latLngs)
@@ -866,7 +873,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(getActivity(), new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
+            markers.add(createMarker(context, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
             update();
         }
 
