@@ -48,11 +48,11 @@ import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
 import org.odk.collect.maps.MapFragmentDelegate;
 import org.odk.collect.maps.MapPoint;
+import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
+import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconCreator;
 import org.odk.collect.maps.markers.MarkerIconDescription;
-import org.odk.collect.maps.layers.MapFragmentReferenceLayerUtils;
-import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.settings.SettingsProvider;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.events.MapListener;
@@ -914,17 +914,14 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                 return new GeoPoint(point.latitude, point.longitude);
             }).collect(Collectors.toList()));
 
-            polygon.setOnClickListener(new Polygon.OnClickListener() {
-                @Override
-                public boolean onClick(Polygon polygon, MapView mapView, GeoPoint eventPos) {
-                    int featureId = findFeature(polygon);
-                    if (featureClickListener != null && featureId != -1) {
-                        featureClickListener.onFeature(featureId);
-                        return true;  // consume the event
-                    }
-
-                    return false;
+            polygon.setOnClickListener((polygon, mapView, eventPos) -> {
+                int featureId = findFeature(polygon);
+                if (featureClickListener != null && featureId != -1) {
+                    featureClickListener.onFeature(featureId);
+                    return true;  // consume the event
                 }
+
+                return false;
             });
 
             for (MapPoint point : points) {
