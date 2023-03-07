@@ -260,7 +260,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addPoly(points, outputMode == OutputMode.GEOSHAPE, true);
+        featureId = map.addPolyLine(points, outputMode == OutputMode.GEOSHAPE, true);
 
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -436,7 +436,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addPoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, true);
+        featureId = map.addPolyLine(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, true);
         inputActive = false;
         updateUi();
     }

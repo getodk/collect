@@ -329,9 +329,9 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public int addPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
+    public int addPolyLine(@NonNull Iterable<MapPoint> points, boolean closed, boolean draggable) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(map, points, closedPolygon, draggable));
+        features.put(featureId, new PolyFeature(map, points, closed, draggable));
         return featureId;
     }
 

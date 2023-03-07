@@ -106,15 +106,15 @@ class FakeMapFragment : Fragment(), MapFragment {
         return markers[featureId]!!
     }
 
-    override fun addPoly(
+    override fun addPolyLine(
         points: Iterable<MapPoint>,
-        closedPolygon: Boolean,
+        closed: Boolean,
         draggable: Boolean
     ): Int {
         val featureId = generateFeatureId()
 
         polys[featureId] = points.toList()
-        polyClosed.add(closedPolygon)
+        polyClosed.add(closed)
         polyDraggable.add(draggable)
 
         featureIds.add(featureId)
