@@ -46,22 +46,24 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
             currentProjectProvider.getCurrentProject()
         )
 
-        if (settingsImportingResult == SettingsImportingResult.SUCCESS) {
-            Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT)
+        when (settingsImportingResult) {
+            SettingsImportingResult.SUCCESS -> {
+                Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT)
 
-            val newProjectName = currentProjectProvider.getCurrentProject().name
-            if (newProjectName != oldProjectName) {
-                File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).delete()
-                File(storagePathProvider.getProjectRootDirPath() + File.separator + newProjectName).createNewFile()
+                val newProjectName = currentProjectProvider.getCurrentProject().name
+                if (newProjectName != oldProjectName) {
+                    File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).delete()
+                    File(storagePathProvider.getProjectRootDirPath() + File.separator + newProjectName).createNewFile()
+                }
+
+                showLongToast(requireContext(), getString(R.string.successfully_imported_settings))
+                ActivityUtils.startActivityAndCloseAllOthers(
+                    requireActivity(),
+                    MainMenuActivity::class.java
+                )
             }
-
-            showLongToast(requireContext(), getString(R.string.successfully_imported_settings))
-            ActivityUtils.startActivityAndCloseAllOthers(
-                requireActivity(),
-                MainMenuActivity::class.java
-            )
-        } else {
-            showLongToast(requireContext(), getString(R.string.invalid_qrcode))
+            SettingsImportingResult.INVALID_SETTINGS -> showLongToast(requireContext(), getString(R.string.invalid_qrcode))
+            SettingsImportingResult.GD_PROJECT -> showLongToast(requireContext(), getString(R.string.settings_with_gd_protocol))
         }
     }
 

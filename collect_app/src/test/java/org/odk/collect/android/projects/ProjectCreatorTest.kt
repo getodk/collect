@@ -56,24 +56,40 @@ class ProjectCreatorTest {
     }
 
     @Test
-    fun `When importing settings failed createNewProject() should return false`() {
+    fun `When importing settings failed createNewProject() should return 'INVALID_SETTINGS'`() {
         whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
 
         projectCreator.createNewProject(json)
-        assertThat(projectCreator.createNewProject(json), `is`(false))
+        assertThat(projectCreator.createNewProject(json), `is`(SettingsImportingResult.INVALID_SETTINGS))
     }
 
     @Test
-    fun `When importing settings succeeded createNewProject() should return true`() {
+    fun `When importing settings contain GD protocol createNewProject() should return 'GD_PROJECT'`() {
+        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(SettingsImportingResult.GD_PROJECT)
+
+        projectCreator.createNewProject(json)
+        assertThat(projectCreator.createNewProject(json), `is`(SettingsImportingResult.GD_PROJECT))
+    }
+
+    @Test
+    fun `When importing settings succeeded createNewProject() should return 'SUCCESS'`() {
         whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(SettingsImportingResult.SUCCESS)
 
         projectCreator.createNewProject(json)
-        assertThat(projectCreator.createNewProject(json), `is`(true))
+        assertThat(projectCreator.createNewProject(json), `is`(SettingsImportingResult.SUCCESS))
     }
 
     @Test
     fun `When importing settings failed should created project be deleted`() {
         whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
+
+        projectCreator.createNewProject(json)
+        verify(projectsRepository).delete(savedProject.uuid)
+    }
+
+    @Test
+    fun `When importing settings contain GD protocol should created project be deleted`() {
+        whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(SettingsImportingResult.GD_PROJECT)
 
         projectCreator.createNewProject(json)
         verify(projectsRepository).delete(savedProject.uuid)

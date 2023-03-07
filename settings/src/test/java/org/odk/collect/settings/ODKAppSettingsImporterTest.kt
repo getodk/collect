@@ -91,4 +91,21 @@ class ODKAppSettingsImporterTest {
         )
         assertThat(result, equalTo(SettingsImportingResult.INVALID_SETTINGS))
     }
+
+    @Test
+    fun `rejects JSON with google_sheets protocol`() {
+        val result = settingsImporter.fromJSON(
+            "{\n" +
+                "  \"general\": {\n" +
+                "       \"protocol\" : \"google_sheets\"" +
+                "  },\n" +
+                "  \"admin\": {\n" +
+                "  }\n" +
+                "}",
+            projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
+        )
+        assertThat(result, equalTo(SettingsImportingResult.GD_PROJECT))
+        assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
+        assertSettingsEmpty(settingsProvider.getProtectedSettings())
+    }
 }

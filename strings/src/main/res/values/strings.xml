@@ -1049,6 +1049,7 @@
     <string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="corrupt_imported_preferences_error">Current settings are corrupt. From project management settings, reset settings or import working ones.</string>
+    <string name="settings_with_gd_protocol">Google Drive/Sheets projects can no longer be created</string>
 
     <!--
      ##############################################

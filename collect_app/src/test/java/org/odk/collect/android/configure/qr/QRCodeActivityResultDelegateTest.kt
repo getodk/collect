@@ -83,6 +83,17 @@ class QRCodeActivityResultDelegateTest {
     }
 
     @Test
+    fun forSelectPhotoWithGoogleDriveProtocol_whenImporting_showsInvalidToast() {
+        val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
+        val data = intentWithData("file://qr", "qr")
+        fakeQRDecoder.register("qr", "data")
+        whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.GD_PROJECT)
+        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(R.string.settings_with_gd_protocol)))
+    }
+
+    @Test
     fun forSelectPhoto_whenQRCodeDecodeFailsWithInvalid_showsInvalidToast() {
         importSettingsFromQrCode_withInvalidQrCode()
         assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(R.string.invalid_qrcode)))

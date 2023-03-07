@@ -315,25 +315,14 @@ class SettingsImporterTest {
     }
 
     @Test
-    fun `when protocol is Google Drive and project name not set, project name falls back to Google account`() {
-        val generalJson = JSONObject()
-            .put(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-            .put(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, "foo@bar.baz")
+    fun `when protocol is Google Drive returns GD_PROJECT`() {
+        val generalJson = JSONObject().put(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
+
         val settings = JSONObject()
             .put(AppConfigurationKeys.GENERAL, generalJson)
             .put(AppConfigurationKeys.ADMIN, JSONObject())
 
-        whenever(
-            projectDetailsCreator.createProjectFromDetails(
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        ).thenReturn(Project.New("A", "B", "C"))
-
-        importer.fromJSON(settings.toString(), currentProject, JSONObject())
-        verify(projectDetailsCreator).createProjectFromDetails("", "", "", "foo@bar.baz")
+        assertThat(importer.fromJSON(settings.toString(), currentProject, JSONObject()), `is`(SettingsImportingResult.GD_PROJECT))
     }
 
     private fun emptySettings(): String {
