@@ -17,7 +17,7 @@ import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.Project
 
-class GoogleDriveDeprecationBannerTest {
+class GoogleDriveDeprecationTest {
     private val rule = CollectTestRule()
     private val testDependencies = TestDependencies()
 
@@ -53,7 +53,7 @@ class GoogleDriveDeprecationBannerTest {
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .selectProject("GD Project 1")
+            .selectProject(gdProject1.name)
             .assertText(R.string.google_drive_deprecation_message)
     }
 
@@ -63,7 +63,7 @@ class GoogleDriveDeprecationBannerTest {
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .selectProject("GD Project 1")
+            .selectProject(gdProject1.name)
             .clickOnString(R.string.learn_more_button_text)
 
         intended(
@@ -80,7 +80,7 @@ class GoogleDriveDeprecationBannerTest {
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .selectProject("GD Project 1")
+            .selectProject(gdProject1.name)
             .assertTextDoesNotExist(R.string.dismiss_button_text)
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
@@ -93,7 +93,7 @@ class GoogleDriveDeprecationBannerTest {
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .selectProject("GD Project 1")
+            .selectProject(gdProject1.name)
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
             .clickOnString(R.string.dismiss_button_text)
@@ -109,13 +109,39 @@ class GoogleDriveDeprecationBannerTest {
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .selectProject("GD Project 1")
+            .selectProject(gdProject1.name)
             .clickOnString(R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
             .clickOnString(R.string.dismiss_button_text)
             .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
             .openProjectSettingsDialog()
-            .selectProject("GD Project 2")
+            .selectProject(gdProject2.name)
             .assertText(R.string.google_drive_deprecation_message)
+    }
+
+    @Test
+    fun additionalWarningShouldNotBeDisplayedWhenRemovingNonGDProject() {
+        rule
+            .startAtMainMenu()
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectManagement()
+            .clickOnDeleteProject()
+            .assertTextDoesNotExist(R.string.delete_google_drive_project_confirm_message)
+    }
+
+    @Test
+    fun additionalWarningShouldBeDisplayedWhenRemovingGDProject() {
+        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
+
+        rule
+            .startAtMainMenu()
+            .openProjectSettingsDialog()
+            .selectProject(gdProject1.name)
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickProjectManagement()
+            .clickOnDeleteProject()
+            .assertText(R.string.delete_google_drive_project_confirm_message)
     }
 }

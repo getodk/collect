@@ -19,6 +19,11 @@ class ProjectManagementPage : Page<ProjectManagementPage>() {
         return QRCodePage().assertOnPage()
     }
 
+    fun clickOnDeleteProject(): ProjectManagementPage {
+        scrollToRecyclerViewItemAndClickText(R.string.delete_project)
+        return this
+    }
+
     fun deleteProject(): MainMenuPage {
         scrollToRecyclerViewItemAndClickText(R.string.delete_project)
         clickOnString(R.string.delete_project_yes)
