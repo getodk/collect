@@ -15,6 +15,7 @@ import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.androidshared.utils.CompressionUtils
 import org.odk.collect.settings.ODKAppSettingsImporter
+import org.odk.collect.settings.importing.SettingsImportingResult
 import java.io.File
 import java.io.IOException
 import java.util.zip.DataFormatException
@@ -40,12 +41,12 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
     override fun handleScanningResult(result: BarcodeResult) {
         val oldProjectName = currentProjectProvider.getCurrentProject().name
 
-        val importSuccess = settingsImporter.fromJSON(
+        val settingsImportingResult = settingsImporter.fromJSON(
             CompressionUtils.decompress(result.text),
             currentProjectProvider.getCurrentProject()
         )
 
-        if (importSuccess) {
+        if (settingsImportingResult == SettingsImportingResult.SUCCESS) {
             Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT)
 
             val newProjectName = currentProjectProvider.getCurrentProject().name

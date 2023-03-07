@@ -20,9 +20,9 @@ internal class SettingsImporter(
     private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
-    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: JSONObject): Boolean {
+    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: JSONObject): SettingsImportingResult {
         if (!settingsValidator.isValid(json)) {
-            return false
+            return SettingsImportingResult.INVALID_SETTINGS
         }
 
         val generalSettings = settingsProvider.getUnprotectedSettings(project.uuid)
@@ -65,7 +65,7 @@ internal class SettingsImporter(
 
         settingsChangedHandler.onSettingsChanged(project.uuid)
 
-        return true
+        return SettingsImportingResult.SUCCESS
     }
 
     private fun importToPrefs(

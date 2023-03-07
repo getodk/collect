@@ -4,6 +4,7 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.ODKAppSettingsImporter
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.importing.SettingsImportingResult
 
 class ProjectCreator(
     private val projectsRepository: ProjectsRepository,
@@ -14,9 +15,9 @@ class ProjectCreator(
 
     fun createNewProject(settingsJson: String): Boolean {
         val savedProject = projectsRepository.save(Project.New("", "", ""))
-        val settingsImportedSuccessfully = settingsImporter.fromJSON(settingsJson, savedProject)
+        val settingsImportingResult = settingsImporter.fromJSON(settingsJson, savedProject)
 
-        return if (settingsImportedSuccessfully) {
+        return if (settingsImportingResult == SettingsImportingResult.SUCCESS) {
             currentProjectProvider.setCurrentProject(savedProject.uuid)
             true
         } else {
