@@ -314,7 +314,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override
     public int addPolygon(@NonNull Iterable<MapPoint> points) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolygonFeature(map, points, requireContext().getResources().getColor(R.color.mapLineColor)));
+        features.put(featureId, new PolygonFeature(requireActivity(), map, points, requireContext().getResources().getColor(R.color.mapLineColor)));
         return featureId;
     }
 
@@ -603,7 +603,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (locationCrosshairs == null) {
             locationCrosshairs = map.addMarker(new MarkerOptions()
                 .position(loc)
-                .icon(getBitmapDescriptor(new MarkerIconDescription(R.drawable.ic_crosshairs)))
+                .icon(getBitmapDescriptor(getContext(), new MarkerIconDescription(R.drawable.ic_crosshairs)))
                 .anchor(0.5f, 0.5f)  // center the crosshairs on the position
             );
         }
@@ -660,8 +660,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private Marker createMarker(GoogleMap map, MarkerDescription markerDescription) {
-        if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
+    private static Marker createMarker(Context context, MarkerDescription markerDescription, GoogleMap map) {
+        if (map == null || context == null) {  // during Robolectric tests, map will be null
             return null;
         }
         // A Marker's position is a LatLng with just latitude and longitude
@@ -671,12 +671,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(markerDescription.getPoint()))
             .snippet(markerDescription.getPoint().altitude + ";" + markerDescription.getPoint().accuracy)
             .draggable(markerDescription.isDraggable())
-            .icon(getBitmapDescriptor(markerDescription.getIconDescription()))
+            .icon(getBitmapDescriptor(context, markerDescription.getIconDescription()))
             .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
         );
     }
 
-    private float getIconAnchorValueX(@IconAnchor String iconAnchor) {
+    private static float getIconAnchorValueX(@IconAnchor String iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
             default:
@@ -684,7 +684,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private float getIconAnchorValueY(@IconAnchor String iconAnchor) {
+    private static float getIconAnchorValueY(@IconAnchor String iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
                 return 1.0f;
@@ -693,8 +693,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private BitmapDescriptor getBitmapDescriptor(MarkerIconDescription markerIconDescription) {
-        return BitmapDescriptorCache.getBitmapDescriptor(getContext(), markerIconDescription);
+    private static BitmapDescriptor getBitmapDescriptor(Context context, MarkerIconDescription markerIconDescription) {
+        return BitmapDescriptorCache.getBitmapDescriptor(context, markerIconDescription);
     }
 
     private void showGpsDisabledAlert() {
@@ -755,11 +755,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private Marker marker;
 
         MarkerFeature(GoogleMap map, MarkerDescription markerDescription) {
-            marker = createMarker(map, markerDescription);
+            marker = createMarker(getActivity(), markerDescription, map);
         }
 
         public void setIcon(MarkerIconDescription markerIconDescription) {
-            marker.setIcon(getBitmapDescriptor(markerIconDescription));
+            marker.setIcon(getBitmapDescriptor(getContext(), markerIconDescription));
         }
 
         public MapPoint getPoint() {
@@ -805,7 +805,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 return;
             }
             for (MapPoint point : points) {
-                markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+                markers.add(createMarker(getActivity(), new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
             }
             update();
         }
@@ -866,7 +866,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+            markers.add(createMarker(getActivity(), new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
             update();
         }
 
@@ -893,18 +893,23 @@ public class GoogleMapFragment extends SupportMapFragment implements
         private final GoogleMap map;
         private final Iterable<MapPoint> points;
         private Polygon polygon;
+        private final List<Marker> markers = new ArrayList<>();
 
-        PolygonFeature(GoogleMap map, Iterable<MapPoint> points, int strokeLineColor) {
+        PolygonFeature(Context context, GoogleMap map, Iterable<MapPoint> points, int strokeLineColor) {
             this.map = map;
             this.points = points;
             this.strokeLineColor = strokeLineColor;
+
+            for (MapPoint point : points) {
+                markers.add(createMarker(context, new MarkerDescription(point, false, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
+            }
 
             update();
         }
 
         @Override
         public boolean ownsMarker(Marker marker) {
-            return false;
+            return markers.contains(marker);
         }
 
         @Override
@@ -937,6 +942,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polygon.remove();
                 polygon = null;
             }
+
+            for (Marker marker : markers) {
+                marker.remove();
+            }
+            markers.clear();
         }
     }
 }
