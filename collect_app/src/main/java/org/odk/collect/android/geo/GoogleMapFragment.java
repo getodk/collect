@@ -71,7 +71,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import javax.inject.Inject;
 
@@ -932,10 +931,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         @Override
         public void update() {
             polygon = map.addPolygon(new PolygonOptions()
-                    .addAll(StreamSupport.stream(points.spliterator(), false)
-                            .map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude))
-                            .collect(Collectors.toList())
-                    )
+                    .addAll(markers.stream().map(Marker::getPosition).collect(Collectors.toList()))
                     .strokeColor(strokeLineColor)
                     .strokeWidth(5)
                     .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, 150))
