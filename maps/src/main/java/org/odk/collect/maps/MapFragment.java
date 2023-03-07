@@ -122,19 +122,19 @@ public interface MapFragment {
     int addPolygon(@NonNull Iterable<MapPoint> points);
 
     /** Appends a vertex to the polyline or polygon specified by featureId. */
-    void appendPointToPoly(int featureId, @NonNull MapPoint point);
+    void appendPointToPolyLine(int featureId, @NonNull MapPoint point);
 
     /**
      * Removes the last vertex of the polyline or polygon specified by featureId.
      * If there are no vertices, does nothing.
      */
-    void removePolyLastPoint(int featureId);
+    void removePolyLineLastPoint(int featureId);
 
     /**
      * Returns the vertices of the polyline or polygon specified by featureId, or an
      * empty list if the featureId does not identify an existing polyline or polygon.
      */
-    @NonNull List<MapPoint> getPolyPoints(int featureId);
+    @NonNull List<MapPoint> getPolyLinePoints(int featureId);
 
     /** Removes all map features from the map. */
     void clearFeatures();

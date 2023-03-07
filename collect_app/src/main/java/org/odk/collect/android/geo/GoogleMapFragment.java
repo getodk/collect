@@ -318,14 +318,14 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return featureId;
     }
 
-    @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
+    @Override public void appendPointToPolyLine(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyLineFeature) {
             ((PolyLineFeature) feature).addPoint(point);
         }
     }
 
-    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
+    @Override public @NonNull List<MapPoint> getPolyLinePoints(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyLineFeature) {
             return ((PolyLineFeature) feature).getPoints();
@@ -333,7 +333,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return new ArrayList<>();
     }
 
-    @Override public void removePolyLastPoint(int featureId) {
+    @Override public void removePolyLineLastPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyLineFeature) {
             ((PolyLineFeature) feature).removeLastPoint();

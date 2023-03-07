@@ -61,13 +61,13 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
-    override fun appendPointToPoly(featureId: Int, point: MapPoint) {
+    override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
     }
 
-    override fun removePolyLastPoint(featureId: Int) {
+    override fun removePolyLineLastPoint(featureId: Int) {
     }
 
-    override fun getPolyPoints(featureId: Int): MutableList<MapPoint> {
+    override fun getPolyLinePoints(featureId: Int): MutableList<MapPoint> {
         TODO("Not yet implemented")
     }
 

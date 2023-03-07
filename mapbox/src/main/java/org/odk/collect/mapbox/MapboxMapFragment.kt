@@ -350,21 +350,21 @@ class MapboxMapFragment :
         return addPolyLine(points, closed = true, draggable = false)
     }
 
-    override fun appendPointToPoly(featureId: Int, point: MapPoint) {
+    override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
         val feature = features[featureId]
         if (feature is PolyFeature) {
             feature.appendPoint(point)
         }
     }
 
-    override fun removePolyLastPoint(featureId: Int) {
+    override fun removePolyLineLastPoint(featureId: Int) {
         val feature = features[featureId]
         if (feature is PolyFeature) {
             feature.removeLastPoint()
         }
     }
 
-    override fun getPolyPoints(featureId: Int): List<MapPoint> {
+    override fun getPolyLinePoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
         return if (feature is PolyFeature) {
             feature.mapPoints

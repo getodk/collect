@@ -341,7 +341,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
+    public void appendPointToPolyLine(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyFeature) {
             ((PolyFeature) feature).addPoint(point);
@@ -350,7 +350,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public @NonNull
-    List<MapPoint> getPolyPoints(int featureId) {
+    List<MapPoint> getPolyLinePoints(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyFeature) {
             return ((PolyFeature) feature).getPoints();
@@ -359,7 +359,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
-    public void removePolyLastPoint(int featureId) {
+    public void removePolyLineLastPoint(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyFeature) {
             ((PolyFeature) feature).removeLastPoint();
