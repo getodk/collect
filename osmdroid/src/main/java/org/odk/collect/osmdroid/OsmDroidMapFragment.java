@@ -900,6 +900,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         private MapView map;
         private Iterable<MapPoint> points;
         private final Polygon polygon = new Polygon();
+        private final List<Marker> markers = new ArrayList<>();
 
         PolygonFeature(MapView map, Iterable<MapPoint> points) {
             this.map = map;
@@ -925,11 +926,15 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
                     return false;
                 }
             });
+
+            for (MapPoint point : points) {
+                markers.add(createMarker(map, new MarkerDescription(point, false, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+            }
         }
 
         @Override
         public boolean ownsMarker(Marker marker) {
-            return false;
+            return markers.contains(marker);
         }
 
         @Override
@@ -950,6 +955,10 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         @Override
         public void dispose() {
             map.getOverlays().remove(polygon);
+            for (Marker marker : markers) {
+                map.getOverlays().remove(marker);
+            }
+            markers.clear();
         }
     }
 
