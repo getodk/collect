@@ -61,6 +61,10 @@ class NoOpMapFragment : Fragment(), MapFragment {
         TODO("Not yet implemented")
     }
 
+    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+        TODO("Not yet implemented")
+    }
+
     override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
     }
 
