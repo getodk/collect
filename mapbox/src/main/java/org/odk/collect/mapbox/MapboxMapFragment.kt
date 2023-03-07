@@ -346,6 +346,10 @@ class MapboxMapFragment :
         return featureId
     }
 
+    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+        return addPolyLine(points, closed = true, draggable = false)
+    }
+
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {
         val feature = features[featureId]
         if (feature is PolyFeature) {

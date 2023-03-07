@@ -138,7 +138,7 @@ public class GeoPolyActivityTest {
 
         mapFragment.ready();
 
-        List<List<MapPoint>> polys = mapFragment.getPolys();
+        List<List<MapPoint>> polys = mapFragment.getPolyLines();
         assertThat(polys.size(), equalTo(1));
         assertThat(polys.get(0), equalTo(polygon));
     }
@@ -157,7 +157,7 @@ public class GeoPolyActivityTest {
 
         mapFragment.ready();
 
-        List<List<MapPoint>> polys = mapFragment.getPolys();
+        List<List<MapPoint>> polys = mapFragment.getPolyLines();
         assertThat(polys.size(), equalTo(1));
 
         ArrayList<MapPoint> expectedPolygon = new ArrayList<>();
@@ -178,7 +178,7 @@ public class GeoPolyActivityTest {
 
         mapFragment.ready();
 
-        List<List<MapPoint>> polys = mapFragment.getPolys();
+        List<List<MapPoint>> polys = mapFragment.getPolyLines();
         assertThat(polys.size(), equalTo(1));
         assertThat(polys.get(0).isEmpty(), equalTo(true));
     }
@@ -231,7 +231,7 @@ public class GeoPolyActivityTest {
         mapFragment.setLocation(new MapPoint(1, 1));
         onView(withId(R.id.record_button)).perform(click());
         onView(withId(R.id.record_button)).perform(click());
-        assertThat(mapFragment.getPolys().get(0).size(), equalTo(1));
+        assertThat(mapFragment.getPolyLines().get(0).size(), equalTo(1));
     }
 
     @Test
@@ -243,7 +243,7 @@ public class GeoPolyActivityTest {
 
         mapFragment.click(new MapPoint(1, 1));
         mapFragment.click(new MapPoint(1, 1));
-        assertThat(mapFragment.getPolys().get(0).size(), equalTo(1));
+        assertThat(mapFragment.getPolyLines().get(0).size(), equalTo(1));
     }
 
     private void startInput(int mode) {

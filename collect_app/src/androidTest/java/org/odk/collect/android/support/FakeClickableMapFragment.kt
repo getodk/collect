@@ -65,6 +65,10 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
         return -1
     }
 
+    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+        return addPolyLine(points, closed = true, draggable = false)
+    }
+
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {}
 
     override fun removePolyLastPoint(featureId: Int) {}

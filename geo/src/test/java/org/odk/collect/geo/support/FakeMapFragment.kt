@@ -24,9 +24,10 @@ class FakeMapFragment : Fragment(), MapFragment {
     private var featureClickListener: FeatureListener? = null
     private val markers = mutableMapOf<Int, MapPoint>()
     private val markerIcons = mutableMapOf<Int, MarkerIconDescription?>()
-    private val polys = mutableMapOf<Int, List<MapPoint>>()
+    private val polyLines = mutableMapOf<Int, List<MapPoint>>()
     private val polyClosed: MutableList<Boolean> = ArrayList()
     private val polyDraggable: MutableList<Boolean> = ArrayList()
+    private val polygons = mutableMapOf<Int, List<MapPoint>>()
     private var hasCenter = false
     private val featureIds = mutableListOf<Int>()
 
@@ -113,7 +114,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     ): Int {
         val featureId = generateFeatureId()
 
-        polys[featureId] = points.toList()
+        polyLines[featureId] = points.toList()
         polyClosed.add(closed)
         polyDraggable.add(draggable)
 
@@ -121,18 +122,25 @@ class FakeMapFragment : Fragment(), MapFragment {
         return featureId
     }
 
+    override fun addPolygon(points: MutableIterable<MapPoint>): Int {
+        val featureId = generateFeatureId()
+        polygons[featureId] = points.toList()
+        featureIds.add(featureId)
+        return featureId
+    }
+
     override fun appendPointToPoly(featureId: Int, point: MapPoint) {
-        val poly = polys[featureId]!!
-        polys[featureId] = poly + point
+        val poly = polyLines[featureId]!!
+        polyLines[featureId] = poly + point
     }
 
     override fun removePolyLastPoint(featureId: Int) {
-        val poly = polys[featureId]!!
-        polys[featureId] = poly.dropLast(1)
+        val poly = polyLines[featureId]!!
+        polyLines[featureId] = poly.dropLast(1)
     }
 
     override fun getPolyPoints(featureId: Int): List<MapPoint> {
-        return polys[featureId]!!
+        return polyLines[featureId]!!
     }
 
     override fun clearFeatures() {
@@ -215,8 +223,8 @@ class FakeMapFragment : Fragment(), MapFragment {
         return zoomBoundingBox
     }
 
-    fun getPolys(): List<List<MapPoint>> {
-        return polys.values.toList()
+    fun getPolyLines(): List<List<MapPoint>> {
+        return polyLines.values.toList()
     }
 
     fun isPolyClosed(index: Int): Boolean {
@@ -233,7 +241,7 @@ class FakeMapFragment : Fragment(), MapFragment {
                 it.value == points[0]
             }!!.key
         } else {
-            polys.entries.find {
+            polyLines.entries.find {
                 it.value == points
             }!!.key
         }
@@ -246,6 +254,10 @@ class FakeMapFragment : Fragment(), MapFragment {
         }
 
         return featureId
+    }
+
+    fun getPolygons(): List<List<MapPoint>> {
+        return polygons.values.toList()
     }
 
     companion object {

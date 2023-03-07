@@ -114,11 +114,12 @@ public interface MapFragment {
     MapPoint getMarkerPoint(int featureId);
 
     /**
-     * Adds a polyline or polygon to the map with the given sequence of vertices.
+     * Adds a polyline to the map with the given sequence of vertices.
      * The vertices will have handles that can be dragged by the user.
      * Returns a positive integer, the featureId for the newly added shape.
      */
     int addPolyLine(@NonNull Iterable<MapPoint> points, boolean closed, boolean draggable);
+    int addPolygon(@NonNull Iterable<MapPoint> points);
 
     /** Appends a vertex to the polyline or polygon specified by featureId. */
     void appendPointToPoly(int featureId, @NonNull MapPoint point);

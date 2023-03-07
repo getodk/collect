@@ -369,7 +369,7 @@ class SelectionMapFragment(
         itemsByFeatureId.clear()
 
         val singlePoints = items.filter { it.points.size == 1 }
-        val traces = items.filter { it.points.size != 1 }
+        val polys = items.filter { it.points.size != 1 }
 
         val markerDescriptions = singlePoints.map {
             val point = it.points[0]
@@ -383,11 +383,15 @@ class SelectionMapFragment(
         }
 
         val pointIds = map.addMarkers(markerDescriptions)
-        val traceIds = traces.fold(listOf<Int>()) { ids, item ->
-            ids + map.addPolyLine(item.points, false, false)
+        val polyIds = polys.fold(listOf<Int>()) { ids, item ->
+            if (item.points.first() == item.points.last()) {
+                ids + map.addPolygon(item.points)
+            } else {
+                ids + map.addPolyLine(item.points, false, false)
+            }
         }
 
-        (singlePoints + traces).zip(pointIds + traceIds).forEach { (item, featureId) ->
+        (singlePoints + polys).zip(pointIds + polyIds).forEach { (item, featureId) ->
             itemsByFeatureId[featureId] = item
             featureIdsByItemId[item.id] = featureId
             points.addAll(item.points)

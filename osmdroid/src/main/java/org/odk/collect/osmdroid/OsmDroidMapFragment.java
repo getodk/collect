@@ -336,6 +336,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     @Override
+    public int addPolygon(@NonNull Iterable<MapPoint> points) {
+        return addPolyLine(points, true, false);
+    }
+
+    @Override
     public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
         if (feature instanceof PolyFeature) {
