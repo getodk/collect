@@ -7,11 +7,9 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.gdrive.sheets.DriveHelper;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
-import org.odk.collect.android.support.pages.ServerSettingsPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.androidtest.RecordedIntentsRule;
@@ -58,21 +56,13 @@ public class ServerSettingsTest {
                 .clickOKOnDialog(new MainMenuPage());
     }
 
-    /**
-     * This test could definitely be extended to cover form download/submit with the creation
-     * of a stub
-     * {@link DriveHelper} and
-     * {@link org.odk.collect.android.gdrive.GoogleAccountsManager}
-     */
     @Test
-    public void selectingGoogleAccount_showsGoogleAccountSettings() {
+    public void selectingServerTypeIsDisabled() {
         new MainMenuPage().assertOnPage()
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickServerSettings()
                 .clickOnServerType()
-                .clickOnButtonInDialog(R.string.server_platform_google_sheets, new ServerSettingsPage())
-                .assertText(R.string.selected_google_account_text)
-                .assertText(R.string.google_sheets_url);
+                .assertTextDoesNotExist(R.string.cancel);
     }
 }
