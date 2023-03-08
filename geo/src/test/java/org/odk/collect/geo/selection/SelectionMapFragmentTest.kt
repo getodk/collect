@@ -206,7 +206,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `zooms to fit all points in polys`() {
+    fun `zooms to fit all points in for item with multiple points`() {
         val points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
         val items: List<MappableSelectItem> = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = points)
@@ -329,7 +329,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping current location button zooms to gps location`() {
+    fun `clicking current location button zooms to gps location`() {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
@@ -341,7 +341,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping zoom to fit button zooms to fit all items`() {
+    fun `clicking zoom to fit button zooms to fit all items`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
             Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(41.0, 0.0)))
@@ -358,7 +358,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping zoom to fit button zooms to fit all polys`() {
+    fun `clicking zoom to fit button zooms to fit all polys`() {
         val points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
         val items: List<MappableSelectItem> = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = points)
@@ -373,7 +373,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping layers button navigates to layers settings`() {
+    fun `clicking layers button navigates to layers settings`() {
         val scenario = launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
@@ -385,7 +385,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item centers on that item with current zoom level`() {
+    fun `clicking on item centers on that item with current zoom level`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
             Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(41.0, 0.0)))
@@ -403,7 +403,42 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item switches item marker to large icon`() {
+    fun `clicking on item with multiple points zooms to fit all item points`() {
+        val itemPoints = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
+            Fixtures.actionMappableSelectItem().copy(id = 1, points = itemPoints)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeature(1)
+        assertThat(map.getZoomBoundingBox(), equalTo(Pair(itemPoints, 0.8)))
+    }
+
+    /**
+     * This looks like a duplicated test, but it's easy to write an implementation that will work
+     * for everything else and break for interleaved points and traces.
+     */
+    @Test
+    fun `clicking on item always selects correct item`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))),
+            Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(45.0, 0.0))),
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        launcherRule.launchInContainer(SelectionMapFragment::class.java)
+        map.ready()
+
+        map.clickOnFeatureId(map.getFeatureId(items[1].points))
+        assertThat(map.center, equalTo(items[1].points[0]))
+    }
+
+    @Test
+    fun `clicking on item switches item marker to large icon`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
@@ -439,7 +474,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item when another has been tapped switches the first one back to its small icon`() {
+    fun `clicking on item when another has been tapped switches the first one back to its small icon`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
@@ -476,7 +511,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item sets item on summary sheet`() {
+    fun `clicking on item sets item on summary sheet`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1"),
             Fixtures.actionMappableSelectItem().copy(id = 1, name = "Blah2"),
@@ -492,7 +527,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping on item returns item ID as result when skipSummary is true`() {
+    fun `clicking on item returns item ID as result when skipSummary is true`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0),
             Fixtures.actionMappableSelectItem().copy(id = 1),
@@ -603,7 +638,7 @@ class SelectionMapFragmentTest {
     }
 
     @Test
-    fun `tapping action hides summary sheet`() {
+    fun `clicking action hides summary sheet`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(
                 id = 0,
@@ -674,8 +709,8 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        map.clickOnFeature(-1)
-        map.clickOnFeature(-2) // First click is fine but second could use the ID and crash
+        map.clickOnFeatureId(-1)
+        map.clickOnFeatureId(-2) // First click is fine but second could use the ID and crash
     }
 
     @Test
