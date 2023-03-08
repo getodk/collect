@@ -405,6 +405,12 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
         setContentView(R.layout.form_entry);
         setupViewModels();
+
+        // https://github.com/getodk/collect/issues/5469
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
+            getWindow().getDecorView().setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
+        }
+
         swipeHandler = new SwipeHandler(this, settingsProvider.getUnprotectedSettings());
 
         errorMessage = null;
