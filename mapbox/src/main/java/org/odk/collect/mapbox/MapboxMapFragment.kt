@@ -349,14 +349,15 @@ class MapboxMapFragment :
 
     override fun addPolygon(points: MutableIterable<MapPoint>): Int {
         val featureId = nextFeatureId++
-        features[featureId] =
-            PolygonFeature(
-                mapView.annotations.createPolygonAnnotationManager(),
-                points,
-                requireContext().resources.getColor(R.color.mapLineColor),
-                featureClickListener,
-                featureId
-            )
+        features[featureId] = PolygonFeature(
+            requireContext(),
+            pointAnnotationManager,
+            mapView.annotations.createPolygonAnnotationManager(),
+            points,
+            featureClickListener,
+            featureId
+        )
+
         return featureId
     }
 
