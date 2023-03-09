@@ -175,12 +175,10 @@ class FormMetadataSettingsTest {
     }
 
     private class FakeDeviceDetailsProvider : DeviceDetailsProvider {
-        override fun getDeviceId(): String {
-            return "deviceID"
-        }
+        override val deviceId: String
+            get() = "deviceID"
 
-        override fun getLine1Number(): String {
-            return "line1Number"
-        }
+        override val line1Number: String
+            get() = "line1Number"
     }
 }
