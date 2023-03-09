@@ -32,9 +32,9 @@ include ':entities'
 include ':selfie-camera'
 include ':qr-code'
 include ':shadows'
+include ':metadata'
 
 apply from: 'secrets.gradle'
 if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
     include ':mapbox'
 }
-include ':metadata'

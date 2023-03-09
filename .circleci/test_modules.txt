@@ -17,3 +17,4 @@ crash-handler:testDebug
 entities:testDebug
 qr-code:testDebug
 shadows:testDebug
+metadata:testDebug
