@@ -71,8 +71,8 @@ class PropertyManager(
         const val PROPMGR_PHONE_NUMBER = "phonenumber"
         const val PROPMGR_USERNAME = "username"
         const val PROPMGR_EMAIL = "email"
-        const val SCHEME_USERNAME = "username"
 
+        private const val SCHEME_USERNAME = "username"
         private const val SCHEME_TEL = "tel"
         private const val SCHEME_MAILTO = "mailto"
     }
