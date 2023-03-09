@@ -57,10 +57,6 @@ public class PropertyManager implements IPropertyManager {
     private final PermissionsProvider permissionsProvider;
     private final SettingsProvider settingsProvider;
 
-    public String getName() {
-        return "Property Manager";
-    }
-
     public PropertyManager(PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
         this.permissionsProvider = permissionsProvider;
         this.deviceDetailsProvider = deviceDetailsProvider;
