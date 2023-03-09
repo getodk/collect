@@ -39,6 +39,7 @@ import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
@@ -94,6 +95,8 @@ public class FormSaveViewModelTest {
 
         LiveData<FormController> formSession = liveDataOf(formController);
         viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository);
+
+        CollectHelpers.createDemoProject(); // Needed to deal with `new StoragePathProvider()` calls in `FormSaveViewModel`
     }
 
     @Test

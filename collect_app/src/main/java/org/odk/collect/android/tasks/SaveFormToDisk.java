@@ -318,14 +318,10 @@ public class SaveFormToDisk {
     }
 
     public static void removeSavepointFiles(String instanceName) {
-        try {
-            File savepointFile = getSavepointFile(instanceName);
-            File formIndexFile = getFormIndexFile(instanceName);
-            FileUtils.deleteAndReport(savepointFile);
-            FileUtils.deleteAndReport(formIndexFile);
-        } catch (Throwable t) {
-            // Ignored
-        }
+        File savepointFile = getSavepointFile(instanceName);
+        File formIndexFile = getFormIndexFile(instanceName);
+        FileUtils.deleteAndReport(savepointFile);
+        FileUtils.deleteAndReport(formIndexFile);
     }
 
     /**
