@@ -40,9 +40,47 @@ class FormMetadataSettingsTest {
         .around(rule)
 
     @Test
-    fun settingMetadata_letsThemBeIncludedInAForm() {
+    fun metadataShouldBeDisplayedInPreferences() {
+        rule.startAtMainMenu()
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickUserAndDeviceIdentity()
+            .clickFormMetadata()
+
+            // First verify that default metadata is displayed
+            .assertPreference(R.string.phone_number, deviceDetailsProvider.line1Number)
+            .assertPreference(R.string.device_id, deviceDetailsProvider.deviceId)
+
+            // Then set custom metadata
+            .clickUsername()
+            .inputText("Chino")
+            .clickOKOnDialog()
+            .clickPhoneNumber()
+            .inputText("123")
+            .clickOKOnDialog()
+            .clickEmail()
+            .inputText("chino@whitepony.com")
+            .clickOKOnDialog()
+
+            // And verify that new metadata is displayed
+            .assertPreference(R.string.username, "Chino")
+            .assertPreference(R.string.phone_number, "123")
+            .assertPreference(R.string.email, "chino@whitepony.com")
+    }
+
+    @Test
+    fun metadataShouldBeDisplayedInForm() {
         rule.startAtMainMenu()
             .copyForm("metadata.xml")
+
+            // First verify that default metadata is displayed
+            .startBlankForm("Metadata")
+            .assertTexts(deviceDetailsProvider.line1Number, deviceDetailsProvider.deviceId)
+            .swipeToEndScreen()
+            .pressBack(SaveOrIgnoreDialog("Metadata", MainMenuPage()))
+            .clickIgnoreChanges()
+
+            // Then set custom metadata
             .openProjectSettingsDialog()
             .clickSettings()
             .clickUserAndDeviceIdentity()
@@ -50,20 +88,19 @@ class FormMetadataSettingsTest {
             .clickUsername()
             .inputText("Chino")
             .clickOKOnDialog()
-            .assertPreference(R.string.username, "Chino")
-            .clickEmail()
-            .inputText("chino@whitepony.com")
-            .clickOKOnDialog()
-            .assertPreference(R.string.email, "chino@whitepony.com")
             .clickPhoneNumber()
             .inputText("664615")
             .clickOKOnDialog()
-            .assertPreference(R.string.phone_number, "664615")
+            .clickEmail()
+            .inputText("chino@whitepony.com")
+            .clickOKOnDialog()
             .pressBack(UserAndDeviceIdentitySettingsPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
+
+            // And verify that new metadata is displayed
             .startBlankForm("Metadata")
-            .assertTexts("Chino", "chino@whitepony.com", "664615")
+            .assertTexts("Chino", "664615", "chino@whitepony.com", deviceDetailsProvider.deviceId)
     }
 
     @Test // Issue number NODK-238 TestCase4 TestCase5
@@ -94,25 +131,6 @@ class FormMetadataSettingsTest {
             .pressBack(MainMenuPage())
             .startBlankForm("Metadata")
             .assertText("Stephen")
-    }
-
-    @Test
-    fun deviceIdentifiersAreDisplayedInSettings() {
-        rule.startAtMainMenu()
-            .copyForm("metadata.xml")
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickUserAndDeviceIdentity()
-            .clickFormMetadata()
-            .assertPreference(R.string.device_id, deviceDetailsProvider.deviceId)
-    }
-
-    @Test
-    fun deviceIdentifiersCanBeIncludedInAForm() {
-        rule.startAtMainMenu()
-            .copyForm("metadata.xml")
-            .startBlankForm("Metadata")
-            .assertText(deviceDetailsProvider.deviceId)
     }
 
     @Test // https://github.com/getodk/collect/issues/4792
