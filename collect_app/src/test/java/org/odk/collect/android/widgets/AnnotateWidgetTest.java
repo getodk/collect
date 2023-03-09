@@ -32,12 +32,14 @@ import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
+import java.io.IOException;
 
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.overrideReferenceManager;
@@ -130,6 +132,40 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
+    public void whenThereIsNoAnswer_hideImageViewAndErrorMessage() {
+        AnnotateWidget widget = createWidget();
+
+        assertThat(widget.getImageView().getVisibility(), is(View.GONE));
+        assertThat(widget.getImageView().getDrawable(), nullValue());
+
+        assertThat(widget.getErrorTextView().getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenTheAnswerImageCanNotBeLoaded_hideImageViewAndShowErrorMessage() throws IOException {
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader(true);
+            }
+        });
+
+        String imagePath = File.createTempFile("current", ".bmp").getAbsolutePath();
+        currentFile = new File(imagePath);
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.USER_SPECIFIED_IMAGE_ANSWER)
+                .build();
+
+        AnnotateWidget widget = createWidget();
+
+        assertThat(widget.getImageView().getVisibility(), is(View.GONE));
+        assertThat(widget.getImageView().getDrawable(), nullValue());
+
+        assertThat(widget.getErrorTextView().getVisibility(), is(View.VISIBLE));
+    }
+
+    @Test
     public void whenPromptHasDefaultAnswer_showsInImageView() throws Exception {
         String imagePath = File.createTempFile("default", ".bmp").getAbsolutePath();
 
@@ -154,7 +190,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
         AnnotateWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView, notNullValue());
+        assertThat(imageView.getVisibility(), is(View.VISIBLE));
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 
@@ -180,7 +216,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
         AnnotateWidget widget = createWidget();
         ImageView imageView = widget.getImageView();
-        assertThat(imageView, notNullValue());
+        assertThat(imageView.getVisibility(), is(View.VISIBLE));
         Drawable drawable = imageView.getDrawable();
         assertThat(drawable, notNullValue());
 

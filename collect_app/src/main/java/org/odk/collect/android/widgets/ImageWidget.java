@@ -67,7 +67,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         imageClickHandler = new ViewImageClickHandler();
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
-        addCurrentImageToLayout();
+        updateAnswer();
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
@@ -85,9 +85,9 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
         answerLayout.addView(errorTextView);
+        answerLayout.addView(imageView);
 
         hideButtonsIfNeeded(appearance);
-        errorTextView.setVisibility(View.GONE);
     }
 
     @Override
@@ -141,7 +141,6 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
     }
 
     private void captureImage() {
-        errorTextView.setVisibility(View.GONE);
         if (selfie && new CameraUtils().isFrontCameraAvailable(getContext())) {
             Intent intent = new Intent(getContext(), CaptureSelfieActivity.class);
             intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));

@@ -52,7 +52,6 @@ import timber.log.Timber;
 
 public abstract class BaseImageWidget extends QuestionWidget implements FileWidget, WidgetDataReceiver {
 
-    @Nullable
     protected ImageView imageView;
     protected String binaryName;
     protected TextView errorTextView;
@@ -81,10 +80,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     @Override
     public void clearAnswer() {
         deleteFile();
-        if (imageView != null) {
-            imageView.setImageDrawable(null);
-        }
-
+        imageView.setImageDrawable(null);
+        imageView.setVisibility(View.GONE);
         errorTextView.setVisibility(View.GONE);
         widgetValueChanged();
     }
@@ -106,7 +103,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             if (newImage.exists()) {
                 questionMediaManager.replaceAnswerFile(getFormEntryPrompt().getIndex().toString(), newImage.getAbsolutePath());
                 binaryName = newImage.getName();
-                addCurrentImageToLayout();
+                updateAnswer();
                 widgetValueChanged();
             } else {
                 Timber.e(new Error("NO IMAGE EXISTS at: " + newImage.getAbsolutePath()));
@@ -131,29 +128,23 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
     }
 
-    protected void addCurrentImageToLayout() {
-        answerLayout.removeView(imageView);
+    protected void updateAnswer() {
+        imageView.setVisibility(View.GONE);
+        errorTextView.setVisibility(View.GONE);
 
         if (binaryName != null) {
             File f = getFile();
             if (f != null && f.exists()) {
-                imageView = createAnswerImageView(getContext());
-                answerLayout.addView(imageView);
+                imageView.setVisibility(View.VISIBLE);
                 imageLoader.loadImage(imageView, f, ImageView.ScaleType.FIT_CENTER, new GlideImageLoader.ImageLoaderCallback() {
                     @Override
                     public void onLoadFailed() {
-                        answerLayout.removeView(imageView);
-                        imageView = null;
+                        imageView.setVisibility(View.GONE);
                         errorTextView.setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void onLoadSucceeded() {
-                        imageView.setOnClickListener(v -> {
-                            if (imageClickHandler != null) {
-                                imageClickHandler.clickImage("viewImage");
-                            }
-                        });
                     }
                 });
             }
@@ -169,6 +160,13 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         answerLayout.setOrientation(LinearLayout.VERTICAL);
 
         binaryName = getFormEntryPrompt().getAnswerText();
+
+        imageView = createAnswerImageView(getContext());
+        imageView.setOnClickListener(v -> {
+            if (imageClickHandler != null) {
+                imageClickHandler.clickImage("viewImage");
+            }
+        });
     }
 
     /**
@@ -221,7 +219,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         }
 
         private void launchDrawActivity() {
-            errorTextView.setVisibility(View.GONE);
             Intent i = new Intent(getContext(), DrawActivity.class);
             i.putExtra(DrawActivity.OPTION, drawOption);
             if (binaryName != null) {
@@ -255,7 +252,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
         @Override
         public void chooseImage(@IdRes final int stringResource) {
-            errorTextView.setVisibility(View.GONE);
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.setType("image/*");
             launchActivityForResult(i, ApplicationConstants.RequestCodes.IMAGE_CHOOSER, stringResource);
@@ -303,8 +299,11 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     protected abstract boolean doesSupportDefaultValues();
 
-    @Nullable
     public ImageView getImageView() {
         return imageView;
+    }
+
+    public TextView getErrorTextView() {
+        return errorTextView;
     }
 }
