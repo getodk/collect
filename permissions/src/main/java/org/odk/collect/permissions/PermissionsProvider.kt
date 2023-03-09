@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.net.Uri
+import android.os.Build
 
 /**
  * PermissionsProvider allows all permission related messages and checks to be encapsulated in one
@@ -48,7 +49,13 @@ open class PermissionsProvider internal constructor(
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)
 
     open val isReadPhoneStatePermissionGranted: Boolean
-        get() = permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)
+        get() = permissionsChecker.isPermissionGranted(
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                Manifest.permission.READ_PHONE_NUMBERS
+            } else {
+                Manifest.permission.READ_PHONE_STATE
+            }
+        )
 
     open fun requestCameraPermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
@@ -202,7 +209,11 @@ open class PermissionsProvider internal constructor(
                     )
                 }
             },
-            Manifest.permission.READ_PHONE_STATE
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+                Manifest.permission.READ_PHONE_NUMBERS
+            } else {
+                Manifest.permission.READ_PHONE_STATE
+            }
         )
     }
 

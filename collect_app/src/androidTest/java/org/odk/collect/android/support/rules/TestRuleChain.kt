@@ -23,7 +23,7 @@ object TestRuleChain {
                     Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.CAMERA,
-                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_PHONE_NUMBERS,
                     Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.GET_ACCOUNTS
                 )

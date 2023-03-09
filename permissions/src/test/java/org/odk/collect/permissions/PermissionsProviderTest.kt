@@ -269,22 +269,22 @@ class PermissionsProviderTest {
     }
 
     @Test
-    fun `isReadPhoneStatePermissionGranted() when read phone state permission is granted returns true`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(true)
+    fun `isReadPhoneStatePermissionGranted() when read phone numbers permission is granted returns true`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_NUMBERS)).thenReturn(true)
 
         assertThat(permissionsProvider.isReadPhoneStatePermissionGranted, `is`(true))
     }
 
     @Test
-    fun `isReadPhoneStatePermissionGranted() when read phone state permission is not granted returns false`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
+    fun `isReadPhoneStatePermissionGranted() when read phone numbers permission is not granted returns false`() {
+        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_NUMBERS)).thenReturn(false)
 
         assertThat(permissionsProvider.isReadPhoneStatePermissionGranted, `is`(false))
     }
 
     @Test
-    fun `requestReadPhoneStatePermission() when read phone state permission is granted calls PermissionListener#granted`() {
-        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
+    fun `requestReadPhoneStatePermission() when read phone numbers permission is granted calls PermissionListener#granted`() {
+        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_NUMBERS)
 
         permissionsProvider.requestReadPhoneStatePermission(activity, permissionListener)
 
@@ -342,14 +342,14 @@ class PermissionsProviderTest {
 
     @Test
     fun `granted listener is not called when Activity is finishing`() {
-        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
+        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_NUMBERS)
 
         whenever(activity.isFinishing).doReturn(true)
 
         permissionsProvider.requestPermissions(
             activity,
             permissionListener,
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.READ_PHONE_NUMBERS
         )
 
         verifyNoInteractions(permissionListener)
@@ -357,14 +357,14 @@ class PermissionsProviderTest {
 
     @Test
     fun `denied listener is not called when Activity is finishing`() {
-        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
+        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_NUMBERS)
 
         whenever(activity.isFinishing).doReturn(true)
 
         permissionsProvider.requestPermissions(
             activity,
             permissionListener,
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.READ_PHONE_NUMBERS
         )
 
         verifyNoInteractions(permissionListener)
