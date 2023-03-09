@@ -25,6 +25,7 @@ import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.shared.settings.Settings;
+import org.odk.collect.shared.strings.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +89,7 @@ public class PropertyManager implements IPropertyManager {
     }
 
     public void putProperty(String propName, String scheme, String value) {
-        if (value != null) {
+        if (value != null && !StringUtils.isBlank(value)) {
             properties.put(propName, value);
             properties.put(withUri(propName), scheme + ":" + value);
         }
