@@ -1,8 +1,7 @@
-package org.odk.collect.android.metadata;
-
-import static org.odk.collect.shared.strings.RandomString.randomString;
+package org.odk.collect.metadata;
 
 import org.odk.collect.shared.settings.Settings;
+import org.odk.collect.shared.strings.RandomString;
 
 public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
 
@@ -24,7 +23,7 @@ public class SharedPreferencesInstallIDProvider implements InstallIDProvider {
     }
 
     private String generateAndStoreInstallID() {
-        String installID = "collect:" + randomString(16);
+        String installID = "collect:" + RandomString.randomString(16);
         metaPreferences.save(preferencesKey, installID);
 
         return installID;

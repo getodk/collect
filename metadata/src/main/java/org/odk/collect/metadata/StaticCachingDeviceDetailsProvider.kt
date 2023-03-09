@@ -1,9 +1,8 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.metadata
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.telephony.TelephonyManager
-import org.odk.collect.android.metadata.InstallIDProvider
 
 class StaticCachingDeviceDetailsProvider(
     private val installIDProvider: InstallIDProvider,

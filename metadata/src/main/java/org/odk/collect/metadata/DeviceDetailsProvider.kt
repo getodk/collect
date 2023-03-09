@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.metadata
 
 interface DeviceDetailsProvider {
     @get:Throws(SecurityException::class)

@@ -7,11 +7,11 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.instancemanagement.InstanceSubmitter
 import org.odk.collect.android.instancemanagement.SubmitException
-import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.permissions.PermissionsProvider
 
 class InstanceAutoSender(

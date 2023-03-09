@@ -18,12 +18,12 @@ import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.upload.InstanceServerUploader;
 import org.odk.collect.android.upload.FormUploadAuthRequestedException;
 import org.odk.collect.android.upload.FormUploadException;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
+import org.odk.collect.metadata.PropertyManager;
 
 import java.util.List;
 

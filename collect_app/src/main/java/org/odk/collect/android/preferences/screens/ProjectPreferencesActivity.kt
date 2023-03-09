@@ -23,7 +23,7 @@ import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBac
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.listeners.OnBackPressedListener
-import org.odk.collect.android.logic.PropertyManager
+import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 

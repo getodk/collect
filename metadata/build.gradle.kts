@@ -1,3 +1,4 @@
+import dependencies.Dependencies
 import dependencies.Versions
 
 plugins {
@@ -37,4 +38,16 @@ android {
 }
 
 dependencies {
+    implementation(project(":permissions"))
+    implementation(project(":settings"))
+    implementation(project(":shared"))
+
+    implementation(Dependencies.javarosa) {
+        exclude(group = "joda-time")
+        exclude(group = "org.hamcrest", module = "hamcrest-all")
+    }
+    implementation(Dependencies.timber)
+
+    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.robolectric)
 }

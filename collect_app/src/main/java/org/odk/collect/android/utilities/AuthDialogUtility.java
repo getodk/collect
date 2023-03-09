@@ -27,8 +27,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment;
+import org.odk.collect.metadata.PropertyManager;
 
 import javax.inject.Inject;
 

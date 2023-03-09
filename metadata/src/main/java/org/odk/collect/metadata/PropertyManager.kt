@@ -1,8 +1,7 @@
-package org.odk.collect.android.logic
+package org.odk.collect.metadata
 
 import org.javarosa.core.services.IPropertyManager
 import org.javarosa.core.services.properties.IPropertyRules
-import org.odk.collect.android.utilities.DeviceDetailsProvider
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys

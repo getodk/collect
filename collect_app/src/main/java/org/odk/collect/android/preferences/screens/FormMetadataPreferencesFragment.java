@@ -1,7 +1,7 @@
 package org.odk.collect.android.preferences.screens;
 
-import static org.odk.collect.android.logic.PropertyManager.PROPMGR_DEVICE_ID;
-import static org.odk.collect.android.logic.PropertyManager.PROPMGR_PHONE_NUMBER;
+import static org.odk.collect.metadata.PropertyManager.PROPMGR_DEVICE_ID;
+import static org.odk.collect.metadata.PropertyManager.PROPMGR_PHONE_NUMBER;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
 
@@ -17,9 +17,9 @@ import androidx.preference.Preference;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.utils.Validator;
+import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.permissions.PermissionsProvider;
 
 import javax.inject.Inject;

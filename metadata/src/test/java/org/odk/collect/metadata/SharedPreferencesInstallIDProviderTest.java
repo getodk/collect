@@ -1,4 +1,4 @@
-package org.odk.collect.android.metadata;
+package org.odk.collect.metadata;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -11,13 +11,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.shared.settings.InMemSettings;
 import org.odk.collect.shared.settings.Settings;
 
 @RunWith(AndroidJUnit4.class)
 public class SharedPreferencesInstallIDProviderTest {
 
-    private final Settings metaPreferences = TestSettingsProvider.getMetaSettings();
+    private final Settings metaPreferences = new InMemSettings();
     private SharedPreferencesInstallIDProvider provider;
 
     @Before
