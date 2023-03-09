@@ -8,13 +8,14 @@ class SharedPreferencesInstallIDProvider(
     private val preferencesKey: String
 ) : InstallIDProvider {
 
-    override fun getInstallID(): String {
-        return if (metaPreferences.contains(preferencesKey)) {
-            metaPreferences.getString(preferencesKey) ?: generateAndStoreInstallID()
-        } else {
-            generateAndStoreInstallID()
+    override val installID: String
+        get() {
+            return if (metaPreferences.contains(preferencesKey)) {
+                metaPreferences.getString(preferencesKey) ?: generateAndStoreInstallID()
+            } else {
+                generateAndStoreInstallID()
+            }
         }
-    }
 
     private fun generateAndStoreInstallID(): String {
         val installID = "collect:" + RandomString.randomString(16)
