@@ -13,7 +13,6 @@ import java.io.IOException
 import java.util.LinkedList
 import java.util.Queue
 import java.util.function.Supplier
-import kotlin.jvm.Throws
 
 class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, private val scheduler: Scheduler) : ViewModel(), MediaPlayer.OnCompletionListener {
 
@@ -193,7 +192,7 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
         mediaPlayer.prepare()
     }
 
-    private class CurrentlyPlaying internal constructor(val clip: Clip, val isPaused: Boolean, val playlist: Queue<Clip>) {
+    private class CurrentlyPlaying(val clip: Clip, val isPaused: Boolean, val playlist: Queue<Clip>) {
 
         val clipID: String
             get() = clip.clipID

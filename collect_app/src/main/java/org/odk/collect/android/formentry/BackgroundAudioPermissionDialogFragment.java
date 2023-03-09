@@ -15,8 +15,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.permissions.PermissionListener;
+import org.odk.collect.permissions.PermissionsProvider;
 
 import javax.inject.Inject;
 
@@ -27,9 +27,13 @@ public class BackgroundAudioPermissionDialogFragment extends DialogFragment {
     @Inject
     PermissionsProvider permissionsProvider;
 
-    @Inject
-    BackgroundAudioViewModel.Factory viewModelFactory;
+    private final ViewModelProvider.Factory viewModelFactory;
+
     BackgroundAudioViewModel viewModel;
+
+    public BackgroundAudioPermissionDialogFragment(ViewModelProvider.Factory viewModelFactory) {
+        this.viewModelFactory = viewModelFactory;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {

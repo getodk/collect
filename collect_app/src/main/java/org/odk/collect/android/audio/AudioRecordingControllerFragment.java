@@ -33,22 +33,17 @@ import javax.inject.Inject;
 
 public class AudioRecordingControllerFragment extends Fragment {
 
-    private final String sessionId;
     @Inject
     AudioRecorder audioRecorder;
 
-    @Inject
-    FormEntryViewModel.Factory formEntryViewModelFactory;
-
-    @Inject
-    BackgroundAudioViewModel.Factory backgroundAudioViewModelFactory;
+    private final ViewModelProvider.Factory viewModelFactory;
 
     public AudioRecordingControllerFragmentBinding binding;
     private FormEntryViewModel formEntryViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
 
-    public AudioRecordingControllerFragment(String sessionId) {
-        this.sessionId = sessionId;
+    public AudioRecordingControllerFragment(ViewModelProvider.Factory viewModelFactory) {
+        this.viewModelFactory = viewModelFactory;
     }
 
     @Override
@@ -56,10 +51,9 @@ public class AudioRecordingControllerFragment extends Fragment {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        formEntryViewModelFactory.setSessionId(sessionId);
-        backgroundAudioViewModelFactory.setSessionId(sessionId);
-        formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
-        backgroundAudioViewModel = new ViewModelProvider(requireActivity(), backgroundAudioViewModelFactory).get(BackgroundAudioViewModel.class);
+        ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity(), viewModelFactory);
+        formEntryViewModel = viewModelProvider.get(FormEntryViewModel.class);
+        backgroundAudioViewModel = viewModelProvider.get(BackgroundAudioViewModel.class);
     }
 
     @Nullable

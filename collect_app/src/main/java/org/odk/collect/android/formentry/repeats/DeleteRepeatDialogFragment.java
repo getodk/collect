@@ -22,22 +22,23 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 
-import javax.inject.Inject;
-
 public class DeleteRepeatDialogFragment extends DialogFragment {
 
-    @Inject
-    FormEntryViewModel.Factory formEntryViewModelFactory;
+    private final ViewModelProvider.Factory viewModelFactory;
     private FormEntryViewModel formEntryViewModel;
 
     private DeleteRepeatDialogCallback callback;
+
+    public DeleteRepeatDialogFragment(ViewModelProvider.Factory viewModelFactory) {
+        this.viewModelFactory = viewModelFactory;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
 
-        formEntryViewModel = new ViewModelProvider(requireActivity(), formEntryViewModelFactory).get(FormEntryViewModel.class);
+        formEntryViewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormEntryViewModel.class);
 
         if (context instanceof DeleteRepeatDialogCallback) {
             callback = (DeleteRepeatDialogCallback) context;

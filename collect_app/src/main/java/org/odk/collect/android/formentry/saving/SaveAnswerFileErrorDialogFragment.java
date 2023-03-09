@@ -13,22 +13,21 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.injection.DaggerUtils;
-
-import javax.inject.Inject;
 
 public class SaveAnswerFileErrorDialogFragment extends DialogFragment {
 
-    @Inject
-    FormSaveViewModel.FactoryFactory formSaveViewModelFactoryFactory;
+    private final ViewModelProvider.Factory viewModelFactory;
     private FormSaveViewModel formSaveViewModel;
+
+    public SaveAnswerFileErrorDialogFragment(ViewModelProvider.Factory viewModelFactory) {
+        this.viewModelFactory = viewModelFactory;
+    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
 
-        ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity(), formSaveViewModelFactoryFactory.create(requireActivity(), null));
+        ViewModelProvider viewModelProvider = new ViewModelProvider(requireActivity(), viewModelFactory);
         formSaveViewModel = viewModelProvider.get(FormSaveViewModel.class);
     }
 

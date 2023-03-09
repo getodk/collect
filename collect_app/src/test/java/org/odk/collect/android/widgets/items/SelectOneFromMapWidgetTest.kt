@@ -2,6 +2,8 @@ package org.odk.collect.android.widgets.items
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -17,7 +19,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
-import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -29,7 +30,7 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
-import org.odk.collect.async.Scheduler
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.permissions.PermissionsChecker
@@ -58,22 +59,6 @@ class SelectOneFromMapWidgetTest {
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesFormEntryViewModelFactory(
-                scheduler: Scheduler,
-                formSessionStore: FormSessionRepository,
-            ): FormEntryViewModel.Factory {
-                return object : FormEntryViewModel.Factory(
-                    System::currentTimeMillis,
-                    scheduler,
-                    formSessionStore
-                ) {
-                    @Suppress("UNCHECKED_CAST")
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return formEntryViewModel as T
-                    }
-                }
-            }
-
             override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker): PermissionsProvider =
                 permissionsProvider
 
@@ -106,9 +91,21 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `clicking button opens SelectOneFromMapDialogFragment`() {
+        val activity = activityController.setup().get()
+        activity.supportFragmentManager.fragmentFactory = FragmentFactoryBuilder().forClass(SelectOneFromMapDialogFragment::class.java) {
+            SelectOneFromMapDialogFragment(object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>,
+                    extras: CreationExtras,
+                ): T {
+                    return formEntryViewModel as T
+                }
+            })
+        }.build()
+
         val prompt = promptWithAnswer(null)
         val widget =
-            SelectOneFromMapWidget(activityController.setup().get(), QuestionDetails(prompt))
+            SelectOneFromMapWidget(activity, QuestionDetails(prompt))
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)
 
         widget.binding.button.performClick()
@@ -269,6 +266,18 @@ class SelectOneFromMapWidgetTest {
 
     @Test
     fun `setData answer is passed to SelectOneFromMapDialogFragment`() {
+        val activity = activityController.setup().get()
+        activity.supportFragmentManager.fragmentFactory = FragmentFactoryBuilder().forClass(SelectOneFromMapDialogFragment::class.java) {
+            SelectOneFromMapDialogFragment(object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>,
+                    extras: CreationExtras,
+                ): T {
+                    return formEntryViewModel as T
+                }
+            })
+        }.build()
+
         val choices = listOf(selectChoice("a"), selectChoice("b"))
         val prompt = MockFormEntryPromptBuilder()
             .withSelectChoices(choices)
@@ -276,7 +285,7 @@ class SelectOneFromMapWidgetTest {
             .build()
 
         val widget =
-            SelectOneFromMapWidget(activityController.setup().get(), QuestionDetails(prompt))
+            SelectOneFromMapWidget(activity, QuestionDetails(prompt))
         widget.setData(SelectOneData(choices[1].selection()))
 
         whenever(formEntryViewModel.getQuestionPrompt(prompt.index)).doReturn(prompt)

@@ -374,6 +374,7 @@ dependencies {
     testImplementation(project(path: ':testshared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
+    testImplementation(project(":shadows"))
 
     testImplementation Dependencies.robolectric
 

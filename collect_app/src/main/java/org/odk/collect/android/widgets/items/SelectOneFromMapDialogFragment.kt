@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import org.javarosa.core.model.FormIndex
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.core.model.data.SelectOneData
@@ -34,14 +35,13 @@ import org.odk.collect.geo.selection.SelectionMapFragment.Companion.REQUEST_SELE
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import javax.inject.Inject
 
-class SelectOneFromMapDialogFragment : MaterialFullScreenDialogFragment(), FragmentResultListener {
+class SelectOneFromMapDialogFragment(private val viewModelFactory: ViewModelProvider.Factory) :
+    MaterialFullScreenDialogFragment(), FragmentResultListener {
 
     @Inject
     lateinit var scheduler: Scheduler
 
-    @Inject
-    lateinit var formEntryViewModelFactory: FormEntryViewModel.Factory
-    private val formEntryViewModel: FormEntryViewModel by activityViewModels { formEntryViewModelFactory }
+    private val formEntryViewModel: FormEntryViewModel by activityViewModels { viewModelFactory }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

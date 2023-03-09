@@ -42,20 +42,32 @@ import org.javarosa.form.api.FormEntryCaption;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.HierarchyListAdapter;
-import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.repeats.DeleteRepeatDialogFragment;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.logic.HierarchyElement;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.location.LocationClient;
+import org.odk.collect.permissions.PermissionsChecker;
+import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.ArrayList;
@@ -121,16 +133,54 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     protected Button jumpEndButton;
     protected RecyclerView recyclerView;
 
-    @Inject
-    FormEntryViewModel.Factory formEntryViewModelFactory;
-
     private FormEntryViewModel formEntryViewModel;
+
+    @Inject
+    Scheduler scheduler;
+
+    @Inject
+    FormSessionRepository formSessionRepository;
+
+    @Inject
+    MediaUtils mediaUtils;
+
+    @Inject
+    Analytics analytics;
+
+    @Inject
+    AudioRecorder audioRecorder;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
+    @Inject
+    EntitiesRepositoryProvider entitiesRepositoryProvider;
+
+    @Inject
+    PermissionsChecker permissionsChecker;
+
+    @Inject
+    LocationClient fusedLocationClient;
+
+    @Inject
+    SettingsProvider settingsProvider;
+
+    @Inject
+    PermissionsProvider permissionsProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        DaggerUtils.getComponent(this).inject(this);
+
+        String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
+        FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocationClient, permissionsProvider);
+
+        this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
+                .forClass(DeleteRepeatDialogFragment.class, () -> new DeleteRepeatDialogFragment(viewModelFactory))
+                .build());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
-        Collect.getInstance().getComponent().inject(this);
 
         recyclerView = findViewById(R.id.list);
         recyclerView.setHasFixedSize(true);
@@ -141,9 +191,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
-        formEntryViewModelFactory.setSessionId(sessionId);
-        formEntryViewModel = new ViewModelProvider(this, formEntryViewModelFactory).get(FormEntryViewModel.class);
+        formEntryViewModel = new ViewModelProvider(this, viewModelFactory).get(FormEntryViewModel.class);
 
         FormController formController = formEntryViewModel.getFormController();
         if (formController == null) {
