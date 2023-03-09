@@ -27,7 +27,8 @@ class InstanceSubmitter(
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,
     private val permissionsProvider: PermissionsProvider,
-    private val generalSettings: Settings
+    private val generalSettings: Settings,
+    private val propertyManager: PropertyManager
 ) {
 
     @Throws(SubmitException::class)
@@ -36,7 +37,7 @@ class InstanceSubmitter(
             throw SubmitException(SubmitException.Type.NOTHING_TO_SUBMIT)
         }
         val result = mutableMapOf<Instance, FormUploadException?>()
-        val deviceId = PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
+        val deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
 
         val uploader: InstanceUploader = if (isGoogleSheetsProtocol()) {
             setUpGoogleSheetsUploader()

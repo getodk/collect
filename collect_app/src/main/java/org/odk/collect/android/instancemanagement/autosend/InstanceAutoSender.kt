@@ -7,6 +7,7 @@ import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.instancemanagement.InstanceSubmitter
 import org.odk.collect.android.instancemanagement.SubmitException
+import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.upload.FormUploadException
@@ -20,7 +21,8 @@ class InstanceAutoSender(
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,
     private val permissionsProvider: PermissionsProvider,
-    private val instancesAppState: InstancesAppState
+    private val instancesAppState: InstancesAppState,
+    private val propertyManager: PropertyManager
 ) {
     fun autoSendInstances(projectDependencyProvider: ProjectDependencyProvider): Boolean {
         val instanceSubmitter = InstanceSubmitter(
@@ -28,7 +30,8 @@ class InstanceAutoSender(
             googleAccountsManager,
             googleApiProvider,
             permissionsProvider,
-            projectDependencyProvider.generalSettings
+            projectDependencyProvider.generalSettings,
+            propertyManager
         )
         return projectDependencyProvider.changeLockProvider.getInstanceLock(projectDependencyProvider.projectId).withLock { acquiredLock: Boolean ->
             if (acquiredLock) {

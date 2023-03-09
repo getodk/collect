@@ -21,7 +21,6 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_USERNAME;
 
 import org.javarosa.core.services.IPropertyManager;
 import org.javarosa.core.services.properties.IPropertyRules;
-import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.utilities.DeviceDetailsProvider;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
@@ -31,8 +30,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.inject.Inject;
 
 import timber.log.Timber;
 
@@ -56,23 +53,12 @@ public class PropertyManager implements IPropertyManager {
 
     private boolean isPhoneStateRequired;
 
-    @Inject
-    DeviceDetailsProvider deviceDetailsProvider;
-
-    @Inject
-    PermissionsProvider permissionsProvider;
-
-    @Inject
-    SettingsProvider settingsProvider;
+    private final DeviceDetailsProvider deviceDetailsProvider;
+    private final PermissionsProvider permissionsProvider;
+    private final SettingsProvider settingsProvider;
 
     public String getName() {
         return "Property Manager";
-    }
-
-    public PropertyManager() {
-        Collect.getInstance().getComponent().inject(this);
-
-        reload();
     }
 
     public PropertyManager(PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {

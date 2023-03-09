@@ -52,7 +52,6 @@ import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.gdrive.GoogleDriveActivity;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.geo.GoogleMapFragment;
-import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
 import org.odk.collect.android.preferences.CaptionedListPreference;
 import org.odk.collect.android.preferences.dialogs.AdminPasswordDialogFragment;
@@ -148,8 +147,6 @@ public interface AppDependencyComponent {
     void inject(InstanceUploaderAdapter instanceUploaderAdapter);
 
     void inject(SavedFormListFragment savedFormListFragment);
-
-    void inject(PropertyManager propertyManager);
 
     void inject(FormEntryActivity formEntryActivity);
 

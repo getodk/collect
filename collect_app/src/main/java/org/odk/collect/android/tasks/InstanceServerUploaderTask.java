@@ -44,6 +44,9 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
     @Inject
     WebCredentialsUtils webCredentialsUtils;
 
+    @Inject
+    PropertyManager propertyManager;
+
     // Custom submission URL, username and password that can be sent via intent extras by external
     // applications
     private String completeDestinationUrl;
@@ -61,7 +64,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
         InstanceServerUploader uploader = new InstanceServerUploader(httpInterface, webCredentialsUtils, settingsProvider.getUnprotectedSettings());
         List<Instance> instancesToUpload = uploader.getInstancesFromIds(instanceIdsToUpload);
 
-        String deviceId = new PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
+        String deviceId = propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID);
 
         for (int i = 0; i < instancesToUpload.size(); i++) {
             if (isCancelled()) {
