@@ -1,17 +1,14 @@
 package org.odk.collect.metadata
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.CoreMatchers.startsWith
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.shared.settings.Settings
 
-@RunWith(AndroidJUnit4::class)
 class CollectInstallIDProviderTest {
     private val metaPreferences: Settings = InMemSettings()
     private val provider = CollectInstallIDProvider(metaPreferences, "blah")

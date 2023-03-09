@@ -49,5 +49,4 @@ dependencies {
     implementation(Dependencies.timber)
 
     testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
 }
