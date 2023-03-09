@@ -118,7 +118,7 @@ object QuitFormDialog {
     }
 
     private fun getDiscardItem(formSaveViewModel: FormSaveViewModel): IconMenuItem {
-        if (formSaveViewModel.isEditing) {
+        if (formSaveViewModel.hasSaved()) {
             return IconMenuItem(R.drawable.ic_delete, R.string.discard_changes)
         } else {
             return IconMenuItem(R.drawable.ic_delete, R.string.do_not_save)

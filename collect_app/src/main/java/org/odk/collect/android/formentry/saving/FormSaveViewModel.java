@@ -289,7 +289,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         return formController.getFormTitle();
     }
 
-    public boolean isEditing() {
+    public boolean hasSaved() {
         File instanceFile = formController.getInstanceFile();
         return instanceFile != null && instanceFile.exists();
     }
