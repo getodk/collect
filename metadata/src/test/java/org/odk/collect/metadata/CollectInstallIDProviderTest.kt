@@ -12,9 +12,9 @@ import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.shared.settings.Settings
 
 @RunWith(AndroidJUnit4::class)
-class SharedPreferencesInstallIDProviderTest {
+class CollectInstallIDProviderTest {
     private val metaPreferences: Settings = InMemSettings()
-    private val provider: SharedPreferencesInstallIDProvider = SharedPreferencesInstallIDProvider(metaPreferences, "blah")
+    private val provider = CollectInstallIDProvider(metaPreferences, "blah")
 
     @Test
     fun returnsSameValueEveryTime() {
