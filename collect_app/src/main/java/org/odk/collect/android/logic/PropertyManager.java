@@ -75,9 +75,9 @@ public class PropertyManager implements IPropertyManager {
 
         // User-defined properties. Will replace any above with the same PROPMGR_ name.
         Settings generalSettings = settingsProvider.getUnprotectedSettings();
-        initUserDefined(generalSettings, KEY_METADATA_USERNAME,    PROPMGR_USERNAME,      SCHEME_USERNAME);
-        initUserDefined(generalSettings, KEY_METADATA_PHONENUMBER, PROPMGR_PHONE_NUMBER,  SCHEME_TEL);
-        initUserDefined(generalSettings, KEY_METADATA_EMAIL,       PROPMGR_EMAIL,         SCHEME_MAILTO);
+        putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, generalSettings.getString(KEY_METADATA_USERNAME));
+        putProperty(PROPMGR_PHONE_NUMBER, SCHEME_TEL, generalSettings.getString(KEY_METADATA_PHONENUMBER));
+        putProperty(PROPMGR_EMAIL, SCHEME_MAILTO, generalSettings.getString(KEY_METADATA_EMAIL));
 
         // Use the server username by default if the metadata username is not defined
         if (getSingularProperty(PROPMGR_USERNAME) == null || getSingularProperty(PROPMGR_USERNAME).isEmpty()) {
@@ -85,18 +85,6 @@ public class PropertyManager implements IPropertyManager {
         }
 
         return this;
-    }
-
-    /**
-     * Initializes a property and its associated “with URI” property, from shared preferences.
-     * @param generalSettings the preferences object to be used
-     * @param prefKey the preferences key
-     * @param propName the name of the property to set
-     * @param scheme the scheme for the associated “with URI” property
-     */
-    private void initUserDefined(Settings generalSettings, String prefKey,
-                                 String propName, String scheme) {
-        putProperty(propName, scheme, generalSettings.getString(prefKey));
     }
 
     public void putProperty(String propName, String scheme, String value) {
