@@ -54,21 +54,11 @@ class PropertyManager(
     }
 
     override fun getSingularProperty(propertyName: String): String {
-        if (!permissionsProvider.isReadPhoneStatePermissionGranted && isPropertyDangerous(propertyName)) {
+        if (propertyName.equals(PROPMGR_PHONE_NUMBER, ignoreCase = true) && !permissionsProvider.isReadPhoneStatePermissionGranted) {
             isPhoneStateRequired = true
         }
 
         return properties[propertyName.lowercase()] ?: ""
-    }
-
-    /**
-     * Dangerous properties are those which require reading phone state:
-     * https://developer.android.com/reference/android/Manifest.permission#READ_PHONE_STATE
-     * @param propertyName The name of the property
-     * @return True if the given property is dangerous, false otherwise.
-     */
-    private fun isPropertyDangerous(propertyName: String?): Boolean {
-        return propertyName != null && propertyName.equals(PROPMGR_PHONE_NUMBER, ignoreCase = true)
     }
 
     override fun getProperty(propertyName: String): List<String> = emptyList()
