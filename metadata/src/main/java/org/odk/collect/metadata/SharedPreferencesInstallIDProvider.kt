@@ -3,6 +3,10 @@ package org.odk.collect.metadata
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.shared.strings.RandomString
 
+interface InstallIDProvider {
+    val installID: String
+}
+
 class SharedPreferencesInstallIDProvider(
     private val metaPreferences: Settings,
     private val preferencesKey: String

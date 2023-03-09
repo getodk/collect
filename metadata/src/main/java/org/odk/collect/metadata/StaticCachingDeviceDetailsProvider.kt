@@ -4,6 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.telephony.TelephonyManager
 
+interface DeviceDetailsProvider {
+    @get:Throws(SecurityException::class)
+    val deviceId: String?
+
+    @get:Throws(SecurityException::class)
+    val line1Number: String?
+}
+
 class StaticCachingDeviceDetailsProvider(
     private val installIDProvider: InstallIDProvider,
     private val context: Context
