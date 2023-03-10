@@ -44,7 +44,7 @@ import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.HtmlUtils;
-import org.odk.collect.android.utilities.ImageFileUtils;
+import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;

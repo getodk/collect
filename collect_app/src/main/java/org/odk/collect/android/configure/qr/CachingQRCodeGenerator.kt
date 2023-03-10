@@ -5,7 +5,7 @@ import org.json.JSONException
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.android.utilities.ImageFileUtils.saveBitmapToFile
+import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import org.odk.collect.qrcode.QRCodeDecoder
 import org.odk.collect.qrcode.QRCodeEncoder
 import timber.log.Timber
@@ -62,7 +62,7 @@ class CachingQRCodeGenerator(private val qrCodeEncoder: QRCodeEncoder) : QRCodeG
             val bmp = qrCodeEncoder.encode(preferencesString)
             Timber.i("QR Code generation took : %d ms", System.currentTimeMillis() - time)
             Timber.i("Saving QR Code to disk... : %s", qRCodeFilepath)
-            saveBitmapToFile(bmp, qRCodeFilepath)
+            ImageFileUtils.saveBitmapToFile(bmp, qRCodeFilepath)
             FileUtils.write(mdCacheFile, messageDigest)
             Timber.i("Updated %s file contents", SETTINGS_MD5_FILE)
         }

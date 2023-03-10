@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.androidshared.bitmap
 
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
@@ -150,7 +150,7 @@ object ImageFileUtils {
                 )
         ) {
             // Source Image doesn't have any EXIF Rotations, so a normal file copy will suffice
-            FileUtils.copyFile(sourceFile, destFile)
+            sourceFile.copyTo(destFile, true)
         } else {
             val sourceImage = getBitmap(sourceFile.absolutePath, BitmapFactory.Options())
             val orientation = sourceFileExif.getAttributeInt(
