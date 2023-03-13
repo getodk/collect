@@ -168,7 +168,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             }
             return;
         }
-        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyPoints(featureId)));
+        state.putParcelableArrayList(POINTS_KEY, new ArrayList<>(map.getPolyLinePoints(featureId)));
         state.putBoolean(INPUT_ACTIVE_KEY, inputActive);
         state.putBoolean(RECORDING_ENABLED_KEY, recordingEnabled);
         state.putBoolean(RECORDING_AUTOMATIC_KEY, recordingAutomatic);
@@ -211,7 +211,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
         ImageButton saveButton = findViewById(R.id.save);
         saveButton.setOnClickListener(v -> {
-            if (!map.getPolyPoints(featureId).isEmpty()) {
+            if (!map.getPolyLinePoints(featureId).isEmpty()) {
                 if (outputMode == OutputMode.GEOTRACE) {
                     saveAsPolyline();
                 } else {
@@ -224,7 +224,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
         playButton = findViewById(R.id.play);
         playButton.setOnClickListener(v -> {
-            if (map.getPolyPoints(featureId).isEmpty()) {
+            if (map.getPolyLinePoints(featureId).isEmpty()) {
                 DialogFragmentUtils.showIfNotShowing(GeoPolySettingsDialogFragment.class, getSupportFragmentManager());
             } else {
                 startInput();
@@ -260,7 +260,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         if (restoredPoints != null) {
             points = restoredPoints;
         }
-        featureId = map.addPoly(points, outputMode == OutputMode.GEOSHAPE, true);
+        featureId = map.addPolyLine(points, outputMode == OutputMode.GEOSHAPE, true);
 
         if (inputActive && !intentReadOnly) {
             startInput();
@@ -284,7 +284,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     }
 
     private void saveAsPolyline() {
-        if (map.getPolyPoints(featureId).size() > 1) {
+        if (map.getPolyLinePoints(featureId).size() > 1) {
             finishWithResult();
         } else {
             ToastUtils.showShortToastInMiddle(this, getString(R.string.polyline_validator));
@@ -292,12 +292,12 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     }
 
     private void saveAsPolygon() {
-        if (map.getPolyPoints(featureId).size() > 2) {
+        if (map.getPolyLinePoints(featureId).size() > 2) {
             // Close the polygon.
-            List<MapPoint> points = map.getPolyPoints(featureId);
+            List<MapPoint> points = map.getPolyLinePoints(featureId);
             int count = points.size();
             if (count > 1 && !points.get(0).equals(points.get(count - 1))) {
-                map.appendPointToPoly(featureId, points.get(0));
+                map.appendPointToPolyLine(featureId, points.get(0));
             }
             finishWithResult();
         } else {
@@ -306,13 +306,13 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     }
 
     private void finishWithResult() {
-        List<MapPoint> points = map.getPolyPoints(featureId);
+        List<MapPoint> points = map.getPolyLinePoints(featureId);
         String result = GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE));
         ExternalAppUtils.returnSingleValue(this, result);
     }
 
     @Override public void onBackPressed() {
-        if (map != null && !originalPoly.equals(map.getPolyPoints(featureId))) {
+        if (map != null && !originalPoly.equals(map.getPolyLinePoints(featureId))) {
             showBackDialog();
         } else {
             finish();
@@ -408,9 +408,9 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     }
 
     private void appendPointIfNew(MapPoint point) {
-        List<MapPoint> points = map.getPolyPoints(featureId);
+        List<MapPoint> points = map.getPolyLinePoints(featureId);
         if (points.isEmpty() || !point.equals(points.get(points.size() - 1))) {
-            map.appendPointToPoly(featureId, point);
+            map.appendPointToPolyLine(featureId, point);
             updateUi();
         }
     }
@@ -429,21 +429,21 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
     private void removeLastPoint() {
         if (featureId != -1) {
-            map.removePolyLastPoint(featureId);
+            map.removePolyLineLastPoint(featureId);
             updateUi();
         }
     }
 
     private void clear() {
         map.clearFeatures();
-        featureId = map.addPoly(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, true);
+        featureId = map.addPolyLine(new ArrayList<>(), outputMode == OutputMode.GEOSHAPE, true);
         inputActive = false;
         updateUi();
     }
 
     /** Updates the state of various UI widgets to reflect internal state. */
     private void updateUi() {
-        final int numPoints = map.getPolyPoints(featureId).size();
+        final int numPoints = map.getPolyLinePoints(featureId).size();
         final MapPoint location = map.getGpsLocation();
 
         // Visibility state
@@ -500,7 +500,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     }
 
     private void showClearDialog() {
-        if (!map.getPolyPoints(featureId).isEmpty()) {
+        if (!map.getPolyLinePoints(featureId).isEmpty()) {
             new MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.geo_clear_warning)
                 .setPositiveButton(R.string.clear, (dialog, id) -> clear())

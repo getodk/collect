@@ -13,8 +13,8 @@ import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 
-/** A polyline or polygon that can be manipulated by dragging Symbols at its vertices. */
-internal class PolyFeature(
+/** A polyline that can be manipulated by dragging Symbols at its vertices. */
+internal class PolyLineFeature(
     private val context: Context,
     private val pointAnnotationManager: PointAnnotationManager,
     private val polylineAnnotationManager: PolylineAnnotationManager,

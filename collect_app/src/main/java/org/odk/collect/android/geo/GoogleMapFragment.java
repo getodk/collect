@@ -26,6 +26,7 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
 
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
@@ -40,6 +41,8 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
@@ -67,6 +70,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -74,9 +78,9 @@ import timber.log.Timber;
 
 public class GoogleMapFragment extends SupportMapFragment implements
         MapFragment, LocationListener, LocationClient.LocationClientListener,
-    GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
-    GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener,
-    GoogleMap.OnPolylineClickListener {
+        GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnMarkerDragListener,
+        GoogleMap.OnPolylineClickListener, GoogleMap.OnPolygonClickListener {
 
     // Bundle keys understood by applyConfig().
     static final String KEY_MAP_TYPE = "MAP_TYPE";
@@ -137,6 +141,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             googleMap.setOnMapLongClickListener(this);
             googleMap.setOnMarkerClickListener(this);
             googleMap.setOnPolylineClickListener(this);
+            googleMap.setOnPolygonClickListener(this);
             googleMap.setOnMarkerDragListener(this);
             googleMap.getUiSettings().setCompassEnabled(true);
             // Don't show the blue dot on the map; we'll draw crosshairs instead.
@@ -272,7 +277,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public int addMarker(MarkerDescription markerDescription) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new MarkerFeature(map, markerDescription));
+        features.put(featureId, new MarkerFeature(getActivity(), markerDescription, map));
         return featureId;
     }
 
@@ -299,31 +304,38 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return feature instanceof MarkerFeature ? ((MarkerFeature) feature).getPoint() : null;
     }
 
-    @Override public int addPoly(@NonNull Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
+    @Override public int addPolyLine(@NonNull Iterable<MapPoint> points, boolean closed, boolean draggable) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolyFeature(map, points, closedPolygon, draggable));
+        features.put(featureId, new PolyLineFeature(getActivity(), points, closed, draggable, map));
         return featureId;
     }
 
-    @Override public void appendPointToPoly(int featureId, @NonNull MapPoint point) {
+    @Override
+    public int addPolygon(@NonNull Iterable<MapPoint> points) {
+        int featureId = nextFeatureId++;
+        features.put(featureId, new PolygonFeature(requireActivity(), map, points, requireContext().getResources().getColor(R.color.mapLineColor)));
+        return featureId;
+    }
+
+    @Override public void appendPointToPolyLine(int featureId, @NonNull MapPoint point) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof PolyFeature) {
-            ((PolyFeature) feature).addPoint(point);
+        if (feature instanceof PolyLineFeature) {
+            ((PolyLineFeature) feature).addPoint(point);
         }
     }
 
-    @Override public @NonNull List<MapPoint> getPolyPoints(int featureId) {
+    @Override public @NonNull List<MapPoint> getPolyLinePoints(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof PolyFeature) {
-            return ((PolyFeature) feature).getPoints();
+        if (feature instanceof PolyLineFeature) {
+            return ((PolyLineFeature) feature).getPoints();
         }
         return new ArrayList<>();
     }
 
-    @Override public void removePolyLastPoint(int featureId) {
+    @Override public void removePolyLineLastPoint(int featureId) {
         MapFeature feature = features.get(featureId);
-        if (feature instanceof PolyFeature) {
-            ((PolyFeature) feature).removeLastPoint();
+        if (feature instanceof PolyLineFeature) {
+            ((PolyLineFeature) feature).removeLastPoint();
         }
     }
 
@@ -436,6 +448,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
     @Override public void onPolylineClick(Polyline polyline) {
         if (featureClickListener != null) {
             featureClickListener.onFeature(findFeature(polyline));
+        }
+    }
+
+    @Override public void onPolygonClick(@NonNull Polygon polygon) {
+        if (featureClickListener != null) {
+            featureClickListener.onFeature(findFeature(polygon));
         }
     }
 
@@ -584,7 +602,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         if (locationCrosshairs == null) {
             locationCrosshairs = map.addMarker(new MarkerOptions()
                 .position(loc)
-                .icon(getBitmapDescriptor(new MarkerIconDescription(R.drawable.ic_crosshairs)))
+                .icon(getBitmapDescriptor(getContext(), new MarkerIconDescription(R.drawable.ic_crosshairs)))
                 .anchor(0.5f, 0.5f)  // center the crosshairs on the position
             );
         }
@@ -625,6 +643,15 @@ public class GoogleMapFragment extends SupportMapFragment implements
         return -1;  // not found
     }
 
+    private int findFeature(Polygon polygon) {
+        for (int featureId : features.keySet()) {
+            if (features.get(featureId).ownsPolygon(polygon)) {
+                return featureId;
+            }
+        }
+        return -1;  // not found
+    }
+
     private void updateFeature(int featureId) {
         MapFeature feature = features.get(featureId);
         if (feature != null) {
@@ -632,8 +659,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private Marker createMarker(GoogleMap map, MarkerDescription markerDescription) {
-        if (map == null || getActivity() == null) {  // during Robolectric tests, map will be null
+    private static Marker createMarker(Context context, MarkerDescription markerDescription, GoogleMap map) {
+        if (map == null || context == null) {  // during Robolectric tests, map will be null
             return null;
         }
         // A Marker's position is a LatLng with just latitude and longitude
@@ -643,12 +670,12 @@ public class GoogleMapFragment extends SupportMapFragment implements
             .position(toLatLng(markerDescription.getPoint()))
             .snippet(markerDescription.getPoint().altitude + ";" + markerDescription.getPoint().accuracy)
             .draggable(markerDescription.isDraggable())
-            .icon(getBitmapDescriptor(markerDescription.getIconDescription()))
+            .icon(getBitmapDescriptor(context, markerDescription.getIconDescription()))
             .anchor(getIconAnchorValueX(markerDescription.getIconAnchor()), getIconAnchorValueY(markerDescription.getIconAnchor()))  // center the icon on the position
         );
     }
 
-    private float getIconAnchorValueX(@IconAnchor String iconAnchor) {
+    private static float getIconAnchorValueX(@IconAnchor String iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
             default:
@@ -656,7 +683,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private float getIconAnchorValueY(@IconAnchor String iconAnchor) {
+    private static float getIconAnchorValueY(@IconAnchor String iconAnchor) {
         switch (iconAnchor) {
             case BOTTOM:
                 return 1.0f;
@@ -665,8 +692,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         }
     }
 
-    private BitmapDescriptor getBitmapDescriptor(MarkerIconDescription markerIconDescription) {
-        return BitmapDescriptorCache.getBitmapDescriptor(getContext(), markerIconDescription);
+    private static BitmapDescriptor getBitmapDescriptor(Context context, MarkerIconDescription markerIconDescription) {
+        return BitmapDescriptorCache.getBitmapDescriptor(context, markerIconDescription);
     }
 
     private void showGpsDisabledAlert() {
@@ -714,6 +741,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
         /** Returns true if the given polyline belongs to this feature. */
         boolean ownsPolyline(Polyline polyline);
 
+        boolean ownsPolygon(Polygon polygon);
+
         /** Updates the feature's geometry after any UI handles have moved. */
         void update();
 
@@ -721,15 +750,17 @@ public class GoogleMapFragment extends SupportMapFragment implements
         void dispose();
     }
 
-    private class MarkerFeature implements MapFeature {
+    private static class MarkerFeature implements MapFeature {
         private Marker marker;
+        private final Context context;
 
-        MarkerFeature(GoogleMap map, MarkerDescription markerDescription) {
-            marker = createMarker(map, markerDescription);
+        MarkerFeature(Context context, MarkerDescription markerDescription, GoogleMap map) {
+            this.context = context;
+            marker = createMarker(context, markerDescription, map);
         }
 
         public void setIcon(MarkerIconDescription markerIconDescription) {
-            marker.setIcon(getBitmapDescriptor(markerIconDescription));
+            marker.setIcon(getBitmapDescriptor(context, markerIconDescription));
         }
 
         public MapPoint getPoint() {
@@ -744,6 +775,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
             return false;
         }
 
+        @Override
+        public boolean ownsPolygon(Polygon polygon) {
+            return false;
+        }
+
         public void update() { }
 
         public void dispose() {
@@ -753,25 +789,30 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
-    private class PolyFeature implements MapFeature {
+    private static class PolyLineFeature implements MapFeature {
         public static final int STROKE_WIDTH = 5;
 
+        private final Context context;
         private final GoogleMap map;
         private final List<Marker> markers = new ArrayList<>();
         private final boolean closedPolygon;
-        private boolean draggable;
+        private final boolean draggable;
         private Polyline polyline;
 
-        PolyFeature(GoogleMap map, Iterable<MapPoint> points, boolean closedPolygon, boolean draggable) {
+        PolyLineFeature(Context context, Iterable<MapPoint> points, boolean closedPolygon, boolean draggable, GoogleMap map) {
+            this.context = context;
             this.map = map;
             this.closedPolygon = closedPolygon;
             this.draggable = draggable;
+
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
+
             for (MapPoint point : points) {
-                markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+                markers.add(createMarker(context, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
             }
+
             update();
         }
 
@@ -781,6 +822,11 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
         public boolean ownsPolyline(Polyline givenPolyline) {
             return polyline.equals(givenPolyline);
+        }
+
+        @Override
+        public boolean ownsPolygon(Polygon polygon) {
+            return false;
         }
 
         public void update() {
@@ -795,7 +841,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 clearPolyline();
             } else if (polyline == null) {
                 polyline = map.addPolyline(new PolylineOptions()
-                    .color(requireContext().getResources().getColor(R.color.mapLineColor))
+                    .color(context.getResources().getColor(R.color.mapLineColor))
                     .zIndex(1)
                     .width(STROKE_WIDTH)
                     .addAll(latLngs)
@@ -826,7 +872,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
             if (map == null) {  // during Robolectric tests, map will be null
                 return;
             }
-            markers.add(createMarker(map, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+            markers.add(createMarker(context, new MarkerDescription(point, draggable, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
             update();
         }
 
@@ -844,6 +890,60 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline.remove();
                 polyline = null;
             }
+        }
+    }
+
+    private static class PolygonFeature implements MapFeature {
+
+        private Polygon polygon;
+        private final List<Marker> markers = new ArrayList<>();
+
+        PolygonFeature(Context context, GoogleMap map, Iterable<MapPoint> points, int strokeLineColor) {
+
+            for (MapPoint point : points) {
+                markers.add(createMarker(context, new MarkerDescription(point, false, CENTER, new MarkerIconDescription(R.drawable.ic_map_point)), map));
+            }
+
+            polygon = map.addPolygon(new PolygonOptions()
+                    .addAll(markers.stream().map(Marker::getPosition).collect(Collectors.toList()))
+                    .strokeColor(strokeLineColor)
+                    .strokeWidth(5)
+                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, 150))
+                    .clickable(true)
+            );
+        }
+
+        @Override
+        public boolean ownsMarker(Marker marker) {
+            return markers.contains(marker);
+        }
+
+        @Override
+        public boolean ownsPolyline(Polyline polyline) {
+            return false;
+        }
+
+        @Override
+        public boolean ownsPolygon(Polygon polygon) {
+            return polygon.equals(this.polygon);
+        }
+
+        @Override
+        public void update() {
+
+        }
+
+        @Override
+        public void dispose() {
+            if (polygon != null) {
+                polygon.remove();
+                polygon = null;
+            }
+
+            for (Marker marker : markers) {
+                marker.remove();
+            }
+            markers.clear();
         }
     }
 }
