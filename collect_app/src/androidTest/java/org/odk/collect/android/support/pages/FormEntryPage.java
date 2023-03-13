@@ -47,6 +47,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
         });
 
         assertToolbarTitle(formName);
+        assertTextDoesNotExist(R.string.jump_to_beginning);
+        assertTextDoesNotExist(R.string.jump_to_end);
         return this;
     }
 
