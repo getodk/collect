@@ -49,7 +49,7 @@ public class QuittingFormTest {
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .clickDiscardForm()
 
                 .assertNumberOfEditableForms(0);
     }
@@ -63,7 +63,7 @@ public class QuittingFormTest {
                 .clickSave()
                 .swipeToNextQuestion("What is your age?")
                 .answerQuestion("What is your age?", "10")
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question")
@@ -130,7 +130,7 @@ public class QuittingFormTest {
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
                 .clickSaveChangesWithError(R.string.required_answer_error)
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
@@ -160,7 +160,7 @@ public class QuittingFormTest {
                 .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
                 .clickSaveChangesWithError(R.string.required_answer_error)
                 .assertQuestion("What is your age?", true)
-                .pressBackAndIgnoreChanges()
+                .pressBackAndDiscardChanges()
 
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")

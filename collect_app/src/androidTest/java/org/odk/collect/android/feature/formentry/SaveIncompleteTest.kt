@@ -25,7 +25,7 @@ class SaveIncompleteTest {
             .startBlankForm("Two Question Save Incomplete")
             .answerQuestion("What is your name?", "Dez")
             .swipeToNextQuestion("[saveIncomplete] What is your age?")
-            .pressBackAndIgnoreChanges()
+            .pressBackAndDiscardChanges()
 
             .clickEditSavedForm(1)
             .clickOnForm("Two Question Save Incomplete")
@@ -39,7 +39,7 @@ class SaveIncompleteTest {
             .startBlankForm("Two Question Save Incomplete Required")
             .answerQuestion("What is your name?", "Dez")
             .swipeToNextQuestion("[saveIncomplete] What is your age?", true)
-            .pressBackAndIgnoreChanges()
+            .pressBackAndDiscardChanges()
 
             .clickEditSavedForm(1)
             .clickOnForm("Two Question Save Incomplete Required")
@@ -62,7 +62,7 @@ class SaveIncompleteTest {
             .clickGoToStart()
             .answerQuestion("What is your name?", "Meg")
             .swipeToNextQuestion("[saveIncomplete] What is your age?", true)
-            .pressBackAndIgnoreChanges()
+            .pressBackAndDiscardChanges()
 
             .assertNumberOfFinalizedForms(0)
             .clickEditSavedForm(1)
@@ -90,7 +90,7 @@ class SaveIncompleteTest {
             .swipeToPreviousQuestion("What is your name?")
             .answerQuestion("What is your name?", "Bradley")
             .swipeToNextQuestion("[saveIncomplete] What is your age?")
-            .pressBackAndIgnoreChanges()
+            .pressBackAndDiscardChanges()
 
             .assertNumberOfFinalizedForms(0)
             .clickEditSavedForm(1)

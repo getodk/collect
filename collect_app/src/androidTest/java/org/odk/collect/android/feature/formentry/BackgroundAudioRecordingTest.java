@@ -160,7 +160,7 @@ public class BackgroundAudioRecordingTest {
 
         formEntryPage.closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .clickDiscardForm()
                 .startBlankForm("One Question");
 
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));

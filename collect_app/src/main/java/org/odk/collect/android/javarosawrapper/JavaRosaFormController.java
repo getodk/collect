@@ -90,6 +90,7 @@ public class JavaRosaFormController implements FormController {
      */
     private static final String AUDIT = "audit";
     public static final String AUDIT_FILE_NAME = "audit.csv";
+    private final boolean isEditing;
 
     /*
      * Store the auditEventLogger object with the form controller state
@@ -106,6 +107,12 @@ public class JavaRosaFormController implements FormController {
         this.mediaFolder = mediaFolder;
         formEntryController = fec;
         this.instanceFile = instanceFile;
+        isEditing = instanceFile != null;
+    }
+
+    @Override
+    public boolean isEditing() {
+        return isEditing;
     }
 
     public FormDef getFormDef() {

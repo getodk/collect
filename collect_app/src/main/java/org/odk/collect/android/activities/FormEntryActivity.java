@@ -2272,8 +2272,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                                 startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                             }
                         });
-
-                        formController.getAuditEventLogger().setEditing(true);
                     } else {
                         formControllerAvailable(formController);
                         if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {

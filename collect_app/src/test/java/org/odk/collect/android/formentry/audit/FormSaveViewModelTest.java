@@ -39,6 +39,7 @@ import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
@@ -46,6 +47,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.projects.Project;
+import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.FakeScheduler;
 import org.odk.collect.utilities.Result;
 import org.robolectric.Robolectric;
@@ -82,6 +84,8 @@ public class FormSaveViewModelTest {
         logger = mock(AuditEventLogger.class);
         mediaUtils = mock(MediaUtils.class);
 
+        File instanceFile = new File(TempFiles.getPathInTempDir());
+        when(formController.getInstanceFile()).thenReturn(instanceFile);
         when(formController.getAuditEventLogger()).thenReturn(logger);
         when(logger.isChangeReasonRequired()).thenReturn(false);
 
@@ -91,6 +95,8 @@ public class FormSaveViewModelTest {
 
         LiveData<FormController> formSession = liveDataOf(formController);
         viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository);
+
+        CollectHelpers.createDemoProject(); // Needed to deal with `new StoragePathProvider()` calls in `FormSaveViewModel`
     }
 
     @Test
@@ -561,8 +567,8 @@ public class FormSaveViewModelTest {
     }
 
     private void whenReasonRequiredToSave() {
+        when(formController.isEditing()).thenReturn(true);
         when(logger.isChangeReasonRequired()).thenReturn(true);
-        when(logger.isEditing()).thenReturn(true);
     }
 
     private void whenFormSaverFinishes(int result) {

@@ -102,14 +102,6 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         });
     }
 
-    public void editingForm() {
-        if (formController == null) {
-            return;
-        }
-
-        formController.getAuditEventLogger().setEditing(true);
-    }
-
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
         if (isSaving() || formController == null) {
             return;
@@ -286,7 +278,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
     private boolean requiresReasonToSave() {
         return formController != null
-                && formController.getAuditEventLogger().isEditing()
+                && formController.isEditing()
                 && formController.getAuditEventLogger().isChangeReasonRequired();
     }
 
@@ -295,6 +287,11 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             return null;
         }
         return formController.getFormTitle();
+    }
+
+    public boolean hasSaved() {
+        File instanceFile = formController.getInstanceFile();
+        return instanceFile != null && instanceFile.exists();
     }
 
     @Override

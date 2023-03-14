@@ -64,7 +64,7 @@ class InstanceEditActionTest {
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
         val result = rule.launchForResult(intent, FormHierarchyPage("One Question")) {
             it.clickGoToStart()
-                .pressBackAndIgnoreChanges(AppClosedPage())
+                .pressBackAndDiscardChanges(AppClosedPage())
         }
 
         assertThat(result.resultData.data, equalTo(uri))

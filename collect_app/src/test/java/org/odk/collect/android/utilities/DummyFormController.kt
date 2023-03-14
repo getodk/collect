@@ -34,6 +34,10 @@ open class DummyFormController : FormController {
 
     override fun getAuditEventLogger(): AuditEventLogger? = null
 
+    override fun isEditing(): Boolean {
+        return false
+    }
+
     override fun getXPath(index: FormIndex?): String? = null
 
     override fun getIndexFromXPath(xpath: String): FormIndex? = null

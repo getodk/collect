@@ -41,7 +41,7 @@ public class FormLanguageTest {
                 .clickOnString(R.string.change_language)
                 .clickOnText("French (fr)")
                 .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
-                .clickIgnoreChanges()
+                .clickDiscardForm()
 
                 .startBlankForm("One Question")
                 .assertQuestion("quel âge as-tu");
