@@ -78,7 +78,7 @@ class FormMetadataSettingsTest {
             .assertTexts(deviceDetailsProvider.line1Number, deviceDetailsProvider.deviceId)
             .swipeToEndScreen()
             .pressBack(SaveOrIgnoreDialog("Metadata", MainMenuPage()))
-            .clickIgnoreChanges()
+            .clickDiscardForm()
 
             // Then set custom metadata
             .openProjectSettingsDialog()
