@@ -314,7 +314,7 @@ public class DrawActivity extends LocalizedActivity {
 
         List<IconMenuItem> items;
         items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
-                new IconMenuItem(R.drawable.ic_delete, R.string.do_not_save));
+                new IconMenuItem(R.drawable.ic_delete, R.string.discard_changes));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
         listView.setAdapter(adapter);
