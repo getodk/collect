@@ -23,8 +23,7 @@ class SavePointTest {
             .answerQuestion("What is your name?", "Alexei")
             .swipeToNextQuestion("What is your age?")
             .answerQuestion("What is your age?", "46")
-            .let { rule.destroyActivity() }
-            .restartProcess()
+            .let { simulateBatteryDeath() }
 
             .startInFormHierarchy()
             .assertText("Alexei")
@@ -37,12 +36,29 @@ class SavePointTest {
     fun savePointIsCreatedWhenLeavingTheApp() {
         rule.startInFormEntry()
             .answerQuestion("What is your name?", "Alexei")
-            .let { rule.saveInstanceStateForActivity().destroyActivity() }
-            .restartProcess()
+            .let { simulateProcessRestore() }
 
             .startInFormHierarchy()
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
+    }
+
+    /**
+     * Simulates a case where the process is killed without lifecycle clean up (like a phone
+     * being battery dying).
+     */
+    private fun simulateBatteryDeath(): FormActivityTestRule {
+        return rule.restartProcess()
+    }
+
+    /**
+     * Simulate a "process restore" case where an app in the background is killed by Android
+     * to reclaim memory, change permissions etc
+     */
+    private fun simulateProcessRestore(): FormActivityTestRule {
+        return rule.saveInstanceStateForActivity()
+            .destroyActivity()
+            .restartProcess()
     }
 }
