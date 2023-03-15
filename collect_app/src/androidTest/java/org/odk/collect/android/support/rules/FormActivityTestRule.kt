@@ -10,6 +10,7 @@ import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.support.ActivityHelpers
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -43,6 +44,15 @@ class FormActivityTestRule @JvmOverloads constructor(
     }
 
     fun destroy(): FormActivityTestRule {
+        lateinit var scenarioActivity: Activity
+        scenario.onActivity {
+            scenarioActivity = it
+        }
+
+        if (ActivityHelpers.getActivity() != scenarioActivity) {
+            throw IllegalStateException("Can't destroy backstack!")
+        }
+
         scenario.moveToState(Lifecycle.State.DESTROYED)
         return this
     }
