@@ -34,7 +34,7 @@ public class DrawWidgetTest {
                 .clickOnId(R.id.simple_button)
                 .waitForRotationToEnd()
                 .pressBack(new SaveOrIgnoreDialog<>("Sketch Image", new FormEntryPage("All widgets")))
-                .clickDiscardForm()
+                .clickDiscardChanges()
                 .waitForRotationToEnd()
                 .clickOnId(R.id.simple_button)
                 .waitForRotationToEnd()
