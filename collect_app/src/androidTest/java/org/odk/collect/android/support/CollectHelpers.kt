@@ -21,6 +21,14 @@ object CollectHelpers {
         return testComponent
     }
 
+    fun simulateProcessRestart(appDependencyModule: AppDependencyModule? = null) {
+        val newComponent =
+            CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
+
+        // Reinitialize any application state with new deps/state
+        newComponent.applicationInitializer().initialize()
+    }
+
     @JvmStatic
     fun addGDProject(gdProject: Project.New, accountName: String, testDependencies: TestDependencies) {
         testDependencies.googleAccountPicker.setDeviceAccount(accountName)

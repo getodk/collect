@@ -426,6 +426,10 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun <T> then(work: () -> T): T {
+        return work()
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)

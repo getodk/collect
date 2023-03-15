@@ -3,13 +3,17 @@ package org.odk.collect.android.support.rules
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import androidx.lifecycle.Lifecycle
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.Project.Companion.DEMO_PROJECT
@@ -21,19 +25,31 @@ class FormActivityTestRule @JvmOverloads constructor(
     private val mediaFilePaths: List<String>? = null
 ) : ActivityScenarioLauncherRule() {
 
-    private lateinit var formEntryPage: FormEntryPage
+    private lateinit var scenario: ActivityScenario<Activity>
 
     override fun before() {
         super.before()
-
         setUpProjectAndCopyForm()
-        launch<Activity>(activityIntent)
-        formEntryPage = FormEntryPage(formName)
-        formEntryPage.assertOnPage()
     }
 
     fun startInFormEntry(): FormEntryPage {
-        return formEntryPage
+        scenario = launch(activityIntent)
+        return FormEntryPage(formName).assertOnPage()
+    }
+
+    fun startInFormHierarchy(): FormHierarchyPage {
+        scenario = launch(activityIntent)
+        return FormHierarchyPage(formName).assertOnPage()
+    }
+
+    fun destroy(): FormActivityTestRule {
+        scenario.moveToState(Lifecycle.State.DESTROYED)
+        return this
+    }
+
+    fun restartProcess(): FormActivityTestRule {
+        CollectHelpers.simulateProcessRestart()
+        return this
     }
 
     private fun setUpProjectAndCopyForm() {
