@@ -1,6 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import android.app.Activity
 import android.content.pm.ActivityInfo
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
@@ -16,7 +15,6 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.core.internal.deps.guava.collect.Iterables
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
@@ -30,9 +28,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import androidx.test.runner.lifecycle.Stage
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.StringContains.containsString
@@ -438,20 +433,5 @@ abstract class Page<T : Page<T>> {
         private fun rotateToPortrait(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         }
-
-        val currentActivity: Activity?
-            get() {
-                InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-                val activity = arrayOfNulls<Activity>(1)
-                InstrumentationRegistry.getInstrumentation().runOnMainSync {
-                    val activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED)
-                    if (!activities.isEmpty()) {
-                        activity[0] = Iterables.getOnlyElement(activities) as Activity
-                    } else {
-                        activity[0] = null
-                    }
-                }
-                return activity[0]
-            }
     }
 }
