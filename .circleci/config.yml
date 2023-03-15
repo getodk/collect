@@ -365,13 +365,17 @@ workflows:
             - compile
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - next
       - test_smoke_instrumented:
           requires:
             - compile
           filters:
             branches:
-              only: master
+              only:
+                - master
+                - next
 
   nightly:
     triggers:
@@ -381,6 +385,7 @@ workflows:
             branches:
               only:
                 - master
+                - next
     jobs:
       - compile
       - test_instrumented:
