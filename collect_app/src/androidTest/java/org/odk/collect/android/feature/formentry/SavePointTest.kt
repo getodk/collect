@@ -23,12 +23,25 @@ class SavePointTest {
             .answerQuestion("What is your name?", "Alexei")
             .swipeToNextQuestion("What is your age?")
             .answerQuestion("What is your age?", "46")
-            .then { rule.destroy() }
+            .let { rule.destroyActivity() }
             .restartProcess()
 
             .startInFormHierarchy()
             .assertText("Alexei")
             .assertTextDoesNotExist("46")
+            .pressBack(FormEntryPage("Two Question"))
+            .assertQuestion("What is your name?")
+    }
+
+    @Test
+    fun savePointIsCreatedWhenLeavingTheApp() {
+        rule.startInFormEntry()
+            .answerQuestion("What is your name?", "Alexei")
+            .let { rule.saveInstanceStateForActivity().destroyActivity() }
+            .restartProcess()
+
+            .startInFormHierarchy()
+            .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
     }

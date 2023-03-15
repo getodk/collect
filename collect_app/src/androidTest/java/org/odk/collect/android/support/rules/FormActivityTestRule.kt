@@ -3,6 +3,8 @@ package org.odk.collect.android.support.rules
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -43,7 +45,15 @@ class FormActivityTestRule @JvmOverloads constructor(
         return FormHierarchyPage(formName).assertOnPage()
     }
 
-    fun destroy(): FormActivityTestRule {
+    fun saveInstanceStateForActivity(): FormActivityTestRule {
+        scenario.onActivity {
+            it.onSaveInstanceState(Bundle(), PersistableBundle())
+        }
+
+        return this
+    }
+
+    fun destroyActivity(): FormActivityTestRule {
         lateinit var scenarioActivity: Activity
         scenario.onActivity {
             scenarioActivity = it
