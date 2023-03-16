@@ -57,7 +57,7 @@ object Dependencies {
     const val glide_compiler = "com.github.bumptech.glide:compiler:${Versions.glide}"
     const val caverock_androidsvg = "com.caverock:androidsvg-aar:1.4"
     const val mp4parser_muxer = "org.mp4parser:muxer:1.9.41" // Check if https://github.com/getodk/collect/issues/5323 no longer takes place before upgrading
-    const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.7.22"
+    const val kotlin_stdlib = "org.jetbrains.kotlin:kotlin-stdlib:1.8.10"
     const val gson = "com.google.code.gson:gson:2.10.1"
     const val firebase_analytics = "com.google.firebase:firebase-analytics:21.2.0"
     const val firebase_crashlytics = "com.google.firebase:firebase-crashlytics:18.3.5"
