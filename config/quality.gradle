@@ -5,7 +5,7 @@ def reportsDir = "${project.buildDir}/reports"
 
 apply plugin: 'checkstyle'
 
-checkstyle.toolVersion = '10.5.0'
+checkstyle.toolVersion = '10.9.0'
 
 tasks.register("checkstyle", Checkstyle) {
     configFile file("$configDir/checkstyle.xml")
@@ -24,7 +24,7 @@ tasks.register("checkstyle", Checkstyle) {
 apply plugin: 'pmd'
 
 pmd {
-    toolVersion = '6.52.0'
+    toolVersion = '6.55.0'
 }
 
 tasks.register("pmd", Pmd) {
@@ -37,12 +37,12 @@ tasks.register("pmd", Pmd) {
     exclude '**/gen/**'
 
     reports {
-        xml.enabled = false
-        html.enabled = true
         xml {
+            enabled false
             setDestination new File("$reportsDir/pmd/pmd.xml")
         }
         html {
+            enabled true
             setDestination new File("$reportsDir/pmd/pmd.html")
         }
     }
