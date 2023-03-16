@@ -97,7 +97,6 @@ import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.androidshared.bitmap.ImageCompressor;
 import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -107,6 +106,7 @@ import org.odk.collect.android.utilities.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.android.views.BarcodeViewDecoder;
+import org.odk.collect.androidshared.bitmap.ImageCompressor;
 import org.odk.collect.androidshared.network.ConnectivityProvider;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.IntentLauncher;
@@ -180,11 +180,7 @@ public class AppDependencyModule {
     @Provides
     @Singleton
     public OpenRosaHttpInterface provideHttpInterface(MimeTypeMap mimeTypeMap, UserAgentProvider userAgentProvider, Application application, VersionInformation versionInformation) {
-        String cacheDir = null;
-        if (!versionInformation.isRelease() || BuildConfig.DEBUG) {
-            cacheDir = application.getCacheDir().getAbsolutePath();
-        }
-
+        String cacheDir = application.getCacheDir().getAbsolutePath();
         return new OkHttpConnection(
                 new OkHttpOpenRosaServerClientProvider(new OkHttpClient(), cacheDir),
                 new CollectThenSystemContentTypeMapper(mimeTypeMap),
