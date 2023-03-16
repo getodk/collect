@@ -33,15 +33,14 @@ class FormActivityTestRule @JvmOverloads constructor(
     override fun before() {
         super.before()
         setUpProjectAndCopyForm()
+        scenario = launch(activityIntent)
     }
 
     fun startInFormEntry(): FormEntryPage {
-        scenario = launch(activityIntent)
         return FormEntryPage(formName).assertOnPage()
     }
 
     fun startInFormHierarchy(): FormHierarchyPage {
-        scenario = launch(activityIntent)
         return FormHierarchyPage(formName).assertOnPage()
     }
 
@@ -67,8 +66,9 @@ class FormActivityTestRule @JvmOverloads constructor(
         return this
     }
 
-    fun restartProcess(): FormActivityTestRule {
+    fun reset(): FormActivityTestRule {
         CollectHelpers.simulateProcessRestart()
+        scenario = launch(activityIntent)
         return this
     }
 

@@ -83,7 +83,7 @@ class SavePointTest {
      * being battery dying).
      */
     private fun simulateBatteryDeath(): FormActivityTestRule {
-        return rule.restartProcess()
+        return rule.reset()
     }
 
     /**
@@ -93,6 +93,6 @@ class SavePointTest {
     private fun simulateProcessRestore(): FormActivityTestRule {
         return rule.saveInstanceStateForActivity()
             .destroyActivity()
-            .restartProcess()
+            .reset()
     }
 }
