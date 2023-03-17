@@ -136,16 +136,6 @@ object AnalyticsEvents {
     const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
-     * Tracks how many forms include an accuracy threshold for the default `geopoint` question
-     */
-    const val ACCURACY_THRESHOLD = "AccuracyThreshold"
-
-    /**
-     * Tracks how many forms use default accuracy thresholds for the default `geopoint` question
-     */
-    const val ACCURACY_THRESHOLD_DEFAULT = "AccuracyThresholdDefault"
-
-    /**
      * Tracks how often "cellular_only" option is used in auto send
      */
     const val CELLULAR_ONLY = "CellularOnly"
