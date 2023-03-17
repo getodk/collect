@@ -1,6 +1,7 @@
 package org.odk.collect.android.injection.config;
 
 import static androidx.core.content.FileProvider.getUriForFile;
+import static org.odk.collect.androidshared.data.AppStateKt.getState;
 import static org.odk.collect.settings.keys.MetaKeys.KEY_INSTALL_ID;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -353,9 +354,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
-    public SyncStatusAppState providesServerFormSyncRepository(Context context) {
-        return new SyncStatusAppState(context);
+    public SyncStatusAppState providesServerFormSyncRepository(Application application) {
+        return new SyncStatusAppState(getState(application), application);
     }
 
     @Provides
