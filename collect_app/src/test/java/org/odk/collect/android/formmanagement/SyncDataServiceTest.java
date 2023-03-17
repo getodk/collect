@@ -8,9 +8,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
+import org.odk.collect.android.formmanagement.matchexactly.SyncDataService;
 import org.odk.collect.android.external.FormsContract;
-import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.forms.FormSourceException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,12 +20,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class SyncStatusAppStateTest {
+public class SyncDataServiceTest {
 
     private final Context context = mock(Context.class);
     private final ContentResolver contentResolver = mock(ContentResolver.class);
-
-    private final AppState appState = new AppState();
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -38,57 +35,57 @@ public class SyncStatusAppStateTest {
 
     @Test
     public void getSyncError_isNullAtFirst() {
-        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
-        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(nullValue()));
+        SyncDataService syncDataService = new SyncDataService(context);
+        assertThat(syncDataService.getSyncError("projectId").getValue(), is(nullValue()));
     }
 
     @Test
     public void getSyncError_whenFinishSyncWithException_isException() {
-        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
-        syncStatusAppState.startSync("projectId");
+        SyncDataService syncDataService = new SyncDataService(context);
+        syncDataService.startSync("projectId");
         FormSourceException exception = new FormSourceException.FetchError();
-        syncStatusAppState.finishSync("projectId", exception);
+        syncDataService.finishSync("projectId", exception);
 
-        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(exception));
+        assertThat(syncDataService.getSyncError("projectId").getValue(), is(exception));
     }
 
     @Test
     public void getSyncError_whenFinishSyncWithNull_isNull() {
-        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
-        syncStatusAppState.startSync("projectId");
-        syncStatusAppState.finishSync("projectId", null);
+        SyncDataService syncDataService = new SyncDataService(context);
+        syncDataService.startSync("projectId");
+        syncDataService.finishSync("projectId", null);
 
-        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(nullValue()));
+        assertThat(syncDataService.getSyncError("projectId").getValue(), is(nullValue()));
     }
 
     @Test
     public void isSyncing_isDifferentForDifferentProjects() {
-        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
-        syncStatusAppState.startSync("projectId");
-        assertThat(syncStatusAppState.isSyncing("projectId").getValue(), is(true));
-        assertThat(syncStatusAppState.isSyncing("otherProjectId").getValue(), is(false));
+        SyncDataService syncDataService = new SyncDataService(context);
+        syncDataService.startSync("projectId");
+        assertThat(syncDataService.isSyncing("projectId").getValue(), is(true));
+        assertThat(syncDataService.isSyncing("otherProjectId").getValue(), is(false));
     }
 
     @Test
     public void getSyncError_isDifferentForDifferentProjects() {
-        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
-        syncStatusAppState.startSync("projectId");
-        syncStatusAppState.finishSync("projectId", new FormSourceException.FetchError());
-        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(notNullValue()));
-        assertThat(syncStatusAppState.getSyncError("otherProjectId").getValue(), is(nullValue()));
+        SyncDataService syncDataService = new SyncDataService(context);
+        syncDataService.startSync("projectId");
+        syncDataService.finishSync("projectId", new FormSourceException.FetchError());
+        assertThat(syncDataService.getSyncError("projectId").getValue(), is(notNullValue()));
+        assertThat(syncDataService.getSyncError("otherProjectId").getValue(), is(nullValue()));
     }
 
     @Test
     public void finishSync_updatesFormsContentObserver() {
-        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
-        syncStatusAppState.startSync("projectId");
-        syncStatusAppState.finishSync("projectId", null);
+        SyncDataService syncDataService = new SyncDataService(context);
+        syncDataService.startSync("projectId");
+        syncDataService.finishSync("projectId", null);
         verify(contentResolver).notifyChange(FormsContract.getUri("projectId"), null);
     }
 
     @Test
     public void clear_clearsSyncErrorAndIsSyncing() {
-        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
+        SyncDataService syncStatusAppState = new SyncDataService(context);
 
         syncStatusAppState.startSync("projectId");
         syncStatusAppState.clear("projectId");

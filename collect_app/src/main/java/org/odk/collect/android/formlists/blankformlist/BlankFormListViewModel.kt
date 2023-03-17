@@ -3,18 +3,15 @@ package org.odk.collect.android.formlists.blankformlist
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
-import org.odk.collect.android.formmanagement.FormDeleter
-import org.odk.collect.android.formmanagement.FormsUpdater
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.android.formmanagement.matchexactly.SyncDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
-import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.async.Scheduler
@@ -26,25 +23,38 @@ import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
 
 class BlankFormListViewModel(
-    private val formsRepository: FormsRepository,
     private val instancesRepository: InstancesRepository,
     private val application: Application,
-    private val syncRepository: SyncStatusAppState,
-    private val formsUpdater: FormsUpdater,
+    private val formsDataService: FormsDataService,
     private val scheduler: Scheduler,
     private val generalSettings: Settings,
-    private val changeLockProvider: ChangeLockProvider,
-    private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
     private val projectId: String,
     private val showAllVersions: Boolean = false
 ) : ViewModel() {
 
     private val _allForms: MutableNonNullLiveData<List<BlankFormListItem>> = MutableNonNullLiveData(emptyList())
     private val _formsToDisplay: MutableLiveData<List<BlankFormListItem>?> = MutableLiveData()
-    val formsToDisplay: LiveData<List<BlankFormListItem>?> = _formsToDisplay
+    val formsToDisplay: LiveData<List<BlankFormListItem>?> = formsDataService.getForms(projectId).map { forms ->
+        var newListOfForms = forms
+            .filter {
+                !it.isDeleted
+            }.map { form ->
+                form.toBlankFormListItem(projectId, instancesRepository)
+            }
 
-    private val _syncResult: MutableLiveData<Consumable<String>> = MutableLiveData()
-    val syncResult: LiveData<Consumable<String>> = _syncResult
+        if (shouldHideOldFormVersions && !showAllVersions) {
+            newListOfForms = newListOfForms.groupBy {
+                it.formId
+            }.map { (_, itemsWithSameId) ->
+                itemsWithSameId.sortedBy {
+                    it.dateOfCreation
+                }.last()
+            }
+        }
+        newListOfForms
+    }
+
+    val syncResult: LiveData<String?> = formsDataService.getDiskError(projectId)
 
     private val isFormLoadingRunning = MutableNonNullLiveData(false)
     private val isSyncingWithStorageRunning = MutableNonNullLiveData(false)
@@ -52,7 +62,7 @@ class BlankFormListViewModel(
     val isLoading: LiveData<Boolean> = LiveDataUtils.zip3(
         isFormLoadingRunning,
         isSyncingWithStorageRunning,
-        syncRepository.isSyncing(projectId)
+        formsDataService.isSyncing(projectId)
     ).map { (one, two, three) -> one || two || three }
 
     var sortingOrder: Int = generalSettings.getInt("formChooserListSortingOrder")
@@ -70,84 +80,32 @@ class BlankFormListViewModel(
             sortAndFilter()
         }
 
-    private val syncWithServerObserver = Observer<Boolean> {
-        if (!it) {
-            loadFromDatabase()
+    private val shouldHideOldFormVersions: Boolean
+        get() {
+            return generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
         }
-    }
 
     init {
-        loadFromDatabase()
-        syncWithStorage()
+        scheduler.immediate(background = {
+            formsDataService.update(projectId)
+        }, foreground = {
 
-        syncRepository.isSyncing(projectId).observeForever(syncWithServerObserver)
+        })
     }
 
     fun getAllForms(): List<BlankFormListItem> {
-        return formsRepository
-            .all
+        return formsDataService
+            .all(projectId)
             .map { form ->
                 form.toBlankFormListItem(projectId, instancesRepository)
             }
     }
 
-    private fun loadFromDatabase() {
-        isFormLoadingRunning.value = true
-        scheduler.immediate(
-            background = {
-                var newListOfForms = formsRepository
-                    .all
-                    .filter {
-                        !it.isDeleted
-                    }.map { form ->
-                        form.toBlankFormListItem(projectId, instancesRepository)
-                    }
-
-                if (!showAllVersions) {
-                    newListOfForms = newListOfForms.groupBy {
-                        it.formId
-                    }.map { (_, itemsWithSameId) ->
-                        itemsWithSameId.sortedBy {
-                            it.dateOfCreation
-                        }.last()
-                    }
-                }
-                newListOfForms
-            },
-            foreground = { newListOfForms ->
-                _allForms.value = newListOfForms.toList()
-                sortAndFilter()
-                isFormLoadingRunning.value = false
-            }
-        )
-    }
-
-    private fun syncWithStorage() {
-        changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
-            if (acquiredLock) {
-                isSyncingWithStorageRunning.value = true
-                scheduler.immediate(
-                    background = {
-                        formsDirDiskFormsSynchronizer.synchronizeAndReturnError()
-                    },
-                    foreground = { result: String? ->
-                        result?.let {
-                            loadFromDatabase()
-                            _syncResult.value = Consumable(result)
-                        }
-                        isSyncingWithStorageRunning.value = false
-                    }
-                )
-            }
-        }
-    }
-
     fun syncWithServer(): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
         scheduler.immediate(
-            { formsUpdater.matchFormsWithServer(projectId) },
+            { formsDataService.matchFormsWithServer(projectId) },
             { value: Boolean ->
-                loadFromDatabase()
                 result.value = value
             }
         )
@@ -162,13 +120,13 @@ class BlankFormListViewModel(
     }
 
     fun isOutOfSyncWithServer(): LiveData<Boolean> {
-        return syncRepository.getSyncError(projectId).map { obj: FormSourceException? ->
+        return formsDataService.getSyncError(projectId).map { obj: FormSourceException? ->
             obj != null
         }
     }
 
     fun isAuthenticationRequired(): LiveData<Boolean> {
-        return syncRepository.getSyncError(projectId).map { error: FormSourceException? ->
+        return formsDataService.getSyncError(projectId).map { error: FormSourceException? ->
             if (error != null) {
                 error is AuthRequired
             } else {
@@ -181,15 +139,10 @@ class BlankFormListViewModel(
         scheduler.immediate(
             background = {
                 databaseIds.forEach {
-                    FormDeleter(
-                        formsRepository,
-                        instancesRepository
-                    ).delete(it)
+                    formsDataService.deleteForm(projectId, it)
                 }
             },
-            foreground = {
-                loadFromDatabase()
-            }
+            foreground = {}
         )
     }
 
@@ -210,8 +163,8 @@ class BlankFormListViewModel(
         private val formsRepository: FormsRepository,
         private val instancesRepository: InstancesRepository,
         private val application: Application,
-        private val syncRepository: SyncStatusAppState,
-        private val formsUpdater: FormsUpdater,
+        private val syncRepository: SyncDataService,
+        private val formsDataService: FormsDataService,
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
         private val changeLockProvider: ChangeLockProvider,
@@ -221,23 +174,14 @@ class BlankFormListViewModel(
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return BlankFormListViewModel(
-                formsRepository,
                 instancesRepository,
                 application,
-                syncRepository,
-                formsUpdater,
+                formsDataService,
                 scheduler,
                 generalSettings,
-                changeLockProvider,
-                formsDirDiskFormsSynchronizer,
                 projectId,
                 !generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
             ) as T
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        syncRepository.isSyncing(projectId).removeObserver(syncWithServerObserver)
     }
 }

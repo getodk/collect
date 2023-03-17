@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.external.FormsContract
-import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.FormSourceException
+import javax.inject.Singleton
 
-class SyncStatusAppState(private val appState: AppState, private val context: Context) {
+@Singleton
+class SyncDataService(private val context: Context) {
+
+    private val syncing = mutableMapOf<String, MutableLiveData<Boolean>>()
+    private val lastSyncFailure = mutableMapOf<String, MutableLiveData<FormSourceException?>>()
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
         return getSyncingLiveData(projectId)
@@ -27,19 +31,14 @@ class SyncStatusAppState(private val appState: AppState, private val context: Co
         context.contentResolver.notifyChange(FormsContract.getUri(projectId), null)
     }
 
-    private fun getSyncingLiveData(projectId: String) =
-        appState.get("$KEY_PREFIX_SYNCING:$projectId", MutableLiveData(false))
-
-    private fun getSyncErrorLiveData(projectId: String) =
-        appState.get("$KEY_PREFIX_ERROR:$projectId", MutableLiveData<FormSourceException>(null))
-
     fun clear(projectId: String) {
         getSyncingLiveData(projectId).value = false
         getSyncErrorLiveData(projectId).value = null
     }
 
-    companion object {
-        const val KEY_PREFIX_SYNCING = "syncStatusSyncing"
-        const val KEY_PREFIX_ERROR = "syncStatusError"
-    }
+    private fun getSyncingLiveData(projectId: String) =
+        syncing.getOrPut(projectId) { MutableLiveData(false) }
+
+    private fun getSyncErrorLiveData(projectId: String) =
+        lastSyncFailure.getOrPut(projectId) { MutableLiveData(null) }
 }

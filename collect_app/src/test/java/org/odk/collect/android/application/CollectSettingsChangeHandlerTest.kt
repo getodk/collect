@@ -5,7 +5,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.matchexactly.SyncDataService
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.keys.ProjectKeys
 
@@ -13,7 +13,7 @@ class CollectSettingsChangeHandlerTest {
 
     private val propertyManager = mock<PropertyManager>()
     private val formUpdateScheduler = mock<FormUpdateScheduler>()
-    private val syncStatusAppState = mock<SyncStatusAppState>()
+    private val syncStatusAppState = mock<SyncDataService>()
     private val handler = CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, syncStatusAppState)
 
     @Test

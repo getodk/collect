@@ -15,8 +15,8 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.formmanagement.FormsUpdater
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.android.formmanagement.matchexactly.SyncDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
@@ -37,8 +37,8 @@ class BlankFormListViewModelTest {
     private val formsRepository = InMemFormsRepository()
     private val instancesRepository = InMemInstancesRepository()
     private val context = ApplicationProvider.getApplicationContext<Application>()
-    private val syncRepository: SyncStatusAppState = mock()
-    private val formsUpdater: FormsUpdater = mock()
+    private val syncRepository: SyncDataService = mock()
+    private val formsDataService: FormsDataService = mock()
     private val scheduler = FakeScheduler()
     private val generalSettings = InMemSettings()
     private val changeLockProvider: ChangeLockProvider = mock()
@@ -73,7 +73,7 @@ class BlankFormListViewModelTest {
     fun `syncWithServer when task finishes sets result to true`() {
         createViewModel()
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
-        doReturn(true).whenever(formsUpdater).matchFormsWithServer(projectId)
+        doReturn(true).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
         scheduler.runBackground()
         scheduler.runBackground()
@@ -84,7 +84,7 @@ class BlankFormListViewModelTest {
     fun `syncWithServer when there is an error sets result to false`() {
         createViewModel()
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
-        doReturn(false).whenever(formsUpdater).matchFormsWithServer(projectId)
+        doReturn(false).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
         scheduler.runBackground()
         scheduler.runBackground()
@@ -510,15 +510,11 @@ class BlankFormListViewModelTest {
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
 
         viewModel = BlankFormListViewModel(
-            formsRepository,
             instancesRepository,
             context,
-            syncRepository,
-            formsUpdater,
+            formsDataService,
             scheduler,
             generalSettings,
-            changeLockProvider,
-            formsDirDiskFormsSynchronizer,
             projectId,
             showAllVersions
         )

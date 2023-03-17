@@ -12,8 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.formmanagement.FormsUpdater
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
@@ -23,7 +22,7 @@ import org.odk.collect.android.support.CollectHelpers
 class AutoUpdateTaskSpecTest {
 
     private val context = ApplicationProvider.getApplicationContext<Application>()
-    private val formUpdateChecker = mock<FormsUpdater>()
+    private val formUpdateChecker = mock<FormsDataService>()
 
     @Before
     fun setup() {
@@ -31,9 +30,8 @@ class AutoUpdateTaskSpecTest {
             override fun providesFormsUpdater(
                 context: Context,
                 notifier: Notifier,
-                syncStatusAppState: SyncStatusAppState,
                 projectDependencyProviderFactory: ProjectDependencyProviderFactory
-            ): FormsUpdater {
+            ): FormsDataService {
                 return formUpdateChecker
             }
         })

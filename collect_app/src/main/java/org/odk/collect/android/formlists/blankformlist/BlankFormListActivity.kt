@@ -91,8 +91,8 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
         }
 
         viewModel.syncResult.observe(this) { result ->
-            if (!result.isConsumed()) {
-                SnackbarUtils.showShortSnackbar(findViewById(R.id.form_list), result.value)
+            if (result != null) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.form_list), result)
             }
         }
 

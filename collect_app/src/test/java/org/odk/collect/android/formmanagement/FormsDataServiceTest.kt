@@ -19,7 +19,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.external.FormsContract
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.matchexactly.SyncDataService
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
@@ -36,7 +36,7 @@ import org.odk.collect.shared.strings.Md5.getMd5Hash
 import org.odk.collect.testshared.BooleanChangeLock
 
 @RunWith(AndroidJUnit4::class)
-class FormsUpdaterTest {
+class FormsDataServiceTest {
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
     private val component = DaggerUtils.getComponent(application)
@@ -44,7 +44,7 @@ class FormsUpdaterTest {
     private val formsRepositoryProvider = component.formsRepositoryProvider()
     private val storagePathProvider = component.storagePathProvider()
     private val settingsProvider = component.settingsProvider()
-    private val syncStatusAppState = mock<SyncStatusAppState>()
+    private val syncDataService = mock<SyncDataService>()
     private val notifier = mock<Notifier>()
     private val analytics = mock<Analytics>()
 
@@ -56,7 +56,7 @@ class FormsUpdaterTest {
         on { fetchFormList() } doReturn emptyList()
     }
 
-    private lateinit var updateManager: FormsUpdater
+    private lateinit var updateManager: FormsDataService
 
     private lateinit var project: Project.Saved
 
@@ -79,13 +79,11 @@ class FormsUpdaterTest {
         val projectDependencyProviderFactory = mock<ProjectDependencyProviderFactory>()
         whenever(projectDependencyProviderFactory.create(project.uuid)).thenReturn(projectDependencyProvider)
 
-        updateManager = FormsUpdater(
+        updateManager = FormsDataService(
             context = application,
             notifier = notifier,
-            syncStatusAppState = syncStatusAppState,
-            projectDependencyProviderFactory = projectDependencyProviderFactory,
-            clock = { 0 }
-        )
+            projectDependencyProviderFactory = projectDependencyProviderFactory
+        ) { 0 }
     }
 
     @Test
@@ -126,7 +124,7 @@ class FormsUpdaterTest {
         changeLock.lock()
 
         updateManager.matchFormsWithServer(project.uuid)
-        verifyNoInteractions(syncStatusAppState)
+        verifyNoInteractions(syncDataService)
         verifyNoInteractions(formSource)
         verifyNoInteractions(notifier)
         verifyNoInteractions(analytics)
@@ -153,10 +151,10 @@ class FormsUpdaterTest {
 
     @Test
     fun `matchFormsWithServer() updates sync state`() {
-        val inOrder = inOrder(syncStatusAppState)
+        val inOrder = inOrder(syncDataService)
         updateManager.matchFormsWithServer(project.uuid)
-        inOrder.verify(syncStatusAppState).startSync(project.uuid)
-        inOrder.verify(syncStatusAppState).finishSync(project.uuid, null)
+        inOrder.verify(syncDataService).startSync(project.uuid)
+        inOrder.verify(syncDataService).finishSync(project.uuid, null)
     }
 
     @Test
