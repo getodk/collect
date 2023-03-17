@@ -9,7 +9,8 @@ class MultiClickSafeButton : MaterialButton {
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet?) : super(
-        context, attrs
+        context,
+        attrs
     )
 
     override fun performClick(): Boolean {

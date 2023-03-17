@@ -189,9 +189,13 @@ object DatabaseObjectMapper {
             .status(cursor.getString(statusColumnIndex))
             .lastStatusChangeDate(cursor.getLong(lastStatusChangeDateColumnIndex))
             .deletedDate(
-                if (cursor.isNull(deletedDateColumnIndex)) null else cursor.getLong(
-                    deletedDateColumnIndex
-                )
+                if (cursor.isNull(deletedDateColumnIndex)) {
+                    null
+                } else {
+                    cursor.getLong(
+                        deletedDateColumnIndex
+                    )
+                }
             )
             .geometryType(cursor.getString(geometryTypeColumnIndex))
             .geometry(cursor.getString(geometryColumnIndex))

@@ -120,7 +120,9 @@ class SettingsImporterTest {
 
         assertThat(
             importer.fromJSON(
-                json.toString(), currentProject, deviceUnsupportedSettings
+                json.toString(),
+                currentProject,
+                deviceUnsupportedSettings
             ),
             `is`(true)
         )
@@ -136,12 +138,15 @@ class SettingsImporterTest {
         assertThat(importer.fromJSON(emptySettings(), currentProject, JSONObject()), `is`(true))
         assertSettings(
             generalSettings,
-            "key1", "default",
-            "key2", true
+            "key1",
+            "default",
+            "key2",
+            true
         )
         assertSettings(
             adminSettings,
-            "key1", 5
+            "key1",
+            5
         )
     }
 
@@ -163,12 +168,15 @@ class SettingsImporterTest {
         assertThat(importer.fromJSON(json.toString(), currentProject, JSONObject()), `is`(true))
         assertSettings(
             generalSettings,
-            "key1", "default",
-            "key2", true
+            "key1",
+            "default",
+            "key2",
+            true
         )
         assertSettings(
             adminSettings,
-            "key1", 5
+            "key1",
+            5
         )
     }
 
@@ -176,22 +184,28 @@ class SettingsImporterTest {
     fun whenKeysAlreadyExistInPrefs_overridesWithDefaults() {
         initSettings(
             generalSettings,
-            "key1", "existing",
-            "key2", false
+            "key1",
+            "existing",
+            "key2",
+            false
         )
         initSettings(
             adminSettings,
-            "key1", 0
+            "key1",
+            0
         )
         assertThat(importer.fromJSON(emptySettings(), currentProject, JSONObject()), `is`(true))
         assertSettings(
             generalSettings,
-            "key1", "default",
-            "key2", true
+            "key1",
+            "default",
+            "key2",
+            true
         )
         assertSettings(
             adminSettings,
-            "key1", 5
+            "key1",
+            5
         )
     }
 

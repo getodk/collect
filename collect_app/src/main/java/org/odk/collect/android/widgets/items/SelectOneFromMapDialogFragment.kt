@@ -70,7 +70,7 @@ class SelectOneFromMapDialogFragment(private val viewModelFactory: ViewModelProv
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         val binding = SelectOneFromMapDialogLayoutBinding.inflate(inflater)
         return binding.root
@@ -107,7 +107,7 @@ internal class SelectChoicesMapData(
     private val resources: Resources,
     scheduler: Scheduler,
     prompt: FormEntryPrompt,
-    private val selectedIndex: Int?,
+    private val selectedIndex: Int?
 ) : SelectionMapData {
 
     private val mapTitle = MutableLiveData(prompt.longText)
@@ -132,7 +132,7 @@ internal class SelectChoicesMapData(
 
     private fun loadItemsFromChoices(
         selectChoices: MutableList<SelectChoice>,
-        prompt: FormEntryPrompt,
+        prompt: FormEntryPrompt
     ): List<MappableSelectItem> {
         return selectChoices.foldIndexed(emptyList()) { index, list, selectChoice ->
             val geometry = selectChoice.getChild("geometry")

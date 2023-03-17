@@ -25,15 +25,20 @@ class FileRequesterImpl(
             val intent = externalAppIntentProvider.getIntentToRunExternalApp(formController, formEntryPrompt)
             val intentWithoutDefaultCategory =
                 externalAppIntentProvider.getIntentToRunExternalAppWithoutDefaultCategory(
-                    formController, formEntryPrompt,
+                    formController,
+                    formEntryPrompt,
                     activity.packageManager
                 )
 
             intentLauncher.launchForResult(
-                activity, intent, requestCode
+                activity,
+                intent,
+                requestCode
             ) {
                 intentLauncher.launchForResult(
-                    activity, intentWithoutDefaultCategory, requestCode
+                    activity,
+                    intentWithoutDefaultCategory,
+                    requestCode
                 ) {
                     showLongToast(activity, getErrorMessage(formEntryPrompt, activity))
                 }

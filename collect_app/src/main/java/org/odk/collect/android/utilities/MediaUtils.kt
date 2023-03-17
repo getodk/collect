@@ -76,8 +76,11 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
     }
 
     private fun getMimeType(file: File, expectedMimeType: String?) =
-        if (expectedMimeType == null || expectedMimeType.isEmpty()) FileUtils.getMimeType(file)
-        else expectedMimeType
+        if (expectedMimeType == null || expectedMimeType.isEmpty()) {
+            FileUtils.getMimeType(file)
+        } else {
+            expectedMimeType
+        }
 
     fun pickFile(activity: Activity, mimeType: String, requestCode: Int) {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {

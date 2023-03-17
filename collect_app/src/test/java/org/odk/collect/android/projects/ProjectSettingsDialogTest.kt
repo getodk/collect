@@ -51,7 +51,7 @@ class ProjectSettingsDialogTest {
         )
     }
 
-    val projectsRepository = InMemProjectsRepository(UUIDGenerator(),)
+    val projectsRepository = InMemProjectsRepository(UUIDGenerator())
 
     @get:Rule
     val launcherRule =

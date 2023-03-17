@@ -13,7 +13,7 @@ object PrefUtils {
         title: String,
         labelIds: IntArray,
         values: Array<String>,
-        settings: Settings,
+        settings: Settings
     ): ListPreference {
         val labels: Array<String?> = labelIds.map { context.getString(it) }.toTypedArray()
         return createListPref(context, key, title, labels, values, settings)
@@ -48,7 +48,7 @@ object PrefUtils {
         title: String,
         labels: Array<String?>,
         values: Array<String>,
-        settings: Settings,
+        settings: Settings
     ): ListPreference {
         ensurePrefHasValidValue(key, values, settings)
         return ListPreference(context).also {
@@ -65,7 +65,7 @@ object PrefUtils {
     private fun ensurePrefHasValidValue(
         key: String,
         validValues: Array<String>,
-        settings: Settings,
+        settings: Settings
     ) {
         val value = settings.getString(key)
         if (validValues.indexOf(value) < 0) {

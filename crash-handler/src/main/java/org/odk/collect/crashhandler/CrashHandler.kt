@@ -106,7 +106,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
 
         private fun wrapUncaughtExceptionHandler(
             crashHandler: CrashHandler,
-            context: Context,
+            context: Context
         ) {
             if (originalHandler != null) {
                 throw IllegalStateException("install() should not be called multiple times without uninstall()!")

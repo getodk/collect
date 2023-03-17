@@ -11,7 +11,7 @@ import org.odk.collect.settings.keys.ProjectKeys
 class CollectOsmDroidDependencyModule(
     private val referenceLayerRepository: ReferenceLayerRepository,
     private val locationClient: LocationClient,
-    private val settingsProvider: SettingsProvider,
+    private val settingsProvider: SettingsProvider
 ) : OsmDroidDependencyModule() {
     override fun providesReferenceLayerRepository(): ReferenceLayerRepository {
         return referenceLayerRepository

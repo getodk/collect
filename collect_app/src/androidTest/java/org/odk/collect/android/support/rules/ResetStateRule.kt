@@ -21,7 +21,7 @@ import java.io.IOException
 
 private class ResetStateStatement(
     private val base: Statement,
-    private val appDependencyModule: AppDependencyModule? = null,
+    private val appDependencyModule: AppDependencyModule? = null
 ) : Statement() {
 
     override fun evaluate() {
@@ -68,7 +68,7 @@ private class ResetStateStatement(
 }
 
 class ResetStateRule @JvmOverloads constructor(
-    private val appDependencyModule: AppDependencyModule? = null,
+    private val appDependencyModule: AppDependencyModule? = null
 ) : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement =

@@ -1,8 +1,8 @@
 package org.odk.collect.android.projects
 
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
-import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.`is`
 import org.junit.Test
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project

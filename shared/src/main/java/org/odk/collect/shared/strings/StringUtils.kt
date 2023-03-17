@@ -19,10 +19,14 @@ object StringUtils {
 
     @JvmStatic
     fun ellipsizeBeginning(text: String): String {
-        return if (text.length <= 100) text else "..." + text.substring(
-            text.length - 97,
-            text.length
-        )
+        return if (text.length <= 100) {
+            text
+        } else {
+            "..." + text.substring(
+                text.length - 97,
+                text.length
+            )
+        }
     }
 
     /**
@@ -81,7 +85,9 @@ object StringUtils {
         }
         return if (end >= start) {
             text.subSequence(start, end + 1)
-        } else text
+        } else {
+            text
+        }
     }
 
     @JvmStatic
@@ -91,6 +97,8 @@ object StringUtils {
         }
         return if (str.endsWith(remove)) {
             str.substring(0, str.length - remove.length)
-        } else str
+        } else {
+            str
+        }
     }
 }

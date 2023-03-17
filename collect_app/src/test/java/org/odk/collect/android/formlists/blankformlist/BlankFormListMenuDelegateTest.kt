@@ -8,8 +8,8 @@ import androidx.core.internal.view.SupportMenu
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
@@ -109,7 +109,8 @@ class BlankFormListMenuDelegateTest {
         menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_refresh))
 
         assertThat(
-            ShadowToast.getTextOfLatestToast(), `is`(activity.getString(R.string.form_update_succeeded))
+            ShadowToast.getTextOfLatestToast(),
+            `is`(activity.getString(R.string.form_update_succeeded))
         )
     }
 
@@ -131,7 +132,8 @@ class BlankFormListMenuDelegateTest {
         menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_refresh))
 
         assertThat(
-            ShadowToast.getTextOfLatestToast(), `is`(activity.getString(R.string.no_connection))
+            ShadowToast.getTextOfLatestToast(),
+            `is`(activity.getString(R.string.no_connection))
         )
         verify(viewModel, never()).syncWithServer()
     }

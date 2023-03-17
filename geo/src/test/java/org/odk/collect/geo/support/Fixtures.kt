@@ -13,7 +13,7 @@ object Fixtures {
             R.drawable.ic_lock_idle_charging,
             "0",
             listOf(MappableSelectItem.IconifiedText(R.drawable.ic_lock_idle_charging, "An item")),
-            MappableSelectItem.IconifiedText(R.drawable.ic_delete, "Action"),
+            MappableSelectItem.IconifiedText(R.drawable.ic_delete, "Action")
         )
     }
 

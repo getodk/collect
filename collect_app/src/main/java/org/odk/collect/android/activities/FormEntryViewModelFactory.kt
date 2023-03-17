@@ -39,13 +39,13 @@ class FormEntryViewModelFactory(
     private val settingsProvider: SettingsProvider,
     private val permissionsChecker: PermissionsChecker,
     private val fusedLocationClient: LocationClient,
-    private val permissionsProvider: PermissionsProvider,
+    private val permissionsProvider: PermissionsProvider
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
         key: String,
         modelClass: Class<T>,
-        handle: SavedStateHandle,
+        handle: SavedStateHandle
     ): T {
         return when (modelClass) {
             FormEntryViewModel::class.java -> FormEntryViewModel(

@@ -137,7 +137,8 @@ class ShowQRCodeFragment : Fragment() {
                         }
 
                         override fun onChildViewRemoved(view: View, view1: View) {}
-                    })
+                    }
+                )
             }
             .show()
     }

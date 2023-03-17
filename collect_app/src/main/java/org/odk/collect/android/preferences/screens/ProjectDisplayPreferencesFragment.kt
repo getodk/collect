@@ -53,7 +53,8 @@ class ProjectDisplayPreferencesFragment :
                 projectsRepository.save(Project.Saved(uuid, name, icon, color))
                 findPreference<Preference>(PROJECT_COLOR_KEY)!!.summaryProvider =
                     ProjectDetailsSummaryProvider(
-                        PROJECT_COLOR_KEY, currentProjectProvider
+                        PROJECT_COLOR_KEY,
+                        currentProjectProvider
                     )
             }
         )
@@ -66,15 +67,18 @@ class ProjectDisplayPreferencesFragment :
 
         findPreference<Preference>(PROJECT_NAME_KEY)!!.summaryProvider =
             ProjectDetailsSummaryProvider(
-                PROJECT_NAME_KEY, currentProjectProvider
+                PROJECT_NAME_KEY,
+                currentProjectProvider
             )
         findPreference<Preference>(PROJECT_ICON_KEY)!!.summaryProvider =
             ProjectDetailsSummaryProvider(
-                PROJECT_ICON_KEY, currentProjectProvider
+                PROJECT_ICON_KEY,
+                currentProjectProvider
             )
         findPreference<Preference>(PROJECT_COLOR_KEY)!!.summaryProvider =
             ProjectDetailsSummaryProvider(
-                PROJECT_COLOR_KEY, currentProjectProvider
+                PROJECT_COLOR_KEY,
+                currentProjectProvider
             )
         findPreference<Preference>(PROJECT_NAME_KEY)!!.onPreferenceChangeListener = this
         findPreference<Preference>(PROJECT_ICON_KEY)!!.onPreferenceChangeListener = this
@@ -105,7 +109,9 @@ class ProjectDisplayPreferencesFragment :
                                 currentProjectProvider.getCurrentProject().color
                             )
                         ),
-                        0, summary.length, 0
+                        0,
+                        summary.length,
+                        0
                     )
                     summary
                 }
@@ -168,7 +174,10 @@ class ProjectDisplayPreferencesFragment :
 
                 projectsRepository.save(
                     Project.Saved(
-                        uuid, newValue.toString(), icon, color
+                        uuid,
+                        newValue.toString(),
+                        icon,
+                        color
                     )
                 )
             }
@@ -177,7 +186,10 @@ class ProjectDisplayPreferencesFragment :
 
                 projectsRepository.save(
                     Project.Saved(
-                        uuid, name, newValue.toString(), color
+                        uuid,
+                        name,
+                        newValue.toString(),
+                        color
                     )
                 )
             }

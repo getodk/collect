@@ -54,7 +54,7 @@ class BlankFormListViewModel(
         LiveDataUtils.zip3(
             isFormLoadingRunning,
             isSyncingWithStorageRunning,
-            syncRepository.isSyncing(projectId),
+            syncRepository.isSyncing(projectId)
         )
     ) { (one, two, three) -> one || two || three }
 

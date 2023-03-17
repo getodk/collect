@@ -11,8 +11,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.config.AppDependencyModule

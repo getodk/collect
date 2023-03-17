@@ -129,7 +129,8 @@ class QRCodeActivityResultDelegateTest {
         val inputStream = ByteArrayInputStream(streamContents.toByteArray())
         Shadows.shadowOf(ApplicationProvider.getApplicationContext<Context>().contentResolver)
             .registerInputStream(
-                Uri.parse("file://qr"), inputStream
+                Uri.parse("file://qr"),
+                inputStream
             )
         val data = Intent()
         data.data = Uri.parse(uri)

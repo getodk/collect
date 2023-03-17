@@ -15,7 +15,7 @@ import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import java.util.function.Consumer
 
 class CollectTestRule @JvmOverloads constructor(
-    private val useDemoProject: Boolean = true,
+    private val useDemoProject: Boolean = true
 ) : ActivityScenarioLauncherRule() {
 
     override fun before() {
@@ -58,7 +58,7 @@ class CollectTestRule @JvmOverloads constructor(
     fun <T : Page<T>> launchForResult(
         intent: Intent,
         destination: T,
-        actions: Consumer<T>,
+        actions: Consumer<T>
     ): Instrumentation.ActivityResult {
         val scenario = launchForResult<Activity>(intent)
         destination.assertOnPage()

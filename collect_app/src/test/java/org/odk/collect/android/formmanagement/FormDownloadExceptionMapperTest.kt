@@ -24,7 +24,7 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formWithNoHashError_returnsFormWithNoHashErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_with_no_hash_error,
+            R.string.form_with_no_hash_error
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.FormWithNoHash()),
@@ -35,7 +35,7 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formParsingError_returnsFormParsingErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_parsing_error,
+            R.string.form_parsing_error
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.FormParsingError()),
@@ -46,7 +46,7 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formSaveError_returnsFormSaveErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_save_disk_error,
+            R.string.form_save_disk_error
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.DiskError()),
@@ -57,7 +57,7 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formWithInvalidSubmissionError_returnsFormInvalidSubmissionErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_with_invalid_submission_error,
+            R.string.form_with_invalid_submission_error
         ) + " " + context.getString(R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.InvalidSubmission()),

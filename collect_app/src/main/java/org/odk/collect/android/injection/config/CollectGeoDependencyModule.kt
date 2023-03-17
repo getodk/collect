@@ -20,7 +20,7 @@ class CollectGeoDependencyModule(
     private val mapFragmentFactory: MapFragmentFactory,
     private val locationClient: LocationClient,
     private val scheduler: Scheduler,
-    private val permissionChecker: PermissionsChecker,
+    private val permissionChecker: PermissionsChecker
 ) : GeoDependencyModule() {
 
     override fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {

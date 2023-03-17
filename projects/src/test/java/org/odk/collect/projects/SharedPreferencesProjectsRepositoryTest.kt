@@ -14,7 +14,7 @@ class SharedPreferencesProjectsRepositoryTest : ProjectsRepositoryTest() {
             UUIDGenerator(),
             Gson(),
             InMemSettings(),
-            "test",
+            "test"
         )
     }
 

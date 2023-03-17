@@ -252,7 +252,7 @@ class FormMapViewModelTest {
                     )
                 )
             ),
-            info = formatDate(R.string.deleted_on_date_at_time, 123L),
+            info = formatDate(R.string.deleted_on_date_at_time, 123L)
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }

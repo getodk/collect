@@ -9,7 +9,7 @@ class MapFragmentDelegate(
     private val mapFragment: MapFragment,
     configuratorProvider: () -> MapConfigurator,
     settingsProvider: () -> Settings,
-    private val onConfigChanged: Consumer<Bundle>,
+    private val onConfigChanged: Consumer<Bundle>
 ) : OnSettingChangeListener {
 
     private val configurator by lazy { configuratorProvider() }
