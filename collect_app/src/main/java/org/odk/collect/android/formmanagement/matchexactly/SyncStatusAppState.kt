@@ -33,6 +33,11 @@ class SyncStatusAppState(private val appState: AppState, private val context: Co
     private fun getSyncErrorLiveData(projectId: String) =
         appState.get("$KEY_PREFIX_ERROR:$projectId", MutableLiveData<FormSourceException>(null))
 
+    fun clear(projectId: String) {
+        getSyncingLiveData(projectId).value = false
+        getSyncErrorLiveData(projectId).value = null
+    }
+
     companion object {
         const val KEY_PREFIX_SYNCING = "syncStatusSyncing"
         const val KEY_PREFIX_ERROR = "syncStatusError"

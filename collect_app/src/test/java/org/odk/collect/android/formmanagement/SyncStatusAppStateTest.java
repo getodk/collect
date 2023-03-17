@@ -85,4 +85,17 @@ public class SyncStatusAppStateTest {
         syncStatusAppState.finishSync("projectId", null);
         verify(contentResolver).notifyChange(FormsContract.getUri("projectId"), null);
     }
+
+    @Test
+    public void clear_clearsSyncErrorAndIsSyncing() {
+        SyncStatusAppState syncStatusAppState = new SyncStatusAppState(appState, context);
+
+        syncStatusAppState.startSync("projectId");
+        syncStatusAppState.clear("projectId");
+        assertThat(syncStatusAppState.isSyncing("projectId").getValue(), is(false));
+
+        syncStatusAppState.finishSync("projectId", new FormSourceException.FetchError());
+        syncStatusAppState.clear("projectId");
+        assertThat(syncStatusAppState.getSyncError("projectId").getValue(), is(nullValue()));
+    }
 }
