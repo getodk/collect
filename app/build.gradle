@@ -244,27 +244,27 @@ dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
     implementation project(':shared')
-    implementation project(':androidshared')
+    implementation project(':android-shared')
     implementation project(':nbistubs')
     implementation project(':icons')
     implementation project(':strings')
     implementation project(':material')
     implementation project(':async')
     implementation project(':analytics')
-    implementation project(':audioclips')
+    implementation project(':audio-clips')
     implementation project(':forms')
-    implementation project(':audiorecorder')
+    implementation project(':audio-recorder')
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
-    implementation project(':imageloader')
+    implementation project(':image-loader')
     implementation project(':errors')
     implementation project(':upgrade')
     implementation project(':permissions')
     implementation(project(':settings')) {
         exclude group: 'joda-time'
     }
-    implementation project(':externalapp')
+    implementation project(':external-app')
     implementation project(':maps')
     implementation project(':osmdroid')
     implementation project(':entities')
@@ -362,15 +362,13 @@ dependencies {
 
     implementation Dependencies.splashscreen
 
-    testImplementation project(':formstest')
-
     // Testing-only dependencies
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_inline
     testImplementation Dependencies.mockito_kotlin
-
-    testImplementation project(':androidtest')
-    testImplementation(project(path: ':testshared')) {
+    testImplementation project(':android-test')
+    testImplementation project(':forms-test')
+    testImplementation(project(path: ':test-shared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
     testImplementation(project(":shadows"))
@@ -389,7 +387,7 @@ dependencies {
     testImplementation Dependencies.androidx_test_espresso_intents
     testImplementation Dependencies.androidx_test_core_ktx
 
-    androidTestImplementation project(':androidtest')
+    androidTestImplementation project(':android-test')
 
     // Used to generate documentation screenshots.
     androidTestImplementation Dependencies.fastlane_screengrab
@@ -405,9 +403,9 @@ dependencies {
     androidTestImplementation Dependencies.okhttp3_mockwebserver
     androidTestImplementation Dependencies.androidx_work_testing
     androidTestImplementation Dependencies.uiautomator
+    debugImplementation project(':fragments-test')
 
-    debugImplementation project(':fragmentstest')
-    debugImplementation(project(':testshared')) {
+    debugImplementation(project(':test-shared',)) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 

@@ -48,8 +48,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":androidshared"))
+    implementation(project(":android-shared"))
     implementation(Dependencies.android_material)
+
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.hamcrest)
     testImplementation(Dependencies.mockito_kotlin)

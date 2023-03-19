@@ -44,10 +44,10 @@ android {
 }
 
 dependencies {
-    implementation Dependencies.androidx_core_ktx
     implementation project(':shared')
+    implementation Dependencies.androidx_core_ktx
 
-    testImplementation project(':testshared')
+    testImplementation project(':test-shared')
     testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest

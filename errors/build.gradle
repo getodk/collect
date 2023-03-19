@@ -48,16 +48,14 @@ android {
 
 dependencies {
     implementation project(path: ':strings')
-    implementation project(path: ':androidshared')
-
+    implementation project(path: ':android-shared')
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.androidx_recyclerview
     implementation Dependencies.android_material
 
-    testImplementation project(path: ':androidtest')
-    testImplementation project(path: ':testshared')
-
+    testImplementation project(path: ':android-test')
+    testImplementation project(path: ':test-shared')
     testImplementation Dependencies.androidx_test_ext_junit
     testImplementation Dependencies.androidx_test_espresso_core
 }

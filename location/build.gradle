@@ -46,7 +46,7 @@ android {
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
-    implementation project(':androidshared')
+    implementation project(':android-shared')
     implementation project(':icons')
     implementation project(':strings')
     implementation Dependencies.kotlin_stdlib
@@ -55,9 +55,9 @@ dependencies {
     implementation Dependencies.timber
     implementation Dependencies.androidx_appcompat
 
-    testImplementation project(':androidtest')
-    testImplementation project(':testshared')
-    testImplementation project(':servicetest')
+    testImplementation project(':android-test')
+    testImplementation project(':test-shared')
+    testImplementation project(':service-test')
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_kotlin
     testImplementation Dependencies.hamcrest

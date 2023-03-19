@@ -53,8 +53,7 @@ dependencies {
 
     implementation(project(":strings"))
     implementation(project(":shared"))
-    implementation(project(":androidshared"))
-
+    implementation(project(":android-shared"))
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_appcompat)
     implementation(Dependencies.android_material)

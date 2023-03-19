@@ -42,12 +42,11 @@ dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
     implementation project(':shared')
-    implementation project(':androidshared')
+    implementation project(':android-shared')
     implementation project(':icons')
     implementation project(':maps')
     implementation project(':location')
     implementation project(':settings')
-
     implementation Dependencies.osmdroid
     implementation Dependencies.androidx_fragment_ktx
     implementation Dependencies.androidx_preference_ktx

@@ -42,13 +42,12 @@ android {
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
-    implementation project(':androidshared')
+    implementation project(':android-shared')
     implementation project(':icons')
     implementation project(':location')
     implementation project(':maps')
     implementation project(':settings')
     implementation project(':shared')
-
     implementation Dependencies.play_services_location
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.guava
@@ -56,8 +55,7 @@ dependencies {
     implementation Dependencies.timber
     implementation Dependencies.androidx_startup
 
-    testImplementation project(':testshared')
-
+    testImplementation project(':test-shared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_inline
     testImplementation Dependencies.hamcrest

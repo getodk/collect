@@ -48,8 +48,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":androidshared"))
-
+    implementation(project(":android-shared"))
     implementation(Dependencies.zxing_android_embedded)
 
     testImplementation(Dependencies.androidx_test_ext_junit)

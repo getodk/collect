@@ -28,29 +28,24 @@ android {
             minifyEnabled false
         }
     }
-    namespace 'org.odk.collect.testshared'
+    namespace 'org.odk.collect.audioclips'
 }
 
 dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation project(path: ':async')
-    implementation project(path: ':shared')
-    implementation project(path: ':androidshared')
-    implementation project(path: ':androidtest')
-    implementation project(path: ':servicetest')
-    implementation Dependencies.androidx_recyclerview
+    implementation project(':async')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
-    implementation Dependencies.androidx_work_runtime
-    implementation Dependencies.androidx_appcompat
-    implementation Dependencies.robolectric
-    implementation Dependencies.junit
-    implementation Dependencies.androidx_test_espresso_intents
-    implementation Dependencies.android_material
-    implementation Dependencies.danlew_android_joda
-    implementation(Dependencies.androidx_fragment_testing) {
-        exclude group: 'androidx.test', module: 'monitor' //fixes issue https://github.com/android/android-test/issues/731
-    }
+    implementation Dependencies.androidx_lifecycle_viewmodel_ktx
+    implementation Dependencies.androidx_lifecycle_livedata_ktx
+
+    testImplementation project(path: ':android-test')
+    testImplementation project(path: ':test-shared')
+    testImplementation Dependencies.junit
+    testImplementation Dependencies.mockito_kotlin
+    testImplementation Dependencies.androidx_test_ext_junit
+    testImplementation Dependencies.androidx_arch_core_testing
+    testImplementation Dependencies.hamcrest
 }

@@ -63,17 +63,18 @@ dependencies {
     implementation project(path: ':icons')
     implementation project(path: ':strings')
     implementation project(path: ':location')
-    implementation project(path: ':androidshared')
-    implementation project(path: ':externalapp')
+    implementation project(path: ':android-shared')
+    implementation project(path: ':external-app')
     implementation project(path: ':async')
     implementation project(path: ':analytics')
     implementation project(path: ':permissions')
     implementation project(path: ':maps')
     implementation project(path: ':material')
 
-    debugImplementation project(path: ':fragmentstest')
-    testImplementation project(path: ':androidtest')
-    testImplementation project(path: ':testshared')
+    debugImplementation project(path: ':fragments-test')
+
+    testImplementation project(path: ':android-test')
+    testImplementation project(path: ':test-shared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
     testImplementation Dependencies.androidx_test_ext_junit
