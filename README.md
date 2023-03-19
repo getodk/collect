@@ -84,11 +84,11 @@ in the table below.
 
 |Name          |Github                                        |Purpose    |
 |------------- |--------------------------------------------- |-----------|
-|FieldTas4k    |https://github.com/smap-consulting/fieldTask4 |FieldTask  |
+|FieldTask     |https://github.com/smap-consulting/fieldTask4 |FieldTask  |
 |JavaRosa      |https://github.com/smap-consulting/javarosa   |FieldTask  |
-|Smap Server 2 |https://github.com/smap-consulting/smapserver2|Server     |
-|WebForm       |https://github.com/nap2000/enketo-core        |Server     |
-|Smap Client   |https://github.com/nap2000/prop-smapserver    |Server     |
+|Smap Server 2 |https://github.com/smap-consulting/smapserver2|Back end Server code     |
+|WebForm       |https://github.com/nap2000/enketo-core        |Browser client    |
+|Smap Client   |https://github.com/nap2000/prop-smapserver    |Administrative client     |
 |Documentation |https://github.com/nap2000/docs               |Documentation |
 
 Acknowledgements
