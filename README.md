@@ -86,9 +86,9 @@ in the table below.
 |------------- |--------------------------------------------- |-----------|
 |FieldTask     |https://github.com/smap-consulting/fieldTask4 |FieldTask  |
 |JavaRosa      |https://github.com/smap-consulting/javarosa   |FieldTask  |
-|Smap Server 2 |https://github.com/smap-consulting/smapserver2|Back end Server code     |
+|SmapServer    |https://github.com/smap-consulting/smapserver2|Back end Server code     |
 |WebForm       |https://github.com/nap2000/enketo-core        |Browser client    |
-|Smap Client   |https://github.com/nap2000/prop-smapserver    |Administrative client     |
+|SmapClient    |https://github.com/nap2000/prop-smapserver    |Administrative client     |
 |Documentation |https://github.com/nap2000/docs               |Documentation |
 
 Acknowledgements
