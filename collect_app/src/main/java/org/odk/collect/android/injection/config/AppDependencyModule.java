@@ -124,7 +124,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.metadata.DeviceDetailsProvider;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
-import org.odk.collect.metadata.CollectInstallIDProvider;
+import org.odk.collect.metadata.SettingsInstallIDProvider;
 import org.odk.collect.metadata.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
@@ -234,7 +234,7 @@ public class AppDependencyModule {
 
     @Provides
     InstallIDProvider providesInstallIDProvider(SettingsProvider settingsProvider) {
-        return new CollectInstallIDProvider(settingsProvider.getMetaSettings(), KEY_INSTALL_ID);
+        return new SettingsInstallIDProvider(settingsProvider.getMetaSettings(), KEY_INSTALL_ID);
     }
 
     @Provides

@@ -7,7 +7,7 @@ interface InstallIDProvider {
     val installID: String
 }
 
-class CollectInstallIDProvider(
+class SettingsInstallIDProvider(
     private val metaPreferences: Settings,
     private val preferencesKey: String
 ) : InstallIDProvider {

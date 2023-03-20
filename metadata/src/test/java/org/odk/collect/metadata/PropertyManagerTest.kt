@@ -28,8 +28,6 @@ class PropertyManagerTest {
 
     @Test
     fun `getSingularProperty should require phone state permission for phone number property only`() {
-        propertyManager.reload()
-
         propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
         propertyManager.getSingularProperty(PropertyManager.PROPMGR_USERNAME)
         propertyManager.getSingularProperty(PropertyManager.PROPMGR_EMAIL)

@@ -9,9 +9,9 @@ import org.junit.Test
 import org.odk.collect.shared.settings.InMemSettings
 import org.odk.collect.shared.settings.Settings
 
-class CollectInstallIDProviderTest {
+class SettingsInstallIDProviderTest {
     private val metaPreferences: Settings = InMemSettings()
-    private val provider = CollectInstallIDProvider(metaPreferences, "blah")
+    private val provider = SettingsInstallIDProvider(metaPreferences, "blah")
 
     @Test
     fun returnsSameValueEveryTime() {

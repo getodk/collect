@@ -48,6 +48,7 @@ dependencies {
     }
     implementation(Dependencies.timber)
 
-    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.hamcrest)
+    testImplementation(Dependencies.junit)
     testImplementation(Dependencies.mockito_kotlin)
 }
