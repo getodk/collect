@@ -50,6 +50,7 @@
 
         <!-- Material3 attributes (needed for Material3 styles/components because theme is
         Theme.MaterialComponents). These can be added on-demand for components that need them. -->
+        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
         <item name="colorPrimaryContainer">?colorPrimary</item>
 
         <item name="colorOnPrimaryContainer">?colorOnPrimary</item>

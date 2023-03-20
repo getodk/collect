@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,6 +36,11 @@ public class FormEndView extends SwipeHandler.View {
         ((TextView) findViewById(R.id.description)).setText(context.getString(R.string.save_enter_data_description, formTitle));
 
         EditText saveAs = findViewById(R.id.save_name);
+        saveAs.setOnFocusChangeListener((view, isFocused) -> {
+            if (isFocused) {
+                findViewById(R.id.manual_name_warning).setVisibility(View.VISIBLE);
+            }
+        });
 
         // disallow carriage returns in the name
         InputFilter returnFilter = (source, start, end, dest, dstart, dend) -> FormNameUtils.normalizeFormName(source.toString().substring(start, end), true);
