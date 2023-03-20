@@ -13,6 +13,6 @@ object Versions {
     const val okhttp3 = "4.10.0"
     const val robolectric = "4.9"
     const val work = "2.8.0"
-    const val lifecycle = "2.5.1"
+    const val lifecycle = "2.6.0"
     const val camerax = "1.2.1"
 }
