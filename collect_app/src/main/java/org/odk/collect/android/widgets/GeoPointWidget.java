@@ -23,12 +23,9 @@ import android.view.View;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
@@ -73,8 +70,6 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
             binding.simpleButton.setText(R.string.get_point);
         }
 
-        logAccuracyThresholdUse(prompt);
-
         return binding.getRoot();
     }
 
@@ -112,16 +107,5 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
         binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.change_location);
         widgetValueChanged();
-    }
-
-    private void logAccuracyThresholdUse(FormEntryPrompt prompt) {
-        // Only default geopoint supports accuracy threshold
-        if (Appearances.getSanitizedAppearanceHint(prompt).isEmpty()) {
-            if (prompt.getQuestion().getAdditionalAttribute(null, "accuracyThreshold") != null) {
-                Analytics.log(AnalyticsEvents.ACCURACY_THRESHOLD, "form");
-            } else {
-                Analytics.log(AnalyticsEvents.ACCURACY_THRESHOLD_DEFAULT, "form");
-            }
-        }
     }
 }
