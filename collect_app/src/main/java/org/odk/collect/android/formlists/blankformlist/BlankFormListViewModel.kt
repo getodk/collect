@@ -1,7 +1,6 @@
 package org.odk.collect.android.formlists.blankformlist
 
 import android.app.Application
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -24,8 +23,6 @@ import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
-import org.odk.collect.shared.strings.Md5.getMd5Hash
-import java.io.ByteArrayInputStream
 
 class BlankFormListViewModel(
     private val formsRepository: FormsRepository,
@@ -149,7 +146,6 @@ class BlankFormListViewModel(
     }
 
     fun syncWithServer(): LiveData<Boolean> {
-        logManualSyncWithServer()
         val result = MutableLiveData<Boolean>()
         scheduler.immediate(
             { formsUpdater.matchFormsWithServer(projectId) },
@@ -182,12 +178,6 @@ class BlankFormListViewModel(
                 false
             }
         }
-    }
-
-    private fun logManualSyncWithServer() {
-        val uri = Uri.parse(generalSettings.getString(ProjectKeys.KEY_SERVER_URL))
-        val host = if (uri.host != null) uri.host else ""
-        val urlHash = getMd5Hash(ByteArrayInputStream(host!!.toByteArray())) ?: ""
     }
 
     private fun sortAndFilter() {
