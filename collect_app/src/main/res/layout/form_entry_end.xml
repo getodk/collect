@@ -57,7 +57,7 @@ the specific language governing permissions and limitations under the License.
                 android:padding="@dimen/margin">
 
                 <ImageView
-                    android:id="@+id/info_icon"
+                    android:id="@+id/instance_name_info_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_outline_info_24"
@@ -66,14 +66,25 @@ the specific language governing permissions and limitations under the License.
                     app:tint="?colorPrimary" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/instance_name_info_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin"
                     android:text="@string/manual_instance_name_warning"
                     android:textAppearance="?textAppearanceBodyLarge"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/info_icon"
-                    app:layout_constraintTop_toTopOf="@id/info_icon" />
+                    app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
+                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/instance_name_learn_more"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manual_instance_learn_more_button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/instance_name_info_text" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

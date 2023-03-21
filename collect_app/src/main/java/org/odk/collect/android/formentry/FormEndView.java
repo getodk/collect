@@ -1,6 +1,8 @@
 package org.odk.collect.android.formentry;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -67,6 +69,13 @@ public class FormEndView extends SwipeHandler.View {
 
         findViewById(R.id.save_exit_button).setOnClickListener(v -> {
             listener.onSaveClicked(markAsFinalized.isChecked());
+        });
+
+        findViewById(R.id.instance_name_learn_more).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setData(Uri.parse("https://forum.getodk.org/t/collect-manual-instance-naming-will-be-removed-in-v2023-2/40313"));
+            context.startActivity(intent);
         });
     }
 

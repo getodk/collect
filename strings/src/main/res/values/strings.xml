@@ -167,6 +167,7 @@
     <string name="mark_finished">Mark form as finalized</string>
     <string name="quit_entry">Save Form and Exit</string>
     <string name="manual_instance_name_warning">Soon manually naming forms will be removed. Form design needs to be updated.</string>
+    <string name="manual_instance_learn_more_button">Learn more</string>
 
     <string name="data_saved_error">Sorry, form save failed!</string>
     <string name="data_saved_ok">Form successfully saved!</string>
