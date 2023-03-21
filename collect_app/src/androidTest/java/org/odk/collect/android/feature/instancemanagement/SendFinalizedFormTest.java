@@ -104,8 +104,7 @@ public class SendFinalizedFormTest {
     @Test
     public void whenGoogleUsedAsServer_sendsSubmissionToSheet() {
         CollectHelpers.addGDProject(
-                new Project.Saved(
-                        "1",
+                new Project.New(
                         "GD Project",
                         "G",
                         "#3e9fcc"

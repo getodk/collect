@@ -26,15 +26,13 @@ class GoogleDriveDeprecationTest {
         .around(RecordedIntentsRule())
         .around(rule)
 
-    private val gdProject1 = Project.Saved(
-        "1",
+    private val gdProject1 = Project.New(
         "GD Project 1",
         "G",
         "#3e9fcc"
     )
 
-    private val gdProject2 = Project.Saved(
-        "2",
+    private val gdProject2 = Project.New(
         "GD Project 2",
         "G",
         "#3e9fcc"
