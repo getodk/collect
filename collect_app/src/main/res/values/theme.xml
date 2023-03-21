@@ -55,6 +55,7 @@
 
         <item name="colorOnPrimaryContainer">?colorOnPrimary</item>
 
+        <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>
         <item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
 
         <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.Medium</item>

@@ -63,14 +63,14 @@ the specific language governing permissions and limitations under the License.
                     android:src="@drawable/ic_outline_info_24"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:tint="?colorOnSurface" />
+                    app:tint="?colorPrimary" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin"
                     android:text="@string/manual_instance_name_warning"
-                    android:textAppearance="?textAppearanceBody1"
+                    android:textAppearance="?textAppearanceBodyLarge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/info_icon"
                     app:layout_constraintTop_toTopOf="@id/info_icon" />
