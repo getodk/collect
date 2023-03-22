@@ -125,6 +125,42 @@ class SavePointTest {
         assertThat(auditLog[5].get("event"), equalTo("form exit"))
     }
 
+    @Test
+    fun whenEditing_savePointIsCreatedWhenLeavingTheApp() {
+        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+            .fillNewForm("two-question-audit.xml", "Two Question")
+            .fillOutAndSave(
+                AppClosedPage(),
+                FormEntryPage.QuestionAndAnswer("What is your name?", "Pasquale"),
+                FormEntryPage.QuestionAndAnswer("What is your age?", "52")
+            )
+
+        rule.editForm("two-question-audit.xml", "Two Question")
+            .clickGoToStart()
+            .answerQuestion("What is your name?", "Alexei")
+            .let { simulateProcessRestore() }
+
+        rule.editForm("two-question-audit.xml", "Two Question")
+            .assertText("Alexei")
+            .pressBack(FormEntryPage("Two Question"))
+            .assertQuestion("What is your name?")
+            .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
+            .clickSaveChanges()
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog.size, equalTo(12))
+
+        assertThat(auditLog[5].get("event"), equalTo("form resume"))
+        assertThat(auditLog[6].get("event"), equalTo("jump"))
+        // Question event not logged - possibly a problem
+
+        assertThat(auditLog[7].get("event"), equalTo("form resume"))
+        assertThat(auditLog[8].get("event"), equalTo("jump"))
+        assertThat(auditLog[9].get("event"), equalTo("question"))
+        assertThat(auditLog[10].get("event"), equalTo("form save"))
+        assertThat(auditLog[11].get("event"), equalTo("form exit"))
+    }
+
     /**
      * Simulates a case where the process is killed without lifecycle clean up (like a phone
      * being battery dying).
