@@ -40,6 +40,8 @@ dependencies {
 
     implementation project(':shared')
     implementation(project(':androidshared')) {
+        // Without this the build fails with 'Corrupt serialized resolution result'.
+        // It looks like a Gradle issue. Hopefully we can get rid of it in the future.
         exclude group: 'androidx.lifecycle'
     }
     implementation project(':icons')
