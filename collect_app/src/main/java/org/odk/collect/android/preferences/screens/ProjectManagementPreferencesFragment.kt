@@ -20,6 +20,7 @@ import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
+import org.odk.collect.settings.keys.ProjectKeys
 import javax.inject.Inject
 
 class ProjectManagementPreferencesFragment :
@@ -65,12 +66,17 @@ class ProjectManagementPreferencesFragment :
                     val pref = Intent(activity, QRCodeTabsActivity::class.java)
                     startActivity(pref)
                 }
-                DELETE_PROJECT_KEY -> MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.delete_project)
-                    .setMessage(R.string.delete_project_confirm_message)
-                    .setNegativeButton(R.string.delete_project_no) { _: DialogInterface?, _: Int -> }
-                    .setPositiveButton(R.string.delete_project_yes) { _: DialogInterface?, _: Int -> deleteProject() }
-                    .show()
+                DELETE_PROJECT_KEY -> {
+                    val isGDProject = ProjectKeys.PROTOCOL_GOOGLE_SHEETS == settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL)
+                    val message = if (isGDProject) R.string.delete_google_drive_project_confirm_message else R.string.delete_project_confirm_message
+
+                    MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.delete_project)
+                        .setMessage(message)
+                        .setNegativeButton(R.string.delete_project_no) { _: DialogInterface?, _: Int -> }
+                        .setPositiveButton(R.string.delete_project_yes) { _: DialogInterface?, _: Int -> deleteProject() }
+                        .show()
+                }
             }
             return true
         }

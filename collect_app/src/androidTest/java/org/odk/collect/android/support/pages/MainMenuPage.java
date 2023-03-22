@@ -4,8 +4,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.intent.Intents.intending;
-import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -13,11 +11,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
-
-import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.Instrumentation;
-import android.content.Intent;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.WaitFor;
@@ -166,22 +159,6 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickFormManagement()
                 .clickOnString(R.string.autosend)
                 .clickOnString(R.string.wifi_cellular_autosend)
-                .pressBack(new ProjectSettingsPage())
-                .pressBack(new MainMenuPage());
-    }
-
-    public MainMenuPage setGoogleAccount(String account) {
-        Intent data = new Intent();
-        data.putExtra(AccountManager.KEY_ACCOUNT_NAME, account);
-        Instrumentation.ActivityResult activityResult = new Instrumentation.ActivityResult(Activity.RESULT_OK, data);
-        intending(hasAction("com.google.android.gms.common.account.CHOOSE_ACCOUNT")).respondWith(activityResult);
-
-        return openProjectSettingsDialog()
-                .clickSettings()
-                .clickServerSettings()
-                .clickOnServerType()
-                .clickOnString(R.string.server_platform_google_sheets)
-                .clickOnString(R.string.selected_google_account_text)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }

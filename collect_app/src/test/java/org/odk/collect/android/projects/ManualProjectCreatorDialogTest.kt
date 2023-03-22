@@ -1,12 +1,9 @@
 package org.odk.collect.android.projects
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers
@@ -29,13 +26,11 @@ import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.Matchers.isPasswordHidden
-import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.ODKAppSettingsImporter
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.testshared.ErrorIntentLauncher
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -162,19 +157,5 @@ class ManualProjectCreatorDialogTest {
             Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
         }
-    }
-
-    @Test
-    fun `If activity to choose google account is not found the app should not crash`() {
-        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesIntentLauncher(): IntentLauncher {
-                return ErrorIntentLauncher()
-            }
-        })
-
-        launcherRule.launch(ManualProjectCreatorDialog::class.java)
-        onView(withText(R.string.gdrive_configure)).inRoot(isDialog()).perform(scrollTo(), click())
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        assertThat(ShadowToast.getTextOfLatestToast(), `is`(context.getString(R.string.activity_not_found, context.getString(R.string.choose_account))))
     }
 }

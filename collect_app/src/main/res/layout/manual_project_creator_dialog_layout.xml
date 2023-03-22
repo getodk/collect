@@ -96,7 +96,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_standard"
-                app:layout_constraintBottom_toTopOf="@+id/gdrive"
                 app:layout_constraintTop_toBottomOf="@+id/password">
 
                 <ImageView
@@ -117,39 +116,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tip_icon"
                     app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/gdrive"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_standard"
-                android:layout_marginBottom="@dimen/margin_standard"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password">
-
-                <TextView
-                    android:id="@+id/project_uses_gdrive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gdrive_project"
-                    android:textAppearance="?textAppearanceBody2"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/configure_gdrive"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_extra_small"
-                    android:text="@string/gdrive_configure"
-                    android:textAppearance="@style/TextAppearance.Collect.Link"
-                    app:layout_constraintStart_toEndOf="@+id/project_uses_gdrive"
-                    app:layout_constraintTop_toTopOf="@+id/project_uses_gdrive" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

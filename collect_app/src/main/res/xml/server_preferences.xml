@@ -8,5 +8,6 @@
         android:entryValues="@array/protocol_entry_values"
         android:key="protocol"
         android:title="@string/type"
+        android:enabled="false"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>

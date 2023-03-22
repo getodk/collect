@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
@@ -15,6 +16,7 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.androidtest.RecordedIntentsRule;
+import org.odk.collect.projects.Project;
 
 @RunWith(AndroidJUnit4.class)
 public class SendFinalizedFormTest {
@@ -101,12 +103,20 @@ public class SendFinalizedFormTest {
 
     @Test
     public void whenGoogleUsedAsServer_sendsSubmissionToSheet() {
-        testDependencies.googleAccountPicker.setDeviceAccount("dani@davey.com");
-        testDependencies.googleApi.setAccount("dani@davey.com");
+        CollectHelpers.addGDProject(
+                new Project.New(
+                        "GD Project",
+                        "G",
+                        "#3e9fcc"
+                ),
+                "dani@davey.com",
+                testDependencies
+        );
 
         rule.startAtMainMenu()
-                .setGoogleAccount("dani@davey.com")
-                .copyForm("one-question-google.xml")
+                .openProjectSettingsDialog()
+                .selectProject("GD Project")
+                .copyForm("one-question-google.xml", null, false, "GD Project")
                 .startBlankForm("One Question Google")
                 .answerQuestion("what is your age", "47")
                 .swipeToEndScreen()

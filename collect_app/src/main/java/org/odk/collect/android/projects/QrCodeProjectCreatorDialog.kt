@@ -35,6 +35,7 @@ import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.qrcode.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.importing.SettingsImportingResult
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -274,21 +275,21 @@ class QrCodeProjectCreatorDialog :
     }
 
     override fun createProject(settingsJson: String) {
-        val projectCreatedSuccessfully = projectCreator.createNewProject(settingsJson)
+        when (projectCreator.createNewProject(settingsJson)) {
+            SettingsImportingResult.SUCCESS -> {
+                Analytics.log(AnalyticsEvents.QR_CREATE_PROJECT)
 
-        if (projectCreatedSuccessfully) {
-            Analytics.log(AnalyticsEvents.QR_CREATE_PROJECT)
-
-            ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
-            ToastUtils.showLongToast(
-                requireContext(),
-                getString(
-                    R.string.switched_project,
-                    currentProjectProvider.getCurrentProject().name
+                ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
+                ToastUtils.showLongToast(
+                    requireContext(),
+                    getString(
+                        R.string.switched_project,
+                        currentProjectProvider.getCurrentProject().name
+                    )
                 )
-            )
-        } else {
-            ToastUtils.showLongToast(requireContext(), getString(R.string.invalid_qrcode))
+            }
+            SettingsImportingResult.INVALID_SETTINGS -> ToastUtils.showLongToast(requireContext(), getString(R.string.invalid_qrcode))
+            SettingsImportingResult.GD_PROJECT -> ToastUtils.showLongToast(requireContext(), getString(R.string.settings_with_gd_protocol))
         }
     }
 

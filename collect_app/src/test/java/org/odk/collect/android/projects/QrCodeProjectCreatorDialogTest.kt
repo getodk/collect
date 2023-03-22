@@ -180,4 +180,41 @@ class QrCodeProjectCreatorDialogTest {
         )
         verifyNoInteractions(projectCreator)
     }
+
+    @Test
+    fun `When QR code contains GD protocol a toast should be displayed`() {
+        val projectCreator = mock<ProjectCreator>()
+
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesBarcodeViewDecoder(): BarcodeViewDecoder {
+                val barcodeResult = mock<BarcodeResult> {
+                    `when`(it.text).thenReturn(
+                        CompressionUtils.compress(
+                            "{\n" +
+                                "  \"general\": {\n" +
+                                "       \"protocol\" : \"google_sheets\"" +
+                                "  },\n" +
+                                "  \"admin\": {\n" +
+                                "  }\n" +
+                                "}"
+                        )
+                    )
+                }
+
+                return mock {
+                    `when`(it.waitForBarcode(any())).thenReturn(MutableLiveData(barcodeResult))
+                }
+            }
+        })
+
+        launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
+        assertThat(
+            ShadowToast.getTextOfLatestToast(),
+            `is`(
+                ApplicationProvider.getApplicationContext<Context>()
+                    .getString(R.string.settings_with_gd_protocol)
+            )
+        )
+        verifyNoInteractions(projectCreator)
+    }
 }
