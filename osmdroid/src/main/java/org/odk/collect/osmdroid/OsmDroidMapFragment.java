@@ -907,7 +907,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             map.getOverlays().add(polygon);
             int strokeColor = map.getContext().getResources().getColor(R.color.mapLineColor);
             polygon.getOutlinePaint().setColor(strokeColor);
-            polygon.getFillPaint().setColor(ColorUtils.setAlphaComponent(strokeColor, 150));
+            polygon.getFillPaint().setColor(ColorUtils.setAlphaComponent(strokeColor, 68));
             polygon.setPoints(StreamSupport.stream(points.spliterator(), false).map(point -> {
                 return new GeoPoint(point.latitude, point.longitude);
             }).collect(Collectors.toList()));
