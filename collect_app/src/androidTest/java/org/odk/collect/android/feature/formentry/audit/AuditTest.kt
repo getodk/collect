@@ -26,13 +26,13 @@ class AuditTest {
         rule.startAtMainMenu()
             .copyForm("one-question-audit.xml")
             .startBlankForm("One Question Audit")
-            .fillOutAndSave(
+            .fillOutAndFinalize(
                 FormEntryPage.QuestionAndAnswer("what is your age", "31")
             )
             .clickEditSavedForm(1)
             .clickOnForm("One Question Audit")
             .clickGoToStart()
-            .fillOutAndSave(
+            .fillOutAndFinalize(
                 FormEntryPage.QuestionAndAnswer("what is your age", "32")
             )
 

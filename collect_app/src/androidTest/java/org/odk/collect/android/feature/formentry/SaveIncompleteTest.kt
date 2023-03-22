@@ -51,7 +51,7 @@ class SaveIncompleteTest {
         rule.startAtMainMenu()
             .copyForm("two-question-save-incomplete-required.xml")
             .startBlankForm("Two Question Save Incomplete Required")
-            .fillOutAndSave(
+            .fillOutAndFinalize(
                 QuestionAndAnswer("What is your name?", "Dez"),
                 QuestionAndAnswer("[saveIncomplete] What is your age?", "56", true)
             )
@@ -76,7 +76,7 @@ class SaveIncompleteTest {
         rule.startAtMainMenu()
             .copyForm("two-question-save-incomplete-required.xml")
             .startBlankForm("Two Question Save Incomplete Required")
-            .fillOutAndSave(
+            .fillOutAndFinalize(
                 QuestionAndAnswer("What is your name?", "Dez"),
                 QuestionAndAnswer("[saveIncomplete] What is your age?", "56", true)
             )

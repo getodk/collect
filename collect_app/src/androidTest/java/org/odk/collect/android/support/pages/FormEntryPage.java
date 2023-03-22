@@ -68,7 +68,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return page;
     }
 
-    public MainMenuPage fillOutAndSave(QuestionAndAnswer... questionsAndAnswers) {
+    public <D extends Page<D>> D fillOutAndSave(D destination, QuestionAndAnswer... questionsAndAnswers) {
+        return fillOut(questionsAndAnswers)
+                .pressBack(new SaveOrIgnoreDialog<>(formName, destination))
+                .clickSaveChanges();
+    }
+
+    public MainMenuPage fillOutAndFinalize(QuestionAndAnswer... questionsAndAnswers) {
         return fillOut(questionsAndAnswers)
                 .swipeToEndScreen()
                 .clickSaveAndExit();

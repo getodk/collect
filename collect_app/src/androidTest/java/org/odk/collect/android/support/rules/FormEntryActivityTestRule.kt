@@ -16,6 +16,7 @@ import org.odk.collect.android.support.ActivityHelpers
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.projects.Project
 import timber.log.Timber
@@ -50,13 +51,19 @@ class FormEntryActivityTestRule : ExternalResource() {
     }
 
     fun <D : Page<D>> fillNewForm(formFilename: String, destination: D): D {
-        intent = createIntent(formFilename)
+        intent = createNewFormIntent(formFilename)
         scenario = ActivityScenario.launch(intent)
         return destination.assertOnPage() as D
     }
 
     fun fillNewForm(formFilename: String, formName: String): FormEntryPage {
         return fillNewForm(formFilename, FormEntryPage(formName))
+    }
+
+    fun editForm(formFilename: String, instanceName: String): FormHierarchyPage {
+        intent = createEditFormIntent(formFilename)
+        scenario = ActivityScenario.launch(intent)
+        return FormHierarchyPage(instanceName).assertOnPage()
     }
 
     fun saveInstanceStateForActivity(): FormEntryActivityTestRule {
@@ -86,7 +93,7 @@ class FormEntryActivityTestRule : ExternalResource() {
         return this
     }
 
-    private fun createIntent(formFilename: String): Intent {
+    private fun createNewFormIntent(formFilename: String): Intent {
         val application = ApplicationProvider.getApplicationContext<Application>()
         val formPath = DaggerUtils.getComponent(application).storagePathProvider()
             .getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename
@@ -96,5 +103,25 @@ class FormEntryActivityTestRule : ExternalResource() {
             .getCurrentProject().uuid
 
         return FormNavigator.newInstanceIntent(application, projectId, form!!.dbId)
+    }
+
+    private fun createEditFormIntent(formFilename: String): Intent {
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        val formPath = DaggerUtils.getComponent(application).storagePathProvider()
+            .getOdkDirPath(StorageSubdirectory.FORMS) + "/" + formFilename
+        val form = DaggerUtils.getComponent(application).formsRepositoryProvider().get()
+            .getOneByPath(formPath)
+        val instance = DaggerUtils.getComponent(application).instancesRepositoryProvider().get()
+            .getAllByFormId(form!!.formId).first()
+        val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
+            .getCurrentProject().uuid
+
+        return FormNavigator.editInstanceIntent(
+            application,
+            projectId,
+            instance.dbId,
+            false,
+            instance.status
+        )
     }
 }
