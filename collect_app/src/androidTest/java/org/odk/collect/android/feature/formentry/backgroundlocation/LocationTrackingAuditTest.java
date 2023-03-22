@@ -13,7 +13,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.FakeLocationClient;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestDependencies;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.testshared.FakeLocation;
@@ -25,7 +25,7 @@ public class LocationTrackingAuditTest {
 
     private final FakeLocationClient locationClient = new FakeLocationClient();
 
-    public FormActivityTestRule rule = new FormActivityTestRule("location-audit.xml", "Audit with Location");
+    public BlankFormTestRule rule = new BlankFormTestRule("location-audit.xml", "Audit with Location");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain(new TestDependencies() {

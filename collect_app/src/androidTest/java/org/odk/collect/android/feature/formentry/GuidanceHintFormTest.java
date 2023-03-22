@@ -17,7 +17,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.GuidanceHint;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.settings.keys.ProjectKeys;
 
@@ -32,7 +32,7 @@ public class GuidanceHintFormTest {
         Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
     }
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(GUIDANCE_SAMPLE_FORM, "Guidance Form Sample");
+    public BlankFormTestRule activityTestRule = new BlankFormTestRule(GUIDANCE_SAMPLE_FORM, "Guidance Form Sample");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()

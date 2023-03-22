@@ -10,27 +10,29 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog
-import org.odk.collect.android.support.rules.FormActivityTestRule
+import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
 @RunWith(AndroidJUnit4::class)
 class SavePointTest {
 
-    private val rule = FormActivityTestRule("two-question-audit.xml", "Two Question")
+    private val rule = FormEntryActivityTestRule()
 
     @get:Rule
     val ruleChain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test
     fun savePointIsCreateWhenMovingForwardInForm() {
-        rule.startInFormEntry()
+        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+            .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
             .swipeToNextQuestion("What is your age?")
             .answerQuestion("What is your age?", "46")
             .let { simulateBatteryDeath() }
 
-            .startInFormHierarchy()
+            .fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
@@ -54,11 +56,12 @@ class SavePointTest {
 
     @Test
     fun savePointIsCreatedWhenLeavingTheApp() {
-        rule.startInFormEntry()
+        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+            .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
             .let { simulateProcessRestore() }
 
-            .startInFormHierarchy()
+            .fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
@@ -82,7 +85,7 @@ class SavePointTest {
      * Simulates a case where the process is killed without lifecycle clean up (like a phone
      * being battery dying).
      */
-    private fun simulateBatteryDeath(): FormActivityTestRule {
+    private fun simulateBatteryDeath(): FormEntryActivityTestRule {
         return rule.reset()
     }
 
@@ -90,7 +93,7 @@ class SavePointTest {
      * Simulate a "process restore" case where an app in the background is killed by Android
      * to reclaim memory, change permissions etc
      */
-    private fun simulateProcessRestore(): FormActivityTestRule {
+    private fun simulateProcessRestore(): FormEntryActivityTestRule {
         return rule.saveInstanceStateForActivity()
             .destroyActivity()
             .reset()
