@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
@@ -242,5 +243,55 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
                 .build();
 
         assertThat(getWidget().annotateButton.isEnabled(), is(false));
+    }
+
+    @Test
+    public void whenPromptHasDefaultAnswer_passUriToDrawActivity() throws Exception {
+        File file = File.createTempFile("default", ".bmp");
+        String imagePath = file.getAbsolutePath();
+
+        ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+        ));
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader();
+            }
+        });
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .build();
+
+        Intent intent = getIntentLaunchedByClick(R.id.markup_image);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
+        assertExtraEquals(DrawActivity.REF_IMAGE, Uri.fromFile(file), intent);
+    }
+
+    @Test
+    public void whenPromptHasDefaultAnswerThatDoesNotExist_doNotPassUriToDrawActivity() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .build();
+
+        Intent intent = getIntentLaunchedByClick(R.id.markup_image);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
+        assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
+    }
+
+    @Test
+    public void whenThereIsNoAnswer_doNotPassUriToDrawActivity() {
+        Intent intent = getIntentLaunchedByClick(R.id.markup_image);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
+        assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
     }
 }

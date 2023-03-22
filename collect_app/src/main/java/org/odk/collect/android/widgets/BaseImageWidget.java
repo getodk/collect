@@ -221,8 +221,9 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         private void launchDrawActivity() {
             Intent i = new Intent(getContext(), DrawActivity.class);
             i.putExtra(DrawActivity.OPTION, drawOption);
-            if (binaryName != null) {
-                i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(getFile()));
+            File file = getFile();
+            if (file != null) {
+                i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(file));
             }
 
             i.putExtra(DrawActivity.EXTRA_OUTPUT, Uri.fromFile(new File(tmpImageFilePath)));
@@ -279,9 +280,18 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
 
     @Nullable
     private File getFile() {
+        if (binaryName == null) {
+            return null;
+        }
+
         File file = questionMediaManager.getAnswerFile(binaryName);
         if ((file == null || !file.exists()) && doesSupportDefaultValues()) {
-            file = new File(getDefaultFilePath());
+            String filePath = getDefaultFilePath();
+            if (filePath != null) {
+                return new File(getDefaultFilePath());
+            } else {
+                return null;
+            }
         }
 
         return file;
@@ -294,7 +304,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             Timber.w(e);
         }
 
-        return "";
+        return null;
     }
 
     protected abstract boolean doesSupportDefaultValues();
