@@ -36,7 +36,7 @@ Please note that the `master` branch reflects ongoing development and is not pro
 ## Release cycle
 Releases can be requested by any community member and generally happen every 2 months.
 
-Before release we perform a "code freeze" (we stop merging pull requests) and then carry out regression testing. If any problems are found, the release is blocked until we can merge fixes. Once the process is complete, [@lognaturel](https://github.com/lognaturel) pushes the releases to the Play Store following [these instructions](#creating-signed-releases-for-google-play-store). The code is "unfrozen" after a short grace period to make hot fixing easier.
+Before release we perform a "code freeze" (we stop merging pull requests). A new beta will then be released to the Play Store by [@lognaturel](https://github.com/lognaturel) and that will be used for regression testing by [@getodk/testers](https://github.com/orgs/getodk/teams/testers). To star If any problems are found, the release is blocked until we can merge fixes. Regression testing should continue on the original beta build (rather than a new one with fixes) unless problems block the rest of testing. Once the process is complete, [@lognaturel](https://github.com/lognaturel) pushes the releases to the Play Store following [these instructions](#creating-signed-releases-for-google-play-store). The code is "unfrozen" after a short grace period to make hot fixing easier.
 
 At the beginning of each release cycle, [@grzesiek2010](https://github.com/grzesiek2010) updates all dependencies that have compatible upgrades available and ensures that the build targets the latest SDK.
 
