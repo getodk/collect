@@ -6,8 +6,7 @@ import android.content.Intent
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import org.junit.rules.ExternalResource
-import org.odk.collect.android.activities.FormEntryActivity
-import org.odk.collect.android.external.FormsContract
+import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.StorageUtils
@@ -64,8 +63,7 @@ class BlankFormTestRule @JvmOverloads constructor(
                 .getOneByPath(formPath)
             val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
                 .getCurrentProject().uuid
-            val intent = Intent(application, FormEntryActivity::class.java)
-            intent.data = FormsContract.getUri(projectId, form!!.dbId)
-            return intent
+
+            return FormNavigator.newInstanceIntent(application, projectId, form!!.dbId)
         }
 }

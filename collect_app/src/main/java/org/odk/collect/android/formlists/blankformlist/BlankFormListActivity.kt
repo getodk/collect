@@ -11,11 +11,10 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.activities.FormMapActivity
+import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -75,16 +74,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
             setResult(RESULT_OK, Intent().setData(formUri))
         } else {
             // caller wants to view/edit a form, so launch formentryactivity
-            Intent(this, FormEntryActivity::class.java).apply {
-                action = Intent.ACTION_EDIT
-                data = formUri
-                putExtra(
-                    ApplicationConstants.BundleKeys.FORM_MODE,
-                    ApplicationConstants.FormModes.EDIT_SAVED
-                )
-
-                startActivity(this)
-            }
+            startActivity(FormNavigator.newInstanceIntent(this, formUri))
         }
         finish()
     }

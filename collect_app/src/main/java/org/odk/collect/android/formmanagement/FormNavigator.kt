@@ -1,7 +1,9 @@
 package org.odk.collect.android.formmanagement
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.external.InstancesContract
@@ -39,12 +41,22 @@ class FormNavigator(
         )
     }
 
-    fun newInstance(activity: Activity, formId: Long) {
-        activity.startActivity(
-            Intent(activity, FormEntryActivity::class.java).also {
-                it.action = Intent.ACTION_EDIT
-                it.data = FormsContract.getUri(projectId, formId)
-            }
+    fun newInstance(context: Context, formId: Long) {
+        context.startActivity(
+            newInstanceIntent(context, projectId, formId)
         )
+    }
+
+    companion object {
+        fun newInstanceIntent(context: Context, uri: Uri?): Intent {
+            return Intent(context, FormEntryActivity::class.java).also {
+                it.action = Intent.ACTION_EDIT
+                it.data = uri
+            }
+        }
+
+        fun newInstanceIntent(context: Context, projectId: String, formId: Long): Intent {
+            return newInstanceIntent(context, FormsContract.getUri(projectId, formId))
+        }
     }
 }
