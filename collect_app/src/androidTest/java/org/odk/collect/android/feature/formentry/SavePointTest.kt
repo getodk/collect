@@ -25,6 +25,7 @@ class SavePointTest {
 
     @Test
     fun savePointIsCreateWhenMovingForwardInForm() {
+        // Create save point
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
@@ -32,7 +33,8 @@ class SavePointTest {
             .answerQuestion("What is your age?", "46")
             .let { simulateBatteryDeath() }
 
-            .fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
+        // Start blank form and check save point is loaded
+        rule.fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
@@ -40,6 +42,7 @@ class SavePointTest {
             .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
+        // Check audit log
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog.size, equalTo(7))
 
@@ -55,7 +58,8 @@ class SavePointTest {
     }
 
     @Test
-    fun whenEditing_savePointIsCreateWhenMovingForwardInForm_butNotForBlankForm() {
+    fun whenEditing_savePointIsCreateWhenMovingForwardInForm() {
+        // Create instance
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
             .fillOutAndSave(
@@ -64,6 +68,7 @@ class SavePointTest {
                 FormEntryPage.QuestionAndAnswer("What is your age?", "52")
             )
 
+        // Create save point
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
@@ -71,10 +76,7 @@ class SavePointTest {
             .answerQuestion("What is your age?", "46")
             .let { simulateBatteryDeath() }
 
-        // Check blank form does not load save point
-        rule.fillNewForm("two-question-audit.xml", "Two Question")
-            .pressBackAndDiscardForm(AppClosedPage())
-
+        // Edit instance and check save point is loaded
         rule.editForm("two-question-audit.xml", "Two Question")
             .assertText("Alexei")
             .assertTextDoesNotExist("46")
@@ -83,6 +85,7 @@ class SavePointTest {
             .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
+        // Check audit log
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog.size, equalTo(13))
 
@@ -100,18 +103,21 @@ class SavePointTest {
 
     @Test
     fun savePointIsCreatedWhenLeavingTheApp() {
+        // Create save point
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
             .let { simulateProcessRestore() }
 
-            .fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
+        // Start blank form and check save point is loaded
+        rule.fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
             .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
+        // Check audit log
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog.size, equalTo(6))
 
@@ -127,6 +133,7 @@ class SavePointTest {
 
     @Test
     fun whenEditing_savePointIsCreatedWhenLeavingTheApp() {
+        // Create instance
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
             .fillOutAndSave(
@@ -135,11 +142,13 @@ class SavePointTest {
                 FormEntryPage.QuestionAndAnswer("What is your age?", "52")
             )
 
+        // Create save point
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
             .let { simulateProcessRestore() }
 
+        // Edit instance and check save point is loaded
         rule.editForm("two-question-audit.xml", "Two Question")
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
@@ -147,6 +156,7 @@ class SavePointTest {
             .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
+        // Check audit log
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog.size, equalTo(12))
 
@@ -159,6 +169,49 @@ class SavePointTest {
         assertThat(auditLog[9].get("event"), equalTo("question"))
         assertThat(auditLog[10].get("event"), equalTo("form save"))
         assertThat(auditLog[11].get("event"), equalTo("form exit"))
+    }
+
+    @Test
+    fun blankFormSavePointIsNotUsedWhenEditingInstance() {
+        // Create instance
+        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+            .fillNewForm("two-question-audit.xml", "Two Question")
+            .fillOutAndSave(
+                AppClosedPage(),
+                FormEntryPage.QuestionAndAnswer("What is your name?", "Pasquale"),
+                FormEntryPage.QuestionAndAnswer("What is your age?", "52")
+            )
+
+        // Create save point for blank form
+        rule.fillNewForm("two-question-audit.xml", "Two Question")
+            .answerQuestion("What is your name?", "Alexei")
+            .let { simulateProcessRestore() }
+
+        // Check editing instance doesn't load save point
+        rule.editForm("two-question-audit.xml", "Two Question")
+            .assertText("Pasquale")
+            .assertTextDoesNotExist("Alexei")
+    }
+
+    @Test
+    fun instanceSavePointIsNotUsedWhenFillingBlankForm() {
+        // Create instance
+        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+            .fillNewForm("two-question-audit.xml", "Two Question")
+            .fillOutAndSave(
+                AppClosedPage(),
+                FormEntryPage.QuestionAndAnswer("What is your name?", "Pasquale"),
+                FormEntryPage.QuestionAndAnswer("What is your age?", "52")
+            )
+
+        // Create save point for instance
+        rule.editForm("two-question-audit.xml", "Two Question")
+            .clickGoToStart()
+            .answerQuestion("What is your name?", "Alexei")
+            .let { simulateProcessRestore() }
+
+        // Check starting blank form does not load save point
+        rule.fillNewForm("two-question-audit.xml", "Two Question")
     }
 
     /**
