@@ -9,10 +9,12 @@ the specific language governing permissions and limitations under the License.
 -->
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:id="@+id/scroll_view"
     android:orientation="vertical">
 
     <LinearLayout
@@ -41,7 +43,54 @@ the specific language governing permissions and limitations under the License.
             android:textSize="21sp"
             android:textStyle="bold" />
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/manual_name_warning"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/margin">
+
+                <ImageView
+                    android:id="@+id/instance_name_info_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_outline_info_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?colorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/instance_name_info_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin"
+                    android:text="@string/manual_instance_name_warning"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
+                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/instance_name_learn_more"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manual_instance_learn_more_button"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/instance_name_info_text" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
         <TextView
+            android:layout_marginTop="@dimen/margin"
             android:id="@+id/save_form_as"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
