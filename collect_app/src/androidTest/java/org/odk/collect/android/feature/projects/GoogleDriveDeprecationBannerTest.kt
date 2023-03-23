@@ -11,6 +11,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
@@ -42,6 +43,27 @@ class GoogleDriveDeprecationBannerTest {
             .switchToManualMode()
             .openGooglePickerAndSelect(googleAccount)
             .assertText(R.string.google_drive_deprecation_message)
+    }
+
+    @Test
+    fun bannerDisappearsAfterSwitchingFromGoogleDriveProjectToOdkServer() {
+        val googleAccount = "steph@curry.basket"
+        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
+
+        rule.startAtMainMenu()
+            .openProjectSettingsDialog()
+            .clickAddProject()
+            .switchToManualMode()
+            .openGooglePickerAndSelect(googleAccount)
+            .assertText(R.string.google_drive_deprecation_message)
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickServerSettings()
+            .clickOnServerType()
+            .clickOnString(R.string.server_platform_odk)
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
     }
 
     @Test
