@@ -83,7 +83,7 @@ object GeoWidgetUtils {
     fun convertCoordinatesIntoDegreeFormat(
         context: Context,
         coordinate: Double,
-        type: String,
+        type: String
     ): String {
         val coordinateDegrees = Location.convert(abs(coordinate), Location.FORMAT_SECONDS)
         val coordinateSplit = coordinateDegrees.split(":").toTypedArray()

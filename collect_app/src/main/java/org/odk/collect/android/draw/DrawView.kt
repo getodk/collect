@@ -121,8 +121,10 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private fun touchMove(x: Float, y: Float) {
         currentPath.quadTo(valueX, valueY, (x + valueX) / 2, (y + valueY) / 2)
         offscreenPath.quadTo(
-            valueX - bitmapLeft, valueY - bitmapTop,
-            (x + valueX) / 2 - bitmapLeft, (y + valueY) / 2 - bitmapTop
+            valueX - bitmapLeft,
+            valueY - bitmapTop,
+            (x + valueX) / 2 - bitmapLeft,
+            (y + valueY) / 2 - bitmapTop
         )
         valueX = x
         valueY = y

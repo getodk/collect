@@ -100,7 +100,7 @@ class FormMapViewModel(
     private fun createItem(
         instance: Instance,
         latitude: Double,
-        longitude: Double,
+        longitude: Double
     ): MappableSelectItem {
         val instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(
             resources,

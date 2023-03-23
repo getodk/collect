@@ -103,7 +103,8 @@ open class PermissionsProvider internal constructor(
                     )
                 }
             },
-            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
     }
 
@@ -151,7 +152,8 @@ open class PermissionsProvider internal constructor(
                     )
                 }
             },
-            Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
         )
     }
 
@@ -247,8 +249,10 @@ open class PermissionsProvider internal constructor(
 
                     override fun denied() {
                         permissionsDialogCreator.showAdditionalExplanation(
-                            activity, R.string.storage_runtime_permission_denied_title,
-                            R.string.storage_runtime_permission_denied_desc, R.drawable.sd,
+                            activity,
+                            R.string.storage_runtime_permission_denied_title,
+                            R.string.storage_runtime_permission_denied_desc,
+                            R.drawable.sd,
                             listener
                         )
                     }

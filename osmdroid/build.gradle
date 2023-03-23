@@ -32,9 +32,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
     namespace 'org.odk.collect.osmdroid'
 }
 
@@ -42,7 +39,11 @@ dependencies {
     coreLibraryDesugaring Dependencies.desugar
 
     implementation project(':shared')
-    implementation project(':androidshared')
+    implementation(project(':androidshared')) {
+        // Without this the build fails with 'Corrupt serialized resolution result'.
+        // It looks like a Gradle issue. Hopefully we can get rid of it in the future.
+        exclude group: 'androidx.lifecycle'
+    }
     implementation project(':icons')
     implementation project(':maps')
     implementation project(':location')

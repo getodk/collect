@@ -24,7 +24,7 @@ sealed interface MappableSelectItem {
         val info: String,
         override val selected: Boolean = false,
         override val color: String? = null,
-        override val symbol: String? = null,
+        override val symbol: String? = null
     ) : MappableSelectItem {
 
         constructor(
@@ -38,7 +38,7 @@ sealed interface MappableSelectItem {
             info: String,
             selected: Boolean = false,
             color: String? = null,
-            symbol: String? = null,
+            symbol: String? = null
         ) : this(
             id,
             listOf(MapPoint(latitude, longitude)),
@@ -63,7 +63,7 @@ sealed interface MappableSelectItem {
         val action: IconifiedText,
         override val selected: Boolean = false,
         override val color: String? = null,
-        override val symbol: String? = null,
+        override val symbol: String? = null
     ) : MappableSelectItem {
 
         constructor(
@@ -77,7 +77,7 @@ sealed interface MappableSelectItem {
             action: IconifiedText,
             selected: Boolean = false,
             color: String? = null,
-            symbol: String? = null,
+            symbol: String? = null
         ) : this(
             id,
             listOf(MapPoint(latitude, longitude)),

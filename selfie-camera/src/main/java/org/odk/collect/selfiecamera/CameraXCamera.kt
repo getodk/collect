@@ -54,7 +54,7 @@ internal class CameraXCamera : Camera {
     override fun takePicture(
         imagePath: String,
         onImageSaved: () -> Unit,
-        onImageSaveError: () -> Unit,
+        onImageSaveError: () -> Unit
     ) {
         Pair(imageCapture, activity).let { (i, a) ->
             if (i == null || a == null) {

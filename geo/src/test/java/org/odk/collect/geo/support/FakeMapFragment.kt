@@ -33,7 +33,7 @@ class FakeMapFragment : Fragment(), MapFragment {
 
     override fun init(
         readyListener: ReadyListener?,
-        errorListener: MapFragment.ErrorListener?,
+        errorListener: MapFragment.ErrorListener?
     ) {
         this.readyListener = readyListener
     }
@@ -72,7 +72,7 @@ class FakeMapFragment : Fragment(), MapFragment {
     override fun zoomToBoundingBox(
         points: Iterable<MapPoint>,
         scaleFactor: Double,
-        animate: Boolean,
+        animate: Boolean
     ) {
         center = null
         zoom = 0.0

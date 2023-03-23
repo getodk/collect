@@ -5,18 +5,15 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 
 class FakeLifecycleOwner : LifecycleOwner {
-
-    private val lifecycle: LifecycleRegistry by lazy {
+    private val lifecycleRegistry: LifecycleRegistry by lazy {
         LifecycleRegistry(this).also {
             it.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
         }
     }
 
+    override val lifecycle: LifecycleRegistry = lifecycleRegistry
+
     fun destroy() {
         lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    }
-
-    override fun getLifecycle(): Lifecycle {
-        return lifecycle
     }
 }

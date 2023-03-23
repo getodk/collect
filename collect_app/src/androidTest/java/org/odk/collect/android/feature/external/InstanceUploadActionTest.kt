@@ -24,7 +24,6 @@ class InstanceUploadActionTest {
 
     @Test
     fun whenInstanceDoesNotExist_showsError() {
-
         val instanceIds = longArrayOf(11)
         instanceUploadAction(instanceIds)
 

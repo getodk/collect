@@ -41,7 +41,7 @@ class QuitFormDialogTest {
         assertThat(dialog.getButton(DialogInterface.BUTTON_POSITIVE).visibility, equalTo(View.GONE))
         assertThat(
             dialog.getButton(DialogInterface.BUTTON_NEGATIVE).visibility,
-            equalTo(View.VISIBLE),
+            equalTo(View.VISIBLE)
         )
         assertThat(
             dialog.getButton(DialogInterface.BUTTON_NEGATIVE).text,
@@ -76,7 +76,7 @@ class QuitFormDialogTest {
         val dialogTitle = dialog.findViewById<TextView>(R.id.alertTitle)
         assertThat(
             dialogTitle!!.text.toString(),
-            equalTo(activity.getString(R.string.quit_application, "blah")),
+            equalTo(activity.getString(R.string.quit_application, "blah"))
         )
     }
 

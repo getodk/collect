@@ -20,13 +20,13 @@ import java.lang.Boolean.parseBoolean
 
 class ActivityGeoDataRequester(
     private val permissionsProvider: PermissionsProvider,
-    private val activity: Activity,
+    private val activity: Activity
 ) : GeoDataRequester {
 
     override fun requestGeoPoint(
         prompt: FormEntryPrompt,
         answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry,
+        waitingForDataRegistry: WaitingForDataRegistry
     ) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
@@ -38,7 +38,7 @@ class ActivityGeoDataRequester(
                         if (!answerText.isNullOrEmpty()) {
                             it.putParcelable(
                                 GeoPointMapActivity.EXTRA_LOCATION,
-                                GeoWidgetUtils.parseGeometry(answerText)[0],
+                                GeoWidgetUtils.parseGeometry(answerText)[0]
                             )
                         }
 
@@ -47,18 +47,18 @@ class ActivityGeoDataRequester(
                         val unacceptableAccuracyThreshold =
                             FormEntryPromptUtils.getBodyAttribute(
                                 prompt,
-                                "unacceptableAccuracyThreshold",
+                                "unacceptableAccuracyThreshold"
                             )
 
                         it.putFloat(
                             GeoPointActivity.EXTRA_ACCURACY_THRESHOLD,
-                            accuracyThreshold?.toFloatOrNull() ?: DEFAULT_ACCURACY_THRESHOLD,
+                            accuracyThreshold?.toFloatOrNull() ?: DEFAULT_ACCURACY_THRESHOLD
                         )
 
                         it.putFloat(
                             GeoPointActivity.EXTRA_UNACCEPTABLE_ACCURACY_THRESHOLD,
                             unacceptableAccuracyThreshold?.toFloatOrNull()
-                                ?: DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD,
+                                ?: DEFAULT_UNACCEPTABLE_ACCURACY_THRESHOLD
                         )
 
                         it.putBoolean(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
@@ -68,24 +68,24 @@ class ActivityGeoDataRequester(
 
                     val intent = Intent(
                         activity,
-                        if (isMapsAppearance(prompt)) GeoPointMapActivity::class.java else GeoPointActivity::class.java,
+                        if (isMapsAppearance(prompt)) GeoPointMapActivity::class.java else GeoPointActivity::class.java
                     ).also {
                         it.putExtras(bundle)
                     }
 
                     activity.startActivityForResult(
                         intent,
-                        ApplicationConstants.RequestCodes.LOCATION_CAPTURE,
+                        ApplicationConstants.RequestCodes.LOCATION_CAPTURE
                     )
                 }
-            },
+            }
         )
     }
 
     override fun requestGeoShape(
         prompt: FormEntryPrompt,
         answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry,
+        waitingForDataRegistry: WaitingForDataRegistry
     ) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
@@ -100,7 +100,7 @@ class ActivityGeoDataRequester(
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
-                            GeoPolyActivity.OutputMode.GEOSHAPE,
+                            GeoPolyActivity.OutputMode.GEOSHAPE
                         )
                         it.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly)
                         it.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
@@ -108,17 +108,17 @@ class ActivityGeoDataRequester(
 
                     activity.startActivityForResult(
                         intent,
-                        ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE,
+                        ApplicationConstants.RequestCodes.GEOSHAPE_CAPTURE
                     )
                 }
-            },
+            }
         )
     }
 
     override fun requestGeoTrace(
         prompt: FormEntryPrompt,
         answerText: String?,
-        waitingForDataRegistry: WaitingForDataRegistry,
+        waitingForDataRegistry: WaitingForDataRegistry
     ) {
         permissionsProvider.requestEnabledLocationPermissions(
             activity,
@@ -133,7 +133,7 @@ class ActivityGeoDataRequester(
                         )
                         it.putExtra(
                             GeoPolyActivity.OUTPUT_MODE_KEY,
-                            GeoPolyActivity.OutputMode.GEOTRACE,
+                            GeoPolyActivity.OutputMode.GEOTRACE
                         )
                         it.putExtra(EXTRA_READ_ONLY, prompt.isReadOnly)
                         it.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, getAllowMockAccuracy(prompt))
@@ -141,10 +141,10 @@ class ActivityGeoDataRequester(
 
                     activity.startActivityForResult(
                         intent,
-                        ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE,
+                        ApplicationConstants.RequestCodes.GEOTRACE_CAPTURE
                     )
                 }
-            },
+            }
         )
     }
 

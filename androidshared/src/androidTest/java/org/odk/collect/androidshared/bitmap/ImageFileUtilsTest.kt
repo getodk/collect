@@ -180,7 +180,8 @@ class ImageFileUtilsTest {
             assertEquals(
                 ExifInterface.ORIENTATION_UNDEFINED,
                 exifData.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED
                 )
             )
         }

@@ -36,7 +36,7 @@ object MapUtils {
     fun createPointAnnotations(
         context: Context,
         pointAnnotationManager: PointAnnotationManager,
-        markerFeatures: List<MarkerDescription>,
+        markerFeatures: List<MarkerDescription>
     ): List<PointAnnotation> {
         val pointAnnotationOptionsList = markerFeatures.map {
             PointAnnotationOptions()

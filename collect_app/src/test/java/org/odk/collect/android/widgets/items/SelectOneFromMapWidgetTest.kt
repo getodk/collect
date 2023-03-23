@@ -96,7 +96,7 @@ class SelectOneFromMapWidgetTest {
             SelectOneFromMapDialogFragment(object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
-                    extras: CreationExtras,
+                    extras: CreationExtras
                 ): T {
                     return formEntryViewModel as T
                 }
@@ -271,7 +271,7 @@ class SelectOneFromMapWidgetTest {
             SelectOneFromMapDialogFragment(object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
-                    extras: CreationExtras,
+                    extras: CreationExtras
                 ): T {
                     return formEntryViewModel as T
                 }

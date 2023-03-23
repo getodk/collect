@@ -156,7 +156,7 @@ class ImageCompressorTest {
 
             // unsupported exif tags
             ExifInterface.TAG_THUMBNAIL_IMAGE_LENGTH to "5",
-            ExifInterface.TAG_DNG_VERSION to "100",
+            ExifInterface.TAG_DNG_VERSION to "100"
         )
 
         saveTestBitmap(3000, 4000, attributes)

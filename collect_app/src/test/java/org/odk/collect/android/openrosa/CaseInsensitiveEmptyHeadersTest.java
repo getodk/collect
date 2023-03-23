@@ -8,7 +8,7 @@ public class CaseInsensitiveEmptyHeadersTest {
 
     @Test
     public void testGetHeaders() {
-        Assert.assertTrue(headers.getHeaders().size() == 0);
+        Assert.assertEquals(0, headers.getHeaders().size());
     }
 
     @Test

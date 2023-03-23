@@ -193,7 +193,8 @@ class SelectOneFromMapDialogFragmentTest {
                             "A",
                             emptyList(),
                             IconifiedText(
-                                R.drawable.ic_save, application.getString(R.string.select_item)
+                                R.drawable.ic_save,
+                                application.getString(R.string.select_item)
                             )
                         ),
                         MappableSelectItem.WithAction(

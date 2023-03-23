@@ -46,8 +46,13 @@ class QRCodeMenuDelegateTest {
 
     private fun setupMenuDelegate() {
         menuDelegate = QRCodeMenuDelegate(
-            activity, intentLauncher, qrCodeGenerator,
-            appConfigurationGenerator, fileProvider, getSettingsProvider(), fakeScheduler
+            activity,
+            intentLauncher,
+            qrCodeGenerator,
+            appConfigurationGenerator,
+            fileProvider,
+            getSettingsProvider(),
+            fakeScheduler
         )
     }
 
@@ -75,7 +80,8 @@ class QRCodeMenuDelegateTest {
         menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_item_scan_sd_card))
 
         assertThat(
-            Shadows.shadowOf(activity).nextStartedActivityForResult, nullValue()
+            Shadows.shadowOf(activity).nextStartedActivityForResult,
+            nullValue()
         )
         assertThat(ShadowToast.getLatestToast(), notNullValue())
     }

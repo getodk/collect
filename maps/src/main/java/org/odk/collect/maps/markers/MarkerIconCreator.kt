@@ -46,7 +46,7 @@ object MarkerIconCreator {
         context: Context,
         drawableId: Int,
         color: Int?,
-        symbol: String?,
+        symbol: String?
     ): Bitmap {
         val drawable = ContextCompat.getDrawable(context, drawableId)
         if (drawable != null) {

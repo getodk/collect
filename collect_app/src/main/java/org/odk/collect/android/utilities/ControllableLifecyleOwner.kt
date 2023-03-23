@@ -9,15 +9,13 @@ class ControllableLifecyleOwner : LifecycleOwner {
         this.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
     }
 
+    override val lifecycle: LifecycleRegistry = lifecycleRegistry
+
     fun start() {
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
     }
 
     fun destroy() {
-        lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    }
-
-    override fun getLifecycle(): Lifecycle {
-        return lifecycleRegistry
+        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     }
 }

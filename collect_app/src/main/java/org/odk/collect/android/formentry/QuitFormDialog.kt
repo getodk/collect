@@ -30,7 +30,7 @@ object QuitFormDialog {
         formEntryViewModel: FormEntryViewModel,
         settingsProvider: SettingsProvider,
         currentProjectProvider: CurrentProjectProvider,
-        onSaveChangesClicked: Runnable?,
+        onSaveChangesClicked: Runnable?
     ): AlertDialog {
         return create(
             activity,
@@ -50,7 +50,7 @@ object QuitFormDialog {
         formEntryViewModel: FormEntryViewModel,
         settingsProvider: SettingsProvider,
         currentProjectProvider: CurrentProjectProvider,
-        onSaveChangesClicked: Runnable?,
+        onSaveChangesClicked: Runnable?
     ): AlertDialog {
         val title: String =
             if (formSaveViewModel.formName == null) activity.resources.getString(R.string.no_form_loaded) else formSaveViewModel.getFormName()

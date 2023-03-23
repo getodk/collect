@@ -18,9 +18,11 @@ object AuditUtils {
             try {
                 for (question in formController.getQuestionPrompts()) {
                     val answer =
-                        if (question.answerValue != null)
+                        if (question.answerValue != null) {
                             question.answerValue!!.displayText
-                        else null
+                        } else {
+                            null
+                        }
 
                     auditEventLogger.logEvent(
                         AuditEvent.AuditEventType.QUESTION,
