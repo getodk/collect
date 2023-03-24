@@ -13,6 +13,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -47,6 +48,12 @@ class BlankFormListViewModelTest {
 
     private val changeLock = BooleanChangeLock()
     private lateinit var viewModel: BlankFormListViewModel
+
+    @Test
+    fun `updates forms when created`() {
+        createViewModel()
+        verify(formsDataService).update(projectId)
+    }
 
     @Test
     fun `syncWithServer when task finishes sets result to true`() {
