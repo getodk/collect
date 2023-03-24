@@ -10,7 +10,6 @@ import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.androidshared.livedata.LiveDataUtils
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
@@ -37,15 +36,7 @@ class BlankFormListViewModel(
     }
 
     val syncResult: LiveData<String?> = formsDataService.getDiskError(projectId)
-
-    private val isFormLoadingRunning = MutableNonNullLiveData(false)
-    private val isSyncingWithStorageRunning = MutableNonNullLiveData(false)
-
-    val isLoading: LiveData<Boolean> = LiveDataUtils.zip3(
-        isFormLoadingRunning,
-        isSyncingWithStorageRunning,
-        formsDataService.isSyncing(projectId)
-    ).map { (one, two, three) -> one || two || three }
+    val isLoading: LiveData<Boolean> = formsDataService.isSyncing(projectId)
 
     var sortingOrder: Int = generalSettings.getInt("formChooserListSortingOrder")
         get() { return generalSettings.getInt("formChooserListSortingOrder") }
