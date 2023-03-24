@@ -55,7 +55,6 @@ import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.formmanagement.matchexactly.SyncDataService;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountPicker;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
@@ -304,8 +303,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, SyncDataService syncStatusAppState) {
-        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, syncStatusAppState);
+    public SettingsChangeHandler providesSettingsChangeHandler(PropertyManager propertyManager, FormUpdateScheduler formUpdateScheduler, FormsDataService formsDataService) {
+        return new CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, formsDataService);
     }
 
     @Provides
@@ -341,11 +340,6 @@ public class AppDependencyModule {
     @Provides
     public QRCodeDecoder providesQRCodeDecoder() {
         return new QRCodeDecoderImpl();
-    }
-
-    @Provides
-    public SyncDataService providesServerFormSyncRepository(Application application) {
-        return new SyncDataService(application);
     }
 
     @Provides
@@ -628,7 +622,7 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public BlankFormListViewModel.Factory providesBlankFormListViewModel(FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, Application application, SyncDataService syncDataService, FormsDataService formsDataService, Scheduler scheduler, SettingsProvider settingsProvider, ChangeLockProvider changeLockProvider, CurrentProjectProvider currentProjectProvider) {
+    public BlankFormListViewModel.Factory providesBlankFormListViewModel(FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider, Application application, FormsDataService formsDataService, Scheduler scheduler, SettingsProvider settingsProvider, ChangeLockProvider changeLockProvider, CurrentProjectProvider currentProjectProvider) {
         return new BlankFormListViewModel.Factory(instancesRepositoryProvider.get(), application, formsDataService, scheduler, settingsProvider.getUnprotectedSettings(), currentProjectProvider.getCurrentProject().getUuid());
     }
 

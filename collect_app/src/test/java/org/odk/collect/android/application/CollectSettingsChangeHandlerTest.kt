@@ -5,7 +5,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
-import org.odk.collect.android.formmanagement.matchexactly.SyncDataService
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.keys.ProjectKeys
 
@@ -13,8 +13,8 @@ class CollectSettingsChangeHandlerTest {
 
     private val propertyManager = mock<PropertyManager>()
     private val formUpdateScheduler = mock<FormUpdateScheduler>()
-    private val syncStatusAppState = mock<SyncDataService>()
-    private val handler = CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, syncStatusAppState)
+    private val formsDataService = mock<FormsDataService>()
+    private val handler = CollectSettingsChangeHandler(propertyManager, formUpdateScheduler, formsDataService)
 
     @Test
     fun `updates PropertyManager when a single setting is changed`() {
@@ -47,13 +47,13 @@ class CollectSettingsChangeHandlerTest {
     @Test
     fun `when changed key is PROTOCOL clears sync status`() {
         handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_PROTOCOL)
-        verify(syncStatusAppState).clear("projectId")
+        verify(formsDataService).clear("projectId")
     }
 
     @Test
     fun `when changed key is SERVER_URL clears sync status`() {
         handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_SERVER_URL)
-        verify(syncStatusAppState).clear("projectId")
+        verify(formsDataService).clear("projectId")
     }
 
     @Test
@@ -65,7 +65,7 @@ class CollectSettingsChangeHandlerTest {
     @Test
     fun `do not clear sync status if other single settings are changed`() {
         handler.onSettingChanged("projectId", "anything", "blah")
-        verifyNoInteractions(syncStatusAppState)
+        verifyNoInteractions(formsDataService)
     }
 
     @Test

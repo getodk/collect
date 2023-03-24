@@ -42,3 +42,17 @@ fun <T> LiveData<T>.getOrAwaitValue(
     @Suppress("UNCHECKED_CAST")
     return data as T
 }
+
+fun <T> LiveData<T>.recordValues(block: (List<T>) -> Unit) {
+    val list = mutableListOf<T>()
+    val observer = Observer<T> {
+        list.add(it)
+    }
+
+    try {
+        this.observeForever(observer)
+        block(list)
+    } finally {
+        this.removeObserver(observer)
+    }
+}

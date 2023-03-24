@@ -41,7 +41,6 @@ import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.InstancesAppState;
-import org.odk.collect.android.formmanagement.matchexactly.SyncDataService;
 import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
@@ -304,8 +303,6 @@ public interface AppDependencyComponent {
     FormsRepositoryProvider formsRepositoryProvider();
 
     InstancesRepositoryProvider instancesRepositoryProvider();
-
-    SyncDataService syncStatusAppState();
 
     FormSourceProvider formSourceProvider();
 

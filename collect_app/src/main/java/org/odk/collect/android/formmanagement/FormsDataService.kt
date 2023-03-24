@@ -43,7 +43,6 @@ class FormsDataService(
     }
 
     fun clear(projectId: String) {
-        getSyncingLiveData(projectId).value = false
         getSyncErrorLiveData(projectId).value = null
     }
 
@@ -143,16 +142,6 @@ class FormsDataService(
         getFormsLiveData(projectId).postValue(sandbox.formsRepository.all)
     }
 
-    private fun syncWithStorage(projectId: String) {
-        val sandbox = projectDependencyProviderFactory.create(projectId)
-        sandbox.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
-            if (acquiredLock) {
-                val error = diskFormsSynchronizer(sandbox).synchronizeAndReturnError()
-                getDiskErrorLiveData(projectId).postValue(error)
-            }
-        }
-    }
-
     private fun startSync(projectId: String) {
         getSyncingLiveData(projectId).postValue(true)
     }
@@ -161,6 +150,16 @@ class FormsDataService(
         getSyncErrorLiveData(projectId).postValue(exception)
         getSyncingLiveData(projectId).postValue(false)
         context.contentResolver.notifyChange(FormsContract.getUri(projectId), null)
+    }
+
+    private fun syncWithStorage(projectId: String) {
+        val sandbox = projectDependencyProviderFactory.create(projectId)
+        sandbox.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
+            if (acquiredLock) {
+                val error = diskFormsSynchronizer(sandbox).synchronizeAndReturnError()
+                getDiskErrorLiveData(projectId).postValue(error)
+            }
+        }
     }
 
     private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>?> {

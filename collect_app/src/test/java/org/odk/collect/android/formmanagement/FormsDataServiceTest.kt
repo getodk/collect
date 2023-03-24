@@ -2,30 +2,32 @@ package org.odk.collect.android.formmanagement
 
 import android.app.Application
 import android.database.ContentObserver
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.equalTo
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.external.FormsContract
-import org.odk.collect.android.formmanagement.matchexactly.SyncDataService
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.androidtest.getOrAwaitValue
+import org.odk.collect.androidtest.recordValues
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.FormSource
 import org.odk.collect.forms.FormSourceException
@@ -38,13 +40,15 @@ import org.odk.collect.testshared.BooleanChangeLock
 @RunWith(AndroidJUnit4::class)
 class FormsDataServiceTest {
 
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
     private val application = ApplicationProvider.getApplicationContext<Application>()
     private val component = DaggerUtils.getComponent(application)
 
     private val formsRepositoryProvider = component.formsRepositoryProvider()
     private val storagePathProvider = component.storagePathProvider()
     private val settingsProvider = component.settingsProvider()
-    private val syncDataService = mock<SyncDataService>()
     private val notifier = mock<Notifier>()
     private val analytics = mock<Analytics>()
 
@@ -56,7 +60,7 @@ class FormsDataServiceTest {
         on { fetchFormList() } doReturn emptyList()
     }
 
-    private lateinit var updateManager: FormsDataService
+    private lateinit var formsDataService: FormsDataService
 
     private lateinit var project: Project.Saved
 
@@ -79,11 +83,16 @@ class FormsDataServiceTest {
         val projectDependencyProviderFactory = mock<ProjectDependencyProviderFactory>()
         whenever(projectDependencyProviderFactory.create(project.uuid)).thenReturn(projectDependencyProvider)
 
-        updateManager = FormsDataService(
+        formsDataService = FormsDataService(
             context = application,
             notifier = notifier,
             projectDependencyProviderFactory = projectDependencyProviderFactory
         ) { 0 }
+    }
+
+    @Test
+    fun getSyncError_isNullAtFirst() {
+        assertThat(formsDataService.getSyncError(project.uuid).value, equalTo(null))
     }
 
     @Test
@@ -95,7 +104,7 @@ class FormsDataServiceTest {
             contentObserver
         )
 
-        updateManager.downloadUpdates(project.uuid)
+        formsDataService.downloadUpdates(project.uuid)
 
         verify(contentObserver).dispatchChange(false, FormsContract.getUri(project.uuid))
     }
@@ -110,10 +119,10 @@ class FormsDataServiceTest {
         settingsProvider.getUnprotectedSettings(project.uuid)
             .save(ProjectKeys.KEY_AUTOMATIC_UPDATE, true)
 
-        updateManager.downloadUpdates(project.uuid)
+        formsDataService.downloadUpdates(project.uuid)
         assertThat(
             formsRepositoryProvider.get(project.uuid).getAllByFormIdAndVersion("formId", "2").size,
-            `is`(1)
+            equalTo(1)
         )
     }
 
@@ -123,8 +132,8 @@ class FormsDataServiceTest {
         whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
 
-        updateManager.matchFormsWithServer(project.uuid)
-        verifyNoInteractions(syncDataService)
+        formsDataService.matchFormsWithServer(project.uuid)
+        assertThat(formsDataService.isSyncing(project.uuid).getOrAwaitValue(), equalTo(false))
         verifyNoInteractions(formSource)
         verifyNoInteractions(notifier)
         verifyNoInteractions(analytics)
@@ -140,28 +149,45 @@ class FormsDataServiceTest {
         whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
 
-        assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
+        assertThat(formsDataService.matchFormsWithServer(project.uuid), equalTo(false))
     }
 
     @Test
     fun `matchFormsWithServer() returns false when there is an error communicating with the server`() {
         whenever(formSource.fetchFormList()).thenThrow(FormSourceException.FetchError())
-        assertThat(updateManager.matchFormsWithServer(project.uuid), `is`(false))
+        assertThat(formsDataService.matchFormsWithServer(project.uuid), equalTo(false))
     }
 
     @Test
-    fun `matchFormsWithServer() updates sync state`() {
-        val inOrder = inOrder(syncDataService)
-        updateManager.matchFormsWithServer(project.uuid)
-        inOrder.verify(syncDataService).startSync(project.uuid)
-        inOrder.verify(syncDataService).finishSync(project.uuid, null)
+    fun `matchFormsWithServer() updates project sync state`() {
+        val projectState = formsDataService.isSyncing(project.uuid)
+        val otherProjectState = formsDataService.isSyncing("other")
+
+        projectState.recordValues { projectValues ->
+            otherProjectState.recordValues { otherProjectValues ->
+                formsDataService.matchFormsWithServer(project.uuid)
+
+                assertThat(projectValues, equalTo(listOf(false, true, false)))
+                assertThat(otherProjectValues, equalTo(listOf(false)))
+            }
+        }
+    }
+
+    @Test
+    fun `matchFormsWithServer() when there is an error updates project error state`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid)
+
+        assertThat(formsDataService.getSyncError(project.uuid).getOrAwaitValue(), equalTo(error))
+        assertThat(formsDataService.getSyncError("other").getOrAwaitValue(), equalTo(null))
     }
 
     @Test
     fun `matchFormsWithServer() notifies when called with default notify value`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        updateManager.matchFormsWithServer(project.uuid)
+        formsDataService.matchFormsWithServer(project.uuid)
         verify(notifier).onSync(error, project.uuid)
     }
 
@@ -169,7 +195,7 @@ class FormsDataServiceTest {
     fun `matchFormsWithServer() notifies when called with notify true`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        updateManager.matchFormsWithServer(project.uuid, true)
+        formsDataService.matchFormsWithServer(project.uuid, true)
         verify(notifier).onSync(error, project.uuid)
     }
 
@@ -177,8 +203,18 @@ class FormsDataServiceTest {
     fun `matchFormsWithServer() does not notify when called with notify false`() {
         val error = FormSourceException.FetchError()
         whenever(formSource.fetchFormList()).thenThrow(error)
-        updateManager.matchFormsWithServer(project.uuid, false)
+        formsDataService.matchFormsWithServer(project.uuid, false)
         verifyNoInteractions(notifier)
+    }
+
+    @Test
+    fun `clear() clears error state`() {
+        val error = FormSourceException.FetchError()
+        whenever(formSource.fetchFormList()).thenThrow(error)
+        formsDataService.matchFormsWithServer(project.uuid)
+
+        formsDataService.clear(project.uuid)
+        assertThat(formsDataService.getSyncError(project.uuid).getOrAwaitValue(), equalTo(null))
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {
