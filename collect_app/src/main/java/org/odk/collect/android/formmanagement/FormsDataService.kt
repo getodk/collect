@@ -104,20 +104,21 @@ class FormsDataService(
 
                 val exception = try {
                     serverFormsSynchronizer.synchronize()
-                    finishSync(projectId, null)
                     if (notify) {
                         notifier.onSync(null, projectId)
                     }
+
                     null
                 } catch (e: FormSourceException) {
-                    finishSync(projectId, e)
                     if (notify) {
                         notifier.onSync(e, projectId)
                     }
+
                     e
                 }
 
                 syncWithDb(projectId)
+                finishSync(projectId, exception)
                 exception == null
             } else {
                 false
@@ -132,15 +133,19 @@ class FormsDataService(
     }
 
     fun update(projectId: String) {
+        startSync(projectId)
+
         syncWithStorage(projectId)
         syncWithDb(projectId)
+
+        finishSync(projectId)
     }
 
     private fun startSync(projectId: String) {
         getSyncingLiveData(projectId).postValue(true)
     }
 
-    private fun finishSync(projectId: String, exception: FormSourceException?) {
+    private fun finishSync(projectId: String, exception: FormSourceException? = null) {
         getSyncErrorLiveData(projectId).postValue(exception)
         getSyncingLiveData(projectId).postValue(false)
     }
