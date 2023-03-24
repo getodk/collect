@@ -24,6 +24,7 @@ import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.androidtest.recordValues
 import org.odk.collect.forms.FormListItem
@@ -82,7 +83,7 @@ class FormsDataServiceTest {
         whenever(projectDependencyProviderFactory.create(project.uuid)).thenReturn(projectDependencyProvider)
 
         formsDataService = FormsDataService(
-            context = application,
+            appState = AppState(),
             notifier = notifier,
             projectDependencyProviderFactory = projectDependencyProviderFactory
         ) { 0 }

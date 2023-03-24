@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
@@ -8,7 +7,7 @@ import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
-import org.odk.collect.androidshared.data.getState
+import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.settings.keys.ProjectKeys
@@ -17,13 +16,11 @@ import java.util.function.Supplier
 import java.util.stream.Collectors
 
 class FormsDataService(
-    context: Context,
+    private val appState: AppState,
     private val notifier: Notifier,
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
     private val clock: Supplier<Long>
 ) {
-
-    private val appState = context.getState()
 
     fun getForms(projectId: String): LiveData<List<Form>?> {
         return getFormsLiveData(projectId)

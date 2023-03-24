@@ -1,6 +1,6 @@
 package org.odk.collect.android.backgroundwork
 
-import android.content.Context
+import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
@@ -25,7 +25,7 @@ class SyncFormsTaskSpecTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesFormsUpdater(
-                context: Context,
+                application: Application,
                 notifier: Notifier,
                 projectDependencyProviderFactory: ProjectDependencyProviderFactory
             ): FormsDataService {

@@ -1,7 +1,6 @@
 package org.odk.collect.android.backgroundwork
 
 import android.app.Application
-import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
@@ -28,7 +27,7 @@ class AutoUpdateTaskSpecTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesFormsUpdater(
-                context: Context,
+                application: Application,
                 notifier: Notifier,
                 projectDependencyProviderFactory: ProjectDependencyProviderFactory
             ): FormsDataService {
