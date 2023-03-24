@@ -1,7 +1,6 @@
 package org.odk.collect.android.formmanagement
 
 import android.app.Application
-import android.database.ContentObserver
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,7 +18,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
@@ -93,20 +91,6 @@ class FormsDataServiceTest {
     @Test
     fun getSyncError_isNullAtFirst() {
         assertThat(formsDataService.getSyncError(project.uuid).value, equalTo(null))
-    }
-
-    @Test
-    fun `downloadUpdates() notifies Forms content resolver`() {
-        val contentObserver = mock<ContentObserver>()
-        application.contentResolver.registerContentObserver(
-            FormsContract.getUri(project.uuid),
-            false,
-            contentObserver
-        )
-
-        formsDataService.downloadUpdates(project.uuid)
-
-        verify(contentObserver).dispatchChange(false, FormsContract.getUri(project.uuid))
     }
 
     @Test

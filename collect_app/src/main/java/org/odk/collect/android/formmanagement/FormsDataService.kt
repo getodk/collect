@@ -3,7 +3,6 @@ package org.odk.collect.android.formmanagement
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
@@ -18,7 +17,7 @@ import java.util.function.Supplier
 import java.util.stream.Collectors
 
 class FormsDataService(
-    private val context: Context,
+    context: Context,
     private val notifier: Notifier,
     private val projectDependencyProviderFactory: ProjectDependencyProviderFactory,
     private val clock: Supplier<Long>
@@ -78,7 +77,6 @@ class FormsDataService(
             }
 
             update(projectId)
-            context.contentResolver.notifyChange(FormsContract.getUri(projectId), null)
         } catch (_: FormSourceException) {
             // Ignored
         }
@@ -149,7 +147,6 @@ class FormsDataService(
     private fun finishSync(projectId: String, exception: FormSourceException?) {
         getSyncErrorLiveData(projectId).postValue(exception)
         getSyncingLiveData(projectId).postValue(false)
-        context.contentResolver.notifyChange(FormsContract.getUri(projectId), null)
     }
 
     private fun syncWithStorage(projectId: String) {
