@@ -1871,6 +1871,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
                             getFormController().setLanguage(languages[whichButton]);
                             dialog.dismiss();
+                            formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
                             onScreenRefresh();
                         })
                 .setTitle(getString(R.string.change_language))
