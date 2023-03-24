@@ -73,7 +73,7 @@ class FormsDataService(
                 }
             }
 
-            update(projectId)
+            syncWithDb(projectId)
         } catch (_: FormSourceException) {
             // Ignored
         }
@@ -117,7 +117,7 @@ class FormsDataService(
                     e
                 }
 
-                update(projectId)
+                syncWithDb(projectId)
                 exception == null
             } else {
                 false
@@ -128,13 +128,12 @@ class FormsDataService(
     fun deleteForm(projectId: String, formId: Long) {
         val sandbox = projectDependencyProviderFactory.create(projectId)
         FormDeleter(sandbox.formsRepository, sandbox.instancesRepository).delete(formId)
-        update(projectId)
+        syncWithDb(projectId)
     }
 
     fun update(projectId: String) {
         syncWithStorage(projectId)
-        val sandbox = projectDependencyProviderFactory.create(projectId)
-        getFormsLiveData(projectId).postValue(sandbox.formsRepository.all)
+        syncWithDb(projectId)
     }
 
     private fun startSync(projectId: String) {
@@ -144,6 +143,11 @@ class FormsDataService(
     private fun finishSync(projectId: String, exception: FormSourceException?) {
         getSyncErrorLiveData(projectId).postValue(exception)
         getSyncingLiveData(projectId).postValue(false)
+    }
+
+    private fun syncWithDb(projectId: String) {
+        val sandbox = projectDependencyProviderFactory.create(projectId)
+        getFormsLiveData(projectId).postValue(sandbox.formsRepository.all)
     }
 
     private fun syncWithStorage(projectId: String) {
