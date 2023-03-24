@@ -53,13 +53,13 @@ public class LiveDataUtils {
         );
     }
 
-    private static abstract class DeferrableUpdateMediatorLiveData<T> extends MediatorLiveData<T> {
+    private abstract static class DeferrableUpdateMediatorLiveData<T> extends MediatorLiveData<T> {
 
         private final int sources;
         private final Set<Integer> registeredSources = new HashSet<>();
-        private int sourceCounter = 0;
+        private int sourceCounter;
 
-        public DeferrableUpdateMediatorLiveData(int sources) {
+        DeferrableUpdateMediatorLiveData(int sources) {
             this.sources = sources;
         }
 
@@ -89,7 +89,7 @@ public class LiveDataUtils {
         private final Object[] values;
         private final Function<Object[], T> map;
 
-        public ZippedLiveData(LiveData<?>[] sources, Function<Object[], T> map) {
+        ZippedLiveData(LiveData<?>[] sources, Function<Object[], T> map) {
             super(sources.length);
             this.map = map;
             values = new Object[sources.length];

@@ -7,17 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import org.odk.collect.android.formmanagement.FormsDataService
-import org.odk.collect.android.formmanagement.matchexactly.SyncDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
-import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.AuthRequired
-import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
@@ -32,26 +29,11 @@ class BlankFormListViewModel(
     private val showAllVersions: Boolean = false
 ) : ViewModel() {
 
-    private val _allForms: MutableNonNullLiveData<List<BlankFormListItem>> = MutableNonNullLiveData(emptyList())
-    private val _formsToDisplay: MutableLiveData<List<BlankFormListItem>?> = MutableLiveData()
-    val formsToDisplay: LiveData<List<BlankFormListItem>?> = formsDataService.getForms(projectId).map { forms ->
-        var newListOfForms = forms
-            .filter {
-                !it.isDeleted
-            }.map { form ->
-                form.toBlankFormListItem(projectId, instancesRepository)
-            }
-
-        if (shouldHideOldFormVersions && !showAllVersions) {
-            newListOfForms = newListOfForms.groupBy {
-                it.formId
-            }.map { (_, itemsWithSameId) ->
-                itemsWithSameId.sortedBy {
-                    it.dateOfCreation
-                }.last()
-            }
-        }
-        newListOfForms
+    private val _filterText = MutableLiveData("")
+    private val _sortingOrder = MutableLiveData(generalSettings.getInt("formChooserListSortingOrder"))
+    private val filteredForms = LiveDataUtils.zip3(formsDataService.getForms(projectId), _filterText, _sortingOrder)
+    val formsToDisplay: LiveData<List<BlankFormListItem>?> = filteredForms.map { (forms, filter, sort) ->
+        filterAndSortForms(forms, sort, filter)
     }
 
     val syncResult: LiveData<String?> = formsDataService.getDiskError(projectId)
@@ -71,26 +53,22 @@ class BlankFormListViewModel(
         set(value) {
             field = value
             generalSettings.save("formChooserListSortingOrder", value)
-            sortAndFilter()
+            _sortingOrder.value = value
         }
 
     var filterText: String = ""
         set(value) {
             field = value
-            sortAndFilter()
-        }
-
-    private val shouldHideOldFormVersions: Boolean
-        get() {
-            return generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
+            _filterText.value = value
         }
 
     init {
-        scheduler.immediate(background = {
-            formsDataService.update(projectId)
-        }, foreground = {
-
-        })
+        scheduler.immediate(
+            background = {
+                formsDataService.update(projectId)
+            },
+            foreground = {}
+        )
     }
 
     fun getAllForms(): List<BlankFormListItem> {
@@ -146,29 +124,56 @@ class BlankFormListViewModel(
         )
     }
 
-    private fun sortAndFilter() {
-        _formsToDisplay.value = when (sortingOrder) {
-            0 -> _allForms.value.sortedBy { it.formName.lowercase() }
-            1 -> _allForms.value.sortedByDescending { it.formName.lowercase() }
-            2 -> _allForms.value.sortedByDescending { it.dateOfLastDetectedAttachmentsUpdate ?: it.dateOfCreation }
-            3 -> _allForms.value.sortedBy { it.dateOfLastDetectedAttachmentsUpdate ?: it.dateOfCreation }
-            4 -> _allForms.value.sortedByDescending { it.dateOfLastUsage }
-            else -> { _allForms.value }
+    private fun filterAndSortForms(
+        forms: List<Form>?,
+        sort: Int?,
+        filter: String
+    ): List<BlankFormListItem> {
+        if (forms == null) {
+            return emptyList()
+        }
+
+        var newListOfForms = forms
+            .filter {
+                !it.isDeleted
+            }.map { form ->
+                form.toBlankFormListItem(projectId, instancesRepository)
+            }
+
+        if (!showAllVersions) {
+            newListOfForms = newListOfForms.groupBy {
+                it.formId
+            }.map { (_, itemsWithSameId) ->
+                itemsWithSameId.sortedBy {
+                    it.dateOfCreation
+                }.last()
+            }
+        }
+
+        return when (sort) {
+            0 -> newListOfForms.sortedBy { it.formName.lowercase() }
+            1 -> newListOfForms.sortedByDescending { it.formName.lowercase() }
+            2 -> newListOfForms.sortedByDescending {
+                it.dateOfLastDetectedAttachmentsUpdate ?: it.dateOfCreation
+            }
+            3 -> newListOfForms.sortedBy {
+                it.dateOfLastDetectedAttachmentsUpdate ?: it.dateOfCreation
+            }
+            4 -> newListOfForms.sortedByDescending { it.dateOfLastUsage }
+            else -> {
+                newListOfForms
+            }
         }.filter {
-            filterText.isBlank() || it.formName.contains(filterText, true)
+            filter.isBlank() || it.formName.contains(filter, true)
         }
     }
 
     class Factory(
-        private val formsRepository: FormsRepository,
         private val instancesRepository: InstancesRepository,
         private val application: Application,
-        private val syncRepository: SyncDataService,
         private val formsDataService: FormsDataService,
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
-        private val changeLockProvider: ChangeLockProvider,
-        private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
         private val projectId: String
     ) : ViewModelProvider.Factory {
 

@@ -26,7 +26,7 @@ class FormsDataService(
 
     private val appState = context.getState()
 
-    fun getForms(projectId: String): LiveData<List<Form>> {
+    fun getForms(projectId: String): LiveData<List<Form>?> {
         return getFormsLiveData(projectId)
     }
 
@@ -167,7 +167,7 @@ class FormsDataService(
         context.contentResolver.notifyChange(FormsContract.getUri(projectId), null)
     }
 
-    private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>> {
+    private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>?> {
         return appState.get("forms:$projectId", MutableLiveData())
     }
 
