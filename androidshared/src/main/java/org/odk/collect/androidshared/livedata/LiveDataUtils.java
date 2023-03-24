@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;
 
 import java.util.HashSet;
@@ -33,6 +34,20 @@ public class LiveDataUtils {
             liveData.removeObserver(observer);
             return true;
         };
+    }
+
+    public static <T> void observeUntilNotNull(LiveData<T> liveData, Consumer<@NotNull T> consumer) {
+        Observer<T> observer = new Observer<T>() {
+            @Override
+            public void onChanged(T value) {
+                if (value != null) {
+                    consumer.accept(value);
+                    liveData.removeObserver(this);
+                }
+            }
+        };
+
+        liveData.observeForever(observer);
     }
 
     public static <T> LiveData<T> liveDataOf(T value) {

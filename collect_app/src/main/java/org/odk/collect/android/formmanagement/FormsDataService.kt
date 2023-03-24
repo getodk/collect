@@ -137,14 +137,10 @@ class FormsDataService(
         update(projectId)
     }
 
-    fun all(projectId: String): List<Form> {
-        val sandbox = projectDependencyProviderFactory.create(projectId)
-        return sandbox.formsRepository.all
-    }
-
     fun update(projectId: String) {
         syncWithStorage(projectId)
-        getFormsLiveData(projectId).postValue(all(projectId))
+        val sandbox = projectDependencyProviderFactory.create(projectId)
+        getFormsLiveData(projectId).postValue(sandbox.formsRepository.all)
     }
 
     private fun syncWithStorage(projectId: String) {

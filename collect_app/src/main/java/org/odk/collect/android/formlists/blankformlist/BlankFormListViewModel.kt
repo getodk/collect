@@ -71,14 +71,6 @@ class BlankFormListViewModel(
         )
     }
 
-    fun getAllForms(): List<BlankFormListItem> {
-        return formsDataService
-            .all(projectId)
-            .map { form ->
-                form.toBlankFormListItem(projectId, instancesRepository)
-            }
-    }
-
     fun syncWithServer(): LiveData<Boolean> {
         val result = MutableLiveData<Boolean>()
         scheduler.immediate(

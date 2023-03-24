@@ -38,7 +38,6 @@ class BlankFormListViewModelTest {
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val formsDataService: FormsDataService = mock {
         on { getForms(any()) } doReturn MutableLiveData()
-        on { all(any()) } doReturn emptyList()
     }
 
     private val scheduler = FakeScheduler()
