@@ -30,7 +30,7 @@ object Dependencies {
     const val play_services_maps = "com.google.android.gms:play-services-maps:18.1.0"
     const val play_services_location = "com.google.android.gms:play-services-location:20.0.0" // Check if map screens still work when upgrading
     const val play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.0.0"
-    const val mapbox_android_sdk = "com.mapbox.maps:android:10.10.0"
+    const val mapbox_android_sdk = "com.mapbox.maps:android:10.11.2"
     const val osmdroid = "org.osmdroid:osmdroid-android:6.1.14"
     const val guava = "com.google.guava:guava:31.1-android"
     const val squareup_okhttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp3}"
