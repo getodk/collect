@@ -90,6 +90,7 @@ class DeleteBlankFormFragment(
                 getString(R.string.delete_yes)
             ) { _, _ ->
                 blankFormListViewModel.deleteForms(*adapter.selected.toLongArray())
+                multiSelectViewModel.unselectAll()
             }
 
             alertDialog.show()

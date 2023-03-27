@@ -178,6 +178,26 @@ class DeleteBlankFormFragmentTest {
     }
 
     @Test
+    fun `clicking delete selected unselects forms`() {
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 11, formName = "Form 1"),
+            blankFormListItem(databaseId = 12, formName = "Form 2")
+        )
+
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+
+        multiSelectViewModel.select(11)
+
+        onView(withText(R.string.delete_file)).perform(click())
+        onView(withText(context.getString(R.string.delete_confirm, 1)))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withText(R.string.delete_yes)).inRoot(isDialog()).perform(click())
+
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(emptySet()))
+    }
+
+    @Test
     fun `delete selected is disabled and enabled when forms are selected or not`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
