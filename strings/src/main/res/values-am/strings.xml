@@ -24,6 +24,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'ታክሏል በ\' EEE፣ ወወወ ቀቀ፣ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'የተመዘገበዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'የተጠናቀቀዉ በ\' EEE፣ ወወወ ቀቀ ዓዓዓዓ \'በ\' ሰሰ:ደደ</string>
@@ -99,7 +100,6 @@
   <string name="quit_application">ከ 1 %s ይውጡ</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp;lt፣ምንም ቅጽ አልተጫነም&amp;gt፣</string>
-  <string name="do_not_save">ለውጦቹን ችላ በል</string>
   <string name="keep_changes">ለውጦችን አስቀምጥ</string>
   <string name="saving_form">ቅጽን በማስቀመጥ ላይ</string>
   <string name="survey_saving_validating_message">መልሶችን በማረጋገጥ ላይ …</string>
@@ -479,6 +479,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

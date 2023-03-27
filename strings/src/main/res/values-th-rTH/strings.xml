@@ -24,6 +24,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'เพิ่มเมื่อ\' EEE, MMM dd, yyyy \'เวลา\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'บันทึกเมื่อ\' EEE, MMM dd, yyyy \'เวลา\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">เสร็จสมบูรณ์เมื่อ EEE, MMM dd, yyyy เวลา HH:mm</string>
@@ -97,7 +98,6 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">ออกจาก %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="do_not_save">ยกเลิกการเปลี่ยนแปลง</string>
   <string name="keep_changes">บันทึกการเปลี่ยนแปลง</string>
   <string name="saving_form">กำลังบันทึกแบบสำรวจ</string>
   <string name="survey_saving_validating_message">กำลังตรวจความถูกต้องของคำตอบ</string>
@@ -513,6 +513,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

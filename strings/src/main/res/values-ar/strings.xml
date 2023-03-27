@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'تمت الاضافة ب\' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'تم الحفظ ب\' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'اكتملت ب\' yyyy, dd MMM, EEE  \'في الساعة\' mm:HH</string>
@@ -137,7 +138,6 @@
   <string name="quit_application">خروج %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&gt;لم يتم تحميل أي استمارات&lt;</string>
-  <string name="do_not_save">تجاهل التعديلات</string>
   <string name="keep_changes">حفظ التعديلات</string>
   <string name="saving_form">جاري حفظ الاستمارة</string>
   <string name="survey_saving_validating_message">تدقيق الاجابات…</string>
@@ -790,7 +790,7 @@
   <string name="view_qr_code_fragment_title">رمز QR</string>
   <string name="import_qrcode_sd">استيراد رمز QR</string>
   <string name="successfully_imported_settings">تم استيراد الإعدادات بنجاح</string>
-  <string name="encoding_max_limit">تم الوصول إلى الحد الأقصى من عدد المحارف: لا يمكن توليد كود QR لجميع الإعدادات</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">تم الوصول إلى الحد الأقصى من عدد المحارف: لا يمكن توليد كود QR لجميع الإعدادات</string>
   <string name="share">مشاركة</string>
   <string name="turn_on_flashlight">تشغيل الإضاءة الخلفية</string>
   <string name="turn_off_flashlight">إيقاف الإضاءة الخلفية</string>
@@ -860,6 +860,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="dismiss_button_text">تجاهل</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

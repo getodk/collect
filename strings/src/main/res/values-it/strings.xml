@@ -20,10 +20,13 @@
   <string name="get_forms">Scarica Modulo Vuoto</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Elimina Modulo Salvato</string>
+  <string name="saved_forms">Moduli salvati</string>
   <string name="version_number">Versione: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Aggiunto il\' EEE, MMM dd, yyyy \'alle\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Aggiornato il\' EEE, dd MMM yyyy \'alle\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Salvato il\' EEE, MMM dd, yyyy \'alle\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -46,6 +49,7 @@
   <string name="sort_by_date_desc">Per data, prima i più recenti</string>
   <string name="sort_by_date_asc">Per data, prima i meno recenti</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">L\'ultimo salvato per primo</string>
   <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
   <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
   <string name="filter_the_list">Filtra la lista</string>
@@ -60,6 +64,7 @@
   <string name="storage_runtime_permission_denied_desc">Senza questi permessi Collect non può accedere ai tuoi questionari o salvare le risposte. Riapri la applicazione quando sei pronto ad autorizzarli.</string>
   <string name="location_runtime_permissions_denied_title">Autorizzazione all\'uso dei servizi di localizzazione</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">Senza<b>il permesso sulla posizione esatta</b>Collect non può registrare la tua posizione. Riprova quando sei pronto a concederlo. </string>
   <string name="camera_runtime_permission_denied_title">Autorizzazione uso fotocamera</string>
   <string name="camera_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può usare la fotocamera. Prova di nuovo quando hai autorizzato l\'uso della fotocamera</string>
   <string name="record_audio_runtime_permission_denied_title">Autorizzazione uso microfono</string>
@@ -72,6 +77,7 @@
     # FILL BLANK FORM
     ##############################################-->
   <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">Apri formulario di tipo mappa</string>
   <string name="instance_scan_count">%1$d moduli aggiunti.</string>
   <string name="finished_disk_scan">Scansione terminata. Tutti i moduli caricati.</string>
   <string name="xform_parse_error">XForm errore di parsing per %1$s: %2$s mancante o non valido.</string>
@@ -130,6 +136,7 @@
   <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
   <string name="mark_finished">Segna Modulo come Completato</string>
   <string name="quit_entry">Salva modulo ed esci</string>
+  <string name="manual_instance_learn_more_button">Saperne di più</string>
   <string name="data_saved_error">Spiacenti, salvataggio modulo fallito!</string>
   <string name="data_saved_ok">Modulo salvato correttamente!</string>
   <string name="save_point_error">Errore nel salvataggio del punto di ripristino: %s</string>
@@ -137,7 +144,8 @@
   <string name="quit_application">Uscita %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;nessun form caricato&gt;</string>
-  <string name="do_not_save">Ignorare i cambiamenti</string>
+  <string name="do_not_save">Elimina formulario</string>
+  <string name="discard_changes">Non salvare le modifiche</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="saving_form">Salvataggio Modulo</string>
   <string name="survey_saving_validating_message">Convalida risposte…</string>
@@ -198,6 +206,8 @@
   <string name="selected_invalid_image">Il file selezionato non è una valida immagine</string>
   <string name="take_picture_instruction">Tocca lo schermo per scattare una foto</string>
   <string name="error_front_camera_unavailable">Fotocamera frontale non disponibile in questo dispositivo</string>
+  <string name="camera_error">Si è verificato un errore durante lo scatto della foto</string>
+  <string name="camera_failed_to_initialize">Impossibile inizializzare la fotocamera!</string>
   <string name="annotate_image">Annota Immagine</string>
   <string name="invalid_file_type">L\'applicazione ha restituito un tipo di file non valido</string>
   <!--Dialog heading for saving annotated image-->
@@ -358,6 +368,8 @@
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Salvare</string>
   <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">Selezionare il posto</string>
+  <string name="choices">Scelte</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -481,6 +493,9 @@
   <string name="discard">Annulla</string>
   <string name="geoshape_view_change_location">Guarda o Cambia Geo-contorno</string>
   <string name="geotrace_view_change_location">Guarda o Cambia Geo-tracciatura</string>
+  <string name="select_item_count">%s: %d (%d mostrato sulla mappa)</string>
+  <string name="select_item">Selezionare</string>
+  <string name="new_item">Nuovo oggetto</string>
   <!--Name of an action button-->
   <string name="view_data">Visualizza modulo salvato</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
@@ -490,10 +505,13 @@
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Ottieni aiuto con i livelli di riferimento</string>
   <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Mostra la mia posizione</string>
   <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">Ingrandisci per adattare tutto</string>
   <!--Description for button that pauses automatic location recording-->
   <string name="pause_location_recording">Metti in pausa</string>
   <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">Rimuovi l\'ultimo punto</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -516,6 +534,7 @@
   <string name="forms_upload_succeeded">Caricamento Formulario riuscito</string>
   <string name="forms_upload_failed">Caricamento Formulario fallito</string>
   <string name="all_uploads_succeeded">Tutti i caricamenti sono riusciti!</string>
+  <string name="some_uploads_failed">%1$s di %2$s caricamenti falliti!</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -837,7 +856,7 @@
   <string name="view_qr_code_fragment_title">Codice QR</string>
   <string name="import_qrcode_sd">Importare codice QR</string>
   <string name="successfully_imported_settings">Impostazioni importate con successo</string>
-  <string name="encoding_max_limit">Numero massimo di caratteri raggiunto: codice QR non può essere generato per tutte le impostazioni</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Numero massimo di caratteri raggiunto: codice QR non può essere generato per tutte le impostazioni</string>
   <string name="share">Condividi</string>
   <string name="turn_on_flashlight">Accendere il flash</string>
   <string name="turn_off_flashlight">Spegnere il flash</string>
@@ -873,6 +892,7 @@
   <string name="survey_multiple_forms_error">Hai scaricato due diversi Moduli ma con lo stesso nome ID e versione. Potrebbe essere lo stesso Modulo scaricato in momenti diversi o con Server diversi. In ogni caso devi cancellarne uno.</string>
   <string name="select_odk_shortcut">Seleziona scorciatoia ODK</string>
   <string name="background_audio_help">Questo formulario registra l\'audio dal microfono del tuo dispositivo.\n\nPuoi utilizzare l\'indicatore del volume per assicurarti che il microfono sia abbastanza vicino al suono che devi registrare.\n\nPer interrompere la registrazione esci da questo formulario.\n\ nPer maggiori informazioni contatta la persona che ti ha chiesto di raccogliere i dati.</string>
+  <string name="loading">Caricando…</string>
   <!--##############################################
      # Projects
      ##############################################-->
@@ -940,13 +960,25 @@
     ##############################################-->
   <string name="open_settings">Apri impostazioni</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Entità</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <string name="crash_last_run">Si è verificato un arresto anomalo l\'ultima volta che l\'app era in esecuzione!</string>
+  <string name="cant_start_app">Impossibile avviare l\'app!</string>
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="google_drive_deprecation_message">Questo progetto utilizza Google Drive. Questa funzionalità verrà rimossa nel prossimo aggiornamento dell\'app.</string>
+  <string name="learn_more_button_text">Saperne di più</string>
+  <string name="dismiss_button_text">Abbandonare</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->
+  <string name="dev_tools">Strumenti di sviluppo</string>
   <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">Arresto anomalo dell\'app</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">Forza un\'eccezione non rilevata che causa l\'arresto anomalo dell\'app</string>
 </resources>

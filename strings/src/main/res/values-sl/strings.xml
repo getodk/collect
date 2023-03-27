@@ -23,6 +23,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Dodan na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Shranjen na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Zaključen na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
@@ -110,7 +111,6 @@
   <string name="quit_application">Izhod %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;noben obrazec ni naložen&gt;</string>
-  <string name="do_not_save">Zavrzi spremembe</string>
   <string name="keep_changes">Shrani spremembe</string>
   <string name="saving_form">Shrani obrazec</string>
   <string name="survey_saving_validating_message">Vrednotim odgovore…</string>
@@ -513,6 +513,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

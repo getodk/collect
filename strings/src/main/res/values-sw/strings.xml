@@ -26,6 +26,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Imeongezwa kwenye\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Imehifadhiwa kwenye\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Imekamilishwa kwenye\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
@@ -139,7 +140,6 @@
   <string name="quit_application">Toka %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp;It;Hakuna fomu iliyowekwa&amp;gt;</string>
-  <string name="do_not_save">Puuzia mabadiliko</string>
   <string name="keep_changes">Hifadhi mabadiliko</string>
   <string name="saving_form">Inahifadhi fomu</string>
   <string name="survey_saving_validating_message">Inathibitisha majibu…</string>
@@ -198,7 +198,7 @@
   <string name="selected_invalid_image">Faili lillilochaguliwa sio picha sahihi</string>
   <string name="take_picture_instruction">Bofya kioo kuchukua picha</string>
   <string name="error_front_camera_unavailable">Kamera ya mbele haipo katika kifaa hiki</string>
-    <string name="annotate_image">Elezea picha</string>
+  <string name="annotate_image">Elezea picha</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Hifadhi na funga</string>
   <string name="signature_capture">Chukua sahihi</string>
@@ -696,7 +696,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">Mipangilio imeingizwa kwa mafanikio</string>
-  <string name="encoding_max_limit">Kiwango cha herufi kimefikia ukomo: Misimbo ya QR haziwezi kutengenezwa kwa mipangilio yote</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Kiwango cha herufi kimefikia ukomo: Misimbo ya QR haziwezi kutengenezwa kwa mipangilio yote</string>
   <string name="share">Shirikisha</string>
   <string name="turn_on_flashlight">Washa mwanga</string>
   <string name="turn_off_flashlight">Zima mwanga</string>
@@ -765,6 +765,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

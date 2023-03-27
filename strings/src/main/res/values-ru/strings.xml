@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Добавлено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Сохранено\' EEE, dd MMM yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">Финализировано EEE, dd MMM yyyy \'в\' HH:mm</string>
@@ -130,7 +131,6 @@
   <string name="quit_application">Выйти из \"%s\"</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;опросник не загружен&gt;</string>
-  <string name="do_not_save">Игнорировать изменения</string>
   <string name="keep_changes">Сохранить ответы</string>
   <string name="saving_form">Выполняется сохранение …</string>
   <string name="survey_saving_validating_message">Проверка ответов…</string>
@@ -647,7 +647,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">Настройки успешно импортированы</string>
-  <string name="encoding_max_limit">Превышен лимит количества символов: QR-код не удалось сгенерировать для всех настроек.</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Превышен лимит количества символов: QR-код не удалось сгенерировать для всех настроек.</string>
   <string name="share">Поделиться</string>
   <string name="turn_on_flashlight">Включить подсветку</string>
   <string name="turn_off_flashlight">Выключить подсветку</string>
@@ -710,6 +710,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

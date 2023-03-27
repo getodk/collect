@@ -24,6 +24,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'अॅड ईईई, एमएमएम डीडी, यॅय\' एचएच: मि.ह.</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'सेव्हड् ओव्हर\' ईईई, एमएमएम डीडी, य्वाय \'एट\' एचएच: एमएम</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'इ.ई.ई., एमएमएम डीडी, य्यय\' एचएच: एमएम वर अंतिम रूप दिले</string>
@@ -105,7 +106,6 @@
   <string name="quit_application">मधून निर्गमन करा %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp; Lt; कोणतेही फॉर्म लोड झाले &amp; gt;</string>
-  <string name="do_not_save">बदलांकडे दुर्लक्ष करा</string>
   <string name="keep_changes">बदल जतन करा</string>
   <string name="saving_form">फॉर्म जतन केला जात आहे</string>
   <string name="survey_saving_validating_message">उत्तरे सत्यापित करीत आहे …</string>
@@ -152,7 +152,7 @@
   <string name="choose_image">प्रतिमा निवडा</string>
   <string name="selected_invalid_image">निवडलेली फाईल वैध प्रतिमा नाही</string>
   <string name="take_picture_instruction">एक चित्र घेण्यासाठी स्क्रीन टॅप करा</string>
-    <!--Dialog heading for saving annotated image-->
+  <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">जतन करा आणि बंद करा</string>
   <string name="sign_button">स्वाक्षरी एकत्रीकरण</string>
   <string name="markup_image">मार्कअप प्रतिमा</string>
@@ -515,7 +515,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">सेटिंग्ज यशस्वीपणे आयात केली</string>
-  <string name="encoding_max_limit">कमाल वर्ण मर्यादेपर्यंत पोहोचले: सर्व सेटिंग्जसाठी क्यूआर कोड व्युत्पन्न करणे शक्य नाही</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">कमाल वर्ण मर्यादेपर्यंत पोहोचले: सर्व सेटिंग्जसाठी क्यूआर कोड व्युत्पन्न करणे शक्य नाही</string>
   <string name="share">सामायिक करा</string>
   <string name="turn_on_flashlight">फ्लॅशलाइट चालू करा</string>
   <string name="turn_off_flashlight">फ्लॅशलाइट बंद करा</string>
@@ -574,6 +574,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools
