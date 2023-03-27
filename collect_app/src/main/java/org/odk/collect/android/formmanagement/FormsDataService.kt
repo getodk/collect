@@ -47,6 +47,8 @@ class FormsDataService(
      * disabled the user will just be notified that there are updates available.
      */
     fun downloadUpdates(projectId: String) {
+        syncWithStorage(projectId)
+
         val sandbox = projectDependencyProviderFactory.create(projectId)
 
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox)
@@ -84,6 +86,8 @@ class FormsDataService(
      */
     @JvmOverloads
     fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
+        syncWithStorage(projectId)
+
         val sandbox = projectDependencyProviderFactory.create(projectId)
 
         val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox)
@@ -137,7 +141,7 @@ class FormsDataService(
         finishSync(projectId)
     }
 
-    private fun syncWithStorage(projectId: String) {
+    fun syncWithStorage(projectId: String) {
         val sandbox = projectDependencyProviderFactory.create(projectId)
         sandbox.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             if (acquiredLock) {

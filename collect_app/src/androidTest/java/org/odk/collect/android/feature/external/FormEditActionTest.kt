@@ -29,6 +29,7 @@ class FormEditActionTest {
     fun editForm_andThenFillingForm_returnsNewInstanceURI() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
+            .clickFillBlankForm() // Sync form
 
         val formId = ContentProviderUtils.getFormDatabaseId("DEMO", "one_question")
         val uri = FormsContract.getUri("DEMO", formId)

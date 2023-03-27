@@ -19,14 +19,20 @@ import android.os.AsyncTask;
 
 import androidx.core.util.Pair;
 
+import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
+import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormSourceException;
 
 import java.util.HashMap;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Background task for downloading forms from urls or a formlist from a url. We overload this task
@@ -46,12 +52,21 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     private String username;
     private String password;
 
+    @Inject
+    FormsDataService formsDataService;
+
+    @Inject
+    CurrentProjectProvider currentProjectProvider;
+
     public DownloadFormListTask(ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
+        DaggerUtils.getComponent(Collect.getInstance()).inject(this);
     }
 
     @Override
     protected Pair<List<ServerFormDetails>, FormSourceException> doInBackground(Void... values) {
+        formsDataService.update(currentProjectProvider.getCurrentProject().getUuid());
+
         if (webCredentialsUtils != null) {
             setTemporaryCredentials();
         }

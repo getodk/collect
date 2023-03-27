@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.StorageUtils;
@@ -28,7 +29,7 @@ public class FormsAdbTest {
             .around(rule);
 
     @Test
-    public void canUpdateFormOnDisk() throws Exception {
+    public void canUpdateAFormFromDisk() throws Exception {
         MainMenuPage mainMenuPage = rule.startAtMainMenu()
                 .copyForm("one-question.xml")
                 .clickFillBlankForm()
@@ -38,6 +39,24 @@ public class FormsAdbTest {
         StorageUtils.copyFormToDemoProject("one-question-updated.xml", "one-question.xml");
 
         mainMenuPage
+                .clickFillBlankForm()
+                .assertFormExists("One Question Updated")
+                .assertFormDoesNotExist("One Question");
+    }
+
+    @Test
+    public void canUpdateFormOnDiskFromServer() throws Exception {
+        testDependencies.server.addForm("One Question Updated", "one_question", "2", "one-question-updated.xml");
+
+        StorageUtils.copyFormToDemoProject("one-question.xml");
+
+        rule.startAtMainMenu()
+                .setServer(testDependencies.server.getURL())
+                .clickGetBlankForm()
+                .assertText(R.string.newer_version_of_a_form_info)
+
+                .clickGetSelected()
+                .clickOKOnDialog(new MainMenuPage())
                 .clickFillBlankForm()
                 .assertFormExists("One Question Updated")
                 .assertFormDoesNotExist("One Question");

@@ -235,8 +235,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
             throw new RuntimeException(e);
         }
 
-        return clickFillBlankForm()
-                .pressBack(new MainMenuPage());
+        return this;
     }
 
     public EntitiesPage openEntityBrowser() {
