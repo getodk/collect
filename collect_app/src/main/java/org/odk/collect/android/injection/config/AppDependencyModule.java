@@ -92,7 +92,6 @@ import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
 import org.odk.collect.android.utilities.FileProvider;
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -344,9 +343,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider, StoragePathProvider storagePathProvider) {
+    public ServerFormsDetailsFetcher providesServerFormDetailsFetcher(FormsRepositoryProvider formsRepositoryProvider, FormSourceProvider formSourceProvider) {
         FormsRepository formsRepository = formsRepositoryProvider.get();
-        return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.get(), new FormsDirDiskFormsSynchronizer(formsRepository, storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS)));
+        return new ServerFormsDetailsFetcher(formsRepository, formSourceProvider.get());
     }
 
     @Provides

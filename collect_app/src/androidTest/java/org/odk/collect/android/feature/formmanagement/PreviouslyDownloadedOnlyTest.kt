@@ -9,7 +9,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.R
-import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FillBlankFormPage
@@ -72,8 +71,7 @@ class PreviouslyDownloadedOnlyTest {
         val page = MainMenuPage().assertOnPage()
             .setServer(testDependencies.server.url)
             .enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload()
-
-        StorageUtils.copyFormToDemoProject("one-question.xml")
+            .copyForm("one-question.xml")
 
         testDependencies.server.addForm(
             "One Question Updated",
@@ -107,8 +105,7 @@ class PreviouslyDownloadedOnlyTest {
         val page = MainMenuPage().assertOnPage()
             .setServer(testDependencies.server.url)
             .enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload()
-
-        StorageUtils.copyFormToDemoProject("one-question.xml")
+            .copyForm("one-question.xml")
 
         testDependencies.server.addForm(
             "One Question Updated",

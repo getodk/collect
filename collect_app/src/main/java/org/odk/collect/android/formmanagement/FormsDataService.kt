@@ -49,8 +49,7 @@ class FormsDataService(
     fun downloadUpdates(projectId: String) {
         val sandbox = projectDependencyProviderFactory.create(projectId)
 
-        val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
-        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
+        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox)
         val formDownloader = formDownloader(sandbox, clock)
 
         try {
@@ -87,8 +86,7 @@ class FormsDataService(
     fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
         val sandbox = projectDependencyProviderFactory.create(projectId)
 
-        val diskFormsSynchronizer = diskFormsSynchronizer(sandbox)
-        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox, diskFormsSynchronizer)
+        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox)
         val formDownloader = formDownloader(sandbox, clock)
 
         val serverFormsSynchronizer = ServerFormsSynchronizer(
@@ -134,11 +132,19 @@ class FormsDataService(
 
     fun update(projectId: String) {
         startSync(projectId)
-
         syncWithStorage(projectId)
         syncWithDb(projectId)
-
         finishSync(projectId)
+    }
+
+    private fun syncWithStorage(projectId: String) {
+        val sandbox = projectDependencyProviderFactory.create(projectId)
+        sandbox.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
+            if (acquiredLock) {
+                val error = diskFormsSynchronizer(sandbox).synchronizeAndReturnError()
+                getDiskErrorLiveData(projectId).postValue(error)
+            }
+        }
     }
 
     private fun startSync(projectId: String) {
@@ -153,16 +159,6 @@ class FormsDataService(
     private fun syncWithDb(projectId: String) {
         val sandbox = projectDependencyProviderFactory.create(projectId)
         getFormsLiveData(projectId).postValue(sandbox.formsRepository.all)
-    }
-
-    private fun syncWithStorage(projectId: String) {
-        val sandbox = projectDependencyProviderFactory.create(projectId)
-        sandbox.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
-            if (acquiredLock) {
-                val error = diskFormsSynchronizer(sandbox).synchronizeAndReturnError()
-                getDiskErrorLiveData(projectId).postValue(error)
-            }
-        }
     }
 
     private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>?> {
@@ -196,13 +192,11 @@ private fun formDownloader(projectDependencyProvider: ProjectDependencyProvider,
 }
 
 private fun serverFormsDetailsFetcher(
-    projectDependencyProvider: ProjectDependencyProvider,
-    diskFormsSynchronizer: FormsDirDiskFormsSynchronizer
+    projectDependencyProvider: ProjectDependencyProvider
 ): ServerFormsDetailsFetcher {
     return ServerFormsDetailsFetcher(
         projectDependencyProvider.formsRepository,
-        projectDependencyProvider.formSource,
-        diskFormsSynchronizer
+        projectDependencyProvider.formSource
     )
 }
 

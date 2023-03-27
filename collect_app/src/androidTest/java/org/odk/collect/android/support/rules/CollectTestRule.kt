@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import org.odk.collect.android.BuildConfig.APPLICATION_ID
 import org.odk.collect.android.external.AndroidShortcutsActivity
+import org.odk.collect.android.support.StorageUtils.copyFormToStorage
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
@@ -64,6 +65,11 @@ class CollectTestRule @JvmOverloads constructor(
         destination.assertOnPage()
         actions.accept(destination)
         return scenario.result
+    }
+
+    fun copyForm(formFilename: String): CollectTestRule {
+        copyFormToStorage(formFilename)
+        return this
     }
 
     private fun getLaunchIntent(): Intent {

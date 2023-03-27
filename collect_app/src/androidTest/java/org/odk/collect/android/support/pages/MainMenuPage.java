@@ -13,7 +13,11 @@ import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.WaitFor;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MainMenuPage extends Page<MainMenuPage> {
 
@@ -208,9 +212,30 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
-    public MainMenuPage copyAndSyncForm(String formFilename) {
-        return copyForm(formFilename)
-                .clickFillBlankForm()
+    public MainMenuPage copyForm(String formFilename) {
+        return copyForm(formFilename, null, "Demo project");
+    }
+
+    public MainMenuPage copyForm(String formFilename, String projectName) {
+        return copyForm(formFilename, null, projectName);
+    }
+
+    public MainMenuPage copyForm(String formFilename, List<String> mediaFilePaths) {
+        return copyForm(formFilename, mediaFilePaths, "Demo project");
+    }
+
+    public MainMenuPage copyForm(String formFilename, List<String> mediaFilePaths, String projectName) {
+        return copyForm(formFilename, mediaFilePaths, false, projectName);
+    }
+
+    public MainMenuPage copyForm(String formFilename, List<String> mediaFilePaths, boolean copyToDatabase, String projectName) {
+        try {
+            StorageUtils.copyFormToStorage(formFilename, mediaFilePaths, copyToDatabase, formFilename, projectName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return clickFillBlankForm()
                 .pressBack(new MainMenuPage());
     }
 

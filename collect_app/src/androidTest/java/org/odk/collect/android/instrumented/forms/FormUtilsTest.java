@@ -37,8 +37,8 @@ public class FormUtilsTest {
 
     @Before
     public void setUp() {
-        rule.startAtFirstLaunch()
-                .copyForm(BASIC_FORM);
+        rule.copyForm(BASIC_FORM)
+                .startAtFirstLaunch();
     }
 
     /* Verify that each host string matches only a single root translator, allowing for them to
