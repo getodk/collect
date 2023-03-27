@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Tillagd\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Sparad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Avslutad\' yyyy-MM-dd (EEE) \'kl\' HH:mm</string>
@@ -129,7 +130,6 @@
   <string name="quit_application">Avsluta %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;inget formulär laddat&gt;</string>
-  <string name="do_not_save">Ignorera ändringar</string>
   <string name="keep_changes">Spara ändringar</string>
   <string name="saving_form">Sparar formulär</string>
   <string name="survey_saving_validating_message">Validerar svar…</string>
@@ -667,7 +667,7 @@ Dela ODK Collect med dem.</string>
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">Import av inställningarna lyckades</string>
-  <string name="encoding_max_limit">Maximalt antal tecken uppnått: QR-kod kan inte genereras för alla inställningar</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Maximalt antal tecken uppnått: QR-kod kan inte genereras för alla inställningar</string>
   <string name="share">Dela</string>
   <string name="turn_on_flashlight">Slå på ficklampa</string>
   <string name="turn_off_flashlight">Stäng av ficklampa</string>
@@ -732,6 +732,9 @@ Dela ODK Collect med dem.</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Dodany\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Zapisany\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Zakończony\' EEE, MMM dd, yyyy \'o\' HH:mm</string>
@@ -137,7 +138,6 @@
   <string name="quit_application">Zakończ %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;brak załadowanego formularza&gt;</string>
-  <string name="do_not_save">Odrzuć Zmiany</string>
   <string name="keep_changes">Zapisz Zmiany</string>
   <string name="saving_form">Zapisuję Formularz</string>
   <string name="survey_saving_validating_message">Sprawdzam poprawność odpowiedzi…</string>
@@ -732,7 +732,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">Ustawienia zostały pomyślnie zaimportowane</string>
-  <string name="encoding_max_limit">Osiągnięto maksymalną liczbę znaków: kod QR nie może zostać wygenerowany dla wszystkich ustawień</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Osiągnięto maksymalną liczbę znaków: kod QR nie może zostać wygenerowany dla wszystkich ustawień</string>
   <string name="share">Udostępnij</string>
   <string name="turn_on_flashlight">Włącz latarkę</string>
   <string name="turn_off_flashlight">Wyłącz latarkę</string>
@@ -797,6 +797,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

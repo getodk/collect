@@ -26,6 +26,8 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Přidáno\' EEE, dd MMM, yyyy \'v\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\"Aktualizováno dne\" EEE, MMM dd, rrrr \"v\" HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Uloženo\' EEE, dd MMM, yyyy \'v\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Dokončeno\' EEE, dd MMM, yyyy \'v\' HH:mm</string>
@@ -47,6 +49,7 @@
   <string name="sort_by_date_desc">Datum, nejnovější první</string>
   <string name="sort_by_date_asc">Datum, nejstarší první</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Poslední uložený jako první</string>
   <string name="sort_by_status_asc">Stav, dokončen první</string>
   <string name="sort_by_status_desc">Stav, nedokončen první</string>
   <string name="filter_the_list">Filtrovat výpis</string>
@@ -61,6 +64,7 @@
   <string name="storage_runtime_permission_denied_desc">Bez těchto oprávnění nelze přistupovat k formulářům nebo ukládat odpovědi. Opětovně otevřete aplikaci, až budete připraveni je udělit.</string>
   <string name="location_runtime_permissions_denied_title">Oprávnění umístění</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">Bez povolení <b>Přesné lokace</b>Collect nemůže zaznamenávat vaši polohu. Zkuste to znovu, až budete připraveni povolení udělit.</string>
   <string name="camera_runtime_permission_denied_title">Oprávnění k fotoaparátu</string>
   <string name="camera_runtime_permission_denied_desc">Bez tohoto povolení nelze přistupovat k fotoaparátu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
   <string name="record_audio_runtime_permission_denied_title">Oprávnění k nahrávání zvuku</string>
@@ -132,6 +136,7 @@
   <string name="save_as_error">Uložené jméno nesmí být prázdné!</string>
   <string name="mark_finished">Označit dotazník jako dokončený</string>
   <string name="quit_entry">Uložit dotazník a skončit</string>
+  <string name="manual_instance_learn_more_button">Více informací</string>
   <string name="data_saved_error">Uložení dotazníku selhalo!</string>
   <string name="data_saved_ok">Dotazník úspěšně uložen!</string>
   <string name="save_point_error">Chyba při ukládání bodu obnovení: %s</string>
@@ -139,7 +144,6 @@
   <string name="quit_application">Konec %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;formulář nenačten&gt;</string>
-  <string name="do_not_save">Ignorovat změny</string>
   <string name="keep_changes">Uložit změny</string>
   <string name="saving_form">Ukládám dotazník</string>
   <string name="survey_saving_validating_message">Ověřuji odpovědi…</string>
@@ -200,6 +204,8 @@
   <string name="selected_invalid_image">Vybraný soubor není platný obrázek</string>
   <string name="take_picture_instruction">Klepnutím na obrazovku udělejte snímek</string>
   <string name="error_front_camera_unavailable">Přední fotoaparát není v tomto zařízení k dispozici</string>
+  <string name="camera_error">Při pořizování snímku došlo k chybě</string>
+  <string name="camera_failed_to_initialize">Nelze inicializovat fotoaparát!</string>
   <string name="annotate_image">Přidat popisek obrázku</string>
   <string name="invalid_file_type">Aplikace vrátila neplatný typ souboru</string>
   <!--Dialog heading for saving annotated image-->
@@ -851,7 +857,7 @@
   <string name="view_qr_code_fragment_title">QR kód</string>
   <string name="import_qrcode_sd">Import QR kódu</string>
   <string name="successfully_imported_settings">Nastavení úspěšně importováno</string>
-  <string name="encoding_max_limit">Maximální limit počtu znaků: QR kód nelze generovat pro všechna nastavení</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Maximální limit počtu znaků: QR kód nelze generovat pro všechna nastavení</string>
   <string name="share">Sdílet</string>
   <string name="turn_on_flashlight">Zapnout svítilnu</string>
   <string name="turn_off_flashlight">Vypnout svítilnu</string>
@@ -955,13 +961,25 @@
     ##############################################-->
   <string name="open_settings">Otevřít nastavení</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Subjekty</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <string name="crash_last_run">Při posledním spuštění aplikace došlo k pádu!</string>
+  <string name="cant_start_app">Nelze spustit aplikaci!</string>
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="google_drive_deprecation_message">Tento projekt používá Disk Google. Tato funkce bude v příští aktualizaci aplikace odstraněna.</string>
+  <string name="learn_more_button_text">Více informací</string>
+  <string name="dismiss_button_text">Zavrhnout</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->
+  <string name="dev_tools">Vývojářské nástroje</string>
   <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">Aplikace Crash</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">Vynucení nezachycené výjimky, která způsobí pád aplikace</string>
 </resources>

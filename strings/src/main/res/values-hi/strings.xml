@@ -24,6 +24,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">EEE, MMM dd, yyyy \'पर जोड़ा\' HH:mm \'पर\' </string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">EEE, MMM dd, yyyy \' पर संरक्षित\' HH:mm \'पर\' </string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">EEE, MMM dd, yyyy \'पर फाइनल हुआ\'  HH:mm \'पर\' </string>
@@ -111,7 +112,6 @@
   <string name="quit_application">बाहर आयें %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp; Lt; कोई फॉर्म लोड नहीं हुआ &amp; gt;</string>
-  <string name="do_not_save">बदलावों पर ध्यान न दें</string>
   <string name="keep_changes">बदलाव संरक्षित करें</string>
   <string name="saving_form">फॉर्म संरक्षित हो रहा है </string>
   <string name="survey_saving_validating_message">उत्तर मान्य कर रहा है…</string>
@@ -526,7 +526,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">सेटिंग सफलतापूर्वक आयातित की गईं</string>
-  <string name="encoding_max_limit">अधिकतम वर्ण सीमा आ गयी: सभी सेटिंग्स के लिए क्यूआर कोड नहीं बनाया जा सकता</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">अधिकतम वर्ण सीमा आ गयी: सभी सेटिंग्स के लिए क्यूआर कोड नहीं बनाया जा सकता</string>
   <string name="share">शेयर</string>
   <string name="turn_on_flashlight">टॉर्च चालू करें</string>
   <string name="turn_off_flashlight">टॉर्च को बंद करें</string>
@@ -587,6 +587,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

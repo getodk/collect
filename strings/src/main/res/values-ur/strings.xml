@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">EEE, MMM dd, yyyy\'کو\' HH:mm \'جمع کیا گیا\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">  EEE, MMM dd, yyyy \'کو\' HH:mm \'پرمحفوظ کیا گیا\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">EEE, MMM dd, yyyy\'کو\' HH:mm \'پر حتمی کیا گیا\'</string>
@@ -128,7 +129,6 @@
   <string name="quit_application">‎%s‏ سے نکل جائیں</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;کوئی فارم نہیں لوڈ کیا گیا&gt;</string>
-  <string name="do_not_save">تبدیلیاں نظرانداز کریں</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="saving_form">فارم محفوظ ہو رہا ہے</string>
   <string name="survey_saving_validating_message"> جوابات کی تصدیق کی جا رہی ہے</string>
@@ -181,7 +181,7 @@
   <string name="selected_invalid_image">منتخب فائل ایک درست تصویر نہیں ہے</string>
   <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
   <string name="error_front_camera_unavailable">اس ڈیوائس پر فرنٹ کمیرہ دستیاب نہیں ہے</string>
-    <string name="annotate_image">تصویر کی تفصیل لکھیے </string>
+  <string name="annotate_image">تصویر کی تفصیل لکھیے </string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="signature_capture">دستخط محفوظ کریں </string>
@@ -657,7 +657,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">سیٹنگز کامیابی سےامپورٹ ہوگئیں</string>
-  <string name="encoding_max_limit">زیادہ سے زیادہ حروف کی حدپہنچ گئی:کیو آر کوڈ تمام سیٹنگنزکے لئے بنایا نہیں کیا جا سکتا</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">زیادہ سے زیادہ حروف کی حدپہنچ گئی:کیو آر کوڈ تمام سیٹنگنزکے لئے بنایا نہیں کیا جا سکتا</string>
   <string name="share">شیئر </string>
   <string name="turn_on_flashlight">فلیش لائٹ چالو کریں</string>
   <string name="turn_off_flashlight">فلیش لائٹ بند کریں</string>
@@ -721,6 +721,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="dismiss_button_text">ختم کریں</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

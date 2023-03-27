@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
@@ -137,7 +138,6 @@
   <string name="quit_application">Sohoka 1%s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp;lt,nta nyandiko shingiro yagiyemo&amp;gt;</string>
-  <string name="do_not_save">Irengagize ibyahindutse</string>
   <string name="keep_changes">Bika ibyo wahinduye</string>
   <string name="saving_form">Ibika ry\'amakuru yinyandiko shingiro.</string>
   <string name="survey_saving_validating_message">Porogaramu iragenzura amakuru yatanzwe</string>
@@ -788,7 +788,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="view_qr_code_fragment_title">QR Code</string>
   <string name="import_qrcode_sd">Kurura umubarendangabanga cg kode ya QR</string>
   <string name="successfully_imported_settings">Igenamiterere ryatumijwe neza</string>
-  <string name="encoding_max_limit">Umubare wanyuma ntarengwa w’inyuguti wageze: Umubarendangabanga cg kode ya QR ntishobora kubyara igenamiterere ryose.</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Umubare wanyuma ntarengwa w’inyuguti wageze: Umubarendangabanga cg kode ya QR ntishobora kubyara igenamiterere ryose.</string>
   <string name="share">Gusangiza</string>
   <string name="turn_on_flashlight">Cana itara</string>
   <string name="turn_off_flashlight">Zimya itara</string>
@@ -882,6 +882,9 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

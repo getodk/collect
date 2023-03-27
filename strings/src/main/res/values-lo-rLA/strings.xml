@@ -21,6 +21,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'ເພີ່ມ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວ​ລາ\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'​ບັນ​ທຶກ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວລາ\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'ສຳ​ເລັດ​ເມື່ອ​\' EEE, MMM dd, yyyy \'ເວ​ລາ\' HH:mm</string>
@@ -91,7 +92,6 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">ອອກຈາກລະບົບ%s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="do_not_save">ຍົກເລີກການປ່ຽນແປງ</string>
   <string name="keep_changes">ບັນທຶກການປ່ຽນແປງ</string>
   <string name="saving_form">ກຳລັງບັນທຶກແບບຟອມ</string>
   <string name="survey_saving_validating_message">ກຳ​ລັງ​ກວດ​ກາ​ຄວາມ​ຖືກ​ຕ້ອງ​ຂອງ​ຄຳ​ຕອບ….</string>
@@ -425,6 +425,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

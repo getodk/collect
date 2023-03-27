@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Ditambahkan pada\' EEE, dd MMM yyyy\', pukul\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Disimpan pada\' EEE, dd MMM yyyy\', pukul\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Difinalisasi pada\' EEE, dd MMM yyyy\', pukul\' HH:mm</string>
@@ -137,7 +138,6 @@
   <string name="quit_application">Keluar dari %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;tidak ada formulir yang dimuat&gt;</string>
-  <string name="do_not_save">Abaikan Perubahan</string>
   <string name="keep_changes">Simpan perubahan</string>
   <string name="saving_form">Menyimpan Formulir</string>
   <string name="survey_saving_validating_message">Memvalidasi jawaban…</string>
@@ -814,7 +814,7 @@
   <string name="view_qr_code_fragment_title">Kode QR</string>
   <string name="import_qrcode_sd">Impor kode QR</string>
   <string name="successfully_imported_settings">Pengaturan berhasil diimpor</string>
-  <string name="encoding_max_limit">Batas karakter maksimum tercapai: QR code tidak dapat dibuat untuk seluruh pengaturan</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Batas karakter maksimum tercapai: QR code tidak dapat dibuat untuk seluruh pengaturan</string>
   <string name="share">Bagikan</string>
   <string name="turn_on_flashlight">Nyalakan senter</string>
   <string name="turn_off_flashlight">Matikan senter</string>
@@ -916,6 +916,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="dismiss_button_text">Singkirkan</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

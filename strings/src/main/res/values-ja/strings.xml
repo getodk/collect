@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">yyyy/MM/dd HH:mm \'に追加しました\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">yyyy/MM/dd HH:mm \'に保存しました\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">yyyy/MM/dd HH:mm \'に確定しました\'</string>
@@ -137,7 +138,6 @@
   <string name="quit_application">%s を終了</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;フォームが読み込まれていません&gt;</string>
-  <string name="do_not_save">変更を無視する</string>
   <string name="keep_changes">変更を保存する</string>
   <string name="saving_form">フォームを保存中</string>
   <string name="survey_saving_validating_message">回答を検証中…</string>
@@ -775,7 +775,7 @@
   <string name="view_qr_code_fragment_title">QR コード</string>
   <string name="import_qrcode_sd">QR コードをインポート</string>
   <string name="successfully_imported_settings">設定を正常にインポートしました</string>
-  <string name="encoding_max_limit">最大文字数制限に達しました: すべての設定の QR コードを生成することができません</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">最大文字数制限に達しました: すべての設定の QR コードを生成することができません</string>
   <string name="share">共有</string>
   <string name="turn_on_flashlight">フラッシュライトをオンにする</string>
   <string name="turn_off_flashlight">フラッシュライトをオフにする</string>
@@ -845,6 +845,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="dismiss_button_text">消去</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
