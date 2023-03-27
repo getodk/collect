@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
+import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 
@@ -36,6 +37,8 @@ import java.util.Map;
  *
  * @author msundt
  * @author carlhartung
+ *
+ * @deprecated Server form should be downloaded using {@link FormsDataService}
  */
 public class DownloadFormsTask extends
         AsyncTask<ArrayList<ServerFormDetails>, String, Map<ServerFormDetails, FormDownloadException>> {

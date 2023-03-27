@@ -41,7 +41,10 @@ import javax.inject.Inject;
  * containing form/url pairs is passed, we download those forms.
  *
  * @author carlhartung
+ *
+ * @deprecated Server form list should be retrieved from {@link FormsDataService}
  */
+@Deprecated
 public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<ServerFormDetails>, FormSourceException>> {
 
     private final ServerFormsDetailsFetcher serverFormsDetailsFetcher;
