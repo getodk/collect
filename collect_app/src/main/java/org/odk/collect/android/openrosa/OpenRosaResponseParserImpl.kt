@@ -126,7 +126,12 @@ class OpenRosaResponseParserImpl : OpenRosaResponseParser {
 
     override fun parseManifest(document: Document): List<MediaFile>? {
         // Attempt OpenRosa 1.0 parsing
-        val manifestElement = document.rootElement
+        val manifestElement = try {
+            document.rootElement
+        } catch (e: RuntimeException) {
+            return null
+        }
+
         if (manifestElement.name != "manifest") {
             return null
         }

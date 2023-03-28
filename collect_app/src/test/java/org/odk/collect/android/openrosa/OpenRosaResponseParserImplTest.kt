@@ -11,7 +11,7 @@ import java.io.StringReader
 class OpenRosaResponseParserImplTest {
 
     @Test
-    fun `when document is empty, returns null`() {
+    fun `parseFormList() when document is empty, returns null`() {
         val doc = StringReader("").use { reader ->
             val parser = KXmlParser()
             parser.setInput(reader)
@@ -24,7 +24,7 @@ class OpenRosaResponseParserImplTest {
     }
 
     @Test
-    fun `when xform hash is missing prefix, parseFormList returns null hash for item`() {
+    fun `parseFormList() when xform hash is missing prefix, returns null hash for item`() {
         val response = StringBuilder()
             .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
             .appendLine("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">")
@@ -50,7 +50,7 @@ class OpenRosaResponseParserImplTest {
     }
 
     @Test
-    fun `when media file hash is empty, parseManifest returns null`() {
+    fun `parseManifest() when media file hash is empty, returns null`() {
         val response = StringBuilder()
             .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
             .appendLine("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">")
@@ -71,5 +71,18 @@ class OpenRosaResponseParserImplTest {
 
         val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)
         assertThat(mediaFiles, equalTo(null))
+    }
+
+    @Test
+    fun `parseManifest() when document is empty, returns null`() {
+        val doc = StringReader("").use { reader ->
+            val parser = KXmlParser()
+            parser.setInput(reader)
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
+            Document().also { it.parse(parser) }
+        }
+
+        val formList = OpenRosaResponseParserImpl().parseManifest(doc)
+        assertThat(formList, equalTo(null))
     }
 }
