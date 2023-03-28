@@ -1,4 +1,4 @@
-package org.odk.collect.android.activities.viewmodels;
+package org.odk.collect.android.mainmenu;
 
 import android.app.Application;
 

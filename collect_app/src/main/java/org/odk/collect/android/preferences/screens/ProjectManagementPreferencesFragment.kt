@@ -10,10 +10,10 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.FirstLaunchActivity
-import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.QRCodeTabsActivity
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreference
 import org.odk.collect.android.preferences.dialogs.ResetDialogPreferenceFragmentCompat
 import org.odk.collect.android.projects.DeleteProjectResult

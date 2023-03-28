@@ -1,4 +1,4 @@
-package org.odk.collect.android.activities
+package org.odk.collect.android.mainmenu
 
 import android.content.Intent
 import android.os.Build
@@ -10,8 +10,15 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.ActivityUtils
+import org.odk.collect.android.activities.CrashHandlerActivity
+import org.odk.collect.android.activities.DeleteSavedFormActivity
+import org.odk.collect.android.activities.FirstLaunchActivity
+import org.odk.collect.android.activities.FormDownloadListActivity
+import org.odk.collect.android.activities.InstanceChooserList
+import org.odk.collect.android.activities.InstanceUploaderListActivity
+import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
-import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.application.MapboxClassInstanceCreator.createMapBoxInitializationFragment
 import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAvailable
 import org.odk.collect.android.databinding.MainMenuBinding

@@ -13,10 +13,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.ActivityUtils
-import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils

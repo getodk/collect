@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.mainmenu.MainMenuViewModel;
 import org.odk.collect.android.version.VersionInformation;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;

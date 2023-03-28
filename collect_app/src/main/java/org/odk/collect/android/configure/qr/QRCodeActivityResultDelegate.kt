@@ -6,8 +6,8 @@ import android.widget.Toast
 import org.odk.collect.analytics.Analytics.Companion.log
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
-import org.odk.collect.android.activities.MainMenuActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
+import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.qrcode.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter

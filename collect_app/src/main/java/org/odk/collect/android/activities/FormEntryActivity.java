@@ -141,6 +141,7 @@ import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
+import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;

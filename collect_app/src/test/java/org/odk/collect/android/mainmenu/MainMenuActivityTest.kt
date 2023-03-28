@@ -1,4 +1,4 @@
-package org.odk.collect.android.activities
+package org.odk.collect.android.mainmenu
 
 import android.app.Application
 import android.graphics.Color
@@ -21,8 +21,11 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.DeleteSavedFormActivity
+import org.odk.collect.android.activities.FormDownloadListActivity
+import org.odk.collect.android.activities.InstanceChooserList
+import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
-import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.InstancesAppState

@@ -1,4 +1,4 @@
-package org.odk.collect.android.activities;
+package org.odk.collect.android.mainmenu;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
