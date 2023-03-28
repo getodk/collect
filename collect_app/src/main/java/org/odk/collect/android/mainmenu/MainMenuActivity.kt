@@ -227,26 +227,13 @@ class MainMenuActivity : LocalizedActivity() {
         }
 
         mainMenuViewModel.sendableInstancesCount.observe(this) { finalized: Int ->
-            if (finalized > 0) {
-                binding.sendData.text = getString(R.string.send_data_button, finalized.toString())
-            } else {
-                binding.sendData.text = getString(R.string.send_data)
-            }
+            binding.sendData.setNumberOfForms(finalized)
         }
         mainMenuViewModel.editableInstancesCount.observe(this) { unsent: Int ->
-            if (unsent > 0) {
-                binding.reviewData.text = getString(R.string.review_data_button, unsent.toString())
-            } else {
-                binding.reviewData.text = getString(R.string.review_data)
-            }
+            binding.reviewData.setNumberOfForms(unsent)
         }
         mainMenuViewModel.sentInstancesCount.observe(this) { sent: Int ->
-            if (sent > 0) {
-                binding.viewSentForms.text =
-                    getString(R.string.view_sent_forms_button, sent.toString())
-            } else {
-                binding.viewSentForms.text = getString(R.string.view_sent_forms)
-            }
+            binding.viewSentForms.setNumberOfForms(sent)
         }
     }
 

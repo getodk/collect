@@ -7,7 +7,9 @@
   OR CONDITIONS OF ANY KIND, either express or implied. See the License for
   the specific language governing permissions and limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -41,82 +43,41 @@
                 android:paddingTop="@dimen/margin_small"
                 android:paddingBottom="@dimen/margin_standard">
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/enter_data"
-                    style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="@color/surfaceButtonColor"
-                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:text="@string/enter_data_button"
-                    tools:text="@string/enter_data_button"/>
+                    app:name="@string/enter_data"/>
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/review_data"
-                    style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="@color/surfaceButtonColor"
-                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:text="@string/review_data_button"
-                    tools:text="@string/review_data" />
+                    app:name="@string/review_data"/>
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/send_data"
-                    style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="@color/surfaceButtonColor"
-                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:text="@string/send_data_button"
-                    tools:text="@string/send_data" />
+                    app:name="@string/send_data"/>
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/view_sent_forms"
-                    style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="@color/surfaceButtonColor"
-                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:text="@string/view_sent_forms" />
+                    app:name="@string/view_sent_forms"/>
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/get_forms"
-                    style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="@color/surfaceButtonColor"
-                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:text="@string/get_forms"
-                    tools:text="@string/get_forms" />
+                    app:name="@string/get_forms"/>
 
-                <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+                <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/manage_forms"
-                    style="@style/Widget.Collect.Button.FullWidth"
-                    android:backgroundTint="@color/surfaceButtonColor"
-                    android:textColor="?colorOnSurface"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:layout_marginStart="@dimen/margin_standard"
-                    android:layout_marginEnd="@dimen/margin_standard"
-                    android:text="@string/manage_files"
-                    tools:text="@string/manage_files" />
+                    app:name="@string/manage_files"/>
 
                 <TextView
                     android:id="@+id/app_name"

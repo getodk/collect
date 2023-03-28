@@ -8,4 +8,9 @@
     <declare-styleable name="Waveform">
         <attr name="mini" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="MainMenuButton">
+        <attr name="icon" format="reference" />
+        <attr name="name" format="string" />
+    </declare-styleable>
 </resources>
