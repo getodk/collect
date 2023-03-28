@@ -15,10 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/name"
         app:layout_constraintEnd_toStartOf="@id/name"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_delete"/>
+        app:layout_constraintTop_toTopOf="@+id/name"
+        tools:src="@drawable/ic_delete" />
 
     <TextView
         android:id="@+id/name"
@@ -27,9 +27,8 @@
         android:layout_marginStart="66dp"
         android:layout_marginEnd="70dp"
         android:layout_marginVertical="18dp"
-        android:textSize="21sp"
+        android:textSize="18sp"
         android:textColor="?colorOnSurface"
-        android:fontFamily="sans-serif"
         android:maxLines="1"
         android:ellipsize="end"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -43,9 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dp"
-        android:textSize="21sp"
+        android:textSize="18sp"
         android:textColor="?colorOnSurface"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@font/roboto_medium"
         app:layout_constraintBottom_toBottomOf="@+id/name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/name"
