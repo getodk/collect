@@ -6,13 +6,17 @@ import org.kxml2.kdom.Element
 import org.odk.collect.forms.FormListItem
 import org.odk.collect.forms.MediaFile
 import org.odk.collect.shared.strings.StringUtils.isBlank
-import java.util.ArrayList
 
 class OpenRosaResponseParserImpl : OpenRosaResponseParser {
 
     override fun parseFormList(document: Document): List<FormListItem>? {
         // Attempt OpenRosa 1.0 parsing
-        val xformsElement = document.rootElement
+        val xformsElement = try {
+            document.rootElement
+        } catch (e: RuntimeException) {
+            return null
+        }
+
         if (xformsElement.name != "xforms") {
             return null
         }

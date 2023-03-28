@@ -7,9 +7,21 @@ import org.kxml2.io.KXmlParser
 import org.kxml2.kdom.Document
 import org.xmlpull.v1.XmlPullParser
 import java.io.StringReader
-import java.lang.StringBuilder
 
 class OpenRosaResponseParserImplTest {
+
+    @Test
+    fun `when document is empty, returns null`() {
+        val doc = StringReader("").use { reader ->
+            val parser = KXmlParser()
+            parser.setInput(reader)
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
+            Document().also { it.parse(parser) }
+        }
+
+        val formList = OpenRosaResponseParserImpl().parseFormList(doc)
+        assertThat(formList, equalTo(null))
+    }
 
     @Test
     fun `when xform hash is missing prefix, parseFormList returns null hash for item`() {
