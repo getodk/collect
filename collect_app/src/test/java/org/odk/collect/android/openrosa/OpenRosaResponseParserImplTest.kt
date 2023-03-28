@@ -12,14 +12,7 @@ class OpenRosaResponseParserImplTest {
 
     @Test
     fun `parseFormList() when document is empty, returns null`() {
-        val doc = StringReader("").use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
-            Document().also { it.parse(parser) }
-        }
-
-        val formList = OpenRosaResponseParserImpl().parseFormList(doc)
+        val formList = OpenRosaResponseParserImpl().parseFormList(Document())
         assertThat(formList, equalTo(null))
     }
 
@@ -75,14 +68,7 @@ class OpenRosaResponseParserImplTest {
 
     @Test
     fun `parseManifest() when document is empty, returns null`() {
-        val doc = StringReader("").use { reader ->
-            val parser = KXmlParser()
-            parser.setInput(reader)
-            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
-            Document().also { it.parse(parser) }
-        }
-
-        val formList = OpenRosaResponseParserImpl().parseManifest(doc)
+        val formList = OpenRosaResponseParserImpl().parseManifest(Document())
         assertThat(formList, equalTo(null))
     }
 }
