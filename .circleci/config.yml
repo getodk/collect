@@ -27,7 +27,7 @@ jobs:
             - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile-only.properties ~/.gradle/gradle.properties
 
       - run:
           name: Download Robolectric deps
@@ -87,7 +87,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile-only.properties ~/.gradle/gradle.properties
 
       - run:
           name: Run code quality checks
@@ -203,7 +203,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile-only.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble connected test build
@@ -229,7 +229,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile-only.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble self signed release build
@@ -251,7 +251,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile-only.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble test build
@@ -301,7 +301,7 @@ jobs:
 
       - run:
           name: Copy gradle config
-          command: mkdir -p ~/.gradle && cp .circleci/gradle.properties ~/.gradle/gradle.properties
+          command: mkdir -p ~/.gradle && cp .circleci/gradle-compile-only.properties ~/.gradle/gradle.properties
 
       - run:
           name: Assemble test build
