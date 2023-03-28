@@ -43,11 +43,10 @@
                 android:paddingTop="@dimen/margin_small"
                 android:paddingBottom="@dimen/margin_standard">
 
-                <org.odk.collect.android.mainmenu.MainMenuButton
+                <org.odk.collect.android.mainmenu.StartNewFormButton
                     android:id="@+id/enter_data"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:name="@string/enter_data"/>
+                    android:layout_height="wrap_content" />
 
                 <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/review_data"
