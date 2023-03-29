@@ -32,6 +32,9 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         }
     }
 
+    val text: String
+        get() = binding.name.text.toString()
+
     override fun performClick(): Boolean {
         return MultiClickGuard.allowClick() && super.performClick()
     }
