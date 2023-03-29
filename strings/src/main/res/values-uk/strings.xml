@@ -6,16 +6,10 @@
   <string name="enter_data_button">Заповнити анкету</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Виправити збережену анкету</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Виправити збережену анкету (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Надіслати завершену анкету</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Надіслати завершену анкету (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Переглянути надіслану анкету</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Переглянути надіслану анкету (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Отримати анкету</string>
   <!--Text for an action button on the main screen.-->

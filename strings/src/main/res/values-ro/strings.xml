@@ -6,12 +6,8 @@
   <string name="enter_data_button">Completați formular necompletat</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Editați formular salvat</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Editați formular salvat (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Trimiteți formular finalizat</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Trimiteți formular finalizat (%s)</string>
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

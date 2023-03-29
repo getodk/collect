@@ -6,16 +6,10 @@
   <string name="enter_data_button">Leeres Formular ausfüllen</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Gespeichertes Formular ändern</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Gespeichertes Formular ändern (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Vollständiges Formular hochladen</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Vollständiges Formular hochladen (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Gesendete Formulare anzeigen</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Gesendetes Formular (%s) anzeigen</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Leeres Formular herunterladen</string>
   <!--Text for an action button on the main screen.-->

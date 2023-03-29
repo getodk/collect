@@ -6,16 +6,10 @@
   <string name="enter_data_button">فورم خالی را تکمیل کنید.</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">ویرایش فورم ذخیره شده</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">ویرایش فورم های ذخیره شده (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ارسال فورم نهایی</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">ارسال فورم نهایی (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">مشاهده فورم ارسال شده</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">مشاهده فورم ارسال شده (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">دریافت فورم خالی</string>
   <!--Text for an action button on the main screen.-->

@@ -6,16 +6,10 @@
   <string name="enter_data_button">Isi Formulir Kosong</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Ubah Formulir Tersimpan</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Ubah Formulir Tersimpan (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Kirim Formulir Terfinalisasi</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Kirim Formulir Terfinalisasi (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Lihat Formulir Terkirim</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Lihat Formulir Terkirim (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Unduh Formulir Kosong</string>
   <!--Text for an action button on the main screen.-->

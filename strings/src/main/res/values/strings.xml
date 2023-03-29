@@ -16,16 +16,10 @@
     <string name="enter_data_button">Fill Blank Form</string>
     <!-- Text for an action button on the main screen. -->
     <string name="review_data">Edit Saved Form</string>
-    <!-- Text for an action button on the main screen. A form count is provided in parentheses. -->
-    <string name="review_data_button">Edit Saved Form (%s)‎‎‎‎</string>
     <!-- Text for an action button on the main screen. -->
     <string name="send_data">Send Finalized Form</string>
-    <!-- Text for an action button on the main screen. A form count is provided in parentheses. -->
-    <string name="send_data_button">Send Finalized Form (%s)</string>
     <!-- Text for an action button on the main screen. -->
     <string name="view_sent_forms">View Sent Form</string>
-    <!-- Text for an action button on the main screen. A form count is provided in parentheses. -->
-    <string name="view_sent_forms_button">View Sent Form (%s)</string>
     <!-- Text for an action button on the main screen. -->
     <string name="get_forms">Get Blank Form</string>
     <!-- Text for an action button on the main screen. -->

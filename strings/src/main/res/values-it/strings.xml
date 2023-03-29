@@ -6,16 +6,10 @@
   <string name="enter_data_button">Compila Modulo Vuoto</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Modifica Modulo Salvato</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Modifica Modulo Salvato (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Invia Modulo Completato</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Invia Modulo Completato (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Visualizza modulo inviato</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Visualizza modulo inviato (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Scarica Modulo Vuoto</string>
   <!--Text for an action button on the main screen.-->

@@ -6,16 +6,10 @@
   <string name="enter_data_button">បំពេញសំណុំបែបបទទទេ</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">កែប្រែសំណុំ​បែប​បទ​ដែលបានរក្សាទុក</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">កែប្រែសំណុំ​បែប​បទ​ដែលរក្សាទុក (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់ (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">ទាញសំណុំបែបបទ</string>
   <!--Text for an action button on the main screen.-->

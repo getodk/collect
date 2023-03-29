@@ -6,16 +6,10 @@
   <string name="enter_data_button">ఖాళీ ఫారం నింపండి</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">సేవ్ చేసిన ఫారంను సవరించండి</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">సేవ్ చేసిన ఫారంను సవరించండి (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ఫైనల్ అయిన ఫారం పంపండి</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">ఫైనల్ చేసిన ఫారం పంపండి(%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">పంపిన ఫారంను చూడండి</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">పంపిన ఫారం లను చూడండి (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">కొత్త ఫారం డౌన్లోడ్ చేసుకోండి</string>
   <!--Text for an action button on the main screen.-->

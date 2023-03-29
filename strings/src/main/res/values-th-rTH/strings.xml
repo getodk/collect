@@ -6,16 +6,10 @@
   <string name="enter_data_button">กรอกแบบสำรวจใหม่</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">แก้ไขแบบสำรวจที่บันทึกไว้แล้ว</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">แก้ไขแบบสำรวจที่บันทึกไว้ (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ส่งแบบสำรวจที่ทำเสร็จแล้ว</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">ส่งแบบสำรวจที่เสร็จสมบูรณ์แล้ว (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">แสดงแบบสำรวจที่ส่งแล้ว</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">แสดงแบบสำรวจ(%s) ที่ส่งแล้ว </string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">ดาวน์โหลดแบบสำรวจเปล่า</string>
   <!--Text for an action button on the main screen.-->

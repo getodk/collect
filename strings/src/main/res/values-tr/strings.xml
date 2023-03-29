@@ -6,16 +6,10 @@
   <string name="enter_data_button">Boş Form Doldur</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Saklanan Formu Güncelle</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Saklanan Formu Güncelle (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Dolu Formu gönder</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Dolu Formu gönder (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Gönderilen Formu Görüntüle</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Gönderilen Formu Görüntüle ( 1 %s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Boş Form Al</string>
   <!--Text for an action button on the main screen.-->

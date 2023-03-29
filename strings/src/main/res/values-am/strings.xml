@@ -6,16 +6,10 @@
   <string name="enter_data_button">ባዶ ቅጽ መሙላት</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">የተቀመጠ ቅጽን ያርትዑ</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">የተቀመጠ ቅጽ ( %s) ያርትዑ</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ተጠናቆ የተሞላ  ቅጽ ላክ</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">ተጠናቆ የተሞላ ቅጽ ላክ (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">ተሞልቶ የተላከዉን  ቅጽ ይመልከቱ</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">ተሞልቶ የተላከዉን ቅጽ ( 1 %s ) ይመልከቱ</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">አዲስ ቅጽ</string>
   <!--Text for an action button on the main screen.-->

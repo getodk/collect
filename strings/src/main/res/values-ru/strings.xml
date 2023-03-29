@@ -6,16 +6,10 @@
   <string name="enter_data_button">Заполнить пустую форму</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Редактировать ответы</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Редактировать ответы (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Выгрузить финализированные опросы</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Выгрузить опросы (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Опросы в архиве</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Архив (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Загрузить бланки</string>
   <!--Text for an action button on the main screen.-->

@@ -6,16 +6,10 @@
   <string name="enter_data_button">Nieuw formulier</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Wijzig formulier</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Wijzig opgeslagen formulier (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Verstuur Afgeronde Formulieren</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Upload afgerond formulier (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Bekijk verzonden formulier</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Bekijk verzonden formulier (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Download leeg formulier </string>
   <!--Text for an action button on the main screen.-->

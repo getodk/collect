@@ -6,16 +6,10 @@
   <string name="enter_data_button">خالی فارم پر کریں</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">محفوظ شدہ فارم میں ترمیم کریں</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">محفوظ شدہ فارم  میں ترمیم کریں(‎%s‏)  </string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">حتمی فارم  بھیجیں</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">حتمی فارم  بھیجیں (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">بھیجا ہوا فارم دیکھیں </string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">بھیجے گئے فارم کو دیکھیں(%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">خالی فارم حاصل کریں</string>
   <!--Text for an action button on the main screen.-->
