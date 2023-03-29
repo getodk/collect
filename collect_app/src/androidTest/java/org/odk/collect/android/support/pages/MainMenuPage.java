@@ -5,7 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
+import static androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -74,18 +74,28 @@ public class MainMenuPage extends Page<MainMenuPage> {
 
     public MainMenuPage assertNumberOfFinalizedForms(int number) {
         if (number == 0) {
-            onView(withText(getTranslatedString(R.string.send_data))).check(matches(isDisplayed()));
+            onView(allOf(withId(R.id.number), isDescendantOfA(withId(R.id.send_data)))).check(matches(withText("")));
         } else {
-            onView(withText(getTranslatedString(R.string.send_data_button, String.valueOf(number)))).check(matches(isDisplayed()));
+            onView(allOf(withId(R.id.number), isDescendantOfA(withId(R.id.send_data)))).check(matches(withText(String.valueOf(number))));
         }
         return this;
     }
 
     public MainMenuPage assertNumberOfEditableForms(int number) {
         if (number == 0) {
-            onView(withText(getTranslatedString(R.string.review_data))).check(matches(isDisplayed()));
+            onView(allOf(withId(R.id.number), isDescendantOfA(withId(R.id.review_data)))).check(matches(withText("")));
         } else {
-            onView(withText(getTranslatedString(R.string.review_data_button, String.valueOf(number)))).check(matches(isDisplayed()));
+            onView(allOf(withId(R.id.number), isDescendantOfA(withId(R.id.review_data)))).check(matches(withText(String.valueOf(number))));
+        }
+
+        return this;
+    }
+
+    public MainMenuPage assertNumberOfSentForms(int number) {
+        if (number == 0) {
+            onView(allOf(withId(R.id.number), isDescendantOfA(withId(R.id.view_sent_forms)))).check(matches(withText("")));
+        } else {
+            onView(allOf(withId(R.id.number), isDescendantOfA(withId(R.id.view_sent_forms)))).check(matches(withText(String.valueOf(number))));
         }
 
         return this;
@@ -96,8 +106,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new GetBlankFormPage().assertOnPage();
     }
 
-    public SendFinalizedFormPage clickSendFinalizedForm(int formCount) {
-        onView(withText(getTranslatedString(R.string.send_data_button, formCount))).perform(click());
+    public SendFinalizedFormPage clickSendFinalizedForm() {
+        onView(withId(R.id.send_data)).perform(click());
         return new SendFinalizedFormPage();
     }
 
@@ -181,16 +191,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new OkDialog().assertOnPage();
     }
 
-    public ViewSentFormPage clickViewSentForm(int formCount) {
-        String text = formCount < 1
-                ? getTranslatedString(R.string.view_sent_forms)
-                : getTranslatedString(R.string.view_sent_forms_button, formCount);
-        onView(withText(text)).perform(click());
+    public ViewSentFormPage clickViewSentForm() {
+        onView(withText(getTranslatedString(R.string.view_sent_forms))).perform(click());
         return new ViewSentFormPage().assertOnPage();
     }
 
     public DeleteSavedFormPage clickDeleteSavedForm() {
-        onView(withText(getTranslatedString(R.string.manage_files))).check(matches(isClickable()));
         onView(withText(getTranslatedString(R.string.manage_files))).perform(scrollTo(), click());
         return new DeleteSavedFormPage().assertOnPage();
     }

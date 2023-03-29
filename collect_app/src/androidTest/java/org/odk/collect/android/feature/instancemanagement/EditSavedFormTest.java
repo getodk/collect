@@ -33,7 +33,7 @@ public class EditSavedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("One Question")
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
@@ -61,7 +61,7 @@ public class EditSavedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("One Question")
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())

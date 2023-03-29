@@ -38,7 +38,7 @@ public class GetAndSubmitFormTest {
                 .clickSaveAndExit()
 
                 // Send form
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("One Question")
                 .clickSendSelected()
                 .assertText("One Question - Success")

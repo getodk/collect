@@ -41,7 +41,7 @@ public class SendFinalizedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("One Question")
                 .clickSendSelectedWithAuthenticationError()
                 .fillUsername("Draymond")
@@ -60,13 +60,13 @@ public class SendFinalizedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("One Question")
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
-
-                .clickViewSentForm(1)
+                .assertNumberOfSentForms(1)
+                .clickViewSentForm()
                 .clickOnForm("One Question")
                 .assertText("123")
                 .assertText(R.string.exit);
@@ -90,13 +90,13 @@ public class SendFinalizedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("One Question")
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
-
-                .clickViewSentForm(1)
+                .assertNumberOfSentForms(1)
+                .clickViewSentForm()
                 .clickOnText("One Question")
                 .assertOnPage();
     }
@@ -122,7 +122,7 @@ public class SendFinalizedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("One Question Google")
                 .clickSendSelected()
                 .assertText("One Question Google - Success");

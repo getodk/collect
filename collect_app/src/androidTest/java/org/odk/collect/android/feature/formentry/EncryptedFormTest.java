@@ -63,13 +63,13 @@ public class EncryptedFormTest {
                 .swipeToEndScreen()
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm(1)
+                .clickSendFinalizedForm()
                 .clickOnForm("encrypted")
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
 
-                .clickViewSentForm(1)
+                .clickViewSentForm()
                 .clickOnText("encrypted")
                 .assertText(R.string.encrypted_form)
                 .assertOnPage();
