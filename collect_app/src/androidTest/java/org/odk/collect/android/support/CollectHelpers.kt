@@ -23,7 +23,7 @@ object CollectHelpers {
 
     fun simulateProcessRestart(appDependencyModule: AppDependencyModule? = null) {
         val newComponent =
-            CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
+            overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
 
         // Reinitialize any application state with new deps/state
         newComponent.applicationInitializer().initialize()
