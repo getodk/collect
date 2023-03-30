@@ -24,7 +24,7 @@ class SavePointTest {
     val ruleChain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test
-    fun savePointIsCreateWhenMovingForwardInForm() {
+    fun savePointIsCreatedWhenMovingForwardInForm() {
         // Create save point
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
@@ -58,7 +58,7 @@ class SavePointTest {
     }
 
     @Test
-    fun whenEditing_savePointIsCreateWhenMovingForwardInForm() {
+    fun whenEditing_savePointIsCreatedWhenMovingForwardInForm() {
         // Create instance
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
