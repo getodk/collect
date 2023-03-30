@@ -53,7 +53,7 @@ class FormEntryActivityTestRule : ExternalResource() {
     fun <D : Page<D>> fillNewForm(formFilename: String, destination: D): D {
         intent = createNewFormIntent(formFilename)
         scenario = ActivityScenario.launch(intent)
-        return destination.assertOnPage() as D
+        return destination.assertOnPage()
     }
 
     fun fillNewForm(formFilename: String, formName: String): FormEntryPage {
