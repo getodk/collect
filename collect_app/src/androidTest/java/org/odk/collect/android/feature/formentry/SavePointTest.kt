@@ -7,6 +7,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -220,7 +221,8 @@ class SavePointTest {
      * being battery dying).
      */
     private fun simulateBatteryDeath(): FormEntryActivityTestRule {
-        return rule.reset()
+        CollectHelpers.simulateProcessRestart()
+        return rule
     }
 
     /**
@@ -228,8 +230,10 @@ class SavePointTest {
      * to reclaim memory, change permissions etc
      */
     private fun simulateProcessRestore(): FormEntryActivityTestRule {
-        return rule.saveInstanceStateForActivity()
+        rule.saveInstanceStateForActivity()
             .destroyActivity()
-            .reset()
+
+        CollectHelpers.simulateProcessRestart()
+        return rule
     }
 }

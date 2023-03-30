@@ -13,7 +13,6 @@ import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.ActivityHelpers
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
@@ -85,11 +84,6 @@ class FormEntryActivityTestRule : ExternalResource() {
         }
 
         scenario.moveToState(Lifecycle.State.DESTROYED)
-        return this
-    }
-
-    fun reset(): FormEntryActivityTestRule {
-        CollectHelpers.simulateProcessRestart()
         return this
     }
 
