@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:src="@drawable/ic_add_white_26"
+        android:src="@drawable/ic_add_white_32"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintBottom_toBottomOf="@id/name"
         app:layout_constraintEnd_toStartOf="@id/name"

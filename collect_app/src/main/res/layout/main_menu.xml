@@ -59,14 +59,14 @@
                     android:id="@+id/send_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_cancel_schedule_send_24"
+                    app:icon="@drawable/ic_send_24"
                     app:name="@string/send_data"/>
 
                 <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/view_sent_forms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_send_24"
+                    app:icon="@drawable/ic_check_circle_24"
                     app:name="@string/view_sent_forms"/>
 
                 <org.odk.collect.android.mainmenu.MainMenuButton
