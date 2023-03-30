@@ -47,8 +47,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         });
 
         assertToolbarTitle(formName);
+
+        // Check we are not on the Form Hierarchy page
         assertTextDoesNotExist(R.string.jump_to_beginning);
         assertTextDoesNotExist(R.string.jump_to_end);
+        
         return this;
     }
 
