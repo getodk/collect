@@ -79,6 +79,7 @@ class SavePointTest {
         // Edit instance and check save point is loaded
         rule.editForm("two-question-audit.xml", "Two Question")
             .assertText("Alexei")
+            .assertText("52")
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
