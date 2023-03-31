@@ -197,7 +197,7 @@ class SavePointTest {
     }
 
     @Test
-    fun instanceSavePointIsNotUsedWhenFillingBlankForm() {
+    fun editedInstanceSavePointIsNotUsedWhenFillingBlankFormOfTheSameForm() {
         // Create instance
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
