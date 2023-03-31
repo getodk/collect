@@ -64,7 +64,7 @@ import org.odk.collect.android.TestSettingsProvider;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.androidtest.RecordedIntentsRule;
 import org.odk.collect.settings.keys.ProjectKeys;
@@ -80,7 +80,7 @@ public class FieldListUpdateTest {
 
     private static final String FIELD_LIST_TEST_FORM = "fieldlist-updates.xml";
 
-    public FormActivityTestRule rule = new FormActivityTestRule(
+    public BlankFormTestRule rule = new BlankFormTestRule(
             FIELD_LIST_TEST_FORM,
             "fieldlist-updates",
             Collections.singletonList("fruits.csv")

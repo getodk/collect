@@ -18,7 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -27,7 +27,7 @@ import java.util.Collections;
 public class LikertTest {
     private static final String LIKERT_TEST_FORM = "likert_test.xml";
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(LIKERT_TEST_FORM, "All widgets likert icon", Collections.singletonList("famous.jpg"));
+    public BlankFormTestRule activityTestRule = new BlankFormTestRule(LIKERT_TEST_FORM, "All widgets likert icon", Collections.singletonList("famous.jpg"));
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()

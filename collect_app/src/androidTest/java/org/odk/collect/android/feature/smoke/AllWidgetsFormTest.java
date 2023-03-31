@@ -18,7 +18,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -37,7 +37,7 @@ public class AllWidgetsFormTest {
     @ClassRule
     public static final LocaleTestRule LOCALE_TEST_RULE = new LocaleTestRule();
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule("all-widgets.xml", "All widgets");
+    public BlankFormTestRule activityTestRule = new BlankFormTestRule("all-widgets.xml", "All widgets");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()

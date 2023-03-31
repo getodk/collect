@@ -3,7 +3,7 @@ package org.odk.collect.android.feature.formentry;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 import java.util.Collections;
@@ -17,7 +17,7 @@ public class DynamicPreLoadedDataSelects {
 
     private static final String EXTERNAL_CSV_SEARCH_FORM = "external-csv-search.xml";
 
-    public FormActivityTestRule rule = new FormActivityTestRule(EXTERNAL_CSV_SEARCH_FORM, "external-csv-search", Collections.singletonList("external-csv-search-produce.csv"));
+    public BlankFormTestRule rule = new BlankFormTestRule(EXTERNAL_CSV_SEARCH_FORM, "external-csv-search", Collections.singletonList("external-csv-search-produce.csv"));
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()

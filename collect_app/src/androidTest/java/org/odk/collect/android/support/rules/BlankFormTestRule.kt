@@ -3,37 +3,42 @@ package org.odk.collect.android.support.rules
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import org.odk.collect.android.activities.FormEntryActivity
-import org.odk.collect.android.external.FormsContract
+import org.junit.rules.ExternalResource
+import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
-import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.Project.Companion.DEMO_PROJECT
+import timber.log.Timber
 import java.io.IOException
 
-class FormActivityTestRule @JvmOverloads constructor(
+class BlankFormTestRule @JvmOverloads constructor(
     private val formFilename: String,
     private val formName: String,
     private val mediaFilePaths: List<String>? = null
-) : ActivityScenarioLauncherRule() {
+) : ExternalResource() {
 
-    private lateinit var formEntryPage: FormEntryPage
+    private lateinit var scenario: ActivityScenario<Activity>
 
     override fun before() {
-        super.before()
-
         setUpProjectAndCopyForm()
-        launch<Activity>(activityIntent)
-        formEntryPage = FormEntryPage(formName)
-        formEntryPage.assertOnPage()
+        scenario = ActivityScenario.launch(activityIntent)
+    }
+
+    override fun after() {
+        try {
+            scenario.close()
+        } catch (e: Throwable) {
+            Timber.e(Error("Error closing ActivityScenario: $e"))
+        }
     }
 
     fun startInFormEntry(): FormEntryPage {
-        return formEntryPage
+        return FormEntryPage(formName).assertOnPage()
     }
 
     private fun setUpProjectAndCopyForm() {
@@ -58,8 +63,7 @@ class FormActivityTestRule @JvmOverloads constructor(
                 .getOneByPath(formPath)
             val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
                 .getCurrentProject().uuid
-            val intent = Intent(application, FormEntryActivity::class.java)
-            intent.data = FormsContract.getUri(projectId, form!!.dbId)
-            return intent
+
+            return FormNavigator.newInstanceIntent(application, projectId, form!!.dbId)
         }
 }

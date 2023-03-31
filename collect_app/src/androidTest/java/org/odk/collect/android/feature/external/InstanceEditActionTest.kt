@@ -13,7 +13,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.support.ContentProviderUtils
 import org.odk.collect.android.support.pages.AppClosedPage
-import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -109,7 +108,7 @@ class InstanceEditActionTest {
             .build()
 
         val intent = Intent(Intent.ACTION_EDIT).also { it.data = uriWithoutProjectId }
-        rule.launch(intent, FormEntryPage("One Question"))
+        rule.launch(intent, FormHierarchyPage("One Question"))
     }
 
     @Test

@@ -23,7 +23,7 @@ class EntityFormTest {
         rule.startAtMainMenu()
             .copyForm("one-question-entity.xml")
             .startBlankForm("One Question Entity")
-            .fillOutAndSave(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Logan Roy"))
             .openEntityBrowser()
             .clickOnDataset("people")
             .assertEntity("full_name: Logan Roy")

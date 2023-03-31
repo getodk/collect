@@ -32,12 +32,7 @@ private class ResetStateStatement(
         clearDisk(oldComponent)
         clearAppState(application)
         setTestState()
-
-        val newComponent =
-            CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
-
-        // Reinitialize any application state with new deps/state
-        newComponent.applicationInitializer().initialize()
+        CollectHelpers.simulateProcessRestart(appDependencyModule)
         base.evaluate()
     }
 

@@ -78,7 +78,7 @@ class SwitchProjectTest {
 
             // Fill form
             .startBlankForm("One Question Entity")
-            .fillOutAndSave(FormEntryPage.QuestionAndAnswer("Name", "Alice"))
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("Name", "Alice"))
             .clickEditSavedForm(1)
             .assertText("One Question Entity")
             .pressBack(MainMenuPage())

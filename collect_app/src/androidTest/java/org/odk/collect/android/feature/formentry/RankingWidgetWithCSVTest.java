@@ -3,7 +3,7 @@ package org.odk.collect.android.feature.formentry;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
 
@@ -13,7 +13,7 @@ public class RankingWidgetWithCSVTest {
 
     private static final String TEST_FORM = "ranking_widget.xml";
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(TEST_FORM, "ranking_widget", Collections.singletonList("fruits.csv"));
+    public BlankFormTestRule activityTestRule = new BlankFormTestRule(TEST_FORM, "ranking_widget", Collections.singletonList("fruits.csv"));
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
