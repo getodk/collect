@@ -26,6 +26,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'添加于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'保存于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'完成于\' EEE, MMM dd, yyyy \'在\' HH:mm</string>
@@ -141,7 +142,6 @@
   <string name="quit_application">退出 %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;未加载表单&gt;</string>
-  <string name="do_not_save">忽略修改</string>
   <string name="keep_changes">保存修改</string>
   <string name="saving_form">正在保存表格</string>
   <string name="survey_saving_validating_message">正在验证答案…</string>
@@ -201,7 +201,6 @@
   <string name="selected_invalid_image">所选文件不是有效图像</string>
   <string name="take_picture_instruction">点击屏幕拍照</string>
   <string name="error_front_camera_unavailable">前置摄像头在此设备上不可用</string>
-  <string name="camera_error">此设备不支持Camera2 API。</string>
   <string name="annotate_image">注释该图片</string>
   <string name="invalid_file_type">应用程序返回了无效的文件类型</string>
   <!--Dialog heading for saving annotated image-->
@@ -844,7 +843,7 @@
   <string name="view_qr_code_fragment_title">二维码</string>
   <string name="import_qrcode_sd">导入二维码</string>
   <string name="successfully_imported_settings">成功导入设置</string>
-  <string name="encoding_max_limit">已达到最大字符数限制：无法为所有设置生成二维码</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">已达到最大字符数限制：无法为所有设置生成二维码</string>
   <string name="share">分享</string>
   <string name="turn_on_flashlight">打开闪光灯</string>
   <string name="turn_off_flashlight">关闭闪光灯</string>
@@ -950,6 +949,9 @@
     ##############################################-->
   <string name="crash_last_run">应用程序上次运行时发生了崩溃！</string>
   <string name="cant_start_app">无法启动应用程序！</string>
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
   <!--##############################################
     # Developer tools
     ##############################################-->

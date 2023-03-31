@@ -26,6 +26,8 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Hinzugefügt am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Aktualisiert am\' EEE, dd. MMM yyyy \'um\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Gespeichert am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Fertig gestellt am\' EEE, dd.MM.yyyy \'um\' HH:mm</string>
@@ -134,6 +136,8 @@
   <string name="save_as_error">Gespeicherter Name darf nicht leer sein!</string>
   <string name="mark_finished">Formular als vollständig markieren</string>
   <string name="quit_entry">Formular speichern und beenden</string>
+  <string name="manual_instance_name_warning">Bald wird manuelles Benamen von Formularen entfernt. Formular-Design muss aktualisiert werden.</string>
+  <string name="manual_instance_learn_more_button">Mehr erfahren</string>
   <string name="data_saved_error">Speichervorgang gescheitert!</string>
   <string name="data_saved_ok">Speichervorgang erfolgreich!</string>
   <string name="save_point_error">Fehler beim Speichern des Wiederherstellungspunkts: %s</string>
@@ -141,7 +145,8 @@
   <string name="quit_application">%s beenden</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;kein Formular geladen&gt;</string>
-  <string name="do_not_save">Änderungen nicht speichern</string>
+  <string name="do_not_save">Formular verwerfen</string>
+  <string name="discard_changes">Änderungen verwerfen</string>
   <string name="keep_changes">Änderungen speichern</string>
   <string name="saving_form">Formular wird gespeichert</string>
   <string name="survey_saving_validating_message">Antworten werden geprüft…</string>
@@ -201,6 +206,8 @@
   <string name="selected_invalid_image">Ausgewählte Datei ist kein gültiges Bild.</string>
   <string name="take_picture_instruction">Bildschirm berühren um ein Foto aufzunehmen</string>
   <string name="error_front_camera_unavailable">Frontkamera bei diesem Gerät nicht verfügbar</string>
+  <string name="camera_error">Es gab einen Fehler beim Fotografieren.</string>
+  <string name="camera_failed_to_initialize">Kamera konnte nicht initialisiert werden!</string>
   <string name="annotate_image">Bild beschreiben</string>
   <string name="invalid_file_type">App gab einen ungültigen Dateityp zurück</string>
   <!--Dialog heading for saving annotated image-->
@@ -846,7 +853,7 @@
   <string name="view_qr_code_fragment_title">QR-Code</string>
   <string name="import_qrcode_sd">QR-Code importieren</string>
   <string name="successfully_imported_settings">Einstellungen erfolgreich importiert</string>
-  <string name="encoding_max_limit">Max. Zeichen-Limit erreicht: QR-Code kann nicht für alle Einstellungen generiert werden</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Max. Zeichen-Limit erreicht: QR-Code kann nicht für alle Einstellungen generiert werden</string>
   <string name="share">Teilen</string>
   <string name="turn_on_flashlight">Taschenlampe anschalten</string>
   <string name="turn_off_flashlight">Taschenlampe ausschalten</string>
@@ -952,6 +959,12 @@
     ##############################################-->
   <string name="crash_last_run">Es gab einen Absturz beim letzten Lauf der App!</string>
   <string name="cant_start_app">Kann die App nicht starten!</string>
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="google_drive_deprecation_message">Dieses Projekt verwendet Google Drive. Diese Funktion wird mit dem nächsten App-Update entfernt.</string>
+  <string name="learn_more_button_text">Mehr erfahren</string>
+  <string name="dismiss_button_text">Verwerfen</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

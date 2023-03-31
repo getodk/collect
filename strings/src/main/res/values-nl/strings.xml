@@ -17,11 +17,13 @@
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <string name="view_sent_forms_button">Bekijk verzonden formulier (%s)</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Download formulieren</string>
+  <string name="get_forms">Download leeg formulier </string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Verwijder formulieren</string>
+  <string name="saved_forms">Opgeslagen formulieren</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Toegevoegd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Opgeslagen op\' EEE dd MMM yyyy \'om\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -120,7 +122,6 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">Sluit %s af</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="do_not_save">Wijzigingen niet opslaan</string>
   <string name="keep_changes">Wijzigingen opslaan</string>
   <string name="saving_form">Formulier opslaan</string>
   <string name="survey_saving_validating_message">Valideren antwoorden…</string>
@@ -534,6 +535,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

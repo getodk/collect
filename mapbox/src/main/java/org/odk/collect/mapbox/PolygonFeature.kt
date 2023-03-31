@@ -28,7 +28,7 @@ class PolygonFeature(
             .withFillColor(
                 ColorUtils.setAlphaComponent(
                     context.resources.getColor(R.color.mapLineColor),
-                    150
+                    68
                 )
             )
     )

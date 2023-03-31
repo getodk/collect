@@ -26,6 +26,8 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Lisätty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Päivitetty\' EEE dd.MM.yyyy \'kello\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Tallennettu\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Viimeistelty\' EEE, dd MMM yyyy \'kello\' HH:mm</string>
@@ -134,6 +136,8 @@
   <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
   <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="quit_entry">Tallenna lomake ja lopeta</string>
+  <string name="manual_instance_name_warning">Manuaalinen lomakkeiden nimeäminen poistetaan kohta. Lomakkeen muotoilua pitää päivittää.</string>
+  <string name="manual_instance_learn_more_button">Lisätietoja</string>
   <string name="data_saved_error">Pahoittelut, lomakkeen tallennus epäonnistui!</string>
   <string name="data_saved_ok">Lomake tallennettu!</string>
   <string name="save_point_error">Virhe tallentaessa palautuspistettä: %s</string>
@@ -141,7 +145,8 @@
   <string name="quit_application">Poistu täältä: %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;ei ladattua lomaketta&gt;</string>
-  <string name="do_not_save">Peru muutokset</string>
+  <string name="do_not_save">Hylkää lomake</string>
+  <string name="discard_changes">Hylkää muutokset</string>
   <string name="keep_changes">Tallenna muutokset</string>
   <string name="saving_form">Tallentamassa lomaketta</string>
   <string name="survey_saving_validating_message">Tarkistetaan vastauksia…</string>
@@ -201,6 +206,8 @@
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
+  <string name="camera_error">Virhe ottaessa kuvaa</string>
+  <string name="camera_failed_to_initialize">Kameran alustaminen ei onnistunut!</string>
   <string name="annotate_image">Lisää merkinnät kuvaan</string>
   <string name="invalid_file_type">Sovellus ilmoitti epäkelvon tiedostotyypin</string>
   <!--Dialog heading for saving annotated image-->
@@ -846,7 +853,7 @@
   <string name="view_qr_code_fragment_title">QR-koodi</string>
   <string name="import_qrcode_sd">Tuo QR-koodi</string>
   <string name="successfully_imported_settings">Asetukset haettu onnistuneesti</string>
-  <string name="encoding_max_limit">Merkkien maksimimäärä ylitetty: QR-koodia ei voida luoda kaikille asetuksille</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Merkkien maksimimäärä ylitetty: QR-koodia ei voida luoda kaikille asetuksille</string>
   <string name="share">Jaa</string>
   <string name="turn_on_flashlight">Taskulamppu päälle</string>
   <string name="turn_off_flashlight">Taskulamppu pois</string>
@@ -952,6 +959,12 @@
     ##############################################-->
   <string name="crash_last_run">Sovellus kaatui viime käyttökerralla!</string>
   <string name="cant_start_app">Sovelluksen käynnistys ei onnistu!</string>
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="google_drive_deprecation_message">Tämä projekti käyttää Google Drive -tallennusta. Tämä toiminnallisuus poistetaan seuraavassa sovelluspäivityksessä.</string>
+  <string name="learn_more_button_text">Lisätietoja</string>
+  <string name="dismiss_button_text">Hylkää</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

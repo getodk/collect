@@ -26,6 +26,8 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Agregado:\' EEE, dd MMM, yyyy \'a las\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Actualizado\' EEE dd \'de\' MMM \'de\' yyyy \'a las\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Guardado:\' EEE, dd MMM, yyyy \'a las\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Finalizado:\' EEE, dd MMM, yyyy \'a las\' HH:mm</string>
@@ -47,6 +49,7 @@
   <string name="sort_by_date_desc">Fecha, más reciente de primero</string>
   <string name="sort_by_date_asc">Fecha, más antiguo de primero</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Último guardado primero</string>
   <string name="sort_by_status_asc">Por status, primero los finalizados</string>
   <string name="sort_by_status_desc">Por Status, primero los no finalizados</string>
   <string name="filter_the_list">Filtrar la lista</string>
@@ -61,6 +64,7 @@
   <string name="storage_runtime_permission_denied_desc">Sin estos permisos no se puede accesar los formularios o guardar las respuetas. Abra la aplicación de nuevo cuando esté listo para dar acceso</string>
   <string name="location_runtime_permissions_denied_title">Permisos de Ubicación</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">Sin el permiso de <b>Localización precisa</b> no puede registrar su ubicación. Intente de nuevo cuando esté el permiso.</string>
   <string name="camera_runtime_permission_denied_title">Permiso de Cámara</string>
   <string name="camera_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder a la cámara. Intente de nuevo cuando esté el permiso.</string>
   <string name="record_audio_runtime_permission_denied_title">Permiso de Grabación de Audio</string>
@@ -132,6 +136,7 @@
   <string name="save_as_error">¡El nombre no puede estar en blanco!</string>
   <string name="mark_finished">Marcar el formulario como finalizado</string>
   <string name="quit_entry">Guardar Formulario y Salir</string>
+  <string name="manual_instance_learn_more_button">Aprende más</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
@@ -139,7 +144,8 @@
   <string name="quit_application">Salir %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;formulario no cargado&gt;</string>
-  <string name="do_not_save">Ignorar Cambios</string>
+  <string name="do_not_save">Descartar formulario</string>
+  <string name="discard_changes">Descartar los cambios</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="saving_form">Guardando el formulario</string>
   <string name="survey_saving_validating_message">Validando respuestas…</string>
@@ -199,6 +205,8 @@
   <string name="selected_invalid_image">El archivo seleccionado no es una imagen válida</string>
   <string name="take_picture_instruction">Toca la pantalla para tomar una foto</string>
   <string name="error_front_camera_unavailable">Este dispositivo no tiene Cámara frontal disponible </string>
+  <string name="camera_error">Hubo un error al tomar la foto</string>
+  <string name="camera_failed_to_initialize">¡No se pudo inicializar la cámara!</string>
   <string name="annotate_image">Anotar en Imagen</string>
   <string name="invalid_file_type">La aplicación devolvió un tipo de archivo no válido</string>
   <!--Dialog heading for saving annotated image-->
@@ -847,7 +855,7 @@
   <string name="view_qr_code_fragment_title">Código QR</string>
   <string name="import_qrcode_sd">Importar código QR</string>
   <string name="successfully_imported_settings">Ajustes importados exitosamente</string>
-  <string name="encoding_max_limit">Se alcanzó el límite máximo de caracteres: No se puede generar código QR para todos los ajustes</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Se alcanzó el límite máximo de caracteres: No se puede generar código QR para todos los ajustes</string>
   <string name="share">Compartir</string>
   <string name="turn_on_flashlight">Encender flash</string>
   <string name="turn_off_flashlight">Apagar flash</string>
@@ -948,13 +956,25 @@
     ##############################################-->
   <string name="open_settings">Abrir Configuración</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Entidades</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <string name="crash_last_run">¡Hubo un colapso la última vez que se ejecutó la aplicación!</string>
+  <string name="cant_start_app">¡No se puede iniciar la aplicación!</string>
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="google_drive_deprecation_message">Este proyecto utiliza Google Drive. Esta funcionalidad se eliminará en la próxima actualización de la aplicación.</string>
+  <string name="learn_more_button_text">Aprende más</string>
+  <string name="dismiss_button_text">Descartar</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->
+  <string name="dev_tools">Herramientas de desarrollo</string>
   <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">Aplicación bloqueada</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">Se forzó una excepción no detectada que hace que la aplicación se bloquee</string>
 </resources>

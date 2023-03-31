@@ -7,12 +7,17 @@ import org.kxml2.io.KXmlParser
 import org.kxml2.kdom.Document
 import org.xmlpull.v1.XmlPullParser
 import java.io.StringReader
-import java.lang.StringBuilder
 
 class OpenRosaResponseParserImplTest {
 
     @Test
-    fun `when xform hash is missing prefix, parseFormList returns null hash for item`() {
+    fun `parseFormList() when document is empty, returns null`() {
+        val formList = OpenRosaResponseParserImpl().parseFormList(Document())
+        assertThat(formList, equalTo(null))
+    }
+
+    @Test
+    fun `parseFormList() when xform hash is missing prefix, returns null hash for item`() {
         val response = StringBuilder()
             .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
             .appendLine("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">")
@@ -38,7 +43,7 @@ class OpenRosaResponseParserImplTest {
     }
 
     @Test
-    fun `when media file hash is empty, parseManifest returns null`() {
+    fun `parseManifest() when media file hash is empty, returns null`() {
         val response = StringBuilder()
             .appendLine("<?xml version='1.0' encoding='UTF-8' ?>")
             .appendLine("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">")
@@ -59,5 +64,11 @@ class OpenRosaResponseParserImplTest {
 
         val mediaFiles = OpenRosaResponseParserImpl().parseManifest(doc)
         assertThat(mediaFiles, equalTo(null))
+    }
+
+    @Test
+    fun `parseManifest() when document is empty, returns null`() {
+        val formList = OpenRosaResponseParserImpl().parseManifest(Document())
+        assertThat(formList, equalTo(null))
     }
 }

@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Adicionada em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Salvo em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'Finalizado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
@@ -137,7 +138,6 @@
   <string name="quit_application">Saída %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;nenhum formulário carregado&gt;</string>
-  <string name="do_not_save">Ignorar Alterações</string>
   <string name="keep_changes">Salvar Alterações</string>
   <string name="saving_form">Salvando Formulário</string>
   <string name="survey_saving_validating_message">Validando respostas…</string>
@@ -836,7 +836,7 @@
   <string name="view_qr_code_fragment_title">QR Code</string>
   <string name="import_qrcode_sd">Importar QR Code</string>
   <string name="successfully_imported_settings">Configurações importadas com sucesso</string>
-  <string name="encoding_max_limit">Número máximo de caracteres alcançado: QR code não pode ser gerado para todas as configurações</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">Número máximo de caracteres alcançado: QR code não pode ser gerado para todas as configurações</string>
   <string name="share">Compartilhar</string>
   <string name="turn_on_flashlight">Ligue a luz do flash</string>
   <string name="turn_off_flashlight">Desligue a luz do flash</string>
@@ -938,6 +938,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="dismiss_button_text">Cancelar</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

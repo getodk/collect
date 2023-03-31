@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,6 +56,19 @@ public class GeoPointWidgetTest {
     public void getAnswer_whenPromptHasAnswer_returnsAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(answer));
         assertEquals(widget.getAnswer().getDisplayText(), answer.getDisplayText());
+    }
+
+    @Test
+    public void getAnswer_whenPromptHasInvalidAnswer_returnsNull() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        assertNull(widget.getAnswer());
+    }
+
+    @Test
+    public void creatingWidgetWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
     }
 
     @Test
@@ -114,10 +128,25 @@ public class GeoPointWidgetTest {
     }
 
     @Test
+    public void setDataWithInvalidValue_doesNotUpdateWidgetAnswer() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData("blah");
+        assertEquals(widget.getAnswer(), null);
+    }
+
+    @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoPointWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
         assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+    }
+
+    @Test
+    public void setDataWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
+        GeoPointWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData("blah");
+        assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
     }
 
     @Test

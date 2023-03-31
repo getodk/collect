@@ -3,6 +3,7 @@ package org.odk.collect.android.widgets;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -71,15 +72,6 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     @Override
     public StringData getNextAnswer() {
         return new StringData(RandomString.make());
-    }
-
-    @Test
-    public void buttonsShouldLaunchCorrectIntents() {
-        stubAllRuntimePermissionsGranted(true);
-
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
-        assertComponentEquals(activity, DrawActivity.class, intent);
-        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
     }
 
     @Test
@@ -188,5 +180,55 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
         String loadedPath = shadowOf(((BitmapDrawable) drawable).getBitmap()).getCreatedFromPath();
         assertThat(loadedPath, equalTo(imagePath));
+    }
+
+    @Test
+    public void whenPromptHasDefaultAnswer_passUriToDrawActivity() throws Exception {
+        File file = File.createTempFile("default", ".bmp");
+        String imagePath = file.getAbsolutePath();
+
+        ReferenceManager referenceManager = setupFakeReferenceManager(singletonList(
+                new Pair<>(DrawWidgetTest.DEFAULT_IMAGE_ANSWER, imagePath)
+        ));
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+
+            @Override
+            public ImageLoader providesImageLoader() {
+                return new SynchronousImageLoader();
+            }
+        });
+
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .build();
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
+        assertExtraEquals(DrawActivity.REF_IMAGE, Uri.fromFile(file), intent);
+    }
+
+    @Test
+    public void whenPromptHasDefaultAnswerThatDoesNotExist_doNotPassUriToDrawActivity() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
+                .build();
+
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
+        assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
+    }
+
+    @Test
+    public void whenThereIsNoAnswer_doNotPassUriToDrawActivity() {
+        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        assertComponentEquals(activity, DrawActivity.class, intent);
+        assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
+        assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
     }
 }

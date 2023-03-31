@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'చేర్చిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'సేవ్ చేసిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'ఖరారు చేసిన తేదీ\' EEE, MMM dd, yyyy \'సమయం\' HH:mm </string>
@@ -137,7 +138,6 @@
   <string name="quit_application">Exit %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&amp; lt; ఏ ఫారం లోడ్ కాలేదు &amp; gt;</string>
-  <string name="do_not_save">మార్పులు విస్మరించు</string>
   <string name="keep_changes">మార్పులను సేవ్ చెయ్యి</string>
   <string name="saving_form">ఫారం సేవ్ చేయబడుతుంది</string>
   <string name="survey_saving_validating_message">సమాధానాలను ధృవీకరిస్తోంది…</string>
@@ -191,7 +191,7 @@
   <string name="selected_invalid_image">ఎంచుకున్న ఫైల్ చెల్లుబాటు అయ్యే చిత్రం కాదు</string>
   <string name="take_picture_instruction">ఫోటో తీయడానికి స్క్రీన్ పైన నొక్కండి</string>
   <string name="error_front_camera_unavailable">ముందు వైపు కెమెరా ఈ పరికరంలో లేదు</string>
-    <string name="annotate_image">ఫోటో మీద వ్యాఖ్యానం వ్రాయండి </string>
+  <string name="annotate_image">ఫోటో మీద వ్యాఖ్యానం వ్రాయండి </string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">సేవ్ చేసి క్లోజ్ చెయ్యండి </string>
   <string name="signature_capture">సంతకం పెట్టండి</string>
@@ -740,7 +740,7 @@
   <string name="view_qr_code_fragment_title">QR కోడ్</string>
   <string name="import_qrcode_sd">QR కోడ్‌ను దిగుమతి చేయండి</string>
   <string name="successfully_imported_settings">సెట్టింగులు విజయవంతంగా దిగుమతి చేయబడ్డాయి</string>
-  <string name="encoding_max_limit">గరిష్ట అక్షరాల పరిమితి చేరుకుంది: అన్ని సెట్టింగ్‌ల కోసం QR కోడ్ ఉత్పత్తి చేయబడదు</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">గరిష్ట అక్షరాల పరిమితి చేరుకుంది: అన్ని సెట్టింగ్‌ల కోసం QR కోడ్ ఉత్పత్తి చేయబడదు</string>
   <string name="share">షేర్</string>
   <string name="turn_on_flashlight">ఫ్లాష్ లైట్ ని ఆన్ చెయ్యండి</string>
   <string name="turn_off_flashlight">ఫ్లాష్ లైట్ ని ఆఫ్ చెయ్యండి</string>
@@ -806,6 +806,10 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="dismiss_button_text">తొలగించండి</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

@@ -23,12 +23,9 @@ import android.view.View;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.GeoWidgetUtils;
@@ -66,23 +63,24 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
         answerText = prompt.getAnswerText();
 
-        if (answerText != null && !answerText.isEmpty()) {
-            binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
-            binding.simpleButton.setText(R.string.change_location);
-        } else {
+        String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
+        if (answerToDisplay.isEmpty()) {
             binding.simpleButton.setText(R.string.get_point);
+            answerText = null;
+        } else {
+            binding.geoAnswerText.setText(answerToDisplay);
+            binding.simpleButton.setText(R.string.change_location);
         }
-
-        logAccuracyThresholdUse(prompt);
 
         return binding.getRoot();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return answerText == null || answerText.isEmpty()
+        double[] parsedGeometryPoint = GeoWidgetUtils.parseGeometryPoint(answerText);
+        return parsedGeometryPoint == null
                 ? null
-                : new GeoPointData(GeoWidgetUtils.parseGeometryPoint(answerText));
+                : new GeoPointData(parsedGeometryPoint);
     }
 
     @Override
@@ -108,20 +106,16 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void setData(Object answer) {
-        answerText = answer.toString();
-        binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
-        binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.change_location);
-        widgetValueChanged();
-    }
-
-    private void logAccuracyThresholdUse(FormEntryPrompt prompt) {
-        // Only default geopoint supports accuracy threshold
-        if (Appearances.getSanitizedAppearanceHint(prompt).isEmpty()) {
-            if (prompt.getQuestion().getAdditionalAttribute(null, "accuracyThreshold") != null) {
-                Analytics.log(AnalyticsEvents.ACCURACY_THRESHOLD, "form");
-            } else {
-                Analytics.log(AnalyticsEvents.ACCURACY_THRESHOLD_DEFAULT, "form");
-            }
+        String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answer.toString());
+        if (answerToDisplay.isEmpty()) {
+            answerText = null;
+            binding.geoAnswerText.setText("");
+            binding.simpleButton.setText(R.string.get_point);
+        } else {
+            answerText = answer.toString();
+            binding.geoAnswerText.setText(answerToDisplay);
+            binding.simpleButton.setText(R.string.change_location);
         }
+        widgetValueChanged();
     }
 }

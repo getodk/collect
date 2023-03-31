@@ -20,10 +20,13 @@
   <string name="get_forms">Изтегляне на бланка</string>
   <!--Text for an action button on the main screen.-->
   <string name="manage_files">Изтриване на записан формуляр</string>
+  <string name="saved_forms">Запазени формуляри</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Добавено на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Обновено на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Записано на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -35,9 +38,36 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Изтрито на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">\'Редактирано на\' EEE, MMM dd, yyyy \'в\' HH:mm</string>
+  <string name="encrypted_form">Криптиран формуляр</string>
+  <string name="deleted_form">Изтрит формуляр</string>
+  <string name="sort_the_list">Подреждане на списъка</string>
+  <string name="sort_by">Подреди по</string>
+  <string name="sort_by_name_asc">Име, А-Я</string>
+  <string name="sort_by_name_desc">Име, Я-А</string>
+  <string name="sort_by_date_desc">Дата, първо най-новите</string>
+  <string name="sort_by_date_asc">Дата, първо най-старите</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Първо последно записаните</string>
+  <string name="sort_by_status_asc">Статус, първо завършени</string>
+  <string name="sort_by_status_desc">Статус, първо незавършени</string>
+  <string name="filter_the_list">Филтриране на списъка</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">Търсене</string>
+  <string name="no_items_display">Няма нищо за показване.</string>
+  <string name="no_items_display_forms">Няма нищо за показване.\n\nИзтеглете и попълнете бланка.</string>
+  <string name="no_items_display_sent_forms">Няма нищо за показване.\n\nПърво изпратете приключени формуляри.</string>
+  <string name="no_items_display_instances">Няма нищо за показване.\n\nПреди изпращане, записаните формуляри трябва да се приключат.</string>
+  <string name="not_granted_permission">Тази дейност изисква допълнително разрешение, което не е одобрено.</string>
+  <string name="storage_runtime_permission_denied_title">Резрешения за хранилището</string>
+  <string name="storage_runtime_permission_denied_desc">Без тези разрешения, приложението няма достъп до вашите формуляри и не може да попълва такива. </string>
+  <string name="location_runtime_permissions_denied_title">Рарешения за местоположението</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">Без разрешението за <b>Точно местоположение</b> Collect не може да запише вашето местоположение. Моля, опитайте пак, когато сте готови да го одобрите.</string>
+  <string name="camera_runtime_permission_denied_title">Разрешение за камера</string>
+  <string name="camera_runtime_permission_denied_desc">Без това разрешение Collect няма достъп до камерата на устройството. Моля, опитайте пак, когато сте готови да го одобрите.</string>
+  <string name="record_audio_runtime_permission_denied_title">Разрешение за запис на аудио</string>
+  <string name="record_audio_runtime_permission_denied_desc">Без това разрешение Collect няма достъп до микрофона на устройството. Моля, опитайте пак, когато сте готови да го одобрите.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -250,6 +280,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

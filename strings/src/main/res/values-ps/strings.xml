@@ -27,6 +27,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="no_items_display">د نندارې لپاره هیڅ شتون نلري.</string>
@@ -73,7 +74,6 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">خارج شی %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="do_not_save">بدلون څخه ډد وکړي</string>
   <string name="saving_form">فورمه د ثبت کیدو په حال کښی</string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
@@ -351,6 +351,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

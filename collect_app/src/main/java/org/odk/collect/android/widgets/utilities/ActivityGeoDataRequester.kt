@@ -35,10 +35,11 @@ class ActivityGeoDataRequester(
                     waitingForDataRegistry.waitForData(prompt.index)
 
                     val bundle = Bundle().also {
-                        if (!answerText.isNullOrEmpty()) {
+                        val parsedGeometry = GeoWidgetUtils.parseGeometry(answerText)
+                        if (parsedGeometry.isNotEmpty()) {
                             it.putParcelable(
                                 GeoPointMapActivity.EXTRA_LOCATION,
-                                GeoWidgetUtils.parseGeometry(answerText)[0]
+                                parsedGeometry[0]
                             )
                         }
 

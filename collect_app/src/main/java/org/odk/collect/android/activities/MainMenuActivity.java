@@ -328,6 +328,8 @@ public class MainMenuActivity extends LocalizedActivity {
                     unprotectedSettings.save(ProjectKeys.GOOGLE_DRIVE_DEPRECATION_BANNER_DISMISSED, true);
                 });
             }
+        } else {
+            findViewById(R.id.google_drive_deprecation_banner).setVisibility(View.GONE);
         }
     }
 }

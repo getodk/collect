@@ -148,6 +148,18 @@ public class ActivityGeoDataRequesterTest {
     }
 
     @Test
+    public void requestGeoPoint_whenAnswerIsPresentButInvalid_doesNotAddToIntent() {
+        activityGeoDataRequester.requestGeoPoint(prompt, "something", waitingForDataRegistry);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+
+        assertEquals(startedIntent.getComponent(), new ComponentName(testActivity, GeoPointActivity.class));
+        assertEquals(shadowActivity.getNextStartedActivityForResult().requestCode, LOCATION_CAPTURE);
+
+        Bundle bundle = startedIntent.getExtras();
+        assertThat(bundle.getParcelable(GeoPointMapActivity.EXTRA_LOCATION), equalTo(null));
+    }
+
+    @Test
     public void whenWidgetHasAccuracyValue_requestGeoPoint_launchesCorrectIntent() {
         when(questionDef.getAdditionalAttribute(null, "accuracyThreshold")).thenReturn("10");
 

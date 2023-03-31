@@ -26,6 +26,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">اضافه شد EEE,MMM,dd,yyyy در HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">ذخیره شد EEE,MMM,dd,yyyy در HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">نهایی شد EEE,MMM,dd,yyyy در HH:mm</string>
@@ -139,7 +140,6 @@
   <string name="quit_application">خروج %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt; هیچ فورمی پر نشده است &gt;</string>
-  <string name="do_not_save">نادیده گرفتن تغییرات</string>
   <string name="keep_changes">ذخیره تغییرات</string>
   <string name="saving_form">ذخیره فورم</string>
   <string name="survey_saving_validating_message">در حال اعتبار سنجی پاسخ ها</string>
@@ -199,7 +199,6 @@
   <string name="selected_invalid_image">فایل انتخاب شده تصویر قابل اعتبار ندارد</string>
   <string name="take_picture_instruction">برای گرفتن عکس روی صفحه ضربه بزنید</string>
   <string name="error_front_camera_unavailable">این دستگاه دوربین جلو موجود نیست</string>
-  <string name="camera_error">این دستگاه از Camera2 API پشتیبانی نمی کند.</string>
   <string name="annotate_image">نوشتن بر روی تصویر</string>
   <string name="invalid_file_type">برنامه یک نوع فایل نامعتبر را برگرداند</string>
   <!--Dialog heading for saving annotated image-->
@@ -798,7 +797,7 @@
   <string name="view_qr_code_fragment_title">ًQR کد</string>
   <string name="import_qrcode_sd">QR کد را وارد شد</string>
   <string name="successfully_imported_settings">تنظیمات با موفقیت وارد شد</string>
-  <string name="encoding_max_limit">به حداکثر محدودیت رقم ها رسیده‌اید: QR کد نمی‌تواند برای همه تنظیمات ایجاد شود</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">به حداکثر محدودیت رقم ها رسیده‌اید: QR کد نمی‌تواند برای همه تنظیمات ایجاد شود</string>
   <string name="share">اشتراک گذاری</string>
   <string name="turn_on_flashlight">روشن نمودن چراغ </string>
   <string name="turn_off_flashlight">خاموش نمودن چراغ</string>
@@ -900,6 +899,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools

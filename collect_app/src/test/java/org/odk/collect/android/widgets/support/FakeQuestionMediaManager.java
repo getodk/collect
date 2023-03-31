@@ -30,6 +30,10 @@ public class FakeQuestionMediaManager implements QuestionMediaManager {
 
     @Override
     public File getAnswerFile(String fileName) {
+        if (fileName == null) {
+            return null;
+        }
+
         File existing = answerFiles.stream().filter(f -> f.getName().equals(fileName)).findFirst().orElse(null);
 
         if (existing != null) {

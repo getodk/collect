@@ -3,6 +3,8 @@ package org.odk.collect.android.database.forms;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorWindow;
+import android.database.sqlite.SQLiteBlobTooBigException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
@@ -16,6 +18,7 @@ import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -38,6 +41,8 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
+
+import timber.log.Timber;
 
 public class DatabaseFormsRepository implements FormsRepository {
 
@@ -246,15 +251,29 @@ public class DatabaseFormsRepository implements FormsRepository {
     private static List<Form> getFormsFromCursor(Cursor cursor, String formsPath, String cachePath) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
-            cursor.moveToPosition(-1);
-            while (cursor.moveToNext()) {
-                Form form = getFormFromCurrentCursorPosition(cursor, formsPath, cachePath);
-
-                forms.add(form);
+            try {
+                cursor.moveToPosition(-1);
+                while (cursor.moveToNext()) {
+                    Form form = getFormFromCurrentCursorPosition(cursor, formsPath, cachePath);
+                    forms.add(form);
+                }
+            } catch (SQLiteBlobTooBigException e) {
+                logSQLiteBlobTooBigException();
+                throw e;
             }
-
         }
         return forms;
+    }
+
+    private static void logSQLiteBlobTooBigException() {
+        try {
+            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+            field.setAccessible(true);
+            Object size = field.get(null);
+            Timber.w("SQLiteBlobTooBigException, sCursorWindowSize: %sB", size);
+        } catch (Throwable t) {
+            // ignore;
+        }
     }
 
     private void deleteFilesForForm(Form form) {

@@ -908,7 +908,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                     .addAll(markers.stream().map(Marker::getPosition).collect(Collectors.toList()))
                     .strokeColor(strokeLineColor)
                     .strokeWidth(5)
-                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, 150))
+                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, 68))
                     .clickable(true)
             );
         }

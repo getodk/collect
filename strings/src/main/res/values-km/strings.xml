@@ -25,6 +25,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'បន្ថែមនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'រក្សាទុកនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'បញ្ចប់នៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
@@ -123,7 +124,6 @@
   <string name="quit_application">ចាកចេញ %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="no_form_loaded">&lt;no ទម្រង់បានផ្ទុក&gt;</string>
-  <string name="do_not_save">បោះបង់ការផ្លាស់ប្តូរ</string>
   <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
   <string name="saving_form">កំពុងរក្សាទុកសំណុំ​បែប​បទ​</string>
   <string name="survey_saving_validating_message">កំពុងផ្ទៀងផ្ទាត់ចម្លើយ</string>
@@ -652,7 +652,7 @@
      # SETTINGS IMPORT
      ##############################################-->
   <string name="successfully_imported_settings">បាន​នាំ​ចូល​ការ​កំណត់​ដោយ​ជោគ​ជ័យ</string>
-  <string name="encoding_max_limit">តួអក្សរ​ដល់​ដែន​កំណត់​អតិបរមា​: លេខកូដ​ QR ​មិន​អាច​បង្កើត​តាម​ការកំណត់​ទាំងអស់​</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">តួអក្សរ​ដល់​ដែន​កំណត់​អតិបរមា​: លេខកូដ​ QR ​មិន​អាច​បង្កើត​តាម​ការកំណត់​ទាំងអស់​</string>
   <string name="share">ចែករំលែក</string>
   <string name="turn_on_flashlight">បើក​ភ្លើងពិល</string>
   <string name="turn_off_flashlight">បិទភ្លើងពិល</string>
@@ -716,6 +716,9 @@
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
   <!--##############################################
     # Crash handling
+    ##############################################-->
+  <!--##############################################
+    # Google Drive deprecation
     ##############################################-->
   <!--##############################################
     # Developer tools
