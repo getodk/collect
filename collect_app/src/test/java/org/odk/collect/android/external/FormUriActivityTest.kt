@@ -159,6 +159,40 @@ class FormUriActivityTest {
         Intents.intended(hasExtra("KEY_1", "Text"))
     }
 
+    @Test
+    fun `When uri is null then display alert dialog`() {
+        saveTestProjects()
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getIntent().apply {
+                data = null
+            }
+        )
+
+        onView(withText(R.string.unrecognized_uri)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
+    @Test
+    fun `When uri is invalid then display alert dialog`() {
+        saveTestProjects()
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getIntent().apply {
+                data = Uri.parse("blah")
+            }
+        )
+
+        onView(withText(R.string.unrecognized_uri)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
     // TODO: Replace the explicit FormUriActivity intent with an implicit one Intent.ACTION_EDIT once it's possible https://github.com/android/android-test/issues/496
     private fun getIntent(projectId: String? = null) =
         Intent(context, FormUriActivity::class.java).apply {

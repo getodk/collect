@@ -35,6 +35,7 @@ class FormUriActivity : ComponentActivity() {
         when {
             !assertProjectListNotEmpty() -> Unit
             !assertCurrentProjectUsed() -> Unit
+            !assertValidUri() -> Unit
             !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
             else -> startForm()
         }
@@ -63,6 +64,28 @@ class FormUriActivity : ComponentActivity() {
         return if (projectId != currentProjectProvider.getCurrentProject().uuid) {
             MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.wrong_project_selected_for_form)
+                .setPositiveButton(R.string.ok) { _, _ -> finish() }
+                .create()
+                .show()
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun assertValidUri(): Boolean {
+        val isUriValid = intent.data?.let {
+            val uriMimeType = contentResolver.getType(it)
+            if (uriMimeType == null) {
+                return@let false
+            } else {
+                return@let uriMimeType == FormsContract.CONTENT_ITEM_TYPE || uriMimeType == InstancesContract.CONTENT_ITEM_TYPE
+            }
+        } ?: false
+
+        return if (!isUriValid) {
+            MaterialAlertDialogBuilder(this)
+                .setMessage(R.string.unrecognized_uri)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .create()
                 .show()
