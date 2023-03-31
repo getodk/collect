@@ -50,13 +50,41 @@ import org.odk.collect.shared.strings.UUIDGenerator
 
 @RunWith(AndroidJUnit4::class)
 class FormUriActivityTest {
-    private lateinit var projectsRepository: ProjectsRepository
+    private val projectsRepository = InMemProjectsRepository()
     private val currentProjectProvider = mock<CurrentProjectProvider>()
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val firstProject = Project.DEMO_PROJECT
     private val secondProject = Project.Saved("123", "Second project", "S", "#cccccc")
-    private val formsRepository = InMemFormsRepository()
-    private val instancesRepository = InMemInstancesRepository()
+    private val blankForm = FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+    private val incompleteForm = Instance.Builder()
+        .formId("1")
+        .formVersion("1")
+        .status(Instance.STATUS_INCOMPLETE)
+        .build()
+    private val completeForm = Instance.Builder()
+        .formId("2")
+        .formVersion("1")
+        .status(Instance.STATUS_COMPLETE)
+        .build()
+    private val submittedForm = Instance.Builder()
+        .formId("3")
+        .formVersion("1")
+        .status(Instance.STATUS_SUBMITTED)
+        .build()
+    private val submissionFailedForm = Instance.Builder()
+        .formId("4")
+        .formVersion("1")
+        .status(Instance.STATUS_SUBMISSION_FAILED)
+        .build()
+    private val formsRepository = InMemFormsRepository().apply {
+        save(blankForm)
+    }
+    private val instancesRepository = InMemInstancesRepository().apply {
+        save(incompleteForm)
+        save(completeForm)
+        save(submittedForm)
+        save(submissionFailedForm)
+    }
     private val formsRepositoryProvider = mock<FormsRepositoryProvider>().apply {
         whenever(get()).thenReturn(formsRepository)
     }
@@ -72,20 +100,6 @@ class FormUriActivityTest {
 
     @Before
     fun setup() {
-        projectsRepository = InMemProjectsRepository()
-
-        formsRepository.save(
-            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
-        )
-
-        instancesRepository.save(
-            Instance.Builder()
-                .formId("1")
-                .formVersion("1")
-                .status(Instance.STATUS_INCOMPLETE)
-                .build()
-        )
-
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectsRepository(
                 uuidGenerator: UUIDGenerator?,
@@ -191,7 +205,7 @@ class FormUriActivityTest {
     fun `When uri represents a blank form that does not exist then display alert dialog`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(firstProject.uuid, 2))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(firstProject.uuid, 100))
 
         onView(withText(R.string.bad_uri)).inRoot(isDialog())
             .check(matches(isDisplayed()))
@@ -204,9 +218,54 @@ class FormUriActivityTest {
     fun `When uri represents a saved form that does not exist then display alert dialog`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(firstProject.uuid, 2))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(firstProject.uuid, 100))
 
         onView(withText(R.string.bad_uri)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
+    @Test
+    fun `When attempting to edit a finalized form then display alert dialog`() {
+        saveTestProjects()
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(formDbId = 2)
+        )
+
+        onView(withText(R.string.form_complete)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
+    @Test
+    fun `When attempting to edit a submitted form then display alert dialog`() {
+        saveTestProjects()
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(formDbId = 3)
+        )
+
+        onView(withText(R.string.form_complete)).inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
+    @Test
+    fun `When attempting to edit a form that failed to submit then display alert dialog`() {
+        saveTestProjects()
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(formDbId = 4)
+        )
+
+        onView(withText(R.string.form_complete)).inRoot(isDialog())
             .check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 
