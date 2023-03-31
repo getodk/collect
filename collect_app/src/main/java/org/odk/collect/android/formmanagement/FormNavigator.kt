@@ -3,7 +3,7 @@ package org.odk.collect.android.formmanagement
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import org.odk.collect.android.activities.FormEntryActivity
+import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
@@ -36,7 +36,7 @@ class FormNavigator(
 
     companion object {
         fun newInstanceIntent(context: Context, uri: Uri?): Intent {
-            return Intent(context, FormEntryActivity::class.java).also {
+            return Intent(context, FormUriActivity::class.java).also {
                 it.action = Intent.ACTION_EDIT
                 it.data = uri
             }
@@ -55,7 +55,7 @@ class FormNavigator(
         ): Intent {
             val uri = InstancesContract.getUri(projectId, instanceId)
 
-            return Intent(context, FormEntryActivity::class.java).also {
+            return Intent(context, FormUriActivity::class.java).also {
                 it.action = Intent.ACTION_EDIT
                 it.data = uri
 
