@@ -32,44 +32,62 @@ class FormUriActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
 
-        if (savedInstanceState != null) {
-            formFillingAlreadyStarted = savedInstanceState.getBoolean(FORM_FILLING_ALREADY_STARTED)
+        when {
+            !assertProjectListNotEmpty() -> Unit
+            !assertCurrentProjectUsed() -> Unit
+            !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
+            else -> startForm()
         }
+    }
 
+    private fun assertProjectListNotEmpty(): Boolean {
         val projects = projectsRepository.getAll()
-        if (projects.isEmpty()) {
+        return if (projects.isEmpty()) {
             MaterialAlertDialogBuilder(this)
                 .setMessage(R.string.app_not_configured)
                 .setPositiveButton(R.string.ok) { _, _ -> finish() }
                 .create()
                 .show()
+            false
         } else {
-            val firstProject = projects.first()
-            val uri = intent.data
-            val uriProjectId = uri?.getQueryParameter("projectId")
-            val projectId = uriProjectId ?: firstProject.uuid
-
-            if (projectId == currentProjectProvider.getCurrentProject().uuid) {
-                if (!formFillingAlreadyStarted) {
-                    formFillingAlreadyStarted = true
-                    openForm.launch(
-                        Intent(this, FormEntryActivity::class.java).also {
-                            it.action = intent.action
-                            it.data = uri
-                            intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
-                        }
-                    )
-                }
-            } else {
-                MaterialAlertDialogBuilder(this)
-                    .setMessage(R.string.wrong_project_selected_for_form)
-                    .setPositiveButton(R.string.ok) { _, _ ->
-                        finish()
-                    }
-                    .create()
-                    .show()
-            }
+            true
         }
+    }
+
+    private fun assertCurrentProjectUsed(): Boolean {
+        val projects = projectsRepository.getAll()
+        val firstProject = projects.first()
+        val uriProjectId = intent.data?.getQueryParameter("projectId")
+        val projectId = uriProjectId ?: firstProject.uuid
+
+        return if (projectId != currentProjectProvider.getCurrentProject().uuid) {
+            MaterialAlertDialogBuilder(this)
+                .setMessage(R.string.wrong_project_selected_for_form)
+                .setPositiveButton(R.string.ok) { _, _ -> finish() }
+                .create()
+                .show()
+            false
+        } else {
+            true
+        }
+    }
+
+    private fun assertFormFillingNotAlreadyStarted(savedInstanceState: Bundle?): Boolean {
+        if (savedInstanceState != null) {
+            formFillingAlreadyStarted = savedInstanceState.getBoolean(FORM_FILLING_ALREADY_STARTED)
+        }
+        return !formFillingAlreadyStarted
+    }
+
+    private fun startForm() {
+        formFillingAlreadyStarted = true
+        openForm.launch(
+            Intent(this, FormEntryActivity::class.java).also {
+                it.action = intent.action
+                it.data = intent.data
+                intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
+            }
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
