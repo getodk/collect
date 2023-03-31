@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.javarosa.core.model.data.GeoPointData;
+import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +52,19 @@ public class GeoPointMapWidgetTest {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(answer));
         assertEquals(widget.getAnswer().getDisplayText(),
                 new GeoPointData(GeoWidgetUtils.parseGeometryPoint(answer.getDisplayText())).getDisplayText());
+    }
+
+    @Test
+    public void getAnswer_whenPromptHasInvalidAnswer_returnsNull() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        assertNull(widget.getAnswer());
+    }
+
+    @Test
+    public void creatingWidgetWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
+        assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
     }
 
     @Test
@@ -108,12 +122,26 @@ public class GeoPointMapWidgetTest {
         assertEquals(widget.getAnswer().getDisplayText(), answer.getDisplayText());
     }
 
+    @Test
+    public void setDataWithInvalidValue_doesNotUpdateWidgetAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData("blah");
+        assertEquals(widget.getAnswer(), null);
+    }
 
     @Test
     public void setData_updatesWidgetDisplayedAnswer() {
         GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
         widget.setData(answer.getDisplayText());
         assertEquals(widget.binding.geoAnswerText.getText(), GeoWidgetUtils.getGeoPointAnswerToDisplay(widget.getContext(), answer.getDisplayText()));
+    }
+
+    @Test
+    public void setDataWithInvalidValue_doesNotUpdateWidgetDisplayedAnswer() {
+        GeoPointMapWidget widget = createWidget(promptWithAnswer(null));
+        widget.setData("blah");
+        assertEquals(widget.binding.geoAnswerText.getText(), "");
+        assertEquals(widget.binding.simpleButton.getText(), widget.getContext().getString(R.string.get_point));
     }
 
     @Test

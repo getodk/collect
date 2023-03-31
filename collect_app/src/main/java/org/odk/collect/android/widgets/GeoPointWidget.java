@@ -63,11 +63,13 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
         answerText = prompt.getAnswerText();
 
-        if (answerText != null && !answerText.isEmpty()) {
-            binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
-            binding.simpleButton.setText(R.string.change_location);
-        } else {
+        String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
+        if (answerToDisplay.isEmpty()) {
             binding.simpleButton.setText(R.string.get_point);
+            answerText = null;
+        } else {
+            binding.geoAnswerText.setText(answerToDisplay);
+            binding.simpleButton.setText(R.string.change_location);
         }
 
         return binding.getRoot();
@@ -75,9 +77,10 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public IAnswerData getAnswer() {
-        return answerText == null || answerText.isEmpty()
+        double[] parsedGeometryPoint = GeoWidgetUtils.parseGeometryPoint(answerText);
+        return parsedGeometryPoint == null
                 ? null
-                : new GeoPointData(GeoWidgetUtils.parseGeometryPoint(answerText));
+                : new GeoPointData(parsedGeometryPoint);
     }
 
     @Override
@@ -103,9 +106,16 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
     @Override
     public void setData(Object answer) {
-        answerText = answer.toString();
-        binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
-        binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.change_location);
+        String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answer.toString());
+        if (answerToDisplay.isEmpty()) {
+            answerText = null;
+            binding.geoAnswerText.setText("");
+            binding.simpleButton.setText(R.string.get_point);
+        } else {
+            answerText = answer.toString();
+            binding.geoAnswerText.setText(answerToDisplay);
+            binding.simpleButton.setText(R.string.change_location);
+        }
         widgetValueChanged();
     }
 }

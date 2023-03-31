@@ -60,21 +60,23 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
 
         answerText = prompt.getAnswerText();
-        binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
+        String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
 
-        boolean dataAvailable = answerText != null && !answerText.isEmpty();
-        if (getFormEntryPrompt().isReadOnly()) {
-            if (dataAvailable) {
-                binding.simpleButton.setText(R.string.geopoint_view_read_only);
-            } else {
+        if (answerToDisplay.isEmpty()) {
+            if (getFormEntryPrompt().isReadOnly()) {
                 binding.simpleButton.setVisibility(View.GONE);
-            }
-        } else {
-            if (dataAvailable) {
-                binding.simpleButton.setText(R.string.view_change_location);
             } else {
                 binding.simpleButton.setText(R.string.get_point);
             }
+            answerText = null;
+        } else {
+            if (getFormEntryPrompt().isReadOnly()) {
+                binding.simpleButton.setText(R.string.geopoint_view_read_only);
+            } else {
+                binding.simpleButton.setText(R.string.view_change_location);
+            }
+
+            binding.geoAnswerText.setText(answerToDisplay);
         }
 
         return binding.getRoot();
@@ -82,9 +84,10 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public IAnswerData getAnswer() {
-        return answerText == null || answerText.isEmpty()
+        double[] parsedGeometryPoint = GeoWidgetUtils.parseGeometryPoint(answerText);
+        return parsedGeometryPoint == null
                 ? null
-                : new GeoPointData(GeoWidgetUtils.parseGeometryPoint(answerText));
+                : new GeoPointData(parsedGeometryPoint);
     }
 
     @Override
@@ -110,9 +113,16 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
 
     @Override
     public void setData(Object answer) {
-        answerText = answer.toString();
-        binding.geoAnswerText.setText(GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText));
-        binding.simpleButton.setText(answerText == null || answerText.isEmpty() ? R.string.get_point : R.string.view_change_location);
+        String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answer.toString());
+        if (answerToDisplay.isEmpty()) {
+            answerText = null;
+            binding.geoAnswerText.setText("");
+            binding.simpleButton.setText(R.string.get_point);
+        } else {
+            answerText = answer.toString();
+            binding.geoAnswerText.setText(answerToDisplay);
+            binding.simpleButton.setText(R.string.view_change_location);
+        }
         widgetValueChanged();
     }
 }
