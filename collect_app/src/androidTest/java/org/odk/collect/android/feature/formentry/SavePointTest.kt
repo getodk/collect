@@ -193,6 +193,7 @@ class SavePointTest {
         // Check editing instance doesn't load save point
         rule.editForm("two-question-audit.xml", "Two Question")
             .assertText("Pasquale")
+            .assertText("52")
             .assertTextDoesNotExist("Alexei")
     }
 
