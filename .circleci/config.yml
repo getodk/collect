@@ -235,6 +235,10 @@ jobs:
           name: Assemble self signed release build
           command: ./gradlew assembleSelfSignedRelease
 
+      - run:
+          name: Check release size
+          command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 10734563 ]; then exit 1; fi
+
   test_smoke_instrumented:
     <<: *android_config
     steps:
