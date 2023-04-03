@@ -56,11 +56,7 @@ class FormUriActivity : ComponentActivity() {
     private fun assertProjectListNotEmpty(): Boolean {
         val projects = projectsRepository.getAll()
         return if (projects.isEmpty()) {
-            MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.app_not_configured)
-                .setPositiveButton(R.string.ok) { _, _ -> finish() }
-                .create()
-                .show()
+            displayErrorDialog(R.string.app_not_configured)
             false
         } else {
             true
@@ -74,11 +70,7 @@ class FormUriActivity : ComponentActivity() {
         val projectId = uriProjectId ?: firstProject.uuid
 
         return if (projectId != currentProjectProvider.getCurrentProject().uuid) {
-            MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.wrong_project_selected_for_form)
-                .setPositiveButton(R.string.ok) { _, _ -> finish() }
-                .create()
-                .show()
+            displayErrorDialog(R.string.wrong_project_selected_for_form)
             false
         } else {
             true
@@ -96,11 +88,7 @@ class FormUriActivity : ComponentActivity() {
         } ?: false
 
         return if (!isUriValid) {
-            MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.unrecognized_uri)
-                .setPositiveButton(R.string.ok) { _, _ -> finish() }
-                .create()
-                .show()
+            displayErrorDialog(R.string.unrecognized_uri)
             false
         } else {
             true
@@ -118,11 +106,7 @@ class FormUriActivity : ComponentActivity() {
         }
 
         return if (!doesFormExist) {
-            MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.bad_uri)
-                .setPositiveButton(R.string.ok) { _, _ -> finish() }
-                .create()
-                .show()
+            displayErrorDialog(R.string.bad_uri)
             false
         } else {
             true
@@ -141,11 +125,7 @@ class FormUriActivity : ComponentActivity() {
         }
 
         return if (!formBlankOrIncomplete) {
-            MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.form_complete)
-                .setPositiveButton(R.string.ok) { _, _ -> finish() }
-                .create()
-                .show()
+            displayErrorDialog(R.string.form_complete)
             false
         } else {
             true
@@ -168,6 +148,14 @@ class FormUriActivity : ComponentActivity() {
                 intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
             }
         )
+    }
+
+    private fun displayErrorDialog(message: Int) {
+        MaterialAlertDialogBuilder(this)
+            .setMessage(message)
+            .setPositiveButton(R.string.ok) { _, _ -> finish() }
+            .create()
+            .show()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
