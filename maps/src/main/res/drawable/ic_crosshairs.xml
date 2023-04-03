@@ -1,8 +1,9 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="48dp"
-        android:height="48dp"
-        android:viewportWidth="48"
-        android:viewportHeight="48">
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48"
+    android:tint="?colorPrimary">
 
     <!-- Do not use theme attributes to define the color https://github.com/mapbox/mapbox-gl-native-android/issues/716 -->
     <path
