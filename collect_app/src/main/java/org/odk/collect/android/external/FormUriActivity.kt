@@ -57,7 +57,7 @@ class FormUriActivity : ComponentActivity() {
                             it.action = intent.action
                             it.data = uri
                             intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
-                        },
+                        }
                     )
                 }
             } else {

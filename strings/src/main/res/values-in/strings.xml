@@ -194,7 +194,6 @@
   <string name="svg_file_does_not_exist">Berkas SVG tidak ada.</string>
   <string name="capture_image">Ambil Foto</string>
   <string name="choose_image">Pilih Gambar</string>
-  <string name="choose_account">Pilih akun</string>
   <string name="selected_invalid_image">Berkas terpilih bukan gambar yang valid</string>
   <string name="take_picture_instruction">Sentuh layar untuk ambil gambar</string>
   <string name="error_front_camera_unavailable">Kamera depan tidak tersedia dalam perangkat ini.</string>
@@ -892,10 +891,6 @@
   <string name="configure_with_qr_code">Konfigurasi dengan QR kode</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Masukkan rincian proyek secara manual</string>
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">Proyek saya menggunakan Google Drive</string>
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
-  <string name="gdrive_configure">Konfigurasi</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">Belum memliki proyek?</string>
   <!--Preceded by "Don't have a project yet?" question-->

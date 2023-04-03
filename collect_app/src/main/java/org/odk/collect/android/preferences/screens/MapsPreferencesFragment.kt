@@ -100,8 +100,11 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
      */
     private fun initBasemapSourcePref() {
         basemapSourcePref = PrefUtils.createListPref(
-            requireContext(), KEY_BASEMAP_SOURCE, getString(R.string.basemap_source),
-            MapConfiguratorProvider.getLabelIds(), MapConfiguratorProvider.getIds(),
+            requireContext(),
+            KEY_BASEMAP_SOURCE,
+            getString(R.string.basemap_source),
+            MapConfiguratorProvider.getLabelIds(),
+            MapConfiguratorProvider.getIds(),
             settingsProvider.getUnprotectedSettings()
         )
         basemapSourcePref.setIconSpaceReserved(false)

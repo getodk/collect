@@ -51,7 +51,9 @@ class AudioVideoImageTextLabelVisibilityTest(
             WidgetTestActivity::class.java
         )
         audioHelper = AudioHelper(
-            activity, activity.viewLifecycle, mock(),
+            activity,
+            activity.viewLifecycle,
+            mock(),
             {
                 mock()
             }

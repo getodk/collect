@@ -198,7 +198,6 @@
   <string name="svg_file_does_not_exist">SVG文件不存在！</string>
   <string name="capture_image">照相</string>
   <string name="choose_image">选择图片</string>
-  <string name="choose_account">选择帐户</string>
   <string name="selected_invalid_image">所选文件不是有效图像</string>
   <string name="take_picture_instruction">点击屏幕拍照</string>
   <string name="error_front_camera_unavailable">前置摄像头在此设备上不可用</string>
@@ -925,10 +924,6 @@
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">手动输入项目详细信息</string>
   <string name="project_config_tip">添加项目后，可以在“设置”中对其进行配置</string>
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">我的项目使用Google Drive。</string>
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
-  <string name="gdrive_configure">配置</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">还没有项目？</string>
   <!--Preceded by "Don't have a project yet?" question-->

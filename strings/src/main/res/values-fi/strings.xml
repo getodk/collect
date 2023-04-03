@@ -203,7 +203,6 @@
   <string name="svg_file_does_not_exist">SVG-tiedosto puuttuu!</string>
   <string name="capture_image">Ota kuva</string>
   <string name="choose_image">Valitse kuva</string>
-  <string name="choose_account">Valitse tili</string>
   <string name="selected_invalid_image">Valittu tiedosto ei ole kelvollinen kuva</string>
   <string name="take_picture_instruction">Napsauta näyttöä ottaaksesi kuvan</string>
   <string name="error_front_camera_unavailable">Etukamera ei ole käytettävissä tällä laitteella</string>
@@ -935,10 +934,6 @@
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Syötä projektin yksityiskohdat manuaalisesti</string>
   <string name="project_config_tip">Lisättyäsi projektin voit konfiguroida sen Asetuksissa.</string>
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">Projektini käyttää Google Drive -palvelua.</string>
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
-  <string name="gdrive_configure">Asetukset</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">Puuttuuko projekti vielä?</string>
   <!--Preceded by "Don't have a project yet?" question-->

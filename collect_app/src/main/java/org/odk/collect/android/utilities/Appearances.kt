@@ -34,17 +34,21 @@ object Appearances {
     const val YEAR = "year"
 
     // Select one/multiple appearances
-    @Deprecated("") const val COMPACT = "compact"
+    @Deprecated("")
+    const val COMPACT = "compact"
 
-    @Deprecated("") const val COMPACT_N = "compact-"
+    @Deprecated("")
+    const val COMPACT_N = "compact-"
     const val MINIMAL = "minimal"
     const val COLUMNS = "columns"
     const val COLUMNS_N = "columns-"
     const val COLUMNS_PACK = "columns-pack"
 
-    @Deprecated("") const val QUICKCOMPACT = "quickcompact"
+    @Deprecated("")
+    const val QUICKCOMPACT = "quickcompact"
 
-    @Deprecated("") const val SEARCH = "search"
+    @Deprecated("")
+    const val SEARCH = "search"
     const val AUTOCOMPLETE = "autocomplete"
     const val LIST_NO_LABEL = "list-nolabel"
     const val LIST = "list"
@@ -60,7 +64,8 @@ object Appearances {
     const val ANNOTATE = "annotate"
     const val DRAW = "draw"
 
-    @Deprecated("") const val SELFIE = "selfie"
+    @Deprecated("")
+    const val SELFIE = "selfie"
     const val NEW_FRONT = "new-front"
     const val NEW = "new"
     const val FRONT = "front"
@@ -124,9 +129,13 @@ object Appearances {
                     val substringFromNumColumns = appearance.substring(idx + columnsAppearance.length)
                     numColumns = substringFromNumColumns.substring(
                         0,
-                        if (substringFromNumColumns.contains(" ")) substringFromNumColumns.indexOf(
-                            ' '
-                        ) else substringFromNumColumns.length
+                        if (substringFromNumColumns.contains(" ")) {
+                            substringFromNumColumns.indexOf(
+                                ' '
+                            )
+                        } else {
+                            substringFromNumColumns.length
+                        }
                     ).toInt()
                     if (numColumns < 1) {
                         numColumns = 1

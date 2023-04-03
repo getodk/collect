@@ -25,15 +25,16 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.pages.AddNewRepeatDialog;
-import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.BlankFormSearchPage;
 import org.odk.collect.android.support.pages.ExitFormDialog;
 import org.odk.collect.android.support.pages.FillBlankFormPage;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
+import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -689,9 +690,9 @@ public class FillBlankFormTest {
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0)
-                .rotateToLandscape(new FormEntryPage("Repeat Group"))
+                .rotateToLandscape(new FormHierarchyPage("Repeat Group"))
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0)
-                .rotateToPortrait(new FormEntryPage("Repeat Group"))
+                .rotateToPortrait(new FormHierarchyPage("Repeat Group"))
                 .checkIfElementInHierarchyMatchesToText("Group Name", 0);
     }
 

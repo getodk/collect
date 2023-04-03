@@ -5,7 +5,7 @@ import java.util.function.Supplier
 
 class InMemProjectsRepositoryTest : ProjectsRepositoryTest() {
     override fun buildSubject(): ProjectsRepository {
-        return InMemProjectsRepository(UUIDGenerator(),)
+        return InMemProjectsRepository(UUIDGenerator())
     }
 
     override fun buildSubject(clock: Supplier<Long>): ProjectsRepository {

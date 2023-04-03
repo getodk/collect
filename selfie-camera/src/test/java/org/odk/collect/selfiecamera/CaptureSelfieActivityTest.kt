@@ -157,7 +157,7 @@ private class FakeCamera : Camera {
     override fun takePicture(
         imagePath: String,
         onImageSaved: () -> Unit,
-        onImageSaveError: () -> Unit,
+        onImageSaveError: () -> Unit
     ) {
         if (state.value == Camera.State.UNINITIALIZED) {
             throw IllegalStateException()

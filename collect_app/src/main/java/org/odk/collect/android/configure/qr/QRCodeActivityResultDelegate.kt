@@ -11,6 +11,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.qrcode.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter
+import org.odk.collect.settings.importing.SettingsImportingResult
 import java.io.FileNotFoundException
 import java.io.InputStream
 
@@ -32,15 +33,18 @@ class QRCodeActivityResultDelegate(
                 }
                 try {
                     val response = qrCodeDecoder.decode(imageStream)
-                    if (settingsImporter.fromJSON(response, project)) {
-                        log(AnalyticsEvents.RECONFIGURE_PROJECT)
-                        showToast(R.string.successfully_imported_settings)
-                        ActivityUtils.startActivityAndCloseAllOthers(
-                            activity,
-                            MainMenuActivity::class.java
-                        )
-                    } else {
-                        showToast(R.string.invalid_qrcode)
+
+                    when (settingsImporter.fromJSON(response, project)) {
+                        SettingsImportingResult.SUCCESS -> {
+                            log(AnalyticsEvents.RECONFIGURE_PROJECT)
+                            showToast(R.string.successfully_imported_settings)
+                            ActivityUtils.startActivityAndCloseAllOthers(
+                                activity,
+                                MainMenuActivity::class.java
+                            )
+                        }
+                        SettingsImportingResult.INVALID_SETTINGS -> showToast(R.string.invalid_qrcode)
+                        SettingsImportingResult.GD_PROJECT -> showToast(R.string.settings_with_gd_protocol)
                     }
                 } catch (e: QRCodeDecoder.QRCodeInvalidException) {
                     showToast(R.string.invalid_qrcode)

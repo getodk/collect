@@ -39,16 +39,22 @@ object FormUpdatesDownloadedNotificationBuilder {
         )
 
         val title =
-            if (allFormsDownloadedSuccessfully) application.getLocalizedString(R.string.forms_download_succeeded)
-            else application.getLocalizedString(R.string.forms_download_failed)
+            if (allFormsDownloadedSuccessfully) {
+                application.getLocalizedString(R.string.forms_download_succeeded)
+            } else {
+                application.getLocalizedString(R.string.forms_download_failed)
+            }
 
         val message =
-            if (allFormsDownloadedSuccessfully) application.getLocalizedString(R.string.all_downloads_succeeded)
-            else application.getLocalizedString(
-                R.string.some_downloads_failed,
-                FormsDownloadResultInterpreter.getNumberOfFailures(result),
-                result.size
-            )
+            if (allFormsDownloadedSuccessfully) {
+                application.getLocalizedString(R.string.all_downloads_succeeded)
+            } else {
+                application.getLocalizedString(
+                    R.string.some_downloads_failed,
+                    FormsDownloadResultInterpreter.getNumberOfFailures(result),
+                    result.size
+                )
+            }
 
         return NotificationCompat.Builder(
             application,

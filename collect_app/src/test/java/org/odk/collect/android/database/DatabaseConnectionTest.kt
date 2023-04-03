@@ -13,8 +13,8 @@ import java.io.File
 @RunWith(AndroidJUnit4::class)
 class DatabaseConnectionTest {
 
-    @Test
     // https://github.com/getodk/collect/issues/5042
+    @Test
     fun `database file should be recreated if removed between operations`() {
         val dbDir = createTempDir()
         val formsDbPath = dbDir.absolutePath + File.separator + "forms.db"

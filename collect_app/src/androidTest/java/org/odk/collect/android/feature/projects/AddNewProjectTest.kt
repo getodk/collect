@@ -36,22 +36,6 @@ class AddNewProjectTest {
     }
 
     @Test
-    fun addingGdriveProjectManually_addsNewProject() {
-        val googleAccount = "steph@curry.basket"
-        testDependencies.googleAccountPicker.setDeviceAccount(googleAccount)
-
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .clickAddProject()
-            .switchToManualMode()
-            .openGooglePickerAndSelect(googleAccount)
-
-            .openProjectSettingsDialog()
-            .assertCurrentProject(googleAccount, "$googleAccount / Google Drive")
-            .assertInactiveProject("Demo project", "demo.getodk.org")
-    }
-
-    @Test
     fun addingProjectFromQrCode_addsNewProject() {
         val page = rule.startAtMainMenu()
             .openProjectSettingsDialog()

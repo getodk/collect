@@ -142,7 +142,7 @@ class MapboxMapFragment :
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         mapView = MapView(inflater.context).apply {
             scalebar.enabled = false
@@ -256,7 +256,7 @@ class MapboxMapFragment :
     override fun zoomToBoundingBox(
         mapPoints: Iterable<MapPoint>?,
         scaleFactor: Double,
-        animate: Boolean,
+        animate: Boolean
     ) {
         mapPoints?.let {
             val points = mapPoints.map {
@@ -461,8 +461,10 @@ class MapboxMapFragment :
 
     override fun onLocationChanged(location: Location) {
         lastLocationFix = MapPoint(
-            location.latitude, location.longitude,
-            location.altitude, location.accuracy.toDouble()
+            location.latitude,
+            location.longitude,
+            location.altitude,
+            location.accuracy.toDouble()
         )
         lastLocationProvider = location.provider
         Timber.i(
@@ -504,7 +506,7 @@ class MapboxMapFragment :
             this.locationPuck = LocationPuck2D(
                 AppCompatResources.getDrawable(
                     requireContext(),
-                    R.drawable.ic_crosshairs,
+                    R.drawable.ic_crosshairs
                 )
             )
         }

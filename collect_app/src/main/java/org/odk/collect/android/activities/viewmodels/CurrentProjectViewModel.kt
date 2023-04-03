@@ -12,7 +12,7 @@ import org.odk.collect.projects.Project
 
 class CurrentProjectViewModel(
     private val currentProjectProvider: CurrentProjectProvider,
-    private val analyticsInitializer: AnalyticsInitializer,
+    private val analyticsInitializer: AnalyticsInitializer
 ) : ViewModel() {
 
     private val _currentProject by lazy { MutableNonNullLiveData(currentProjectProvider.getCurrentProject()) }
@@ -42,7 +42,7 @@ class CurrentProjectViewModel(
 
     open class Factory(
         private val currentProjectProvider: CurrentProjectProvider,
-        private val analyticsInitializer: AnalyticsInitializer,
+        private val analyticsInitializer: AnalyticsInitializer
     ) :
         ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -1,7 +1,8 @@
 package org.odk.collect.android.formmanagement
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.external.InstancesContract
@@ -18,16 +19,45 @@ class FormNavigator(
     private val instancesRepositoryProvider: () -> InstancesRepository
 ) {
 
-    fun editInstance(activity: Activity, instanceId: Long) {
-        val uri = InstancesContract.getUri(projectId, instanceId)
-        activity.startActivity(
-            Intent(activity, FormEntryActivity::class.java).also {
+    fun editInstance(context: Context, instanceId: Long) {
+        val editingDisabled = !settingsProvider.getProtectedSettings().getBoolean(KEY_EDIT_SAVED)
+        val status = instancesRepositoryProvider().get(instanceId)?.status
+
+        context.startActivity(
+            editInstanceIntent(context, projectId, instanceId, editingDisabled, status)
+        )
+    }
+
+    fun newInstance(context: Context, formId: Long) {
+        context.startActivity(
+            newInstanceIntent(context, projectId, formId)
+        )
+    }
+
+    companion object {
+        fun newInstanceIntent(context: Context, uri: Uri?): Intent {
+            return Intent(context, FormEntryActivity::class.java).also {
                 it.action = Intent.ACTION_EDIT
                 it.data = uri
+            }
+        }
 
-                val editingDisabled =
-                    !settingsProvider.getProtectedSettings().getBoolean(KEY_EDIT_SAVED)
-                val status = instancesRepositoryProvider().get(instanceId)?.status
+        fun newInstanceIntent(context: Context, projectId: String, formId: Long): Intent {
+            return newInstanceIntent(context, FormsContract.getUri(projectId, formId))
+        }
+
+        fun editInstanceIntent(
+            context: Context,
+            projectId: String,
+            instanceId: Long,
+            editingDisabled: Boolean,
+            status: String?
+        ): Intent {
+            val uri = InstancesContract.getUri(projectId, instanceId)
+
+            return Intent(context, FormEntryActivity::class.java).also {
+                it.action = Intent.ACTION_EDIT
+                it.data = uri
 
                 if (editingDisabled ||
                     status == Instance.STATUS_SUBMITTED ||
@@ -36,15 +66,6 @@ class FormNavigator(
                     it.putExtra(FORM_MODE, VIEW_SENT)
                 }
             }
-        )
-    }
-
-    fun newInstance(activity: Activity, formId: Long) {
-        activity.startActivity(
-            Intent(activity, FormEntryActivity::class.java).also {
-                it.action = Intent.ACTION_EDIT
-                it.data = FormsContract.getUri(projectId, formId)
-            }
-        )
+        }
     }
 }

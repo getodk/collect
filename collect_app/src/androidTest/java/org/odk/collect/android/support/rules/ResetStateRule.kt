@@ -21,7 +21,7 @@ import java.io.IOException
 
 private class ResetStateStatement(
     private val base: Statement,
-    private val appDependencyModule: AppDependencyModule? = null,
+    private val appDependencyModule: AppDependencyModule? = null
 ) : Statement() {
 
     override fun evaluate() {
@@ -32,12 +32,7 @@ private class ResetStateStatement(
         clearDisk(oldComponent)
         clearAppState(application)
         setTestState()
-
-        val newComponent =
-            CollectHelpers.overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
-
-        // Reinitialize any application state with new deps/state
-        newComponent.applicationInitializer().initialize()
+        CollectHelpers.simulateProcessRestart(appDependencyModule)
         base.evaluate()
     }
 
@@ -68,7 +63,7 @@ private class ResetStateStatement(
 }
 
 class ResetStateRule @JvmOverloads constructor(
-    private val appDependencyModule: AppDependencyModule? = null,
+    private val appDependencyModule: AppDependencyModule? = null
 ) : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement =

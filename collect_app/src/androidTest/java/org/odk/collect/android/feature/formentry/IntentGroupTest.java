@@ -57,7 +57,7 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.androidtest.RecordedIntentsRule;
 
@@ -70,7 +70,7 @@ import java.io.IOException;
 public class IntentGroupTest {
     private static final String INTENT_GROUP_FORM = "intent-group.xml";
 
-    public FormActivityTestRule rule = new FormActivityTestRule(INTENT_GROUP_FORM, "intent-group");
+    public BlankFormTestRule rule = new BlankFormTestRule(INTENT_GROUP_FORM, "intent-group");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()

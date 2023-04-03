@@ -8,13 +8,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.doThrow
 import org.mockito.Mockito.inOrder
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.testshared.FakeScheduler
 import java.io.File

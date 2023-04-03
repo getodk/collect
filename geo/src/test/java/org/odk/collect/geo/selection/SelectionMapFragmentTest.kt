@@ -450,7 +450,7 @@ class SelectionMapFragmentTest {
     fun `clicking on item always selects correct item`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0), MapPoint(41.0, 0.0))),
-            Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(45.0, 0.0))),
+            Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(45.0, 0.0)))
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
@@ -477,7 +477,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_alarm,
                 symbol = "B",
                 color = "#000000"
-            ),
+            )
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
@@ -513,7 +513,7 @@ class SelectionMapFragmentTest {
                 largeIcon = android.R.drawable.ic_lock_idle_alarm,
                 symbol = "B",
                 color = "#000000"
-            ),
+            )
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
@@ -538,7 +538,7 @@ class SelectionMapFragmentTest {
     fun `clicking on item sets item on summary sheet`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, name = "Blah1"),
-            Fixtures.actionMappableSelectItem().copy(id = 1, name = "Blah2"),
+            Fixtures.actionMappableSelectItem().copy(id = 1, name = "Blah2")
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 
@@ -554,7 +554,7 @@ class SelectionMapFragmentTest {
     fun `clicking on item returns item ID as result when skipSummary is true`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0),
-            Fixtures.actionMappableSelectItem().copy(id = 1),
+            Fixtures.actionMappableSelectItem().copy(id = 1)
         )
         whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
 

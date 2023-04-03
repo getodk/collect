@@ -10,8 +10,8 @@ import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.equalToIgnoringCase
+import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.nullValue
 import org.junit.Rule
 import org.junit.Test

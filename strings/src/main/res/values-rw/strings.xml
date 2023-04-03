@@ -195,7 +195,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="svg_file_does_not_exist">Ububiko bwa SVG ntabwo buboneka! </string>
   <string name="capture_image">Fata ifoto </string>
   <string name="choose_image">Hitamo Ishusho</string>
-  <string name="choose_account">Hitamo konti</string>
   <string name="selected_invalid_image">Ifoto wahisemo mububiko si ifoto yukuri</string>
   <string name="take_picture_instruction">Kora kuri screen ufate ifoto </string>
   <string name="error_front_camera_unavailable">Ifoto y\'imbere ntabwo iboneka kuri iki gikoresho</string>
@@ -862,10 +861,6 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <string name="configure_with_qr_code">Byihuze hifashishijwe kode ya QR</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Ukoresheje amaboko injiza amakuru kuri project</string>
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">Poroje yanjye ikoresha Google Drive</string>
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
-  <string name="gdrive_configure">Hindura</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">Nta poroje ufitemo</string>
   <!--Preceded by "Don't have a project yet?" question-->

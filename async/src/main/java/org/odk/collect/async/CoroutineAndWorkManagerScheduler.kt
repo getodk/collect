@@ -31,7 +31,7 @@ class CoroutineAndWorkManagerScheduler(foregroundContext: CoroutineContext, back
             .setInputData(workManagerInputData)
             .build()
 
-        workManager.beginUniqueWork(tag, ExistingWorkPolicy.KEEP, workRequest).enqueue()
+        workManager.beginUniqueWork(tag, ExistingWorkPolicy.APPEND_OR_REPLACE, workRequest).enqueue()
     }
 
     override fun networkDeferred(tag: String, spec: TaskSpec, repeatPeriod: Long, inputData: Map<String, String>) {

@@ -10,7 +10,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
 
     override fun init(
         readyListener: MapFragment.ReadyListener?,
-        errorListener: MapFragment.ErrorListener?,
+        errorListener: MapFragment.ErrorListener?
     ) {
     }
 
@@ -34,7 +34,7 @@ class NoOpMapFragment : Fragment(), MapFragment {
     override fun zoomToBoundingBox(
         points: MutableIterable<MapPoint>?,
         scaleFactor: Double,
-        animate: Boolean,
+        animate: Boolean
     ) {
     }
 

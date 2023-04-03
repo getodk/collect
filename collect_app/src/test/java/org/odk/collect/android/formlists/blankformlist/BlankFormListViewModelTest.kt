@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -336,7 +336,7 @@ class BlankFormListViewModelTest {
             instance(formId = "3", lastStatusChangeDate = 2L),
             instance(formId = "5", lastStatusChangeDate = 3L),
             instance(formId = "4", lastStatusChangeDate = 4L),
-            instance(formId = "2", lastStatusChangeDate = 5L),
+            instance(formId = "2", lastStatusChangeDate = 5L)
         )
 
         createViewModel()
@@ -383,7 +383,7 @@ class BlankFormListViewModelTest {
 
         saveInstances(
             instance(formId = "1", lastStatusChangeDate = 1L),
-            instance(formId = "3", lastStatusChangeDate = 2L),
+            instance(formId = "3", lastStatusChangeDate = 2L)
         )
 
         createViewModel()
@@ -408,7 +408,7 @@ class BlankFormListViewModelTest {
         saveInstances(
             instance(formId = "1", lastStatusChangeDate = 1L, version = "1"),
             instance(formId = "2", lastStatusChangeDate = 2L),
-            instance(formId = "1", lastStatusChangeDate = 3L, version = "2"),
+            instance(formId = "1", lastStatusChangeDate = 3L, version = "2")
         )
 
         createViewModel(shouldHideOldFormVersions = false)

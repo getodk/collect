@@ -47,6 +47,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         });
 
         assertToolbarTitle(formName);
+
+        // Check we are not on the Form Hierarchy page
+        assertTextDoesNotExist(R.string.jump_to_beginning);
+        assertTextDoesNotExist(R.string.jump_to_end);
+        
         return this;
     }
 
@@ -66,7 +71,13 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return page;
     }
 
-    public MainMenuPage fillOutAndSave(QuestionAndAnswer... questionsAndAnswers) {
+    public <D extends Page<D>> D fillOutAndSave(D destination, QuestionAndAnswer... questionsAndAnswers) {
+        return fillOut(questionsAndAnswers)
+                .pressBack(new SaveOrIgnoreDialog<>(formName, destination))
+                .clickSaveChanges();
+    }
+
+    public MainMenuPage fillOutAndFinalize(QuestionAndAnswer... questionsAndAnswers) {
         return fillOut(questionsAndAnswers)
                 .swipeToEndScreen()
                 .clickSaveAndExit();

@@ -2,9 +2,9 @@ package org.odk.collect.geo.geopoint
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.map
 import org.odk.collect.analytics.Analytics.Companion.log
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
@@ -56,7 +56,7 @@ internal class LocationTrackerGeoPointViewModel(
     private val trackerLocation = MutableLiveData<Location?>(null)
     override val acceptedLocation: MutableLiveData<Location?> = MutableLiveData<Location?>(null)
 
-    override val currentAccuracy = Transformations.map(trackerLocation) {
+    override val currentAccuracy = trackerLocation.map {
         if (it != null) {
             when {
                 it.accuracy > unacceptableAccuracyThreshold -> GeoPointAccuracy.Unacceptable(it.accuracy)

@@ -20,9 +20,9 @@ internal class SettingsImporter(
     private val projectDetailsCreator: ProjectDetailsCreator
 ) {
 
-    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: JSONObject): Boolean {
+    fun fromJSON(json: String, project: Project.Saved, deviceUnsupportedSettings: JSONObject): SettingsImportingResult {
         if (!settingsValidator.isValid(json)) {
-            return false
+            return SettingsImportingResult.INVALID_SETTINGS
         }
 
         val generalSettings = settingsProvider.getUnprotectedSettings(project.uuid)
@@ -32,6 +32,10 @@ internal class SettingsImporter(
         adminSettings.clear()
 
         val jsonObject = JSONObject(json)
+
+        if (isGDProject(jsonObject)) {
+            return SettingsImportingResult.GD_PROJECT
+        }
 
         // Import unprotected settings
         importToPrefs(jsonObject, AppConfigurationKeys.GENERAL, generalSettings, deviceUnsupportedSettings)
@@ -65,7 +69,13 @@ internal class SettingsImporter(
 
         settingsChangedHandler.onSettingsChanged(project.uuid)
 
-        return true
+        return SettingsImportingResult.SUCCESS
+    }
+
+    private fun isGDProject(jsonObject: JSONObject): Boolean {
+        val generalSettings = jsonObject.getJSONObject(AppConfigurationKeys.GENERAL)
+        return generalSettings.has(ProjectKeys.KEY_PROTOCOL) &&
+            generalSettings.get(ProjectKeys.KEY_PROTOCOL) == ProjectKeys.PROTOCOL_GOOGLE_SHEETS
     }
 
     private fun importToPrefs(

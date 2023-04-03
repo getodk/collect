@@ -11,13 +11,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 public class SetGeopointActionTest {
     private static final String SETGEOPOINT_ACTION_FORM = "setgeopoint-action.xml";
 
-    public FormActivityTestRule rule = new FormActivityTestRule(SETGEOPOINT_ACTION_FORM, "setgeopoint-action-instance-load");
+    public BlankFormTestRule rule = new BlankFormTestRule(SETGEOPOINT_ACTION_FORM, "setgeopoint-action-instance-load");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()

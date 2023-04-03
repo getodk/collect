@@ -15,7 +15,7 @@ class FakeClickableMapFragment : Fragment(), MapFragment {
 
     override fun init(
         readyListener: MapFragment.ReadyListener?,
-        errorListener: MapFragment.ErrorListener?,
+        errorListener: MapFragment.ErrorListener?
     ) {
         readyListener?.onReady(this)
     }

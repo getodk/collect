@@ -26,9 +26,11 @@ object ImageFileUtils {
     @JvmStatic
     fun saveBitmapToFile(bitmap: Bitmap?, path: String) {
         val compressFormat =
-            if (path.lowercase(Locale.getDefault()).endsWith(".png"))
+            if (path.lowercase(Locale.getDefault()).endsWith(".png")) {
                 CompressFormat.PNG
-            else CompressFormat.JPEG
+            } else {
+                CompressFormat.JPEG
+            }
         try {
             if (bitmap != null) {
                 FileOutputStream(path).use { out -> bitmap.compress(compressFormat, IMAGE_COMPRESS_QUALITY, out) }
@@ -101,7 +103,9 @@ object ImageFileUtils {
             if (bitmap != null) {
                 bitmap = Bitmap.createScaledBitmap(
                     bitmap,
-                    newWidth.toInt(), newHeight.toInt(), false
+                    newWidth.toInt(),
+                    newHeight.toInt(),
+                    false
                 )
             }
         } else {
@@ -122,7 +126,11 @@ object ImageFileUtils {
         if (bitmap != null) {
             Timber.i(
                 "Screen is %dx%d.  Image has been scaled down by %f to %dx%d",
-                screenHeight, screenWidth, scale, bitmap.height, bitmap.width
+                screenHeight,
+                screenWidth,
+                scale,
+                bitmap.height,
+                bitmap.width
             )
         }
         return bitmap

@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModel
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -66,7 +66,7 @@ class MainMenuActivityTest {
                 application: Application,
                 settingsProvider: SettingsProvider,
                 instancesAppState: InstancesAppState,
-                scheduler: Scheduler,
+                scheduler: Scheduler
             ): MainMenuViewModel.Factory {
                 return object : MainMenuViewModel.Factory(
                     versionInformation,
@@ -85,7 +85,7 @@ class MainMenuActivityTest {
                 currentProjectProvider: CurrentProjectProvider,
                 analyticsInitializer: AnalyticsInitializer,
                 storagePathProvider: StoragePathProvider,
-                projectsRepository: ProjectsRepository,
+                projectsRepository: ProjectsRepository
             ): CurrentProjectViewModel.Factory {
                 return object : CurrentProjectViewModel.Factory(
                     currentProjectProvider,

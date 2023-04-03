@@ -10,6 +10,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.importing.SettingsChangeHandler
+import org.odk.collect.settings.importing.SettingsImportingResult
 import org.odk.collect.settings.support.SettingsUtils.assertSettingsEmpty
 import java.lang.RuntimeException
 
@@ -39,7 +40,7 @@ class ODKAppSettingsImporterTest {
                 "}",
             projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
         )
-        assertThat(result, equalTo(true))
+        assertThat(result, equalTo(SettingsImportingResult.SUCCESS))
     }
 
     @Test
@@ -48,7 +49,7 @@ class ODKAppSettingsImporterTest {
             "{ \"admin\": {}}",
             projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
         )
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(SettingsImportingResult.INVALID_SETTINGS))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
         assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
@@ -59,7 +60,7 @@ class ODKAppSettingsImporterTest {
             "{ \"general\": {}}",
             projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
         )
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(SettingsImportingResult.INVALID_SETTINGS))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
         assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
@@ -70,7 +71,7 @@ class ODKAppSettingsImporterTest {
             "{\"general\":{*},\"admin\":{}}",
             projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
         )
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(SettingsImportingResult.INVALID_SETTINGS))
         assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
         assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
@@ -88,6 +89,23 @@ class ODKAppSettingsImporterTest {
                 "}",
             projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
         )
-        assertThat(result, equalTo(false))
+        assertThat(result, equalTo(SettingsImportingResult.INVALID_SETTINGS))
+    }
+
+    @Test
+    fun `rejects JSON with google_sheets protocol`() {
+        val result = settingsImporter.fromJSON(
+            "{\n" +
+                "  \"general\": {\n" +
+                "       \"protocol\" : \"google_sheets\"" +
+                "  },\n" +
+                "  \"admin\": {\n" +
+                "  }\n" +
+                "}",
+            projectsRepository.save(Project.New("Flat", "AS", "#ff0000"))
+        )
+        assertThat(result, equalTo(SettingsImportingResult.GD_PROJECT))
+        assertSettingsEmpty(settingsProvider.getUnprotectedSettings())
+        assertSettingsEmpty(settingsProvider.getProtectedSettings())
     }
 }

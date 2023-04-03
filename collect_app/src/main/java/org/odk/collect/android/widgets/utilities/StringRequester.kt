@@ -41,7 +41,8 @@ class StringRequesterImpl(
             if (intent != null && Intent.ACTION_SENDTO == intent.action) {
                 intentLauncher.launch(activity, intent) {
                     intentLauncher.launch(
-                        activity, intentWithoutDefaultCategory
+                        activity,
+                        intentWithoutDefaultCategory
                     ) {
                         onError(getErrorMessage(formEntryPrompt, activity))
                     }
@@ -49,7 +50,9 @@ class StringRequesterImpl(
             } else {
                 intentLauncher.launchForResult(activity, intent, requestCode) {
                     intentLauncher.launchForResult(
-                        activity, intentWithoutDefaultCategory, requestCode
+                        activity,
+                        intentWithoutDefaultCategory,
+                        requestCode
                     ) {
                         onError(getErrorMessage(formEntryPrompt, activity))
                     }

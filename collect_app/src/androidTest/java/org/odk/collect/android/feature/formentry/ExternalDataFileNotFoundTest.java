@@ -6,13 +6,13 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.rules.FormActivityTestRule;
+import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
 public class ExternalDataFileNotFoundTest {
     private static final String EXTERNAL_DATA_QUESTIONS = "external_data_questions.xml";
 
-    public FormActivityTestRule activityTestRule = new FormActivityTestRule(EXTERNAL_DATA_QUESTIONS, "externalDataQuestions");
+    public BlankFormTestRule activityTestRule = new BlankFormTestRule(EXTERNAL_DATA_QUESTIONS, "externalDataQuestions");
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()

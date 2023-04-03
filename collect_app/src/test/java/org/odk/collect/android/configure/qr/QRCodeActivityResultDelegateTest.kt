@@ -20,6 +20,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.qrcode.QRCodeDecoder
 import org.odk.collect.settings.ODKAppSettingsImporter
+import org.odk.collect.settings.importing.SettingsImportingResult
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowToast
@@ -63,7 +64,7 @@ class QRCodeActivityResultDelegateTest {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.register("qr", "data")
-        whenever(settingsImporter.fromJSON("data", project)).thenReturn(true)
+        whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.SUCCESS)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
 
@@ -77,8 +78,19 @@ class QRCodeActivityResultDelegateTest {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.register("qr", "data")
-        whenever(settingsImporter.fromJSON("data", project)).thenReturn(false)
+        whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+    }
+
+    @Test
+    fun forSelectPhotoWithGoogleDriveProtocol_whenImporting_showsInvalidToast() {
+        val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
+        val data = intentWithData("file://qr", "qr")
+        fakeQRDecoder.register("qr", "data")
+        whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.GD_PROJECT)
+        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(R.string.settings_with_gd_protocol)))
     }
 
     @Test
@@ -91,7 +103,7 @@ class QRCodeActivityResultDelegateTest {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.failsWith(QRCodeDecoder.QRCodeInvalidException())
-        whenever(settingsImporter.fromJSON("data", project)).thenReturn(false)
+        whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
 
@@ -105,7 +117,7 @@ class QRCodeActivityResultDelegateTest {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.failsWith(QRCodeDecoder.QRCodeNotFoundException())
-        whenever(settingsImporter.fromJSON("data", project)).thenReturn(false)
+        whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
 
@@ -129,7 +141,8 @@ class QRCodeActivityResultDelegateTest {
         val inputStream = ByteArrayInputStream(streamContents.toByteArray())
         Shadows.shadowOf(ApplicationProvider.getApplicationContext<Context>().contentResolver)
             .registerInputStream(
-                Uri.parse("file://qr"), inputStream
+                Uri.parse("file://qr"),
+                inputStream
             )
         val data = Intent()
         data.data = Uri.parse(uri)

@@ -203,7 +203,6 @@
   <string name="svg_file_does_not_exist">Le fichier SVG n\'existe pas !</string>
   <string name="capture_image">Prendre une photo</string>
   <string name="choose_image">Choisir une Image</string>
-  <string name="choose_account">Choisir compte</string>
   <string name="selected_invalid_image">Le fichier choisi n\'est pas une image valide</string>
   <string name="take_picture_instruction">Toucher l\'écran pour prendre une photo</string>
   <string name="error_front_camera_unavailable">Caméra frontale non disponible sur cet appareil</string>
@@ -938,10 +937,6 @@
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Saisir les détails du projet</string>
   <string name="project_config_tip">Après avoir ajouté un projet, vous pouvez le configurer dans les Paramètres</string>
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">Mon projet utilise Google Drive.</string>
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
-  <string name="gdrive_configure">Configurer</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">Pas encore de projet?</string>
   <!--Preceded by "Don't have a project yet?" question-->

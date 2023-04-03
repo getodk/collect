@@ -55,7 +55,8 @@ class NumberPickerDialog : DialogFragment() {
             .setView(view)
             .setPositiveButton(R.string.ok) { _, _ ->
                 listener?.onNumberPickerValueSelected(
-                    requireArguments().getInt(WIDGET_ID), numberPicker.value
+                    requireArguments().getInt(WIDGET_ID),
+                    numberPicker.value
                 )
             }
             .setNegativeButton(R.string.cancel) { _, _ -> }

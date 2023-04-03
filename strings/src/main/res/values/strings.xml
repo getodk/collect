@@ -256,7 +256,6 @@
 
     <string name="capture_image">Take Picture</string>
     <string name="choose_image">Choose Image</string>
-    <string name="choose_account">Choose account</string>
     <string name="selected_invalid_image">Selected file is not a valid image</string>
     <string name="take_picture_instruction">Tap the screen to take a picture</string>
     <string name="error_front_camera_unavailable">Front camera not available on this device</string>
@@ -1051,6 +1050,7 @@
     <string name="invalid_qrcode">QR code does not contain valid settings</string>
     <string name="qr_code_not_found">QR Code not found in the selected image</string>
     <string name="corrupt_imported_preferences_error">Current settings are corrupt. From project management settings, reset settings or import working ones.</string>
+    <string name="settings_with_gd_protocol">Google Drive/Sheets projects can no longer be created</string>
 
     <!--
      ##############################################
@@ -1113,6 +1113,7 @@
     <!-- Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog -->
     <string name="switch_to_project">Switch to %s</string>
     <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
+    <string name="delete_google_drive_project_confirm_message"><font fgcolor='#D42C2C'>This is a Google Drive/Sheets project. Once you delete it, you will not be able to create it again.</font>\n\nAll blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
     <string name="cannot_delete_project_title">Project can\'t be deleted</string>
@@ -1135,10 +1136,6 @@
     <!-- Text for the button that allows for manually entering project details. Should be short -->
     <string name="configure_manually">Manually enter project details</string>
     <string name="project_config_tip">After you add your project, you can configure it in Settings</string>
-    <!-- Immediately followed by "Configure" which is a link to configure a Google Drive project -->
-    <string name="gdrive_project">My project uses Google Drive.</string>
-    <!-- Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project -->
-    <string name="gdrive_configure">Configure</string>
     <!-- Immediately followed by "Try Collect" which is a link to create a demo project -->
     <string name="dont_have_project">Don\'t have a project yet?</string>
     <!-- Preceded by "Don't have a project yet?" question -->

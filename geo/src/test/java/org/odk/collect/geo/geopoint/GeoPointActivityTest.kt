@@ -66,7 +66,7 @@ class GeoPointActivityTest {
         val intent = Intent(getApplicationContext(), GeoPointActivity::class.java)
 
         launcherRule.launch<GeoPointActivity>(intent)
-        verify(viewModel).start(retainMockAccuracy = false,)
+        verify(viewModel).start(retainMockAccuracy = false)
     }
 
     @Test
@@ -112,7 +112,7 @@ class GeoPointActivityTest {
 
         intent.putExtra(EXTRA_RETAIN_MOCK_ACCURACY, true)
         launcherRule.launch<GeoPointActivity>(intent)
-        verify(viewModel).start(retainMockAccuracy = true,)
+        verify(viewModel).start(retainMockAccuracy = true)
     }
 
     @Test
@@ -121,7 +121,7 @@ class GeoPointActivityTest {
         intent.putExtra(GeoPointActivity.EXTRA_ACCURACY_THRESHOLD, 5.0f)
 
         launcherRule.launch<GeoPointActivity>(intent)
-        verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0f,)
+        verify(viewModel).start(retainMockAccuracy = false, accuracyThreshold = 5.0f)
     }
 
     @Test

@@ -396,10 +396,6 @@
   <string name="configure_with_qr_code">QR kod ile kurulum yap</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
   <string name="configure_manually">Proje detaylarını manuel ekle</string>
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <string name="gdrive_project">Projem Google Drive kullanıyor.</string>
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
-  <string name="gdrive_configure">Ayarla</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <string name="dont_have_project">Hala projeniz yok mu?</string>
   <!--Preceded by "Don't have a project yet?" question-->

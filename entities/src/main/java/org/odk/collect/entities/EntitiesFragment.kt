@@ -24,7 +24,7 @@ class EntitiesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         return ListLayoutBinding.inflate(inflater, container, false).root
     }

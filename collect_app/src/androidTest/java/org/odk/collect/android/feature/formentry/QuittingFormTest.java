@@ -115,7 +115,7 @@ public class QuittingFormTest {
         rule.startAtMainMenu()
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
-                .fillOutAndSave(
+                .fillOutAndFinalize(
                         new QuestionAndAnswer("What is your name?", "Reuben"),
                         new QuestionAndAnswer("What is your age?", "32", true)
                 )
@@ -143,7 +143,7 @@ public class QuittingFormTest {
         rule.startAtMainMenu()
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
-                .fillOutAndSave(
+                .fillOutAndFinalize(
                         new QuestionAndAnswer("What is your name?", "Reuben"),
                         new QuestionAndAnswer("What is your age?", "32", true)
                 )
