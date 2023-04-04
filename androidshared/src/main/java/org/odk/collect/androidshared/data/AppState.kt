@@ -62,8 +62,12 @@ interface StateStore {
 }
 
 fun Application.getState(): AppState {
-    val stateStore = this as StateStore
-    return stateStore.getState()
+    try {
+        val stateStore = this as StateStore
+        return stateStore.getState()
+    } catch (e: ClassCastException) {
+        throw ClassCastException("${this.javaClass} cannot be cast to StateStore")
+    }
 }
 
 fun Context.getState(): AppState {
