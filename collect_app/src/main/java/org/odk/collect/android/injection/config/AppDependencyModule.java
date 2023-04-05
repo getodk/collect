@@ -121,11 +121,9 @@ import org.odk.collect.location.LocationClientProvider;
 import org.odk.collect.maps.MapFragmentFactory;
 import org.odk.collect.maps.layers.DirectoryReferenceLayerRepository;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
-import org.odk.collect.metadata.DeviceDetailsProvider;
 import org.odk.collect.metadata.InstallIDProvider;
 import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.metadata.SettingsInstallIDProvider;
-import org.odk.collect.metadata.StaticCachingDeviceDetailsProvider;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -233,13 +231,8 @@ public class AppDependencyModule {
 
 
     @Provides
-    InstallIDProvider providesInstallIDProvider(SettingsProvider settingsProvider) {
+    public InstallIDProvider providesInstallIDProvider(SettingsProvider settingsProvider) {
         return new SettingsInstallIDProvider(settingsProvider.getMetaSettings(), KEY_INSTALL_ID);
-    }
-
-    @Provides
-    public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
-        return new StaticCachingDeviceDetailsProvider(installIDProvider, context);
     }
 
     @Provides
@@ -305,8 +298,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public PropertyManager providesPropertyManager(PermissionsProvider permissionsProvider, DeviceDetailsProvider deviceDetailsProvider, SettingsProvider settingsProvider) {
-        return new PropertyManager(permissionsProvider, deviceDetailsProvider, settingsProvider);
+    public PropertyManager providesPropertyManager(PermissionsProvider permissionsProvider, InstallIDProvider installIDProvider, SettingsProvider settingsProvider) {
+        return new PropertyManager(permissionsProvider, installIDProvider, settingsProvider);
     }
 
     @Provides

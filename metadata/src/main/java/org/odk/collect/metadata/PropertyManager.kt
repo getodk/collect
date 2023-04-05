@@ -14,7 +14,7 @@ import timber.log.Timber
  */
 class PropertyManager(
     private val permissionsProvider: PermissionsProvider,
-    private val deviceDetailsProvider: DeviceDetailsProvider,
+    private val installIDProvider: InstallIDProvider,
     private val settingsProvider: SettingsProvider
 ) : IPropertyManager {
     private val properties = mutableMapOf<String, String>()
@@ -25,8 +25,7 @@ class PropertyManager(
         isPhoneStateRequired = false
 
         try {
-            putProperty(PROPMGR_DEVICE_ID, "", deviceDetailsProvider.deviceId)
-            putProperty(PROPMGR_PHONE_NUMBER, SCHEME_TEL, deviceDetailsProvider.line1Number)
+            putProperty(PROPMGR_DEVICE_ID, "", installIDProvider.installID)
         } catch (e: SecurityException) {
             Timber.i(e)
         }
