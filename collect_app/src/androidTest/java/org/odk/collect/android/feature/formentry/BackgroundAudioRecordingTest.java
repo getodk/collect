@@ -12,6 +12,7 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -45,9 +46,9 @@ public class BackgroundAudioRecordingTest {
 
     private StubAudioRecorder stubAudioRecorderViewModel;
 
-    private RevokeableRecordAudioPermissionsChecker permissionsChecker;
-    private ControllableRecordAudioPermissionsProvider permissionsProvider;
-    public final TestDependencies testDependencies = new TestDependencies() {
+    private final RevokeableRecordAudioPermissionsChecker permissionsChecker = new RevokeableRecordAudioPermissionsChecker(ApplicationProvider.getApplicationContext());
+    private final ControllableRecordAudioPermissionsProvider permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker);
+    private final TestDependencies testDependencies = new TestDependencies() {
 
         @Override
         public AudioRecorder providesAudioRecorder(Application application) {
@@ -68,19 +69,11 @@ public class BackgroundAudioRecordingTest {
 
         @Override
         public PermissionsChecker providesPermissionsChecker(Context context) {
-            if (permissionsChecker == null) {
-                permissionsChecker = new RevokeableRecordAudioPermissionsChecker(context);
-            }
-
             return permissionsChecker;
         }
 
         @Override
         public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
-            if (permissionsProvider == null) {
-                permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker);
-            }
-
             return permissionsProvider;
         }
     };
