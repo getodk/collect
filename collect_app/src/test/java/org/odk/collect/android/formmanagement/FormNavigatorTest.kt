@@ -12,7 +12,7 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.activities.FormEntryActivity
+import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_MODE
 import org.odk.collect.android.utilities.ApplicationConstants.FormModes.VIEW_SENT
@@ -36,31 +36,31 @@ class FormNavigatorTest {
     private val navigator = FormNavigator("projectId", settingsProvider) { instancesRepository }
 
     @Test
-    fun `editInstance starts FormEntryActivity with instance URI`() {
+    fun `editInstance starts FormUriActivity with instance URI`() {
         settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true)
 
         navigator.editInstance(activity, 101)
 
         intended(hasAction(ACTION_EDIT))
-        intended(hasComponent(FormEntryActivity::class.java.name))
+        intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", 101)))
         intended(not(hasExtra(FORM_MODE, VIEW_SENT)))
     }
 
     @Test
-    fun `editInstance stars FormEntryActivity in view only mode when editing is disabled`() {
+    fun `editInstance stars FormUriActivity in view only mode when editing is disabled`() {
         settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, false)
 
         navigator.editInstance(activity, 101)
 
         intended(hasAction(ACTION_EDIT))
-        intended(hasComponent(FormEntryActivity::class.java.name))
+        intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", 101)))
         intended(hasExtra(FORM_MODE, VIEW_SENT))
     }
 
     @Test
-    fun `editInstance stars FormEntryActivity in view only mode when instance has been sent`() {
+    fun `editInstance stars FormUriActivity in view only mode when instance has been sent`() {
         settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true)
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -71,13 +71,13 @@ class FormNavigatorTest {
         navigator.editInstance(activity, instance.dbId)
 
         intended(hasAction(ACTION_EDIT))
-        intended(hasComponent(FormEntryActivity::class.java.name))
+        intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", instance.dbId)))
         intended(hasExtra(FORM_MODE, VIEW_SENT))
     }
 
     @Test
-    fun `editInstance stars FormEntryActivity in view only mode when instance has failed to send`() {
+    fun `editInstance stars FormUriActivity in view only mode when instance has failed to send`() {
         settingsProvider.getProtectedSettings().save(KEY_EDIT_SAVED, true)
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -88,7 +88,7 @@ class FormNavigatorTest {
         navigator.editInstance(activity, instance.dbId)
 
         intended(hasAction(ACTION_EDIT))
-        intended(hasComponent(FormEntryActivity::class.java.name))
+        intended(hasComponent(FormUriActivity::class.java.name))
         intended(hasData(InstancesContract.getUri("projectId", instance.dbId)))
         intended(hasExtra(FORM_MODE, VIEW_SENT))
     }
