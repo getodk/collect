@@ -19,15 +19,17 @@ class PropertyManager(
     fun reload(): PropertyManager {
         val generalSettings = settingsProvider.getUnprotectedSettings()
 
-        putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, generalSettings.getString(ProjectKeys.KEY_METADATA_USERNAME))
+        var username = generalSettings.getString(ProjectKeys.KEY_METADATA_USERNAME)
+        // Use the server username by default if the metadata username is not defined
+        if (username.isNullOrBlank()) {
+            username = settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_USERNAME)
+        }
+
+        putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, username)
         putProperty(PROPMGR_PHONE_NUMBER, SCHEME_TEL, generalSettings.getString(ProjectKeys.KEY_METADATA_PHONENUMBER))
         putProperty(PROPMGR_EMAIL, SCHEME_MAILTO, generalSettings.getString(ProjectKeys.KEY_METADATA_EMAIL))
         putProperty(PROPMGR_DEVICE_ID, "", installIDProvider.installID)
 
-        // Use the server username by default if the metadata username is not defined
-        if (getSingularProperty(PROPMGR_USERNAME).isBlank()) {
-            putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_USERNAME))
-        }
         return this
     }
 
