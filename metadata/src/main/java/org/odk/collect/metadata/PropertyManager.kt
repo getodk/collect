@@ -4,7 +4,6 @@ import org.javarosa.core.services.IPropertyManager
 import org.javarosa.core.services.properties.IPropertyRules
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
-import timber.log.Timber
 
 /**
  * Returns device properties and metadata to JavaRosa
@@ -18,18 +17,12 @@ class PropertyManager(
     private val properties = mutableMapOf<String, String>()
 
     fun reload(): PropertyManager {
-        try {
-            putProperty(PROPMGR_DEVICE_ID, "", installIDProvider.installID)
-        } catch (e: SecurityException) {
-            Timber.i(e)
-        }
-
-        // User-defined properties. Will replace any above with the same PROPMGR_ name
         val generalSettings = settingsProvider.getUnprotectedSettings()
 
         putProperty(PROPMGR_USERNAME, SCHEME_USERNAME, generalSettings.getString(ProjectKeys.KEY_METADATA_USERNAME))
         putProperty(PROPMGR_PHONE_NUMBER, SCHEME_TEL, generalSettings.getString(ProjectKeys.KEY_METADATA_PHONENUMBER))
         putProperty(PROPMGR_EMAIL, SCHEME_MAILTO, generalSettings.getString(ProjectKeys.KEY_METADATA_EMAIL))
+        putProperty(PROPMGR_DEVICE_ID, "", installIDProvider.installID)
 
         // Use the server username by default if the metadata username is not defined
         if (getSingularProperty(PROPMGR_USERNAME).isBlank()) {
