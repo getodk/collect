@@ -22,9 +22,8 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.metadata.DeviceDetailsProvider
+import org.odk.collect.metadata.InstallIDProvider
 import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -48,8 +47,7 @@ class ProjectResetterTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesPropertyManager(
-                permissionsProvider: PermissionsProvider?,
-                deviceDetailsProvider: DeviceDetailsProvider?,
+                installIDProvider: InstallIDProvider,
                 settingsProvider: SettingsProvider?
             ): PropertyManager {
                 return propertyManager

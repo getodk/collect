@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.settings
 
-import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -15,12 +14,12 @@ import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.ResetStateRule
 import org.odk.collect.android.support.rules.TestRuleChain
-import org.odk.collect.metadata.DeviceDetailsProvider
 import org.odk.collect.metadata.InstallIDProvider
+import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
 class FormMetadataSettingsTest {
-    private val deviceDetailsProvider: DeviceDetailsProvider = FakeDeviceDetailsProvider()
+    private val installIDProvider = FakeInstallIDProvider()
     var rule = CollectTestRule()
 
     @get:Rule
@@ -28,11 +27,8 @@ class FormMetadataSettingsTest {
         .around(
             ResetStateRule(
                 object : AppDependencyModule() {
-                    override fun providesDeviceDetailsProvider(
-                        context: Context,
-                        installIDProvider: InstallIDProvider
-                    ): DeviceDetailsProvider {
-                        return deviceDetailsProvider
+                    override fun providesInstallIDProvider(settingsProvider: SettingsProvider): InstallIDProvider {
+                        return installIDProvider
                     }
                 }
             )
@@ -47,11 +43,6 @@ class FormMetadataSettingsTest {
             .clickUserAndDeviceIdentity()
             .clickFormMetadata()
 
-            // First verify that default metadata is displayed
-            .assertPreference(R.string.phone_number, deviceDetailsProvider.line1Number)
-            .assertPreference(R.string.device_id, deviceDetailsProvider.deviceId)
-
-            // Then set custom metadata
             .clickUsername()
             .inputText("Chino")
             .clickOKOnDialog()
@@ -62,10 +53,10 @@ class FormMetadataSettingsTest {
             .inputText("chino@whitepony.com")
             .clickOKOnDialog()
 
-            // And verify that new metadata is displayed
             .assertPreference(R.string.username, "Chino")
             .assertPreference(R.string.phone_number, "123")
             .assertPreference(R.string.email, "chino@whitepony.com")
+            .assertPreference(R.string.device_id, installIDProvider.installID)
     }
 
     @Test
@@ -73,14 +64,6 @@ class FormMetadataSettingsTest {
         rule.startAtMainMenu()
             .copyForm("metadata.xml")
 
-            // First verify that default metadata is displayed
-            .startBlankForm("Metadata")
-            .assertTexts(deviceDetailsProvider.line1Number, deviceDetailsProvider.deviceId)
-            .swipeToEndScreen()
-            .pressBack(SaveOrIgnoreDialog("Metadata", MainMenuPage()))
-            .clickDiscardForm()
-
-            // Then set custom metadata
             .openProjectSettingsDialog()
             .clickSettings()
             .clickUserAndDeviceIdentity()
@@ -100,7 +83,7 @@ class FormMetadataSettingsTest {
 
             // And verify that new metadata is displayed
             .startBlankForm("Metadata")
-            .assertTexts("Chino", "664615", "chino@whitepony.com", deviceDetailsProvider.deviceId)
+            .assertTexts("Chino", "664615", "chino@whitepony.com", installIDProvider.installID)
     }
 
     @Test // Issue number NODK-238 TestCase4 TestCase5
@@ -175,9 +158,7 @@ class FormMetadataSettingsTest {
 
             .clickFillBlankForm()
             .clickOnForm("Metadata")
-            .assertText("john@second-project.com")
-            .assertText("987654321")
-            .assertText("John Smith")
+            .assertTexts("john@second-project.com", "987654321", "John Smith")
             .swipeToEndScreen()
             .clickSaveAndExit()
 
@@ -185,18 +166,13 @@ class FormMetadataSettingsTest {
             .selectProject("Demo project")
             .clickFillBlankForm()
             .clickOnForm("Metadata")
-            .assertText("demo@getodk.com")
-            .assertText("123456789")
-            .assertText("Demo user")
+            .assertTexts("demo@getodk.com", "123456789", "Demo user")
             .swipeToEndScreen()
             .clickSaveAndExit()
     }
 
-    private class FakeDeviceDetailsProvider : DeviceDetailsProvider {
-        override val deviceId: String
+    private class FakeInstallIDProvider : InstallIDProvider {
+        override val installID: String
             get() = "deviceID"
-
-        override val line1Number: String
-            get() = "line1Number"
     }
 }

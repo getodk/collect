@@ -3,18 +3,12 @@ package org.odk.collect.android.preferences.screens;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.metadata.PropertyManager.PROPMGR_DEVICE_ID;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
 
-import android.app.Activity;
 import android.content.Context;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,18 +18,16 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
-import org.odk.collect.metadata.DeviceDetailsProvider;
 import org.odk.collect.metadata.InstallIDProvider;
-import org.odk.collect.permissions.ContextCompatPermissionChecker;
-import org.odk.collect.permissions.PermissionListener;
-import org.odk.collect.permissions.PermissionsChecker;
-import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.settings.InMemSettingsProvider;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 @RunWith(AndroidJUnit4.class)
 public class FormMetadataPreferencesFragmentTest {
 
-    private final FakePhoneStatePermissionsProvider permissionsProvider = new FakePhoneStatePermissionsProvider();
-    private final DeviceDetailsProvider deviceDetailsProvider = mock(DeviceDetailsProvider.class);
+    private final InstallIDProvider installIDProvider = mock(InstallIDProvider.class);
+    private final SettingsProvider settingsProvider = new InMemSettingsProvider();
 
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
@@ -43,96 +35,44 @@ public class FormMetadataPreferencesFragmentTest {
     @Before
     public void setup() {
         CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-
             @Override
-            public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
-                return permissionsProvider;
+            public InstallIDProvider providesInstallIDProvider(SettingsProvider settingsProvider) {
+                return installIDProvider;
             }
 
             @Override
-            public DeviceDetailsProvider providesDeviceDetailsProvider(Context context, InstallIDProvider installIDProvider) {
-                return deviceDetailsProvider;
+            public SettingsProvider providesSettingsProvider(Context context) {
+                return settingsProvider;
             }
         });
     }
 
     @Test
-    public void recreating_doesntRequestPermissionsAgain() {
-        FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
-        assertThat(permissionsProvider.timesRequested, equalTo(1));
-
-        scenario.recreate();
-        assertThat(permissionsProvider.timesRequested, equalTo(1));
-    }
-
-    @Test
-    public void recreating_whenPermissionsAcceptedPreviously_showsPermissionDependantPreferences() {
-        when(deviceDetailsProvider.getDeviceId()).thenReturn("123456789");
+    public void whenMetadataEmpty_preferenceSummariesAreNotSet() {
+        when(installIDProvider.getInstallID()).thenReturn("");
 
         FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
-        permissionsProvider.grant();
         scenario.onFragment(fragment -> {
-            assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo("123456789"));
-        });
-
-        scenario.recreate();
-        scenario.onFragment(fragment -> {
-            assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo("123456789"));
+            assertThat(fragment.findPreference("metadata_username").getSummary(), equalTo("Not set"));
+            assertThat(fragment.findPreference("metadata_phonenumber").getSummary(), equalTo("Not set"));
+            assertThat(fragment.findPreference("metadata_email").getSummary(), equalTo("Not set"));
+            assertThat(fragment.findPreference("deviceid").getSummary(), equalTo(fragment.getContext().getString(R.string.preference_not_available)));
         });
     }
 
     @Test
-    public void recreating_whenPermissionsGrantedPreviously_doesNotShowPermissionDependantPreferences() {
-        FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
-        permissionsProvider.deny();
-        scenario.recreate();
-        verifyNoInteractions(deviceDetailsProvider);
-    }
-
-    @Test
-    public void whenDeviceDetailsAreMissing_preferenceSummariesAreNotSet() {
-        when(deviceDetailsProvider.getLine1Number()).thenReturn(null);
-        when(deviceDetailsProvider.getDeviceId()).thenReturn(null);
+    public void whenMetadataNotEmpty_preferenceSummariesAreSet() {
+        when(installIDProvider.getInstallID()).thenReturn("123456789");
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_METADATA_USERNAME, "John");
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_METADATA_PHONENUMBER, "789");
+        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_METADATA_EMAIL, "john@gmail.com");
 
         FragmentScenario<FormMetadataPreferencesFragment> scenario = launcherRule.launch(FormMetadataPreferencesFragment.class);
-        permissionsProvider.grant();
         scenario.onFragment(fragment -> {
-            String notSetMessage = fragment.getContext().getString(R.string.preference_not_available);
-
-            assertThat(fragment.findPreference(KEY_METADATA_PHONENUMBER).getSummary(), equalTo(notSetMessage));
-            assertThat(fragment.findPreference(PROPMGR_DEVICE_ID).getSummary(), equalTo(notSetMessage));
+            assertThat(fragment.findPreference("metadata_username").getSummary(), equalTo("John"));
+            assertThat(fragment.findPreference("metadata_phonenumber").getSummary(), equalTo("789"));
+            assertThat(fragment.findPreference("metadata_email").getSummary(), equalTo("john@gmail.com"));
+            assertThat(fragment.findPreference("deviceid").getSummary(), equalTo("123456789"));
         });
-    }
-
-    private static class FakePhoneStatePermissionsProvider extends PermissionsProvider {
-
-        int timesRequested;
-        private PermissionListener lastAction;
-        private boolean granted;
-
-        private FakePhoneStatePermissionsProvider() {
-            super(new ContextCompatPermissionChecker(InstrumentationRegistry.getInstrumentation().getTargetContext()));
-        }
-
-        @Override
-        public void requestReadPhoneStatePermission(Activity activity, @NonNull PermissionListener action) {
-            timesRequested++;
-            this.lastAction = action;
-        }
-
-        @Override
-        public boolean isReadPhoneStatePermissionGranted() {
-            return granted;
-        }
-
-        void grant() {
-            granted = true;
-            lastAction.granted();
-        }
-
-        void deny() {
-            granted = false;
-            lastAction.denied();
-        }
     }
 }

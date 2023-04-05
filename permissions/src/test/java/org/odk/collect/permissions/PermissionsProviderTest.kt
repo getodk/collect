@@ -269,53 +269,6 @@ class PermissionsProviderTest {
     }
 
     @Test
-    fun `isReadPhoneStatePermissionGranted() when read phone state permission is granted returns true`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(true)
-
-        assertThat(permissionsProvider.isReadPhoneStatePermissionGranted, `is`(true))
-    }
-
-    @Test
-    fun `isReadPhoneStatePermissionGranted() when read phone state permission is not granted returns false`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)).thenReturn(false)
-
-        assertThat(permissionsProvider.isReadPhoneStatePermissionGranted, `is`(false))
-    }
-
-    @Test
-    fun `requestReadPhoneStatePermission() when read phone state permission is granted calls PermissionListener#granted`() {
-        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
-
-        permissionsProvider.requestReadPhoneStatePermission(activity, permissionListener)
-
-        verify(permissionListener).granted()
-        verifyNoMoreInteractions(permissionListener)
-        verifyNoInteractions(permissionsDialogCreator)
-    }
-
-    @Test
-    fun `requestReadPhoneStatePermission() when read phone state permission is not granted calls PermissionListener#denied`() {
-        permissionsProvider.requestReadPhoneStatePermission(activity, permissionListener)
-
-        verify(permissionListener).denied()
-        verifyNoMoreInteractions(permissionListener)
-    }
-
-    @Test
-    fun `requestReadPhoneStatePermission() when read phone state permission is not granted calls PermissionsDialogCreator#showAdditionalExplanation`() {
-        permissionsProvider.requestReadPhoneStatePermission(activity, permissionListener)
-
-        verify(permissionsDialogCreator).showAdditionalExplanation(
-            activity,
-            R.string.read_phone_state_runtime_permission_denied_title,
-            R.string.read_phone_state_runtime_permission_denied_desc,
-            R.drawable.ic_phone,
-            permissionListener
-        )
-        verifyNoMoreInteractions(permissionsDialogCreator)
-    }
-
-    @Test
     fun `requestReadUriPermission() when request read uri permission granted calls PermissionListener#granted`() {
         permissionsProvider.requestReadUriPermission(
             activity,
@@ -342,14 +295,14 @@ class PermissionsProviderTest {
 
     @Test
     fun `granted listener is not called when Activity is finishing`() {
-        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
+        permissionsApi.setGrantedPermission(Manifest.permission.CAMERA)
 
         whenever(activity.isFinishing).doReturn(true)
 
         permissionsProvider.requestPermissions(
             activity,
             permissionListener,
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.CAMERA
         )
 
         verifyNoInteractions(permissionListener)
@@ -357,14 +310,14 @@ class PermissionsProviderTest {
 
     @Test
     fun `denied listener is not called when Activity is finishing`() {
-        permissionsApi.setGrantedPermission(Manifest.permission.READ_PHONE_STATE)
+        permissionsApi.setGrantedPermission(Manifest.permission.CAMERA)
 
         whenever(activity.isFinishing).doReturn(true)
 
         permissionsProvider.requestPermissions(
             activity,
             permissionListener,
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.CAMERA
         )
 
         verifyNoInteractions(permissionListener)
