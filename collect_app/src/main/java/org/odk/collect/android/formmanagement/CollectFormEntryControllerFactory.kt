@@ -10,7 +10,7 @@ import org.odk.collect.shared.settings.Settings
 
 class CollectFormEntryControllerFactory constructor(private val settings: Settings) :
     FormEntryControllerFactory {
-    override fun create(formDef: FormDef?): FormEntryController {
+    override fun create(formDef: FormDef): FormEntryController {
         return FormEntryController(FormEntryModel(formDef)).also {
             it.addPostProcessor(EntityFormFinalizationProcessor())
 

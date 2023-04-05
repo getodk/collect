@@ -22,6 +22,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
+
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -574,6 +576,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     }
 
     public interface FormEntryControllerFactory {
-        FormEntryController create(FormDef formDef);
+        FormEntryController create(@NonNull FormDef formDef);
     }
 }
