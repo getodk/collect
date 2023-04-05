@@ -55,6 +55,9 @@ object ProjectKeys {
     const val KEY_BACKGROUND_LOCATION = "background_location"
     const val KEY_BACKGROUND_RECORDING = "background_recording"
 
+    // experimental_preferences.xml
+    const val KEY_PREDICATE_CACHING = "predicate_caching"
+
     // values
     const val PROTOCOL_SERVER = "odk_default"
     const val PROTOCOL_GOOGLE_SHEETS = "google_sheets"
