@@ -251,6 +251,15 @@ public class DatabaseFormsRepository implements FormsRepository {
     private static List<Form> getFormsFromCursor(Cursor cursor, String formsPath, String cachePath) {
         List<Form> forms = new ArrayList<>();
         if (cursor != null) {
+            Object cursorSize = null;
+            try {
+                Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
+                field.setAccessible(true);
+                cursorSize = field.get(null);
+            } catch (Throwable e) {
+                // ignore
+            }
+
             try {
                 cursor.moveToPosition(-1);
                 while (cursor.moveToNext()) {
@@ -258,22 +267,11 @@ public class DatabaseFormsRepository implements FormsRepository {
                     forms.add(form);
                 }
             } catch (SQLiteBlobTooBigException e) {
-                logSQLiteBlobTooBigException();
+                Timber.w("SQLiteBlobTooBigException, sCursorWindowSize: %sB", cursorSize != null ? cursorSize : "?");
                 throw e;
             }
         }
         return forms;
-    }
-
-    private static void logSQLiteBlobTooBigException() {
-        try {
-            Field field = CursorWindow.class.getDeclaredField("sCursorWindowSize");
-            field.setAccessible(true);
-            Object size = field.get(null);
-            Timber.w("SQLiteBlobTooBigException, sCursorWindowSize: %sB", size);
-        } catch (Throwable t) {
-            // ignore;
-        }
     }
 
     private void deleteFilesForForm(Form form) {
