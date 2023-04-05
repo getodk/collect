@@ -1,7 +1,6 @@
 package org.odk.collect.android.preferences.screens;
 
 import static org.odk.collect.metadata.PropertyManager.PROPMGR_DEVICE_ID;
-import static org.odk.collect.metadata.PropertyManager.PROPMGR_PHONE_NUMBER;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_EMAIL;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER;
 
@@ -66,7 +65,6 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
         });
 
         phonePreference.setOnBindEditTextListener(editText -> editText.setInputType(EditorInfo.TYPE_CLASS_PHONE));
-        phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
         deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
     }
 
