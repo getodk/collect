@@ -32,9 +32,7 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.core.model.instance.utils.DefaultAnswerResolver;
 import org.javarosa.core.reference.ReferenceManager;
-import org.javarosa.entities.EntityFormFinalizationProcessor;
 import org.javarosa.form.api.FormEntryController;
-import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
@@ -81,6 +79,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private String instancePath;
     private final String xpath;
     private final String waitingXPath;
+    private FormEntryControllerFactory formEntryControllerFactory;
     private boolean pendingActivityResult;
     private int requestCode;
     private int resultCode;
@@ -112,10 +111,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String xpath, String waitingXPath) {
+    public FormLoaderTask(String instancePath, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory) {
         this.instancePath = instancePath;
         this.xpath = xpath;
         this.waitingXPath = waitingXPath;
+        this.formEntryControllerFactory = formEntryControllerFactory;
     }
 
     /**
@@ -176,9 +176,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         }
 
         // create FormEntryController from formdef
-        final FormEntryModel fem = new FormEntryModel(formDef);
-        final FormEntryController fec = new FormEntryController(fem);
-        fec.addPostProcessor(new EntityFormFinalizationProcessor());
+        final FormEntryController fec = formEntryControllerFactory.create(formDef);
 
         boolean usedSavepoint = false;
 
@@ -573,5 +571,9 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     public FormDef getFormDef() {
         return formDef;
+    }
+
+    public interface FormEntryControllerFactory {
+        FormEntryController create(FormDef formDef);
     }
 }
