@@ -67,8 +67,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses mikrofon pada perangkat. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="get_accounts_runtime_permission_denied_title">Izin untuk mengakses akun</string>
   <string name="get_accounts_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses akun. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Izin untuk membaca status telepon</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect tidak akan melakukan panggilan telepon, tetapi ODK Collect memerlukan akses ke beberapa informasi mengenai perangkat Anda, seperti nomor telepon dan ID perangkat.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

@@ -1968,11 +1968,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                     && formLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
                 FormController fec = formLoaderTask.getFormController();
                 if (fec != null) {
-                    if (!propertyManager.isPhoneStateRequired()) {
-                        loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
-                    } else if (permissionsProvider.isReadPhoneStatePermissionGranted()) {
-                        loadForm();
-                    }
+                    loadingComplete(formLoaderTask, formLoaderTask.getFormDef(), null);
                 } else {
                     DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     FormLoaderTask t = formLoaderTask;
@@ -2130,150 +2126,136 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         final FormController formController = task.getFormController();
 
         if (formController != null) {
-            if (propertyManager.isPhoneStateRequired()) {
-                permissionsProvider.requestReadPhoneStatePermission(this, new PermissionListener() {
-                    @Override
-                    public void granted() {
-                        loadForm();
-                    }
+            formLoaderTask.setFormLoaderListener(null);
+            FormLoaderTask t = formLoaderTask;
+            formLoaderTask = null;
+            t.cancel(true);
+            t.destroy();
 
-                    @Override
-                    public void additionalExplanationClosed() {
-                        exit();
+            Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
+
+            // Set the language if one has already been set in the past
+            String[] languageTest = formController.getLanguages();
+            if (languageTest != null) {
+                String defaultLanguage = formController.getLanguage();
+                Form form = formsRepository.getOneByPath(formPath);
+
+                if (form != null) {
+                    String newLanguage = form.getLanguage();
+
+                    try {
+                        formController.setLanguage(newLanguage);
+                    } catch (Exception e) {
+                        // if somehow we end up with a bad language, set it to the default
+                        Timber.i("Ended up with a bad language. %s", newLanguage);
+                        formController.setLanguage(defaultLanguage);
+                    }
+                }
+            }
+
+            boolean pendingActivityResult = task.hasPendingActivityResult();
+
+            if (pendingActivityResult) {
+                Timber.w("Calling onActivityResult from loadingComplete");
+
+                formControllerAvailable(formController);
+                formEntryViewModel.refresh();
+                onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
+                return;
+            }
+
+            // it can be a normal flow for a pending activity result to restore from a savepoint
+            // (the call flow handled by the above if statement). For all other use cases, the
+            // user should be notified, as it means they wandered off doing other things then
+            // returned to ODK Collect and chose Edit Saved Form, but that the savepoint for
+            // that form is newer than the last saved version of their form data.
+            boolean hasUsedSavepoint = task.hasUsedSavepoint();
+
+            if (hasUsedSavepoint) {
+                runOnUiThread(() -> showLongToast(this, R.string.savepoint_used));
+            }
+
+            if (formController.getInstanceFile() == null) {
+                FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
+                        storagePathProvider,
+                        System::currentTimeMillis
+                );
+
+                File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
+                if (instanceFile != null) {
+                    formController.setInstanceFile(instanceFile);
+                } else {
+                    showFormLoadErrorAndExit(getString(R.string.loading_form_failed));
+                }
+
+                identityPromptViewModel.formLoaded(formController);
+                identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
+                    if (!requiresIdentity) {
+                        formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
+
+                        // Register to receive location provider change updates and write them to the audit
+                        // log. onStart has already run but the formController was null so try again.
+                        if (formController.currentFormAuditsLocation()
+                                && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
+                            registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+                        }
+
+                        formControllerAvailable(formController);
+
+                        // onResume ran before the form was loaded. Let the viewModel know that the activity
+                        // is about to be displayed and configured. Do this before the refresh actually
+                        // happens because if audit logging is enabled, the refresh logs a question event
+                        // and we want that to show up after initialization events.
+                        activityDisplayed();
+                        formEntryViewModel.refresh();
+
+                        if (warningMsg != null) {
+                            showLongToast(this, warningMsg);
+                            Timber.w(warningMsg);
+                        }
                     }
                 });
             } else {
-                formLoaderTask.setFormLoaderListener(null);
-                FormLoaderTask t = formLoaderTask;
-                formLoaderTask = null;
-                t.cancel(true);
-                t.destroy();
+                Intent reqIntent = getIntent();
 
-                Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
-
-                // Set the language if one has already been set in the past
-                String[] languageTest = formController.getLanguages();
-                if (languageTest != null) {
-                    String defaultLanguage = formController.getLanguage();
-                    Form form = formsRepository.getOneByPath(formPath);
-
-                    if (form != null) {
-                        String newLanguage = form.getLanguage();
-
-                        try {
-                            formController.setLanguage(newLanguage);
-                        } catch (Exception e) {
-                            // if somehow we end up with a bad language, set it to the default
-                            Timber.i("Ended up with a bad language. %s", newLanguage);
-                            formController.setLanguage(defaultLanguage);
-                        }
-                    }
-                }
-
-                boolean pendingActivityResult = task.hasPendingActivityResult();
-
-                if (pendingActivityResult) {
-                    Timber.w("Calling onActivityResult from loadingComplete");
-
-                    formControllerAvailable(formController);
-                    formEntryViewModel.refresh();
-                    onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
-                    return;
-                }
-
-                // it can be a normal flow for a pending activity result to restore from a savepoint
-                // (the call flow handled by the above if statement). For all other use cases, the
-                // user should be notified, as it means they wandered off doing other things then
-                // returned to ODK Collect and chose Edit Saved Form, but that the savepoint for
-                // that form is newer than the last saved version of their form data.
-                boolean hasUsedSavepoint = task.hasUsedSavepoint();
-
-                if (hasUsedSavepoint) {
-                    runOnUiThread(() -> showLongToast(this, R.string.savepoint_used));
-                }
-
-                if (formController.getInstanceFile() == null) {
-                    FormInstanceFileCreator formInstanceFileCreator = new FormInstanceFileCreator(
-                            storagePathProvider,
-                            System::currentTimeMillis
-                    );
-
-                    File instanceFile = formInstanceFileCreator.createInstanceFile(formPath);
-                    if (instanceFile != null) {
-                        formController.setInstanceFile(instanceFile);
-                    } else {
-                        showFormLoadErrorAndExit(getString(R.string.loading_form_failed));
-                    }
-
+                // we've just loaded a saved form, so start in the hierarchy view
+                String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
+                if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                     identityPromptViewModel.formLoaded(formController);
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
-                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_START, true, System.currentTimeMillis());
-
-                            // Register to receive location provider change updates and write them to the audit
-                            // log. onStart has already run but the formController was null so try again.
-                            if (formController.currentFormAuditsLocation()
-                                    && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
-                                registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
+                            if (!allowMovingBackwards) {
+                                // we aren't allowed to jump around the form so attempt to
+                                // go directly to the question we were on last time the
+                                // form was saved.
+                                // TODO: revisit the fallback. If for some reason the index
+                                // wasn't saved, we can now jump around which doesn't seem right.
+                                FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile(formController);
+                                if (formIndex != null) {
+                                    formController.jumpToIndex(formIndex);
+                                    formControllerAvailable(formController);
+                                    formEntryViewModel.refresh();
+                                    return;
+                                }
                             }
 
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                             formControllerAvailable(formController);
-
-                            // onResume ran before the form was loaded. Let the viewModel know that the activity
-                            // is about to be displayed and configured. Do this before the refresh actually
-                            // happens because if audit logging is enabled, the refresh logs a question event
-                            // and we want that to show up after initialization events.
-                            activityDisplayed();
-                            formEntryViewModel.refresh();
-
-                            if (warningMsg != null) {
-                                showLongToast(this, warningMsg);
-                                Timber.w(warningMsg);
-                            }
+                            Intent intent = new Intent(this, FormHierarchyActivity.class);
+                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                            startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
                         }
                     });
                 } else {
-                    Intent reqIntent = getIntent();
-
-                    // we've just loaded a saved form, so start in the hierarchy view
-                    String formMode = reqIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);
-                    if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
-                        identityPromptViewModel.formLoaded(formController);
-                        identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
-                            if (!requiresIdentity) {
-                                if (!allowMovingBackwards) {
-                                    // we aren't allowed to jump around the form so attempt to
-                                    // go directly to the question we were on last time the
-                                    // form was saved.
-                                    // TODO: revisit the fallback. If for some reason the index
-                                    // wasn't saved, we can now jump around which doesn't seem right.
-                                    FormIndex formIndex = SaveFormIndexTask.loadFormIndexFromFile(formController);
-                                    if (formIndex != null) {
-                                        formController.jumpToIndex(formIndex);
-                                        formControllerAvailable(formController);
-                                        formEntryViewModel.refresh();
-                                        return;
-                                    }
-                                }
-
-                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                                formControllerAvailable(formController);
-                                Intent intent = new Intent(this, FormHierarchyActivity.class);
-                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
-                                startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
-                            }
-                        });
-                    } else {
-                        formControllerAvailable(formController);
-                        if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
-                            Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
-                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
-                            startActivity(intent);
-                        }
-
-                        finish();
+                    formControllerAvailable(formController);
+                    if (ApplicationConstants.FormModes.VIEW_SENT.equalsIgnoreCase(formMode)) {
+                        Intent intent = new Intent(this, ViewOnlyFormHierarchyActivity.class);
+                        intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                        startActivity(intent);
                     }
+
+                    finish();
                 }
             }
         } else {

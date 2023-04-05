@@ -47,9 +47,6 @@ open class PermissionsProvider internal constructor(
     val isGetAccountsPermissionGranted: Boolean
         get() = permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)
 
-    open val isReadPhoneStatePermissionGranted: Boolean
-        get() = permissionsChecker.isPermissionGranted(Manifest.permission.READ_PHONE_STATE)
-
     open fun requestCameraPermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
             activity,
@@ -178,33 +175,6 @@ open class PermissionsProvider internal constructor(
                 }
             },
             Manifest.permission.GET_ACCOUNTS
-        )
-    }
-
-    open fun requestReadPhoneStatePermission(
-        activity: Activity,
-        action: PermissionListener
-    ) {
-        requestPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    action.granted()
-                }
-
-                override fun denied() {
-                    action.denied()
-
-                    permissionsDialogCreator.showAdditionalExplanation(
-                        activity,
-                        R.string.read_phone_state_runtime_permission_denied_title,
-                        R.string.read_phone_state_runtime_permission_denied_desc,
-                        R.drawable.ic_phone,
-                        action
-                    )
-                }
-            },
-            Manifest.permission.READ_PHONE_STATE
         )
     }
 

@@ -70,8 +70,6 @@
   <string name="record_audio_runtime_permission_denied_desc">没有此权限，应用无法访问麦克风。请在准备好授予时重试。</string>
   <string name="get_accounts_runtime_permission_denied_title">获取帐户权限</string>
   <string name="get_accounts_runtime_permission_denied_desc">没有此权限，应用无法访问帐户。请在准备好授予时重试。</string>
-  <string name="read_phone_state_runtime_permission_denied_title">读取手机状态权限</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">应用不进行呼叫，但它需要访问有关设备的某些属性，如电话号码和设备ID。</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

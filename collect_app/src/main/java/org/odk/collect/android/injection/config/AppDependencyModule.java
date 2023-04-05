@@ -298,8 +298,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public PropertyManager providesPropertyManager(PermissionsProvider permissionsProvider, InstallIDProvider installIDProvider, SettingsProvider settingsProvider) {
-        return new PropertyManager(permissionsProvider, installIDProvider, settingsProvider);
+    public PropertyManager providesPropertyManager(InstallIDProvider installIDProvider, SettingsProvider settingsProvider) {
+        return new PropertyManager(installIDProvider, settingsProvider);
     }
 
     @Provides

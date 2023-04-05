@@ -67,8 +67,6 @@
   <string name="record_audio_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా మైక్రోఫోన్‌ను యాక్సెస్ చేయలేరు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="get_accounts_runtime_permission_denied_title">ఖాతాల అనుమతి పొందండి</string>
   <string name="get_accounts_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా ఖాతాలను యాక్సెస్ చేయదు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">ఫోన్ స్టేట్ అనుమతి చదవండి</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ఎటువంటి కాల్స్ చేయదు. కాని దీనికి మీ పరికరం గురించిన ఫోన్ నంబర్, పరికరం ID వంటి కొంత సమాచారాన్ని సేకరించవలసి ఉంటుంది.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

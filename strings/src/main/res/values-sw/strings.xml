@@ -68,8 +68,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kutumia kinakili sauti. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <string name="get_accounts_runtime_permission_denied_title">Pata ruhusa ya akaunti</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kufungua akaunti. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Soma ruhusa ya simu</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect haipigi simu lakini inahitaji kufikia taarifa fulani kuhusu kifaa chako kama namba ya simu na ya utambulisho wa kifaa.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

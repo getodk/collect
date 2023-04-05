@@ -61,7 +61,6 @@
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Kamerabehörigheter</string>
   <string name="record_audio_runtime_permission_denied_title">Behörigheter för att spela in ljud</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Behörigheter för att läsa telefonstatus</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

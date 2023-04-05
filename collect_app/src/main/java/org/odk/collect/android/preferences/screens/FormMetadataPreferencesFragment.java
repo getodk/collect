@@ -20,15 +20,10 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.metadata.PropertyManager;
-import org.odk.collect.permissions.PermissionsProvider;
 
 import javax.inject.Inject;
 
 public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragment {
-
-    @Inject
-    PermissionsProvider permissionsProvider;
-
     @Inject
     PropertyManager propertyManager;
 
@@ -57,12 +52,6 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
         super.onActivityCreated(savedInstanceState);
 
         setupPrefs();
-
-        if (permissionsProvider.isReadPhoneStatePermissionGranted()) {
-            phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
-        } else if (savedInstanceState == null) {
-            permissionsProvider.requestReadPhoneStatePermission(getActivity(), () -> phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER)));
-        }
     }
 
     private void setupPrefs() {
@@ -77,6 +66,7 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
         });
 
         phonePreference.setOnBindEditTextListener(editText -> editText.setInputType(EditorInfo.TYPE_CLASS_PHONE));
+        phonePreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_PHONE_NUMBER));
         deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
     }
 

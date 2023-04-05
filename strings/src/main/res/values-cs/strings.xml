@@ -71,8 +71,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez tohoto povolení nelze získat přístup k mikrofonu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
   <string name="get_accounts_runtime_permission_denied_title">Získat oprávnění k účtům</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže přistupovat k účtům. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Přečtěte si povolení k telefonu</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect neprovádí volání, ale potřebuje přístup k určitým vlastnostem vašeho zařízení, jako je například telefonní číslo a device ID.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

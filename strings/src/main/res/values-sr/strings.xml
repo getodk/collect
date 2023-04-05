@@ -67,8 +67,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit mikrofonu. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
   <string name="get_accounts_runtime_permission_denied_title">Dozvole za dobijanje korisničkih imena.</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit korisničkim nalozima. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Dozvola za čitanje statusa telefona</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može da obavlja pozive ali mu je potreban pristup nekim djelovima uređaja poput broja telefona ili identifikacionog broja uređaja.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

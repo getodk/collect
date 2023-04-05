@@ -67,8 +67,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do mikrofonu. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="get_accounts_runtime_permission_denied_title">Uzyskaj uprawnienia do kont</string>
   <string name="get_accounts_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do kont. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Sprawdź uprawnienia dostępu do właściwości telefonu</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect nie wykonuje połączeń, ale wymaga dostępu do niektórych właściwości twojego urządzenia, w tym do numeru telefonu i numeru ID</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

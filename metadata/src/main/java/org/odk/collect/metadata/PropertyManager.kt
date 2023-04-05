@@ -2,7 +2,6 @@ package org.odk.collect.metadata
 
 import org.javarosa.core.services.IPropertyManager
 import org.javarosa.core.services.properties.IPropertyRules
-import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import timber.log.Timber
@@ -13,17 +12,12 @@ import timber.log.Timber
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 class PropertyManager(
-    private val permissionsProvider: PermissionsProvider,
     private val installIDProvider: InstallIDProvider,
     private val settingsProvider: SettingsProvider
 ) : IPropertyManager {
     private val properties = mutableMapOf<String, String>()
-    var isPhoneStateRequired = false
-        private set
 
     fun reload(): PropertyManager {
-        isPhoneStateRequired = false
-
         try {
             putProperty(PROPMGR_DEVICE_ID, "", installIDProvider.installID)
         } catch (e: SecurityException) {
@@ -52,10 +46,6 @@ class PropertyManager(
     }
 
     override fun getSingularProperty(propertyName: String): String {
-        if (propertyName.equals(PROPMGR_PHONE_NUMBER, ignoreCase = true) && !permissionsProvider.isReadPhoneStatePermissionGranted) {
-            isPhoneStateRequired = true
-        }
-
         return properties[propertyName.lowercase()] ?: ""
     }
 

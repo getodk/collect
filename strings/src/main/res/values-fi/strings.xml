@@ -71,8 +71,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään mikrofonia. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
   <string name="get_accounts_runtime_permission_denied_title">Hae tilin käyttöluvat</string>
   <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Puhelimen tilan lukemisen käyttölupa</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ei soita puheluita, mutta se tarvitsee tiedot joistakin laitteesi tiedoista, kuten puhelinnumero ja laitteen ID.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

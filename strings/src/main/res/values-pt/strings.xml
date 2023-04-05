@@ -67,8 +67,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar seu microfone. Por favor, tente novamente quando estiver pronto a concedê-la.</string>
   <string name="get_accounts_runtime_permission_denied_title">Permissão para acessar contas</string>
   <string name="get_accounts_runtime_permission_denied_desc">Sem esta permissão, o ODK Collecta não consegue acessar as contas. Por favor, tente novamente quando estiver pronto a concedê-la.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Permissão para acessar o estado do telefone</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect não faz chamadas, mas precisa desta permissão para acessar algumas informações do seu dispositivo como o número do telefone e o ID do dispositivo.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
