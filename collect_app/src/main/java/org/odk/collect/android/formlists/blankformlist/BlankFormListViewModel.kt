@@ -70,11 +70,6 @@ class BlankFormListViewModel(
             sortAndFilter()
         }
 
-    private val shouldHideOldFormVersions: Boolean
-        get() {
-            return generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
-        }
-
     private val syncWithServerObserver = Observer<Boolean> {
         if (!it) {
             loadFromDatabase()
@@ -108,7 +103,7 @@ class BlankFormListViewModel(
                         form.toBlankFormListItem(projectId, instancesRepository)
                     }
 
-                if (shouldHideOldFormVersions && !showAllVersions) {
+                if (!showAllVersions) {
                     newListOfForms = newListOfForms.groupBy {
                         it.formId
                     }.map { (_, itemsWithSameId) ->
@@ -235,7 +230,8 @@ class BlankFormListViewModel(
                 generalSettings,
                 changeLockProvider,
                 formsDirDiskFormsSynchronizer,
-                projectId
+                projectId,
+                !generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
             ) as T
         }
     }
