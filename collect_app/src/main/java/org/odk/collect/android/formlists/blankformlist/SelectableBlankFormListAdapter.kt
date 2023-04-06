@@ -30,11 +30,11 @@ class SelectableBlankFormListAdapter(private val onItemClickListener: (Long) -> 
         val item = formItems[position]
         holder.blankFormListItem = item
 
-        val checkbox = holder.itemView.findViewById<CheckBox>(R.id.checkbox)
-        checkbox.isChecked = selected.contains(item.databaseId)
-
-        checkbox.setOnClickListener {
-            onItemClickListener(item.databaseId)
+        val checkbox = holder.itemView.findViewById<CheckBox>(R.id.checkbox).also {
+            it.isChecked = selected.contains(item.databaseId)
+            it.setOnClickListener {
+                onItemClickListener(item.databaseId)
+            }
         }
 
         holder.itemView.setOnClickListener {
