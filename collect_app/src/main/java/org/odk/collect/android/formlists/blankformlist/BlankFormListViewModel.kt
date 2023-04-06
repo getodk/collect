@@ -198,22 +198,6 @@ class BlankFormListViewModel(
         )
     }
 
-    fun deleteAllForms() {
-        scheduler.immediate(
-            background = {
-                getAllForms().forEach {
-                    FormDeleter(
-                        formsRepository,
-                        instancesRepository
-                    ).delete(it.databaseId)
-                }
-            },
-            foreground = {
-                loadFromDatabase()
-            }
-        )
-    }
-
     private fun sortAndFilter() {
         _formsToDisplay.value = when (sortingOrder) {
             0 -> _allForms.value.sortedBy { it.formName.lowercase() }
