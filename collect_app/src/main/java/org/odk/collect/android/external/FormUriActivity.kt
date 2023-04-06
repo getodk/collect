@@ -16,6 +16,10 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import javax.inject.Inject
 
+/**
+ * This class serves as a firewall for starting form filling. It should be used to do that
+ * rather than [FormEntryActivity] directly as it ensures that the required data is valid.
+ */
 class FormUriActivity : ComponentActivity() {
 
     @Inject
