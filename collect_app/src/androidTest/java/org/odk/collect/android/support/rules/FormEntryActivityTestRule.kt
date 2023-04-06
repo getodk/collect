@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import org.junit.rules.ExternalResource
+import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.injection.DaggerUtils
@@ -97,7 +98,7 @@ class FormEntryActivityTestRule : ExternalResource() {
         val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
             .getCurrentProject().uuid
 
-        return FormNavigator.newInstanceIntent(application, FormsContract.getUri(projectId, form!!.dbId))
+        return FormNavigator.newInstanceIntent(application, FormsContract.getUri(projectId, form!!.dbId), FormEntryActivity::class)
     }
 
     private fun createEditFormIntent(formFilename: String): Intent {
@@ -114,7 +115,8 @@ class FormEntryActivityTestRule : ExternalResource() {
         return FormNavigator.editInstanceIntent(
             application,
             projectId,
-            instance.dbId
+            instance.dbId,
+            FormEntryActivity::class
         )
     }
 }
