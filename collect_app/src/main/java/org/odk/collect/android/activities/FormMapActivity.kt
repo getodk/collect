@@ -18,6 +18,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
+import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormNavigator
 import org.odk.collect.android.formmanagement.formmap.FormMapViewModel
 import org.odk.collect.android.injection.DaggerUtils
@@ -81,21 +82,15 @@ class FormMapActivity : LocalizedActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.form_map_activity)
 
-        val formNavigator = FormNavigator(
-            currentProjectProvider.getCurrentProject().uuid,
-            settingsProvider,
-            instancesRepositoryProvider::get
-        )
-
         supportFragmentManager.setFragmentResultListener(
             SelectionMapFragment.REQUEST_SELECT_ITEM,
             this
         ) { _: String?, result: Bundle ->
             if (result.containsKey(SelectionMapFragment.RESULT_SELECTED_ITEM)) {
                 val instanceId = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM)
-                formNavigator.editInstance(this, instanceId)
+                startActivity(FormNavigator.editInstanceIntent(this, currentProjectProvider.getCurrentProject().uuid, instanceId))
             } else if (result.containsKey(SelectionMapFragment.RESULT_CREATE_NEW_ITEM)) {
-                formNavigator.newInstance(this, formId)
+                startActivity(FormNavigator.newInstanceIntent(this, FormsContract.getUri(currentProjectProvider.getCurrentProject().uuid, formId)))
             }
         }
     }

@@ -9,11 +9,14 @@ import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import javax.inject.Inject
 
 /**
@@ -34,6 +37,9 @@ class FormUriActivity : ComponentActivity() {
     @Inject
     lateinit var instanceRepositoryProvider: InstancesRepositoryProvider
 
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
+
     private var formFillingAlreadyStarted = false
 
     private val openForm =
@@ -51,7 +57,6 @@ class FormUriActivity : ComponentActivity() {
             !assertCurrentProjectUsed() -> Unit
             !assertValidUri() -> Unit
             !assertFormExists() -> Unit
-            !assertFormCanBeEdited() -> Unit
             !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
             else -> startForm()
         }
@@ -117,25 +122,6 @@ class FormUriActivity : ComponentActivity() {
         }
     }
 
-    private fun assertFormCanBeEdited(): Boolean {
-        val uri = intent.data!!
-        val uriMimeType = contentResolver.getType(uri)
-
-        val formBlankOrIncomplete = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
-            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.status == Instance.STATUS_INCOMPLETE
-        } else {
-            true
-        }
-
-        return if (!formBlankOrIncomplete) {
-            displayErrorDialog(R.string.form_complete)
-            false
-        } else {
-            true
-        }
-    }
-
     private fun assertFormFillingNotAlreadyStarted(savedInstanceState: Bundle?): Boolean {
         if (savedInstanceState != null) {
             formFillingAlreadyStarted = savedInstanceState.getBoolean(FORM_FILLING_ALREADY_STARTED)
@@ -146,10 +132,13 @@ class FormUriActivity : ComponentActivity() {
     private fun startForm() {
         formFillingAlreadyStarted = true
         openForm.launch(
-            Intent(this, FormEntryActivity::class.java).also {
-                it.action = intent.action
-                it.data = intent.data
-                intent.extras?.let { sourceExtras -> it.putExtras(sourceExtras) }
+            Intent(this, FormEntryActivity::class.java).apply {
+                action = intent.action
+                data = intent.data
+                intent.extras?.let { sourceExtras -> putExtras(sourceExtras) }
+                if (!canFormBeEdited()) {
+                    putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT)
+                }
             }
         )
     }
@@ -160,6 +149,22 @@ class FormUriActivity : ComponentActivity() {
             .setPositiveButton(R.string.ok) { _, _ -> finish() }
             .create()
             .show()
+    }
+
+    private fun canFormBeEdited(): Boolean {
+        val uri = intent.data!!
+        val uriMimeType = contentResolver.getType(uri)
+
+        val formBlankOrIncomplete = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            instance!!.status == Instance.STATUS_INCOMPLETE
+        } else {
+            true
+        }
+
+        val formEditingEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+
+        return formBlankOrIncomplete && formEditingEnabled
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

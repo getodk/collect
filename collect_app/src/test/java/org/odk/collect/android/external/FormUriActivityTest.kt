@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -13,6 +14,7 @@ import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -21,6 +23,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +36,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
@@ -44,7 +48,9 @@ import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.UUIDGenerator
 
@@ -53,7 +59,7 @@ class FormUriActivityTest {
     private val projectsRepository = InMemProjectsRepository()
     private val currentProjectProvider = mock<CurrentProjectProvider>()
     private val context = ApplicationProvider.getApplicationContext<Application>()
-    private val firstProject = Project.DEMO_PROJECT
+    private val currentProject = Project.DEMO_PROJECT
     private val secondProject = Project.Saved("123", "Second project", "S", "#cccccc")
     private val blankForm = FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
     private val incompleteForm = Instance.Builder()
@@ -92,6 +98,10 @@ class FormUriActivityTest {
         whenever(get()).thenReturn(instancesRepository)
     }
 
+    private val settingsProvider = InMemSettingsProvider().apply {
+        getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
+    }
+
     @get:Rule
     val activityRule = RecordedIntentsRule()
 
@@ -126,17 +136,18 @@ class FormUriActivityTest {
             ): InstancesRepositoryProvider {
                 return instancesRepositoryProvider
             }
+
+            override fun providesSettingsProvider(context: Context?): SettingsProvider {
+                return settingsProvider
+            }
         })
     }
 
     @Test
     fun `When there are no projects then display alert dialog`() {
         val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
-        onView(withText(R.string.app_not_configured)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
 
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertErrorDialog(scenario, R.string.app_not_configured)
     }
 
     @Test
@@ -145,11 +156,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(secondProject.uuid))
 
-        onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertErrorDialog(scenario, R.string.wrong_project_selected_for_form)
     }
 
     @Test
@@ -160,11 +167,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent())
 
-        onView(withText(R.string.wrong_project_selected_for_form)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertErrorDialog(scenario, R.string.wrong_project_selected_for_form)
     }
 
     @Test
@@ -177,11 +180,7 @@ class FormUriActivityTest {
             }
         )
 
-        onView(withText(R.string.unrecognized_uri)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertErrorDialog(scenario, R.string.unrecognized_uri)
     }
 
     @Test
@@ -194,117 +193,98 @@ class FormUriActivityTest {
             }
         )
 
-        onView(withText(R.string.unrecognized_uri)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertErrorDialog(scenario, R.string.unrecognized_uri)
     }
 
     @Test
     fun `When uri represents a blank form that does not exist then display alert dialog`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(firstProject.uuid, 100))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(currentProject.uuid, 100))
 
-        onView(withText(R.string.bad_uri)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertErrorDialog(scenario, R.string.bad_uri)
     }
 
     @Test
     fun `When uri represents a saved form that does not exist then display alert dialog`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(firstProject.uuid, 100))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, 100))
 
-        onView(withText(R.string.bad_uri)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertErrorDialog(scenario, R.string.bad_uri)
     }
 
     @Test
-    fun `When attempting to edit a finalized form then display alert dialog`() {
+    fun `When attempting to edit an incomplete form with disabled editing then start form for view only`() {
         saveTestProjects()
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(
-            getSavedIntent(formDbId = 2)
+        launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(currentProject.uuid, formDbId = 1)
         )
 
-        onView(withText(R.string.form_complete)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertStartSavedFormIntent(false)
     }
 
     @Test
-    fun `When attempting to edit a submitted form then display alert dialog`() {
+    fun `When attempting to edit a finalized form then start form for view only`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(
-            getSavedIntent(formDbId = 3)
+        launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(currentProject.uuid, formDbId = 2)
         )
 
-        onView(withText(R.string.form_complete)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
-
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        assertStartSavedFormIntent(false, 2)
     }
 
     @Test
-    fun `When attempting to edit a form that failed to submit then display alert dialog`() {
+    fun `When attempting to edit a submitted form then start form for view only`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(
-            getSavedIntent(formDbId = 4)
+        launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(currentProject.uuid, formDbId = 3)
         )
 
-        onView(withText(R.string.form_complete)).inRoot(isDialog())
-            .check(matches(isDisplayed()))
-        onView(withId(android.R.id.button1)).perform(click())
+        assertStartSavedFormIntent(false, 3)
+    }
 
-        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    @Test
+    fun `When attempting to edit a form that failed to submit then start form for view only`() {
+        saveTestProjects()
+
+        launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(currentProject.uuid, formDbId = 4)
+        )
+
+        assertStartSavedFormIntent(false, 4)
     }
 
     @Test
     fun `Form filling should not be started again after recreating the activity or getting back to it`() {
         saveTestProjects()
 
-        val scenario = launcherRule.launch<FormUriActivity>(getBlankFormIntent(firstProject.uuid))
-
+        val scenario = launcherRule.launch<FormUriActivity>(getBlankFormIntent(currentProject.uuid))
         scenario.recreate()
 
         Intents.intended(hasComponent(FormEntryActivity::class.java.name), Intents.times(1))
-        Intents.intended(hasData(FormsContract.getUri(firstProject.uuid, 1)))
-        Intents.intended(hasExtra("KEY_1", "Text"))
     }
 
     @Test
     fun `When there is project id specified in uri that represents a blank form and it matches current project id then start form filling`() {
         saveTestProjects()
 
-        launcherRule.launch<FormUriActivity>(getBlankFormIntent(firstProject.uuid))
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(currentProject.uuid))
 
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
-        Intents.intended(hasData(FormsContract.getUri(firstProject.uuid, 1)))
-        Intents.intended(hasExtra("KEY_1", "Text"))
+        assertStartBlankFormIntent()
     }
 
     @Test
     fun `When there is project id specified in uri that represents a saved form and it matches current project id then start form filling`() {
         saveTestProjects()
 
-        launcherRule.launch<FormUriActivity>(getSavedIntent(firstProject.uuid))
+        launcherRule.launch<FormUriActivity>(getSavedIntent(currentProject.uuid))
 
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
-        Intents.intended(hasData(InstancesContract.getUri(firstProject.uuid, 1)))
-        Intents.intended(hasExtra("KEY_1", "Text"))
+        assertStartSavedFormIntent(true)
     }
 
     @Test
@@ -313,19 +293,7 @@ class FormUriActivityTest {
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent())
 
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
-        val uri = FormsContract.getUri("", 1)
-        Intents.intended(
-            hasData(
-                Uri.Builder()
-                    .scheme(uri.scheme)
-                    .authority(uri.authority)
-                    .path(uri.path)
-                    .query(null)
-                    .build()
-            )
-        )
-        Intents.intended(hasExtra("KEY_1", "Text"))
+        assertStartBlankFormIntent(projectId = null)
     }
 
     @Test
@@ -334,32 +302,14 @@ class FormUriActivityTest {
 
         launcherRule.launch<FormUriActivity>(getSavedIntent())
 
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
-        val uri = InstancesContract.getUri("", 1)
-        Intents.intended(
-            hasData(
-                Uri.Builder()
-                    .scheme(uri.scheme)
-                    .authority(uri.authority)
-                    .path(uri.path)
-                    .query(null)
-                    .build()
-            )
-        )
-        Intents.intended(hasExtra("KEY_1", "Text"))
+        assertStartSavedFormIntent(true, projectId = null)
     }
 
     // TODO: Replace the explicit FormUriActivity intent with an implicit one Intent.ACTION_EDIT once it's possible https://github.com/android/android-test/issues/496
     private fun getBlankFormIntent(projectId: String? = null, formDbId: Long = 1) =
         Intent(context, FormUriActivity::class.java).apply {
             data = if (projectId == null) {
-                val uri = FormsContract.getUri("", formDbId)
-                Uri.Builder()
-                    .scheme(uri.scheme)
-                    .authority(uri.authority)
-                    .path(uri.path)
-                    .query(null)
-                    .build()
+                getFormsUriInOldFormatWithNoProjectId(formDbId)
             } else {
                 FormsContract.getUri(projectId, formDbId)
             }
@@ -369,23 +319,69 @@ class FormUriActivityTest {
     private fun getSavedIntent(projectId: String? = null, formDbId: Long = 1) =
         Intent(context, FormUriActivity::class.java).apply {
             data = if (projectId == null) {
-                val uri = InstancesContract.getUri("", formDbId)
-                Uri.Builder()
-                    .scheme(uri.scheme)
-                    .authority(uri.authority)
-                    .path(uri.path)
-                    .query(null)
-                    .build()
+                getInstancesUriInOldFormatWithNoProjectId(formDbId)
             } else {
                 InstancesContract.getUri(projectId, formDbId)
             }
             putExtra("KEY_1", "Text")
         }
 
+    private fun getFormsUriInOldFormatWithNoProjectId(formDbId: Long): Uri {
+        val uri = FormsContract.getUri("", formDbId)
+        return Uri.Builder()
+            .scheme(uri.scheme)
+            .authority(uri.authority)
+            .path(uri.path)
+            .query(null)
+            .build()
+    }
+
+    private fun getInstancesUriInOldFormatWithNoProjectId(formDbId: Long): Uri {
+        val uri = InstancesContract.getUri("", formDbId)
+        return Uri.Builder()
+            .scheme(uri.scheme)
+            .authority(uri.authority)
+            .path(uri.path)
+            .query(null)
+            .build()
+    }
+
+    private fun assertErrorDialog(scenario: ActivityScenario<FormUriActivity>, message: Int) {
+        onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
+    private fun assertStartBlankFormIntent(dbId: Long = 1, projectId: String? = currentProject.uuid) {
+        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
+        if (projectId == null) {
+            Intents.intended(hasData(getFormsUriInOldFormatWithNoProjectId(dbId)))
+        } else {
+            Intents.intended(hasData(FormsContract.getUri(projectId, dbId)))
+        }
+        Intents.intended(hasExtra("KEY_1", "Text"))
+    }
+
+    private fun assertStartSavedFormIntent(canBeEdited: Boolean, dbId: Long = 1, projectId: String? = currentProject.uuid) {
+        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
+        if (projectId == null) {
+            Intents.intended(hasData(getInstancesUriInOldFormatWithNoProjectId(dbId)))
+        } else {
+            Intents.intended(hasData(InstancesContract.getUri(projectId, dbId)))
+        }
+        if (canBeEdited) {
+            Intents.intended(not(hasExtraWithKey(ApplicationConstants.BundleKeys.FORM_MODE)))
+        } else {
+            Intents.intended(hasExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT))
+        }
+        Intents.intended(hasExtra("KEY_1", "Text"))
+    }
+
     private fun saveTestProjects() {
-        projectsRepository.save(firstProject)
+        projectsRepository.save(currentProject)
         projectsRepository.save(secondProject)
 
-        whenever(currentProjectProvider.getCurrentProject()).thenReturn(firstProject)
+        whenever(currentProjectProvider.getCurrentProject()).thenReturn(currentProject)
     }
 }
