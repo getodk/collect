@@ -52,7 +52,7 @@ class BlankFormListItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             }
         }
 
-    fun setEndView(layoutId: Int) {
-        FrameLayout.inflate(itemView.context, layoutId, binding.endView)
+    fun setTrailingView(layoutId: Int) {
+        FrameLayout.inflate(itemView.context, layoutId, binding.trailingView)
     }
 }

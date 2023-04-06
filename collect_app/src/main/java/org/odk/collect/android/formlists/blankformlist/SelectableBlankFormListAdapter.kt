@@ -22,7 +22,7 @@ class SelectableBlankFormListAdapter(private val onItemClickListener: (Long) -> 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlankFormListItemViewHolder {
         return BlankFormListItemViewHolder(parent).also {
-            it.setEndView(R.layout.checkbox)
+            it.setTrailingView(R.layout.checkbox)
         }
     }
 

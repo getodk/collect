@@ -22,7 +22,7 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:textAppearance="@style/TextAppearance.Collect.Subtitle1"
-        app:layout_constraintEnd_toStartOf="@+id/end_view"
+        app:layout_constraintEnd_toStartOf="@+id/trailing_view"
         app:layout_constraintStart_toEndOf="@+id/image"
         app:layout_constraintTop_toTopOf="@+id/image"
         tools:text="All widgets" />
@@ -52,7 +52,7 @@
         tools:text="Added on Thu, Jul 11, 2019 at 15:35" />
 
     <FrameLayout
-        android:id="@+id/end_view"
+        android:id="@+id/trailing_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minHeight="40dp"

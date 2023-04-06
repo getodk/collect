@@ -16,7 +16,7 @@ class BlankFormListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BlankFormListItemViewHolder {
         return BlankFormListItemViewHolder(parent).also {
-            it.setEndView(R.layout.map_button)
+            it.setTrailingView(R.layout.map_button)
         }
     }
 
