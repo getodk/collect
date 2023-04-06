@@ -23,8 +23,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 import org.odk.collect.android.R
 import org.odk.collect.android.adapters.DeleteFormsTabsAdapter
 import org.odk.collect.android.databinding.TabsLayoutBinding
-import org.odk.collect.android.formlists.DeleteBlankFormFragment
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
+import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.injection.DaggerUtils

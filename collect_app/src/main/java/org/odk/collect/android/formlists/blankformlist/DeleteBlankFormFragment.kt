@@ -1,4 +1,4 @@
-package org.odk.collect.android.formlists
+package org.odk.collect.android.formlists.blankformlist
 
 import android.content.Context
 import android.content.DialogInterface
@@ -14,9 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
-import org.odk.collect.android.formlists.blankformlist.BlankFormListMenuProvider
-import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
-import org.odk.collect.android.formlists.blankformlist.SelectableBlankFormListAdapter
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 
 class DeleteBlankFormFragment(

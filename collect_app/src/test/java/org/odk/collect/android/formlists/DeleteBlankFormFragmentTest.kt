@@ -35,6 +35,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListMenuProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
+import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
