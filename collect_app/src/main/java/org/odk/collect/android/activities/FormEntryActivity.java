@@ -213,11 +213,13 @@ import timber.log.Timber;
  * FormEntryActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
  *
+ * This class should never be started directly. Instead {@link org.odk.collect.android.external.FormUriActivity}
+ * should be used to start form filling.
+ *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  * option)
  */
-
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormEntryActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
