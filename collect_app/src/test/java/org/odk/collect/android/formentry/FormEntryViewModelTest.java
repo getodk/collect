@@ -237,6 +237,20 @@ public class FormEntryViewModelTest {
         assertThat(getOrAwaitValue(viewModel.getFailedConstraint()), equalTo(failedConstraint));
     }
 
+    /**
+     * We don't want to flush the log before answers are actually committed.
+     */
+    @Test
+    public void moveForward_whenThereIsAFailedConstraint_doesNotFlushAuditLog() throws Exception {
+        FailedConstraint failedConstraint = new FailedConstraint(startingIndex, 0);
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedConstraint);
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+
+        verify(auditEventLogger, never()).flush();
+    }
+
     @Test
     public void moveForward_whenThereIsAFailedConstraint_doesNotStepToNextEvent() throws Exception {
         FailedConstraint failedConstraint = new FailedConstraint(startingIndex, 0);
