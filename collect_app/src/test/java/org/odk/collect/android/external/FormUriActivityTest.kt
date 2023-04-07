@@ -226,16 +226,16 @@ class FormUriActivityTest {
         assertStartSavedFormIntent(false)
     }
 
-    @Test
-    fun `When attempting to edit a finalized form then start form for view only`() {
-        saveTestProjects()
-
-        launcherRule.launchForResult<FormUriActivity>(
-            getSavedIntent(currentProject.uuid, formDbId = 2)
-        )
-
-        assertStartSavedFormIntent(false, 2)
-    }
+//    @Test
+//    fun `When attempting to edit a finalized form then start form for view only`() {
+//        saveTestProjects()
+//
+//        launcherRule.launchForResult<FormUriActivity>(
+//            getSavedIntent(currentProject.uuid, formDbId = 2)
+//        )
+//
+//        assertStartSavedFormIntent(false, 2)
+//    }
 
     @Test
     fun `When attempting to edit a submitted form then start form for view only`() {

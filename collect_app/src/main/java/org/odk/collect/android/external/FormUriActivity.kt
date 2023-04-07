@@ -155,16 +155,25 @@ class FormUriActivity : ComponentActivity() {
         val uri = intent.data!!
         val uriMimeType = contentResolver.getType(uri)
 
-        val formBlankOrIncomplete = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+//        val formBlankOrIncomplete = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+//            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+//            instance!!.status == Instance.STATUS_INCOMPLETE
+//        } else {
+//            true
+//        }
+
+        val formBlankOrUnsent = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.status == Instance.STATUS_INCOMPLETE
+            instance!!.status == Instance.STATUS_INCOMPLETE || instance.status == Instance.STATUS_COMPLETE
         } else {
             true
         }
 
         val formEditingEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 
-        return formBlankOrIncomplete && formEditingEnabled
+//        return formBlankOrIncomplete && formEditingEnabled
+
+        return formBlankOrUnsent && formEditingEnabled
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
