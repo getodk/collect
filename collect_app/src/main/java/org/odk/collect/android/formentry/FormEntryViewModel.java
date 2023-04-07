@@ -188,8 +188,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }, updateSuccess -> {
             isLoading.setValue(false);
 
-            formController.getAuditEventLogger().flush();
-
             if (updateSuccess) {
                 try {
                     formController.stepToNextScreenEvent();
@@ -210,8 +208,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return saveScreenAnswersToFormController(answers, false);
         }, updateSuccess -> {
             isLoading.setValue(false);
-
-            formController.getAuditEventLogger().flush();
 
             if (updateSuccess) {
                 try {

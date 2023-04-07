@@ -196,7 +196,6 @@ public class FormEntryViewModelTest {
         scheduler.runBackground();
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(answers, false);
-        verifier.verify(auditEventLogger).flush();
         verifier.verify(formController).stepToNextScreenEvent();
         verifier.verify(auditEventLogger).flush();
     }
@@ -297,7 +296,6 @@ public class FormEntryViewModelTest {
         scheduler.runBackground();
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(answers, false);
-        verifier.verify(auditEventLogger).flush();
         verifier.verify(formController).stepToPreviousScreenEvent();
         verifier.verify(auditEventLogger).flush();
     }
