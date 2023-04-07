@@ -371,7 +371,6 @@ workflows:
             branches:
               ignore:
                 - master
-                - next
       - test_smoke_instrumented:
           requires:
             - compile
@@ -379,7 +378,6 @@ workflows:
             branches:
               only:
                 - master
-                - next
 
   nightly:
     triggers:
@@ -389,7 +387,6 @@ workflows:
             branches:
               only:
                 - master
-                - next
     jobs:
       - compile
       - test_instrumented:
