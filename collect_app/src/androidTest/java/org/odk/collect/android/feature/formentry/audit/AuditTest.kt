@@ -54,4 +54,31 @@ class AuditTest {
         assertThat(auditLog[11].get("event"), equalTo("form exit"))
         assertThat(auditLog[12].get("event"), equalTo("form finalize"))
     }
+
+    @Test
+    fun fillingFormWithTrackChanges_withConstraint_andViolatingConstraint_andCorrectingAnswer_tracksCorrectedAnswer() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-audit-constraint.xml")
+            .startBlankForm("One Question Audit Constraint")
+            .answerQuestion("What is your age?", "120")
+            .swipeToNextQuestionWithConstraintViolation("Too old!")
+            .answerQuestion("What is your age?", "119")
+            .swipeToEndScreen()
+            .clickSaveAndExit()
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog.size, equalTo(6))
+
+        assertThat(auditLog[0].get("event"), equalTo("form start"))
+
+        val questionEvent = auditLog[1]
+        assertThat(questionEvent.get("event"), equalTo("question"))
+        assertThat(questionEvent.get("old-value"), equalTo(""))
+        assertThat(questionEvent.get("new-value"), equalTo("119"))
+
+        assertThat(auditLog[2].get("event"), equalTo("end screen"))
+        assertThat(auditLog[3].get("event"), equalTo("form save"))
+        assertThat(auditLog[4].get("event"), equalTo("form exit"))
+        assertThat(auditLog[5].get("event"), equalTo("form finalize"))
+    }
 }
