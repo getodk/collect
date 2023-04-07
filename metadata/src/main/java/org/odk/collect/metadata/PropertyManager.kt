@@ -17,6 +17,8 @@ class PropertyManager(
     private val properties = mutableMapOf<String, String>()
 
     fun reload(): PropertyManager {
+        properties.clear()
+
         val generalSettings = settingsProvider.getUnprotectedSettings()
 
         var username = generalSettings.getString(ProjectKeys.KEY_METADATA_USERNAME)

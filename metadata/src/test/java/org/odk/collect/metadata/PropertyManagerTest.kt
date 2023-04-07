@@ -40,6 +40,30 @@ class PropertyManagerTest {
     }
 
     @Test
+    fun `reload should clear existing properties`() {
+        settingsProvider.getUnprotectedSettings().apply {
+            save(ProjectKeys.KEY_METADATA_USERNAME, "John")
+            save(ProjectKeys.KEY_METADATA_PHONENUMBER, "789")
+            save(ProjectKeys.KEY_METADATA_EMAIL, "john@gmail.com")
+        }
+
+        propertyManager.reload()
+
+        settingsProvider.getUnprotectedSettings().apply {
+            save(ProjectKeys.KEY_METADATA_USERNAME, "")
+            save(ProjectKeys.KEY_METADATA_PHONENUMBER, "")
+            save(ProjectKeys.KEY_METADATA_EMAIL, "")
+        }
+
+        propertyManager.reload()
+
+        assertThat(propertyManager.getSingularProperty(PropertyManager.PROPMGR_USERNAME), equalTo(""))
+        assertThat(propertyManager.getSingularProperty(PropertyManager.PROPMGR_PHONE_NUMBER), equalTo(""))
+        assertThat(propertyManager.getSingularProperty(PropertyManager.PROPMGR_EMAIL), equalTo(""))
+        assertThat(propertyManager.getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID), equalTo("123"))
+    }
+
+    @Test
     fun `reload should use server username if metadata username is not defined`() {
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_USERNAME, "Mark")
 
