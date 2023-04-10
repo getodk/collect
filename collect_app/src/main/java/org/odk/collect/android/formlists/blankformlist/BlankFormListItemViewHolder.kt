@@ -28,12 +28,15 @@ class BlankFormListItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
             field?.let {
                 binding.formTitle.text = it.formName
 
-                binding.formSubtitle.text =
+                binding.formVersion.text =
                     binding.root.context.getString(R.string.version_number, it.formVersion)
-                binding.formSubtitle.visibility =
+                binding.formVersion.visibility =
                     if (it.formVersion.isNotBlank()) View.VISIBLE else View.GONE
 
-                binding.formSubtitle2.text = try {
+                binding.formId.text =
+                    binding.root.context.getString(R.string.id_number, it.formId)
+
+                binding.formHistory.text = try {
                     if (it.dateOfLastDetectedAttachmentsUpdate != null) {
                         SimpleDateFormat(
                             binding.root.context.getString(R.string.updated_on_date_at_time),

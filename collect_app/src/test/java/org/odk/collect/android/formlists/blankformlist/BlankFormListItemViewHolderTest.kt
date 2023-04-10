@@ -22,32 +22,50 @@ class BlankFormListItemViewHolderTest {
         val parent = FrameLayout(context)
         val viewHolder = BlankFormListItemViewHolder(parent)
 
-        viewHolder.blankFormListItem = blankFormListItem(formVersion = "myVersion")
+        viewHolder.blankFormListItem = blankFormListItem(formId = "myId", formVersion = "myVersion")
 
         val binding = BlankFormListItemBinding.bind(viewHolder.itemView)
         assertThat(
-            binding.formSubtitle.text,
+            binding.formVersion.text,
             equalTo(context.getString(R.string.version_number, "myVersion"))
         )
     }
 
     @Test
-    fun `hides subtitle when form version is blank`() {
+    fun `hides version when form version is blank`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val parent = FrameLayout(context)
         val viewHolder = BlankFormListItemViewHolder(parent)
 
-        viewHolder.blankFormListItem = blankFormListItem(formVersion = "")
+        viewHolder.blankFormListItem = blankFormListItem(formId = "myId", formVersion = "")
 
         val binding = BlankFormListItemBinding.bind(viewHolder.itemView)
-        assertThat(binding.formSubtitle.visibility, equalTo(View.GONE))
+        assertThat(binding.formVersion.visibility, equalTo(View.GONE))
+    }
+
+    @Test
+    fun `displays form id`() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val parent = FrameLayout(context)
+        val viewHolder = BlankFormListItemViewHolder(parent)
+
+        viewHolder.blankFormListItem = blankFormListItem(formId = "myId")
+
+        val binding = BlankFormListItemBinding.bind(viewHolder.itemView)
+        assertThat(
+            binding.formId.text,
+            equalTo(context.getString(R.string.id_number, "myId"))
+        )
     }
 }
 
-private fun blankFormListItem(formVersion: String = "formVersion"): BlankFormListItem {
+private fun blankFormListItem(
+    formId: String = "formId",
+    formVersion: String = "formVersion"
+): BlankFormListItem {
     return BlankFormListItem(
         databaseId = 0,
-        formId = "formId",
+        formId = formId,
         formName = "formName",
         formVersion = formVersion,
         geometryPath = "",

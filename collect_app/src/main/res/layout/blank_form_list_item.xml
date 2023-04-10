@@ -28,7 +28,7 @@
         tools:text="All widgets" />
 
     <TextView
-        android:id="@+id/form_subtitle"
+        android:id="@+id/form_version"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_extra_small"
@@ -39,7 +39,17 @@
         tools:text="Version: 2019051301" />
 
     <TextView
-        android:id="@+id/form_subtitle2"
+        android:id="@+id/form_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Collect.Body2.MediumEmphasis"
+        app:layout_constraintEnd_toEndOf="@+id/form_title"
+        app:layout_constraintStart_toStartOf="@+id/form_title"
+        app:layout_constraintTop_toBottomOf="@+id/form_version"
+        tools:text="ID: form-id" />
+
+    <TextView
+        android:id="@+id/form_history"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_extra_small"
@@ -48,7 +58,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/form_title"
         app:layout_constraintStart_toStartOf="@+id/form_title"
-        app:layout_constraintTop_toBottomOf="@+id/form_subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/form_id"
         tools:text="Added on Thu, Jul 11, 2019 at 15:35" />
 
     <FrameLayout
