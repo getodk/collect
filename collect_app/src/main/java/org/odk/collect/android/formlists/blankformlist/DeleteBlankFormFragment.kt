@@ -52,8 +52,7 @@ class DeleteBlankFormFragment(
                 adapter.formItems = it
 
                 binding.empty.isVisible = it.isEmpty()
-                binding.selectAll.isVisible = it.isNotEmpty()
-                binding.deleteSelected.isVisible = it.isNotEmpty()
+                binding.buttons.isVisible = it.isNotEmpty()
             }
         }
 

@@ -19,6 +19,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isChecked
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
@@ -225,14 +226,10 @@ class DeleteBlankFormFragmentTest {
     @Test
     fun `bottom buttons are hidden when there are no forms`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
-
-        onView(withText(R.string.select_all)).check(matches(not(isDisplayed())))
-        onView(withText(R.string.delete_file)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.buttons)).check(matches(not(isDisplayed())))
 
         formsToDisplay.value = listOf(blankFormListItem(databaseId = 1, formName = "Form 1"))
-
-        onView(withText(R.string.select_all)).check(matches(isDisplayed()))
-        onView(withText(R.string.delete_file)).check(matches(isDisplayed()))
+        onView(withId(R.id.buttons)).check(matches(isDisplayed()))
     }
 
     @Test
