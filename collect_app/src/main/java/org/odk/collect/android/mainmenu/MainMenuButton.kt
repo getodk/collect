@@ -18,7 +18,8 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.MainMenuButton,
-            0, 0
+            0,
+            0
         ).apply {
             try {
                 val buttonIcon = this.getResourceId(R.styleable.MainMenuButton_icon, 0)
