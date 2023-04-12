@@ -138,6 +138,24 @@ class DeleteBlankFormFragmentTest {
     }
 
     @Test
+    fun `can click select all after selecting some forms`() {
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 1, formName = "Form 1"),
+            blankFormListItem(databaseId = 2, formName = "Form 2")
+        )
+
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+
+        multiSelectViewModel.select(1)
+        onView(withText(R.string.select_all)).perform(click())
+
+        multiSelectViewModel.unselect(1)
+        onView(withText(R.string.select_all)).perform(click())
+
+        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 2)))
+    }
+
+    @Test
     fun `clicking clear all selects no forms`() {
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 1, formName = "Form 1"),

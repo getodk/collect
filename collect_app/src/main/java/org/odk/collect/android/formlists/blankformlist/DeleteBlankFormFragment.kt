@@ -23,6 +23,7 @@ class DeleteBlankFormFragment(
 
     private lateinit var blankFormListViewModel: BlankFormListViewModel
     private lateinit var multiSelectViewModel: MultiSelectViewModel
+    private var allSelected = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -57,24 +58,25 @@ class DeleteBlankFormFragment(
         }
 
         multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                binding.deleteSelected.isEnabled = false
-                binding.selectAll.setText(R.string.select_all)
-            } else {
-                binding.deleteSelected.isEnabled = true
+            allSelected = it.size == adapter.itemCount
+
+            if (allSelected) {
                 binding.selectAll.setText(R.string.clear_all)
+            } else {
+                binding.selectAll.setText(R.string.select_all)
             }
 
+            binding.deleteSelected.isEnabled = it.isNotEmpty()
             adapter.selected = it
         }
 
         binding.selectAll.setOnClickListener {
-            if (adapter.selected.isEmpty()) {
+            if (allSelected) {
+                multiSelectViewModel.unselectAll()
+            } else {
                 adapter.formItems.forEach {
                     multiSelectViewModel.select(it.databaseId)
                 }
-            } else {
-                multiSelectViewModel.unselectAll()
             }
         }
 
