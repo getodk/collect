@@ -78,6 +78,7 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `selected forms are checked`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 1, formName = "Form 1"),
             blankFormListItem(databaseId = 2, formName = "Form 2")
@@ -85,20 +86,18 @@ class DeleteBlankFormFragmentTest {
 
         multiSelectViewModel.select(2)
 
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
         onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
     }
 
     @Test
     fun `clicking forms selects them`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 1, formName = "Form 1"),
             blankFormListItem(databaseId = 2, formName = "Form 2"),
             blankFormListItem(databaseId = 3, formName = "Form 3")
         )
-
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         onView(withText("Form 1")).perform(click())
         onView(withText("Form 3")).perform(click())
@@ -108,12 +107,11 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `clicking selected forms unselects them`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 1, formName = "Form 1"),
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
-
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         onView(withText("Form 1")).perform(click())
         onView(withText("Form 2")).perform(click())
@@ -125,12 +123,11 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `clicking select all selects all forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 1, formName = "Form 1"),
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
-
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         onView(withText(R.string.select_all)).perform(click())
 
@@ -139,12 +136,11 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `can click select all after selecting some forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 1, formName = "Form 1"),
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
-
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         multiSelectViewModel.select(1)
         onView(withText(R.string.select_all)).perform(click())
@@ -157,12 +153,11 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `clicking clear all selects no forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 1, formName = "Form 1"),
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
-
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         onView(withText(R.string.clear_all)).check(doesNotExist())
         onView(withText(R.string.select_all)).perform(click())
@@ -178,12 +173,11 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `clicking delete selected deletes selected forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 11, formName = "Form 1"),
             blankFormListItem(databaseId = 12, formName = "Form 2")
         )
-
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         multiSelectViewModel.select(11)
         multiSelectViewModel.select(12)
@@ -199,12 +193,11 @@ class DeleteBlankFormFragmentTest {
 
     @Test
     fun `clicking delete selected unselects forms`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 11, formName = "Form 1"),
             blankFormListItem(databaseId = 12, formName = "Form 2")
         )
-
-        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         multiSelectViewModel.select(11)
 
