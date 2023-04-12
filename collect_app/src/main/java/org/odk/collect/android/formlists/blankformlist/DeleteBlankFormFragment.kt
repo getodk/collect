@@ -23,6 +23,7 @@ class DeleteBlankFormFragment(
 
     private lateinit var blankFormListViewModel: BlankFormListViewModel
     private lateinit var multiSelectViewModel: MultiSelectViewModel
+
     private var allSelected = false
 
     override fun onAttach(context: Context) {
@@ -55,19 +56,15 @@ class DeleteBlankFormFragment(
                 binding.empty.isVisible = it.isEmpty()
                 binding.buttons.isVisible = it.isNotEmpty()
             }
+
+            updateAllSelected(binding, adapter)
         }
 
         multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
-            allSelected = it.size == adapter.itemCount
-
-            if (allSelected) {
-                binding.selectAll.setText(R.string.clear_all)
-            } else {
-                binding.selectAll.setText(R.string.select_all)
-            }
-
             binding.deleteSelected.isEnabled = it.isNotEmpty()
             adapter.selected = it
+
+            updateAllSelected(binding, adapter)
         }
 
         binding.selectAll.setOnClickListener {
@@ -97,5 +94,15 @@ class DeleteBlankFormFragment(
         val blankFormListMenuProvider =
             BlankFormListMenuProvider(requireActivity(), blankFormListViewModel)
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
+    }
+
+    fun updateAllSelected(binding: DeleteBlankFormLayoutBinding, adapter: SelectableBlankFormListAdapter) {
+        allSelected = adapter.formItems.isNotEmpty() && adapter.selected.size == adapter.formItems.size
+
+        if (allSelected) {
+            binding.selectAll.setText(R.string.clear_all)
+        } else {
+            binding.selectAll.setText(R.string.select_all)
+        }
     }
 }
