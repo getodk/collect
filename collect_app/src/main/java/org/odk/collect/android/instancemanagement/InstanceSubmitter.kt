@@ -6,7 +6,6 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.gdrive.InstanceGoogleSheetsUploader
-import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.upload.InstanceServerUploader
 import org.odk.collect.android.upload.InstanceUploader
@@ -17,6 +16,8 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.WebCredentialsUtils
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.metadata.PropertyManager
+import org.odk.collect.metadata.PropertyManager.Companion.PROPMGR_DEVICE_ID
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
@@ -27,7 +28,8 @@ class InstanceSubmitter(
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,
     private val permissionsProvider: PermissionsProvider,
-    private val generalSettings: Settings
+    private val generalSettings: Settings,
+    private val propertyManager: PropertyManager
 ) {
 
     @Throws(SubmitException::class)
@@ -36,7 +38,7 @@ class InstanceSubmitter(
             throw SubmitException(SubmitException.Type.NOTHING_TO_SUBMIT)
         }
         val result = mutableMapOf<Instance, FormUploadException?>()
-        val deviceId = PropertyManager().getSingularProperty(PropertyManager.PROPMGR_DEVICE_ID)
+        val deviceId = propertyManager.getSingularProperty(PROPMGR_DEVICE_ID)
 
         val uploader: InstanceUploader = if (isGoogleSheetsProtocol()) {
             setUpGoogleSheetsUploader()

@@ -28,6 +28,7 @@ import org.odk.collect.android.utilities.ChangeLockProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.network.NetworkStateProvider
+import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -53,7 +54,8 @@ class AutoSendTaskSpecTest {
                 googleAccountsManager: GoogleAccountsManager?,
                 googleApiProvider: GoogleApiProvider?,
                 permissionsProvider: PermissionsProvider?,
-                instancesAppState: InstancesAppState?
+                instancesAppState: InstancesAppState?,
+                propertyManager: PropertyManager
             ): InstanceAutoSender {
                 return instanceAutoSender
             }

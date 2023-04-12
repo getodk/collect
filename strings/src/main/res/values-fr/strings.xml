@@ -71,8 +71,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder au microphone. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
   <string name="get_accounts_runtime_permission_denied_title">Obtenir la permission des comptes</string>
   <string name="get_accounts_runtime_permission_denied_desc">Sans cette autorisation, Collect ne peut pas accéder aux comptes. Veuillez réessayer lorsque vous êtes prêt à l’accorder.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Lire la permission de l\'état du téléphone</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ne passe pas d\'appels, mais il doit accéder à certaines propriétés de votre périphérique, telles que le numéro de téléphone et l\'ID de périphérique.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

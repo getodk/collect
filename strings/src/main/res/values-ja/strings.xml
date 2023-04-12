@@ -67,8 +67,6 @@
   <string name="record_audio_runtime_permission_denied_desc">このアクセス許可がないと、Collect はマイクにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="get_accounts_runtime_permission_denied_title">アカウントのアクセス許可を取得</string>
   <string name="get_accounts_runtime_permission_denied_desc">このアクセス許可がないと、Collect はアカウントにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
-  <string name="read_phone_state_runtime_permission_denied_title">電話の状態読み取りアクセス許可</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect は電話はかけませんが、電話番号やデバイス ID など、デバイスに関する特定のプロパティにアクセスする必要があります。</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

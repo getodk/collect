@@ -6,7 +6,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
-import org.odk.collect.android.logic.PropertyManager
+import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.keys.ProjectKeys
 
 class CollectSettingsChangeHandlerTest {

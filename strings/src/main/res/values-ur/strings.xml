@@ -65,8 +65,6 @@
   <string name="record_audio_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو مائیکروفون تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
   <string name="get_accounts_runtime_permission_denied_title">گیٹ اکاؤنٹس پرمیشن</string>
   <string name="get_accounts_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو اکاؤنٹس تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
-  <string name="read_phone_state_runtime_permission_denied_title">ریڈ فون اسٹیٹ پرمیشن</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">او ڈی کے کولیکٹ  کالز نہیں کرتا، لیکن یہ آپ کےڈیوائس  کے بارے میں مخصوص خصوصیات جیسے فون نمبر اور ڈیوائس آئی ڈٰی تک رسائی حاصل کرنے کی ضرورت ہے.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

@@ -67,8 +67,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Udafite uburenganzira Collect ntishobora kwemera konte. Mwakongera igihe mwaba mubonye ubwo burenganzira. </string>
   <string name="get_accounts_runtime_permission_denied_title">Kubona uburenganzira kuri konte </string>
   <string name="get_accounts_runtime_permission_denied_desc">Udafite uburenganzira Collect ntishobora kwemera konte. Wongere igihe uzaba wahawe ubwo burenganzira </string>
-  <string name="read_phone_state_runtime_permission_denied_title">Reba niba telefone ikwemerera uburenganzira </string>
-  <string name="read_phone_state_runtime_permission_denied_desc">ODK Collect ntabwo ihamagara ariko icyenera kugira uburenganzira kuri bimwe ku gikoresho nka nimero ya telefone, n\'ibiranga icyo gikoresho </string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->

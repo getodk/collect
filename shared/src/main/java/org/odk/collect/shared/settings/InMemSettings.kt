@@ -61,10 +61,8 @@ class InMemSettings : Settings {
     }
 
     override fun registerOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
-        TODO("Not yet implemented")
     }
 
     override fun unregisterOnSettingChangeListener(listener: Settings.OnSettingChangeListener) {
-        TODO("Not yet implemented")
     }
 }

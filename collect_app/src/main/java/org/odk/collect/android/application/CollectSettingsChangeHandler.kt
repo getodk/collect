@@ -3,7 +3,7 @@ package org.odk.collect.android.application
 import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
-import org.odk.collect.android.logic.PropertyManager
+import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.settings.importing.SettingsChangeHandler
 import org.odk.collect.settings.keys.ProjectKeys
 

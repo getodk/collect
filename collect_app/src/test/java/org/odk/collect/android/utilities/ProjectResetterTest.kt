@@ -16,14 +16,14 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.logic.PropertyManager
 import org.odk.collect.android.preferences.Defaults
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.metadata.InstallIDProvider
+import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -47,8 +47,7 @@ class ProjectResetterTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesPropertyManager(
-                permissionsProvider: PermissionsProvider?,
-                deviceDetailsProvider: DeviceDetailsProvider?,
+                installIDProvider: InstallIDProvider,
                 settingsProvider: SettingsProvider?
             ): PropertyManager {
                 return propertyManager

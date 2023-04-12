@@ -71,8 +71,6 @@
   <string name="record_audio_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder al micrófono. Intente de nuevo cuando esté el permiso.</string>
   <string name="get_accounts_runtime_permission_denied_title">Obtener permiso de la cuenta</string>
   <string name="get_accounts_runtime_permission_denied_desc">Sin los permisos no se puede acceder las cuentas. Intente de nuevo cuando haya otorgado los permisos.</string>
-  <string name="read_phone_state_runtime_permission_denied_title">Lea el permiso del estado del teléfono</string>
-  <string name="read_phone_state_runtime_permission_denied_desc">La aplicación  no hace llamadas pero necesita acceso a ciertas propiedades del teléfono como el número telefónico y el IMEI.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
