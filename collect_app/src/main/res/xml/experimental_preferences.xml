@@ -3,7 +3,7 @@
     android:title="@string/experimental">
 
     <SwitchPreferenceCompat
-        android:title="Predicate caching"
+        android:title="@string/predicate_caching"
         android:key="predicate_caching" />
 
     <Preference
