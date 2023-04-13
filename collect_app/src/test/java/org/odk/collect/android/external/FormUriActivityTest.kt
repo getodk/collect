@@ -22,6 +22,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.Gson
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -53,6 +54,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.UUIDGenerator
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class FormUriActivityTest {
@@ -65,21 +67,31 @@ class FormUriActivityTest {
     private val incompleteForm = Instance.Builder()
         .formId("1")
         .formVersion("1")
+        .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
         .status(Instance.STATUS_INCOMPLETE)
         .build()
     private val completeForm = Instance.Builder()
         .formId("2")
         .formVersion("1")
+        .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
         .status(Instance.STATUS_COMPLETE)
         .build()
     private val submittedForm = Instance.Builder()
         .formId("3")
         .formVersion("1")
+        .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
         .status(Instance.STATUS_SUBMITTED)
         .build()
     private val submissionFailedForm = Instance.Builder()
         .formId("4")
         .formVersion("1")
+        .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+        .status(Instance.STATUS_SUBMISSION_FAILED)
+        .build()
+    private val savedFormWithNonExistingInstanceFile = Instance.Builder()
+        .formId("5")
+        .formVersion("1")
+        .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
         .status(Instance.STATUS_SUBMISSION_FAILED)
         .build()
     private val formsRepository = InMemFormsRepository().apply {
@@ -90,6 +102,7 @@ class FormUriActivityTest {
         save(completeForm)
         save(submittedForm)
         save(submissionFailedForm)
+        save(savedFormWithNonExistingInstanceFile)
     }
     private val formsRepositoryProvider = mock<FormsRepositoryProvider>().apply {
         whenever(get()).thenReturn(formsRepository)
@@ -212,6 +225,17 @@ class FormUriActivityTest {
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, 100))
 
         assertErrorDialog(scenario, R.string.bad_uri)
+    }
+
+    @Test
+    fun `When attempting to edit a form with non existing instance file then display alert dialog and remove the instance from the database`() {
+        saveTestProjects()
+
+        File(savedFormWithNonExistingInstanceFile.instanceFilePath).delete()
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, 5))
+
+        assertThat(instancesRepository.get(5), equalTo(null))
+        assertErrorDialog(scenario, R.string.instance_deleted_message)
     }
 
     @Test

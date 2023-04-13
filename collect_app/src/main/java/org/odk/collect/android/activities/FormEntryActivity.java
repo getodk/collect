@@ -134,7 +134,6 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
-import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -661,12 +660,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             instancePath = instance.getInstanceFilePath();
-            if (!new File(instancePath).exists()) {
-                Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE);
-                new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), formsRepository).delete(instance.getDbId());
-                createErrorDialog(getString(R.string.instance_deleted_message), true);
-                return;
-            }
 
             List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 

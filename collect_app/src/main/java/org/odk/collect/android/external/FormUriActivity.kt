@@ -5,9 +5,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormEntryActivity
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -17,6 +20,7 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
+import java.io.File
 import javax.inject.Inject
 
 /**
@@ -111,7 +115,15 @@ class FormUriActivity : ComponentActivity() {
         val doesFormExist = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
             formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri)) != null
         } else {
-            instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri)) != null
+            instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
+                if (!File(it.instanceFilePath).exists()) {
+                    Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE)
+                    InstanceDeleter(instanceRepositoryProvider.get(), formsRepositoryProvider.get()).delete(it.dbId)
+                    displayErrorDialog(R.string.instance_deleted_message)
+                    return false
+                }
+                return true
+            } ?: false
         }
 
         return if (!doesFormExist) {
