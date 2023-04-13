@@ -195,6 +195,20 @@ class FormUriActivityTest {
     }
 
     @Test
+    fun `When uri represents a blank with non existing form file then display alert dialog`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
+
+        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+
+        File(form.formFilePath).delete()
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+
+        assertErrorDialog(scenario, context.getString(R.string.bad_uri))
+    }
+
+    @Test
     fun `When uri represents a saved form that does not exist then display alert dialog`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)

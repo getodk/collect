@@ -114,7 +114,9 @@ class FormUriActivity : ComponentActivity() {
         val uriMimeType = contentResolver.getType(uri)
 
         val doesFormExist = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-            formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri)) != null
+            formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
+                File(it.formFilePath).exists()
+            } ?: false
         } else {
             instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
                 if (!File(it.instanceFilePath).exists()) {
@@ -140,7 +142,7 @@ class FormUriActivity : ComponentActivity() {
                     return false
                 }
 
-                return true
+                true
             } ?: false
         }
 
