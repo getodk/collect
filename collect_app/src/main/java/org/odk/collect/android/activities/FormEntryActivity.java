@@ -660,11 +660,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         if (uriMimeType != null && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
-            if (instance == null) {
-                createErrorDialog(getString(R.string.bad_uri, uri), true);
-                return;
-            }
-
             instancePath = instance.getInstanceFilePath();
             if (!new File(instancePath).exists()) {
                 Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE);
