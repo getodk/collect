@@ -707,10 +707,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                  */
                 instancePath = loadSavePoint();
             }
-        } else {
-            Timber.i("Unrecognized URI: %s", uri);
-            createErrorDialog(getString(R.string.unrecognized_uri, uri), true);
-            return;
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null, formEntryControllerFactory);
