@@ -663,19 +663,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
             List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
-            if (candidateForms.isEmpty()) {
-                createErrorDialog(getString(
-                        R.string.parent_form_not_present,
-                        instance.getFormId())
-                                + ((instance.getFormVersion() == null) ? ""
-                                : "\n" + getString(R.string.version) + " " + instance.getFormVersion()),
-                        true);
-                return;
-            } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {
-                createErrorDialog(getString(R.string.survey_multiple_forms_error), true);
-                return;
-            }
-
             formPath = candidateForms.get(0).getFormFilePath();
         } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
             Form form = formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri));

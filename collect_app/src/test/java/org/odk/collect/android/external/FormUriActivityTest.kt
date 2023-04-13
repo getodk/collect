@@ -160,7 +160,7 @@ class FormUriActivityTest {
     fun `When there are no projects then display alert dialog`() {
         val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
 
-        assertErrorDialog(scenario, R.string.app_not_configured)
+        assertErrorDialog(scenario, context.getString(R.string.app_not_configured))
     }
 
     @Test
@@ -169,7 +169,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(secondProject.uuid))
 
-        assertErrorDialog(scenario, R.string.wrong_project_selected_for_form)
+        assertErrorDialog(scenario, context.getString(R.string.wrong_project_selected_for_form))
     }
 
     @Test
@@ -180,7 +180,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent())
 
-        assertErrorDialog(scenario, R.string.wrong_project_selected_for_form)
+        assertErrorDialog(scenario, context.getString(R.string.wrong_project_selected_for_form))
     }
 
     @Test
@@ -193,7 +193,7 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(scenario, R.string.unrecognized_uri)
+        assertErrorDialog(scenario, context.getString(R.string.unrecognized_uri))
     }
 
     @Test
@@ -206,7 +206,7 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(scenario, R.string.unrecognized_uri)
+        assertErrorDialog(scenario, context.getString(R.string.unrecognized_uri))
     }
 
     @Test
@@ -215,7 +215,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(currentProject.uuid, 100))
 
-        assertErrorDialog(scenario, R.string.bad_uri)
+        assertErrorDialog(scenario, context.getString(R.string.bad_uri))
     }
 
     @Test
@@ -224,7 +224,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, 100))
 
-        assertErrorDialog(scenario, R.string.bad_uri)
+        assertErrorDialog(scenario, context.getString(R.string.bad_uri))
     }
 
     @Test
@@ -235,7 +235,67 @@ class FormUriActivityTest {
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, 5))
 
         assertThat(instancesRepository.get(5), equalTo(null))
-        assertErrorDialog(scenario, R.string.instance_deleted_message)
+        assertErrorDialog(scenario, context.getString(R.string.instance_deleted_message))
+    }
+
+    @Test
+    fun `When attempting to edit a form with zero form definitions then display alert dialog with formId if version does not exist`() {
+        saveTestProjects()
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("20")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, instance.dbId))
+
+        val expectedMessage = context.getString(R.string.parent_form_not_present, instance.formId)
+
+        assertErrorDialog(scenario, expectedMessage)
+    }
+
+    @Test
+    fun `When attempting to edit a form with zero form definitions then display alert dialog with formId and version if both exist`() {
+        saveTestProjects()
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("20")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, instance.dbId))
+
+        val expectedMessage = context.getString(R.string.parent_form_not_present, "${instance.formId}\n${context.getString(R.string.version)} ${instance.formVersion}")
+
+        assertErrorDialog(scenario, expectedMessage)
+    }
+
+    @Test
+    fun `When attempting to edit a form with multiple non-deleted form definitions then display alert dialog`() {
+        saveTestProjects()
+
+        formsRepository.save(FormUtils.buildForm("20", "1", TempFiles.createTempDir().absolutePath, FormUtils.createXFormBody("20", "1", "Form 1")).build())
+        formsRepository.save(FormUtils.buildForm("20", "1", TempFiles.createTempDir().absolutePath, FormUtils.createXFormBody("20", "1", "Form 2")).build())
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("20")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(currentProject.uuid, instance.dbId))
+
+        assertErrorDialog(scenario, context.getString(R.string.survey_multiple_forms_error))
     }
 
     @Test
@@ -370,7 +430,7 @@ class FormUriActivityTest {
             .build()
     }
 
-    private fun assertErrorDialog(scenario: ActivityScenario<FormUriActivity>, message: Int) {
+    private fun assertErrorDialog(scenario: ActivityScenario<FormUriActivity>, message: String) {
         onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 

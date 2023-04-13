@@ -16,6 +16,7 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -69,7 +70,7 @@ class FormUriActivity : ComponentActivity() {
     private fun assertProjectListNotEmpty(): Boolean {
         val projects = projectsRepository.getAll()
         return if (projects.isEmpty()) {
-            displayErrorDialog(R.string.app_not_configured)
+            displayErrorDialog(getString(R.string.app_not_configured))
             false
         } else {
             true
@@ -83,7 +84,7 @@ class FormUriActivity : ComponentActivity() {
         val projectId = uriProjectId ?: firstProject.uuid
 
         return if (projectId != currentProjectProvider.getCurrentProject().uuid) {
-            displayErrorDialog(R.string.wrong_project_selected_for_form)
+            displayErrorDialog(getString(R.string.wrong_project_selected_for_form))
             false
         } else {
             true
@@ -101,7 +102,7 @@ class FormUriActivity : ComponentActivity() {
         } ?: false
 
         return if (!isUriValid) {
-            displayErrorDialog(R.string.unrecognized_uri)
+            displayErrorDialog(getString(R.string.unrecognized_uri))
             false
         } else {
             true
@@ -119,15 +120,32 @@ class FormUriActivity : ComponentActivity() {
                 if (!File(it.instanceFilePath).exists()) {
                     Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE)
                     InstanceDeleter(instanceRepositoryProvider.get(), formsRepositoryProvider.get()).delete(it.dbId)
-                    displayErrorDialog(R.string.instance_deleted_message)
+                    displayErrorDialog(getString(R.string.instance_deleted_message))
                     return false
                 }
+
+                val candidateForms = formsRepositoryProvider.get().getAllByFormIdAndVersion(it.formId, it.formVersion)
+
+                if (candidateForms.isEmpty()) {
+                    val version = if (it.formVersion == null) {
+                        ""
+                    } else {
+                        "\n${getString(R.string.version)} ${it.formVersion}"
+                    }
+
+                    displayErrorDialog(getString(R.string.parent_form_not_present, "${it.formId}$version"))
+                    return false
+                } else if (candidateForms.count { form: Form -> !form.isDeleted } > 1) {
+                    displayErrorDialog(getString(R.string.survey_multiple_forms_error))
+                    return false
+                }
+
                 return true
             } ?: false
         }
 
         return if (!doesFormExist) {
-            displayErrorDialog(R.string.bad_uri)
+            displayErrorDialog(getString(R.string.bad_uri))
             false
         } else {
             true
@@ -155,7 +173,7 @@ class FormUriActivity : ComponentActivity() {
         )
     }
 
-    private fun displayErrorDialog(message: Int) {
+    private fun displayErrorDialog(message: String) {
         MaterialAlertDialogBuilder(this)
             .setMessage(message)
             .setPositiveButton(R.string.ok) { _, _ -> finish() }
