@@ -35,7 +35,7 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:drawableEnd="@drawable/ic_distance_wrapped"
+        android:drawableEnd="@drawable/ic_distance"
         android:padding="15dp"
         android:paddingBottom="20dp"
         android:text="@string/record_geopoint"
