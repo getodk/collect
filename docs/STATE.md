@@ -19,8 +19,8 @@ and update this document as the code evolves.
 * App has mixture of unit tests, ["Local tests" and "Instrumented tests"](https://developer.android.com/training/testing/fundamentals#instrumented-vs-local) but coverage is far from complete
 * Local tests are a mixture of classic Robolectric and AndroidX Test/Espresso (backed by Robolectric)
 * UI is "iconic" (old) but with a lot of inconsistencies and quirks and is best adapted to small screens (although often used on tablets)
-* A lot of code lives in between one "god" Activity (`FormEntryActivity`) and a process singleton (`FormController`)
-* Core form entry flow uses custom side-to-side swipe view (in `FormEntryActivity` made up of `ODKView`)
+* A lot of code lives in between one "god" Activity (`FormFillingActivity`) and a process singleton (`FormController`)
+* Core form entry flow uses custom side-to-side swipe view (in `FormFillingActivity` made up of `ODKView`)
 * Questions are rendered using a view "framework" of implementations inheriting from `QuestionWidget` (which is documented at in [WIDGETS.MD](WIDGETS.md))
 * Async/reactivity handled with a mixture of callbacks and LiveData
 * App mostly stores data in flat files indexed in SQLite
@@ -38,7 +38,7 @@ and update this document as the code evolves.
 ## Where we're going
 
 * General effort to increase test coverage and quality while working on anything and pushing more for tests in PR review
-* Slowly moving responsibilities out of `FormEntryActivity`
+* Slowly moving responsibilities out of `FormFillingActivity`
 * Writing pretty much all new code in Kotlin
 * Writing new code using a [multi-module approach](CODE-GUIDELINES.md#gradle-sub-modules) (feature modules, mini frameworks etc) and breaking old code out into modules when opportunities come up
 * Trying to remove technical debt flagged with `@Deprecated`

@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import org.jetbrains.annotations.NotNull;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 
@@ -17,7 +17,7 @@ public class MediaLoadingFragment extends Fragment {
     private MediaLoadingTask mediaLoadingTask;
 
     public void beginMediaLoadingTask(Uri uri, FormController formController) {
-        mediaLoadingTask = new MediaLoadingTask((FormEntryActivity) getActivity(), formController.getInstanceFile());
+        mediaLoadingTask = new MediaLoadingTask((FormFillingActivity) getActivity(), formController.getInstanceFile());
         mediaLoadingTask.execute(uri);
     }
 
@@ -31,7 +31,7 @@ public class MediaLoadingFragment extends Fragment {
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (mediaLoadingTask != null) {
-            mediaLoadingTask.onAttach((FormEntryActivity) getActivity());
+            mediaLoadingTask.onAttach((FormFillingActivity) getActivity());
         }
     }
 

@@ -119,7 +119,7 @@ the specific language governing permissions and limitations under the License.
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".activities.FormEntryActivity"
+            android:name=".activities.FormFillingActivity"
             android:theme="@style/Theme.Collect.FormEntry"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -231,7 +231,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.FormEntryActivity"
-            android:targetActivity=".activities.FormEntryActivity"
+            android:targetActivity=".external.FormUriActivity"
             tools:ignore="AppLinkUrlError"
             android:exported="true">
         </activity-alias>

@@ -32,7 +32,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.FormEntryActivity
+import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
@@ -399,7 +399,7 @@ class FormUriActivityTest {
         val scenario = launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         scenario.recreate()
 
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name), Intents.times(1))
+        Intents.intended(hasComponent(FormFillingActivity::class.java.name), Intents.times(1))
     }
 
     @Test
@@ -521,7 +521,7 @@ class FormUriActivityTest {
     }
 
     private fun assertStartBlankFormIntent(projectId: String?, dbId: Long) {
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
+        Intents.intended(hasComponent(FormFillingActivity::class.java.name))
         if (projectId == null) {
             Intents.intended(hasData(getFormsUriInOldFormatWithNoProjectId(dbId)))
         } else {
@@ -531,7 +531,7 @@ class FormUriActivityTest {
     }
 
     private fun assertStartSavedFormIntent(projectId: String?, dbId: Long, canBeEdited: Boolean) {
-        Intents.intended(hasComponent(FormEntryActivity::class.java.name))
+        Intents.intended(hasComponent(FormFillingActivity::class.java.name))
         if (projectId == null) {
             Intents.intended(hasData(getInstancesUriInOldFormatWithNoProjectId(dbId)))
         } else {

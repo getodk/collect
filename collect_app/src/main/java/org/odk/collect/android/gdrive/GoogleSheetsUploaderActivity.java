@@ -36,7 +36,7 @@ import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
@@ -121,7 +121,7 @@ public class GoogleSheetsUploaderActivity extends LocalizedActivity implements I
         long[] selectedInstanceIDs;
 
         Intent intent = getIntent();
-        selectedInstanceIDs = intent.getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+        selectedInstanceIDs = intent.getLongArrayExtra(FormFillingActivity.KEY_INSTANCES);
 
         instancesToSend = ArrayUtils.toObject(selectedInstanceIDs);
 

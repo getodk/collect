@@ -7,7 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.FormEntryActivity
+import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 /**
  * This class serves as a firewall for starting form filling. It should be used to do that
- * rather than [FormEntryActivity] directly as it ensures that the required data is valid.
+ * rather than [FormFillingActivity] directly as it ensures that the required data is valid.
  */
 class FormUriActivity : ComponentActivity() {
 
@@ -164,7 +164,7 @@ class FormUriActivity : ComponentActivity() {
     private fun startForm() {
         formFillingAlreadyStarted = true
         openForm.launch(
-            Intent(this, FormEntryActivity::class.java).apply {
+            Intent(this, FormFillingActivity::class.java).apply {
                 action = intent.action
                 data = intent.data
                 intent.extras?.let { sourceExtras -> putExtras(sourceExtras) }

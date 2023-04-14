@@ -24,7 +24,7 @@ import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
@@ -75,7 +75,7 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
     protected void selectArea(String areaId) {
         super.selectArea(areaId);
 
-        ((FormEntryActivity) getContext()).runOnUiThread(() -> {
+        ((FormFillingActivity) getContext()).runOnUiThread(() -> {
             if (autoAdvance && listener != null) {
                 listener.advance();
             }

@@ -171,7 +171,7 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
                                 DO_NOT_EXIT);
                         return;
                     }
-                    // caller wants to view/edit a form, so launch formentryactivity
+                    // caller wants to view/edit a form, so launch FormFillingActivity
                     Intent parentIntent = this.getIntent();
                     Intent intent = new Intent(this, FormUriActivity.class);
                     intent.setAction(Intent.ACTION_EDIT);

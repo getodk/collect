@@ -9,7 +9,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMultiMinimalDialog;
@@ -51,7 +51,7 @@ public class SelectMultiMinimalWidget extends SelectMinimalWidget {
                 getFormEntryPrompt(), getReferenceManager(),
                 getPlayColor(getFormEntryPrompt(), themeUtils), numColumns, noButtonsMode, mediaUtils);
 
-        DialogFragmentUtils.showIfNotShowing(dialog, SelectMinimalDialog.class, ((FormEntryActivity) getContext()).getSupportFragmentManager());
+        DialogFragmentUtils.showIfNotShowing(dialog, SelectMinimalDialog.class, ((FormFillingActivity) getContext()).getSupportFragmentManager());
     }
 
     @Override

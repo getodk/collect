@@ -5,12 +5,12 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.shared.settings.Settings;
 
 /**
  * Ensures that background location tracking continues throughout the activity lifecycle. Builds
- * location-related dependency, receives activity events from #{@link FormEntryActivity} and
+ * location-related dependency, receives activity events from #{@link FormFillingActivity} and
  * forwards those events to the location manager.
  *
  * The current goal is to keep this component very thin but this may evolve as it is involved in

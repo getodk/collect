@@ -230,7 +230,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             // first make sure we have a google account selected
             if (new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
                 Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-                i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+                i.putExtra(FormFillingActivity.KEY_INSTANCES, instanceIds);
                 startActivityForResult(i, INSTANCE_UPLOADER);
             } else {
                 new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(this);
@@ -238,7 +238,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         } else {
             // otherwise, do the normal aggregate/other thing.
             Intent i = new Intent(this, InstanceUploaderActivity.class);
-            i.putExtra(FormEntryActivity.KEY_INSTANCES, instanceIds);
+            i.putExtra(FormFillingActivity.KEY_INSTANCES, instanceIds);
             startActivityForResult(i, INSTANCE_UPLOADER);
         }
     }
@@ -300,7 +300,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         switch (requestCode) {
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:
-                if (intent.getBooleanExtra(FormEntryActivity.KEY_SUCCESS, false)) {
+                if (intent.getBooleanExtra(FormFillingActivity.KEY_SUCCESS, false)) {
                     listView.clearChoices();
                     if (listAdapter.isEmpty()) {
                         finish();

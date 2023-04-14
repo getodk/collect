@@ -4,6 +4,7 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_BACKGROUND_LOCATION;
 
 import android.location.Location;
 
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formentry.audit.AuditConfig;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -22,7 +23,7 @@ import java.util.function.Supplier;
  * The methods on the {@link FormController} are wrapped here rather
  * than the form controller being passed in when constructing the {@link BackgroundLocationManager}
  * because the form controller isn't set until
- * {@link org.odk.collect.android.activities.FormEntryActivity}'s onCreate.
+ * {@link FormFillingActivity}'s onCreate.
  */
 public class BackgroundLocationHelper {
 

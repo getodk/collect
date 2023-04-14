@@ -126,7 +126,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
             selectedInstanceIDs = savedInstanceState.getLongArray(TO_SEND);
             dataBundle = savedInstanceState;
         } else {
-            selectedInstanceIDs = getIntent().getLongArrayExtra(FormEntryActivity.KEY_INSTANCES);
+            selectedInstanceIDs = getIntent().getLongArrayExtra(FormFillingActivity.KEY_INSTANCES);
             dataBundle = getIntent().getExtras();
 
             boolean missingInstances = stream(selectedInstanceIDs).anyMatch(id -> instancesRepository.get(id) == null);

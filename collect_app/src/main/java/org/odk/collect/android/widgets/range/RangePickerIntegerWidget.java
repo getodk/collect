@@ -10,7 +10,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.IntegerData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.databinding.RangePickerWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -47,7 +47,7 @@ public class RangePickerIntegerWidget extends QuestionWidget {
 
         progress = RangePickerWidgetUtils.getProgressFromPrompt(prompt, displayedValuesForNumberPicker);
         binding.widgetButton.setOnClickListener(v -> RangeWidgetUtils.showNumberPickerDialog(
-                (FormEntryActivity) getContext(), displayedValuesForNumberPicker, getId(), progress));
+                (FormFillingActivity) getContext(), displayedValuesForNumberPicker, getId(), progress));
 
         return binding.getRoot();
     }

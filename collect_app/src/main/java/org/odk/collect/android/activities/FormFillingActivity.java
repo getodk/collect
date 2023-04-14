@@ -209,7 +209,7 @@ import javax.inject.Named;
 import timber.log.Timber;
 
 /**
- * FormEntryActivity is responsible for displaying questions, animating
+ * FormFillingActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
  *
  * This class should never be started directly. Instead {@link org.odk.collect.android.external.FormUriActivity}
@@ -220,7 +220,7 @@ import timber.log.Timber;
  * option)
  */
 @SuppressWarnings("PMD.CouplingBetweenObjects")
-public class FormEntryActivity extends LocalizedActivity implements AnimationListener,
+public class FormFillingActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
@@ -254,7 +254,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
-    public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormEntryActivity.class.getName() + MaterialProgressDialogFragment.class.getName() + "mediaLoading";
+    public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormFillingActivity.class.getName() + MaterialProgressDialogFragment.class.getName() + "mediaLoading";
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -1268,7 +1268,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             @Override
             public void onSaveClicked(boolean markAsFinalized) {
                 if (saveName.length() < 1) {
-                    showShortToast(FormEntryActivity.this, R.string.save_as_error);
+                    showShortToast(FormFillingActivity.this, R.string.save_as_error);
                 } else {
                     if (!saveName.equals(formSaveViewModel.getFormName()) && !saveName.equals(formController.getSubmissionMetadata().instanceName)) {
                         Analytics.log(AnalyticsEvents.MANUALLY_SPECIFIED_INSTANCE_NAME, "form");
@@ -1608,7 +1608,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                 new Thread() {
                     @Override
                     public void run() {
-                        FormEntryActivity.this.runOnUiThread(() -> {
+                        FormFillingActivity.this.runOnUiThread(() -> {
                             try {
                                 Thread.sleep(500);
                             } catch (InterruptedException e) {

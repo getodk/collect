@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
@@ -700,8 +700,8 @@ public class FillBlankFormTest {
     }
 
     private String getQuestionText() {
-        FormEntryActivity formEntryActivity = (FormEntryActivity) ActivityHelpers.getActivity();
-        FrameLayout questionContainer = formEntryActivity.findViewById(R.id.text_container);
+        FormFillingActivity formFillingActivity = (FormFillingActivity) ActivityHelpers.getActivity();
+        FrameLayout questionContainer = formFillingActivity.findViewById(R.id.text_container);
         TextView questionView = (TextView) questionContainer.getChildAt(0);
         return questionView.getText().toString();
     }
