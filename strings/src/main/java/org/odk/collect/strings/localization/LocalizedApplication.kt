@@ -3,7 +3,8 @@ package org.odk.collect.strings.localization
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
-import java.util.Locale
+import android.view.View
+import java.util.*
 
 interface LocalizedApplication {
 
@@ -26,4 +27,8 @@ fun Context.getLocalizedString(stringId: Int, vararg formatArgs: Any): String {
     return createConfigurationContext(newConfig)
         .resources
         .getString(stringId, *formatArgs)
+}
+
+fun Context.isLTR(): Boolean {
+    return resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_LTR
 }

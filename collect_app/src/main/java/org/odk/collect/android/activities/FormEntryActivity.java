@@ -99,6 +99,8 @@ import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
+import org.odk.collect.android.formentry.FormAnimation;
+import org.odk.collect.android.formentry.FormAnimationType;
 import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
@@ -295,10 +297,6 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     @Override
     public void allowSwiping(boolean doSwipe) {
         swipeHandler.setAllowSwiping(doSwipe);
-    }
-
-    enum AnimationType {
-        LEFT, RIGHT, FADE
     }
 
     private boolean showNavigationButtons;
@@ -1435,7 +1433,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         int event = getFormController().getEvent();
 
         SwipeHandler.View current = createView(event, false);
-        showView(current, AnimationType.FADE);
+        showView(current, FormAnimationType.FADE);
 
         formIndexAnimationHandler.setLastIndex(getFormController().getFormIndex());
     }
@@ -1446,12 +1444,12 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             case FormEntryController.EVENT_GROUP:
                 // create a savepoint
                 nonblockingCreateSavePointData();
-                showView(createView(event, true), AnimationType.RIGHT);
+                showView(createView(event, true), FormAnimationType.RIGHT);
                 break;
             case FormEntryController.EVENT_END_OF_FORM:
             case FormEntryController.EVENT_REPEAT:
             case EVENT_PROMPT_NEW_REPEAT:
-                showView(createView(event, true), AnimationType.RIGHT);
+                showView(createView(event, true), FormAnimationType.RIGHT);
                 break;
             case FormEntryController.EVENT_REPEAT_JUNCTURE:
                 Timber.i("Repeat juncture: %s", getFormController().getFormIndex().getReference());
@@ -1465,7 +1463,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     private void animateToPreviousView(int event) {
         SwipeHandler.View next = createView(event, false);
-        showView(next, AnimationType.LEFT);
+        showView(next, FormAnimationType.LEFT);
     }
 
     /**
@@ -1473,7 +1471,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
      * current view and next appropriately given the AnimationType. Also updates
      * the progress bar.
      */
-    public void showView(SwipeHandler.View next, AnimationType from) {
+    public void showView(SwipeHandler.View next, FormAnimationType from) {
         invalidateOptionsMenu();
 
         // disable notifications...
@@ -1486,7 +1484,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
         // logging of the view being shown is already done, as this was handled
         // by createView()
-        switch (from) {
+        switch (FormAnimation.getAnimationTypeBasedOnLanguageDirection(this, from)) {
             case RIGHT:
                 inAnimation = loadAnimation(this,
                         R.anim.push_left_in);
