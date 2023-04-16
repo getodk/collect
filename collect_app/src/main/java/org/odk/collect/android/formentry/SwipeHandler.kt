@@ -9,6 +9,7 @@ import org.odk.collect.android.utilities.FlingRegister
 import org.odk.collect.androidshared.utils.ScreenUtils
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.Settings
+import org.odk.collect.strings.localization.isLTR
 import kotlin.math.abs
 import kotlin.math.atan2
 
@@ -90,9 +91,17 @@ class SwipeHandler(context: Context, generalSettings: Settings) {
                 if (diffX > xpixellimit && diffY < ypixellimit || diffX > xpixellimit * 2) {
                     beenSwiped = true
                     if (e1.x > e2.x) {
-                        onSwipe.onSwipeForward()
+                        if (view!!.context.isLTR()) {
+                            onSwipe.onSwipeForward()
+                        } else {
+                            onSwipe.onSwipeBackward()
+                        }
                     } else {
-                        onSwipe.onSwipeBackward()
+                        if (view!!.context.isLTR()) {
+                            onSwipe.onSwipeBackward()
+                        } else {
+                            onSwipe.onSwipeForward()
+                        }
                     }
                     return true
                 }
