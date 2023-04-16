@@ -140,7 +140,7 @@ import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.SavePointListener;
-import org.odk.collect.android.listeners.SwipeHandler;
+import org.odk.collect.android.formentry.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.projects.CurrentProjectProvider;

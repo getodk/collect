@@ -1,4 +1,4 @@
-package org.odk.collect.android.listeners
+package org.odk.collect.android.formentry
 
 import android.content.Context
 import android.view.GestureDetector

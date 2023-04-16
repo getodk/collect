@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.listeners.SwipeHandler;
 import org.odk.collect.android.utilities.FormNameUtils;
 
 public class FormEndView extends SwipeHandler.View {
