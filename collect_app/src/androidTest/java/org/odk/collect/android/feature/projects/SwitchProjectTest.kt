@@ -111,7 +111,7 @@ class SwitchProjectTest {
             .pressBack(MainMenuPage())
 
             // Check instances
-            .clickSendFinalizedForm()
+            .clickSendFinalizedForm(1)
             .assertText("Two Question")
             .pressBack(MainMenuPage())
 

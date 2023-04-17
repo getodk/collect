@@ -26,7 +26,7 @@ public class SaveAsTest {
                 .swipeToEndScreen()
                 .fillInFormName("My Favourite Form")
                 .clickSaveAndExit()
-                .clickSendFinalizedForm()
+                .clickSendFinalizedForm(1)
                 .assertText("My Favourite Form");
     }
 
@@ -45,7 +45,7 @@ public class SaveAsTest {
                 .assertText("My Favourite Form")
                 .clickSaveAndExit()
 
-                .clickSendFinalizedForm()
+                .clickSendFinalizedForm(1)
                 .assertText("My Favourite Form");
     }
 }

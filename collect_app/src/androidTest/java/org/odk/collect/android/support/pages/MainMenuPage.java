@@ -91,7 +91,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
-    public MainMenuPage assertNumberOfSentForms(int number) {
+    private MainMenuPage assertNumberOfSentForms(int number) {
         if (number == 0) {
             onView(allOf(withId(R.id.number), isDescendantOfA(withId(R.id.view_sent_forms)))).check(matches(withText("")));
         } else {
@@ -106,7 +106,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new GetBlankFormPage().assertOnPage();
     }
 
-    public SendFinalizedFormPage clickSendFinalizedForm() {
+    public SendFinalizedFormPage clickSendFinalizedForm(int number) {
+        assertNumberOfFinalizedForms(number);
         onView(withId(R.id.send_data)).perform(click());
         return new SendFinalizedFormPage();
     }
@@ -191,7 +192,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return new OkDialog().assertOnPage();
     }
 
-    public ViewSentFormPage clickViewSentForm() {
+    public ViewSentFormPage clickViewSentForm(int number) {
+        assertNumberOfSentForms(number);
         onView(withText(getTranslatedString(R.string.view_sent_forms))).perform(click());
         return new ViewSentFormPage().assertOnPage();
     }

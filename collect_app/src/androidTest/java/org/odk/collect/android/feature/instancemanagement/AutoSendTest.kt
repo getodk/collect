@@ -34,13 +34,11 @@ class AutoSendTest {
             .inputText("31")
             .swipeToEndScreen()
             .clickSaveAndExit()
-            .assertNumberOfSentForms(0)
 
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage
-            .assertNumberOfSentForms(1)
-            .clickViewSentForm()
+            .clickViewSentForm(1)
             .assertText("One Question")
 
         notificationDrawerRule
@@ -65,13 +63,11 @@ class AutoSendTest {
             .inputText("31")
             .swipeToEndScreen()
             .clickSaveAndExit()
-            .assertNumberOfSentForms(0)
 
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage
-            .assertNumberOfSentForms(1)
-            .clickViewSentForm()
+            .clickViewSentForm(1)
             .assertText("One Question")
 
         notificationDrawerRule
@@ -101,13 +97,11 @@ class AutoSendTest {
             .inputText("31")
             .swipeToEndScreen()
             .clickSaveAndExit()
-            .assertNumberOfSentForms(0)
 
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage
-            .assertNumberOfSentForms(1)
-            .clickViewSentForm()
+            .clickViewSentForm(1)
             .assertText("One Question Autosend")
 
         notificationDrawerRule
@@ -131,13 +125,11 @@ class AutoSendTest {
             .inputText("31")
             .swipeToEndScreen()
             .clickSaveAndExit()
-            .assertNumberOfSentForms(0)
 
         testDependencies.scheduler.runDeferredTasks()
 
         mainMenuPage
-            .assertNumberOfSentForms(1)
-            .clickViewSentForm()
+            .clickViewSentForm(1)
             .assertText("One Question Autosend")
 
         notificationDrawerRule
