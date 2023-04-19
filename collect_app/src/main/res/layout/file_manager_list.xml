@@ -51,6 +51,7 @@ the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/toggle_button"
+            style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
@@ -62,10 +63,10 @@ the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/delete_button"
+            style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
-
             android:text="@string/delete_file"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/toggle_button"

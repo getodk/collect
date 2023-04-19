@@ -36,6 +36,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/select_all"
+            style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
@@ -47,10 +48,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/delete_selected"
+            style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_standard"
-
             android:text="@string/delete_file"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/select_all"
