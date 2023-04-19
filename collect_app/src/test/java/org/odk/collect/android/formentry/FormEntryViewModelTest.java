@@ -196,7 +196,6 @@ public class FormEntryViewModelTest {
         scheduler.runBackground();
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(answers, false);
-        verifier.verify(auditEventLogger).flush();
         verifier.verify(formController).stepToNextScreenEvent();
         verifier.verify(auditEventLogger).flush();
     }
@@ -236,6 +235,20 @@ public class FormEntryViewModelTest {
         scheduler.runBackground();
 
         assertThat(getOrAwaitValue(viewModel.getFailedConstraint()), equalTo(failedConstraint));
+    }
+
+    /**
+     * We don't want to flush the log before answers are actually committed.
+     */
+    @Test
+    public void moveForward_whenThereIsAFailedConstraint_doesNotFlushAuditLog() throws Exception {
+        FailedConstraint failedConstraint = new FailedConstraint(startingIndex, 0);
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedConstraint);
+
+        viewModel.moveForward(new HashMap<>());
+        scheduler.runBackground();
+
+        verify(auditEventLogger, never()).flush();
     }
 
     @Test
@@ -297,7 +310,6 @@ public class FormEntryViewModelTest {
         scheduler.runBackground();
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(answers, false);
-        verifier.verify(auditEventLogger).flush();
         verifier.verify(formController).stepToPreviousScreenEvent();
         verifier.verify(auditEventLogger).flush();
     }
