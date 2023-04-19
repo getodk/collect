@@ -29,8 +29,10 @@ import org.hamcrest.Matchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
@@ -172,7 +174,7 @@ class DeleteBlankFormFragmentTest {
     }
 
     @Test
-    fun `clicking delete selected deletes selected forms`() {
+    fun `clicking delete selected and then accepting deletes selected forms`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
         formsToDisplay.value = listOf(
             blankFormListItem(databaseId = 11, formName = "Form 1"),
@@ -189,6 +191,26 @@ class DeleteBlankFormFragmentTest {
         onView(withText(R.string.delete_yes)).inRoot(isDialog()).perform(click())
 
         verify(blankFormListViewModel).deleteForms(11, 12)
+    }
+
+    @Test
+    fun `clicking delete selected and then cancelling does nothing`() {
+        fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 11, formName = "Form 1"),
+            blankFormListItem(databaseId = 12, formName = "Form 2")
+        )
+
+        multiSelectViewModel.select(11)
+        multiSelectViewModel.select(12)
+
+        onView(withText(R.string.delete_file)).perform(click())
+        onView(withText(context.getString(R.string.delete_confirm, 2)))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+        onView(withText(R.string.delete_no)).inRoot(isDialog()).perform(click())
+
+        verify(blankFormListViewModel, never()).deleteForms(any())
     }
 
     @Test

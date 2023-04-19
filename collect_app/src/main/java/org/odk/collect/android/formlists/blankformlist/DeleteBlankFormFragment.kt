@@ -78,17 +78,14 @@ class DeleteBlankFormFragment(
         }
 
         binding.deleteSelected.setOnClickListener {
-            val alertDialog = MaterialAlertDialogBuilder(requireContext()).create()
-            alertDialog.setMessage(getString(R.string.delete_confirm, adapter.selected.size.toString()))
-            alertDialog.setButton(
-                DialogInterface.BUTTON_POSITIVE,
-                getString(R.string.delete_yes)
-            ) { _, _ ->
-                blankFormListViewModel.deleteForms(*adapter.selected.toLongArray())
-                multiSelectViewModel.unselectAll()
-            }
-
-            alertDialog.show()
+            MaterialAlertDialogBuilder(requireContext())
+                .setMessage(getString(R.string.delete_confirm, adapter.selected.size.toString()))
+                .setPositiveButton(getString(R.string.delete_yes)) { _, _ ->
+                    blankFormListViewModel.deleteForms(*adapter.selected.toLongArray())
+                    multiSelectViewModel.unselectAll()
+                }
+                .setNegativeButton(getString(R.string.delete_no), null)
+                .show()
         }
 
         val blankFormListMenuProvider =
