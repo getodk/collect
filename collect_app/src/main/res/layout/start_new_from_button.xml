@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginVertical="@dimen/margin_small"
     android:layout_marginHorizontal="@dimen/margin_standard"
-    android:elevation="4dp"
+    android:elevation="1dp"
     android:background="@drawable/start_new_form_button_background">
 
     <ImageView

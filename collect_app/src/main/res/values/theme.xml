@@ -16,6 +16,7 @@
         <item name="colorOnSecondary">?colorOnPrimary</item>
         <item name="colorOnError">@color/colorOnError</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
         </item>
