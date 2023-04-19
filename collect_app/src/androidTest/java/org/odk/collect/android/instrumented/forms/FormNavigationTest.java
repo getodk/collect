@@ -16,11 +16,15 @@
 
 package org.odk.collect.android.instrumented.forms;
 
+import static junit.framework.Assert.assertEquals;
+
 import android.app.Application;
 
 import androidx.test.core.app.ApplicationProvider;
 
 import org.javarosa.core.model.FormDef;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -46,8 +50,6 @@ import java.util.concurrent.ExecutionException;
 
 import timber.log.Timber;
 
-import static junit.framework.Assert.assertEquals;
-
 /**
  * This test has been created in order to check indices while navigating through a form.
  * It's especially important while navigating through a form that contains nested groups and if we
@@ -58,6 +60,13 @@ import static junit.framework.Assert.assertEquals;
  */
 @RunWith(Parameterized.class)
 public class FormNavigationTest {
+
+    private final FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory = new FormLoaderTask.FormEntryControllerFactory() {
+        @Override
+        public FormEntryController create(FormDef formDef) {
+            return new FormEntryController(new FormEntryModel(formDef));
+        }
+    };
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
@@ -120,7 +129,7 @@ public class FormNavigationTest {
             Timber.i(e);
         }
 
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null, formEntryControllerFactory);
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
             public void loadingComplete(FormLoaderTask task, FormDef fd, String warningMsg) {

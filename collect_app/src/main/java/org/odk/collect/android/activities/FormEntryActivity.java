@@ -359,6 +359,9 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     @Inject
     public AudioHelperFactory audioHelperFactory;
 
+    @Inject
+    public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -634,7 +637,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                     formEntryViewModel.refresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath);
+                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
                 }
@@ -713,7 +716,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             return;
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, null, null);
+        formLoaderTask = new FormLoaderTask(instancePath, null, null, formEntryControllerFactory);
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);

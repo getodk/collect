@@ -1196,5 +1196,6 @@
     <string name="crash_app">Crash app</string>
     <!-- An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close -->
     <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
+    <string name="predicate_caching">Predicate caching</string>
 
 </resources>

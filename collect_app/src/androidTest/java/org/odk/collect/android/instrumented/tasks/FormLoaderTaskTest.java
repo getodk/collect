@@ -1,5 +1,15 @@
 package org.odk.collect.android.instrumented.tasks;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.notNullValue;
+
+import android.app.Application;
+
+import androidx.test.core.app.ApplicationProvider;
+
+import org.javarosa.core.model.FormDef;
+import org.javarosa.form.api.FormEntryController;
+import org.javarosa.form.api.FormEntryModel;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,19 +22,13 @@ import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.rules.RunnableRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory;
 import org.odk.collect.projects.Project;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
-
-import android.app.Application;
-
-import androidx.test.core.app.ApplicationProvider;
 
 public class FormLoaderTaskTest {
 
@@ -34,6 +38,13 @@ public class FormLoaderTaskTest {
     private static final String SIMPLE_SEARCH_EXTERNAL_CSV_FORM = "simple-search-external-csv.xml";
     private static final String SIMPLE_SEARCH_EXTERNAL_CSV_FILE = "simple-search-external-csv-fruits.csv";
     private static final String SIMPLE_SEARCH_EXTERNAL_DB_FILE = "simple-search-external-csv-fruits.db";
+
+    private final FormEntryControllerFactory formEntryControllerFactory = new FormEntryControllerFactory() {
+        @Override
+        public FormEntryController create(FormDef formDef) {
+            return new FormEntryController(new FormEntryModel(formDef));
+        }
+    };
 
     @Rule
     public RuleChain copyFormChain = TestRuleChain.chain()
@@ -55,7 +66,7 @@ public class FormLoaderTaskTest {
     @Test
     public void loadFormWithSecondaryCSV() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SECONDARY_INSTANCE_EXTERNAL_CSV_FORM;
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
         Assert.assertNotNull(wrapper);
     }
@@ -64,7 +75,7 @@ public class FormLoaderTaskTest {
     @Test
     public void loadSearchFromExternalCSV() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
         assertThat(wrapper, notNullValue());
     }
@@ -72,7 +83,7 @@ public class FormLoaderTaskTest {
     @Test
     public void loadSearchFromexternalCsvLeavesFileUnchanged() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
@@ -87,7 +98,7 @@ public class FormLoaderTaskTest {
     public void loadSearchFromExternalCSVmultipleTimes() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
         // initial load with side effects
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
         FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
@@ -98,7 +109,7 @@ public class FormLoaderTaskTest {
         long dbLastModified = dbFile.lastModified();
 
         // subsequent load should succeed despite side effects from import
-        formLoaderTask = new FormLoaderTask(formPath, null, null);
+        formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
         wrapper = formLoaderTask.execute(formPath).get();
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
