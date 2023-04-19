@@ -8,7 +8,7 @@ import org.odk.collect.android.external.FormUriActivity
 import org.odk.collect.android.external.InstancesContract
 import kotlin.reflect.KClass
 
-object FormNavigator {
+object FormFillingIntentFactory {
     fun newInstanceIntent(
         context: Context,
         uri: Uri?,

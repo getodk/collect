@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.external.FormsContract
-import org.odk.collect.android.formmanagement.FormNavigator
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.formmanagement.formmap.FormMapViewModel
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
@@ -88,9 +88,9 @@ class FormMapActivity : LocalizedActivity() {
         ) { _: String?, result: Bundle ->
             if (result.containsKey(SelectionMapFragment.RESULT_SELECTED_ITEM)) {
                 val instanceId = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM)
-                startActivity(FormNavigator.editInstanceIntent(this, currentProjectProvider.getCurrentProject().uuid, instanceId))
+                startActivity(FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().uuid, instanceId))
             } else if (result.containsKey(SelectionMapFragment.RESULT_CREATE_NEW_ITEM)) {
-                startActivity(FormNavigator.newInstanceIntent(this, FormsContract.getUri(currentProjectProvider.getCurrentProject().uuid, formId)))
+                startActivity(FormFillingIntentFactory.newInstanceIntent(this, FormsContract.getUri(currentProjectProvider.getCurrentProject().uuid, formId)))
             }
         }
     }

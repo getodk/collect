@@ -10,7 +10,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormMapActivity
-import org.odk.collect.android.formmanagement.FormNavigator
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.preferences.dialogs.ServerAuthDialogFragment
 import org.odk.collect.androidshared.network.NetworkStateProvider
@@ -57,7 +57,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
             setResult(RESULT_OK, Intent().setData(formUri))
         } else {
             // caller wants to view/edit a form, so launch FormFillingActivity
-            startActivity(FormNavigator.newInstanceIntent(this, formUri))
+            startActivity(FormFillingIntentFactory.newInstanceIntent(this, formUri))
         }
         finish()
     }

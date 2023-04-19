@@ -20,7 +20,7 @@ import org.odk.collect.androidtest.RecordedIntentsRule
 import org.robolectric.Robolectric
 
 @RunWith(AndroidJUnit4::class)
-class FormNavigatorTest {
+class FormFillingIntentFactoryTest {
 
     @get:Rule
     val recordedIntentsRule = RecordedIntentsRule()
@@ -29,7 +29,7 @@ class FormNavigatorTest {
 
     @Test
     fun `newInstance starts FormUriActivity with instance URI`() {
-        activity.startActivity(FormNavigator.newInstanceIntent(activity, InstancesContract.getUri("projectId", 101)))
+        activity.startActivity(FormFillingIntentFactory.newInstanceIntent(activity, InstancesContract.getUri("projectId", 101)))
 
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))
@@ -39,7 +39,7 @@ class FormNavigatorTest {
 
     @Test
     fun `editInstance starts FormUriActivity with instance URI`() {
-        activity.startActivity(FormNavigator.editInstanceIntent(activity, "projectId", 101))
+        activity.startActivity(FormFillingIntentFactory.editInstanceIntent(activity, "projectId", 101))
 
         intended(hasAction(ACTION_EDIT))
         intended(hasComponent(FormUriActivity::class.java.name))
