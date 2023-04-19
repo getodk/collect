@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
         android:ellipsize="end"
-        android:textAppearance="?textAppearanceLabelLarge"
+        android:textAppearance="?textAppearanceTitleLarge"
         android:maxLines="1"
         android:textColor="?colorOnPrimary"
         android:text="@string/enter_data_button"

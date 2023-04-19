@@ -58,6 +58,7 @@
 
         <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>
         <item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
 
         <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.Medium</item>
         <!--/Material3 attributes-->
