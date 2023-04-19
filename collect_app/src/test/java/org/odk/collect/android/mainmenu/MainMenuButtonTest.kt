@@ -6,7 +6,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
@@ -18,12 +17,7 @@ class MainMenuButtonTest {
             it.setTheme(R.style.Theme_Material3_Light)
         }
 
-    private lateinit var mainMenuButton: MainMenuButton
-
-    @Before
-    fun setUp() {
-        mainMenuButton = MainMenuButton(context)
-    }
+    private val mainMenuButton = MainMenuButton(context)
 
     @Test
     fun `setNumberOfForms sets the number correctly`() {
