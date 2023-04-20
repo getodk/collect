@@ -117,7 +117,6 @@
   <string name="too_complex_form">Este formulário é complexo demais para este dispositivo. Tente simplificar expressões ou peça ajuda no fórum.</string>
   <string name="survey_internal_error">Erro interno: falha ao abrir a questão.</string>
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
-  <string name="save_as_error">Nome a salvar não pode estar vazio!</string>
   <string name="data_saved_error">Desculpe, falha ao salvar formulário!</string>
   <string name="data_saved_ok">Formulário salvo com sucesso!</string>
   <string name="save_point_error">Erro ao salvar ponto de recuperação: %s</string>

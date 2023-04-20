@@ -77,7 +77,6 @@
   <string name="required_answer_error">Jammer, hierdie antwoord word benodig!</string>
   <string name="survey_internal_error">Interne fout: aanstap na die vraag het misluk</string>
   <string name="save_enter_data_description">U is aan die einde van %s.</string>
-  <string name="save_as_error">Gestoorde naam mag nie leeg wees nie!</string>
   <string name="data_saved_error">Jammer, stoor van vorm het misluk!</string>
   <string name="data_saved_ok">Vorm suksesvol gestoor!</string>
   <string name="save_point_error">Fout tydens stoor van herstel-punt: %s</string>

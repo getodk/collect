@@ -117,7 +117,6 @@
   <string name="too_complex_form">Formulir ini terlalu rumit untuk perangkat ini. Coba sederhanakan ekspresi atau minta bantuan di forum.</string>
   <string name="survey_internal_error">Kesalahan internal: langkah menuju risalah tidak berhasil.</string>
   <string name="save_enter_data_description">Anda berada di akhir dari formulir\n\"%s\".</string>
-  <string name="save_as_error">Nama tidak boleh kosong.</string>
   <string name="data_saved_error">Maaf, tidak berhasil menyimpan formulir.</string>
   <string name="data_saved_ok">Formulir berhasil disimpan.</string>
   <string name="save_point_error">Terjadi kesalahan saat menyimpan titik pemulihan: %s</string>

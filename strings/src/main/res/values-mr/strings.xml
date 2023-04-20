@@ -87,7 +87,6 @@
   <string name="required_answer_error">क्षमस्व, हे प्रतिसाद आवश्यक आहे!</string>
   <string name="survey_internal_error">अंतर्गत त्रुटी: प्रॉम्प्टसाठी चरण अयशस्वी.</string>
   <string name="save_enter_data_description">आपण 1%s च्या समाप्तीस आहात</string>
-  <string name="save_as_error">जतन केलेले नाव रिक्त असू शकत नाही!</string>
   <string name="data_saved_error">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
   <string name="data_saved_ok">फॉर्म यशस्वीरित्या जतन केला!</string>
   <string name="save_point_error">पुनर्प्राप्ती बिंदू जतन करताना त्रुटी: %s</string>

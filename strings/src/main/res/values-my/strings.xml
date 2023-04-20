@@ -70,7 +70,6 @@
   <string name="invalid_answer_error">ဖမ္းယူမွု မေကာင္းပါ</string>
   <string name="required_answer_error">အေျဖမ်ား မျပည့္စံုေသးပါ</string>
   <string name="save_enter_data_description">သင္သည္ \"%s\"၏ ေနာက္ဆံုးအပိုင္းသို႔ ေရာက္ရိွေနပါသည္။</string>
-  <string name="save_as_error">အမည္ေနရာတြင္ ကြပ္လပ္ထား၍ မရပါ</string>
   <string name="data_saved_error">ပုံစံအား မသိမ်းဆည်းနိုင်ပါ</string>
   <string name="data_saved_ok">ပုံစံအားအောင်မြင်စွာ သိမ်းဆည်းနိုင်ပါသည်</string>
   <string name="save_point_error">ပြန်လည်ရယူသည့် နေရာ အမှားဖြစ်ပေါ်%s</string>

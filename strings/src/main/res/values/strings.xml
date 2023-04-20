@@ -152,7 +152,6 @@
     <string name="survey_internal_error">Internal error: step to prompt failed.</string>
 
     <string name="save_enter_data_description">You are at the end of %s.</string>
-    <string name="save_as_error">Saved name must not be blank!</string>
     <string name="save_as_draft">Save as draft</string>
     <string name="finalize">Finalize</string>
 

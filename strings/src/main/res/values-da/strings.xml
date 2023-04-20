@@ -95,7 +95,6 @@
   <string name="invalid_space_in_answer_singular">OBS! Indtastede værdi 1%s har mellemrum</string>
   <string name="invalid_space_in_answer_plural">OBS! Indtastede værdier 1 %s har mellemrum</string>
   <string name="save_enter_data_description">Du er ved slutningen af %s.</string>
-  <string name="save_as_error">Den gemte titel må ikke være tom - skal hedde noget.</string>
   <string name="data_saved_error">Formularen kunne ikke gemmes</string>
   <string name="data_saved_ok">Formular gemt </string>
   <string name="save_point_error">Kunne ikke gemme gendannelsespunkt: %s</string>

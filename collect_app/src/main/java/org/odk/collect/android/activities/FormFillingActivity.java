@@ -231,7 +231,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
-    private static final String KEY_SAVE_NAME = "saveName";
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
@@ -597,7 +596,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (savedInstanceState.containsKey(KEY_ERROR)) {
                 errorMessage = savedInstanceState.getString(KEY_ERROR);
             }
-            saveName = savedInstanceState.getString(KEY_SAVE_NAME);
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
@@ -799,7 +797,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
-        outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
     }
@@ -1256,19 +1253,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), new FormEndView.Listener() {
-            @Override
-            public void onSaveClicked(boolean markAsFinalized) {
-                if (saveName.length() < 1) {
-                    showShortToast(FormFillingActivity.this, R.string.save_as_error);
-                } else {
-                    if (!saveName.equals(formSaveViewModel.getFormName()) && !saveName.equals(formController.getSubmissionMetadata().instanceName)) {
-                        Analytics.log(AnalyticsEvents.MANUALLY_SPECIFIED_INSTANCE_NAME, "form");
-                    }
-                    formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
-                }
-            }
-        });
+        FormEndView endView = new FormEndView(this, saveName, markAsFinalized ->
+                saveForm(true, markAsFinalized, saveName, false)
+        );
 
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();

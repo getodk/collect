@@ -69,7 +69,6 @@
   <string name="invalid_answer_error">Xin lỗi, phản hồi này không đúng!</string>
   <string name="required_answer_error">Xin lỗi, câu trả lời được yêu cầu điền!</string>
   <string name="save_enter_data_description">Bạn đang ở phần kết thúc của \"%s\".</string>
-  <string name="save_as_error">Tên được lưu không để trống!</string>
   <string name="data_saved_error">Xin lỗi, biểu mẫu không lưu được!</string>
   <string name="data_saved_ok">Biểu mẫu đã được lưu!</string>
   <string name="save_point_error">Lỗi lưu lại điểm khôi phục: %s</string>

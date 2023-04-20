@@ -99,7 +99,6 @@
   <string name="invalid_answer_error">Ndjesë, kjo përgjigje është e pavlefshme!</string>
   <string name="required_answer_error">Kjo përgjigje duhet të plotësohet patjetër!</string>
   <string name="save_enter_data_description">Jeni në fund të %s.</string>
-  <string name="save_as_error">Emri i ruajtur nuk mund të jetë bosh!</string>
   <string name="data_saved_error">Ndjesë, ruajtja e formualrit dështoi!</string>
   <string name="data_saved_ok">Formulari u ruajt me sukses!</string>
   <string name="save_point_error">Gabim në ruajtjen e pikës së shpëtimit: %s</string>

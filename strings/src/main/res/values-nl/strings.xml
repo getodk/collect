@@ -104,7 +104,6 @@
   <string name="invalid_space_in_answer_plural">Waarschuwing: de onderliggende waardes, %s, hebben spaties</string>
   <string name="survey_internal_error">Interne fout: doorgaan naar invoer mislukt.</string>
   <string name="save_enter_data_description">U bent aan het einde van \"%s\".</string>
-  <string name="save_as_error">Formuliernaam mag niet leeg zijn!</string>
   <string name="data_saved_error">Sorry, formulier opslaan mislukt!</string>
   <string name="data_saved_ok">Formulier is opgeslagen!</string>
   <string name="save_point_error">Fout bij maken herstelpunt: %s</string>
