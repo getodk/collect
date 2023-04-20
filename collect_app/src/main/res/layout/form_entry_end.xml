@@ -30,24 +30,40 @@ the specific language governing permissions and limitations under the License.
             android:textColor="?colorOnSurface"
             android:textSize="21sp"
             android:textStyle="bold"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintBottom_toTopOf="@+id/finalize"
+            app:layout_constraintBottom_toTopOf="@+id/save_as_draft"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="You are at the end of All widgets" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_as_draft"
+            style="@style/Widget.Collect.Button.FullWidth"
+            android:backgroundTint="@color/surfaceButtonColor"
+            android:textColor="?colorOnSurface"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:text="@string/save_as_draft"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/finalize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/finalize"
             style="@style/Widget.Collect.Button.FullWidth"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_small"
             android:text="@string/finalize"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/save_as_draft"
+            app:layout_constraintStart_toEndOf="@id/save_as_draft"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description" />
+            app:layout_constraintTop_toTopOf="@id/save_as_draft" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

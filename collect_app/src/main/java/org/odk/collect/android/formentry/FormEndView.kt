@@ -18,6 +18,10 @@ class FormEndView(
     init {
         binding.description.text = context.getString(R.string.save_enter_data_description, formTitle)
 
+        binding.saveAsDraft.setOnClickListener {
+            listener.onSaveClicked(false)
+        }
+
         binding.finalize.setOnClickListener {
             listener.onSaveClicked(true)
         }
