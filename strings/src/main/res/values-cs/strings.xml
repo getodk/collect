@@ -123,7 +123,6 @@
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
   <string name="save_enter_data_description">Jste na konci %s.</string>
   <string name="save_as_error">Uložené jméno nesmí být prázdné!</string>
-  <string name="quit_entry">Uložit dotazník a skončit</string>
   <string name="data_saved_error">Uložení dotazníku selhalo!</string>
   <string name="data_saved_ok">Dotazník úspěšně uložen!</string>
   <string name="save_point_error">Chyba při ukládání bodu obnovení: %s</string>

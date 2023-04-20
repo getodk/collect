@@ -83,7 +83,6 @@
   <string name="survey_internal_error">Rakenduse sisene viga: liikumine erkaanile/valjale ebaõnnestus.</string>
   <string name="save_enter_data_description">Olete %s lõpus</string>
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
-  <string name="quit_entry">Salvesta vorm ja välju</string>
   <string name="data_saved_error">Kahjuks ebaõnnestus vormi salvestamine!</string>
   <string name="data_saved_ok">Vorm on edukalt salvestatud!</string>
   <string name="save_point_error">Vea parndamise taastuspunkt %s </string>

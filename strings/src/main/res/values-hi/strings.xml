@@ -94,7 +94,6 @@
   <string name="survey_internal_error">आतंरिक त्रुटि: prompt के स्टेप असफल.</string>
   <string name="save_enter_data_description">आप %s के समापन पर हैं</string>
   <string name="save_as_error">संरक्षित नाम रिक्त नहीं होना चाहिए!</string>
-  <string name="quit_entry">फॉर्म संरक्षित करें और बाहर आयें</string>
   <string name="data_saved_error">क्षमा करें, फॉर्म संरक्षण असफल!</string>
   <string name="data_saved_ok">फॉर्म सफलतापूर्वक संरक्षित!</string>
   <string name="save_point_error">रिकवरी बिंदु %sसंरक्षण में त्रुटि है  </string>

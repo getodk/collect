@@ -118,7 +118,6 @@
   <string name="survey_internal_error">అంతర్గత లోపం: ప్రాంప్ట్ ప్రారంభించే దశ విఫలమైంది.</string>
   <string name="save_enter_data_description">మీరు%sచివరిలో ఉన్నారు.</string>
   <string name="save_as_error">సేవ్ చేసిన పేరు ఖాళీగా ఉండకూడదు!</string>
-  <string name="quit_entry">ఫారంను సేవ్ చేసి నిష్క్రమించండి</string>
   <string name="data_saved_error">క్షమించండి, ఫారం సేవ్ అవ్వలేదు</string>
   <string name="data_saved_ok">ఫారం విజయవంతంగా సేవ్ చేయబడింది!</string>
   <string name="save_point_error">రికవరీ పాయింట్‌ను సేవ్ చేయడంలో లోపం ఉంది: %s</string>

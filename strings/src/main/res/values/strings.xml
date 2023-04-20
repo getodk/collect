@@ -153,7 +153,7 @@
 
     <string name="save_enter_data_description">You are at the end of %s.</string>
     <string name="save_as_error">Saved name must not be blank!</string>
-    <string name="quit_entry">Save Form and Exit</string>
+    <string name="finalize">Finalize</string>
 
     <string name="data_saved_error">Sorry, form save failed!</string>
     <string name="data_saved_ok">Form successfully saved!</string>

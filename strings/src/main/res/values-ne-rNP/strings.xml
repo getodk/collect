@@ -88,7 +88,6 @@
   <string name="survey_internal_error">भित्री गल्ती: प्रम्ट सम्म को चरण असफल भयो |</string>
   <string name="save_enter_data_description">तपाई %sको अन्त्यमा हुनुहुन्छ |</string>
   <string name="save_as_error">संचित गर्दा नाम खाली छोड्न मिल्दैन !</string>
-  <string name="quit_entry">फारम संचित गरी बाहिर निस्कनुहोस् </string>
   <string name="data_saved_error">माफ गर्नुहोला , फारम संचित हुन सकेन !</string>
   <string name="data_saved_ok">फारम सफलतापूर्वक संचित भयो !</string>
   <string name="save_point_error">रिकभरी बिन्दु संचित गर्दा गल्ति भयो: %s</string>

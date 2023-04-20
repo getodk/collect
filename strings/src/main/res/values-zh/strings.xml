@@ -122,7 +122,6 @@
   <string name="survey_internal_error">内部错误：提示步骤失败。</string>
   <string name="save_enter_data_description">您已在 %s 的末尾.</string>
   <string name="save_as_error">保存的名字不能为空!</string>
-  <string name="quit_entry">保存表格并退出</string>
   <string name="data_saved_error">表格保存失败!</string>
   <string name="data_saved_ok">表格已成功保存!</string>
   <string name="save_point_error">错误！保存还原点文件：%s</string>

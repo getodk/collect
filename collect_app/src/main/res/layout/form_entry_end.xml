@@ -46,7 +46,7 @@ the specific language governing permissions and limitations under the License.
             style="@style/Widget.Collect.Button.FullWidth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/quit_entry" />
+            android:text="@string/finalize" />
 
         <View
             android:layout_width="match_parent"

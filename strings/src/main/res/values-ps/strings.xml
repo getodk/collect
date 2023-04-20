@@ -58,7 +58,6 @@
   <string name="invalid_answer_error">اوبخښی! دا ځواب سم ندي!</string>
   <string name="required_answer_error">اوبخښی، ځواب ورکول اړین دي!</string>
   <string name="save_enter_data_description">تاسو د %sپای کښی یاست.</string>
-  <string name="quit_entry">فورمه ثبت کړي او خارج شی</string>
   <string name="data_saved_error">اوبخښی، د فورمي ثبتول ناکامه شو!</string>
   <string name="data_saved_ok">فورمه په بریالی توکه ثبت شو!</string>
   <string name="save_point_error">د خطا ثبت بیا موندولو نښه: %s</string>

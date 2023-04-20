@@ -115,7 +115,6 @@
   <string name="survey_internal_error">Interna greška: korak ka promt-u nije moguć.</string>
   <string name="save_enter_data_description">Nalazite se na kraju %s.</string>
   <string name="save_as_error">Sačuvano ime ne može biti prazno!</string>
-  <string name="quit_entry">Sačuvaj formular i izađi</string>
   <string name="data_saved_error">Izvini, čuvanje formulara nije uspjelo!</string>
   <string name="data_saved_ok">Formular je uspješno sačuvan!</string>
   <string name="save_point_error">Greška u čuvanju tačke povratka: %s </string>

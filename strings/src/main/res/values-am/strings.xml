@@ -82,7 +82,6 @@
   <string name="required_answer_error">ይቅርታ፣ ይህ ምላሽ ያስፈልጋል!</string>
   <string name="save_enter_data_description">በ 1 %s መጨረሻ ላይ ነዎት</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
-  <string name="quit_entry">ቅጹን አስቀምጠዉ ይውጡ</string>
   <string name="data_saved_error">ይቅርታ፣ ቅፁን ማስቀመጥ አልተሳካም!</string>
   <string name="data_saved_ok">ቅፁ በተሳካ ሁኔታ ተቀምጧል!</string>
   <string name="save_point_error">የመልሶ ማግኛ ነጥብ ማስቀመጥ አልተቻለም፡ 1 %s</string>

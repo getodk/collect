@@ -77,7 +77,6 @@
   <string name="survey_internal_error">​ຜິດ​ພາດ​ພາຍ​ໃນ: ຂັ້ນ​ຕອນ​ການ​ເຕືອນ​ລົ້ມ​ເຫຼວ.</string>
   <string name="save_enter_data_description">​ທ່ານຢູ່ຈຸດສີ້ນສຸດຂອງ %s.</string>
   <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
-  <string name="quit_entry">ບັນທຶກແບບຟອມ ແລະ ອອກຈາກລະບົບ</string>
   <string name="data_saved_error">ການບັກທຶກແບບຟອມລົ້ມເຫຼວ</string>
   <string name="data_saved_ok">ແບບຟອມໄດ້ຖືກບັນທຶກສຳເລັດແລ້ວ</string>
   <string name="save_point_error">ພໍ້​ບັນ​ຫາ​ໃນ​ລະ​ຫວ່າງບັນ​ທຶກຈຸດ​​ການ​ກູ້​ຄືນ: %s</string>

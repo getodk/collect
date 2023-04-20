@@ -123,7 +123,6 @@
   <string name="survey_internal_error">Interner Fehler: Sprung zur Eingabe fehlgeschlagen.</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
   <string name="save_as_error">Gespeicherter Name darf nicht leer sein!</string>
-  <string name="quit_entry">Formular speichern und beenden</string>
   <string name="data_saved_error">Speichervorgang gescheitert!</string>
   <string name="data_saved_ok">Speichervorgang erfolgreich!</string>
   <string name="save_point_error">Fehler beim Speichern des Wiederherstellungspunkts: %s</string>

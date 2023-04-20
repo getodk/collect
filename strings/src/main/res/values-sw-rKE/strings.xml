@@ -81,7 +81,6 @@
   <string name="survey_internal_error">Hitilafu ya ndani: hatua ya amri ina kasoro.</string>
   <string name="save_enter_data_description">Umefika mwisho wa %s.</string>
   <string name="save_as_error">Jina lilohifadhiwa halifai kuwa tupu</string>
-  <string name="quit_entry">Hifadhi fomu na Kutoka</string>
   <string name="data_saved_error">Samahani, fomu haikuhifadhiwa!</string>
   <string name="data_saved_ok">Fomu imehifadhiwa!</string>
   <string name="save_point_error">Hitilafu imetokea kwa ncha ya urejesho: %s</string>

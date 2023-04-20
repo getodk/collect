@@ -118,7 +118,6 @@
   <string name="survey_internal_error">Błąd wewnętrzny: przejście do pytania nie powiodło się.</string>
   <string name="save_enter_data_description">Jesteś przy końcu %s.</string>
   <string name="save_as_error">Zapisana nazwa nie może być pusta!</string>
-  <string name="quit_entry">Zapisz Formularz i Zakończ</string>
   <string name="data_saved_error">Przykro mi, zapis formularza się nie powiódł!</string>
   <string name="data_saved_ok">Formularz został zapisany pomyślnie!</string>
   <string name="save_point_error">Błąd przy zapisywaniu punktu odtwarzania: %s</string>

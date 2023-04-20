@@ -74,7 +74,6 @@
   <string name="required_answer_error">معافی، یہ جواب دینا ضروری ہے</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
   <string name="save_as_error">محفوظ کیا گیا نام خالی نہیں ہونا چاہئے</string>
-  <string name="quit_entry">فارم کو محفوظ کرکے نکل جایئں</string>
   <string name="data_saved_error">معافی, فارم محفوظ نہیں ہوسکا</string>
   <string name="data_saved_ok">فارم کامیابی سے محفوظ کیا گیا</string>
   <string name="save_point_error">ریکوری پوانٹ سیو کرتے وقت خرابی: %s</string>

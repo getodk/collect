@@ -88,7 +88,6 @@
   <string name="delete_repeat_confirm">Bu grupla beraber \"%s\" alt grubuda silinsin mi ?</string>
   <string name="delete_repeat_no">Vazgeç</string>
   <string name="save_as_error">İsim alani boş bırakilamaz</string>
-  <string name="quit_entry">Formu sakla ve Çık</string>
   <string name="data_saved_error">Form kaydedilirken hata oluştu</string>
   <string name="data_saved_ok">From başarılı bir şekilde saklandi</string>
   <!--Dialog title when exiting a form. The name of the form will be included-->

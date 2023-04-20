@@ -79,7 +79,6 @@
   <string name="survey_internal_error">Eroare internă: trecerea către prompt eșuată.</string>
   <string name="save_enter_data_description">Sunteți la sfârșitul \"%s\".</string>
   <string name="save_as_error">Numele salvat nu trebuie să fie gol!</string>
-  <string name="quit_entry">Salvați formularul și ieșiți</string>
   <string name="data_saved_error">Ne pare rău, salvarea formularului nu a reușit!</string>
   <string name="data_saved_ok">Salvarea formularului a reușit!</string>
   <string name="save_point_error">Eroare la salvarea punctului de recuperare: %s</string>

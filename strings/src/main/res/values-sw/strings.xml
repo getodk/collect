@@ -120,7 +120,6 @@
   <string name="survey_internal_error">Kosa la ndani: hatua ya kutoa taarifa imeshindikana.</string>
   <string name="save_enter_data_description">Upo mwishoni mwa %s.</string>
   <string name="save_as_error">Jina la Kuhifadhi halipaswi kuwa tupu!</string>
-  <string name="quit_entry">Hifadhi fomu na toka</string>
   <string name="data_saved_error">Samahani, uhifadhi wa fomu umeshindikana!</string>
   <string name="data_saved_ok">Umefanikiwa kuhifadhi fomu!</string>
   <string name="save_point_error">Hitilafu katika kuhifadhi alama ya urejeshi \"recovery point\" :%s</string>

@@ -85,7 +85,6 @@
   <string name="survey_internal_error">Error intern al demanar la següent dada.</string>
   <string name="save_enter_data_description">Formulari \"%s\" finalitzat.</string>
   <string name="save_as_error">El nom no pot deixar-se en blanc</string>
-  <string name="quit_entry">Desa formulari i surt.</string>
   <string name="data_saved_error">Ho sentim, el formulari no s\'ha desat be!</string>
   <string name="data_saved_ok">Formulari desat correctament!</string>
   <string name="save_point_error">Error al guardar el punt de recuperació: %s</string>
