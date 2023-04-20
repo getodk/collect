@@ -25,7 +25,7 @@ public class FormEndView extends SwipeHandler.View {
 
         ((TextView) findViewById(R.id.description)).setText(context.getString(R.string.save_enter_data_description, formTitle));
 
-        findViewById(R.id.save_exit_button).setOnClickListener(v -> {
+        findViewById(R.id.finalize).setOnClickListener(v -> {
             listener.onSaveClicked(true);
         });
     }

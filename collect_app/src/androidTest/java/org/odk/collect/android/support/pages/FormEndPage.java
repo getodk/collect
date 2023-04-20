@@ -28,7 +28,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public <D extends Page<D>> D clickSaveAndExit(D destination) {
-        onView(withId(R.id.save_exit_button)).perform(click());
+        onView(withId(R.id.finalize)).perform(click());
         return destination.assertOnPage();
     }
 
@@ -41,7 +41,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormEntryPage clickSaveAndExitWithError(String errorText) {
-        onView(withId(R.id.save_exit_button)).perform(click());
+        onView(withId(R.id.finalize)).perform(click());
         assertConstraintDisplayed(errorText);
         return new FormEntryPage(formName).assertOnPage();
     }

@@ -9,49 +9,45 @@ the specific language governing permissions and limitations under the License.
 -->
 
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0" />
+        android:padding="@dimen/margin_standard">
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:lineSpacingMultiplier="1.2"
-            android:paddingTop="10dp"
-            android:paddingBottom="20dp"
             android:textColor="?colorOnSurface"
             android:textSize="21sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toTopOf="@+id/finalize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="You are at the end of All widgets" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_exit_button"
+            android:id="@+id/finalize"
             style="@style/Widget.Collect.Button.FullWidth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/finalize" />
+            android:layout_marginTop="@dimen/margin_standard"
+            android:text="@string/finalize"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0" />
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
