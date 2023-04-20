@@ -124,7 +124,6 @@
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
   <string name="save_as_error">¡El nombre no puede estar en blanco!</string>
   <string name="quit_entry">Guardar Formulario y Salir</string>
-  <string name="manual_instance_learn_more_button">Aprende más</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>

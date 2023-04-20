@@ -124,8 +124,6 @@
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
   <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
   <string name="quit_entry">Tallenna lomake ja lopeta</string>
-  <string name="manual_instance_name_warning">Manuaalinen lomakkeiden nimeäminen poistetaan kohta. Lomakkeen muotoilua pitää päivittää.</string>
-  <string name="manual_instance_learn_more_button">Lisätietoja</string>
   <string name="data_saved_error">Pahoittelut, lomakkeen tallennus epäonnistui!</string>
   <string name="data_saved_ok">Lomake tallennettu!</string>
   <string name="save_point_error">Virhe tallentaessa palautuspistettä: %s</string>

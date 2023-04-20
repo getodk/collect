@@ -124,8 +124,6 @@
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
   <string name="save_as_error">Le nom ne peut pas être vide !</string>
   <string name="quit_entry">Enregistrer le formulaire et sortir</string>
-  <string name="manual_instance_name_warning">Bientôt il sera impossible de nommer les formulaires manuellement. Le formulaire doit être modifié.</string>
-  <string name="manual_instance_learn_more_button">En savoir plus</string>
   <string name="data_saved_error">Désolé, l\'enregistrement du formulaire a échoué.</string>
   <string name="data_saved_ok">Le formulaire a été enregistré avec succès.</string>
   <string name="save_point_error">Erreur lors de l\'enregistrement du point de récupération: %s</string>
