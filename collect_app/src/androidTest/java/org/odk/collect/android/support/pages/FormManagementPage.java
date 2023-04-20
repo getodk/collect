@@ -42,11 +42,6 @@ public class FormManagementPage extends Page<FormManagementPage> {
         return this;
     }
 
-    public FormManagementPage clickOnDefaultToFinalized() {
-        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.default_completed));
-        return this;
-    }
-
     public FormManagementPage openConstraintProcessing() {
         scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.constraint_behavior_title));
         return this;

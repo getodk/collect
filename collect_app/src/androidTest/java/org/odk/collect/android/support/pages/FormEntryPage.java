@@ -122,6 +122,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEndPage swipeToEndScreen(String instanceName) {
+        flingLeft();
+        return WaitFor.waitFor(() -> new FormEndPage(instanceName).assertOnPage());
+    }
+
     public FormEndPage swipeToEndScreen() {
         flingLeft();
         return WaitFor.waitFor(() -> new FormEndPage(formName).assertOnPage());

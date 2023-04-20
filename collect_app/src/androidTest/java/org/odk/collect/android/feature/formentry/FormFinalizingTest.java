@@ -22,6 +22,17 @@ public class FormFinalizingTest {
     public RuleChain copyFormChain = TestRuleChain.chain()
             .around(rule);
 
+    @Test
+    public void fillingForm_andPressingSaveAndDraft_doesNotFinalizesForm() {
+        rule.startAtMainMenu()
+                .copyForm(FORM)
+                .assertNumberOfFinalizedForms(0)
+                .startBlankForm("One Question")
+                .swipeToEndScreen()
+                .clickSaveAsDraftAndExit()
+                .assertNumberOfEditableForms(1)
+                .assertNumberOfFinalizedForms(0);
+    }
 
     @Test
     public void fillingForm_andPressingSaveAndExit_finalizesForm() {
@@ -31,20 +42,8 @@ public class FormFinalizingTest {
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
+                .assertNumberOfEditableForms(1)
                 .assertNumberOfFinalizedForms(1);
-    }
-
-    @Test
-    public void fillingForm_andUncheckingFinalize_andPressingSaveAndExit_doesNotFinalizesForm() {
-        rule.startAtMainMenu()
-                .copyForm(FORM)
-                .assertNumberOfFinalizedForms(0)
-                .startBlankForm("One Question")
-                .swipeToEndScreen()
-                .clickMarkAsFinalized()
-                .assertMarkFinishedIsNotSelected()
-                .clickSaveAndExit()
-                .assertNumberOfFinalizedForms(0);
     }
 
     @Test
@@ -56,6 +55,7 @@ public class FormFinalizingTest {
                 .closeSoftKeyboard()
                 .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
                 .clickSaveChanges()
+                .assertNumberOfEditableForms(1)
                 .assertNumberOfFinalizedForms(0);
     }
 }

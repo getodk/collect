@@ -7,7 +7,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -64,7 +63,6 @@ class TrackChangesReasonTest {
             .clickSaveAndExitWithChangesReasonPrompt()
             .closeSoftKeyboard()
             .pressBack(FormEntryPage("Track Changes Reason"))
-            .assertText(R.string.save_form_as)
     }
 
     @Test
@@ -82,7 +80,6 @@ class TrackChangesReasonTest {
             .clickSaveAndExitWithChangesReasonPrompt()
             .closeSoftKeyboard()
             .pressClose(FormEntryPage("Track Changes Reason"))
-            .assertText(R.string.save_form_as)
     }
 
     @Test

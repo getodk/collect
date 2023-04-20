@@ -3,9 +3,7 @@ package org.odk.collect.android.support.pages;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -25,6 +23,11 @@ public class FormEndPage extends Page<FormEndPage> {
     public FormEndPage assertOnPage() {
         onView(withText(getTranslatedString(R.string.save_enter_data_description, formName))).check(matches(isDisplayed()));
         return this;
+    }
+
+    public MainMenuPage clickSaveAsDraftAndExit() {
+        onView(withId(R.id.save_as_draft)).perform(click());
+        return new MainMenuPage().assertOnPage();
     }
 
     public <D extends Page<D>> D clickSaveAndExit(D destination) {
@@ -52,21 +55,6 @@ public class FormEndPage extends Page<FormEndPage> {
 
     public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
         return clickSaveAndExit(new ChangesReasonPromptPage(formName));
-    }
-
-    public FormEndPage assertMarkFinishedIsSelected() {
-        onView(withId(R.id.mark_finished)).check(matches(isChecked()));
-        return this;
-    }
-
-    public FormEndPage assertMarkFinishedIsNotSelected() {
-        onView(withId(R.id.mark_finished)).check(matches(isNotChecked()));
-        return this;
-    }
-
-    public FormEndPage clickMarkAsFinalized() {
-        onView(withId(R.id.mark_finished)).perform(click());
-        return this;
     }
 
     public FormHierarchyPage clickGoToArrow() {

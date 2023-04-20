@@ -98,14 +98,13 @@ public class FillBlankFormTest {
                 .copyForm("1560_DateData.xml")
                 .startBlankForm("1560_DateData")
                 .checkIsTranslationDisplayed("Jan 01, 1900", "01 ene. 1900")
-                .swipeToEndScreen()
+                .swipeToEndScreen("01/01/00")
                 .clickSaveAndExit()
 
                 .copyForm("1560_IntegerData.xml")
                 .startBlankForm("1560_IntegerData")
                 .assertText("5")
-                .swipeToEndScreen()
-                .assertText("5")
+                .swipeToEndScreen("5")
                 .clickSaveAndExit()
 
                 .copyForm("1560_IntegerData_instanceID.xml")
@@ -366,11 +365,9 @@ public class FillBlankFormTest {
         new MainMenuPage()
                 .copyForm("g6Error2.xml")
                 .startBlankForm("g6Error2")
-                .inputText("bla")
                 .swipeToNextQuestionWithError()
                 .clickOK(new FormEntryPage("g6Error2"))
                 .swipeToEndScreen()
-                .inputText("ble")
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
@@ -384,7 +381,6 @@ public class FillBlankFormTest {
         new MainMenuPage()
                 .copyForm("emptyGroupFieldList2.xml")
                 .startBlankForm("emptyGroupFieldList2")
-                .inputText("nana")
                 .swipeToEndScreen()
                 .clickSaveAndExit()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
@@ -614,23 +610,6 @@ public class FillBlankFormTest {
                 .assertText("File: " + formsDirPath + "/fieldlist-updates_nocsv-media/fruits.csv is missing.")
                 .swipeToEndScreen()
                 .clickSaveAndExit();
-    }
-
-    @Test
-    public void changedName_shouldNotDisappearAfterScreenRotation() {
-        //TestCase13
-        rule.startAtMainMenu()
-                .copyForm("all-widgets.xml")
-                .startBlankForm("All widgets")
-                .clickGoToArrow()
-                .clickJumpEndButton()
-                .clickOnId(R.id.save_name)
-                .inputText("submission")
-                .closeSoftKeyboard()
-                .rotateToLandscape(new FormEntryPage("All widgets"))
-                .assertText("submission")
-                .rotateToPortrait(new FormEntryPage("All widgets"))
-                .assertText("submission");
     }
 
     @Test
