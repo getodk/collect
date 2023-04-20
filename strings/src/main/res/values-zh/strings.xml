@@ -685,8 +685,6 @@
   <string name="delete_after_send">发送后自动删除</string>
   <string name="delete_after_send_summary">发送到服务器后删除已完成的表单和媒体</string>
   <string name="form_filling_category">表单填写</string>
-  <string name="default_completed">默认标记表格为完成</string>
-  <string name="default_completed_summary">表格会默认标记为完成</string>
   <string name="constraint_behavior_title">约束处理</string>
   <string name="constraint_behavior">约束检查</string>
   <string name="constraint_behavior_on_swipe">向前滑动时验证</string>

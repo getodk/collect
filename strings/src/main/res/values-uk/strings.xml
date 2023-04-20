@@ -555,8 +555,6 @@
   <string name="delete_after_send">Видалити після надсилання</string>
   <string name="delete_after_send_summary">Видаляє завершені анкети та медіа файли після надсилання на сервер</string>
   <string name="form_filling_category">Заповнення анкети</string>
-  <string name="default_completed">Завершувати за замовчуванням</string>
-  <string name="default_completed_summary">За замовчуванням позначати анкети як завершені</string>
   <string name="constraint_behavior_title">Обробка обмежень</string>
   <string name="constraint_behavior">Обмеження зумовлюють поведінку</string>
   <string name="constraint_behavior_on_swipe">Перевіряти підчас переходу вперед</string>

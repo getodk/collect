@@ -697,8 +697,6 @@
   <string name="delete_after_send">Vymazat po odeslání</string>
   <string name="delete_after_send_summary">Vymaže dokončené dotazníky a média po odeslání na server</string>
   <string name="form_filling_category">Plnění formuláře</string>
-  <string name="default_completed">Ukládání dotazníku</string>
-  <string name="default_completed_summary">Vždy uložit dotazník jako dokončený</string>
   <string name="constraint_behavior_title">Omezování zpracování</string>
   <string name="constraint_behavior">Ověření správnosti odpovědi</string>
   <string name="constraint_behavior_on_swipe">Ověření při přechodu na další otázku</string>

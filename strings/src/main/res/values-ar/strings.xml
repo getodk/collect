@@ -643,8 +643,6 @@
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
   <string name="form_filling_category">تعبئة الاستمارة</string>
-  <string name="default_completed">حدد النموذج كنموذج منتهي</string>
-  <string name="default_completed_summary">اجعل النموذج منتهي بشكل إفتراضي</string>
   <string name="constraint_behavior_title">معالجة القيود</string>
   <string name="constraint_behavior">معالجة القيود جارية</string>
   <string name="constraint_behavior_on_swipe">التدقيق عند السحب باتجاه الامام</string>

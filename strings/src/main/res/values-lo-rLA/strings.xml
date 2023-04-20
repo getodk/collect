@@ -324,8 +324,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
-  <string name="default_completed">​ຄ່າ​ເລີ່ມ​ຕົ້ນແເມ່ນ ສຳ​ເລັດ​ແລ້ວ</string>
-  <string name="default_completed_summary">ກຳນົດແບບຟອມວ່າສຳ​ເລັດ​ແລ້ວ ໂດຍອັດຕະໂນມັດ</string>
   <string name="constraint_behavior">ລັກສະນະການປະເມີນຜົນແບບມີເງື່ອນໄຂ</string>
   <string name="constraint_behavior_on_swipe">ການກວດ​ສອບ​ເມື່ອປັດເລື່ອນໄປທາງໜ້າ</string>
   <string name="constraint_behavior_on_finalize">ເລື່ອນການກວດສອບໄປຈົນກວ່າການສຳຫຼວດສຳເລັດ</string>

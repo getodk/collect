@@ -21,7 +21,6 @@ object Defaults {
             hashMap[ProjectKeys.KEY_AUTOSEND] = "off"
             hashMap[ProjectKeys.KEY_GUIDANCE_HINT] = "no"
             hashMap[ProjectKeys.KEY_DELETE_AFTER_SEND] = false
-            hashMap[ProjectKeys.KEY_COMPLETED_DEFAULT] = true
             hashMap[ProjectKeys.KEY_CONSTRAINT_BEHAVIOR] = ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE
             hashMap[ProjectKeys.KEY_HIGH_RESOLUTION] = true
             hashMap[ProjectKeys.KEY_IMAGE_SIZE] = "original_image_size"

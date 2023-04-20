@@ -59,10 +59,6 @@
             android:title="@string/delete_after_send"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
-            android:key="default_to_finalized"
-            android:title="@string/default_completed"
-            app:iconSpaceReserved="false" />
-        <CheckBoxPreference
             android:key="change_constraint_behavior"
             android:title="@string/constraint_behavior_title"
             app:iconSpaceReserved="false" />

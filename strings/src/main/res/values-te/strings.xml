@@ -596,8 +596,6 @@
   <string name="delete_after_send">పంపిన తర్వాత తొలగించండి</string>
   <string name="delete_after_send_summary">సర్వర్‌కు పంపిన తర్వాత ఫైనల్ చేసిన ఫారమ్‌లను మరియు మీడియాను తొలగిస్తుంది</string>
   <string name="form_filling_category">ఫారం నింపడం</string>
-  <string name="default_completed">ఆటోమాటిక్ గా ఫైనల్ చెయ్యి </string>
-  <string name="default_completed_summary">ఫారంను ఆటోమేటిక్ గా ఫైనల్ చేసినట్లు గుర్తించండి</string>
   <string name="constraint_behavior_title">పరిమితి ప్రాసెసింగ్</string>
   <string name="constraint_behavior">కంస్ట్రయిన్ట్ ప్రాసెసింగ్ బిహేవియర్ </string>
   <string name="constraint_behavior_on_swipe">ఫార్వర్డ్ స్వైప్ మీద ధృవీకరించండి</string>

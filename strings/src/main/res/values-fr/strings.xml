@@ -696,8 +696,6 @@
   <string name="delete_after_send">Supprimer après l\'envoi</string>
   <string name="delete_after_send_summary">Suppression des médias et formulaire finalisés après l\'envoi au serveur</string>
   <string name="form_filling_category">Remplissage de formulaire</string>
-  <string name="default_completed">Finaliser par défaut</string>
-  <string name="default_completed_summary">Marquer comme finalisé par défaut</string>
   <string name="constraint_behavior_title">Traitement de contraintes</string>
   <string name="constraint_behavior">Comportement du traitement des contraintes</string>
   <string name="constraint_behavior_on_swipe">Valider lors du glissement du doigt vers la gauche</string>

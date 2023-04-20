@@ -259,8 +259,6 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
-  <string name="default_completed">അന്തിമ സ്ഥിരമായത്</string>
-  <string name="default_completed_summary">സ്ഥിരമായി അന്തിമമായി മാർക്ക് ഫോം അടയാളപ്പെടുത്തുക</string>
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->

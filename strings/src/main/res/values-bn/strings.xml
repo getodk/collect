@@ -293,8 +293,6 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
-  <string name="default_completed">ডিফল্ট থেকে চূড়ান্ত করন</string>
-  <string name="default_completed_summary">ডিফল্ট ভাবে চূড়ান্ত ফর্ম চিন্হিত করে রাখা</string>
   <string name="constraint_behavior">constraint_behavior</string>
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->

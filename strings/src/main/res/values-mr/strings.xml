@@ -413,8 +413,6 @@
   <string name="delete_after_send">पाठवानंतर हटवा</string>
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
   <string name="form_filling_category">फॉर्म भरणे</string>
-  <string name="default_completed">अंतिम रूप ला डिफॉल्ट करा </string>
-  <string name="default_completed_summary">डीफॉल्टनुसार अंतिम रूप दिलेला फॉर्म चिन्हांकित करा</string>
   <string name="constraint_behavior_title">प्रतिबंध प्रोसेसिंग</string>
   <string name="constraint_behavior">प्रतिबंध प्रोसेसिंग वर्तन</string>
   <string name="constraint_behavior_on_swipe">पुढील स्वाइप वर प्रमाणित करा</string>

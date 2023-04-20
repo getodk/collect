@@ -555,8 +555,6 @@
   <string name="delete_after_send">Obriši nakon otpreme</string>
   <string name="delete_after_send_summary">Briše završene ankete i medije nakon otpremanja na server</string>
   <string name="form_filling_category">Ispunjavanje formulara</string>
-  <string name="default_completed">Fabričko podešavanje: završena anketa</string>
-  <string name="default_completed_summary">Fabričko podešavanje - uvijek označi formular kao završen</string>
   <string name="constraint_behavior_title">Ograničenje procesuiranja</string>
   <string name="constraint_behavior">Ograniči procesuiranje</string>
   <string name="constraint_behavior_on_swipe">Validiraj nakon prevlačenja za naprijed</string>

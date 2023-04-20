@@ -330,8 +330,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Slett etter innsendt.</string>
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
-  <string name="default_completed">Default til fullført</string>
-  <string name="default_completed_summary">Sette fullført som default</string>
   <string name="constraint_behavior">Begrens prosesseringsmetoden</string>
   <string name="constraint_behavior_on_swipe">Validere ved sveip forover</string>
   <string name="constraint_behavior_on_finalize">Avvent validering til skjemaet er fullført</string>

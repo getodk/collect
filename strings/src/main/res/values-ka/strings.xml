@@ -335,8 +335,6 @@
   <string name="autosend_selector_title">ავტომატურად გაგზავნა</string>
   <string name="autosend">ავტომატურად გაგზავნა</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
-  <string name="default_completed">ნაგულისხმებია დასრულებულად მონიშვნა</string>
-  <string name="default_completed_summary">ნაგულისხმებია დასრულებულად მონიშვნა</string>
   <string name="constraint_behavior">შეზღუდვის დამუშავების ქცევა</string>
   <string name="constraint_behavior_on_swipe">სანდოობის შემოწმება წინ გადასვლისას</string>
   <string name="constraint_behavior_on_finalize">სანდოობის შემოწმების გადადება ფორმის დასრულებამდე</string>

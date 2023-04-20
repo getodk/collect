@@ -696,8 +696,6 @@
   <string name="delete_after_send">Elimina dopo invio</string>
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>
   <string name="form_filling_category">Riempimento modulo</string>
-  <string name="default_completed">Apri automaticamente la schermata di Finalizzazione</string>
-  <string name="default_completed_summary">Marca automaticamente un modulo come Finalizzato</string>
   <string name="constraint_behavior_title">Vincoli di elaborazione</string>
   <string name="constraint_behavior">Comportamento sui vincoli</string>
   <string name="constraint_behavior_on_swipe">Convalida scorrendo il dito in avanti</string>

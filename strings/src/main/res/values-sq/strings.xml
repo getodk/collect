@@ -437,8 +437,6 @@
   <string name="delete_after_send">Fshi formularët pasi të nisen</string>
   <string name="delete_after_send_summary">Fshi formularët e finalizuar dhe mediat pasi të jenë ngarkuar në server</string>
   <string name="form_filling_category">Plotësimi i formularëve</string>
-  <string name="default_completed">Parapërcaktoje të finalizuar</string>
-  <string name="default_completed_summary">Shëno formularin automatikisht si të përfunduar</string>
   <string name="constraint_behavior_title">Kufizo procesimin</string>
   <string name="constraint_behavior">Limito sjelljet procesuese</string>
   <string name="constraint_behavior_on_swipe">Valido pasi të ecet përpara</string>

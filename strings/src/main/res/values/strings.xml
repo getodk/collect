@@ -854,9 +854,6 @@
 
     <string name="form_filling_category">Form filling</string>
 
-    <string name="default_completed">Default to finalized</string>
-    <string name="default_completed_summary">Mark form as finalized by default</string>
-
     <string name="constraint_behavior_title">Constraint processing</string>
     <string name="constraint_behavior">Constraint processing behavior</string>
     <string name="constraint_behavior_on_swipe">Validate upon forward swipe</string>

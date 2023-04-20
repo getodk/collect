@@ -693,8 +693,6 @@
   <string name="delete_after_send">Poista lähettämisen jälkeen</string>
   <string name="delete_after_send_summary">Poistaa valmiiksi merkityt lomakkeet ja mediatiedostot kun ne on lähetetty palvelimelle</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>
-  <string name="default_completed">Oletusarvona lomakkeen merkitseminen valmiiksi</string>
-  <string name="default_completed_summary">Merkitse lomake oletusarvona valmiiksi</string>
   <string name="constraint_behavior_title">Rajoitusten käsittely</string>
   <string name="constraint_behavior">Rajoitusten käsittely</string>
   <string name="constraint_behavior_on_swipe">Validointi pyyhkäistäessä eteepäin</string>

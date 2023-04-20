@@ -24,7 +24,6 @@ object ProtectedProjectKeys {
     const val KEY_HIDE_OLD_FORM_VERSIONS = "hide_old_form_versions"
     const val KEY_AUTOSEND = "change_autosend"
     const val KEY_DELETE_AFTER_SEND = "delete_after_send"
-    const val KEY_DEFAULT_TO_FINALIZED = "default_to_finalized"
     const val KEY_CONSTRAINT_BEHAVIOR = "change_constraint_behavior"
     const val KEY_HIGH_RESOLUTION = "high_resolution"
     const val KEY_IMAGE_SIZE = "image_size"
@@ -65,7 +64,6 @@ object ProtectedProjectKeys {
         KEY_HIDE_OLD_FORM_VERSIONS,
         KEY_AUTOSEND,
         KEY_DELETE_AFTER_SEND,
-        KEY_DEFAULT_TO_FINALIZED,
         KEY_CONSTRAINT_BEHAVIOR,
         KEY_HIGH_RESOLUTION,
         KEY_IMAGE_SIZE,

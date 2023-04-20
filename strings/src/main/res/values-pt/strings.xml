@@ -678,8 +678,6 @@
   <string name="delete_after_send">Apagar depois de enviado</string>
   <string name="delete_after_send_summary">Apaga formulários completos e arquivos de mídia depois de enviados ao servidor.</string>
   <string name="form_filling_category">Preenchimento de formulários</string>
-  <string name="default_completed">Finalizado como Padrão</string>
-  <string name="default_completed_summary">Marcar formulário finalizado como padrão</string>
   <string name="constraint_behavior_title">Processamento de regras</string>
   <string name="constraint_behavior">Comportamento de processamento da regra</string>
   <string name="constraint_behavior_on_swipe">Validar ao avançar</string>

@@ -326,8 +326,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Verwyder na stuur</string>
   <string name="delete_after_send_summary">Verwyder gefinaliseerde vorms en media nadat dit server toe gestuur is</string>
-  <string name="default_completed">Default na gefinaliseer</string>
-  <string name="default_completed_summary">Merk vorm as gefinaliseer as default</string>
   <string name="constraint_behavior">Constraint proseseringsgedrag</string>
   <string name="constraint_behavior_on_swipe">Toets tydens vorentoe swipe</string>
   <string name="constraint_behavior_on_finalize">Stel toetsing uit tot finalisering</string>

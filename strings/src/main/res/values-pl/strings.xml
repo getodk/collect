@@ -592,8 +592,6 @@
   <string name="delete_after_send">Skasuj po wysłaniu</string>
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>
   <string name="form_filling_category">Wypełnianie formularzu</string>
-  <string name="default_completed">Domyślnie zaznacz jako zakończony</string>
-  <string name="default_completed_summary">Domyślnie zaznacz formularz jako zakończony</string>
   <string name="constraint_behavior_title">Przetwarzanie ograniczeń</string>
   <string name="constraint_behavior">Przetwarzam zachowanie ograniczeń</string>
   <string name="constraint_behavior_on_swipe">Sprawdź poprawność po przeciągnięciu do przodu</string>

@@ -392,8 +392,6 @@
   <string name="delete_after_send">पठाए पछि डिलिट गर्नुहोस् </string>
   <string name="delete_after_send_summary">अन्तिम रुप दिइएको फारम र मिडिया सर्भरमा पठाए पछि डिलिट गर्छ </string>
   <string name="form_filling_category">फारम भर्दा</string>
-  <string name="default_completed">डिफल्ट रुपमा अन्तिम रुप दिइएको </string>
-  <string name="default_completed_summary">डिफल्ट रुपमा फारामलाई अन्तिम रुप दिइएको अंकित गर्नुहोस् </string>
   <string name="constraint_behavior">अभाव प्रशोधन व्यवहार </string>
   <string name="constraint_behavior_on_swipe">तेर्सो स्वाइप गरे पछी मान्य छ कि छैन हेर्नुहोला </string>
   <string name="constraint_behavior_on_finalize">अन्तिम रुप नदिए सम्म मान्यता दिन स्थगित गर्नुहोस् </string>

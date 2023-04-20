@@ -555,8 +555,6 @@
   <string name="delete_after_send">Futa baada ya kutuma</string>
   <string name="delete_after_send_summary">Inafuta fomu zilizokamilika na midia baada ya kuzituma kwenye seva</string>
   <string name="form_filling_category">Ujazaji wa fomu</string>
-  <string name="default_completed">Imekamilika ni jibu msingi</string>
-  <string name="default_completed_summary">Weka alama kwenye imekamilika kama jibu msingi</string>
   <string name="constraint_behavior_title">Kuchakata kikwazo </string>
   <string name="constraint_behavior">Kikwazo uchakataji tabia</string>
   <string name="constraint_behavior_on_swipe">Thibitisha pindi unapitisha mbele</string>

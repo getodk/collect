@@ -639,8 +639,6 @@
   <string name="delete_after_send">بعد از ارسال حذف کنید</string>
   <string name="delete_after_send_summary">فورم های نهایی و رسانه یی را بعد از ارسال به سرور حذف کنید</string>
   <string name="form_filling_category">فورم را پر کنید</string>
-  <string name="default_completed">پیش‌فرض نهایی شد</string>
-  <string name="default_completed_summary">به طور پیش فرض فورم را به عنوان نهایی شده علامت گذاری کنید</string>
   <string name="constraint_behavior_title"> محدودیت پردازش</string>
   <string name="constraint_behavior">محدودیت رفتار پردازش </string>
   <string name="constraint_behavior_on_swipe">با کشیدن انگشت به جلو اعتبارسنجی کنید</string>

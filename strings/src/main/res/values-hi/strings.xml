@@ -421,8 +421,6 @@
   <string name="delete_after_send">भेजने के बाद मिटायें</string>
   <string name="delete_after_send_summary">सर्वर को भेजने के बाद अंतिम फॉर्म और मीडिया मिटाता है</string>
   <string name="form_filling_category">फॉर्म भरना</string>
-  <string name="default_completed">फाइनल करने हेतु डिफ़ॉल्ट </string>
-  <string name="default_completed_summary">फॉर्म को डिफ़ॉल्ट फाइनल जैसे मार्क करें  </string>
   <string name="constraint_behavior_title">बाधा प्रसंस्करण</string>
   <string name="constraint_behavior">प्रसंस्करण व्यवहार बाधा </string>
   <string name="constraint_behavior_on_swipe">फारवर्ड  स्वाइप पर मान्य करें</string>

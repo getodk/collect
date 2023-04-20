@@ -321,8 +321,6 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
-  <string name="default_completed">sahihisha kama  fomu iliyo kamilika</string>
-  <string name="default_completed_summary">sahihisha fomu kama iliyo kamilika</string>
   <string name="constraint_behavior">Uchakatishi wa dhibitisho</string>
   <string name="constraint_behavior_on_swipe">Dhibitisha ukisonga mbele</string>
   <string name="constraint_behavior_on_finalize">Chelewesha fomu hadi itamatishwe</string>

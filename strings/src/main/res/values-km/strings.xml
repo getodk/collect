@@ -518,8 +518,6 @@
   <string name="delete_after_send">លុបទម្រង់បន្ទាប់ការផ្ញើចេញ</string>
   <string name="delete_after_send_summary">លុប​សំណុំ​​បែប​​បទ​ដែល​បាន​បញ្ចប់ និង​មីឌៀ ​បន្ទាប់​ពី​ការ​ផ្ញើ​ចេញ​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
   <string name="form_filling_category">ការបំពេញទម្រង់</string>
-  <string name="default_completed">លំដាំដើមដើម្បីបញ្ចប់</string>
-  <string name="default_completed_summary">កំណត់ថាសំណុំបែបបទបានបញ្ចប់ដោយលំនាំដើម</string>
   <string name="constraint_behavior_title">ដំណើរការនៃការរឹតបន្តឹង</string>
   <string name="constraint_behavior">កំពុងដំណើរការឥរិយាបទឧបសគ្គ</string>
   <string name="constraint_behavior_on_swipe">ផ្តល់​សុពលភាព​នៅ​ពេលដែលអូស​ទៅ​មុខ</string>

@@ -531,8 +531,6 @@
   <string name="delete_after_send">Radera efter sändning</string>
   <string name="delete_after_send_summary">Raderar avslutade formulär och media efter dessa sänts till servern</string>
   <string name="form_filling_category">Formulärifyllnad</string>
-  <string name="default_completed">Avsluta som standardåtgärd</string>
-  <string name="default_completed_summary">Markera formulär som avslutat som standardåtgärd</string>
   <string name="constraint_behavior_title">Hantering av restriktioner</string>
   <string name="constraint_behavior">Hantering av restriktioner</string>
   <string name="constraint_behavior_on_swipe">Validera vid svepning framåt</string>

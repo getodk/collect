@@ -28,7 +28,6 @@ import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_COMPLETED_DEFAULT;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
 import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
 
@@ -997,7 +996,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
+                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, false, getFormController()), null, true);
                 return true;
         }
 
@@ -1944,7 +1943,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
 
                 QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, currentProjectProvider, () -> {
-                    saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
+                    saveForm(true, InstancesDaoHelper.isInstanceComplete(false, false, getFormController()), null, true);
                 });
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:

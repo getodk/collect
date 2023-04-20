@@ -376,8 +376,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Esborra despres d\'enviar</string>
   <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>
-  <string name="default_completed">Considera finalitzat per defecte</string>
-  <string name="default_completed_summary">Marca formulari com finalitzat per defecte.</string>
   <string name="constraint_behavior">Comportament del processament de restriccions</string>
   <string name="constraint_behavior_on_swipe">Validar al moure endavant</string>
   <string name="constraint_behavior_on_finalize">Ajornar validació fins al final</string>

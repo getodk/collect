@@ -657,8 +657,6 @@
   <string name="delete_after_send">Hapus setelah kirim</string>
   <string name="delete_after_send_summary">Hapus media dan formulir yang terfinalisasi setelah dikirim ke server</string>
   <string name="form_filling_category">Mengisi Formulir</string>
-  <string name="default_completed">Terfinalisasi secara bawaan</string>
-  <string name="default_completed_summary">Tandai formulir telah terfinalisasi secara bawaan</string>
   <string name="constraint_behavior_title">Pemrosesan konstrain</string>
   <string name="constraint_behavior">Konstrain perilaku pemrosesan</string>
   <string name="constraint_behavior_on_swipe">Validasi pada saat menggeser layar ke kanan</string>

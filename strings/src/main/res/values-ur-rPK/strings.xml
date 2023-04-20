@@ -294,8 +294,6 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
-  <string name="default_completed">حتمی کیا گیا زیر استعمال</string>
-  <string name="default_completed_summary">فارم کو (default) مکمل بنا دیں</string>
   <string name="constraint_behavior">ترکیبی عمل کو روکیں</string>
   <string name="constraint_behavior_on_swipe">آگے سوائپ پر توثیق کریں</string>
   <string name="constraint_behavior_on_finalize">توثیق کو حتمی ہونے تک موءخر کردیں</string>

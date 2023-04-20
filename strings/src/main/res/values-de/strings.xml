@@ -693,8 +693,6 @@
   <string name="delete_after_send">Löschen nach dem Senden</string>
   <string name="delete_after_send_summary">Löscht abgeschlossene Formulare und Medien nach dem Senden zum Server</string>
   <string name="form_filling_category">Formulareingabe</string>
-  <string name="default_completed">Autom. als vollständig markieren</string>
-  <string name="default_completed_summary">Formular wird standardmäßig als vollständig markiert</string>
   <string name="constraint_behavior_title">Validierung</string>
   <string name="constraint_behavior">Validierungszeitpunkt</string>
   <string name="constraint_behavior_on_swipe">Validierung beim Vorwärts-Wischen</string>

@@ -350,8 +350,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Ștergeți după trimitere</string>
   <string name="delete_after_send_summary">Ștergeți formulare finalizate și fișierele media după trimiterea către server</string>
-  <string name="default_completed">Implicit finalizat</string>
-  <string name="default_completed_summary">Marcați formularul ca finalizat, implicit</string>
   <string name="constraint_behavior">Comportament de procesare constrâns</string>
   <string name="constraint_behavior_on_swipe">Validare în timpul inaintării</string>
   <string name="constraint_behavior_on_finalize">Amânați validarea până la finalizare</string>

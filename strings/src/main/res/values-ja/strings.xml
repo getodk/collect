@@ -628,8 +628,6 @@
   <string name="delete_after_send">送信後に削除</string>
   <string name="delete_after_send_summary">サーバに送信した後、確定されたフォームやメディアを削除します</string>
   <string name="form_filling_category">フォーム入力</string>
-  <string name="default_completed">デフォルトで確定</string>
-  <string name="default_completed_summary">デフォルトでフォームを確定済にします</string>
   <string name="constraint_behavior_title">処理の制約</string>
   <string name="constraint_behavior">処理動作の制約</string>
   <string name="constraint_behavior_on_swipe">次へスワイプ時に検証</string>

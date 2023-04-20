@@ -696,8 +696,6 @@
   <string name="delete_after_send">Eliminar después de enviar</string>
   <string name="delete_after_send_summary">Eliminar formularios finalizados y archivos multimedia después de enviar al servidor</string>
   <string name="form_filling_category">Llenado de Formularios</string>
-  <string name="default_completed">Por defecto considerar finalizado</string>
-  <string name="default_completed_summary">Por defecto, marcar el formulario como terminado.</string>
   <string name="constraint_behavior_title">Manejo de restricciones</string>
   <string name="constraint_behavior">Manejo de las restricciones</string>
   <string name="constraint_behavior_on_swipe">Validar al desplazar hacia delante.</string>

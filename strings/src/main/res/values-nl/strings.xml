@@ -396,8 +396,6 @@
   <string name="off">Uit</string>
   <string name="delete_after_send">Verwijderen na versturen</string>
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
-  <string name="default_completed">Standaard definitief</string>
-  <string name="default_completed_summary">Formulier standaard als definitief markeren</string>
   <string name="constraint_behavior">Verwerking van beperkingen</string>
   <string name="constraint_behavior_on_swipe">Controleer bij doorgaan</string>
   <string name="constraint_behavior_on_finalize">Controleer bij afronden</string>

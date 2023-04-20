@@ -513,8 +513,6 @@
   <string name="delete_after_send">Удалить после отправки</string>
   <string name="delete_after_send_summary">Удаляет финализированные опросники и их медиа после отправки данных на сервер</string>
   <string name="form_filling_category">Заполнение опросника</string>
-  <string name="default_completed">Финализировать по умолчанию</string>
-  <string name="default_completed_summary">Помечать опросы финализированными по умолчанию</string>
   <string name="constraint_behavior_title">Обработка ограничений</string>
   <string name="constraint_behavior">Способ проверки ограничений</string>
   <string name="constraint_behavior_on_swipe">Проверять после каждого вопроса</string>

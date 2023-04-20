@@ -386,8 +386,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Kustuta peale saatmist</string>
   <string name="delete_after_send_summary">Peale serverisse saatmist kustutab lõpetatud vormid ja meedia</string>
-  <string name="default_completed">Vaikimis märgi lõpetatuks</string>
-  <string name="default_completed_summary">Vaikimisi märgi vorm lõpetatuks</string>
   <string name="constraint_behavior">Piira vormi töötlemise käitumist</string>
   <string name="constraint_behavior_on_swipe">Valideeri vormis edasi liikudes</string>
   <string name="constraint_behavior_on_finalize">Vormi valideerimine toimub sisestuse lõpetamisel</string>

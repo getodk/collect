@@ -375,8 +375,6 @@
   <string name="autosend">ส่งอัตโนมัติ</string>
   <string name="delete_after_send">ลบหลังจากส่งแล้ว</string>
   <string name="delete_after_send_summary">ลบฟอร์มที่ตรวจสอบแล้วและไฟล์ภาพและเสียงหลังจากส่งไปที่เซิร์ฟเวอร์แล้ว</string>
-  <string name="default_completed">Default to finalized</string>
-  <string name="default_completed_summary">ตั้งค่าเริ่มต้นให้ทำเครื่องหมายแบบสำรวจว่าเสร็จสมบูรณ์แล้ว</string>
   <string name="constraint_behavior">ลักษณะการประมวลผลแบบมีเงื่อนไข</string>
   <string name="constraint_behavior_on_swipe">ตรวจสอบเมื่อปัดเลื่อนไปข้างหน้า</string>
   <string name="constraint_behavior_on_finalize">เลื่อนการตรวจสอบไปจนกว่าการสำรวจสิ้นสุด</string>

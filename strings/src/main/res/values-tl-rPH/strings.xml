@@ -18,8 +18,6 @@
   <string name="data">Mga Inimpok na Form</string>
   <string name="data_saved_error">Paumanhin, nabigo ang pag-impok ng form!</string>
   <string name="data_saved_ok">Matagumpay na inimpok ang Form!</string>
-  <string name="default_completed">Yari ang paunang \'tukoy</string>
-  <string name="default_completed_summary">Markahang Yari ang Form bilang paunang tukoy</string>
   <string name="delete_confirm">Burahin ang %s form(s)?</string>
   <string name="delete_file">Burahin ang mga napili</string>
   <string name="delete_no">Huwag burahin</string>

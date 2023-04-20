@@ -387,8 +387,6 @@
   <string name="wifi_autosend">Samo WiFi</string>
   <string name="cellular_autosend">Samo mobilno omrežje</string>
   <string name="wifi_cellular_autosend">WiFi ali mobilno omrežje</string>
-  <string name="default_completed">Zaključeno naj bo privzeto</string>
-  <string name="default_completed_summary">Privzeto označi obrazec kot zaključen</string>
   <string name="constraint_behavior">Način obravnave omejitev</string>
   <string name="constraint_behavior_on_swipe">Ovrednoti ob potegu naprej</string>
   <string name="constraint_behavior_on_finalize">Zadrži vrednotenje do zaključka</string>
