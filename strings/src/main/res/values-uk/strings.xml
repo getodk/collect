@@ -114,7 +114,6 @@
   <string name="save_enter_data_description">Ви наприкінці %s.</string>
   <string name="save_form_as">Назвіть анкету</string>
   <string name="save_as_error">Ім’я не може бути порожнім!</string>
-  <string name="mark_finished">Позначити анкету як завершену</string>
   <string name="quit_entry">Зберегти анкету та вийти</string>
   <string name="data_saved_error">Вибачте, не вдалось зберегти анкету!</string>
   <string name="data_saved_ok">Анкету успішно збережено!</string>

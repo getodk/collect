@@ -119,7 +119,6 @@
   <string name="save_enter_data_description">إنّك في نهاية الـ%s.</string>
   <string name="save_form_as">سمّي هذه الاستمارة</string>
   <string name="save_as_error">اسم الحفظ لا يمكن أن يكون فارغ!</string>
-  <string name="mark_finished">حدد الاستمارة كاستمارة منتهية</string>
   <string name="quit_entry">حفظ الاستمارة والخروج</string>
   <string name="data_saved_error">عذرًا، لم يتمّ حفظ الاستمارة!</string>
   <string name="data_saved_ok">تمّ حفظ الاستمارة بنجاح!</string>

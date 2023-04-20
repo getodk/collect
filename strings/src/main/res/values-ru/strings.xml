@@ -114,7 +114,6 @@
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
   <string name="save_form_as">Сохранить данный опрос под названием:</string>
   <string name="save_as_error">Название не может быть пустым!</string>
-  <string name="mark_finished">Пометить опрос как финализированный </string>
   <string name="quit_entry">Сохранить ответы и перейти в главное меню</string>
   <string name="data_saved_error">Не удалось сохранить ответы</string>
   <string name="data_saved_ok">Ответы успешно сохранены</string>

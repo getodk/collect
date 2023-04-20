@@ -32,9 +32,5 @@
             android:key="save_as"
             android:title="@string/save_form_as"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
-            android:key="mark_as_finalized"
-            android:title="@string/mark_finished"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -124,7 +124,6 @@
   <string name="save_enter_data_description">Jste na konci %s.</string>
   <string name="save_form_as">Pojmenujte tento dotazník</string>
   <string name="save_as_error">Uložené jméno nesmí být prázdné!</string>
-  <string name="mark_finished">Označit dotazník jako dokončený</string>
   <string name="quit_entry">Uložit dotazník a skončit</string>
   <string name="manual_instance_learn_more_button">Více informací</string>
   <string name="data_saved_error">Uložení dotazníku selhalo!</string>

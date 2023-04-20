@@ -27,7 +27,6 @@ class FormEndViewTest {
             context,
             null,
             null,
-            false,
             null
         )
 
@@ -44,7 +43,6 @@ class FormEndViewTest {
             context,
             null,
             null,
-            false,
             null
         )
 

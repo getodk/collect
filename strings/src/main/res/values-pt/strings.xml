@@ -119,7 +119,6 @@
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
   <string name="save_form_as">Nomear este Formulário</string>
   <string name="save_as_error">Nome a salvar não pode estar vazio!</string>
-  <string name="mark_finished">Marcar formulário como finalizado</string>
   <string name="quit_entry">Salvar Formulário e Sair</string>
   <string name="data_saved_error">Desculpe, falha ao salvar formulário!</string>
   <string name="data_saved_ok">Formulário salvo com sucesso!</string>

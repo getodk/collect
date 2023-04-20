@@ -1258,7 +1258,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), new FormEndView.Listener() {
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, new FormEndView.Listener() {
             @Override
             public void onSaveAsChanged(String saveAs) {
                 // Seems like this is needed for rotation?
@@ -1278,17 +1278,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         });
 
-        if (!settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_MARK_AS_FINALIZED)) {
-            endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
-        }
-
         if (formController.getSubmissionMetadata().instanceName != null) {
             // if instanceName is defined in form, this is the name -- no
             // revisions
             // display only the name, not the prompt, and disable edits
             endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
             endView.findViewById(R.id.save_name).setEnabled(false);
-            endView.findViewById(R.id.save_name).setVisibility(View.VISIBLE);
         }
 
         // override the visibility settings based upon admin preferences

@@ -124,7 +124,6 @@
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
   <string name="save_form_as">Nommer le formulaire :</string>
   <string name="save_as_error">Le nom ne peut pas être vide !</string>
-  <string name="mark_finished">Marquer le formulaire comme finalisé</string>
   <string name="quit_entry">Enregistrer le formulaire et sortir</string>
   <string name="manual_instance_name_warning">Bientôt il sera impossible de nommer les formulaires manuellement. Le formulaire doit être modifié.</string>
   <string name="manual_instance_learn_more_button">En savoir plus</string>

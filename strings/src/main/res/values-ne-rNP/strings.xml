@@ -89,7 +89,6 @@
   <string name="save_enter_data_description">तपाई %sको अन्त्यमा हुनुहुन्छ |</string>
   <string name="save_form_as">फारमलाई नाम दिनुहोस्</string>
   <string name="save_as_error">संचित गर्दा नाम खाली छोड्न मिल्दैन !</string>
-  <string name="mark_finished">फारामलाई अन्तिम रुप दिइएको अंकित गर्नुहोस् </string>
   <string name="quit_entry">फारम संचित गरी बाहिर निस्कनुहोस् </string>
   <string name="data_saved_error">माफ गर्नुहोला , फारम संचित हुन सकेन !</string>
   <string name="data_saved_ok">फारम सफलतापूर्वक संचित भयो !</string>

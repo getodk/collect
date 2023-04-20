@@ -70,7 +70,6 @@
   <string name="save_enter_data_description">আপনি %s ফরম শেষে দিকে রয়েছে </string>
   <string name="save_form_as">এই ফর্মের নাম</string>
   <string name="save_as_error">সংরক্ষিত নাম খালি রাখা যাবে না।</string>
-  <string name="mark_finished">ফরম চূড়ান্ত হিসেবে চিন্হিত করুন </string>
   <string name="quit_entry">ফরম সংরক্ষন করুন  এবং প্রস্থান করুন </string>
   <string name="data_saved_error">দু:খিত, ফরম সংরক্ষিত হয়নি</string>
   <string name="data_saved_ok">ফরম সংরক্ষিত হয়েছে</string>

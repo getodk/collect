@@ -79,7 +79,6 @@
   <string name="required_answer_error">ക്ഷമിക്കണം, ഈ ഉത്തരം അത്യാവശ്യമാണ്</string>
   <string name="save_form_as">ഈ ഫോമിന് പേര് നൽകുക</string>
   <string name="save_as_error">സേവ് ചെയ്ത പേര് ശൂന്യമാകാൻ പാടുള്ളതല്ല</string>
-  <string name="mark_finished">ഫോം അവസാനിപ്പിച്ചതായി അടയാളപ്പെടുത്തുക</string>
   <string name="data_saved_error">ക്ഷമിക്കണം, ഫോർമ് സംരക്ഷിക്കുന്നത് പരാജയപ്പെട്ടു!</string>
   <string name="data_saved_ok">ഫോർമ് വിജയകരമായി സംരക്ഷിച്ചു!</string>
   <string name="save_point_error">വീണ്ടെടുക്കൽ പോയിന്റ് സംരക്ഷിക്കുന്നതിൽ പിശക്/പ്രമാദം: 1 %s</string>

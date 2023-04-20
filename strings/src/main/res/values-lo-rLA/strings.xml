@@ -78,7 +78,6 @@
   <string name="save_enter_data_description">​ທ່ານຢູ່ຈຸດສີ້ນສຸດຂອງ %s.</string>
   <string name="save_form_as">ໃສ່ຊື່ແບບຟອມນີ້</string>
   <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
-  <string name="mark_finished">ໝາຍແບບຟອມວ່າໄດ້ສຳເລັດແລ້ວ</string>
   <string name="quit_entry">ບັນທຶກແບບຟອມ ແລະ ອອກຈາກລະບົບ</string>
   <string name="data_saved_error">ການບັກທຶກແບບຟອມລົ້ມເຫຼວ</string>
   <string name="data_saved_ok">ແບບຟອມໄດ້ຖືກບັນທຶກສຳເລັດແລ້ວ</string>

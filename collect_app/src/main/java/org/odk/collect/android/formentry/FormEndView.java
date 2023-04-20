@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -23,15 +22,15 @@ public class FormEndView extends SwipeHandler.View {
     private final String formTitle;
     private final String defaultInstanceName;
 
-    public FormEndView(Context context, String formTitle, String defaultInstanceName, boolean instanceComplete, Listener listener) {
+    public FormEndView(Context context, String formTitle, String defaultInstanceName, Listener listener) {
         super(context);
         this.formTitle = formTitle;
         this.defaultInstanceName = defaultInstanceName;
         this.listener = listener;
-        init(context, instanceComplete);
+        init(context);
     }
 
-    private void init(Context context, boolean instanceComplete) {
+    private void init(Context context) {
         inflate(context, R.layout.form_entry_end, this);
 
         ((TextView) findViewById(R.id.description)).setText(context.getString(R.string.save_enter_data_description, formTitle));
@@ -63,11 +62,8 @@ public class FormEndView extends SwipeHandler.View {
             }
         });
 
-        final CheckBox markAsFinalized = findViewById(R.id.mark_finished);
-        markAsFinalized.setChecked(instanceComplete);
-
         findViewById(R.id.save_exit_button).setOnClickListener(v -> {
-            listener.onSaveClicked(markAsFinalized.isChecked());
+            listener.onSaveClicked(true);
         });
 
         findViewById(R.id.instance_name_learn_more).setOnClickListener(v -> {

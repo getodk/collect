@@ -107,7 +107,6 @@
   <string name="save_enter_data_description">អ្នកដល់ទីបញ្ចប់នៃ %s</string>
   <string name="save_form_as">ឈ្មោះសំណុំ​បែប​បទនេះ</string>
   <string name="save_as_error">ឈ្មោះរក្សាទុកមិនអាចទទេ!</string>
-  <string name="mark_finished">សម្គាល់សំណុំបែបបទថាបានបញ្ចប់</string>
   <string name="quit_entry">រក្សា​ទុក​សំណុំ​បែប​បទ​ និង​ចាក​ចេញ</string>
   <string name="data_saved_error">សុំទោស, រក្សា​ទុកសំណុំ​បែបបទ​មិន​បាន​សម្រេច!</string>
   <string name="data_saved_ok">បាន​រក្សាទុកសំណុំ​បែបបទ​ដោយ​ជោគជ័យ!</string>

@@ -87,7 +87,6 @@
   <string name="save_enter_data_description">თქვენ ხართ \"%s\"-ს ბოლოში.</string>
   <string name="save_form_as">მიანიჭეთ სახელი ფორმას:</string>
   <string name="save_as_error">სახელი არ უნდა იყოს ცარიელი!</string>
-  <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
   <string name="quit_entry">ფორმის შენახვა და გამოსვლა</string>
   <string name="data_saved_error">უკაცრავად, ფორმა ვერ შეინახა!</string>
   <string name="data_saved_ok">ფორმა წარმატებით შეინახა!</string>

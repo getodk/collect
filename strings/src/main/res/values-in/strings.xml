@@ -119,7 +119,6 @@
   <string name="save_enter_data_description">Anda berada di akhir dari formulir\n\"%s\".</string>
   <string name="save_form_as">Namai formulir ini: </string>
   <string name="save_as_error">Nama tidak boleh kosong.</string>
-  <string name="mark_finished">Tandai formulir telah terfinalisasi</string>
   <string name="quit_entry">Simpan formulir dan keluar</string>
   <string name="data_saved_error">Maaf, tidak berhasil menyimpan formulir.</string>
   <string name="data_saved_ok">Formulir berhasil disimpan.</string>

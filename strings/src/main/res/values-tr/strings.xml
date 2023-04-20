@@ -89,7 +89,6 @@
   <string name="delete_repeat_no">Vazgeç</string>
   <string name="save_form_as">Form ismi </string>
   <string name="save_as_error">İsim alani boş bırakilamaz</string>
-  <string name="mark_finished">Bitirilen Formu işaretle</string>
   <string name="quit_entry">Formu sakla ve Çık</string>
   <string name="data_saved_error">Form kaydedilirken hata oluştu</string>
   <string name="data_saved_ok">From başarılı bir şekilde saklandi</string>

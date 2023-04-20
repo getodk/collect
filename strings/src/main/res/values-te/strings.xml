@@ -119,7 +119,6 @@
   <string name="save_enter_data_description">మీరు%sచివరిలో ఉన్నారు.</string>
   <string name="save_form_as">ఈ ఫారంకు పేరు పెట్టండి</string>
   <string name="save_as_error">సేవ్ చేసిన పేరు ఖాళీగా ఉండకూడదు!</string>
-  <string name="mark_finished">ఫారంను ఖరారు చేసినట్లుగా గుర్తించండి</string>
   <string name="quit_entry">ఫారంను సేవ్ చేసి నిష్క్రమించండి</string>
   <string name="data_saved_error">క్షమించండి, ఫారం సేవ్ అవ్వలేదు</string>
   <string name="data_saved_ok">ఫారం విజయవంతంగా సేవ్ చేయబడింది!</string>

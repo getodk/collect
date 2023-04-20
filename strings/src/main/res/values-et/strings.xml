@@ -84,7 +84,6 @@
   <string name="save_enter_data_description">Olete %s lõpus</string>
   <string name="save_form_as">Vormi nimi</string>
   <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
-  <string name="mark_finished">Märgi vorm lõpetatuks</string>
   <string name="quit_entry">Salvesta vorm ja välju</string>
   <string name="data_saved_error">Kahjuks ebaõnnestus vormi salvestamine!</string>
   <string name="data_saved_ok">Vorm on edukalt salvestatud!</string>

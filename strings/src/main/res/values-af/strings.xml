@@ -79,7 +79,6 @@
   <string name="save_enter_data_description">U is aan die einde van %s.</string>
   <string name="save_form_as">Gee hierdie vorm \'n naam</string>
   <string name="save_as_error">Gestoorde naam mag nie leeg wees nie!</string>
-  <string name="mark_finished">Merk vorm as gefinaliseer</string>
   <string name="quit_entry">Stoor Vorm en Verlaat</string>
   <string name="data_saved_error">Jammer, stoor van vorm het misluk!</string>
   <string name="data_saved_ok">Vorm suksesvol gestoor!</string>

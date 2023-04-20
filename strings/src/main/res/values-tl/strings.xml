@@ -73,7 +73,6 @@
   <string name="save_enter_data_description">Ikaw ay nasa dulo ng \"%s\".</string>
   <string name="save_form_as">Panglanan ang Form:</string>
   <string name="save_as_error">Hindi maaaring blangko ang pangalan ng form!</string>
-  <string name="mark_finished">Markahan Yari ang Form</string>
   <string name="quit_entry">Impukin ang Form at Lumabas</string>
   <string name="data_saved_error">Paumanhin, nabigo ang pag-impok ng form!</string>
   <string name="data_saved_ok">Matagumpay na inimpok ang Form!</string>

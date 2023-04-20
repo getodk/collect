@@ -119,7 +119,6 @@
   <string name="save_enter_data_description">%s の最後です。</string>
   <string name="save_form_as">このフォームの名前</string>
   <string name="save_as_error">保存する名前は空にできません!</string>
-  <string name="mark_finished">フォームを確定済にします</string>
   <string name="quit_entry">フォームを保存して終了</string>
   <string name="data_saved_error">申し訳ありません、フォームが保存できませんでした!</string>
   <string name="data_saved_ok">フォームを保存しました!</string>

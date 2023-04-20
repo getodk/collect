@@ -107,15 +107,6 @@ the specific language governing permissions and limitations under the License.
             android:inputType="textMultiLine"
             android:textSize="21sp" />
 
-        <CheckBox
-            android:id="@+id/mark_finished"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginBottom="10dp"
-            android:text="@string/mark_finished"
-            android:textSize="21sp" />
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_exit_button"
             style="@style/Widget.Collect.Button.FullWidth"

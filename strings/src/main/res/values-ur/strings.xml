@@ -110,7 +110,6 @@
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
   <string name="save_form_as">اس فارم کو نام دیں</string>
   <string name="save_as_error">محفوظ کیا گیا نام خالی نہیں ہونا چاہئے</string>
-  <string name="mark_finished">فارم کو حتمی کردیں</string>
   <string name="quit_entry">فارم کو محفوظ کرکے نکل جایئں</string>
   <string name="data_saved_error">معذرت, فارم محفوظ نہیں ہوسکا</string>
   <string name="data_saved_ok">فارم کامیابی سے محفوظ ہو گیا</string>

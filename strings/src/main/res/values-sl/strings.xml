@@ -94,7 +94,6 @@
   <string name="save_enter_data_description">Si pri koncu %s</string>
   <string name="save_form_as">Poimenuj obrazec</string>
   <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
-  <string name="mark_finished">Označi obrazec kot zaključen</string>
   <string name="quit_entry">Shrani obrazec in zapri</string>
   <string name="data_saved_error">Shranjevanje obrazca ni uspelo!</string>
   <string name="data_saved_ok">Obrazec uspešno shranjen!</string>

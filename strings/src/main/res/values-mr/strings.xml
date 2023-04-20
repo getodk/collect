@@ -89,7 +89,6 @@
   <string name="save_enter_data_description">आपण 1%s च्या समाप्तीस आहात</string>
   <string name="save_form_as">या फॉर्मला नाव द्या</string>
   <string name="save_as_error">जतन केलेले नाव रिक्त असू शकत नाही!</string>
-  <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
   <string name="quit_entry">फॉर्म जतन करा आणि निर्गमन करा</string>
   <string name="data_saved_error">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
   <string name="data_saved_ok">फॉर्म यशस्वीरित्या जतन केला!</string>

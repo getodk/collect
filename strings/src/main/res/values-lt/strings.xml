@@ -70,7 +70,6 @@
   <string name="save_enter_data_description">Jūs esate \"%s\" pabaigoje.</string>
   <string name="save_form_as">Pavadinkite šią formą:</string>
   <string name="save_as_error">Pavadinimas negali būti tuščias!</string>
-  <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
   <string name="quit_entry">Išsaugoti formą ir išeiti</string>
   <string name="data_saved_error">Deja, formos išsaugoti nepavyko!</string>
   <string name="data_saved_ok">Forma sėkmingai išsaugota!</string>

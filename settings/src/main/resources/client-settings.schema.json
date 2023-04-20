@@ -317,9 +317,6 @@
         },
         "save_as": {
           "type": "boolean"
-        },
-        "mark_as_finalized": {
-          "type": "boolean"
         }
       }
     }

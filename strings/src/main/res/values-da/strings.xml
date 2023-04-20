@@ -97,7 +97,6 @@
   <string name="save_enter_data_description">Du er ved slutningen af %s.</string>
   <string name="save_form_as">Navngiv formular</string>
   <string name="save_as_error">Den gemte titel må ikke være tom - skal hedde noget.</string>
-  <string name="mark_finished">Markér form som færdiggjort</string>
   <string name="quit_entry">Gem formular og afslut</string>
   <string name="data_saved_error">Formularen kunne ikke gemmes</string>
   <string name="data_saved_ok">Formular gemt </string>

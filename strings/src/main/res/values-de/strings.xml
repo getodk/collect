@@ -124,7 +124,6 @@
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
   <string name="save_form_as">Benennen Sie dieses Formular:</string>
   <string name="save_as_error">Gespeicherter Name darf nicht leer sein!</string>
-  <string name="mark_finished">Formular als vollständig markieren</string>
   <string name="quit_entry">Formular speichern und beenden</string>
   <string name="manual_instance_name_warning">Bald wird manuelles Benamen von Formularen entfernt. Formular-Design muss aktualisiert werden.</string>
   <string name="manual_instance_learn_more_button">Mehr erfahren</string>

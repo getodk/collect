@@ -83,7 +83,6 @@
   <string name="save_enter_data_description">በ 1 %s መጨረሻ ላይ ነዎት</string>
   <string name="save_form_as">ይህን ቅጽ ይሰይሙ</string>
   <string name="save_as_error">የተቀመጠው ስም ባዶ መሆን የለበትም!</string>
-  <string name="mark_finished">ቅጹን እንደተጠናቀቀ ምልክት አድርግ</string>
   <string name="quit_entry">ቅጹን አስቀምጠዉ ይውጡ</string>
   <string name="data_saved_error">ይቅርታ፣ ቅፁን ማስቀመጥ አልተሳካም!</string>
   <string name="data_saved_ok">ቅፁ በተሳካ ሁኔታ ተቀምጧል!</string>

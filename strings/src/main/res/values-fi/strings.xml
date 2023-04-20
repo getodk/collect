@@ -124,7 +124,6 @@
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
   <string name="save_form_as">Nimeä tämä lomake</string>
   <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
-  <string name="mark_finished">Merkitse lomake valmiiksi</string>
   <string name="quit_entry">Tallenna lomake ja lopeta</string>
   <string name="manual_instance_name_warning">Manuaalinen lomakkeiden nimeäminen poistetaan kohta. Lomakkeen muotoilua pitää päivittää.</string>
   <string name="manual_instance_learn_more_button">Lisätietoja</string>

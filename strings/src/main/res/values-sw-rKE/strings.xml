@@ -82,7 +82,6 @@
   <string name="save_enter_data_description">Umefika mwisho wa %s.</string>
   <string name="save_form_as">Ipatie jina fomu hii</string>
   <string name="save_as_error">Jina lilohifadhiwa halifai kuwa tupu</string>
-  <string name="mark_finished">sahihisha fomu kama iliyo kamilika</string>
   <string name="quit_entry">Hifadhi fomu na Kutoka</string>
   <string name="data_saved_error">Samahani, fomu haikuhifadhiwa!</string>
   <string name="data_saved_ok">Fomu imehifadhiwa!</string>

@@ -101,7 +101,6 @@
   <string name="save_enter_data_description">Jeni në fund të %s.</string>
   <string name="save_form_as">Emërto formularin</string>
   <string name="save_as_error">Emri i ruajtur nuk mund të jetë bosh!</string>
-  <string name="mark_finished">Shëno formularin si të përfunduar</string>
   <string name="quit_entry">Ruaj formën dhe dil</string>
   <string name="data_saved_error">Ndjesë, ruajtja e formualrit dështoi!</string>
   <string name="data_saved_ok">Formulari u ruajt me sukses!</string>

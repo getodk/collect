@@ -80,7 +80,6 @@
   <string name="save_enter_data_description">Sunteți la sfârșitul \"%s\".</string>
   <string name="save_form_as">Denumiți acest formular:</string>
   <string name="save_as_error">Numele salvat nu trebuie să fie gol!</string>
-  <string name="mark_finished">Marcați formularul ca finalizat</string>
   <string name="quit_entry">Salvați formularul și ieșiți</string>
   <string name="data_saved_error">Ne pare rău, salvarea formularului nu a reușit!</string>
   <string name="data_saved_ok">Salvarea formularului a reușit!</string>
