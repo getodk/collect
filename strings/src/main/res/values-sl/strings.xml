@@ -92,7 +92,6 @@
   <string name="invalid_space_in_answer_plural">Opozorila: vrednosti %s vsebujejo presledke</string>
   <string name="survey_internal_error">Interna napaka. Korak k vprašanju ni uspel.</string>
   <string name="save_enter_data_description">Si pri koncu %s</string>
-  <string name="save_form_as">Poimenuj obrazec</string>
   <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
   <string name="quit_entry">Shrani obrazec in zapri</string>
   <string name="data_saved_error">Shranjevanje obrazca ni uspelo!</string>

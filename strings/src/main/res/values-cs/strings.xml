@@ -122,7 +122,6 @@
   <string name="too_complex_form">Tento formulář je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>
   <string name="survey_internal_error">Vnitřní chyba: přechod k otázce selhal.</string>
   <string name="save_enter_data_description">Jste na konci %s.</string>
-  <string name="save_form_as">Pojmenujte tento dotazník</string>
   <string name="save_as_error">Uložené jméno nesmí být prázdné!</string>
   <string name="quit_entry">Uložit dotazník a skončit</string>
   <string name="manual_instance_learn_more_button">Více informací</string>

@@ -71,7 +71,6 @@
   <string name="invalid_answer_error">Paumanhin, ang tugon na into ay hindi wasto!</string>
   <string name="required_answer_error">Paumanhin, ang tugon na ito ay kailangan!</string>
   <string name="save_enter_data_description">Ikaw ay nasa dulo ng \"%s\".</string>
-  <string name="save_form_as">Panglanan ang Form:</string>
   <string name="save_as_error">Hindi maaaring blangko ang pangalan ng form!</string>
   <string name="quit_entry">Impukin ang Form at Lumabas</string>
   <string name="data_saved_error">Paumanhin, nabigo ang pag-impok ng form!</string>

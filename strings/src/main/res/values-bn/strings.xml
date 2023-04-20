@@ -68,7 +68,6 @@
   <string name="invalid_answer_error">দুঃখিত,উত্তর গ্রহণযোগ্য নয়।</string>
   <string name="required_answer_error">দুঃখিত, এই উত্তরটি অপরিহার্য ।</string>
   <string name="save_enter_data_description">আপনি %s ফরম শেষে দিকে রয়েছে </string>
-  <string name="save_form_as">এই ফর্মের নাম</string>
   <string name="save_as_error">সংরক্ষিত নাম খালি রাখা যাবে না।</string>
   <string name="quit_entry">ফরম সংরক্ষন করুন  এবং প্রস্থান করুন </string>
   <string name="data_saved_error">দু:খিত, ফরম সংরক্ষিত হয়নি</string>

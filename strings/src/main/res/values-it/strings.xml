@@ -122,7 +122,6 @@
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
-  <string name="save_form_as">Nome di questo modulo:</string>
   <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
   <string name="quit_entry">Salva modulo ed esci</string>
   <string name="manual_instance_learn_more_button">Saperne di più</string>

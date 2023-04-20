@@ -117,7 +117,6 @@
   <string name="too_complex_form">ఈ పరికరం కోసం ఈ ఫారం చాలా క్లిష్టంగా ఉంటుంది. వ్యక్తీకరణలను సరళీకృతం చేయడానికి ప్రయత్నించండి లేదా ఫోరమ్‌లో సహాయం కోసం అడగండి.</string>
   <string name="survey_internal_error">అంతర్గత లోపం: ప్రాంప్ట్ ప్రారంభించే దశ విఫలమైంది.</string>
   <string name="save_enter_data_description">మీరు%sచివరిలో ఉన్నారు.</string>
-  <string name="save_form_as">ఈ ఫారంకు పేరు పెట్టండి</string>
   <string name="save_as_error">సేవ్ చేసిన పేరు ఖాళీగా ఉండకూడదు!</string>
   <string name="quit_entry">ఫారంను సేవ్ చేసి నిష్క్రమించండి</string>
   <string name="data_saved_error">క్షమించండి, ఫారం సేవ్ అవ్వలేదు</string>

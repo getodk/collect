@@ -110,7 +110,6 @@
   <string name="invalid_space_in_answer_plural">Varning: bakomliggande värden %s innehåller mellanslag</string>
   <string name="survey_internal_error">Internt fel: gå till inmatningsrad misslyckades.</string>
   <string name="save_enter_data_description">Du är vid slutet av %s.</string>
-  <string name="save_form_as">Namnge detta formulär</string>
   <string name="save_as_error">Sparat namn får inte vara tomt!</string>
   <string name="quit_entry">Spara formulär och avsluta</string>
   <string name="data_saved_error">Tyvärr, formuläret kunde inte sparas!</string>

@@ -28,9 +28,5 @@
             android:key="save_mid"
             android:title="@string/save_mid"
             app:iconSpaceReserved="false" />
-        <CheckBoxPreference
-            android:key="save_as"
-            android:title="@string/save_form_as"
-            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

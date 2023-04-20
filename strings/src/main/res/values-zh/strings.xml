@@ -121,7 +121,6 @@
   <string name="too_complex_form">此表单对于此设备太复杂。尝试简化表达或在论坛上寻求帮助。</string>
   <string name="survey_internal_error">内部错误：提示步骤失败。</string>
   <string name="save_enter_data_description">您已在 %s 的末尾.</string>
-  <string name="save_form_as">重命名表格:</string>
   <string name="save_as_error">保存的名字不能为空!</string>
   <string name="quit_entry">保存表格并退出</string>
   <string name="data_saved_error">表格保存失败!</string>

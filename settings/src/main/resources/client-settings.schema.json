@@ -314,9 +314,6 @@
         },
         "save_mid": {
           "type": "boolean"
-        },
-        "save_as": {
-          "type": "boolean"
         }
       }
     }

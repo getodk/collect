@@ -152,7 +152,6 @@
     <string name="survey_internal_error">Internal error: step to prompt failed.</string>
 
     <string name="save_enter_data_description">You are at the end of %s.</string>
-    <string name="save_form_as">Name this form</string>
     <string name="save_as_error">Saved name must not be blank!</string>
     <string name="quit_entry">Save Form and Exit</string>
     <string name="manual_instance_name_warning">Soon manually naming forms will be removed. Form design needs to be updated.</string>

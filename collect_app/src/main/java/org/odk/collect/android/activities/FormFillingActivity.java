@@ -191,7 +191,6 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
@@ -1258,13 +1257,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, new FormEndView.Listener() {
-            @Override
-            public void onSaveAsChanged(String saveAs) {
-                // Seems like this is needed for rotation?
-                saveName = saveAs;
-            }
-
+        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), new FormEndView.Listener() {
             @Override
             public void onSaveClicked(boolean markAsFinalized) {
                 if (saveName.length() < 1) {
@@ -1277,20 +1270,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
             }
         });
-
-        if (formController.getSubmissionMetadata().instanceName != null) {
-            // if instanceName is defined in form, this is the name -- no
-            // revisions
-            // display only the name, not the prompt, and disable edits
-            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
-            endView.findViewById(R.id.save_name).setEnabled(false);
-        }
-
-        // override the visibility settings based upon admin preferences
-        if (!settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS)) {
-            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
-            endView.findViewById(R.id.save_name).setVisibility(View.GONE);
-        }
 
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();

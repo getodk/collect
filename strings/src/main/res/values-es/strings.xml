@@ -122,7 +122,6 @@
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
-  <string name="save_form_as">Nombrar a este formulario:</string>
   <string name="save_as_error">¡El nombre no puede estar en blanco!</string>
   <string name="quit_entry">Guardar Formulario y Salir</string>
   <string name="manual_instance_learn_more_button">Aprende más</string>

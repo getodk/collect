@@ -99,7 +99,6 @@
   <string name="choose_image">Pumili ng Imahe</string>
   <string name="selected">Pinili: </string>
   <string name="select_answer">Pumili ng Sagot</string>
-  <string name="save_form_as">Panglanan ang Form:</string>
   <string name="save_as_error">Hindi maaaring blangko ang pangalan ng form!</string>
   <string name="edit_prompt">Pamatnugutan ang Udyok</string>
   <string name="selected_google_account_text">Google Account</string>

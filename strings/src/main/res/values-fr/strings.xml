@@ -122,7 +122,6 @@
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="survey_internal_error">Erreur interne : un ou plusieurs champs de saisie peuvent avoir été ignorés.</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
-  <string name="save_form_as">Nommer le formulaire :</string>
   <string name="save_as_error">Le nom ne peut pas être vide !</string>
   <string name="quit_entry">Enregistrer le formulaire et sortir</string>
   <string name="manual_instance_name_warning">Bientôt il sera impossible de nommer les formulaires manuellement. Le formulaire doit être modifié.</string>

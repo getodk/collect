@@ -117,7 +117,6 @@
   <string name="too_complex_form">Formularz jest zbyt skomplikowany dla tego urządzenia. Spróbuj uprościć wyrażenia, lub poproś o pomoc na forum.</string>
   <string name="survey_internal_error">Błąd wewnętrzny: przejście do pytania nie powiodło się.</string>
   <string name="save_enter_data_description">Jesteś przy końcu %s.</string>
-  <string name="save_form_as">Nazwij ten formularz</string>
   <string name="save_as_error">Zapisana nazwa nie może być pusta!</string>
   <string name="quit_entry">Zapisz Formularz i Zakończ</string>
   <string name="data_saved_error">Przykro mi, zapis formularza się nie powiódł!</string>

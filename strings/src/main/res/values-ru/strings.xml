@@ -112,7 +112,6 @@
   <string name="invalid_space_in_answer_plural">Внимание: нижеследующие значения %s содержат пробелы</string>
   <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
-  <string name="save_form_as">Сохранить данный опрос под названием:</string>
   <string name="save_as_error">Название не может быть пустым!</string>
   <string name="quit_entry">Сохранить ответы и перейти в главное меню</string>
   <string name="data_saved_error">Не удалось сохранить ответы</string>

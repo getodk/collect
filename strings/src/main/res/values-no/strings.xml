@@ -76,7 +76,6 @@
   <string name="required_answer_error">Beklager, svaret er påkrevd!</string>
   <string name="survey_internal_error">Intern feil: step to prompt feilet.</string>
   <string name="save_enter_data_description">Du er på slutten av \"%s\".</string>
-  <string name="save_form_as">Lagre som:</string>
   <string name="save_as_error">Navnet kan ikke være blank!</string>
   <string name="quit_entry">Lagre skjema og avslutt</string>
   <string name="data_saved_error">Beklager, skjemalagring mislyktes!</string>

@@ -76,7 +76,6 @@
   <string name="required_answer_error">ກະລຸນາຕື່ມຄຳຕອບໃສ່ຄຳຖາມນີ້ກ່ອນ</string>
   <string name="survey_internal_error">​ຜິດ​ພາດ​ພາຍ​ໃນ: ຂັ້ນ​ຕອນ​ການ​ເຕືອນ​ລົ້ມ​ເຫຼວ.</string>
   <string name="save_enter_data_description">​ທ່ານຢູ່ຈຸດສີ້ນສຸດຂອງ %s.</string>
-  <string name="save_form_as">ໃສ່ຊື່ແບບຟອມນີ້</string>
   <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
   <string name="quit_entry">ບັນທຶກແບບຟອມ ແລະ ອອກຈາກລະບົບ</string>
   <string name="data_saved_error">ການບັກທຶກແບບຟອມລົ້ມເຫຼວ</string>
