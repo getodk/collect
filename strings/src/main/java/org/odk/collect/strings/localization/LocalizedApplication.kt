@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.view.View
-import java.util.*
+import java.util.Locale
 
 interface LocalizedApplication {
 
