@@ -46,7 +46,7 @@ public class ResetApplicationTest {
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .clickEditSavedForm()
                 .assertText("All widgets")
                 .pressBack(new MainMenuPage())

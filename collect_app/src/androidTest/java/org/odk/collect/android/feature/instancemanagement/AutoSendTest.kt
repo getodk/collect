@@ -33,7 +33,7 @@ class AutoSendTest {
             .startBlankForm("One Question")
             .inputText("31")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
         testDependencies.scheduler.runDeferredTasks()
 
@@ -62,7 +62,7 @@ class AutoSendTest {
             .startBlankForm("One Question")
             .inputText("31")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
         testDependencies.scheduler.runDeferredTasks()
 
@@ -96,7 +96,7 @@ class AutoSendTest {
             .startBlankForm("One Question Autosend")
             .inputText("31")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
         testDependencies.scheduler.runDeferredTasks()
 
@@ -124,7 +124,7 @@ class AutoSendTest {
             .startBlankForm("One Question Autosend")
             .inputText("31")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
         testDependencies.scheduler.runDeferredTasks()
 

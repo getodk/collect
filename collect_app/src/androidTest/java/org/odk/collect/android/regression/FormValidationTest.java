@@ -35,7 +35,7 @@ public class FormValidationTest {
                 .answerQuestion(0, "Aaaaa")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test

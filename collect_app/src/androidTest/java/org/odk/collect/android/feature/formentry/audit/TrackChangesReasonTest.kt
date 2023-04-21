@@ -31,7 +31,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -55,7 +55,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
             .clickEditSavedForm()
 
             .clickOnForm("Track Changes Reason")
@@ -72,7 +72,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -89,7 +89,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -109,7 +109,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -131,7 +131,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -148,7 +148,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")

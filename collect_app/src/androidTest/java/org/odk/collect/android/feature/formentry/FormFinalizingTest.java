@@ -23,25 +23,25 @@ public class FormFinalizingTest {
             .around(rule);
 
     @Test
-    public void fillingForm_andPressingSaveAndDraft_doesNotFinalizesForm() {
+    public void fillingForm_andPressingSaveAsDraft_doesNotFinalizesForm() {
         rule.startAtMainMenu()
                 .copyForm(FORM)
                 .assertNumberOfFinalizedForms(0)
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
-                .clickSaveAsDraftAndExit()
+                .clickSaveAsDraft()
                 .assertNumberOfEditableForms(1)
                 .assertNumberOfFinalizedForms(0);
     }
 
     @Test
-    public void fillingForm_andPressingSaveAndExit_finalizesForm() {
+    public void fillingForm_andPressingFinalize_finalizesForm() {
         rule.startAtMainMenu()
                 .copyForm(FORM)
                 .assertNumberOfFinalizedForms(0)
                 .startBlankForm("One Question")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .assertNumberOfEditableForms(1)
                 .assertNumberOfFinalizedForms(1);
     }

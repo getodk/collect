@@ -36,7 +36,7 @@ public class TriggerWidgetTest {
                 .startBlankForm("Guidance Form Sample")
                 .assertText("Guidance text")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
     }
 
@@ -56,6 +56,6 @@ public class TriggerWidgetTest {
                 .clickOnText("TriggerWidget")
                 .assertText("Guidance text")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 }

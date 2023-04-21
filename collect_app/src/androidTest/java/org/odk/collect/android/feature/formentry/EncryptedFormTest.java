@@ -44,7 +44,7 @@ public class EncryptedFormTest {
                 .startBlankForm("encrypted")
                 .assertQuestion("Question 1")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok)
                 .clickEditSavedForm()
                 .checkInstanceState("encrypted", Instance.STATUS_COMPLETE)
@@ -61,7 +61,7 @@ public class EncryptedFormTest {
                 .startBlankForm("encrypted")
                 .assertQuestion("Question 1")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("encrypted")
@@ -83,7 +83,7 @@ public class EncryptedFormTest {
                 .startBlankForm("encrypted-no-instanceID")
                 .assertQuestion("Question 1")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
                 .clickEditSavedForm()
                 .checkInstanceState("encrypted-no-instanceID", Instance.STATUS_INCOMPLETE);

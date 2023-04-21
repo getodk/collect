@@ -25,22 +25,22 @@ public class FormEndPage extends Page<FormEndPage> {
         return this;
     }
 
-    public MainMenuPage clickSaveAsDraftAndExit() {
+    public MainMenuPage clickSaveAsDraft() {
         onView(withId(R.id.save_as_draft)).perform(click());
         return new MainMenuPage().assertOnPage();
     }
 
-    public <D extends Page<D>> D clickSaveAndExit(D destination) {
+    public <D extends Page<D>> D clickFinalize(D destination) {
         onView(withId(R.id.finalize)).perform(click());
         return destination.assertOnPage();
     }
 
-    public MainMenuPage clickSaveAndExit() {
-        return clickSaveAndExit(new MainMenuPage());
+    public MainMenuPage clickFinalize() {
+        return clickFinalize(new MainMenuPage());
     }
 
     public FormMapPage clickSaveAndExitBackToMap() {
-        return clickSaveAndExit(new FormMapPage(formName));
+        return clickFinalize(new FormMapPage(formName));
     }
 
     public FormEntryPage clickSaveAndExitWithError(String errorText) {
@@ -50,11 +50,11 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public OkDialog clickSaveAndExitWithErrorDialog() {
-        return clickSaveAndExit(new OkDialog());
+        return clickFinalize(new OkDialog());
     }
 
     public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
-        return clickSaveAndExit(new ChangesReasonPromptPage(formName));
+        return clickFinalize(new ChangesReasonPromptPage(formName));
     }
 
     public FormHierarchyPage clickGoToArrow() {

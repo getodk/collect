@@ -37,7 +37,7 @@ class FormEditActionTest {
         val result = rule.launchForResult(formIntent, FormEntryPage("One Question")) {
             it.answerQuestion("what is your age", "31")
                 .swipeToEndScreen()
-                .clickSaveAndExit(AppClosedPage())
+                .clickFinalize(AppClosedPage())
         }
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")

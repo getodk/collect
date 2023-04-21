@@ -33,7 +33,7 @@ class InstanceEditActionTest {
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
@@ -43,7 +43,7 @@ class InstanceEditActionTest {
             it.clickGoToStart()
                 .answerQuestion("what is your age", "32")
                 .swipeToEndScreen()
-                .clickSaveAndExit(AppClosedPage())
+                .clickFinalize(AppClosedPage())
         }
 
         assertThat(result.resultData.data, equalTo(uri))
@@ -55,7 +55,7 @@ class InstanceEditActionTest {
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
@@ -75,7 +75,7 @@ class InstanceEditActionTest {
             .copyAndSyncForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
             .addAndSwitchToProject("https://example.com")
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
@@ -93,7 +93,7 @@ class InstanceEditActionTest {
             .copyAndSyncForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
             .addAndSwitchToProject("https://example.com")
             .openProjectSettingsDialog()
             .selectProject("Demo project")
@@ -117,7 +117,7 @@ class InstanceEditActionTest {
             .copyAndSyncForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
             .addAndSwitchToProject("https://example.com")
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")

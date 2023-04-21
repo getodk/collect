@@ -80,7 +80,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public MainMenuPage fillOutAndFinalize(QuestionAndAnswer... questionsAndAnswers) {
         return fillOut(questionsAndAnswers)
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     public FormEntryPage swipeToNextQuestion(String questionText) {

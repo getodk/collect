@@ -58,7 +58,7 @@ public class FormManagementTest {
                 .startBlankForm("hints textq")
                 .assertText("1 very very very very very very very very very very long text")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -78,7 +78,7 @@ public class FormManagementTest {
                 .clickOnText("Hint 1")
                 .assertText("1 very very very very very very very very very very long text")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
 }

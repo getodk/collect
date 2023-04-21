@@ -43,7 +43,7 @@ public class DeleteBlankFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "22")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickDeleteSavedForm()
                 .clickBlankForms()
@@ -60,7 +60,7 @@ public class DeleteBlankFormTest {
                 .clickOnQuestion("what is your age")
                 .answerQuestion("what is your age", "30")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -76,7 +76,7 @@ public class DeleteBlankFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "22")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickDeleteSavedForm()
                 .clickBlankForms()

@@ -29,7 +29,7 @@ class FormMetadataTest {
             // Open form once to cache definition
             .clickFillBlankForm()
             .clickOnEmptyForm("start-geopoint")
-            .clickSaveAndExit()
+            .clickFinalize()
 
             // Load with cached definition
             .clickFillBlankForm()

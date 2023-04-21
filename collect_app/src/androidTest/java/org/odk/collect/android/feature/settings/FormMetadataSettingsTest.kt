@@ -160,7 +160,7 @@ class FormMetadataSettingsTest {
             .clickOnForm("Metadata")
             .assertTexts("john@second-project.com", "987654321", "John Smith")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
             .openProjectSettingsDialog()
             .selectProject("Demo project")
@@ -168,7 +168,7 @@ class FormMetadataSettingsTest {
             .clickOnForm("Metadata")
             .assertTexts("demo@getodk.com", "123456789", "Demo user")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
     }
 
     private class FakeInstallIDProvider : InstallIDProvider {

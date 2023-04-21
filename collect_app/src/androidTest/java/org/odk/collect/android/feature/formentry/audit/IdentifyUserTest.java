@@ -42,7 +42,7 @@ public class IdentifyUserTest {
                 .enterIdentity("Lucius")
                 .clickKeyboardEnter(new FormEntryPage("Identify User"))
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
         CSVRecord formStartEvent = auditLog.get(0);
@@ -59,14 +59,14 @@ public class IdentifyUserTest {
                 .enterIdentity("Lucius")
                 .clickKeyboardEnter(new FormEntryPage("Identify User"))
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickEditSavedForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Jack")
                 .clickKeyboardEnter(new FormHierarchyPage("Identify User"))
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
 
             List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
             CSVRecord formResumeEvent = auditLog.get(6);
@@ -121,6 +121,6 @@ public class IdentifyUserTest {
                 .clickFillBlankForm()
                 .clickOnForm("Identify User False")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 }

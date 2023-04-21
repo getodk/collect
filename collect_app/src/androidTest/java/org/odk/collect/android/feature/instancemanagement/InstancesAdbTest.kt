@@ -40,7 +40,7 @@ class InstancesAdbTest {
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
 
         val instancesDir =
             testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)
