@@ -10,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.androidshared.utils.getPreference
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.settings.Settings
@@ -36,12 +37,12 @@ class FormEntryAccessPreferencesFragmentTest {
         val scenario = launcherRule.launch(FormEntryAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormEntryAccessPreferencesFragment ->
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled,
                 equalTo(true)
             )
 
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
                 equalTo(false)
             )
         }
@@ -55,12 +56,12 @@ class FormEntryAccessPreferencesFragmentTest {
         val scenario = launcherRule.launch(FormEntryAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormEntryAccessPreferencesFragment ->
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled,
                 equalTo(false)
             )
 
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
                 equalTo(true)
             )
         }
@@ -71,18 +72,18 @@ class FormEntryAccessPreferencesFragmentTest {
         val scenario = launcherRule.launch(FormEntryAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormEntryAccessPreferencesFragment ->
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
                 equalTo(true)
             )
 
-            fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)!!.performClick()
+            fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).performClick()
 
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
                 equalTo(false)
             )
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE)!!.isChecked,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isChecked,
                 equalTo(true)
             )
         }
@@ -93,18 +94,18 @@ class FormEntryAccessPreferencesFragmentTest {
         val scenario = launcherRule.launch(FormEntryAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormEntryAccessPreferencesFragment ->
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled,
                 equalTo(true)
             )
 
-            fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE)!!.performClick()
+            fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).performClick()
 
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)!!.isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled,
                 equalTo(false)
             )
             assertThat(
-                fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)!!.isChecked,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isChecked,
                 equalTo(true)
             )
         }
