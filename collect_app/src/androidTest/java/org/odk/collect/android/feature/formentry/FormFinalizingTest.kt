@@ -5,7 +5,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.R
+import org.odk.collect.android.support.pages.AccessControlPage
+import org.odk.collect.android.support.pages.FormEndPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SaveOrIgnoreDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
@@ -52,6 +56,40 @@ class FormFinalizingTest {
             .clickSaveChanges()
             .assertNumberOfEditableForms(1)
             .assertNumberOfFinalizedForms(0)
+    }
+
+    @Test
+    fun disablingSaveAsDraftInSettings_disablesItInTheEndScreen() {
+        rule.startAtMainMenu()
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickAccessControl()
+            .clickFormEntrySettings()
+            .clickOnString(R.string.save_as_draft)
+            .pressBack(AccessControlPage())
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+            .copyForm(FORM)
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickSaveAsDraft(FormEndPage("One Question"))
+    }
+
+    @Test
+    fun disablingFinalizeInSettings_disablesItInTheEndScreen() {
+        rule.startAtMainMenu()
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickAccessControl()
+            .clickFormEntrySettings()
+            .clickOnString(R.string.finalize)
+            .pressBack(AccessControlPage())
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+            .copyForm(FORM)
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickFinalize(FormEndPage("One Question"))
     }
 
     companion object {

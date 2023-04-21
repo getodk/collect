@@ -25,6 +25,11 @@ public class FormEndPage extends Page<FormEndPage> {
         return this;
     }
 
+    public <D extends Page<D>> D clickSaveAsDraft(D destination) {
+        onView(withId(R.id.save_as_draft)).perform(click());
+        return destination.assertOnPage();
+    }
+
     public MainMenuPage clickSaveAsDraft() {
         onView(withId(R.id.save_as_draft)).perform(click());
         return new MainMenuPage().assertOnPage();
