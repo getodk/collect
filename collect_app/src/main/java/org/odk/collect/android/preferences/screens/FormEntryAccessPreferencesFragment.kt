@@ -41,6 +41,20 @@ class FormEntryAccessPreferencesFragment : BaseAdminPreferencesFragment() {
             settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
         findPreference(ProtectedProjectKeys.KEY_SAVE_MID).isEnabled =
             settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
+
+        findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled = findPreference(ProtectedProjectKeys.KEY_FINALIZE).isChecked
+        findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _: Preference, newValue: Any? ->
+                findPreference(ProtectedProjectKeys.KEY_FINALIZE).isEnabled = newValue as Boolean
+                true
+            }
+
+        findPreference(ProtectedProjectKeys.KEY_FINALIZE).isEnabled = findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isChecked
+        findPreference(ProtectedProjectKeys.KEY_FINALIZE).onPreferenceChangeListener =
+            Preference.OnPreferenceChangeListener { _: Preference, newValue: Any? ->
+                findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled = newValue as Boolean
+                true
+            }
     }
 
     fun preventOtherWaysOfEditingForm() {
