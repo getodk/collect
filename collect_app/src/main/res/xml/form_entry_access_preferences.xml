@@ -32,5 +32,9 @@
             android:key="save_as_draft"
             android:title="@string/save_as_draft"
             app:iconSpaceReserved="false" />
+        <CheckBoxPreference
+            android:key="finalize"
+            android:title="@string/finalize"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

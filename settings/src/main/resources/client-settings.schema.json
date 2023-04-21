@@ -311,6 +311,9 @@
         },
         "save_as_draft": {
           "type": "boolean"
+        },
+        "finalize": {
+          "type": "boolean"
         }
       }
     }
