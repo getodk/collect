@@ -308,6 +308,9 @@
         },
         "save_mid": {
           "type": "boolean"
+        },
+        "save_as_draft": {
+          "type": "boolean"
         }
       }
     }

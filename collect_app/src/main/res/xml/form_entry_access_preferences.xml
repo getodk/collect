@@ -28,5 +28,9 @@
             android:key="save_mid"
             android:title="@string/save_mid"
             app:iconSpaceReserved="false" />
+        <CheckBoxPreference
+            android:key="save_as_draft"
+            android:title="@string/save_as_draft"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

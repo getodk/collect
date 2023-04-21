@@ -39,6 +39,7 @@ object ProtectedProjectKeys {
     const val KEY_CHANGE_LANGUAGE = "change_language"
     const val KEY_JUMP_TO = "jump_to"
     const val KEY_SAVE_MID = "save_mid"
+    const val KEY_SAVE_AS_DRAFT = "save_as_draft"
 
     const val ALLOW_OTHER_WAYS_OF_EDITING_FORM = "allow_other_ways_of_editing_form"
 
@@ -78,6 +79,7 @@ object ProtectedProjectKeys {
         KEY_CHANGE_LANGUAGE,
         KEY_JUMP_TO,
         KEY_SAVE_MID,
+        KEY_SAVE_AS_DRAFT,
         ALLOW_OTHER_WAYS_OF_EDITING_FORM
     )
 }

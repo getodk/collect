@@ -10,6 +10,7 @@ import org.odk.collect.android.listeners.SwipeHandler
 class FormEndView(
     context: Context,
     formTitle: String,
+    isSaveAsDraftEnabled: Boolean,
     private val listener: Listener
 ) : SwipeHandler.View(context) {
 
@@ -18,6 +19,7 @@ class FormEndView(
     init {
         binding.description.text = context.getString(R.string.save_enter_data_description, formTitle)
 
+        binding.saveAsDraft.isEnabled = isSaveAsDraftEnabled
         binding.saveAsDraft.setOnClickListener {
             listener.onSaveClicked(false)
         }
