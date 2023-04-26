@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">പുതിയ ഫോം പൂരിപ്പിക്കുക</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">പുതിയ ഫോം പൂരിപ്പിക്കുക</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">സേവ് ചെയ്ത ഫോമിൽ മാറ്റം വരുത്തുക </string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Remplir un formulaire</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Remplir un formulaire</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Éditer formulaire enregistré</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Envoyer un formulaire finalisé</string>

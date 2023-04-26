@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">填写空表表格</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">填写空表表格</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">修改已保存表格</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">上传完成的表格</string>

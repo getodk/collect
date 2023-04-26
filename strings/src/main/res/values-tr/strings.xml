@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Boş Form Doldur</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Boş Form Doldur</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Saklanan Formu Güncelle</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Dolu Formu gönder</string>

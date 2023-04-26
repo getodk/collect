@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">ባዶዉን ቅጽ ሙላ</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">ባዶ ቅጽ መሙላት</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">የተቀመጠ ቅጽን ያርትዑ</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ተጠናቆ የተሞላ  ቅጽ ላክ</string>

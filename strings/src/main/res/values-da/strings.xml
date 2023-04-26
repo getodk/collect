@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Udfyld tom formular</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Udfyld blank formular</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Redigér gemt formular</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Gem færdiggjort formular</string>

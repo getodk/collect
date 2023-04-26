@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">กรอกแบบสำรวจใหม่</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">กรอกแบบสำรวจใหม่</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">แก้ไขแบบสำรวจที่บันทึกไว้แล้ว</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ส่งแบบสำรวจที่ทำเสร็จแล้ว</string>

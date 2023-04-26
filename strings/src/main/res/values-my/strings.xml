@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">ပုံစံအလွတ်အား ဖြည့်သွင်းရန်</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">ပုံစံအလွတ်အား ဖြည့်သွင်းရန်</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">သိမ္းထားေသာပံုစံအား ျပင္ဆင္ရန္</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">အၿပီးသတ္ပံုစံအားေပးပို႔ရန္</string>

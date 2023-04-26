@@ -13,8 +13,6 @@
     <!-- Text for an action button on the main screen. -->
     <string name="enter_data">Start new form</string>
     <!-- Text for an action button on the main screen. -->
-    <string name="enter_data_button">Fill Blank Form</string>
-    <!-- Text for an action button on the main screen. -->
     <string name="review_data">Drafts</string>
     <!-- Text for an action button on the main screen. -->
     <string name="send_data">Ready to send</string>

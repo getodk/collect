@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Pildyti tuščią formą</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Pildyti tuščią formą</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Taisyti užpildytą formą</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Išsiųsti užbaigtą formą</string>

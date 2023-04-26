@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">خالی فارم پر کریں</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">خالی فارم پر کریں</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">محفوظ شدہ فارم میں ترمیم کریں</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">حتمی فارم  بھیجیں</string>

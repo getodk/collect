@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Uzuza ahateganyijwe muri iyi nyandiko shingiro cg ngenderwaho</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Uzuza ahateganyijwe muri iyi nyandiko shingiro cg ngenderwaho.</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Guhindura inyandiko shingiro cg ngenderwaho ibika.</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Ohereza ibyo umaze kuzuza</string>

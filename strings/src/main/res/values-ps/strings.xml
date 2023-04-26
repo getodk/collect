@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">خالی فورمه ډک کړي</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">خالی فورمه ډک کړي</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">ثبت شوي فورمه تصحیح کړي</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">نهايی شوي فورمي ولیږی</string>

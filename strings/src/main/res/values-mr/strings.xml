@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">रिक्त फॉर्म भरा</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">रिक्त फॉर्म भरा</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">जतन फॉर्म संपादित करा</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">अंतिम फॉर्म पाठवा</string>

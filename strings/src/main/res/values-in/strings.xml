@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Isi Formulir Kosong</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Isi Formulir Kosong</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Ubah Formulir Tersimpan</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Kirim Formulir Terfinalisasi</string>

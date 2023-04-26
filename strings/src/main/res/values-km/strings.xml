@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">បំពេញសំណុំបែបបទទទេ</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">កែប្រែសំណុំ​បែប​បទ​ដែលបានរក្សាទុក</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>

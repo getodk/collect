@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Izpolni prazen obrazec</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Izpolni prazen obrazec</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Uredi shranjen ubrazec</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Pošlji zaključen obrazec</string>

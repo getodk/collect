@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">ఖాళీ ఫారం నింపండి</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">సేవ్ చేసిన ఫారంను సవరించండి</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ఫైనల్ అయిన ఫారం పంపండి</string>

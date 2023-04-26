@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Vul Leë Vorm In</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Vul Leë Vorm In</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Wysig Gestoorde Vorm</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Stuur Gefinaliseerde Vorm</string>

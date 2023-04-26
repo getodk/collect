@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Nieuw formulier invullen</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Nieuw formulier</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Wijzig formulier</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Verstuur Afgeronde Formulieren</string>

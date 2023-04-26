@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Fyll i tomt formulär</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Fyll i tomt formulär</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Redigera sparat formulär</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Skicka avslutat formulär</string>

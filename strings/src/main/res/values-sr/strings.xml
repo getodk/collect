@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Popuni prazan formular</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Popuni prazan formular</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Uredi sačuvani formular</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Pošalji završene formulare</string>

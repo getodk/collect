@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Mbush formular bosh</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Mbush formular bosh</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Modifiko formularin e ruajtur</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Dërgo formularin e përfunduar</string>

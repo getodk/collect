@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">فورم خالی را تکمیل کنید.</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">فورم خالی را تکمیل کنید.</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">ویرایش فورم ذخیره شده</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ارسال فورم نهایی</string>

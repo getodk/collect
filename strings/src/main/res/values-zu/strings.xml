@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data"> Gcwalisa ifomu elingagcwalisiwe</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button"> Gcwalisa ifomu elingagcwalisiwe</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Lungisa  ifomu eligciniwe</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Thumela kwefomu eliphelesiwe</string>

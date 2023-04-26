@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Заполнить пустую форму</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Заполнить пустую форму</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Редактировать ответы</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Выгрузить финализированные опросы</string>

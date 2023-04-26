@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">ცარიელი ფორმის შევსება</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">შეავსეთ ცარიელი ფორმა</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">შენახული ფორმის რედაქტირება</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">დასრულებული ფორმების გაგზავნა</string>

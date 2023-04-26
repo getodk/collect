@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Заповнити анкету</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Заповнити анкету</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Виправити збережену анкету</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Надіслати завершену анкету</string>

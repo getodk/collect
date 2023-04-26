@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Điền biểu mẫu</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Điền biểu mẫu</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Sửa biểu mẫu lưu</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Gửi biểu mẫu đã hoàn thành</string>

@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">खाली फॉर्म भरें</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">खाली फॉर्म भरें</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">संरक्षित फॉर्म संशोधित करें</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">फाइनल हो चुके फॉर्म भेजें</string>

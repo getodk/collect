@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Jaza fomu tupu</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Jaza fomu</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Hariri fomu iliyo hifadhiwa</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Tuma fomu iliyo kamilika</string>

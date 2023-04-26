@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">空のフォームに入力してください</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">空のフォームに入力する</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">保存済のフォームを編集</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">確定済のフォームを送信</string>

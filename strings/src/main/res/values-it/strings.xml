@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Compila Modulo Vuoto</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Compila Modulo Vuoto</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Modifica Modulo Salvato</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Invia Modulo Completato</string>
