@@ -6,5 +6,5 @@ here: https://m3.material.io/styles/color/the-color-system/tokens#7fd4440e-986d-
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:alpha="0.12" android:color="?attr/colorOnPrimary" />
+    <item android:alpha="@dimen/low_emphasis" android:color="?attr/colorOnPrimary" />
 </selector>
