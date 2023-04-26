@@ -20,7 +20,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     @Override
     public MainMenuPage assertOnPage() {
         return WaitFor.waitFor(() -> {
-            onView(withText(R.string.enter_data_button)).check(matches(isDisplayed()));
+            onView(withText(R.string.enter_data)).check(matches(isDisplayed()));
             onView(withText(containsString(getTranslatedString(R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
             return this;
         });

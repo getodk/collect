@@ -30,7 +30,7 @@
         android:textAppearance="?textAppearanceTitleLarge"
         android:maxLines="1"
         android:textColor="?colorOnPrimary"
-        android:text="@string/enter_data_button"
+        android:text="@string/enter_data"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"

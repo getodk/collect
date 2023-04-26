@@ -191,7 +191,7 @@ class FormMapViewModel(
 
         return MappableSelectItem.IconifiedText(
             if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
-            resources.getString(if (canEditSaved) R.string.review_data else R.string.view_data)
+            resources.getString(if (canEditSaved) R.string.edit_data else R.string.view_data)
         )
     }
 

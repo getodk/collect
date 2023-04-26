@@ -129,7 +129,7 @@ class MainMenuActivityTest {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button = activity.findViewById<StartNewFormButton>(R.id.enter_data)
-            assertThat(button.text, `is`(activity.getString(R.string.enter_data_button)))
+            assertThat(button.text, `is`(activity.getString(R.string.enter_data)))
         }
     }
 

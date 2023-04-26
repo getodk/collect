@@ -11,19 +11,19 @@
 -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation" tools:locale="en">
     <!-- Text for an action button on the main screen. -->
-    <string name="enter_data">Fill Blank Form</string>
+    <string name="enter_data">Start new form</string>
     <!-- Text for an action button on the main screen. -->
     <string name="enter_data_button">Fill Blank Form</string>
     <!-- Text for an action button on the main screen. -->
-    <string name="review_data">Edit Saved Form</string>
+    <string name="review_data">Drafts</string>
     <!-- Text for an action button on the main screen. -->
-    <string name="send_data">Send Finalized Form</string>
+    <string name="send_data">Ready to send</string>
     <!-- Text for an action button on the main screen. -->
-    <string name="view_sent_forms">View Sent Form</string>
+    <string name="view_sent_forms">Sent</string>
     <!-- Text for an action button on the main screen. -->
-    <string name="get_forms">Get Blank Form</string>
+    <string name="get_forms">Download form</string>
     <!-- Text for an action button on the main screen. -->
-    <string name="manage_files">Delete Saved Form</string>
+    <string name="manage_files">Delete form</string>
 
     <string name="saved_forms">Saved forms</string>
 
@@ -584,6 +584,7 @@
     <string name="select_item">Select</string>
     <string name="new_item">New item</string>
     <!-- Name of an action button -->
+    <string name="edit_data">Edit Saved Form</string>
     <string name="view_data">View Saved Form</string>
 
     <!-- Name for the location tracking notifications. Will be seen in Android settings. -->
