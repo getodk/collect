@@ -50,16 +50,6 @@ public class FillBlankFormTest {
             .around(rule);
 
     @Test
-    public void subtext_ShouldDisplayAdditionalInformation() {
-        //TestCase2
-        rule.startAtMainMenu()
-                .copyForm("all-widgets.xml")
-                .clickFillBlankForm()
-                .checkIsFormSubtextDisplayed();
-
-    }
-
-    @Test
     public void exitDialog_ShouldDisplaySaveAndIgnoreOptions() {
         //TestCase6 , TestCase9
         rule.startAtMainMenu()

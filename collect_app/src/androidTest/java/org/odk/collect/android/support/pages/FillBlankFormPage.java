@@ -7,13 +7,11 @@ import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 import static org.odk.collect.testshared.ViewActions.clickOnViewContentDescription;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -49,14 +47,6 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public BlankFormSearchPage searchInBar(String query) {
         onView(withId(R.id.search_src_text)).perform(replaceText(query));
         return new BlankFormSearchPage().assertOnPage();
-    }
-
-    public FillBlankFormPage checkIsFormSubtextDisplayed() {
-        return WaitFor.waitFor(() -> {
-            assertTextDoesNotExist(R.string.no_items_display_forms);
-            onView(withIndex(withId(R.id.form_subtitle2), 0)).check(matches(isDisplayed()));
-            return this;
-        });
     }
 
     public FillBlankFormPage checkMapIconDisplayedForForm(String formName) {

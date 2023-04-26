@@ -129,8 +129,9 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
         deleteButton.setEnabled(areCheckedItems());
 
         if (getListView().getCount() == 0) {
-            toggleButton.setEnabled(false);
+            getView().findViewById(R.id.buttons).setVisibility(View.GONE);
         } else {
+            getView().findViewById(R.id.buttons).setVisibility(View.VISIBLE);
             toggleButton.setEnabled(true);
         }
     }

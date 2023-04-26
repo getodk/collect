@@ -26,7 +26,7 @@ and update this document as the code evolves.
 * App mostly stores data in flat files indexed in SQLite
 * Access to data in SQLite happens through repository objects which deal in data/domain objects (`FormsRepository` and `Form` for example)
 * Settings UIs for the app use Android's Preferences abstraction
-* App uses [Material 2 Theming](https://material.io/develop/android/theming/theming-overview) so [Material components](https://material.io/components?platform=android) (and [Material 3 components](https://m3.material.io/) where appropriate)are preferred over custom or platform ones.
+* App uses [Material 2 Theming](https://material.io/develop/android/theming/theming-overview) so [Material components](https://material.io/components?platform=android) (using [Material 3 components](https://m3.material.io/) styles) are preferred over custom or platform ones.
 * Dagger2 is used to inject "black box" objects such as Activity and just uses a very basic setup
 * Http is handled using OkHttp3 and https client abstractions are generally wrapped in Android's AsyncTask
 * Geo activities use three engines (Mapbox, osmdroid, Google Maps) depending on the selected basemap even though Mapbox could do everything osmdroid does

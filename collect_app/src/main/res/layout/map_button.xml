@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.button.MaterialButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/map_button"
+    style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+    android:layout_width="40sp"
+    android:layout_height="40sp"
+    android:clickable="false"
+    android:contentDescription="@string/open_form_map"
+    android:focusable="false"
+    android:insetLeft="0sp"
+    android:insetTop="0sp"
+    android:insetRight="0sp"
+    android:insetBottom="0sp"
+    android:padding="8sp"
+    app:icon="@drawable/ic_map"
+    app:iconTint="?attr/colorOnSurface" />

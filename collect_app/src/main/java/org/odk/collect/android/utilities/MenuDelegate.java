@@ -8,7 +8,10 @@ import android.view.MenuItem;
  * Delegate responsible for the menu (options menu) of an {@link android.app.Activity}. Allows the
  * menu to be defined and tested separately from the Activity itself. Methods should be called
  * from their corresponding Activity lifecycle methods.
+ *
+ * @deprecated use {@link androidx.core.view.MenuProvider} instead
  */
+@Deprecated
 public interface MenuDelegate {
 
     void onCreateOptionsMenu(MenuInflater menuInflater, Menu menu);

@@ -107,13 +107,16 @@ abstract class Page<T : Page<T>> {
     @JvmOverloads
     fun assertTextThatContainsExists(text: String, index: Int = 0): T {
         onView(
-            withIndex(
-                withText(
-                    containsString(
-                        text
-                    )
+            allOf(
+                withIndex(
+                    withText(
+                        containsString(
+                            text
+                        )
+                    ),
+                    index
                 ),
-                index
+                withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
             )
         ).check(matches(not(doesNotExist())))
         return this as T

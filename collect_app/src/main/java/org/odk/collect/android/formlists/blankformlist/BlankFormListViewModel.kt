@@ -7,6 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import org.odk.collect.android.formmanagement.FormDeleter
 import org.odk.collect.android.formmanagement.FormsUpdater
 import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -34,7 +35,8 @@ class BlankFormListViewModel(
     private val generalSettings: Settings,
     private val changeLockProvider: ChangeLockProvider,
     private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
-    private val projectId: String
+    private val projectId: String,
+    private val showAllVersions: Boolean = false
 ) : ViewModel() {
 
     private val _allForms: MutableNonNullLiveData<List<BlankFormListItem>> = MutableNonNullLiveData(emptyList())
@@ -66,11 +68,6 @@ class BlankFormListViewModel(
         set(value) {
             field = value
             sortAndFilter()
-        }
-
-    private val shouldHideOldFormVersions: Boolean
-        get() {
-            return generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
         }
 
     private val syncWithServerObserver = Observer<Boolean> {
@@ -106,7 +103,7 @@ class BlankFormListViewModel(
                         form.toBlankFormListItem(projectId, instancesRepository)
                     }
 
-                if (shouldHideOldFormVersions) {
+                if (!showAllVersions) {
                     newListOfForms = newListOfForms.groupBy {
                         it.formId
                     }.map { (_, itemsWithSameId) ->
@@ -180,6 +177,22 @@ class BlankFormListViewModel(
         }
     }
 
+    fun deleteForms(vararg databaseIds: Long) {
+        scheduler.immediate(
+            background = {
+                databaseIds.forEach {
+                    FormDeleter(
+                        formsRepository,
+                        instancesRepository
+                    ).delete(it)
+                }
+            },
+            foreground = {
+                loadFromDatabase()
+            }
+        )
+    }
+
     private fun sortAndFilter() {
         _formsToDisplay.value = when (sortingOrder) {
             0 -> _allForms.value.sortedBy { it.formName.lowercase() }
@@ -217,7 +230,8 @@ class BlankFormListViewModel(
                 generalSettings,
                 changeLockProvider,
                 formsDirDiskFormsSynchronizer,
-                projectId
+                projectId,
+                !generalSettings.getBoolean(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)
             ) as T
         }
     }
