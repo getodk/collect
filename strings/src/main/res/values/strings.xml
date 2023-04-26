@@ -161,6 +161,7 @@
     <string name="quit_entry">Save Form and Exit</string>
 
     <string name="data_saved_error">Sorry, form save failed!</string>
+    <string name="read_only_saved_error">Cannot save read only form.</string>
     <string name="data_saved_ok">Form successfully saved!</string>
     <string name="comments_saved_ok">Comments successfully saved!</string>
     <string name="save_point_error">Error saving recovery point: %s</string>

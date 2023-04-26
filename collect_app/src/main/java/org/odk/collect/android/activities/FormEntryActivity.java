@@ -1880,7 +1880,13 @@ public class FormEntryActivity extends CollectAbstractActivity implements Animat
             }
         }
 
-        formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit);
+        FormController formController = getFormController();
+        if(formController !=null && formController.getReadOnly()) {
+            showShortToast(R.string.read_only_saved_error);
+            return false;
+        } else {
+            formSaveViewModel.saveForm(getIntent().getData(), complete, updatedSaveName, exit);
+        }
 
         return true;
     }
