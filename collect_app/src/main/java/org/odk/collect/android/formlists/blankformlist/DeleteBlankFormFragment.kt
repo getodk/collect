@@ -78,6 +78,7 @@ class DeleteBlankFormFragment(
 
         binding.deleteSelected.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.delete_file)
                 .setMessage(getString(R.string.delete_confirm, adapter.selected.size.toString()))
                 .setPositiveButton(getString(R.string.delete_yes)) { _, _ ->
                     blankFormListViewModel.deleteForms(*adapter.selected.toLongArray())
