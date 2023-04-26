@@ -195,7 +195,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When uri represents a blank with non existing form file then display alert dialog`() {
+    fun `When uri represents a blank form with non existing form file then display alert dialog`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
