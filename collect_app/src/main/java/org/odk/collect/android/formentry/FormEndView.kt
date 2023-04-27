@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import androidx.core.widget.NestedScrollView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FormEntryEndBinding
-import org.odk.collect.android.listeners.SwipeHandler
 
 class FormEndView(
     context: Context,
@@ -33,7 +32,7 @@ class FormEndView(
 
     override fun shouldSuppressFlingGesture() = false
 
-    override fun getVerticalScrollView(): NestedScrollView? {
+    override fun verticalScrollView(): NestedScrollView? {
         return findViewById(R.id.scroll_view)
     }
 

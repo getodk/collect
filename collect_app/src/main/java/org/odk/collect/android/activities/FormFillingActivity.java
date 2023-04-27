@@ -2356,7 +2356,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         @Nullable
         @Override
-        public NestedScrollView getVerticalScrollView() {
+        public NestedScrollView verticalScrollView() {
             return null;
         }
     }
