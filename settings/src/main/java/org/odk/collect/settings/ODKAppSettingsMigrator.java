@@ -31,24 +31,24 @@ import java.util.List;
  */
 public class ODKAppSettingsMigrator implements SettingsMigrator {
 
-    private final Settings metaPrefs;
+    private final Settings metaSettings;
 
-    public ODKAppSettingsMigrator(Settings metaPrefs) {
-        this.metaPrefs = metaPrefs;
+    public ODKAppSettingsMigrator(Settings metaSettings) {
+        this.metaSettings = metaSettings;
     }
 
     @Override
-    public void migrate(Settings generalSettings, Settings adminSettings) {
+    public void migrate(Settings unprotectedSettings, Settings protectedSettings) {
         for (Migration migration : getUnprotectedMigrations()) {
-            migration.apply(generalSettings);
+            migration.apply(unprotectedSettings);
         }
 
         for (Migration migration : getProtectedMigrations()) {
-            migration.apply(adminSettings);
+            migration.apply(protectedSettings);
         }
 
         for (Migration migration : getMetaMigrations()) {
-            migration.apply(metaPrefs);
+            migration.apply(metaSettings);
         }
     }
 
@@ -102,9 +102,9 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
 
                 removeKey("firstRun"),
                 removeKey("lastVersion"),
-                moveKey("scoped_storage_used").toPreferences(metaPrefs),
+                moveKey("scoped_storage_used").toPreferences(metaSettings),
                 removeKey("metadata_migrated"),
-                moveKey("mapbox_initialized").toPreferences(metaPrefs),
+                moveKey("mapbox_initialized").toPreferences(metaSettings),
 
                 combineKeys("autosend_wifi", "autosend_network")
                         .withValues(false, false).toPairs("autosend", "off")
@@ -124,7 +124,7 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
 
                 translateValue("never").toValue("every_fifteen_minutes").forKey("periodic_form_updates_check"),
 
-                moveKey("knownUrlList").toPreferences(metaPrefs)
+                moveKey("knownUrlList").toPreferences(metaSettings)
         );
     }
 
