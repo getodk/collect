@@ -24,6 +24,8 @@ class ODKAppSettingsImporterTest {
         settingsProvider,
         mapOf("server_url" to "https://demo.getodk.org"),
         emptyMap(),
+        emptyMap(),
+        emptyMap(),
         listOf("#00000"),
         settingsChangeHandler,
         JSONObject()

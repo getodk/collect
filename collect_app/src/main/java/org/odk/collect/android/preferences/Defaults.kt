@@ -60,6 +60,14 @@ object Defaults {
         }
 
     @JvmStatic
+    val removedUnprotected: HashMap<String, Any>
+        get() {
+            val hashMap = HashMap<String, Any>()
+            hashMap["default_completed"] = true // The option was removed in v2023.2. Now used only to migrate old settings.
+            return hashMap
+        }
+
+    @JvmStatic
     val protected: Map<String, Any>
         get() {
             val defaults: MutableMap<String, Any> = HashMap()
@@ -72,5 +80,13 @@ object Defaults {
             }
 
             return defaults
+        }
+
+    @JvmStatic
+    val removedProtected: HashMap<String, Any>
+        get() {
+            val hashMap = HashMap<String, Any>()
+            hashMap["mark_as_finalized"] = true // The option was removed in v2023.2. Now used only to migrate old settings.
+            return hashMap
         }
 }

@@ -156,6 +156,9 @@
         "delete_send": {
           "type": "boolean"
         },
+        "default_completed": {
+          "type": "boolean"
+        },
         "constraint_behavior": {
           "type": "string",
           "enum": [
@@ -307,6 +310,9 @@
           "type": "boolean"
         },
         "save_mid": {
+          "type": "boolean"
+        },
+        "mark_as_finalized": {
           "type": "boolean"
         },
         "save_as_draft": {
