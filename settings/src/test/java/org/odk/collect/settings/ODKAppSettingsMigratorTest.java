@@ -16,113 +16,113 @@ import java.util.List;
 
 public class ODKAppSettingsMigratorTest {
 
-    private final Settings generalSettings = new InMemSettings();
-    private final Settings adminSettings = new InMemSettings();
+    private final Settings unprotectedSettings = new InMemSettings();
+    private final Settings protectedSettings = new InMemSettings();
     private final Settings metaSettings = new InMemSettings();
 
     @Test
     public void shouldMigrateGoogleMapSettings() {
-        initSettings(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "streets");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "streets");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(1));
+        assertSettings(unprotectedSettings, "basemap_source", "google", "google_map_style", String.valueOf(1));
 
-        initSettings(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "satellite");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "satellite");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(2));
+        assertSettings(unprotectedSettings, "basemap_source", "google", "google_map_style", String.valueOf(2));
 
-        initSettings(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "terrain\u200e");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "terrain\u200e");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(3));
+        assertSettings(unprotectedSettings, "basemap_source", "google", "google_map_style", String.valueOf(3));
 
-        initSettings(generalSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "hybrid");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "google_maps", "map_basemap_behavior", "hybrid");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "google", "google_map_style", String.valueOf(4));
+        assertSettings(unprotectedSettings, "basemap_source", "google", "google_map_style", String.valueOf(4));
     }
 
     @Test
     public void shouldMigrateMapboxMapSettings() {
-        initSettings(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_streets");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_streets");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/streets-v11");
+        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/streets-v11");
 
-        initSettings(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_light");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_light");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/light-v10");
+        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/light-v10");
 
-        initSettings(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_dark");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_dark");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/dark-v10");
+        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/dark-v10");
 
-        initSettings(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/satellite-v9");
+        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/satellite-v9");
 
-        initSettings(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite_streets");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_satellite_streets");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/satellite-streets-v11");
+        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/satellite-streets-v11");
 
-        initSettings(generalSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_outdoors");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "mapbox_maps", "map_basemap_behavior", "mapbox_outdoors");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/outdoors-v11");
+        assertSettings(unprotectedSettings, "basemap_source", "mapbox", "mapbox_map_style", "mapbox://styles/mapbox/outdoors-v11");
     }
 
     @Test
     public void shouldMigrateOsmMapSettings() {
-        initSettings(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "osm");
+        assertSettings(unprotectedSettings, "basemap_source", "osm");
 
-        initSettings(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "usgs", "usgs_map_style", "topographic");
+        assertSettings(unprotectedSettings, "basemap_source", "usgs", "usgs_map_style", "topographic");
 
-        initSettings(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_sat");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_sat");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "usgs", "usgs_map_style", "hybrid");
+        assertSettings(unprotectedSettings, "basemap_source", "usgs", "usgs_map_style", "hybrid");
 
-        initSettings(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_img");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_img");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "usgs", "usgs_map_style", "satellite");
+        assertSettings(unprotectedSettings, "basemap_source", "usgs", "usgs_map_style", "satellite");
 
-        initSettings(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_stamen_terrain");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_stamen_terrain");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "stamen");
+        assertSettings(unprotectedSettings, "basemap_source", "stamen");
 
-        initSettings(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_positron");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_positron");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "carto", "carto_map_style", "positron");
+        assertSettings(unprotectedSettings, "basemap_source", "carto", "carto_map_style", "positron");
 
-        initSettings(generalSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_darkmatter");
+        initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_darkmatter");
         runMigrations();
-        assertSettings(generalSettings, "basemap_source", "carto", "carto_map_style", "dark_matter");
+        assertSettings(unprotectedSettings, "basemap_source", "carto", "carto_map_style", "dark_matter");
     }
 
     @Test
     public void shouldMigrateAdminSettings() {
-        initSettings(adminSettings, "unrelated", "value");
+        initSettings(protectedSettings, "unrelated", "value");
         runMigrations();
-        assertSettings(adminSettings, "unrelated", "value");
+        assertSettings(protectedSettings, "unrelated", "value");
 
-        initSettings(adminSettings, "show_map_sdk", true);
+        initSettings(protectedSettings, "show_map_sdk", true);
         runMigrations();
-        assertSettings(adminSettings, "show_map_sdk", true);
+        assertSettings(protectedSettings, "show_map_sdk", true);
 
-        initSettings(adminSettings, "show_map_sdk", false);
+        initSettings(protectedSettings, "show_map_sdk", false);
         runMigrations();
-        assertSettings(adminSettings, "maps", false);
+        assertSettings(protectedSettings, "maps", false);
 
-        initSettings(adminSettings, "show_map_basemap", true);
+        initSettings(protectedSettings, "show_map_basemap", true);
         runMigrations();
-        assertSettings(adminSettings, "show_map_basemap", true);
+        assertSettings(protectedSettings, "show_map_basemap", true);
 
-        initSettings(adminSettings, "show_map_basemap", false);
+        initSettings(protectedSettings, "show_map_basemap", false);
         runMigrations();
-        assertSettings(adminSettings, "maps", false);
+        assertSettings(protectedSettings, "maps", false);
     }
 
     @Test
     public void migratesMetaKeysToMetaPrefs() {
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "firstRun", true,
                 "lastVersion", 1L,
                 "scoped_storage_used", true,
@@ -132,7 +132,7 @@ public class ODKAppSettingsMigratorTest {
 
         runMigrations();
 
-        assertSettingsEmpty(generalSettings);
+        assertSettingsEmpty(unprotectedSettings);
         assertSettings(metaSettings,
                 "scoped_storage_used", true,
                 "mapbox_initialized", true
@@ -141,99 +141,99 @@ public class ODKAppSettingsMigratorTest {
 
     @Test
     public void migratesServerType() {
-        initSettings(generalSettings, "protocol", "other_protocol");
+        initSettings(unprotectedSettings, "protocol", "other_protocol");
         runMigrations();
-        assertSettings(generalSettings, "protocol", "odk_default");
+        assertSettings(unprotectedSettings, "protocol", "odk_default");
     }
 
     @Test
     public void migratesAutosendSettings() {
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "autosend_wifi", false,
                 "autosend_network", false
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "autosend", "off"
         );
 
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "autosend_wifi", true,
                 "autosend_network", false
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "autosend", "wifi_only"
         );
 
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "autosend_wifi", false,
                 "autosend_network", true
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "autosend", "cellular_only"
         );
 
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "autosend_wifi", true,
                 "autosend_network", true
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "autosend", "wifi_and_cellular"
         );
     }
 
     @Test
     public void migratesFormUpdateModeSettings() {
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "periodic_form_updates_check", "never"
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "form_update_mode", "manual",
                 "periodic_form_updates_check", "every_fifteen_minutes"
         );
 
         List<String> periods = asList("every_fifteen_minutes", "every_one_hour", "every_six_hours", "every_24_hours");
         for (String period : periods) {
-            initSettings(generalSettings,
+            initSettings(unprotectedSettings,
                     "periodic_form_updates_check", period
             );
             runMigrations();
-            assertSettings(generalSettings,
+            assertSettings(unprotectedSettings,
                     "periodic_form_updates_check", period,
                     "form_update_mode", "previously_downloaded"
             );
         }
 
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "protocol", "google_sheets"
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "protocol", "google_sheets",
                 "form_update_mode", "manual"
         );
 
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "protocol", "google_sheets",
                 "periodic_form_updates_check", "every_24_hours"
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "protocol", "google_sheets",
                 "form_update_mode", "manual",
                 "periodic_form_updates_check", "every_24_hours"
         );
 
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "protocol", "google_sheets",
                 "periodic_form_updates_check", "never"
         );
         runMigrations();
-        assertSettings(generalSettings,
+        assertSettings(unprotectedSettings,
                 "protocol", "google_sheets",
                 "form_update_mode", "manual",
                 "periodic_form_updates_check", "every_fifteen_minutes"
@@ -242,12 +242,12 @@ public class ODKAppSettingsMigratorTest {
 
     @Test
     public void migratesServerList() {
-        initSettings(generalSettings,
+        initSettings(unprotectedSettings,
                 "knownUrlList", "[\"http://blah.com\"]"
         );
 
         runMigrations();
-        assertSettingsEmpty(generalSettings);
+        assertSettingsEmpty(unprotectedSettings);
         assertSettings(metaSettings,
                 "server_list", "[\"http://blah.com\"]"
         );
@@ -255,69 +255,69 @@ public class ODKAppSettingsMigratorTest {
 
     @Test
     public void when_markAsFinalized_wasDisabled_and_defaultCompleted_wasDisabled_thenDisableNew_finalize_andRemoveOldSettings() {
-        initSettings(adminSettings, "mark_as_finalized", false);
-        initSettings(generalSettings, "default_completed", false);
+        initSettings(protectedSettings, "mark_as_finalized", false);
+        initSettings(unprotectedSettings, "default_completed", false);
 
         runMigrations();
 
-        assertSettings(adminSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true, ProtectedProjectKeys.KEY_FINALIZE, false);
+        assertSettings(protectedSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true, ProtectedProjectKeys.KEY_FINALIZE, false);
 
-        assertThat(adminSettings.contains("mark_as_finalized"), equalTo(false));
-        assertThat(adminSettings.contains("default_completed"), equalTo(false));
+        assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
+        assertThat(protectedSettings.contains("default_completed"), equalTo(false));
     }
 
     @Test
     public void when_markAsFinalized_wasDisabled_and_defaultCompleted_wasEnabled_thenDisableNew_saveAsDraft_andRemoveOldSettings() {
-        initSettings(adminSettings, "mark_as_finalized", false);
-        initSettings(generalSettings, "default_completed", true);
+        initSettings(protectedSettings, "mark_as_finalized", false);
+        initSettings(unprotectedSettings, "default_completed", true);
 
         runMigrations();
 
-        assertSettings(adminSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false, ProtectedProjectKeys.KEY_FINALIZE, true);
+        assertSettings(protectedSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false, ProtectedProjectKeys.KEY_FINALIZE, true);
 
-        assertThat(adminSettings.contains("mark_as_finalized"), equalTo(false));
-        assertThat(adminSettings.contains("default_completed"), equalTo(false));
+        assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
+        assertThat(protectedSettings.contains("default_completed"), equalTo(false));
     }
 
     @Test
     public void when_markAsFinalized_wasDisabled_and_defaultCompleted_wasNotSet_thenDisableNew_finalize_andRemoveOldSettings() {
-        initSettings(adminSettings, "mark_as_finalized", false);
+        initSettings(protectedSettings, "mark_as_finalized", false);
 
         runMigrations();
 
-        assertSettings(adminSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false, ProtectedProjectKeys.KEY_FINALIZE, true);
+        assertSettings(protectedSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false, ProtectedProjectKeys.KEY_FINALIZE, true);
 
-        assertThat(adminSettings.contains("mark_as_finalized"), equalTo(false));
-        assertThat(generalSettings.contains("default_completed"), equalTo(false));
+        assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
+        assertThat(protectedSettings.contains("default_completed"), equalTo(false));
     }
 
     @Test
     public void when_markAsFinalized_wasEnabled_and_defaultCompleted_wasDisabled_thenDoNotUpdateSettingsAndRemoveOldOnes() {
-        initSettings(adminSettings, "mark_as_finalized", true);
-        initSettings(generalSettings, "default_completed", false);
+        initSettings(protectedSettings, "mark_as_finalized", true);
+        initSettings(unprotectedSettings, "default_completed", false);
 
         runMigrations();
 
-        assertSettingsEmpty(adminSettings);
+        assertSettingsEmpty(protectedSettings);
 
-        assertThat(adminSettings.contains("mark_as_finalized"), equalTo(false));
-        assertThat(adminSettings.contains("default_completed"), equalTo(false));
+        assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
+        assertThat(protectedSettings.contains("default_completed"), equalTo(false));
     }
 
     @Test
     public void when_markAsFinalized_wasEnabled_and_defaultCompleted_wasEnabled_thenDoNotUpdateSettingsAndRemoveOldOnes() {
-        initSettings(adminSettings, "mark_as_finalized", true);
-        initSettings(generalSettings, "default_completed", true);
+        initSettings(protectedSettings, "mark_as_finalized", true);
+        initSettings(unprotectedSettings, "default_completed", true);
 
         runMigrations();
 
-        assertSettingsEmpty(adminSettings);
+        assertSettingsEmpty(protectedSettings);
 
-        assertThat(adminSettings.contains("mark_as_finalized"), equalTo(false));
-        assertThat(adminSettings.contains("default_completed"), equalTo(false));
+        assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
+        assertThat(protectedSettings.contains("default_completed"), equalTo(false));
     }
 
     private void runMigrations() {
-        new ODKAppSettingsMigrator(metaSettings).migrate(generalSettings, adminSettings);
+        new ODKAppSettingsMigrator(metaSettings).migrate(unprotectedSettings, protectedSettings);
     }
 }
