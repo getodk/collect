@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement;
 
-import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 
 import org.javarosa.xform.parse.XFormParser;
@@ -13,6 +12,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormSource;
 import org.odk.collect.forms.FormSourceException;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.shared.files.DirectoryUtils;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -73,13 +73,9 @@ public class ServerFormDownloader implements FormDownloader {
         } catch (FormSourceException e) {
             throw new FormDownloadException.FormSourceError(e);
         } finally {
-            try {
-                deleteDirectory(tempDir);
-                for (Form formToDelete : preExistingFormsWithSameIdAndVersion) {
-                    formsRepository.delete(formToDelete.getDbId());
-                }
-            } catch (IOException ignored) {
-                // ignored
+            DirectoryUtils.deleteDirectory(tempDir);
+            for (Form formToDelete : preExistingFormsWithSameIdAndVersion) {
+                formsRepository.delete(formToDelete.getDbId());
             }
         }
     }

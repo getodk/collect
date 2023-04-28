@@ -2,7 +2,6 @@ package org.odk.collect.android.support.rules
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import org.apache.commons.io.FileUtils
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -16,6 +15,7 @@ import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.material.BottomSheetBehavior
+import org.odk.collect.shared.files.DirectoryUtils
 import java.io.File
 import java.io.IOException
 
@@ -49,7 +49,7 @@ private class ResetStateStatement(
 
     private fun clearDisk(component: AppDependencyComponent) {
         try {
-            FileUtils.deleteDirectory(File(component.storagePathProvider().odkRootDirPath))
+            DirectoryUtils.deleteDirectory(File(component.storagePathProvider().odkRootDirPath))
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

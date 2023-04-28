@@ -10,6 +10,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.importing.ProjectDetailsCreator
 import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.shared.files.DirectoryUtils
 import org.odk.collect.upgrade.Upgrade
 import java.io.File
 import java.io.FileNotFoundException
@@ -66,7 +67,7 @@ class ExistingProjectMigrator(
         }
 
         try {
-            FileUtils.deleteDirectory(File(rootDir, ".cache"))
+            DirectoryUtils.deleteDirectory(File(rootDir, ".cache"))
         } catch (e: Exception) {
             // ignore
         }

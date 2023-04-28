@@ -4,11 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.shared.files.DirectoryUtils;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.TempFiles;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 public class InMemFormsRepository implements FormsRepository {
 
@@ -198,16 +197,12 @@ public class InMemFormsRepository implements FormsRepository {
 
         // Delete media files
         if (form.getFormMediaPath() != null) {
-            try {
-                File mediaDir = new File(form.getFormMediaPath());
+            File mediaDir = new File(form.getFormMediaPath());
 
-                if (mediaDir.isDirectory()) {
-                    deleteDirectory(mediaDir);
-                } else {
-                    mediaDir.delete();
-                }
-            } catch (IOException ignored) {
-                // Ignored
+            if (mediaDir.isDirectory()) {
+                DirectoryUtils.deleteDirectory(mediaDir);
+            } else {
+                mediaDir.delete();
             }
         }
     }

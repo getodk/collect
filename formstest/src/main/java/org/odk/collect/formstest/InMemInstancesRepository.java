@@ -1,11 +1,10 @@
 package org.odk.collect.formstest;
 
-import org.apache.commons.io.FileUtils;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.shared.files.DirectoryUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -192,10 +191,6 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     private void deleteInstanceFiles(Instance instance) {
-        try {
-            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
-        } catch (IOException e) {
-            // Ignored
-        }
+        DirectoryUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
     }
 }
