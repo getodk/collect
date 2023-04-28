@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Fyll i tomt formulär</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Fyll i tomt formulär</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Redigera sparat formulär</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Redigera sparat formulär (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Skicka avslutat formulär</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Skicka avslutat formulär (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Visa skickat formulär</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Visa skickat formulär (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Hämta tomt formulär</string>
   <!--Text for an action button on the main screen.-->

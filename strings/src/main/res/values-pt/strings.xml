@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Formulário em Branco</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Formulário em Branco</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Editar Formulário Salvo</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Editar Formulário Salvo (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Enviar Formulário Finalizado</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Enviar formulário finalizado (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Ver Formulário Enviado</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Visualizar Formulário Enviado (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Carregar Formulário em Branco</string>
   <!--Text for an action button on the main screen.-->

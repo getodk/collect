@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">खाली फॉर्म भरें</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">खाली फॉर्म भरें</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">संरक्षित फॉर्म संशोधित करें</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">संरक्षित फॉर्म (%s) संशोधित करें </string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">फाइनल हो चुके फॉर्म भेजें</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">फाइनल हो चुका फॉर्म (%s) भेजें</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">भेज चुके फॉर्म देखें</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">भेज चुके फॉर्म (%s) देखें </string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">खाली फॉर्म प्राप्त करें</string>
   <!--Text for an action button on the main screen.-->

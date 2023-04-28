@@ -8,4 +8,14 @@
     <declare-styleable name="Waveform">
         <attr name="mini" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="MainMenuButton">
+        <attr name="icon" format="reference" />
+        <attr name="name" format="string" />
+    </declare-styleable>
+
+    <!--  Should be removed when these attributes are added to Material Components  -->
+    <declare-styleable name="Material3PolyFill">
+        <attr name="colorSurfaceContainerLow" format="color" />
+    </declare-styleable>
 </resources>

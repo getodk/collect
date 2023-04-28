@@ -10,6 +10,7 @@
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorSurfaceVariant">#dce3e9</color>
     <color name="colorOnSurface">#000000</color>
+    <color name="colorSurfaceContainerLow">#F7F7FA</color>
 
     <bool name="lightStatusBar">true</bool>
 

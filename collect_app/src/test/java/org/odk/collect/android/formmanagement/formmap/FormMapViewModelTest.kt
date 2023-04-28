@@ -120,7 +120,7 @@ class FormMapViewModelTest {
             ),
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_edit,
-                application.getString(R.string.review_data)
+                application.getString(R.string.edit_data)
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -164,7 +164,7 @@ class FormMapViewModelTest {
             ),
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_edit,
-                application.getString(R.string.review_data)
+                application.getString(R.string.edit_data)
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))

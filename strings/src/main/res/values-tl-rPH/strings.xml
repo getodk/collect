@@ -36,8 +36,7 @@
   <string name="do_not_change">Urong</string>
   <string name="do_not_exit">Urong</string>
   <string name="do_not_save">Balewalain ang mga binago</string>
-    <string name="enter_data">Punan ang Blangkong Form</string>
-  <string name="enter_data_button">Punan ang Form</string>
+  <string name="enter_data">Punan ang Blangkong Form</string>
   <string name="error_occured">May Maling Nangyari</string>
   <string name="file_deleted_error">Paumanhin, %1$s of %2$s ang mga piniling form(s) ay nabigong ma-i-karga!</string>
   <string name="file_deleted_ok">%s na (mga) form ay matagumpay na binura!</string>

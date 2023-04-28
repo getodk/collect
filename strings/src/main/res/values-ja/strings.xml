@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">空のフォームに入力してください</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">空のフォームに入力する</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">保存済のフォームを編集</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">保存済のフォーム (%s) を編集</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">確定済のフォームを送信</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">確定済のフォーム (%s) を送信</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">送信済フォームを表示</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">送信済フォーム (%s) を表示</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">空のフォームを取得する</string>
   <!--Text for an action button on the main screen.-->

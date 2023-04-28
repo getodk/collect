@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Täida vorm</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Täida vorm</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Muuda salvestatud vormi</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Muuda salvestatud vormi (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Saada lõpetatud vorm</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Saada lõpetatud vorm (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Vaata saadetud vormi</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Vaata saadetud vormi (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Lae sisestusvorm alla</string>
   <!--Text for an action button on the main screen.-->

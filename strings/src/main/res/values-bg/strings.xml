@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Попълване на бланка</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Попълване на бланка</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Редактиране на записан формуляр</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Редактиране на записан формуляр (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Изпращане на завършен формуляр</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Изпращане на завършен формуляр (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Преглед на изпратен формуляр</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Преглед на изпратен формуляр (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Изтегляне на бланка</string>
   <!--Text for an action button on the main screen.-->

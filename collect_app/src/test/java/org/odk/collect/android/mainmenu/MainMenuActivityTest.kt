@@ -1,10 +1,9 @@
-package org.odk.collect.android.activities
+package org.odk.collect.android.mainmenu
 
 import android.app.Application
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,9 +19,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.DeleteSavedFormActivity
+import org.odk.collect.android.activities.FormDownloadListActivity
+import org.odk.collect.android.activities.InstanceChooserList
+import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
-import org.odk.collect.android.activities.viewmodels.MainMenuViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.InstancesAppState
@@ -125,8 +128,8 @@ class MainMenuActivityTest {
     fun `Fill Blank Form button should have proper text`() {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val button: Button = activity.findViewById(R.id.enter_data)
-            assertThat(button.text, `is`(activity.getString(R.string.enter_data_button)))
+            val button = activity.findViewById<StartNewFormButton>(R.id.enter_data)
+            assertThat(button.text, `is`(activity.getString(R.string.enter_data)))
         }
     }
 
@@ -136,7 +139,7 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
-            val button: Button = activity.findViewById(R.id.enter_data)
+            val button = activity.findViewById<StartNewFormButton>(R.id.enter_data)
             button.performClick()
             assertThat(
                 Intents.getIntents()[0],
@@ -151,7 +154,7 @@ class MainMenuActivityTest {
     fun `Edit Saved Form button should have proper text`() {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val button: Button = activity.findViewById(R.id.review_data)
+            val button = activity.findViewById<MainMenuButton>(R.id.review_data)
             assertThat(button.text, `is`(activity.getString(R.string.review_data)))
         }
     }
@@ -162,7 +165,7 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
-            val button: Button = activity.findViewById(R.id.review_data)
+            val button = activity.findViewById<MainMenuButton>(R.id.review_data)
             button.performClick()
             assertThat(Intents.getIntents()[0], hasComponent(InstanceChooserList::class.java.name))
             assertThat(
@@ -178,7 +181,7 @@ class MainMenuActivityTest {
     fun `Send Finalized Form button should have proper text`() {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val button: Button = activity.findViewById(R.id.send_data)
+            val button = activity.findViewById<MainMenuButton>(R.id.send_data)
             assertThat(button.text, `is`(activity.getString(R.string.send_data)))
         }
     }
@@ -189,7 +192,7 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
-            val button: Button = activity.findViewById(R.id.send_data)
+            val button = activity.findViewById<MainMenuButton>(R.id.send_data)
             button.performClick()
             assertThat(
                 Intents.getIntents()[0],
@@ -204,7 +207,7 @@ class MainMenuActivityTest {
     fun `View Sent Form button should have proper text`() {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val button: Button = activity.findViewById(R.id.view_sent_forms)
+            val button = activity.findViewById<MainMenuButton>(R.id.view_sent_forms)
             assertThat(button.text, `is`(activity.getString(R.string.view_sent_forms)))
         }
     }
@@ -215,7 +218,7 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
-            val button: Button = activity.findViewById(R.id.view_sent_forms)
+            val button = activity.findViewById<MainMenuButton>(R.id.view_sent_forms)
             button.performClick()
             assertThat(Intents.getIntents()[0], hasComponent(InstanceChooserList::class.java.name))
             assertThat(
@@ -231,7 +234,7 @@ class MainMenuActivityTest {
     fun `Get Blank Form button should have proper text`() {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val button: Button = activity.findViewById(R.id.get_forms)
+            val button = activity.findViewById<MainMenuButton>(R.id.get_forms)
             assertThat(button.text, `is`(activity.getString(R.string.get_forms)))
         }
     }
@@ -242,7 +245,7 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
-            val button: Button = activity.findViewById(R.id.get_forms)
+            val button = activity.findViewById<MainMenuButton>(R.id.get_forms)
             button.performClick()
             assertThat(
                 Intents.getIntents()[0],
@@ -257,7 +260,7 @@ class MainMenuActivityTest {
     fun `Delete Saved Form button should have proper text`() {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
-            val button: Button = activity.findViewById(R.id.manage_forms)
+            val button = activity.findViewById<MainMenuButton>(R.id.manage_forms)
             assertThat(button.text, `is`(activity.getString(R.string.manage_files)))
         }
     }
@@ -268,7 +271,7 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             Intents.init()
 
-            val button: Button = activity.findViewById(R.id.manage_forms)
+            val button = activity.findViewById<MainMenuButton>(R.id.manage_forms)
             button.performClick()
             assertThat(
                 Intents.getIntents()[0],
@@ -276,6 +279,116 @@ class MainMenuActivityTest {
             )
 
             Intents.release()
+        }
+    }
+
+    @Test
+    fun `When editSavedFormButton is enabled in settings, should be visible`() {
+        whenever(mainMenuViewModel.shouldEditSavedFormButtonBeVisible()).thenReturn(true)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.review_data)
+            assertThat(editSavedFormButton.visibility, equalTo(View.VISIBLE))
+        }
+    }
+
+    @Test
+    fun `When editSavedFormButton is disabled in settings, should be gone`() {
+        whenever(mainMenuViewModel.shouldEditSavedFormButtonBeVisible()).thenReturn(false)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.review_data)
+            assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
+        }
+    }
+
+    @Test
+    fun `When sendFinalizedFormButton is enabled in settings, should be visible`() {
+        whenever(mainMenuViewModel.shouldSendFinalizedFormButtonBeVisible()).thenReturn(true)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.send_data)
+            assertThat(editSavedFormButton.visibility, equalTo(View.VISIBLE))
+        }
+    }
+
+    @Test
+    fun `When sendFinalizedFormButton is disabled in settings, should be gone`() {
+        whenever(mainMenuViewModel.shouldSendFinalizedFormButtonBeVisible()).thenReturn(false)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.send_data)
+            assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
+        }
+    }
+
+    @Test
+    fun `When viewSentFormButton is enabled in settings, should be visible`() {
+        whenever(mainMenuViewModel.shouldViewSentFormButtonBeVisible()).thenReturn(true)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.view_sent_forms)
+            assertThat(editSavedFormButton.visibility, equalTo(View.VISIBLE))
+        }
+    }
+
+    @Test
+    fun `When viewSentFormButton is disabled in settings, should be gone`() {
+        whenever(mainMenuViewModel.shouldViewSentFormButtonBeVisible()).thenReturn(false)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.view_sent_forms)
+            assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
+        }
+    }
+
+    @Test
+    fun `When getBlankFormButton is enabled in settings, should be visible`() {
+        whenever(mainMenuViewModel.shouldGetBlankFormButtonBeVisible()).thenReturn(true)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.get_forms)
+            assertThat(editSavedFormButton.visibility, equalTo(View.VISIBLE))
+        }
+    }
+
+    @Test
+    fun `When getBlankFormButton is disabled in settings, should be gone`() {
+        whenever(mainMenuViewModel.shouldGetBlankFormButtonBeVisible()).thenReturn(false)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.get_forms)
+            assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
+        }
+    }
+
+    @Test
+    fun `When deleteSavedFormButton is enabled in settings, should be visible`() {
+        whenever(mainMenuViewModel.shouldDeleteSavedFormButtonBeVisible()).thenReturn(true)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.manage_forms)
+            assertThat(editSavedFormButton.visibility, equalTo(View.VISIBLE))
+        }
+    }
+
+    @Test
+    fun `When deleteSavedFormButton is disabled in settings, should be gone`() {
+        whenever(mainMenuViewModel.shouldDeleteSavedFormButtonBeVisible()).thenReturn(false)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity { activity: MainMenuActivity ->
+            val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.manage_forms)
+            assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
         }
     }
 }

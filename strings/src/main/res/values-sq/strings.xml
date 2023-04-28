@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Mbush formular bosh</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Mbush formular bosh</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Modifiko formularin e ruajtur</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Modifiko formularin e ruajtur (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Dërgo formularin e përfunduar</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Dërgo formularin e përfunduar (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Shih formularin e dërguar</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Shih formularin e dërguar (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Ngarko formular bosh</string>
   <!--Text for an action button on the main screen.-->

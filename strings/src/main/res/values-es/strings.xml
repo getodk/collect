@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Llenar Nuevo Formulario</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Llenar Nuevo Formulario</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Editar Formulario Guardado</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Editar Formulario Guardado (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Enviar Formulario Finalizado</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Enviar Formulario Finalizado (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Ver Formularios Enviados</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Ver Formularios Enviados (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Obtener Formulario en Blanco</string>
   <!--Text for an action button on the main screen.-->

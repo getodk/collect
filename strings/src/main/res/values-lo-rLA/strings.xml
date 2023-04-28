@@ -3,15 +3,9 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມໃໝ່</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">ຕື່ມຂໍ້ມູນໃສ່ແບບຟອມ​ໃໝ່</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">​ດັດ​ແກ້ແບບຟອມທີ່​ບັນທຶກໄວ້</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">​ດັດ​ແກ້ແບບຟອມທີ່​ບັນທຶກໄວ້(%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">ສົ່ງແບບຟອມທີ່ສຳເລັດແລ້ວ(%s)</string>
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

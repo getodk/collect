@@ -7,7 +7,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.InstanceUploaderListActivity
-import org.odk.collect.android.activities.MainMenuActivity
+import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes

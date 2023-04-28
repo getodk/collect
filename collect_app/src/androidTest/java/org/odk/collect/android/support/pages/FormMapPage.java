@@ -29,7 +29,7 @@ public class FormMapPage extends Page<FormMapPage> {
     }
 
     public FormHierarchyPage clickEditSavedForm(String formName) {
-        clickOnString(R.string.review_data);
+        clickOnString(R.string.edit_data);
         return new FormHierarchyPage(formName).assertOnPage();
     }
 }

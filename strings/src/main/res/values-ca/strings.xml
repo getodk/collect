@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Omplir nou formulari</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Omplir nou formulari</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Editar formulari desat</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Editar formulari desat (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Enviar formulari finalitzat</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Enviar formulari finalitzat (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Veure formulari enviat.</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Veure formulari enviat  (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Descarregar formulari buit</string>
   <!--Text for an action button on the main screen.-->

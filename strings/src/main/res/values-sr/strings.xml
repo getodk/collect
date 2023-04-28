@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Popuni prazan formular</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Popuni prazan formular</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Uredi sačuvani formular</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Uredi sačuvani formular (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Pošalji završene formulare</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Pošalji završene formulare (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Vidi poslate formulare</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Vidi poslate formulare (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Preuzmi prazan formular</string>
   <!--Text for an action button on the main screen.-->

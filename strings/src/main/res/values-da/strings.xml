@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Udfyld tom formular</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Udfyld blank formular</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Redigér gemt formular</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Redigér gemt formular (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Gem færdiggjort formular</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Upload færdiggjort formular (1%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Inspicér afsendt formular</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Inpicér afsendt formular (1%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Hent tom formular</string>
   <!--Text for an action button on the main screen.-->

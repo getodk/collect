@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">填写空表表格</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">填写空表表格</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">修改已保存表格</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">修改已保存表格 (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">上传完成的表格</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">上传完成的表格 (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">查看已发送的表格</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">查看已发送的表格（%s）</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">下载空表格</string>
   <!--Text for an action button on the main screen.-->

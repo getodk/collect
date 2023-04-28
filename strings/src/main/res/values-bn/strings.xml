@@ -3,15 +3,9 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">নতুন খালি ফরম পূরণ করুন</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">নতুন খালি ফরম পূরণ করুন</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">সংরক্ষিত ফরম পুনরায় সম্পাদনা করুন</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">সংরক্ষিত ফরম %s সম্পাদনা করুন </string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">চূড়ান্ত ফরম পাঠান</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">চূড়ান্ত ফরম (%s) পাঠান</string>
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

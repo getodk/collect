@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Remplir un formulaire</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Remplir un formulaire</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Éditer formulaire enregistré</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Éditer formulaire enregistré (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Envoyer un formulaire finalisé</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Envoyer un formulaire finalisé (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Voir formulaire envoyé</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Voir formulaire envoyé (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Télécharger un formulaire vierge</string>
   <!--Text for an action button on the main screen.-->

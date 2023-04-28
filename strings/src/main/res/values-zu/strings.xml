@@ -3,15 +3,9 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data"> Gcwalisa ifomu elingagcwalisiwe</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button"> Gcwalisa ifomu elingagcwalisiwe</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Lungisa  ifomu eligciniwe</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Lungisa  ifomu eligciniwe (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Thumela kwefomu eliphelesiwe</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Thumela kwefomu eliphelesiwe (%s)</string>
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

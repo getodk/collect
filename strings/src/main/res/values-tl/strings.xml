@@ -3,8 +3,6 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Punan ang Blangkong Form</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Punan ang Form</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Patnugutan ang inimpok na Form</string>
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

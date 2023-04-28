@@ -3,15 +3,9 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Fyll ut skjema</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Fyll ut skjema</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Rediger lagret skjema</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Rediger lagret skjema (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Send ferdig skjema</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Send ferdig skjema (%s)</string>
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

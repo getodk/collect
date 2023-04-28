@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Jaza fomu iliyo tupu</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Jaza fomu iliyo tupu</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Hariri fomu iliyohifadhiwa</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Hariri fomu iliyohifadhiwa (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Tuma fomu zilizokamilika</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Tuma fomu zilizokamilika (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">Angalia fomu Iliyotumwa</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">Angalia fomu Iliyotumwa (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">Pata fomu iliyowazi</string>
   <!--Text for an action button on the main screen.-->

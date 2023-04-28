@@ -3,19 +3,11 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">خالی فورمه ډک کړي</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">خالی فورمه ډک کړي</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">ثبت شوي فورمه تصحیح کړي</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">ثبت شوي فورمه تصحیح کړي (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">نهايی شوي فورمي ولیږی</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">نهايی شوي فورمه ولیږی ( %s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="view_sent_forms">لیږل شوي فورمي ښکاره کړي</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="view_sent_forms_button">لیږل شوي فورمي ښکاره کړي ( %s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="get_forms">سپینه فورمه تر لاسه کړی</string>
   <!--Text for an action button on the main screen.-->

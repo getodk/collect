@@ -3,15 +3,9 @@
   <!--Text for an action button on the main screen.-->
   <string name="enter_data">Vul Leë Vorm In</string>
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data_button">Vul Leë Vorm In</string>
-  <!--Text for an action button on the main screen.-->
   <string name="review_data">Wysig Gestoorde Vorm</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="review_data_button">Wysig Gestoorde Vorm (%s)</string>
   <!--Text for an action button on the main screen.-->
   <string name="send_data">Stuur Gefinaliseerde Vorm</string>
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <string name="send_data_button">Stuur Gefinaliseerde Vorm (%s)</string>
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->

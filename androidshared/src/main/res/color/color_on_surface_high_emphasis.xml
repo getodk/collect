@@ -8,5 +8,5 @@ different emphasis/transparency values on text but Android doesn't have a way to
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:alpha="0.87" android:color="?attr/colorOnSurface" />
+    <item android:alpha="@dimen/high_emphasis" android:color="?attr/colorOnSurface" />
 </selector>
