@@ -14,9 +14,7 @@ internal class SettingsImporter(
     private val settingsMigrator: SettingsMigrator,
     private val settingsValidator: SettingsValidator,
     private val generalDefaults: Map<String, Any>,
-    private val removedGeneralDefaults: Map<String, Any>,
     private val adminDefaults: Map<String, Any>,
-    private val removedAdminDefaults: Map<String, Any>,
     private val settingsChangedHandler: SettingsChangeHandler,
     private val projectsRepository: ProjectsRepository,
     private val projectDetailsCreator: ProjectDetailsCreator
@@ -63,9 +61,6 @@ internal class SettingsImporter(
             projectDetails,
             connectionIdentifier
         )
-
-        loadDefaults(generalSettings, removedGeneralDefaults)
-        loadDefaults(adminSettings, removedAdminDefaults)
 
         settingsMigrator.migrate(generalSettings, adminSettings)
 

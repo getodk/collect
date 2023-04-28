@@ -45,13 +45,9 @@ class SettingsImporterTest {
         "key2" to true
     )
 
-    private var removedGeneralDefaults: Map<String, Any> = emptyMap()
-
     private val adminDefaults: Map<String, Any> = mapOf(
         "key1" to 5
     )
-
-    private var removedAdminDefaults: Map<String, Any> = emptyMap()
 
     private lateinit var importer: SettingsImporter
 
@@ -62,9 +58,7 @@ class SettingsImporterTest {
             { _: Settings?, _: Settings? -> },
             settingsValidator,
             generalDefaults,
-            removedGeneralDefaults,
             adminDefaults,
-            removedAdminDefaults,
             settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator
@@ -215,37 +209,6 @@ class SettingsImporterTest {
         )
     }
 
-    @Test // Migrations might migrate settings that were removed so load them first
-    fun migratesPreferences_afterLoadingRemovedDefaults() {
-        removedGeneralDefaults = mapOf(
-            "key0" to "default"
-        )
-
-        removedAdminDefaults = mapOf(
-            "key0" to 5
-        )
-
-        val migrator =
-            SettingsMigrator { _: Settings?, _: Settings? ->
-                if (!generalSettings.contains("key0") || !adminSettings.contains("key0")) {
-                    throw RuntimeException("removed defaults not loaded yet!")
-                }
-            }
-        importer = SettingsImporter(
-            settingsProvider,
-            migrator,
-            settingsValidator,
-            generalDefaults,
-            removedGeneralDefaults,
-            adminDefaults,
-            removedAdminDefaults,
-            settingsChangeHandler,
-            projectsRepository,
-            projectDetailsCreator
-        )
-        assertThat(importer.fromJSON(emptySettings(), currentProject, JSONObject()), `is`(SettingsImportingResult.SUCCESS))
-    }
-
     @Test // Migrations might add/rename/move keys
     fun migratesPreferences_beforeLoadingDefaults() {
         val migrator =
@@ -259,9 +222,7 @@ class SettingsImporterTest {
             migrator,
             settingsValidator,
             generalDefaults,
-            removedGeneralDefaults,
             adminDefaults,
-            removedAdminDefaults,
             settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator
@@ -287,9 +248,7 @@ class SettingsImporterTest {
             migrator,
             settingsValidator,
             generalDefaults,
-            removedGeneralDefaults,
             adminDefaults,
-            removedAdminDefaults,
             settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator
@@ -304,9 +263,7 @@ class SettingsImporterTest {
             { _: Settings?, _: Settings? -> },
             settingsValidator,
             generalDefaults,
-            removedGeneralDefaults,
             adminDefaults,
-            removedAdminDefaults,
             settingsChangeHandler,
             projectsRepository,
             projectDetailsCreator

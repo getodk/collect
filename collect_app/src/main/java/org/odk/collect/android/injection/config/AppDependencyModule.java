@@ -327,9 +327,7 @@ public class AppDependencyModule {
                 projectsRepository,
                 settingsProvider,
                 Defaults.getUnprotected(),
-                Defaults.getRemovedUnprotected(),
                 Defaults.getProtected(),
-                Defaults.getRemovedProtected(),
                 asList(context.getResources().getStringArray(R.array.project_colors)),
                 settingsChangeHandler,
                 deviceUnsupportedSettings

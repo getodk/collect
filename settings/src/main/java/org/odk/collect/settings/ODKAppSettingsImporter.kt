@@ -13,9 +13,7 @@ class ODKAppSettingsImporter(
     projectsRepository: ProjectsRepository,
     settingsProvider: SettingsProvider,
     generalDefaults: Map<String, Any>,
-    removedGeneralDefaults: Map<String, Any>,
     adminDefaults: Map<String, Any>,
-    removedAdminDefaults: Map<String, Any>,
     projectColors: List<String>,
     settingsChangedHandler: SettingsChangeHandler,
     private val deviceUnsupportedSettings: JSONObject
@@ -26,9 +24,7 @@ class ODKAppSettingsImporter(
         ODKAppSettingsMigrator(settingsProvider.getMetaSettings()),
         JsonSchemaSettingsValidator { javaClass.getResourceAsStream("/client-settings.schema.json")!! },
         generalDefaults,
-        removedGeneralDefaults,
         adminDefaults,
-        removedAdminDefaults,
         settingsChangedHandler,
         projectsRepository,
         ProjectDetailsCreatorImpl(projectColors, generalDefaults)
