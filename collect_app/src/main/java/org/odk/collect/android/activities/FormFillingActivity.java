@@ -134,7 +134,6 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
-import org.odk.collect.android.instancemanagement.InstanceDeleter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -210,16 +209,18 @@ import javax.inject.Named;
 import timber.log.Timber;
 
 /**
- * FormEntryActivity is responsible for displaying questions, animating
+ * FormFillingActivity is responsible for displaying questions, animating
  * transitions between questions, and allowing the user to enter data.
+ *
+ * This class should never be started directly. Instead {@link org.odk.collect.android.external.FormUriActivity}
+ * should be used to start form filling.
  *
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Thomas Smyth, Sassafras Tech Collective (tom@sassafrastech.com; constraint behavior
  * option)
  */
-
 @SuppressWarnings("PMD.CouplingBetweenObjects")
-public class FormEntryActivity extends LocalizedActivity implements AnimationListener,
+public class FormFillingActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
         SavePointListener, NumberPickerDialog.NumberPickerListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
@@ -253,7 +254,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
     // Tracks whether we are autosaving
     public static final String KEY_AUTO_SAVED = "autosaved";
 
-    public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormEntryActivity.class.getName() + MaterialProgressDialogFragment.class.getName() + "mediaLoading";
+    public static final String TAG_PROGRESS_DIALOG_MEDIA_LOADING = FormFillingActivity.class.getName() + MaterialProgressDialogFragment.class.getName() + "mediaLoading";
 
     private boolean autoSaved;
     private boolean allowMovingBackwards;
@@ -385,12 +386,8 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (getIntent().getData() != null) {
-            Timber.w("onCreate %s", Md5.getMd5Hash(getIntent().getData().toString()));
-        } else {
-            Timber.w("onCreate null");
-        }
-        
+        Timber.w("onCreate %s", Md5.getMd5Hash(getIntent().getData().toString()));
+
         // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
         // this issue by including WebViews
         if (Build.VERSION.SDK_INT >= 24) {
@@ -662,57 +659,22 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
         if (uriMimeType != null && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
-            if (instance == null) {
-                createErrorDialog(getString(R.string.bad_uri, uri), true);
-                return;
-            }
-
             instancePath = instance.getInstanceFilePath();
-            if (!new File(instancePath).exists()) {
-                Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE);
-                new InstanceDeleter(new InstancesRepositoryProvider(Collect.getInstance()).get(), formsRepository).delete(instance.getDbId());
-                createErrorDialog(getString(R.string.instance_deleted_message), true);
-                return;
-            }
 
             List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
-
-            if (candidateForms.isEmpty()) {
-                createErrorDialog(getString(
-                        R.string.parent_form_not_present,
-                        instance.getFormId())
-                                + ((instance.getFormVersion() == null) ? ""
-                                : "\n" + getString(R.string.version) + " " + instance.getFormVersion()),
-                        true);
-                return;
-            } else if (candidateForms.stream().filter(f -> !f.isDeleted()).count() > 1) {
-                createErrorDialog(getString(R.string.survey_multiple_forms_error), true);
-                return;
-            }
 
             formPath = candidateForms.get(0).getFormFilePath();
         } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
             Form form = formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri));
-            if (form != null) {
-                formPath = form.getFormFilePath();
-            }
+            formPath = form.getFormFilePath();
 
-            if (formPath == null) {
-                createErrorDialog(getString(R.string.bad_uri, uri), true);
-                return;
-            } else {
-                /**
-                 * This is the fill-blank-form code path.See if there is a savepoint for this form
-                 * that has never been explicitly saved by the user. If there is, open this savepoint(resume this filled-in form).
-                 * Savepoints for forms that were explicitly saved will be recovered when that
-                 * explicitly saved instance is edited via edit-saved-form.
-                 */
-                instancePath = loadSavePoint();
-            }
-        } else {
-            Timber.i("Unrecognized URI: %s", uri);
-            createErrorDialog(getString(R.string.unrecognized_uri, uri), true);
-            return;
+            /**
+             * This is the fill-blank-form code path.See if there is a savepoint for this form
+             * that has never been explicitly saved by the user. If there is, open this savepoint(resume this filled-in form).
+             * Savepoints for forms that were explicitly saved will be recovered when that
+             * explicitly saved instance is edited via edit-saved-form.
+             */
+            instancePath = loadSavePoint();
         }
 
         formLoaderTask = new FormLoaderTask(instancePath, null, null, formEntryControllerFactory);
@@ -803,11 +765,8 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        if (getIntent().getData() != null) {
-            Timber.w("onSaveInstanceState %s", Md5.getMd5Hash(getIntent().getData().toString()));
-        } else {
-            Timber.w("onSaveInstanceState null");
-        }
+        Timber.w("onSaveInstanceState %s", Md5.getMd5Hash(getIntent().getData().toString()));
+
         super.onSaveInstanceState(outState);
 
         outState.putString(KEY_SESSION_ID, sessionId);
@@ -1309,7 +1268,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
             @Override
             public void onSaveClicked(boolean markAsFinalized) {
                 if (saveName.length() < 1) {
-                    showShortToast(FormEntryActivity.this, R.string.save_as_error);
+                    showShortToast(FormFillingActivity.this, R.string.save_as_error);
                 } else {
                     if (!saveName.equals(formSaveViewModel.getFormName()) && !saveName.equals(formController.getSubmissionMetadata().instanceName)) {
                         Analytics.log(AnalyticsEvents.MANUALLY_SPECIFIED_INSTANCE_NAME, "form");
@@ -1649,7 +1608,7 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
                 new Thread() {
                     @Override
                     public void run() {
-                        FormEntryActivity.this.runOnUiThread(() -> {
+                        FormFillingActivity.this.runOnUiThread(() -> {
                             try {
                                 Thread.sleep(500);
                             } catch (InterruptedException e) {
@@ -1901,11 +1860,8 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     @Override
     protected void onStart() {
-        if (getIntent().getData() != null) {
-            Timber.w("onStart %s", Md5.getMd5Hash(getIntent().getData().toString()));
-        } else {
-            Timber.w("onStart null");
-        }
+        Timber.w("onStart %s", Md5.getMd5Hash(getIntent().getData().toString()));
+
         super.onStart();
         FormController formController = getFormController();
 
@@ -1924,11 +1880,8 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     @Override
     protected void onPause() {
-        if (getIntent().getData() != null) {
-            Timber.w("onPause %s", Md5.getMd5Hash(getIntent().getData().toString()));
-        } else {
-            Timber.w("onPause null");
-        }
+        Timber.w("onPause %s", Md5.getMd5Hash(getIntent().getData().toString()));
+
         backgroundLocationViewModel.activityHidden();
 
         super.onPause();
@@ -1936,11 +1889,8 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     @Override
     protected void onResume() {
-        if (getIntent().getData() != null) {
-            Timber.w("onResume %s", Md5.getMd5Hash(getIntent().getData().toString()));
-        } else {
-            Timber.w("onResume null");
-        }
+        Timber.w("onResume %s", Md5.getMd5Hash(getIntent().getData().toString()));
+
         super.onResume();
 
         activityDisplayed();
@@ -2043,11 +1993,8 @@ public class FormEntryActivity extends LocalizedActivity implements AnimationLis
 
     @Override
     protected void onDestroy() {
-        if (getIntent().getData() != null) {
-            Timber.w("onDestroy %s", Md5.getMd5Hash(getIntent().getData().toString()));
-        } else {
-            Timber.w("onDestroy null");
-        }
+        Timber.w("onDestroy %s", Md5.getMd5Hash(getIntent().getData().toString()));
+
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(null);
             // We have to call cancel to terminate the thread, otherwise it

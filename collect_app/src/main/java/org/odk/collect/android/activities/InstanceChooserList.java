@@ -37,6 +37,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -170,9 +171,9 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
                                 DO_NOT_EXIT);
                         return;
                     }
-                    // caller wants to view/edit a form, so launch formentryactivity
+                    // caller wants to view/edit a form, so launch FormFillingActivity
                     Intent parentIntent = this.getIntent();
-                    Intent intent = new Intent(this, FormEntryActivity.class);
+                    Intent intent = new Intent(this, FormUriActivity.class);
                     intent.setAction(Intent.ACTION_EDIT);
                     intent.setData(instanceUri);
                     String formMode = parentIntent.getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE);

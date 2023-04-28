@@ -30,7 +30,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
@@ -109,7 +109,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
         waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
 
         RankingWidgetDialog rankingWidgetDialog = new RankingWidgetDialog(savedItems == null ? items : savedItems, getFormEntryPrompt());
-        rankingWidgetDialog.show(((FormEntryActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
+        rankingWidgetDialog.show(((FormFillingActivity) getContext()).getSupportFragmentManager(), "RankingDialog");
     }
 
     private List<SelectChoice> getOrderedItems() {

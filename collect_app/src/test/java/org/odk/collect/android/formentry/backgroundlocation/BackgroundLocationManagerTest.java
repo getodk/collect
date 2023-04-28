@@ -44,7 +44,7 @@ public class BackgroundLocationManagerTest {
     }
 
     /**
-     * activityDisplayed is called from both onStart and loadingComplete in FormEntryActivity. This
+     * activityDisplayed is called from both onStart and loadingComplete in FormFillingActivity. This
      * test confirms that it doesn't matter how many times activityDisplayed is called until the
      * form has been loaded.
      */
@@ -445,16 +445,16 @@ public class BackgroundLocationManagerTest {
         backgroundLocationManager.activityHidden();
         backgroundLocationManager.activityDisplayed();
 
-        // not possible through FormEntryActivity because menu doesn't show toggle
+        // not possible through FormFillingActivity because menu doesn't show toggle
         backgroundLocationManager.backgroundLocationPreferenceToggled();
 
-        // not possible through FormEntryActivity because provider not registered
+        // not possible through FormFillingActivity because provider not registered
         backgroundLocationManager.locationProvidersChanged();
 
-        // not possible through FormEntryActivity because listener not set
+        // not possible through FormFillingActivity because listener not set
         backgroundLocationManager.onLocationChanged(LocationTestUtils.createLocation("GPS", 1, 2, 3, 4));
 
-        // not possible through FormEntryActivity because location request never needed
+        // not possible through FormFillingActivity because location request never needed
         backgroundLocationManager.locationPermissionGranted();
         backgroundLocationManager.locationPermissionDenied();
 

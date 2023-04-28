@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 
 /**
- * Helpers for returning answers to [FormEntryActivity] via [Activity.onActivityResult] and also
+ * Helpers for returning answers to [FormFillingActivity] via [Activity.onActivityResult] and also
  * for dealing with those answers in [Activity.onActivityResult] itself.
  */
 object ExternalAppUtils {

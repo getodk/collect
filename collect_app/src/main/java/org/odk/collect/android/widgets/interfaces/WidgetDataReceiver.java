@@ -14,11 +14,11 @@
 
 package org.odk.collect.android.widgets.interfaces;
 
-import org.odk.collect.android.activities.FormEntryActivity;
+import org.odk.collect.android.activities.FormFillingActivity;
 
 public interface WidgetDataReceiver {
     /**
-     * Allows answer to be set externally in {@link FormEntryActivity}.
+     * Allows answer to be set externally in {@link FormFillingActivity}.
      */
     void setData(Object answer);
 }
