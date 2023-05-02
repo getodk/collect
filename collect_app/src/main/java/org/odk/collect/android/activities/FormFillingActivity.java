@@ -993,7 +993,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, false, getFormController()), null, true);
+                saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
                 return true;
         }
 
@@ -1932,7 +1932,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
 
                 QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, currentProjectProvider, () -> {
-                    saveForm(true, InstancesDaoHelper.isInstanceComplete(false, false, getFormController()), null, true);
+                    saveForm(true, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
                 });
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:

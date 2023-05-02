@@ -44,14 +44,11 @@ public final class InstancesDaoHelper {
      * TODO: replace with method in {@link InstancesRepository}
      * that returns an {@link Instance} object from a path.
      */
-    public static boolean isInstanceComplete(boolean end, boolean completedByDefault, FormController formController) {
+    public static boolean isInstanceComplete(FormController formController) {
         // default to false if we're mid form
         boolean complete = false;
 
         if (formController != null && formController.getInstanceFile() != null) {
-            // First check if we're at the end of the form, then check the preferences
-            complete = end && completedByDefault;
-
             // Then see if we've already marked this form as complete before
             String path = formController.getInstanceFile().getAbsolutePath();
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
