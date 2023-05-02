@@ -40,7 +40,7 @@ the specific language governing permissions and limitations under the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_as_draft"
-            style="@style/Widget.Collect.Button.FullWidth"
+            style="Widget.Material3.Button.OutlinedButton"
             android:backgroundTint="@color/surfaceButtonColor"
             android:textColor="?colorOnSurface"
             android:layout_width="0dp"
@@ -55,7 +55,7 @@ the specific language governing permissions and limitations under the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/finalize"
-            style="@style/Widget.Collect.Button.FullWidth"
+            style="Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
