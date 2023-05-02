@@ -54,10 +54,6 @@ public class FormEndPage extends Page<FormEndPage> {
         return new FormEntryPage(formName).assertOnPage();
     }
 
-    public OkDialog clickSaveAndExitWithErrorDialog() {
-        return clickFinalize(new OkDialog());
-    }
-
     public ChangesReasonPromptPage clickSaveAndExitWithChangesReasonPrompt() {
         return clickFinalize(new ChangesReasonPromptPage(formName));
     }
@@ -73,11 +69,6 @@ public class FormEndPage extends Page<FormEndPage> {
 
     public FormEntryPage swipeToPreviousQuestion(String questionText, boolean isRequired) {
         return new FormEntryPage(formName).swipeToPreviousQuestion(questionText, isRequired);
-    }
-
-    public FormEndPage fillInFormName(String formName) {
-        inputText(formName);
-        return this;
     }
 
     private void assertConstraintDisplayed(String constraintText) {
