@@ -72,7 +72,7 @@ class FormFinalizingTest {
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickSaveAsDraft(FormEndPage("One Question"))
+            .assertDisabled(R.string.save_as_draft)
     }
 
     @Test
@@ -89,7 +89,7 @@ class FormFinalizingTest {
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickFinalize(FormEndPage("One Question"))
+            .assertDisabled(R.string.finalize)
     }
 
     companion object {
