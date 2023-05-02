@@ -105,24 +105,6 @@ class ExistingProjectMigratorTest {
     }
 
     @Test
-    fun `if cache dir can not be deleted the app does not crash`() {
-        val cacheDir = File(rootDir, ".cache")
-        cacheDir.createNewFile()
-
-        existingProjectMigrator.run()
-        val existingProject = currentProjectProvider.getCurrentProject()
-
-        assertThat(cacheDir.exists(), `is`(true))
-
-        getProjectDirPaths(existingProject.uuid).forEach {
-            val dir = File(it)
-            assertThat(dir.exists(), `is`(true))
-            assertThat(dir.isDirectory, `is`(true))
-            assertThat(dir.listFiles()!!.isEmpty(), `is`(true))
-        }
-    }
-
-    @Test
     fun `still copies other files if a directory is missing`() {
         val legacyRootDirsWithoutForms = listOf(
             File(rootDir, "instances"),

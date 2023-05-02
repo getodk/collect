@@ -6,14 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
-import org.apache.commons.io.FileUtils;
 import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.shared.files.DirectoryUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -260,11 +259,7 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
     }
 
     private void deleteInstanceFiles(Instance instance) {
-        try {
-            FileUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
-        } catch (IOException e) {
-            // Ignored
-        }
+        DirectoryUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
     }
 
     private static List<Instance> getInstancesFromCursor(Cursor cursor, String instancesPath) {

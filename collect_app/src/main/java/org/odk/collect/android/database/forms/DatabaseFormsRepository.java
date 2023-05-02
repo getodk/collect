@@ -14,10 +14,10 @@ import org.odk.collect.android.database.DatabaseConstants;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.shared.files.DirectoryUtils;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,7 +28,6 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import static android.provider.BaseColumns._ID;
-import static org.apache.commons.io.FileUtils.deleteDirectory;
 import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
 import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromForm;
@@ -287,16 +286,12 @@ public class DatabaseFormsRepository implements FormsRepository {
 
         // Delete media files
         if (form.getFormMediaPath() != null) {
-            try {
-                File mediaDir = new File(form.getFormMediaPath());
+            File mediaDir = new File(form.getFormMediaPath());
 
-                if (mediaDir.isDirectory()) {
-                    deleteDirectory(mediaDir);
-                } else {
-                    mediaDir.delete();
-                }
-            } catch (IOException ignored) {
-                // Ignored
+            if (mediaDir.isDirectory()) {
+                DirectoryUtils.deleteDirectory(mediaDir);
+            } else {
+                mediaDir.delete();
             }
         }
     }
