@@ -24,6 +24,8 @@ public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
 
     @Override
     public ChangesReasonPromptPage assertOnPage() {
+        closeSoftKeyboard(); // Might open before assertion has a chance to run
+
         assertToolbarTitle(formName);
         onView(withText(getTranslatedString(R.string.reason_for_changes))).check(matches(isDisplayed()));
         return this;
