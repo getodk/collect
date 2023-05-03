@@ -28,7 +28,7 @@ object TestRuleChain {
                 )
             )
             .around(ResetRotationRule())
-            .around(DisableDeviceAnimationsRule())
+            .around(PrepDeviceForTestsRule())
             .around(ResetStateRule(testDependencies))
             .around(countingTaskExecutorIdlingResource)
             .around(
