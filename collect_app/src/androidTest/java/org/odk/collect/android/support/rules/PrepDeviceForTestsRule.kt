@@ -6,12 +6,16 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class DisableDeviceAnimationsRule : TestRule {
+/**
+ * Disables animations and sets long press timeout to 3 seconds in an attempt to avoid flakiness.
+ */
+class PrepDeviceForTestsRule : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement {
         return object : Statement() {
             override fun evaluate() {
                 ANIMATIONS.forEach { executeShellCommand("settings put global $it 0") }
+                executeShellCommand("settings put secure long_press_timeout 3000")
                 base.evaluate()
             }
         }
