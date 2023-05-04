@@ -76,10 +76,6 @@
   <string name="required_answer_error">Beklager, svaret er påkrevd!</string>
   <string name="survey_internal_error">Intern feil: step to prompt feilet.</string>
   <string name="save_enter_data_description">Du er på slutten av \"%s\".</string>
-  <string name="save_form_as">Lagre som:</string>
-  <string name="save_as_error">Navnet kan ikke være blank!</string>
-  <string name="mark_finished">Kryss skjema som ferdig</string>
-  <string name="quit_entry">Lagre skjema og avslutt</string>
   <string name="data_saved_error">Beklager, skjemalagring mislyktes!</string>
   <string name="data_saved_ok">Skjema lagret!</string>
   <string name="save_point_error">Feil under lagring av gjenopprettingspunkt: %s</string>
@@ -333,8 +329,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Slett etter innsendt.</string>
   <string name="delete_after_send_summary">Sletter fullførte skjemaer og media etter at de er sendt til serveren</string>
-  <string name="default_completed">Default til fullført</string>
-  <string name="default_completed_summary">Sette fullført som default</string>
   <string name="constraint_behavior">Begrens prosesseringsmetoden</string>
   <string name="constraint_behavior_on_swipe">Validere ved sveip forover</string>
   <string name="constraint_behavior_on_finalize">Avvent validering til skjemaet er fullført</string>

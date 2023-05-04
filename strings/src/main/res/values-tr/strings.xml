@@ -87,10 +87,6 @@
   <string name="delete_repeat_ask">Bu grubu sil ?</string>
   <string name="delete_repeat_confirm">Bu grupla beraber \"%s\" alt grubuda silinsin mi ?</string>
   <string name="delete_repeat_no">Vazgeç</string>
-  <string name="save_form_as">Form ismi </string>
-  <string name="save_as_error">İsim alani boş bırakilamaz</string>
-  <string name="mark_finished">Bitirilen Formu işaretle</string>
-  <string name="quit_entry">Formu sakla ve Çık</string>
   <string name="data_saved_error">Form kaydedilirken hata oluştu</string>
   <string name="data_saved_ok">From başarılı bir şekilde saklandi</string>
   <!--Dialog title when exiting a form. The name of the form will be included-->
@@ -305,7 +301,6 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
-  <string name="default_completed_summary">Formu normalde tamamlanmış olarak işaretle</string>
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
   <string name="guidance_no">Hayır</string>
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->

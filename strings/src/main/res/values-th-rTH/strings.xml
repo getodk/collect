@@ -80,10 +80,6 @@
   <string name="invalid_answer_error">ขออภัย คำตอบไม่ถูกต้อง</string>
   <string name="required_answer_error">ขออภัย โปรดตอบคำถามนี้</string>
   <string name="save_enter_data_description">ท่านอยู่ที่จุดสิ้นสุดของ %s.</string>
-  <string name="save_form_as">ตั้งชื่อแบบสำรวจนี้</string>
-  <string name="save_as_error">Saved name must not be blank!</string>
-  <string name="mark_finished">ทำเครื่องหมายแบบสำรวจว่าเสร็จเรียบร้อยแล้ว</string>
-  <string name="quit_entry">บันทึกและออก</string>
   <string name="data_saved_error">ขออภัย ไม่สามารถบันทึกแบบสำรวจได้</string>
   <string name="data_saved_ok">บันทึกแบบสำรวจเรียบร้อยแล้ว</string>
   <string name="save_point_error">มีข้อผิดพลาดในการบันทึกจุดย้อนคืน : %s</string>
@@ -378,8 +374,6 @@
   <string name="autosend">ส่งอัตโนมัติ</string>
   <string name="delete_after_send">ลบหลังจากส่งแล้ว</string>
   <string name="delete_after_send_summary">ลบฟอร์มที่ตรวจสอบแล้วและไฟล์ภาพและเสียงหลังจากส่งไปที่เซิร์ฟเวอร์แล้ว</string>
-  <string name="default_completed">Default to finalized</string>
-  <string name="default_completed_summary">ตั้งค่าเริ่มต้นให้ทำเครื่องหมายแบบสำรวจว่าเสร็จสมบูรณ์แล้ว</string>
   <string name="constraint_behavior">ลักษณะการประมวลผลแบบมีเงื่อนไข</string>
   <string name="constraint_behavior_on_swipe">ตรวจสอบเมื่อปัดเลื่อนไปข้างหน้า</string>
   <string name="constraint_behavior_on_finalize">เลื่อนการตรวจสอบไปจนกว่าการสำรวจสิ้นสุด</string>

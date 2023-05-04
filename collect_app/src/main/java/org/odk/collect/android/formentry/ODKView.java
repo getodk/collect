@@ -567,7 +567,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
 
     @Nullable
     @Override
-    public NestedScrollView getVerticalScrollView() {
+    public NestedScrollView verticalScrollView() {
         return findViewById(R.id.odk_view_container);
     }
 

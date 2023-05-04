@@ -36,7 +36,6 @@ object ProjectKeys {
     const val KEY_HIDE_OLD_FORM_VERSIONS = "hide_old_form_versions"
     const val KEY_AUTOSEND = "autosend"
     const val KEY_DELETE_AFTER_SEND = "delete_send"
-    const val KEY_COMPLETED_DEFAULT = "default_completed"
     const val KEY_CONSTRAINT_BEHAVIOR = "constraint_behavior"
     const val KEY_HIGH_RESOLUTION = "high_resolution"
     const val KEY_IMAGE_SIZE = "image_size"

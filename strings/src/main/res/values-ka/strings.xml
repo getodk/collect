@@ -85,10 +85,6 @@
   <string name="invalid_space_in_answer_singular">გაფრთხილება: მნიშვნელობა %s შეიცავს გამოტოვებულ ადგილებს </string>
   <string name="invalid_space_in_answer_plural">გაფრთხილება: მნიშვნელობები %s შეიცავს ცარიელ ადგილებს</string>
   <string name="save_enter_data_description">თქვენ ხართ \"%s\"-ს ბოლოში.</string>
-  <string name="save_form_as">მიანიჭეთ სახელი ფორმას:</string>
-  <string name="save_as_error">სახელი არ უნდა იყოს ცარიელი!</string>
-  <string name="mark_finished">აღვნიშნოთ ფორმა დასრულებულად</string>
-  <string name="quit_entry">ფორმის შენახვა და გამოსვლა</string>
   <string name="data_saved_error">უკაცრავად, ფორმა ვერ შეინახა!</string>
   <string name="data_saved_ok">ფორმა წარმატებით შეინახა!</string>
   <string name="save_point_error">შეცდომა აღდგენის წერტილის შენახვისას: %s</string>
@@ -338,8 +334,6 @@
   <string name="autosend_selector_title">ავტომატურად გაგზავნა</string>
   <string name="autosend">ავტომატურად გაგზავნა</string>
   <string name="delete_after_send">გაგზავნის შემდგომ წაშლა</string>
-  <string name="default_completed">ნაგულისხმებია დასრულებულად მონიშვნა</string>
-  <string name="default_completed_summary">ნაგულისხმებია დასრულებულად მონიშვნა</string>
   <string name="constraint_behavior">შეზღუდვის დამუშავების ქცევა</string>
   <string name="constraint_behavior_on_swipe">სანდოობის შემოწმება წინ გადასვლისას</string>
   <string name="constraint_behavior_on_finalize">სანდოობის შემოწმების გადადება ფორმის დასრულებამდე</string>

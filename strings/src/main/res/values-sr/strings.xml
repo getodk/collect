@@ -114,10 +114,6 @@
   <string name="too_complex_form">Formular je previše kompleksan za vaoj uređaj. Pokušaj da uprostiš izraze ili zatraži pomoć na forumu.</string>
   <string name="survey_internal_error">Interna greška: korak ka promt-u nije moguć.</string>
   <string name="save_enter_data_description">Nalazite se na kraju %s.</string>
-  <string name="save_form_as">Nazovi ovaj formular</string>
-  <string name="save_as_error">Sačuvano ime ne može biti prazno!</string>
-  <string name="mark_finished">Označi formular kao završen</string>
-  <string name="quit_entry">Sačuvaj formular i izađi</string>
   <string name="data_saved_error">Izvini, čuvanje formulara nije uspjelo!</string>
   <string name="data_saved_ok">Formular je uspješno sačuvan!</string>
   <string name="save_point_error">Greška u čuvanju tačke povratka: %s </string>
@@ -558,8 +554,6 @@
   <string name="delete_after_send">Obriši nakon otpreme</string>
   <string name="delete_after_send_summary">Briše završene ankete i medije nakon otpremanja na server</string>
   <string name="form_filling_category">Ispunjavanje formulara</string>
-  <string name="default_completed">Fabričko podešavanje: završena anketa</string>
-  <string name="default_completed_summary">Fabričko podešavanje - uvijek označi formular kao završen</string>
   <string name="constraint_behavior_title">Ograničenje procesuiranja</string>
   <string name="constraint_behavior">Ograniči procesuiranje</string>
   <string name="constraint_behavior_on_swipe">Validiraj nakon prevlačenja za naprijed</string>

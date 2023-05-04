@@ -119,10 +119,6 @@
   <string name="too_complex_form">این فرم برای این دستگاه بسیار پیچیده است. سعی کنید برای ساده سازی فورم  یا اصطلاحات کمک بخواهید.</string>
   <string name="survey_internal_error">خطای داخلی: گام به اعلان ناموفق بود.</string>
   <string name="save_enter_data_description">شما در پایان %sقرار دارید.</string>
-  <string name="save_form_as">نام گذاری این فورم</string>
-  <string name="save_as_error">نام ذخیره شده نباید خالی باشد!</string>
-  <string name="mark_finished">فورم را به عنوان نهایی شده علامت بزنید</string>
-  <string name="quit_entry">ذخیره فورم و خروج </string>
   <string name="data_saved_error">متاسفانه فورم ذخیره نشد!</string>
   <string name="data_saved_ok">فورم با موفقیت ذخیره شد!</string>
   <string name="save_point_error">خطا در ذخیره نقطه یابی: %s</string>
@@ -642,8 +638,6 @@
   <string name="delete_after_send">بعد از ارسال حذف کنید</string>
   <string name="delete_after_send_summary">فورم های نهایی و رسانه یی را بعد از ارسال به سرور حذف کنید</string>
   <string name="form_filling_category">فورم را پر کنید</string>
-  <string name="default_completed">پیش‌فرض نهایی شد</string>
-  <string name="default_completed_summary">به طور پیش فرض فورم را به عنوان نهایی شده علامت گذاری کنید</string>
   <string name="constraint_behavior_title"> محدودیت پردازش</string>
   <string name="constraint_behavior">محدودیت رفتار پردازش </string>
   <string name="constraint_behavior_on_swipe">با کشیدن انگشت به جلو اعتبارسنجی کنید</string>

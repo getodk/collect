@@ -41,7 +41,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .clickOnDoNotAdd(new AddNewRepeatDialog("Repeat # 2"))
                 .clickOnDoNotAdd(new FormEntryPage("TestRepeat"))
                 .clickForwardButtonToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -76,7 +76,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .swipeToNextQuestion("Multi Select")
                 .swipeToNextQuestionWithRepeatGroup("Part1")
                 .clickOnDoNotAdd(new FormEndPage("Repeat titles 1648"))
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -87,21 +87,21 @@ public class FillBlankFormWithRepeatGroupTest {
                 .copyForm("form1.xml")
                 .startBlankForm("form1")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form2.xml")
                 .startBlankForm("form2")
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form3.xml")
                 .startBlankForm("form3")
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form4.xml")
@@ -115,7 +115,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .inputText("T3")
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form5.xml")
@@ -129,7 +129,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .inputText("T3")
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form6.xml")
@@ -143,27 +143,27 @@ public class FillBlankFormWithRepeatGroupTest {
                 .inputText("T3")
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form7.xml")
                 .startBlankForm("form7")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form8.xml")
                 .startBlankForm("form8")
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
 
         rule.startAtMainMenu()
                 .copyForm("form9.xml")
                 .startBlankForm("form9")
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -186,7 +186,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .clickOnDoNotAdd(new FormEntryPage("RepeatGroupAndGroup"))
                 .closeSoftKeyboard()
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -224,7 +224,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .assertText("3")
                 .swipeToNextQuestionWithRepeatGroup("People")
                 .clickOnDoNotAdd(new FormEndPage("RepeatGroupNew"))
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -258,7 +258,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .clickGoUpIcon()
                 .assertText("3.\u200E Person: C")
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -276,7 +276,7 @@ public class FillBlankFormWithRepeatGroupTest {
                 .clickGoToArrow()
                 .assertText("2")
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -293,6 +293,6 @@ public class FillBlankFormWithRepeatGroupTest {
                 .clickOnDoNotAdd(new FormEndPage("Repeat Group"))
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 }

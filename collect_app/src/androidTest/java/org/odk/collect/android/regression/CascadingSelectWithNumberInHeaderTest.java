@@ -38,6 +38,6 @@ public class CascadingSelectWithNumberInHeaderTest {
                 .assertText("3a")
                 .swipeToNextQuestion("Thank you for taking the time to complete this form!")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 }

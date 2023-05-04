@@ -122,12 +122,6 @@
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
-  <string name="save_form_as">Nimeä tämä lomake</string>
-  <string name="save_as_error">Tallennettu nimi ei saa olla tyhjä!</string>
-  <string name="mark_finished">Merkitse lomake valmiiksi</string>
-  <string name="quit_entry">Tallenna lomake ja lopeta</string>
-  <string name="manual_instance_name_warning">Manuaalinen lomakkeiden nimeäminen poistetaan kohta. Lomakkeen muotoilua pitää päivittää.</string>
-  <string name="manual_instance_learn_more_button">Lisätietoja</string>
   <string name="data_saved_error">Pahoittelut, lomakkeen tallennus epäonnistui!</string>
   <string name="data_saved_ok">Lomake tallennettu!</string>
   <string name="save_point_error">Virhe tallentaessa palautuspistettä: %s</string>
@@ -698,8 +692,6 @@
   <string name="delete_after_send">Poista lähettämisen jälkeen</string>
   <string name="delete_after_send_summary">Poistaa valmiiksi merkityt lomakkeet ja mediatiedostot kun ne on lähetetty palvelimelle</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>
-  <string name="default_completed">Oletusarvona lomakkeen merkitseminen valmiiksi</string>
-  <string name="default_completed_summary">Merkitse lomake oletusarvona valmiiksi</string>
   <string name="constraint_behavior_title">Rajoitusten käsittely</string>
   <string name="constraint_behavior">Rajoitusten käsittely</string>
   <string name="constraint_behavior_on_swipe">Validointi pyyhkäistäessä eteepäin</string>

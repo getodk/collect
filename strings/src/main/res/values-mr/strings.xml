@@ -87,10 +87,6 @@
   <string name="required_answer_error">क्षमस्व, हे प्रतिसाद आवश्यक आहे!</string>
   <string name="survey_internal_error">अंतर्गत त्रुटी: प्रॉम्प्टसाठी चरण अयशस्वी.</string>
   <string name="save_enter_data_description">आपण 1%s च्या समाप्तीस आहात</string>
-  <string name="save_form_as">या फॉर्मला नाव द्या</string>
-  <string name="save_as_error">जतन केलेले नाव रिक्त असू शकत नाही!</string>
-  <string name="mark_finished">अंतिम रूपाने फॉर्म चिन्हांकित करा</string>
-  <string name="quit_entry">फॉर्म जतन करा आणि निर्गमन करा</string>
   <string name="data_saved_error">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
   <string name="data_saved_ok">फॉर्म यशस्वीरित्या जतन केला!</string>
   <string name="save_point_error">पुनर्प्राप्ती बिंदू जतन करताना त्रुटी: %s</string>
@@ -416,8 +412,6 @@
   <string name="delete_after_send">पाठवानंतर हटवा</string>
   <string name="delete_after_send_summary">सर्व्हरवर पाठविल्यानंतर अंतिम स्वरूप आणि मीडिया हटविते</string>
   <string name="form_filling_category">फॉर्म भरणे</string>
-  <string name="default_completed">अंतिम रूप ला डिफॉल्ट करा </string>
-  <string name="default_completed_summary">डीफॉल्टनुसार अंतिम रूप दिलेला फॉर्म चिन्हांकित करा</string>
   <string name="constraint_behavior_title">प्रतिबंध प्रोसेसिंग</string>
   <string name="constraint_behavior">प्रतिबंध प्रोसेसिंग वर्तन</string>
   <string name="constraint_behavior_on_swipe">पुढील स्वाइप वर प्रमाणित करा</string>

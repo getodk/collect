@@ -108,10 +108,6 @@
   <string name="invalid_space_in_answer_plural">انتباہ: نیچے دی گئی ویلیو%s میں خالی جگہیں ہیں</string>
   <string name="survey_internal_error">اندرونی خرابی: فوری طور پر سیٹ اپ ناکام ہوگیا</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
-  <string name="save_form_as">اس فارم کو نام دیں</string>
-  <string name="save_as_error">محفوظ کیا گیا نام خالی نہیں ہونا چاہئے</string>
-  <string name="mark_finished">فارم کو حتمی کردیں</string>
-  <string name="quit_entry">فارم کو محفوظ کرکے نکل جایئں</string>
   <string name="data_saved_error">معذرت, فارم محفوظ نہیں ہوسکا</string>
   <string name="data_saved_ok">فارم کامیابی سے محفوظ ہو گیا</string>
   <string name="save_point_error">ریکوری پوانٹ سیو کرتے وقت خرابی: %s</string>
@@ -523,8 +519,6 @@
   <string name="delete_after_send">بھیجنے کے بعد ڈیلیٹ کریں</string>
   <string name="delete_after_send_summary">سرور کو بھیجنے کے بعد حتمی فارمزاور میڈیا ڈیلیٹ کردیتے ہیں</string>
   <string name="form_filling_category">فارم فلنگ</string>
-  <string name="default_completed">پہلے سے حتمی طور پر سیٹ کر دیا گیا ہے</string>
-  <string name="default_completed_summary">فارم کو پہلے سےمکمل بنا دیں</string>
   <string name="constraint_behavior_title">کونسٹراینٹ  پروسیسنگ</string>
   <string name="constraint_behavior">ترکیبی عمل کو روکیں</string>
   <string name="constraint_behavior_on_swipe">آگے سوائپ پر تصدیق کریں</string>

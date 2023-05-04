@@ -96,7 +96,7 @@ public class BackgroundAudioRecordingTest {
                 .swipeToEndScreen();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
-        formEndPage.clickSaveAndExit();
+        formEndPage.clickFinalize();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
 
         File instancesDir = new File(testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));
@@ -118,7 +118,7 @@ public class BackgroundAudioRecordingTest {
                 .swipeToEndScreen();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(true));
 
-        formEndPage.clickSaveAndExit();
+        formEndPage.clickFinalize();
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
 
         File instancesDir = new File(testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES));

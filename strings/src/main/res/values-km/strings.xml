@@ -105,10 +105,6 @@
   <string name="invalid_space_in_answer_plural">ព្រមាន: តម្លៃមូលដ្ឋាន %s មានដកឃ្លា</string>
   <string name="survey_internal_error">កំហុសខាងក្នុង: ជំហានដើម្បីជំរុញឱ្យបរាជ័យ។</string>
   <string name="save_enter_data_description">អ្នកដល់ទីបញ្ចប់នៃ %s</string>
-  <string name="save_form_as">ឈ្មោះសំណុំ​បែប​បទនេះ</string>
-  <string name="save_as_error">ឈ្មោះរក្សាទុកមិនអាចទទេ!</string>
-  <string name="mark_finished">សម្គាល់សំណុំបែបបទថាបានបញ្ចប់</string>
-  <string name="quit_entry">រក្សា​ទុក​សំណុំ​បែប​បទ​ និង​ចាក​ចេញ</string>
   <string name="data_saved_error">សុំទោស, រក្សា​ទុកសំណុំ​បែបបទ​មិន​បាន​សម្រេច!</string>
   <string name="data_saved_ok">បាន​រក្សាទុកសំណុំ​បែបបទ​ដោយ​ជោគជ័យ!</string>
   <string name="save_point_error">បញ្ហាក្នុងការរក្សាទុកនូវចំនុចស្តារឡើងវិញ: %s</string>
@@ -521,8 +517,6 @@
   <string name="delete_after_send">លុបទម្រង់បន្ទាប់ការផ្ញើចេញ</string>
   <string name="delete_after_send_summary">លុប​សំណុំ​​បែប​​បទ​ដែល​បាន​បញ្ចប់ និង​មីឌៀ ​បន្ទាប់​ពី​ការ​ផ្ញើ​ចេញ​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
   <string name="form_filling_category">ការបំពេញទម្រង់</string>
-  <string name="default_completed">លំដាំដើមដើម្បីបញ្ចប់</string>
-  <string name="default_completed_summary">កំណត់ថាសំណុំបែបបទបានបញ្ចប់ដោយលំនាំដើម</string>
   <string name="constraint_behavior_title">ដំណើរការនៃការរឹតបន្តឹង</string>
   <string name="constraint_behavior">កំពុងដំណើរការឥរិយាបទឧបសគ្គ</string>
   <string name="constraint_behavior_on_swipe">ផ្តល់​សុពលភាព​នៅ​ពេលដែលអូស​ទៅ​មុខ</string>

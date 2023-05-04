@@ -104,10 +104,6 @@
   <string name="invalid_space_in_answer_plural">Waarschuwing: de onderliggende waardes, %s, hebben spaties</string>
   <string name="survey_internal_error">Interne fout: doorgaan naar invoer mislukt.</string>
   <string name="save_enter_data_description">U bent aan het einde van \"%s\".</string>
-  <string name="save_form_as">Geef dit formulier een naam:</string>
-  <string name="save_as_error">Formuliernaam mag niet leeg zijn!</string>
-  <string name="mark_finished">Definitief maken</string>
-  <string name="quit_entry">Opslaan en afsluiten</string>
   <string name="data_saved_error">Sorry, formulier opslaan mislukt!</string>
   <string name="data_saved_ok">Formulier is opgeslagen!</string>
   <string name="save_point_error">Fout bij maken herstelpunt: %s</string>
@@ -399,8 +395,6 @@
   <string name="off">Uit</string>
   <string name="delete_after_send">Verwijderen na versturen</string>
   <string name="delete_after_send_summary">Verwijderd afgeronde formulieren en media na verzending</string>
-  <string name="default_completed">Standaard definitief</string>
-  <string name="default_completed_summary">Formulier standaard als definitief markeren</string>
   <string name="constraint_behavior">Verwerking van beperkingen</string>
   <string name="constraint_behavior_on_swipe">Controleer bij doorgaan</string>
   <string name="constraint_behavior_on_finalize">Controleer bij afronden</string>

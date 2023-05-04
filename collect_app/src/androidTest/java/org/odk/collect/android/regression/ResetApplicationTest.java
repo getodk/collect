@@ -4,7 +4,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.pages.FormManagementPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.AccessControlPage;
@@ -47,7 +46,7 @@ public class ResetApplicationTest {
                 .startBlankForm("All widgets")
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .clickEditSavedForm()
                 .assertText("All widgets")
                 .pressBack(new MainMenuPage())
@@ -138,45 +137,5 @@ public class ResetApplicationTest {
                 .assertTextDoesNotExist(R.string.theme_dark)
                 .assertText(R.string.use_device_language)
                 .assertTextDoesNotExist("español");
-    }
-
-    @Test
-    public void formManagementSettings_shouldBeReset() {
-        //TestCase3
-        rule.startAtMainMenu()
-                .openProjectSettingsDialog()
-                .clickSettings()
-                .openFormManagement()
-                .clickAutoSend()
-                .clickOnButtonInDialog(R.string.wifi_autosend, new FormManagementPage())
-                .assertText(R.string.wifi_autosend)
-                .clickOnDefaultToFinalized()
-                .pressBack(new ProjectSettingsPage())
-                .pressBack(new MainMenuPage())
-                .copyForm("all-widgets.xml")
-                .startBlankForm("All widgets")
-                .clickGoToArrow()
-                .clickJumpEndButton()
-                .assertMarkFinishedIsNotSelected()
-                .clickSaveAndExit()
-                .openProjectSettingsDialog()
-                .clickSettings()
-                .clickProjectManagement()
-                .clickOnResetApplication()
-                .clickOnString(R.string.reset_settings)
-                .clickOnString(R.string.reset_settings_button_reset)
-                .clickOKOnDialog();
-        new MainMenuPage()
-                .openProjectSettingsDialog()
-                .clickSettings()
-                .openFormManagement()
-                .assertText(R.string.off)
-                .pressBack(new ProjectSettingsPage())
-                .pressBack(new MainMenuPage())
-                .startBlankForm("All widgets")
-                .clickGoToArrow()
-                .clickJumpEndButton()
-                .assertMarkFinishedIsSelected()
-                .clickSaveAndExit();
     }
 }

@@ -76,10 +76,6 @@
   <string name="required_answer_error">ກະລຸນາຕື່ມຄຳຕອບໃສ່ຄຳຖາມນີ້ກ່ອນ</string>
   <string name="survey_internal_error">​ຜິດ​ພາດ​ພາຍ​ໃນ: ຂັ້ນ​ຕອນ​ການ​ເຕືອນ​ລົ້ມ​ເຫຼວ.</string>
   <string name="save_enter_data_description">​ທ່ານຢູ່ຈຸດສີ້ນສຸດຂອງ %s.</string>
-  <string name="save_form_as">ໃສ່ຊື່ແບບຟອມນີ້</string>
-  <string name="save_as_error">ການໃສ່ຊື່ເອກະສານທີ່ຈະບັນທຶກບໍ່​ຕ້ອງຍະຫວ່າງ!</string>
-  <string name="mark_finished">ໝາຍແບບຟອມວ່າໄດ້ສຳເລັດແລ້ວ</string>
-  <string name="quit_entry">ບັນທຶກແບບຟອມ ແລະ ອອກຈາກລະບົບ</string>
   <string name="data_saved_error">ການບັກທຶກແບບຟອມລົ້ມເຫຼວ</string>
   <string name="data_saved_ok">ແບບຟອມໄດ້ຖືກບັນທຶກສຳເລັດແລ້ວ</string>
   <string name="save_point_error">ພໍ້​ບັນ​ຫາ​ໃນ​ລະ​ຫວ່າງບັນ​ທຶກຈຸດ​​ການ​ກູ້​ຄືນ: %s</string>
@@ -327,8 +323,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">ລຶບພາຍຫຼັງສົ່ງແລ້ວ</string>
   <string name="delete_after_send_summary">ລຶບຟອມທີ່ສຳເລັດແລ້ວ ແລະ ສື່ ຫຼັງຈາກສົ່ງຫາເສີບເວີ</string>
-  <string name="default_completed">​ຄ່າ​ເລີ່ມ​ຕົ້ນແເມ່ນ ສຳ​ເລັດ​ແລ້ວ</string>
-  <string name="default_completed_summary">ກຳນົດແບບຟອມວ່າສຳ​ເລັດ​ແລ້ວ ໂດຍອັດຕະໂນມັດ</string>
   <string name="constraint_behavior">ລັກສະນະການປະເມີນຜົນແບບມີເງື່ອນໄຂ</string>
   <string name="constraint_behavior_on_swipe">ການກວດ​ສອບ​ເມື່ອປັດເລື່ອນໄປທາງໜ້າ</string>
   <string name="constraint_behavior_on_finalize">ເລື່ອນການກວດສອບໄປຈົນກວ່າການສຳຫຼວດສຳເລັດ</string>

@@ -80,7 +80,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public MainMenuPage fillOutAndFinalize(QuestionAndAnswer... questionsAndAnswers) {
         return fillOut(questionsAndAnswers)
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     public FormEntryPage swipeToNextQuestion(String questionText) {
@@ -120,6 +120,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
         flingLeft();
         waitForText(repeatLabel + " > " + repeatNumber);
         return this;
+    }
+
+    public FormEndPage swipeToEndScreen(String instanceName) {
+        flingLeft();
+        return WaitFor.waitFor(() -> new FormEndPage(instanceName).assertOnPage());
     }
 
     public FormEndPage swipeToEndScreen() {

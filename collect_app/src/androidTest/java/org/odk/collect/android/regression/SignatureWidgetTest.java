@@ -46,7 +46,7 @@ public class SignatureWidgetTest {
                 .waitForRotationToEnd()
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -72,6 +72,6 @@ public class SignatureWidgetTest {
                 .waitForRotationToEnd()
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 }

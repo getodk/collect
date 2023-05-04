@@ -82,10 +82,6 @@
   <string name="required_answer_error">Vabandage, vastus on kohustuslik!</string>
   <string name="survey_internal_error">Rakenduse sisene viga: liikumine erkaanile/valjale ebaõnnestus.</string>
   <string name="save_enter_data_description">Olete %s lõpus</string>
-  <string name="save_form_as">Vormi nimi</string>
-  <string name="save_as_error">Salvestatud nimi ei tohi tühjaks jääda!</string>
-  <string name="mark_finished">Märgi vorm lõpetatuks</string>
-  <string name="quit_entry">Salvesta vorm ja välju</string>
   <string name="data_saved_error">Kahjuks ebaõnnestus vormi salvestamine!</string>
   <string name="data_saved_ok">Vorm on edukalt salvestatud!</string>
   <string name="save_point_error">Vea parndamise taastuspunkt %s </string>
@@ -389,8 +385,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Kustuta peale saatmist</string>
   <string name="delete_after_send_summary">Peale serverisse saatmist kustutab lõpetatud vormid ja meedia</string>
-  <string name="default_completed">Vaikimis märgi lõpetatuks</string>
-  <string name="default_completed_summary">Vaikimisi märgi vorm lõpetatuks</string>
   <string name="constraint_behavior">Piira vormi töötlemise käitumist</string>
   <string name="constraint_behavior_on_swipe">Valideeri vormis edasi liikudes</string>
   <string name="constraint_behavior_on_finalize">Vormi valideerimine toimub sisestuse lõpetamisel</string>

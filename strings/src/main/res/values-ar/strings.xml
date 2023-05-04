@@ -117,10 +117,6 @@
   <string name="too_complex_form">هذه الاستمارة معقدة جدًا لهذا الجهاز. حاول تبسيط التعبيرات أو طلب المساعدة في المنتدى.</string>
   <string name="survey_internal_error">خطأ داخلي: فشل الخطأ الموجه.</string>
   <string name="save_enter_data_description">إنّك في نهاية الـ%s.</string>
-  <string name="save_form_as">سمّي هذه الاستمارة</string>
-  <string name="save_as_error">اسم الحفظ لا يمكن أن يكون فارغ!</string>
-  <string name="mark_finished">حدد الاستمارة كاستمارة منتهية</string>
-  <string name="quit_entry">حفظ الاستمارة والخروج</string>
   <string name="data_saved_error">عذرًا، لم يتمّ حفظ الاستمارة!</string>
   <string name="data_saved_ok">تمّ حفظ الاستمارة بنجاح!</string>
   <string name="save_point_error">خطأ في حفظ نقطة الاسترداد %s</string>
@@ -646,8 +642,6 @@
   <string name="delete_after_send">حذف بعد الارسال</string>
   <string name="delete_after_send_summary">حذف الاستمارة النهائية والوسائط المتعددة بعد ارسالها الى الخادم</string>
   <string name="form_filling_category">تعبئة الاستمارة</string>
-  <string name="default_completed">حدد النموذج كنموذج منتهي</string>
-  <string name="default_completed_summary">اجعل النموذج منتهي بشكل إفتراضي</string>
   <string name="constraint_behavior_title">معالجة القيود</string>
   <string name="constraint_behavior">معالجة القيود جارية</string>
   <string name="constraint_behavior_on_swipe">التدقيق عند السحب باتجاه الامام</string>

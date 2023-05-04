@@ -28,7 +28,6 @@ import static org.odk.collect.android.utilities.DialogUtils.getDialog;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_COMPLETED_DEFAULT;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
 import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
 
@@ -84,7 +83,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.audio.AMRAppender;
@@ -233,7 +231,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     public static final String KEY_INSTANCES = "instances";
     public static final String KEY_SUCCESS = "success";
     public static final String KEY_ERROR = "error";
-    private static final String KEY_SAVE_NAME = "saveName";
     private static final String KEY_LOCATION_PERMISSIONS_GRANTED = "location_permissions_granted";
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
@@ -599,7 +596,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (savedInstanceState.containsKey(KEY_ERROR)) {
                 errorMessage = savedInstanceState.getString(KEY_ERROR);
             }
-            saveName = savedInstanceState.getString(KEY_SAVE_NAME);
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
             }
@@ -801,7 +797,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
         outState.putBoolean(NEWFORM, false);
         outState.putString(KEY_ERROR, errorMessage);
-        outState.putString(KEY_SAVE_NAME, saveName);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
     }
@@ -998,7 +993,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
+                saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
                 return true;
         }
 
@@ -1258,44 +1253,11 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         }
 
-        FormEndView endView = new FormEndView(this, formSaveViewModel.getFormName(), saveName, InstancesDaoHelper.isInstanceComplete(true, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), new FormEndView.Listener() {
-            @Override
-            public void onSaveAsChanged(String saveAs) {
-                // Seems like this is needed for rotation?
-                saveName = saveAs;
-            }
-
-            @Override
-            public void onSaveClicked(boolean markAsFinalized) {
-                if (saveName.length() < 1) {
-                    showShortToast(FormFillingActivity.this, R.string.save_as_error);
-                } else {
-                    if (!saveName.equals(formSaveViewModel.getFormName()) && !saveName.equals(formController.getSubmissionMetadata().instanceName)) {
-                        Analytics.log(AnalyticsEvents.MANUALLY_SPECIFIED_INSTANCE_NAME, "form");
-                    }
-                    formSaveViewModel.saveForm(getIntent().getData(), markAsFinalized, saveName, true);
-                }
-            }
-        });
-
-        if (!settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_MARK_AS_FINALIZED)) {
-            endView.findViewById(R.id.mark_finished).setVisibility(View.GONE);
-        }
-
-        if (formController.getSubmissionMetadata().instanceName != null) {
-            // if instanceName is defined in form, this is the name -- no
-            // revisions
-            // display only the name, not the prompt, and disable edits
-            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
-            endView.findViewById(R.id.save_name).setEnabled(false);
-            endView.findViewById(R.id.save_name).setVisibility(View.VISIBLE);
-        }
-
-        // override the visibility settings based upon admin preferences
-        if (!settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS)) {
-            endView.findViewById(R.id.save_form_as).setVisibility(View.GONE);
-            endView.findViewById(R.id.save_name).setVisibility(View.GONE);
-        }
+        boolean isSaveAsDraftEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT);
+        boolean isFinalizeEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_FINALIZE);
+        FormEndView endView = new FormEndView(this, saveName, isSaveAsDraftEnabled, isFinalizeEnabled, markAsFinalized ->
+                saveForm(true, markAsFinalized, saveName, false)
+        );
 
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();
@@ -1970,7 +1932,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
 
                 QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, currentProjectProvider, () -> {
-                    saveForm(true, InstancesDaoHelper.isInstanceComplete(false, settingsProvider.getUnprotectedSettings().getBoolean(KEY_COMPLETED_DEFAULT), getFormController()), null, true);
+                    saveForm(true, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
                 });
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -2393,7 +2355,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         @Nullable
         @Override
-        public NestedScrollView getVerticalScrollView() {
+        public NestedScrollView verticalScrollView() {
             return null;
         }
     }

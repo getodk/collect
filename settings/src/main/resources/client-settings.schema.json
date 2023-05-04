@@ -273,9 +273,6 @@
         "delete_after_send": {
           "type": "boolean"
         },
-        "default_to_finalized": {
-          "type": "boolean"
-        },
         "change_constraint_behavior": {
           "type": "boolean"
         },
@@ -315,10 +312,13 @@
         "save_mid": {
           "type": "boolean"
         },
-        "save_as": {
+        "mark_as_finalized": {
           "type": "boolean"
         },
-        "mark_as_finalized": {
+        "save_as_draft": {
+          "type": "boolean"
+        },
+        "finalize": {
           "type": "boolean"
         }
       }

@@ -122,11 +122,6 @@
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
-  <string name="save_form_as">Nome di questo modulo:</string>
-  <string name="save_as_error">Il nome Salvato non deve essere vuoto!</string>
-  <string name="mark_finished">Segna Modulo come Completato</string>
-  <string name="quit_entry">Salva modulo ed esci</string>
-  <string name="manual_instance_learn_more_button">Saperne di più</string>
   <string name="data_saved_error">Spiacenti, salvataggio modulo fallito!</string>
   <string name="data_saved_ok">Modulo salvato correttamente!</string>
   <string name="save_point_error">Errore nel salvataggio del punto di ripristino: %s</string>
@@ -700,8 +695,6 @@
   <string name="delete_after_send">Elimina dopo invio</string>
   <string name="delete_after_send_summary">Elimina moduli finalizzati e media dopo l\'\'invio al server</string>
   <string name="form_filling_category">Riempimento modulo</string>
-  <string name="default_completed">Apri automaticamente la schermata di Finalizzazione</string>
-  <string name="default_completed_summary">Marca automaticamente un modulo come Finalizzato</string>
   <string name="constraint_behavior_title">Vincoli di elaborazione</string>
   <string name="constraint_behavior">Comportamento sui vincoli</string>
   <string name="constraint_behavior_on_swipe">Convalida scorrendo il dito in avanti</string>

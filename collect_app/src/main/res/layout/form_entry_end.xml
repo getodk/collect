@@ -17,116 +17,51 @@ the specific language governing permissions and limitations under the License.
     android:fillViewport="true"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.0" />
+        android:padding="@dimen/margin_standard">
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:lineSpacingMultiplier="1.2"
-            android:paddingTop="10dp"
-            android:paddingBottom="20dp"
             android:textColor="?colorOnSurface"
             android:textSize="21sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/manual_name_warning"
-            style="@style/Widget.Material3.CardView.Filled"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="@dimen/margin">
-
-                <ImageView
-                    android:id="@+id/instance_name_info_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_outline_info_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="?colorPrimary" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/instance_name_info_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin"
-                    android:text="@string/manual_instance_name_warning"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
-                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/instance_name_learn_more"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/manual_instance_learn_more_button"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/instance_name_info_text" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
-            android:layout_marginTop="@dimen/margin"
-            android:id="@+id/save_form_as"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:lineSpacingMultiplier="1.2"
-            android:text="@string/save_form_as"
-            android:textColor="?colorOnSurface"
-            android:textSize="21sp" />
-
-        <EditText
-            android:id="@+id/save_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:textSize="21sp" />
-
-        <CheckBox
-            android:id="@+id/mark_finished"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginBottom="10dp"
-            android:text="@string/mark_finished"
-            android:textSize="21sp" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/save_as_draft"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="You are at the end of All widgets" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_exit_button"
-            style="@style/Widget.Collect.Button.FullWidth"
-            android:layout_width="match_parent"
+            android:id="@+id/save_as_draft"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/quit_entry" />
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:text="@string/save_as_draft"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/finalize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description" />
 
-        <View
-            android:layout_width="match_parent"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/finalize"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0" />
-    </LinearLayout>
+            android:layout_marginStart="@dimen/margin_small"
+            android:text="@string/finalize"
+            app:layout_constraintBottom_toBottomOf="@id/save_as_draft"
+            app:layout_constraintStart_toEndOf="@id/save_as_draft"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/save_as_draft" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

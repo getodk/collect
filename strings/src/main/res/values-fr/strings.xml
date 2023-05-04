@@ -122,12 +122,6 @@
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="survey_internal_error">Erreur interne : un ou plusieurs champs de saisie peuvent avoir été ignorés.</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
-  <string name="save_form_as">Nommer le formulaire :</string>
-  <string name="save_as_error">Le nom ne peut pas être vide !</string>
-  <string name="mark_finished">Marquer le formulaire comme finalisé</string>
-  <string name="quit_entry">Enregistrer le formulaire et sortir</string>
-  <string name="manual_instance_name_warning">Bientôt il sera impossible de nommer les formulaires manuellement. Le formulaire doit être modifié.</string>
-  <string name="manual_instance_learn_more_button">En savoir plus</string>
   <string name="data_saved_error">Désolé, l\'enregistrement du formulaire a échoué.</string>
   <string name="data_saved_ok">Le formulaire a été enregistré avec succès.</string>
   <string name="save_point_error">Erreur lors de l\'enregistrement du point de récupération: %s</string>
@@ -701,8 +695,6 @@
   <string name="delete_after_send">Supprimer après l\'envoi</string>
   <string name="delete_after_send_summary">Suppression des médias et formulaire finalisés après l\'envoi au serveur</string>
   <string name="form_filling_category">Remplissage de formulaire</string>
-  <string name="default_completed">Finaliser par défaut</string>
-  <string name="default_completed_summary">Marquer comme finalisé par défaut</string>
   <string name="constraint_behavior_title">Traitement de contraintes</string>
   <string name="constraint_behavior">Comportement du traitement des contraintes</string>
   <string name="constraint_behavior_on_swipe">Valider lors du glissement du doigt vers la gauche</string>

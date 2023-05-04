@@ -39,7 +39,7 @@ public class SendFinalizedFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "123")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")
@@ -58,7 +58,7 @@ public class SendFinalizedFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "123")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")
@@ -88,7 +88,7 @@ public class SendFinalizedFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "123")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")
@@ -120,7 +120,7 @@ public class SendFinalizedFormTest {
                 .startBlankForm("One Question Google")
                 .answerQuestion("what is your age", "47")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question Google")

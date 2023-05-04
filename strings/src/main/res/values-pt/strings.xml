@@ -117,10 +117,6 @@
   <string name="too_complex_form">Este formulário é complexo demais para este dispositivo. Tente simplificar expressões ou peça ajuda no fórum.</string>
   <string name="survey_internal_error">Erro interno: falha ao abrir a questão.</string>
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
-  <string name="save_form_as">Nomear este Formulário</string>
-  <string name="save_as_error">Nome a salvar não pode estar vazio!</string>
-  <string name="mark_finished">Marcar formulário como finalizado</string>
-  <string name="quit_entry">Salvar Formulário e Sair</string>
   <string name="data_saved_error">Desculpe, falha ao salvar formulário!</string>
   <string name="data_saved_ok">Formulário salvo com sucesso!</string>
   <string name="save_point_error">Erro ao salvar ponto de recuperação: %s</string>
@@ -681,8 +677,6 @@
   <string name="delete_after_send">Apagar depois de enviado</string>
   <string name="delete_after_send_summary">Apaga formulários completos e arquivos de mídia depois de enviados ao servidor.</string>
   <string name="form_filling_category">Preenchimento de formulários</string>
-  <string name="default_completed">Finalizado como Padrão</string>
-  <string name="default_completed_summary">Marcar formulário finalizado como padrão</string>
   <string name="constraint_behavior_title">Processamento de regras</string>
   <string name="constraint_behavior">Comportamento de processamento da regra</string>
   <string name="constraint_behavior_on_swipe">Validar ao avançar</string>

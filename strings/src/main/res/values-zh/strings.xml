@@ -121,10 +121,6 @@
   <string name="too_complex_form">此表单对于此设备太复杂。尝试简化表达或在论坛上寻求帮助。</string>
   <string name="survey_internal_error">内部错误：提示步骤失败。</string>
   <string name="save_enter_data_description">您已在 %s 的末尾.</string>
-  <string name="save_form_as">重命名表格:</string>
-  <string name="save_as_error">保存的名字不能为空!</string>
-  <string name="mark_finished">标记表格为完成</string>
-  <string name="quit_entry">保存表格并退出</string>
   <string name="data_saved_error">表格保存失败!</string>
   <string name="data_saved_ok">表格已成功保存!</string>
   <string name="save_point_error">错误！保存还原点文件：%s</string>
@@ -688,8 +684,6 @@
   <string name="delete_after_send">发送后自动删除</string>
   <string name="delete_after_send_summary">发送到服务器后删除已完成的表单和媒体</string>
   <string name="form_filling_category">表单填写</string>
-  <string name="default_completed">默认标记表格为完成</string>
-  <string name="default_completed_summary">表格会默认标记为完成</string>
   <string name="constraint_behavior_title">约束处理</string>
   <string name="constraint_behavior">约束检查</string>
   <string name="constraint_behavior_on_swipe">向前滑动时验证</string>

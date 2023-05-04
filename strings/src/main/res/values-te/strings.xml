@@ -117,10 +117,6 @@
   <string name="too_complex_form">ఈ పరికరం కోసం ఈ ఫారం చాలా క్లిష్టంగా ఉంటుంది. వ్యక్తీకరణలను సరళీకృతం చేయడానికి ప్రయత్నించండి లేదా ఫోరమ్‌లో సహాయం కోసం అడగండి.</string>
   <string name="survey_internal_error">అంతర్గత లోపం: ప్రాంప్ట్ ప్రారంభించే దశ విఫలమైంది.</string>
   <string name="save_enter_data_description">మీరు%sచివరిలో ఉన్నారు.</string>
-  <string name="save_form_as">ఈ ఫారంకు పేరు పెట్టండి</string>
-  <string name="save_as_error">సేవ్ చేసిన పేరు ఖాళీగా ఉండకూడదు!</string>
-  <string name="mark_finished">ఫారంను ఖరారు చేసినట్లుగా గుర్తించండి</string>
-  <string name="quit_entry">ఫారంను సేవ్ చేసి నిష్క్రమించండి</string>
   <string name="data_saved_error">క్షమించండి, ఫారం సేవ్ అవ్వలేదు</string>
   <string name="data_saved_ok">ఫారం విజయవంతంగా సేవ్ చేయబడింది!</string>
   <string name="save_point_error">రికవరీ పాయింట్‌ను సేవ్ చేయడంలో లోపం ఉంది: %s</string>
@@ -599,8 +595,6 @@
   <string name="delete_after_send">పంపిన తర్వాత తొలగించండి</string>
   <string name="delete_after_send_summary">సర్వర్‌కు పంపిన తర్వాత ఫైనల్ చేసిన ఫారమ్‌లను మరియు మీడియాను తొలగిస్తుంది</string>
   <string name="form_filling_category">ఫారం నింపడం</string>
-  <string name="default_completed">ఆటోమాటిక్ గా ఫైనల్ చెయ్యి </string>
-  <string name="default_completed_summary">ఫారంను ఆటోమేటిక్ గా ఫైనల్ చేసినట్లు గుర్తించండి</string>
   <string name="constraint_behavior_title">పరిమితి ప్రాసెసింగ్</string>
   <string name="constraint_behavior">కంస్ట్రయిన్ట్ ప్రాసెసింగ్ బిహేవియర్ </string>
   <string name="constraint_behavior_on_swipe">ఫార్వర్డ్ స్వైప్ మీద ధృవీకరించండి</string>

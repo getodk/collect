@@ -95,10 +95,6 @@
   <string name="invalid_space_in_answer_singular">OBS! Indtastede værdi 1%s har mellemrum</string>
   <string name="invalid_space_in_answer_plural">OBS! Indtastede værdier 1 %s har mellemrum</string>
   <string name="save_enter_data_description">Du er ved slutningen af %s.</string>
-  <string name="save_form_as">Navngiv formular</string>
-  <string name="save_as_error">Den gemte titel må ikke være tom - skal hedde noget.</string>
-  <string name="mark_finished">Markér form som færdiggjort</string>
-  <string name="quit_entry">Gem formular og afslut</string>
   <string name="data_saved_error">Formularen kunne ikke gemmes</string>
   <string name="data_saved_ok">Formular gemt </string>
   <string name="save_point_error">Kunne ikke gemme gendannelsespunkt: %s</string>
@@ -449,8 +445,6 @@
   <string name="autosend">Auto-send</string>
   <string name="delete_after_send">Slet efter afsendelse</string>
   <string name="delete_after_send_summary">Sletter færdiggjorte formularer og tilhørende mediefiler efter afsendelse til server.</string>
-  <string name="default_completed">Standard til færdigjort</string>
-  <string name="default_completed_summary">Markér formularen afsluttet som standard.</string>
   <string name="constraint_behavior_on_swipe">Validér ved brug af fremad-swipe</string>
   <string name="constraint_behavior_on_finalize">Udsæt validering indtil færdiggørelsen</string>
   <string name="high_resolution_summary">Aktivér højt-opløselige video-indstillnger</string>

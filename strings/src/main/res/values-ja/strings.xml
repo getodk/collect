@@ -117,10 +117,6 @@
   <string name="too_complex_form">この形式はこの端末には複雑すぎます。 表現を単純化するか、フォーラムで助けを求めてください。</string>
   <string name="survey_internal_error">内部エラー: プロンプトするステップに失敗しました。</string>
   <string name="save_enter_data_description">%s の最後です。</string>
-  <string name="save_form_as">このフォームの名前</string>
-  <string name="save_as_error">保存する名前は空にできません!</string>
-  <string name="mark_finished">フォームを確定済にします</string>
-  <string name="quit_entry">フォームを保存して終了</string>
   <string name="data_saved_error">申し訳ありません、フォームが保存できませんでした!</string>
   <string name="data_saved_ok">フォームを保存しました!</string>
   <string name="save_point_error">リカバリーポイントの保存中にエラー: %s</string>
@@ -631,8 +627,6 @@
   <string name="delete_after_send">送信後に削除</string>
   <string name="delete_after_send_summary">サーバに送信した後、確定されたフォームやメディアを削除します</string>
   <string name="form_filling_category">フォーム入力</string>
-  <string name="default_completed">デフォルトで確定</string>
-  <string name="default_completed_summary">デフォルトでフォームを確定済にします</string>
   <string name="constraint_behavior_title">処理の制約</string>
   <string name="constraint_behavior">処理動作の制約</string>
   <string name="constraint_behavior_on_swipe">次へスワイプ時に検証</string>

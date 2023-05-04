@@ -122,12 +122,6 @@
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="survey_internal_error">Interner Fehler: Sprung zur Eingabe fehlgeschlagen.</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
-  <string name="save_form_as">Benennen Sie dieses Formular:</string>
-  <string name="save_as_error">Gespeicherter Name darf nicht leer sein!</string>
-  <string name="mark_finished">Formular als vollständig markieren</string>
-  <string name="quit_entry">Formular speichern und beenden</string>
-  <string name="manual_instance_name_warning">Bald wird manuelles Benamen von Formularen entfernt. Formular-Design muss aktualisiert werden.</string>
-  <string name="manual_instance_learn_more_button">Mehr erfahren</string>
   <string name="data_saved_error">Speichervorgang gescheitert!</string>
   <string name="data_saved_ok">Speichervorgang erfolgreich!</string>
   <string name="save_point_error">Fehler beim Speichern des Wiederherstellungspunkts: %s</string>
@@ -698,8 +692,6 @@
   <string name="delete_after_send">Löschen nach dem Senden</string>
   <string name="delete_after_send_summary">Löscht abgeschlossene Formulare und Medien nach dem Senden zum Server</string>
   <string name="form_filling_category">Formulareingabe</string>
-  <string name="default_completed">Autom. als vollständig markieren</string>
-  <string name="default_completed_summary">Formular wird standardmäßig als vollständig markiert</string>
   <string name="constraint_behavior_title">Validierung</string>
   <string name="constraint_behavior">Validierungszeitpunkt</string>
   <string name="constraint_behavior_on_swipe">Validierung beim Vorwärts-Wischen</string>

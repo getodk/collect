@@ -73,10 +73,6 @@
   <string name="invalid_answer_error">Uxolo, lempendulo ayilungile</string>
   <string name="required_answer_error">Uxolo, lempendulo iyadingeka</string>
   <string name="save_enter_data_description">Ususekupheleni kuka %s.</string>
-  <string name="save_form_as">Qamba leli fomu</string>
-  <string name="save_as_error">Igama eligciniwe akumele lingabi nalutho</string>
-  <string name="mark_finished">Bonisa ukuthi ifomu liphothuliwe</string>
-  <string name="quit_entry">londoloza ifomu bese uyaphuma</string>
   <string name="data_saved_error">Uxolo ifomu alilondolozekanga</string>
   <string name="data_saved_ok">Ifomu lilondolozeke ngempumelelo</string>
   <!--Dialog title when exiting a form. The name of the form will be included-->
@@ -305,8 +301,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Susa emva kokuthumela</string>
   <string name="delete_after_send_summary">Cima amafomu nezekuxhumana emuva kokuthumela ku seva</string>
-  <string name="default_completed">Ngokungenhloso kube sekuqediwe</string>
-  <string name="default_completed_summary">Phawula ifomu njeseliphelile ngokungenhloso</string>
   <string name="high_resolution_summary">Vumela ukuqobha ngesithwebuli sevidiyo sezinga eliphezulu</string>
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->

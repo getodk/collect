@@ -117,10 +117,6 @@
   <string name="too_complex_form">Formularz jest zbyt skomplikowany dla tego urządzenia. Spróbuj uprościć wyrażenia, lub poproś o pomoc na forum.</string>
   <string name="survey_internal_error">Błąd wewnętrzny: przejście do pytania nie powiodło się.</string>
   <string name="save_enter_data_description">Jesteś przy końcu %s.</string>
-  <string name="save_form_as">Nazwij ten formularz</string>
-  <string name="save_as_error">Zapisana nazwa nie może być pusta!</string>
-  <string name="mark_finished">Zaznacz formularz jako zakończony</string>
-  <string name="quit_entry">Zapisz Formularz i Zakończ</string>
   <string name="data_saved_error">Przykro mi, zapis formularza się nie powiódł!</string>
   <string name="data_saved_ok">Formularz został zapisany pomyślnie!</string>
   <string name="save_point_error">Błąd przy zapisywaniu punktu odtwarzania: %s</string>
@@ -595,8 +591,6 @@
   <string name="delete_after_send">Skasuj po wysłaniu</string>
   <string name="delete_after_send_summary">Usuń zakończone formularze i pliki medialne po wysłaniu na serwer.</string>
   <string name="form_filling_category">Wypełnianie formularzu</string>
-  <string name="default_completed">Domyślnie zaznacz jako zakończony</string>
-  <string name="default_completed_summary">Domyślnie zaznacz formularz jako zakończony</string>
   <string name="constraint_behavior_title">Przetwarzanie ograniczeń</string>
   <string name="constraint_behavior">Przetwarzam zachowanie ograniczeń</string>
   <string name="constraint_behavior_on_swipe">Sprawdź poprawność po przeciągnięciu do przodu</string>

@@ -117,10 +117,6 @@
   <string name="too_complex_form">Iyi  fishi iremereye tabuleti yawe, gerageza kugira ibyo ugabanyamo.</string>
   <string name="survey_internal_error">Porogaramu yahuye n\'ikibazo cyo kutagaragaza amakuru.</string>
   <string name="save_enter_data_description">ugeze ku iherezo rya 1%s</string>
-  <string name="save_form_as">Ita izina iyi form </string>
-  <string name="save_as_error">Izina wemeje ntirigomba kuba ririho ubusa! </string>
-  <string name="mark_finished">Emezako form wayisoje </string>
-  <string name="quit_entry">Bika amakuru, ubundi uvemo</string>
   <string name="data_saved_error">Mwihangane, kubika amakuru byanze! </string>
   <string name="data_saved_ok">Amakuru yabitswe! </string>
   <string name="save_point_error">Ikosa mukwisevinga biragaruka: %s</string>
@@ -642,8 +638,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="delete_after_send">Gusiba nyuma yokohereza </string>
   <string name="delete_after_send_summary">Nyuma yo kohereza form na media kukicaro Ushobora guhita ubisiba.</string>
   <string name="form_filling_category">Kuzuza Form </string>
-  <string name="default_completed">Kubura gusoza.</string>
-  <string name="default_completed_summary">Garagaza inyandiko shingiro yasojwe itagaragara cg yabuze.</string>
   <string name="constraint_behavior_title">Gukemura uburyo bwintegeko.</string>
   <string name="constraint_behavior">Imyitwarire yo gukemura uburyo bwintegeko</string>
   <string name="constraint_behavior_on_swipe">Kwemeza uburyo bw\'ikubura ryihuse.</string>

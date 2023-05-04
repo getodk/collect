@@ -29,12 +29,12 @@
             android:title="@string/save_mid"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
-            android:key="save_as"
-            android:title="@string/save_form_as"
+            android:key="save_as_draft"
+            android:title="@string/save_as_draft"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
-            android:key="mark_as_finalized"
-            android:title="@string/mark_finished"
+            android:key="finalize"
+            android:title="@string/finalize"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

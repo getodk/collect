@@ -245,7 +245,6 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOSEND)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
@@ -263,7 +262,6 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
         adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
@@ -281,7 +279,6 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOSEND)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(false))
@@ -303,7 +300,6 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOSEND)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
@@ -321,7 +317,6 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
         adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
@@ -339,7 +334,6 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOSEND)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
@@ -361,7 +355,6 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOSEND)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(true))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(true))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(true))
@@ -379,7 +372,6 @@ class FormManagementPreferencesFragmentTest {
         adminSettings.save(ProtectedProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS, false)
         adminSettings.save(ProtectedProjectKeys.KEY_AUTOSEND, false)
         adminSettings.save(ProtectedProjectKeys.KEY_DELETE_AFTER_SEND, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
@@ -397,7 +389,6 @@ class FormManagementPreferencesFragmentTest {
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIDE_OLD_FORM_VERSIONS)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_AUTOSEND)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_DELETE_AFTER_SEND)!!.isVisible, `is`(false))
-            assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_COMPLETED_DEFAULT)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_HIGH_RESOLUTION)!!.isVisible, `is`(false))
             assertThat(fragment.findPreference<Preference>(ProjectKeys.KEY_IMAGE_SIZE)!!.isVisible, `is`(false))
@@ -457,7 +448,6 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `When all preferences in 'Form filling' category are hidden, the category should be hidden as well`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, false)
@@ -472,7 +462,6 @@ class FormManagementPreferencesFragmentTest {
 
     @Test
     fun `When al least one preference in 'Form filling' category is visible, the category should be visible as well`() {
-        adminSettings.save(ProtectedProjectKeys.KEY_DEFAULT_TO_FINALIZED, false)
         adminSettings.save(ProtectedProjectKeys.KEY_CONSTRAINT_BEHAVIOR, false)
         adminSettings.save(ProtectedProjectKeys.KEY_HIGH_RESOLUTION, false)
         adminSettings.save(ProtectedProjectKeys.KEY_IMAGE_SIZE, true)

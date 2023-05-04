@@ -56,7 +56,7 @@ class SwitchProjectTest {
             .startBlankForm("Two Question")
             .swipeToNextQuestion("What is your age?")
             .swipeToEndScreen()
-            .clickSaveAndExit()
+            .clickFinalize()
             .clickEditSavedForm(1)
             .assertText("Two Question")
             .pressBack(MainMenuPage())

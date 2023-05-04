@@ -31,7 +31,7 @@ public class EditSavedFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "123")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")
@@ -59,7 +59,7 @@ public class EditSavedFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "123")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickSendFinalizedForm(1)
                 .clickOnForm("One Question")

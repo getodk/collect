@@ -98,21 +98,20 @@ public class FillBlankFormTest {
                 .copyForm("1560_DateData.xml")
                 .startBlankForm("1560_DateData")
                 .checkIsTranslationDisplayed("Jan 01, 1900", "01 ene. 1900")
-                .swipeToEndScreen()
-                .clickSaveAndExit()
+                .swipeToEndScreen("01/01/00")
+                .clickFinalize()
 
                 .copyForm("1560_IntegerData.xml")
                 .startBlankForm("1560_IntegerData")
                 .assertText("5")
-                .swipeToEndScreen()
-                .assertText("5")
-                .clickSaveAndExit()
+                .swipeToEndScreen("5")
+                .clickFinalize()
 
                 .copyForm("1560_IntegerData_instanceID.xml")
                 .startBlankForm("1560_IntegerData_instanceID")
                 .assertText("5")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -213,7 +212,7 @@ public class FillBlankFormTest {
                 .clickOnText("No")
                 .swipeToNextQuestion("Any other notes?")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
 
@@ -232,7 +231,7 @@ public class FillBlankFormTest {
                 .clickOnText("Granny Smith")
                 .swipeToNextQuestion("Varieties (relative reference)")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -307,7 +306,7 @@ public class FillBlankFormTest {
                 .clickOnText("Mango")
                 .clickOnText("Oranges")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
 
@@ -326,7 +325,7 @@ public class FillBlankFormTest {
             firstQuestionAnswers.add(getQuestionText());
             formEntryPage.swipeToNextQuestion("Your random once value:");
             secondQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToEndScreen().clickSaveAndExit();
+            formEntryPage.swipeToEndScreen().clickFinalize();
         }
 
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
@@ -344,7 +343,7 @@ public class FillBlankFormTest {
             formEntryPage.inputText("3");
             formEntryPage.swipeToNextQuestion("Your random number was");
             firstQuestionAnswers.add(getQuestionText());
-            formEntryPage.swipeToEndScreen().clickSaveAndExit();
+            formEntryPage.swipeToEndScreen().clickFinalize();
         }
 
         assertNotSame(firstQuestionAnswers.get(0), firstQuestionAnswers.get(1));
@@ -360,33 +359,30 @@ public class FillBlankFormTest {
                 .startBlankFormWithError("g6Error")
                 .clickOK(new FormEntryPage("g6Error"))
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage()
                 .copyForm("g6Error2.xml")
                 .startBlankForm("g6Error2")
-                .inputText("bla")
                 .swipeToNextQuestionWithError()
                 .clickOK(new FormEntryPage("g6Error2"))
                 .swipeToEndScreen()
-                .inputText("ble")
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage()
                 .copyForm("emptyGroupFieldList.xml")
                 .clickFillBlankForm()
                 .clickOnEmptyForm("emptyGroupFieldList")
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
 
         new MainMenuPage()
                 .copyForm("emptyGroupFieldList2.xml")
                 .startBlankForm("emptyGroupFieldList2")
-                .inputText("nana")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
 
@@ -397,7 +393,7 @@ public class FillBlankFormTest {
                 .copyForm("metadata2.xml")
                 .clickFillBlankForm()
                 .clickOnEmptyForm("metadata2")
-                .clickSaveAndExit()
+                .clickFinalize()
                 .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
     }
 
@@ -432,7 +428,7 @@ public class FillBlankFormTest {
                 .clickOnText("Jaggu")
                 .swipeToNextQuestion("Comments")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -539,7 +535,7 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion("C value")
                 .swipeToNextQuestionWithRepeatGroup("null")
                 .clickOnDoNotAdd(new FormEndPage("Event: odk-new-repeat"))
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -554,7 +550,7 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion("My value")
                 .assertText("5")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -593,7 +589,7 @@ public class FillBlankFormTest {
                 .assertText("File: " + formsDirPath + "/search_and_select-media/nombre.csv is missing.")
                 .assertText("File: " + formsDirPath + "/search_and_select-media/nombre2.csv is missing.")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .copyForm("select_one_external.xml")
                 .startBlankForm("cascading select test")
@@ -603,7 +599,7 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion("city")
                 .assertText("File: " + formsDirPath + "/select_one_external-media/itemsets.csv is missing.")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .copyForm("fieldlist-updates_nocsv.xml")
                 .startBlankForm("fieldlist-updates")
@@ -613,24 +609,7 @@ public class FillBlankFormTest {
                 .clickOnQuestion("Source15")
                 .assertText("File: " + formsDirPath + "/fieldlist-updates_nocsv-media/fruits.csv is missing.")
                 .swipeToEndScreen()
-                .clickSaveAndExit();
-    }
-
-    @Test
-    public void changedName_shouldNotDisappearAfterScreenRotation() {
-        //TestCase13
-        rule.startAtMainMenu()
-                .copyForm("all-widgets.xml")
-                .startBlankForm("All widgets")
-                .clickGoToArrow()
-                .clickJumpEndButton()
-                .clickOnId(R.id.save_name)
-                .inputText("submission")
-                .closeSoftKeyboard()
-                .rotateToLandscape(new FormEntryPage("All widgets"))
-                .assertText("submission")
-                .rotateToPortrait(new FormEntryPage("All widgets"))
-                .assertText("submission");
+                .clickFinalize();
     }
 
     @Test

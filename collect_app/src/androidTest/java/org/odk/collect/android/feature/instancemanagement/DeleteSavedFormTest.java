@@ -26,7 +26,7 @@ public class DeleteSavedFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "30")
                 .swipeToEndScreen()
-                .clickSaveAndExit()
+                .clickFinalize()
 
                 .clickDeleteSavedForm()
                 .clickForm("One Question")

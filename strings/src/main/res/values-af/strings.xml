@@ -77,10 +77,6 @@
   <string name="required_answer_error">Jammer, hierdie antwoord word benodig!</string>
   <string name="survey_internal_error">Interne fout: aanstap na die vraag het misluk</string>
   <string name="save_enter_data_description">U is aan die einde van %s.</string>
-  <string name="save_form_as">Gee hierdie vorm \'n naam</string>
-  <string name="save_as_error">Gestoorde naam mag nie leeg wees nie!</string>
-  <string name="mark_finished">Merk vorm as gefinaliseer</string>
-  <string name="quit_entry">Stoor Vorm en Verlaat</string>
   <string name="data_saved_error">Jammer, stoor van vorm het misluk!</string>
   <string name="data_saved_ok">Vorm suksesvol gestoor!</string>
   <string name="save_point_error">Fout tydens stoor van herstel-punt: %s</string>
@@ -329,8 +325,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Verwyder na stuur</string>
   <string name="delete_after_send_summary">Verwyder gefinaliseerde vorms en media nadat dit server toe gestuur is</string>
-  <string name="default_completed">Default na gefinaliseer</string>
-  <string name="default_completed_summary">Merk vorm as gefinaliseer as default</string>
   <string name="constraint_behavior">Constraint proseseringsgedrag</string>
   <string name="constraint_behavior_on_swipe">Toets tydens vorentoe swipe</string>
   <string name="constraint_behavior_on_finalize">Stel toetsing uit tot finalisering</string>

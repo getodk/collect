@@ -43,7 +43,7 @@ public class DrawWidgetTest {
                 .waitForRotationToEnd()
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -65,7 +65,7 @@ public class DrawWidgetTest {
                 .waitForRotationToEnd()
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 
     @Test
@@ -93,6 +93,6 @@ public class DrawWidgetTest {
                 .waitForRotationToEnd()
                 .clickGoToArrow()
                 .clickJumpEndButton()
-                .clickSaveAndExit();
+                .clickFinalize();
     }
 }

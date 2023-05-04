@@ -92,10 +92,6 @@
   <string name="invalid_space_in_answer_plural">Opozorila: vrednosti %s vsebujejo presledke</string>
   <string name="survey_internal_error">Interna napaka. Korak k vprašanju ni uspel.</string>
   <string name="save_enter_data_description">Si pri koncu %s</string>
-  <string name="save_form_as">Poimenuj obrazec</string>
-  <string name="save_as_error">Shranjeno ime ne more biti prazno!</string>
-  <string name="mark_finished">Označi obrazec kot zaključen</string>
-  <string name="quit_entry">Shrani obrazec in zapri</string>
   <string name="data_saved_error">Shranjevanje obrazca ni uspelo!</string>
   <string name="data_saved_ok">Obrazec uspešno shranjen!</string>
   <string name="save_point_error">Napaka pri shranjevanju  obnovitvene točke %s</string>
@@ -390,8 +386,6 @@
   <string name="wifi_autosend">Samo WiFi</string>
   <string name="cellular_autosend">Samo mobilno omrežje</string>
   <string name="wifi_cellular_autosend">WiFi ali mobilno omrežje</string>
-  <string name="default_completed">Zaključeno naj bo privzeto</string>
-  <string name="default_completed_summary">Privzeto označi obrazec kot zaključen</string>
   <string name="constraint_behavior">Način obravnave omejitev</string>
   <string name="constraint_behavior_on_swipe">Ovrednoti ob potegu naprej</string>
   <string name="constraint_behavior_on_finalize">Zadrži vrednotenje do zaključka</string>

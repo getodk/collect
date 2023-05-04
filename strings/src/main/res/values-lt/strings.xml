@@ -68,10 +68,6 @@
   <string name="invalid_answer_error">Deja, šis atsakymas yra netinkamas!</string>
   <string name="required_answer_error">Atsakymas į šį klausimą yra privalomas!</string>
   <string name="save_enter_data_description">Jūs esate \"%s\" pabaigoje.</string>
-  <string name="save_form_as">Pavadinkite šią formą:</string>
-  <string name="save_as_error">Pavadinimas negali būti tuščias!</string>
-  <string name="mark_finished">Pažymėti formą kaip užbaigtą</string>
-  <string name="quit_entry">Išsaugoti formą ir išeiti</string>
   <string name="data_saved_error">Deja, formos išsaugoti nepavyko!</string>
   <string name="data_saved_ok">Forma sėkmingai išsaugota!</string>
   <!--Dialog title when exiting a form. The name of the form will be included-->
@@ -287,8 +283,6 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
-  <string name="default_completed">Numatyta kaip užbaigta</string>
-  <string name="default_completed_summary">Numatytuoju atveju pažymėti formą kaip užbaigtą</string>
   <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->

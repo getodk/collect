@@ -112,10 +112,6 @@
   <string name="invalid_space_in_answer_plural">Внимание: нижеследующие значения %s содержат пробелы</string>
   <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
-  <string name="save_form_as">Сохранить данный опрос под названием:</string>
-  <string name="save_as_error">Название не может быть пустым!</string>
-  <string name="mark_finished">Пометить опрос как финализированный </string>
-  <string name="quit_entry">Сохранить ответы и перейти в главное меню</string>
   <string name="data_saved_error">Не удалось сохранить ответы</string>
   <string name="data_saved_ok">Ответы успешно сохранены</string>
   <string name="save_point_error">Ошибка сохранения точки восстановления: %s</string>
@@ -516,8 +512,6 @@
   <string name="delete_after_send">Удалить после отправки</string>
   <string name="delete_after_send_summary">Удаляет финализированные опросники и их медиа после отправки данных на сервер</string>
   <string name="form_filling_category">Заполнение опросника</string>
-  <string name="default_completed">Финализировать по умолчанию</string>
-  <string name="default_completed_summary">Помечать опросы финализированными по умолчанию</string>
   <string name="constraint_behavior_title">Обработка ограничений</string>
   <string name="constraint_behavior">Способ проверки ограничений</string>
   <string name="constraint_behavior_on_swipe">Проверять после каждого вопроса</string>

@@ -84,10 +84,6 @@
   <string name="required_answer_error">Aquesta dada és d\'entrada obligada!</string>
   <string name="survey_internal_error">Error intern al demanar la següent dada.</string>
   <string name="save_enter_data_description">Formulari \"%s\" finalitzat.</string>
-  <string name="save_form_as">Anomena aquest formulari:</string>
-  <string name="save_as_error">El nom no pot deixar-se en blanc</string>
-  <string name="mark_finished">Marcar formulari com completat</string>
-  <string name="quit_entry">Desa formulari i surt.</string>
   <string name="data_saved_error">Ho sentim, el formulari no s\'ha desat be!</string>
   <string name="data_saved_ok">Formulari desat correctament!</string>
   <string name="save_point_error">Error al guardar el punt de recuperació: %s</string>
@@ -379,8 +375,6 @@
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
   <string name="delete_after_send">Esborra despres d\'enviar</string>
   <string name="delete_after_send_summary">Esborra formularis tancats i arxius multimedia després d\'enviar a servidor</string>
-  <string name="default_completed">Considera finalitzat per defecte</string>
-  <string name="default_completed_summary">Marca formulari com finalitzat per defecte.</string>
   <string name="constraint_behavior">Comportament del processament de restriccions</string>
   <string name="constraint_behavior_on_swipe">Validar al moure endavant</string>
   <string name="constraint_behavior_on_finalize">Ajornar validació fins al final</string>

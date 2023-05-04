@@ -80,10 +80,6 @@
   <string name="required_answer_error">Samahani, jibu hili linahitajika!</string>
   <string name="survey_internal_error">Hitilafu ya ndani: hatua ya amri ina kasoro.</string>
   <string name="save_enter_data_description">Umefika mwisho wa %s.</string>
-  <string name="save_form_as">Ipatie jina fomu hii</string>
-  <string name="save_as_error">Jina lilohifadhiwa halifai kuwa tupu</string>
-  <string name="mark_finished">sahihisha fomu kama iliyo kamilika</string>
-  <string name="quit_entry">Hifadhi fomu na Kutoka</string>
   <string name="data_saved_error">Samahani, fomu haikuhifadhiwa!</string>
   <string name="data_saved_ok">Fomu imehifadhiwa!</string>
   <string name="save_point_error">Hitilafu imetokea kwa ncha ya urejesho: %s</string>
@@ -324,8 +320,6 @@
   <!--Frequency for requesting blank form updates from the server-->
   <!--Frequency for requesting blank form updates from the server-->
   <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
-  <string name="default_completed">sahihisha kama  fomu iliyo kamilika</string>
-  <string name="default_completed_summary">sahihisha fomu kama iliyo kamilika</string>
   <string name="constraint_behavior">Uchakatishi wa dhibitisho</string>
   <string name="constraint_behavior_on_swipe">Dhibitisha ukisonga mbele</string>
   <string name="constraint_behavior_on_finalize">Chelewesha fomu hadi itamatishwe</string>

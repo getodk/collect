@@ -46,11 +46,4 @@
         <item name="android:backgroundTint">@color/surfaceButtonColor</item>
         <item name="android:textColor">@color/color_on_surface_tint_list</item>
     </style>
-
-    <style name="Widget.Collect.Button.FullWidth" parent="Widget.MaterialComponents.Button">
-        <item name="android:paddingTop">@dimen/margin_standard</item>
-        <item name="android:paddingBottom">@dimen/margin_standard</item>
-        <item name="android:textSize">21sp</item>
-    </style>
-
 </resources>
