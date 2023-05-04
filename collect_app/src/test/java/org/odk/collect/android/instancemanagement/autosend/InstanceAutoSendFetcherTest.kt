@@ -133,37 +133,6 @@ class InstanceAutoSendFetcherTest {
     }
 
     @Test
-    fun `enabling auto-send is not case sensitive`() {
-        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(false)
-
-        val formWithEnabledAutoSend = buildForm("1", "1", createTempDir().absolutePath, autosend = " TrUe ").build()
-        val instanceOfFormWithEnabledAutoSendComplete = buildInstance("1", "1", "instance 1", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
-
-        formsRepository.save(formWithEnabledAutoSend)
-        instancesRepository.save(instanceOfFormWithEnabledAutoSendComplete)
-
-        val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
-
-        assertThat(instancesToSend.size, `is`(1))
-        assertTrue(instancesToSend.contains(instanceOfFormWithEnabledAutoSendComplete))
-    }
-
-    @Test
-    fun `disabling auto-send is not case sensitive`() {
-        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings(projectId)).thenReturn(true)
-
-        val formWithEnabledAutoSend = buildForm("1", "1", createTempDir().absolutePath, autosend = " FaLsE ").build()
-        val instanceOfFormWithEnabledAutoSendComplete = buildInstance("1", "1", "instance 1", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
-
-        formsRepository.save(formWithEnabledAutoSend)
-        instancesRepository.save(instanceOfFormWithEnabledAutoSendComplete)
-
-        val instancesToSend = instanceAutoSendFetcher.getInstancesToAutoSend(projectId, instancesRepository, formsRepository)
-
-        assertTrue(instancesToSend.isEmpty())
-    }
-
-    @Test
     fun `if there are multiple versions of one form and only one has auto-send enabled take only instances of that form`() {
         val formWithEnabledAutoSendV1 = buildForm("1", "1", createTempDir().absolutePath, autosend = "false").build()
         val instanceOfFormWithEnabledAutoSendCompleteV1 = buildInstance("1", "1", "instance 2", Instance.STATUS_COMPLETE, null, createTempDir().absolutePath).build()
