@@ -99,7 +99,7 @@ import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormAnimation;
 import org.odk.collect.android.formentry.FormAnimationType;
-import org.odk.collect.android.formentry.FormEndView;
+import org.odk.collect.android.formentry.FormEndViewFactory;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
@@ -189,7 +189,6 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
@@ -358,6 +357,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Inject
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory;
+
+    @Inject
+    public FormEndViewFactory formEndViewFactory;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -1253,17 +1255,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         }
 
-        boolean isSaveAsDraftEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT);
-        boolean isFinalizeEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_FINALIZE);
-        FormEndView endView = new FormEndView(this, saveName, isSaveAsDraftEnabled, isFinalizeEnabled, markAsFinalized ->
-                saveForm(true, markAsFinalized, saveName, false)
-        );
-
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();
         }
 
-        return endView;
+        return formEndViewFactory.createFormEndView(this, saveName, formsRepository.getOneByPath(formPath), markAsFinalized ->
+                saveForm(true, markAsFinalized, saveName, false)
+        );
     }
 
     @Override

@@ -27,6 +27,7 @@ import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
+import org.odk.collect.android.formentry.FormEndViewFactory;
 import org.odk.collect.android.mainmenu.MainMenuViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
@@ -520,9 +521,19 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState, PropertyManager propertyManager) {
-        InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(new AutoSendSettingsProvider(networkStateProvider, settingsProvider));
+    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState, PropertyManager propertyManager) {
+        InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(autoSendSettingsProvider);
         return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState, propertyManager);
+    }
+
+    @Provides
+    public AutoSendSettingsProvider providesAutoSendSettingsProvider(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
+        return new AutoSendSettingsProvider(networkStateProvider, settingsProvider);
+    }
+
+    @Provides
+    public FormEndViewFactory providesFormEndViewFactory(SettingsProvider settingsProvider, AutoSendSettingsProvider autoSendSettingsProvider) {
+        return new FormEndViewFactory(settingsProvider, autoSendSettingsProvider);
     }
 
     @Provides

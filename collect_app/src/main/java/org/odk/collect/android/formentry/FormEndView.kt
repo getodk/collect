@@ -11,6 +11,7 @@ class FormEndView(
     formTitle: String,
     isSaveAsDraftEnabled: Boolean,
     isFinalizeEnabled: Boolean,
+    shouldFormBeSentAutomatically: Boolean,
     private val listener: Listener
 ) : SwipeHandler.View(context) {
 
@@ -27,6 +28,9 @@ class FormEndView(
         binding.finalize.isEnabled = isFinalizeEnabled
         binding.finalize.setOnClickListener {
             listener.onSaveClicked(true)
+        }
+        if (shouldFormBeSentAutomatically) {
+            binding.finalize.text = context.getString(R.string.send)
         }
     }
 
