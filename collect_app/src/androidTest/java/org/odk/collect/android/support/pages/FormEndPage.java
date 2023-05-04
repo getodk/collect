@@ -44,6 +44,11 @@ public class FormEndPage extends Page<FormEndPage> {
         return clickFinalize(new MainMenuPage());
     }
 
+    public MainMenuPage clickSend() {
+        onView(withText(getTranslatedString(R.string.send))).perform(click());
+        return new MainMenuPage().assertOnPage();
+    }
+
     public FormMapPage clickSaveAndExitBackToMap() {
         return clickFinalize(new FormMapPage(formName));
     }
