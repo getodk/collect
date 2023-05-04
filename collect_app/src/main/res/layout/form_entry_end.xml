@@ -53,7 +53,7 @@ the specific language governing permissions and limitations under the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/finalize"
-            style="@style/Widget.Material3.Button.IconButton.Filled"
+            style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
