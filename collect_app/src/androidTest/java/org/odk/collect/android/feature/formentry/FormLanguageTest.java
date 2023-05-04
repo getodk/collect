@@ -8,7 +8,7 @@ import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -41,7 +41,7 @@ public class FormLanguageTest {
                 .clickOptionsIcon()
                 .clickOnString(R.string.change_language)
                 .clickOnText("French (fr)")
-                .pressBack(new SaveOrIgnoreDialog<>("One Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>("One Question", new MainMenuPage()))
                 .clickDiscardForm()
 
                 .startBlankForm("One Question")

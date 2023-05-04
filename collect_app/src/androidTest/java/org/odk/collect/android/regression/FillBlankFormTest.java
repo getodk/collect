@@ -56,7 +56,7 @@ public class FillBlankFormTest {
                 .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .pressBack(new ExitFormDialog("All widgets"))
-                .assertText(R.string.keep_changes)
+                .assertText(R.string.save_as_draft)
                 .assertText(R.string.do_not_save)
                 .clickOnString(R.string.do_not_save)
                 .checkIsIdDisplayed(R.id.enter_data)

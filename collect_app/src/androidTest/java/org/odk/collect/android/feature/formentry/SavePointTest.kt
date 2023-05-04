@@ -12,7 +12,7 @@ import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
@@ -40,7 +40,7 @@ class SavePointTest {
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log
@@ -84,7 +84,7 @@ class SavePointTest {
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log
@@ -116,7 +116,7 @@ class SavePointTest {
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log
@@ -156,7 +156,7 @@ class SavePointTest {
             .assertText("52")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrIgnoreDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log

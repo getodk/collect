@@ -9,7 +9,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
@@ -51,7 +51,7 @@ class FormFinalizingTest {
             .assertNumberOfFinalizedForms(0)
             .startBlankForm("One Question")
             .closeSoftKeyboard()
-            .pressBack(SaveOrIgnoreDialog("One Question", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog("One Question", MainMenuPage()))
             .clickSaveChanges()
             .assertNumberOfEditableForms(1)
             .assertNumberOfFinalizedForms(0)

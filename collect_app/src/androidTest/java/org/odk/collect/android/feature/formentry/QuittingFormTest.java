@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -33,7 +33,7 @@ public class QuittingFormTest {
                         new QuestionAndAnswer("What is your name?", "Reuben"),
                         new QuestionAndAnswer("What is your age?", "10")
                 )
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>("Two Question", new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)
@@ -48,7 +48,7 @@ public class QuittingFormTest {
                 .copyForm("two-question.xml")
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>("Two Question", new MainMenuPage()))
                 .clickDiscardForm()
 
                 .assertNumberOfEditableForms(0);
@@ -79,7 +79,7 @@ public class QuittingFormTest {
                 .answerQuestion("What is your name?", "Reuben")
                 .swipeToNextQuestion("What is your age?", true)
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)
@@ -93,7 +93,7 @@ public class QuittingFormTest {
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
                 .answerQuestion("What is your name?", "Reuben")
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)
@@ -102,7 +102,7 @@ public class QuittingFormTest {
                 .answerQuestion("What is your name?", "Another Reuben")
                 .swipeToNextQuestion("What is your age?", true)
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)
@@ -128,7 +128,7 @@ public class QuittingFormTest {
                 .longPressOnQuestion("What is your age?", true)
                 .removeResponse()
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
+                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
                 .clickSaveChangesWithError(R.string.required_answer_error)
                 .pressBackAndDiscardChanges()
 
@@ -157,7 +157,7 @@ public class QuittingFormTest {
                 .removeResponse()
                 .swipeToPreviousQuestion("What is your name?")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrIgnoreDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
+                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
                 .clickSaveChangesWithError(R.string.required_answer_error)
                 .assertQuestion("What is your age?", true)
                 .pressBackAndDiscardChanges()

@@ -11,7 +11,7 @@ import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.ChangesReasonPromptPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
@@ -116,7 +116,7 @@ class TrackChangesReasonTest {
             .clickGoToStart()
             .closeSoftKeyboard()
             .pressBack(
-                SaveOrIgnoreDialog(
+                SaveOrDiscardFormDialog(
                     "Track Changes Reason",
                     ChangesReasonPromptPage("Track Changes Reason")
                 )
@@ -137,7 +137,7 @@ class TrackChangesReasonTest {
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
             .closeSoftKeyboard()
-            .pressBack(SaveOrIgnoreDialog("Track Changes Reason", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog("Track Changes Reason", MainMenuPage()))
             .clickDiscardChanges()
     }
 
@@ -166,7 +166,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .clickSave()
             .closeSoftKeyboard()
-            .pressBack(SaveOrIgnoreDialog("Track Changes Reason", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog("Track Changes Reason", MainMenuPage()))
             .clickSaveChanges()
     }
 }
