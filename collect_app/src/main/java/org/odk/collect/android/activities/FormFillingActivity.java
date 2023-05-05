@@ -654,7 +654,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
-        if (formError != null) {
+        if (formError instanceof FormError.Fatal) {
             createErrorDialog(formError);
             return;
         }
@@ -1895,7 +1895,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             updateNavigationButtonVisibility();
         }
 
-        if (formError != null) {
+        if (formError instanceof FormError.Fatal) {
             if (alertDialog != null && !alertDialog.isShowing()) {
                 createErrorDialog(formError);
             } else {
