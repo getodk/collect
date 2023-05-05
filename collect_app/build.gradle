@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply from: '../config/quality.gradle'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
 apply plugin: "com.google.android.gms.oss-licenses-plugin"
 
 import com.android.ddmlib.DdmPreferences

@@ -1,6 +1,10 @@
 package org.odk.collect.android.formentry
 
-sealed class FormError {
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+sealed class FormError : Parcelable {
     abstract val message: String
 
     data class NonFatal(override val message: String) : FormError()
