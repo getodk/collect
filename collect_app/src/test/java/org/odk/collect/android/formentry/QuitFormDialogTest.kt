@@ -38,8 +38,9 @@ class QuitFormDialogTest {
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
 
     @Test
-    fun `The 'Save' button should be hidden if 'Save Form' is disabled in protected settings`() {
+    fun `The 'Save' button should be hidden if 'Save Form' is disabled but 'Drafts' button is visible`() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, false)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
         val dialog = showDialog(activity)
 
         val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
@@ -52,8 +53,24 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun `The 'Save' button should be visible if 'Save Form' is enabled in protected settings`() {
+    fun `The 'Save' button should be hidden if 'Save Form' is enabled but 'Drafts' button is hidden`() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, true)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+        val view = shadowDialog.getView() as ListView
+        val iconMenuItem: IconMenuItem = view.adapter.getItem(0) as IconMenuItem
+
+        assertThat(view.adapter.count, equalTo(1))
+        assertThat(iconMenuItem.imageResId, not(equalTo(R.drawable.ic_save)))
+        assertThat(iconMenuItem.textResId, not(equalTo(R.string.save_as_draft)))
+    }
+
+    @Test
+    fun `The 'Save' button should be visible if 'Save Form' is enabled and 'Drafts' button is visible`() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, true)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
         val dialog = showDialog(activity)
 
         val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
