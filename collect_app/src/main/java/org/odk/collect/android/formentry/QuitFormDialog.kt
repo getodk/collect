@@ -56,7 +56,7 @@ object QuitFormDialog {
             if (formSaveViewModel.formName == null) activity.resources.getString(R.string.no_form_loaded) else formSaveViewModel.getFormName()
 
         val items: List<IconMenuItem> = if (
-            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)
+            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID) && settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
         ) {
             ImmutableList.of(
                 IconMenuItem(R.drawable.ic_save, R.string.save_as_draft),
