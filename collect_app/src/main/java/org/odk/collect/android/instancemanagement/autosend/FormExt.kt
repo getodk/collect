@@ -1,4 +1,6 @@
-package org.odk.collect.forms
+package org.odk.collect.android.instancemanagement.autosend
+
+import org.odk.collect.forms.Form
 
 fun Form.shouldFormBeSentAutomatically(isAutoSendEnabledInSettings: Boolean): Boolean {
     return if (isAutoSendEnabledInSettings) {

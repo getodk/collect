@@ -14,8 +14,4 @@ java {
 
 dependencies {
     implementation Dependencies.kotlin_stdlib
-
-    testImplementation project(':formstest')
-    testImplementation(Dependencies.junit)
-    testImplementation Dependencies.hamcrest
 }

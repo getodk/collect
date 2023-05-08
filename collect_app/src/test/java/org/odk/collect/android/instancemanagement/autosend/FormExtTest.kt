@@ -1,4 +1,4 @@
-package org.odk.collect.forms
+package org.odk.collect.android.instancemanagement.autosend
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

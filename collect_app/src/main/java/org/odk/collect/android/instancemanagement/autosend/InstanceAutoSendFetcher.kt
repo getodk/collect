@@ -3,7 +3,6 @@ package org.odk.collect.android.instancemanagement.autosend
 import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
-import org.odk.collect.forms.shouldFormBeSentAutomatically
 
 class InstanceAutoSendFetcher(private val autoSendSettingsProvider: AutoSendSettingsProvider) {
 

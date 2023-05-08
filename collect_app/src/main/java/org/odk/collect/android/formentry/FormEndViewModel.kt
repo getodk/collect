@@ -3,8 +3,8 @@ package org.odk.collect.android.formentry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
+import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.forms.Form
-import org.odk.collect.forms.shouldFormBeSentAutomatically
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
