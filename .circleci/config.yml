@@ -233,6 +233,12 @@ jobs:
           name: Check APK size hasn't increased by more than 100kb
           command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 10734563 ]; then exit 1; fi
 
+      - run:
+          name: Copy APK to predictable path for artifact storage
+          command: cp collect_app/build/outputs/apk/selfSignedRelease/*.apk selfSignedRelease.apk
+      - store_artifacts:
+          path: selfSignedRelease.apk
+
   test_smoke_instrumented:
     <<: *android_config
     steps:
