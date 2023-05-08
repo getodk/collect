@@ -4,11 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
-import org.odk.collect.forms.Form
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class FormEndViewModel(
+    private val formSessionRepository: FormSessionRepository,
+    private val sessionId: String,
     private val settingsProvider: SettingsProvider,
     private val autoSendSettingsProvider: AutoSendSettingsProvider
 ) : ViewModel() {
@@ -21,13 +22,19 @@ class FormEndViewModel(
         return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_FINALIZE)
     }
 
-    fun shouldFormBeSentAutomatically(form: Form): Boolean {
-        return form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())
+    fun shouldFormBeSentAutomatically(): Boolean {
+        val form = formSessionRepository.get(sessionId).value?.form
+        return form?.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings()) ?: false
     }
 
-    class Factory(private val settingsProvider: SettingsProvider, private val autoSendSettingsProvider: AutoSendSettingsProvider) : ViewModelProvider.Factory {
+    class Factory(
+        private val formSessionRepository: FormSessionRepository,
+        private val sessionId: String,
+        private val settingsProvider: SettingsProvider,
+        private val autoSendSettingsProvider: AutoSendSettingsProvider
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FormEndViewModel(settingsProvider, autoSendSettingsProvider) as T
+            return FormEndViewModel(formSessionRepository, sessionId, settingsProvider, autoSendSettingsProvider) as T
         }
     }
 }

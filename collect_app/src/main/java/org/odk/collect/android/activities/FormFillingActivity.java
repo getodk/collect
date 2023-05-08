@@ -573,7 +573,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
-        formSessionRepository.set(sessionId, formController);
+        formSessionRepository.set(sessionId, formController, formsRepository.getOneByPath(formPath));
 
         AnalyticsUtils.setForm(formController);
 
@@ -1267,7 +1267,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         return new FormEndView(
                 this,
                 saveName,
-                formsRepository.getOneByPath(formPath),
                 formEndViewModel,
                 markAsFinalized -> saveForm(true, markAsFinalized, saveName, false)
         );

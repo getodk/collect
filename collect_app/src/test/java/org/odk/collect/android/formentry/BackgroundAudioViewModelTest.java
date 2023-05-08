@@ -22,6 +22,7 @@ import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.audiorecorder.recorder.Output;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.forms.Form;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.testshared.RobolectricHelpers;
@@ -38,11 +39,12 @@ public class BackgroundAudioViewModelTest {
     private final FakeRecordAudioActionRegistry recordAudioActionRegistry = new FakeRecordAudioActionRegistry();
     private final AudioRecorder audioRecorder = mock(AudioRecorder.class);
     private final FormController formController = mock(FormController.class);
+    private final Form form = mock(Form.class);
     private final AuditEventLogger auditEventLogger = mock(AuditEventLogger.class);
 
     private BackgroundAudioViewModel viewModel;
     private Supplier<Long> clock;
-    private final MutableLiveData<FormController> formSession = new MutableLiveData<>(formController);
+    private final MutableLiveData<FormSession> formSession = new MutableLiveData<>(new FormSession(formController, form));
 
     @Before
     public void setup() {
@@ -182,7 +184,7 @@ public class BackgroundAudioViewModelTest {
 
         viewModel.onCleared();
         when(formController.getAuditEventLogger()).thenReturn(mock(AuditEventLogger.class));
-        formSession.setValue(formController);
+        formSession.setValue(new FormSession(formController, form));
 
         viewModel.setBackgroundRecordingEnabled(false);
         verify(auditEventLogger).logEvent(AuditEvent.AuditEventType.BACKGROUND_AUDIO_DISABLED, true, 1234L);

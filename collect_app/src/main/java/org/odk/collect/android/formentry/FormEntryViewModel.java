@@ -68,8 +68,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         this.formSessionRepository = formSessionRepository;
 
         this.sessionId = sessionId;
-        formSessionObserver = observe(formSessionRepository.get(this.sessionId), formController -> {
-            this.formController = formController;
+        formSessionObserver = observe(formSessionRepository.get(this.sessionId), formSession -> {
+            this.formController = formSession.getFormController();
 
             boolean hasBackgroundRecording = formController.getFormDef().hasAction(RecordAudioActionHandler.ELEMENT_NAME);
             this.hasBackgroundRecording.setValue(hasBackgroundRecording);

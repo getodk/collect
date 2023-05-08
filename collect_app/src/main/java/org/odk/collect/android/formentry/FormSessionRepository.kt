@@ -5,12 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidshared.data.getState
+import org.odk.collect.forms.Form
 import org.odk.collect.shared.strings.UUIDGenerator
 
 interface FormSessionRepository {
     fun create(): String
-    fun get(id: String): LiveData<FormController?>
-    fun set(id: String, formController: FormController)
+    fun get(id: String): LiveData<FormSession>
+    fun set(id: String, formController: FormController, form: Form)
     fun clear(id: String)
 }
 
@@ -22,12 +23,12 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
         return UUIDGenerator().generateUUID()
     }
 
-    override fun get(id: String): LiveData<FormController?> {
+    override fun get(id: String): LiveData<FormSession> {
         return getLiveData(id)
     }
 
-    override fun set(id: String, formController: FormController) {
-        getLiveData(id).value = formController
+    override fun set(id: String, formController: FormController, form: Form) {
+        getLiveData(id).value = FormSession(formController, form)
     }
 
     override fun clear(id: String) {
@@ -35,7 +36,7 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
     }
 
     private fun getLiveData(id: String) =
-        appState.get(getKey(id), MutableLiveData<FormController?>(null))
+        appState.get(getKey(id), MutableLiveData<FormSession>(null))
 
     private fun getKey(id: String) = "$KEY_PREFIX:$id"
 
@@ -43,3 +44,8 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
         const val KEY_PREFIX = "formSession"
     }
 }
+
+data class FormSession(
+    val formController: FormController,
+    val form: Form
+)

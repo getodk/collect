@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import androidx.core.widget.NestedScrollView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FormEntryEndBinding
-import org.odk.collect.forms.Form
 
 class FormEndView(
     context: Context,
     formTitle: String,
-    form: Form,
     formEndViewModel: FormEndViewModel,
     private val listener: Listener
 ) : SwipeHandler.View(context) {
@@ -29,7 +27,7 @@ class FormEndView(
         binding.finalize.setOnClickListener {
             listener.onSaveClicked(true)
         }
-        if (formEndViewModel.shouldFormBeSentAutomatically(form)) {
+        if (formEndViewModel.shouldFormBeSentAutomatically()) {
             binding.finalize.text = context.getString(R.string.send)
         }
     }

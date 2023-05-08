@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModel;
 import org.javarosa.core.model.instance.TreeReference;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.androidshared.livedata.LiveDataUtils;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
@@ -48,7 +47,7 @@ public class BackgroundAudioViewModel extends ViewModel {
     @Nullable
     private AuditEventLogger auditEventLogger;
 
-    public BackgroundAudioViewModel(AudioRecorder audioRecorder, Settings generalSettings, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Supplier<Long> clock, LiveData<FormController> formSession) {
+    public BackgroundAudioViewModel(AudioRecorder audioRecorder, Settings generalSettings, RecordAudioActionRegistry recordAudioActionRegistry, PermissionsChecker permissionsChecker, Supplier<Long> clock, LiveData<FormSession> formSession) {
         this.audioRecorder = audioRecorder;
         this.generalSettings = generalSettings;
         this.recordAudioActionRegistry = recordAudioActionRegistry;
@@ -61,9 +60,7 @@ public class BackgroundAudioViewModel extends ViewModel {
 
         isBackgroundRecordingEnabled = new MutableNonNullLiveData<>(generalSettings.getBoolean(KEY_BACKGROUND_RECORDING));
 
-        formSessionObserver = LiveDataUtils.observe(formSession, formController -> {
-            this.auditEventLogger = formController.getAuditEventLogger();
-        });
+        formSessionObserver = LiveDataUtils.observe(formSession, it -> this.auditEventLogger = it.getFormController().getAuditEventLogger());
     }
 
     @Override

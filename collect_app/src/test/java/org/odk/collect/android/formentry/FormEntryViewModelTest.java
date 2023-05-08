@@ -68,7 +68,7 @@ public class FormEntryViewModelTest {
 
         scheduler = new FakeScheduler();
 
-        formSessionRepository.set("blah", formController);
+        formSessionRepository.set("blah", formController, mock());
         viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler, formSessionRepository, "blah");
     }
 

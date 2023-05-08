@@ -100,7 +100,7 @@ class FormEntryViewModelFactory(
                         permissionsProvider,
                         settingsProvider.getUnprotectedSettings()
                     ) {
-                        formSessionRepository.get(sessionId).value
+                        formSessionRepository.get(sessionId).value?.formController
                     }
                 )
 
@@ -109,7 +109,7 @@ class FormEntryViewModelFactory(
 
             IdentityPromptViewModel::class.java -> IdentityPromptViewModel()
 
-            FormEndViewModel::class.java -> FormEndViewModel(settingsProvider, autoSendSettingsProvider)
+            FormEndViewModel::class.java -> FormEndViewModel(formSessionRepository, sessionId, settingsProvider, autoSendSettingsProvider)
 
             else -> throw IllegalArgumentException()
         } as T
