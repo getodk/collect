@@ -43,4 +43,8 @@
     <style name="TextAppearance.Collect.Link" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textColor">?colorPrimary</item>
     </style>
+
+    <style name="TextAppearanceLabelExtraLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>
