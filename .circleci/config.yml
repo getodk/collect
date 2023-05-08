@@ -92,9 +92,6 @@ jobs:
       - run:
           name: Run code quality checks
           command: ./gradlew checkCode
-      - store_artifacts:
-          path: collect_app/build/reports
-          destination: reports
 
   test_modules:
     <<: *android_config
@@ -127,9 +124,6 @@ jobs:
           command: |
             ./gradlew $(cat .circleci/fork_test_modules.txt | awk '{for (i=1; i<=NF; i++) printf "%s ",$i}')
 
-      - store_artifacts:
-          path: collect_app/build/reports
-          destination: reports
       - store_test_results:
           path: collect_app/build/test-results
 
