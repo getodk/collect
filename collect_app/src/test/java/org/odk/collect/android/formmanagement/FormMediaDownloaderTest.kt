@@ -57,7 +57,7 @@ class FormMediaDownloaderTest {
     }
 
     @Test
-    fun `returns false when there is an existing copy of a media file and an older one and server hash doesn't match existing copy`() {
+    fun `returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
         // Save forms
         val formsRepository = InMemFormsRepository()
         val form1 = FormFixtures.form(
