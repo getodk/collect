@@ -152,6 +152,7 @@
     <string name="survey_internal_error">Internal error: step to prompt failed.</string>
 
     <string name="save_enter_data_description">You are at the end of %s.</string>
+    <string name="form_edits_warning">You will not be able to make edits once you finalize. If you need to make changes, \"Save as draft\" until you\'re ready to send.</string>
     <string name="save_as_draft">Save as draft</string>
     <string name="finalize">Finalize</string>
 
