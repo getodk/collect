@@ -27,7 +27,6 @@ import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
-import org.odk.collect.android.formentry.FormEndViewFactory;
 import org.odk.collect.android.mainmenu.MainMenuViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
@@ -529,11 +528,6 @@ public class AppDependencyModule {
     @Provides
     public AutoSendSettingsProvider providesAutoSendSettingsProvider(NetworkStateProvider networkStateProvider, SettingsProvider settingsProvider) {
         return new AutoSendSettingsProvider(networkStateProvider, settingsProvider);
-    }
-
-    @Provides
-    public FormEndViewFactory providesFormEndViewFactory(SettingsProvider settingsProvider, AutoSendSettingsProvider autoSendSettingsProvider) {
-        return new FormEndViewFactory(settingsProvider, autoSendSettingsProvider);
     }
 
     @Provides

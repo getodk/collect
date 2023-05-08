@@ -99,7 +99,8 @@ import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormAnimation;
 import org.odk.collect.android.formentry.FormAnimationType;
-import org.odk.collect.android.formentry.FormEndViewFactory;
+import org.odk.collect.android.formentry.FormEndView;
+import org.odk.collect.android.formentry.FormEndViewModel;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
@@ -132,6 +133,7 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -359,7 +361,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory;
 
     @Inject
-    public FormEndViewFactory formEndViewFactory;
+    public AutoSendSettingsProvider autoSendSettingsProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
@@ -376,6 +378,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
+    private FormEndViewModel formEndViewModel;
 
     private static final String KEY_SESSION_ID = "sessionId";
     private String sessionId;
@@ -405,7 +408,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider);
+        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider, autoSendSettingsProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
@@ -544,6 +547,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 DialogFragmentUtils.showIfNotShowing(SaveAnswerFileErrorDialogFragment.class, getSupportFragmentManager());
             }
         });
+
+        formEndViewModel = viewModelProvider.get(FormEndViewModel.class);
 
         internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider);
 
@@ -1259,8 +1264,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             updateNavigationButtonVisibility();
         }
 
-        return formEndViewFactory.createFormEndView(this, saveName, formsRepository.getOneByPath(formPath), markAsFinalized ->
-                saveForm(true, markAsFinalized, saveName, false)
+        return new FormEndView(
+                this,
+                saveName,
+                formsRepository.getOneByPath(formPath),
+                formEndViewModel,
+                markAsFinalized -> saveForm(true, markAsFinalized, saveName, false)
         );
     }
 

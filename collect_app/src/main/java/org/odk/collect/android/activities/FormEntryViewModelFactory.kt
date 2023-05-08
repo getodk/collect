@@ -9,6 +9,7 @@ import org.javarosa.core.model.instance.TreeReference
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.BackgroundAudioViewModel
 import org.odk.collect.android.formentry.BackgroundAudioViewModel.RecordAudioActionRegistry
+import org.odk.collect.android.formentry.FormEndViewModel
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel
@@ -17,6 +18,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationMa
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel
 import org.odk.collect.android.formentry.saving.DiskFormSaver
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
+import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.async.Scheduler
@@ -39,7 +41,8 @@ class FormEntryViewModelFactory(
     private val settingsProvider: SettingsProvider,
     private val permissionsChecker: PermissionsChecker,
     private val fusedLocationClient: LocationClient,
-    private val permissionsProvider: PermissionsProvider
+    private val permissionsProvider: PermissionsProvider,
+    private val autoSendSettingsProvider: AutoSendSettingsProvider
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -105,6 +108,8 @@ class FormEntryViewModelFactory(
             }
 
             IdentityPromptViewModel::class.java -> IdentityPromptViewModel()
+
+            FormEndViewModel::class.java -> FormEndViewModel(settingsProvider, autoSendSettingsProvider)
 
             else -> throw IllegalArgumentException()
         } as T
