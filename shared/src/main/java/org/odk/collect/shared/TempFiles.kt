@@ -7,14 +7,16 @@ object TempFiles {
 
     @JvmStatic
     fun createTempFile(name: String, extension: String): File {
-        val tempFile = File.createTempFile(name, extension)
-        tempFile.deleteOnExit()
-        return tempFile
+        val tmpDir = getTempDir()
+        return File(tmpDir, name + getRandomName(tmpDir) + extension).also {
+            it.createNewFile()
+            it.deleteOnExit()
+        }
     }
 
     @JvmStatic
     fun createTempFile(parent: File, name: String): File {
-        return File(parent, name).also {
+        return File(parent, name + getRandomName(parent)).also {
             it.createNewFile()
             it.deleteOnExit()
         }
@@ -30,14 +32,15 @@ object TempFiles {
 
     @JvmStatic
     fun createTempFile(parent: File): File {
-        val tempFile = File.createTempFile(getRandomString(), ".temp", parent)
-        tempFile.deleteOnExit()
-        return tempFile
+        return File(parent, getRandomName(parent)).also {
+            it.createNewFile()
+            it.deleteOnExit()
+        }
     }
 
     @JvmStatic
     fun getPathInTempDir(name: String, extension: String): String {
-        val tmpDir = System.getProperty("java.io.tmpdir", ".")
+        val tmpDir = getTempDir()
         val file = File(tmpDir, name + extension)
         file.deleteOnExit()
         return file.absolutePath
@@ -45,15 +48,15 @@ object TempFiles {
 
     @JvmStatic
     fun getPathInTempDir(): String {
-        val tmpDir = System.getProperty("java.io.tmpdir", ".")
-        return File(tmpDir, getRandomString()).absolutePath
+        val tmpDir = getTempDir()
+        return File(tmpDir, getRandomName(tmpDir)).absolutePath
     }
 
     @JvmStatic
     @JvmOverloads
     fun createTempDir(parent: File? = null): File {
         val dir = if (parent != null) {
-            File(parent, getRandomString())
+            File(parent, getRandomName(parent))
         } else {
             File(getPathInTempDir())
         }
@@ -62,5 +65,23 @@ object TempFiles {
         return dir
     }
 
-    private fun getRandomString() = RandomString.randomString(16)
+    private fun getTempDir(): File {
+        val tmpDir = File(System.getProperty("java.io.tmpdir", "."), " org.odk.collect.shared.TempFiles")
+        if (!tmpDir.exists()) {
+            tmpDir.mkdir()
+        }
+
+        return tmpDir
+    }
+
+    private fun getRandomName(parent: File): String {
+        val existing = parent.listFiles()
+
+        var candiate = RandomString.randomString(16)
+        while (existing!!.any { it.name.contains(candiate) }) {
+            candiate = RandomString.randomString(16)
+        }
+
+        return candiate
+    }
 }
