@@ -334,6 +334,28 @@ class FormUriActivityTest {
     }
 
     @Test
+    fun `When attempting to edit a finalized form then start form for view only`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+
+        launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+
+        assertStartSavedFormIntent(project.uuid, instance.dbId, false)
+    }
+
+    @Test
     fun `When attempting to edit a submitted form then start form for view only`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
