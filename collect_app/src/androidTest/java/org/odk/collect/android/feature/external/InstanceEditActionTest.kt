@@ -30,7 +30,7 @@ class InstanceEditActionTest {
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
@@ -52,7 +52,7 @@ class InstanceEditActionTest {
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
         val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
         val uri = InstancesContract.getUri("DEMO", instanceId)
