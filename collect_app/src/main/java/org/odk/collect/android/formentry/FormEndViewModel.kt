@@ -1,7 +1,6 @@
 package org.odk.collect.android.formentry
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.settings.SettingsProvider
@@ -25,16 +24,5 @@ class FormEndViewModel(
     fun shouldFormBeSentAutomatically(): Boolean {
         val form = formSessionRepository.get(sessionId).value?.form
         return form?.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings()) ?: false
-    }
-
-    class Factory(
-        private val formSessionRepository: FormSessionRepository,
-        private val sessionId: String,
-        private val settingsProvider: SettingsProvider,
-        private val autoSendSettingsProvider: AutoSendSettingsProvider
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return FormEndViewModel(formSessionRepository, sessionId, settingsProvider, autoSendSettingsProvider) as T
-        }
     }
 }

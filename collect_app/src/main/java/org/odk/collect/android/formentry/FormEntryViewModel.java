@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
@@ -289,31 +288,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     public void exit() {
         formSessionRepository.clear(sessionId);
-    }
-
-    public static class Factory implements ViewModelProvider.Factory {
-
-        private final Supplier<Long> clock;
-        private final Scheduler scheduler;
-        private final FormSessionRepository formSessionRepository;
-        private String sessionId;
-
-        public Factory(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository) {
-            this.clock = clock;
-            this.scheduler = scheduler;
-            this.formSessionRepository = formSessionRepository;
-        }
-
-        public void setSessionId(String sessionId) {
-            this.sessionId = sessionId;
-        }
-
-        @SuppressWarnings("unchecked")
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new FormEntryViewModel(clock, scheduler, formSessionRepository, sessionId);
-        }
     }
 
     public abstract static class FormError {
