@@ -59,7 +59,7 @@ public class IdentifyUserTest {
                 .enterIdentity("Lucius")
                 .clickKeyboardEnter(new FormEntryPage("Identify User"))
                 .swipeToEndScreen()
-                .clickFinalize()
+                .clickSaveAsDraft()
 
                 .clickEditSavedForm()
                 .clickOnFormWithIdentityPrompt("Identify User")
@@ -69,7 +69,7 @@ public class IdentifyUserTest {
                 .clickFinalize();
 
             List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
-            CSVRecord formResumeEvent = auditLog.get(6);
+            CSVRecord formResumeEvent = auditLog.get(5);
             assertThat(formResumeEvent.get(0), equalTo("form resume"));
             assertThat(formResumeEvent.get(4), equalTo("Jack"));
     }

@@ -40,7 +40,7 @@ class FormFinalizingTest {
             .startBlankForm("One Question")
             .swipeToEndScreen()
             .clickFinalize()
-            .assertNumberOfEditableForms(1)
+            .assertNumberOfEditableForms(0)
             .assertNumberOfFinalizedForms(1)
     }
 

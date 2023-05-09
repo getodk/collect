@@ -26,9 +26,11 @@ class AuditTest {
         rule.startAtMainMenu()
             .copyForm("one-question-audit.xml")
             .startBlankForm("One Question Audit")
-            .fillOutAndFinalize(
+            .fillOut(
                 FormEntryPage.QuestionAndAnswer("what is your age", "31")
             )
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
             .clickEditSavedForm(1)
             .clickOnForm("One Question Audit")
             .clickGoToStart()
@@ -37,21 +39,20 @@ class AuditTest {
             )
 
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
-        assertThat(auditLog.size, equalTo(13))
+        assertThat(auditLog.size, equalTo(12))
 
         assertThat(auditLog[0].get("event"), equalTo("form start"))
         assertThat(auditLog[1].get("event"), equalTo("question"))
         assertThat(auditLog[2].get("event"), equalTo("end screen"))
         assertThat(auditLog[3].get("event"), equalTo("form save"))
         assertThat(auditLog[4].get("event"), equalTo("form exit"))
-        assertThat(auditLog[5].get("event"), equalTo("form finalize"))
 
-        assertThat(auditLog[6].get("event"), equalTo("form resume"))
-        assertThat(auditLog[7].get("event"), equalTo("jump"))
-        assertThat(auditLog[8].get("event"), equalTo("question"))
-        assertThat(auditLog[9].get("event"), equalTo("end screen"))
-        assertThat(auditLog[10].get("event"), equalTo("form save"))
-        assertThat(auditLog[11].get("event"), equalTo("form exit"))
-        assertThat(auditLog[12].get("event"), equalTo("form finalize"))
+        assertThat(auditLog[5].get("event"), equalTo("form resume"))
+        assertThat(auditLog[6].get("event"), equalTo("jump"))
+        assertThat(auditLog[7].get("event"), equalTo("question"))
+        assertThat(auditLog[8].get("event"), equalTo("end screen"))
+        assertThat(auditLog[9].get("event"), equalTo("form save"))
+        assertThat(auditLog[10].get("event"), equalTo("form exit"))
+        assertThat(auditLog[11].get("event"), equalTo("form finalize"))
     }
 }

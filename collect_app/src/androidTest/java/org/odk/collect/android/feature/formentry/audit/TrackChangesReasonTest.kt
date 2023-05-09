@@ -31,7 +31,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -41,9 +41,9 @@ class TrackChangesReasonTest {
             .clickSave()
 
         val auditLogForFirstInstance = StorageUtils.getAuditLogForFirstInstance()
-        assertThat(auditLogForFirstInstance[9].get("event"), equalTo("change reason"))
+        assertThat(auditLogForFirstInstance[8].get("event"), equalTo("change reason"))
         assertThat(
-            auditLogForFirstInstance[9].get("change-reason"),
+            auditLogForFirstInstance[8].get("change-reason"),
             equalTo("Needed to be more exciting and less mysterious")
         )
     }
@@ -55,7 +55,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
             .clickEditSavedForm()
 
             .clickOnForm("Track Changes Reason")
@@ -72,7 +72,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -89,7 +89,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -109,7 +109,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -131,7 +131,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")
@@ -148,7 +148,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .inputText("Nothing much...")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
             .clickEditSavedForm()
             .clickOnForm("Track Changes Reason")

@@ -30,7 +30,7 @@ class InstancesAdbTest {
             .clickFillBlankForm() // Add form via disk sync
             .copyInstance("One Question_2021-06-22_15-55-50.xml")
             .pressBack(MainMenuPage()) // Return to main menu to trigger instance disk sync
-            .clickEditSavedForm(1)
+            .clickSendFinalizedForm(1)
             .assertText("One Question")
     }
 
@@ -40,7 +40,7 @@ class InstancesAdbTest {
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
         val instancesDir =
             testDependencies.storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES)
