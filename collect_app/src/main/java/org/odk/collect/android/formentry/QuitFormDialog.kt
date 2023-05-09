@@ -59,7 +59,7 @@ object QuitFormDialog {
             settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)
         ) {
             ImmutableList.of(
-                IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
+                IconMenuItem(R.drawable.ic_save, R.string.save_as_draft),
                 getDiscardItem(formSaveViewModel)
             )
         } else {
@@ -82,7 +82,7 @@ object QuitFormDialog {
         listView.onItemClickListener =
             OnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
                 val item = adapter.getItem(position) as IconMenuItem
-                if (item.textResId == R.string.keep_changes) {
+                if (item.textResId == R.string.save_as_draft) {
                     onSaveChangesClicked?.run()
                 } else {
                     formSaveViewModel.ignoreChanges()

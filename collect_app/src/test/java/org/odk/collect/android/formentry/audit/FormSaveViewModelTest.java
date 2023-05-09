@@ -34,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
+import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -46,6 +47,7 @@ import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.entities.EntitiesRepository;
+import org.odk.collect.forms.Form;
 import org.odk.collect.projects.Project;
 import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.FakeScheduler;
@@ -70,6 +72,7 @@ public class FormSaveViewModelTest {
     private FormSaveViewModel viewModel;
     private MediaUtils mediaUtils;
     private FormController formController;
+    private Form form;
     private AudioRecorder audioRecorder;
     private CurrentProjectProvider currentProjectProvider;
 
@@ -81,6 +84,7 @@ public class FormSaveViewModelTest {
         Robolectric.getBackgroundThreadScheduler().pause();
 
         formController = mock(FormController.class);
+        form = mock(Form.class);
         logger = mock(AuditEventLogger.class);
         mediaUtils = mock(MediaUtils.class);
 
@@ -93,7 +97,7 @@ public class FormSaveViewModelTest {
         currentProjectProvider = mock(CurrentProjectProvider.class);
         when(currentProjectProvider.getCurrentProject()).thenReturn(Project.Companion.getDEMO_PROJECT());
 
-        LiveData<FormController> formSession = liveDataOf(formController);
+        LiveData<FormSession> formSession = liveDataOf(new FormSession(formController, form));
         viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository);
 
         CollectHelpers.createDemoProject(); // Needed to deal with `new StoragePathProvider()` calls in `FormSaveViewModel`
@@ -466,7 +470,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah2");
@@ -488,7 +492,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah1");
@@ -562,7 +566,7 @@ public class FormSaveViewModelTest {
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(formController), entitiesRepository);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository);
         viewModel.ignoreChanges(); // Checks nothing explodes
     }
 

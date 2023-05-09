@@ -25,18 +25,13 @@ public class FormEndPage extends Page<FormEndPage> {
         return this;
     }
 
-    public <D extends Page<D>> D clickSaveAsDraft(D destination) {
-        onView(withText(getTranslatedString(R.string.save_as_draft))).perform(click());
-        return destination.assertOnPage();
-    }
-
     public MainMenuPage clickSaveAsDraft() {
-        onView(withText(getTranslatedString(R.string.save_as_draft))).perform(click());
+        clickOnString(R.string.save_as_draft);
         return new MainMenuPage().assertOnPage();
     }
 
     public <D extends Page<D>> D clickFinalize(D destination) {
-        onView(withText(getTranslatedString(R.string.finalize))).perform(click());
+        clickOnString(R.string.finalize);
         return destination.assertOnPage();
     }
 
@@ -44,12 +39,17 @@ public class FormEndPage extends Page<FormEndPage> {
         return clickFinalize(new MainMenuPage());
     }
 
+    public MainMenuPage clickSend() {
+        clickOnString(R.string.send);
+        return new MainMenuPage().assertOnPage();
+    }
+
     public FormMapPage clickSaveAndExitBackToMap() {
         return clickFinalize(new FormMapPage(formName));
     }
 
     public FormEntryPage clickSaveAndExitWithError(String errorText) {
-        onView(withText(getTranslatedString(R.string.finalize))).perform(click());
+        clickOnString(R.string.finalize);
         assertConstraintDisplayed(errorText);
         return new FormEntryPage(formName).assertOnPage();
     }

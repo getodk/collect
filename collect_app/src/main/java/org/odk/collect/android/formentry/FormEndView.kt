@@ -9,8 +9,7 @@ import org.odk.collect.android.databinding.FormEntryEndBinding
 class FormEndView(
     context: Context,
     formTitle: String,
-    isSaveAsDraftEnabled: Boolean,
-    isFinalizeEnabled: Boolean,
+    formEndViewModel: FormEndViewModel,
     private val listener: Listener
 ) : SwipeHandler.View(context) {
 
@@ -19,14 +18,17 @@ class FormEndView(
     init {
         binding.description.text = context.getString(R.string.save_enter_data_description, formTitle)
 
-        binding.saveAsDraft.isEnabled = isSaveAsDraftEnabled
+        binding.saveAsDraft.isEnabled = formEndViewModel.isSaveDraftEnabled()
         binding.saveAsDraft.setOnClickListener {
             listener.onSaveClicked(false)
         }
 
-        binding.finalize.isEnabled = isFinalizeEnabled
+        binding.finalize.isEnabled = formEndViewModel.isFinalizeEnabled()
         binding.finalize.setOnClickListener {
             listener.onSaveClicked(true)
+        }
+        if (formEndViewModel.shouldFormBeSentAutomatically()) {
+            binding.finalize.text = context.getString(R.string.send)
         }
     }
 

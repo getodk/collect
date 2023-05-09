@@ -19,6 +19,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.externaldata.ExternalDataManager;
+import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -80,7 +81,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private final CurrentProjectProvider currentProjectProvider;
     private final EntitiesRepository entitiesRepository;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormController> formSession, EntitiesRepository entitiesRepository) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
@@ -97,9 +98,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             recentFiles = stateHandle.get(RECENT_FILES);
         }
 
-        LiveDataUtils.observe(formSession, formController -> {
-            this.formController = formController;
-        });
+        LiveDataUtils.observe(formSession, it -> this.formController = it.getFormController());
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {

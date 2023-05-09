@@ -100,6 +100,7 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel;
 import org.odk.collect.android.formentry.FormAnimation;
 import org.odk.collect.android.formentry.FormAnimationType;
 import org.odk.collect.android.formentry.FormEndView;
+import org.odk.collect.android.formentry.FormEndViewModel;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
@@ -132,6 +133,7 @@ import org.odk.collect.android.fragments.dialogs.LocationProvidersDisabledDialog
 import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
+import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
@@ -189,7 +191,6 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
@@ -359,6 +360,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Inject
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory;
 
+    @Inject
+    public AutoSendSettingsProvider autoSendSettingsProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -374,6 +378,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
+    private FormEndViewModel formEndViewModel;
 
     private static final String KEY_SESSION_ID = "sessionId";
     private String sessionId;
@@ -403,7 +408,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider);
+        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider, autoSendSettingsProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
@@ -543,6 +548,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         });
 
+        formEndViewModel = viewModelProvider.get(FormEndViewModel.class);
+
         internalRecordingRequester = new InternalRecordingRequester(this, audioRecorder, permissionsProvider);
 
         waitingForDataRegistry = new FormControllerWaitingForDataRegistry(this::getFormController);
@@ -566,7 +573,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
-        formSessionRepository.set(sessionId, formController);
+        formSessionRepository.set(sessionId, formController, formsRepository.getOneByPath(formPath));
 
         AnalyticsUtils.setForm(formController);
 
@@ -1253,17 +1260,16 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         }
 
-        boolean isSaveAsDraftEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT);
-        boolean isFinalizeEnabled = settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_FINALIZE);
-        FormEndView endView = new FormEndView(this, saveName, isSaveAsDraftEnabled, isFinalizeEnabled, markAsFinalized ->
-                saveForm(true, markAsFinalized, saveName, false)
-        );
-
         if (showNavigationButtons) {
             updateNavigationButtonVisibility();
         }
 
-        return endView;
+        return new FormEndView(
+                this,
+                saveName,
+                formEndViewModel,
+                markAsFinalized -> saveForm(true, markAsFinalized, saveName, false)
+        );
     }
 
     @Override

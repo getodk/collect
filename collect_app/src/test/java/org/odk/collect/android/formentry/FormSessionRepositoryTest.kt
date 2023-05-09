@@ -7,6 +7,7 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidtest.getOrAwaitValue
+import org.odk.collect.forms.Form
 
 abstract class FormSessionRepositoryTest {
 
@@ -32,20 +33,24 @@ abstract class FormSessionRepositoryTest {
         val id2 = formSessionRepository.create()
 
         val formController1 = mock<FormController>()
+        val form1 = mock<Form>()
+
         val formController2 = mock<FormController>()
+        val form2 = mock<Form>()
 
-        formSessionRepository.set(id1, formController1)
-        formSessionRepository.set(id2, formController2)
+        formSessionRepository.set(id1, formController1, form1)
+        formSessionRepository.set(id2, formController2, form2)
 
-        assertThat(formSessionRepository.get(id1).getOrAwaitValue(), equalTo(formController1))
-        assertThat(formSessionRepository.get(id2).getOrAwaitValue(), equalTo(formController2))
+        assertThat(formSessionRepository.get(id1).getOrAwaitValue(), equalTo(FormSession(formController1, form1)))
+        assertThat(formSessionRepository.get(id2).getOrAwaitValue(), equalTo(FormSession(formController2, form2)))
     }
 
     @Test
     fun clear_clearsLiveDataForId() {
         val id = formSessionRepository.create()
         val formController = mock<FormController>()
-        formSessionRepository.set(id, formController)
+        val form = mock<Form>()
+        formSessionRepository.set(id, formController, form)
 
         formSessionRepository.clear(id)
         assertThat(formSessionRepository.get(id).getOrAwaitValue(), equalTo(null))

@@ -9,7 +9,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.pages.UserAndDeviceIdentitySettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.ResetStateRule
@@ -100,7 +100,7 @@ class FormMetadataSettingsTest {
             .pressBack(MainMenuPage())
             .startBlankForm("Metadata")
             .assertText("Chino")
-            .pressBack(SaveOrIgnoreDialog("Metadata", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog("Metadata", MainMenuPage()))
             .clickDiscardForm()
             .openProjectSettingsDialog()
             .clickSettings()

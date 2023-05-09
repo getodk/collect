@@ -9,7 +9,8 @@ object FormFixtures {
         formId: String = "formId",
         version: String = "1",
         date: Long = 1,
-        mediaFiles: List<Pair<String, String>> = emptyList()
+        mediaFiles: List<Pair<String, String>> = emptyList(),
+        autoSend: String? = null
     ): Form {
         val formFilesPath = TempFiles.createTempDir().absolutePath
         val mediaFilePath = TempFiles.createTempDir().absolutePath
@@ -25,6 +26,7 @@ object FormFixtures {
             .formFilePath(FormUtils.createFormFixtureFile(formId, version, formFilesPath))
             .formMediaPath(mediaFilePath)
             .date(date)
+            .autoSend(autoSend)
             .build()
     }
 }

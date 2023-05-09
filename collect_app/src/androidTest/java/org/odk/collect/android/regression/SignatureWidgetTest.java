@@ -10,7 +10,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
-import org.odk.collect.android.support.pages.SaveOrIgnoreDialog;
+import org.odk.collect.android.support.pages.SaveOrIgnoreDrawingDialog;
 
 // Issue number NODK-211
 @RunWith(AndroidJUnit4.class)
@@ -34,14 +34,14 @@ public class SignatureWidgetTest {
                 .clickOnQuestion("Signature widget")
                 .clickWidgetButton()
                 .waitForRotationToEnd()
-                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets")))
+                .pressBack(new SaveOrIgnoreDrawingDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .checkIsTranslationDisplayed("Exit Gather Signature", "Salir Adjuntar firma")
                 .assertText(R.string.keep_changes)
                 .clickDiscardChanges()
                 .waitForRotationToEnd()
                 .clickWidgetButton()
                 .waitForRotationToEnd()
-                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets")))
+                .pressBack(new SaveOrIgnoreDrawingDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .clickSaveChanges()
                 .waitForRotationToEnd()
                 .clickGoToArrow()
@@ -67,7 +67,7 @@ public class SignatureWidgetTest {
                 .clickOnString(R.string.ok)
                 .clickOnId(R.id.fab_actions)
                 .checkIsIdDisplayed(R.id.fab_set_color)
-                .pressBack(new SaveOrIgnoreDialog<>("Gather Signature", new FormEntryPage("All widgets")))
+                .pressBack(new SaveOrIgnoreDrawingDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .clickSaveChanges()
                 .waitForRotationToEnd()
                 .clickGoToArrow()

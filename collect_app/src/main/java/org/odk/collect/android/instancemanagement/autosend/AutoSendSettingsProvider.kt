@@ -12,7 +12,7 @@ class AutoSendSettingsProvider(
     private val settingsProvider: SettingsProvider
 ) {
 
-    fun isAutoSendEnabledInSettings(projectId: String): Boolean {
+    fun isAutoSendEnabledInSettings(projectId: String? = null): Boolean {
         val currentNetworkInfo = networkStateProvider.networkInfo ?: return false
 
         val autosend = settingsProvider.getUnprotectedSettings(projectId).getString(ProjectKeys.KEY_AUTOSEND)
