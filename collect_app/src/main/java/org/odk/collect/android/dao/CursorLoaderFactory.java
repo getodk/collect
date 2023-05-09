@@ -46,12 +46,8 @@ public class CursorLoaderFactory {
     }
 
     public CursorLoader createEditableInstancesCursorLoader(String sortOrder) {
-        String selection = DatabaseInstanceColumns.STATUS + " !=? " +
-                "and " + DatabaseInstanceColumns.STATUS + " !=? ";
-        String[] selectionArgs = {
-                Instance.STATUS_SUBMITTED,
-                Instance.STATUS_SUBMISSION_FAILED
-        };
+        String selection = DatabaseInstanceColumns.STATUS + " =? ";
+        String[] selectionArgs = {Instance.STATUS_INCOMPLETE};
 
         return getInstancesCursorLoader(selection, selectionArgs, sortOrder);
     }
@@ -61,13 +57,12 @@ public class CursorLoaderFactory {
         if (charSequence.length() == 0) {
             cursorLoader = createEditableInstancesCursorLoader(sortOrder);
         } else {
-            String selection = DatabaseInstanceColumns.STATUS + " !=? " +
-                    "and " + DatabaseInstanceColumns.STATUS + " !=? " +
+            String selection = DatabaseInstanceColumns.STATUS + " =? " +
                     "and " + DatabaseInstanceColumns.DISPLAY_NAME + " LIKE ?";
             String[] selectionArgs = {
-                    Instance.STATUS_SUBMITTED,
-                    Instance.STATUS_SUBMISSION_FAILED,
-                    "%" + charSequence + "%"};
+                    Instance.STATUS_INCOMPLETE,
+                    "%" + charSequence + "%"
+            };
 
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
         }
