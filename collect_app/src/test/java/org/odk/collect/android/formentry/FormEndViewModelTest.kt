@@ -22,14 +22,34 @@ class FormEndViewModelTest {
     private val formEndViewModel = FormEndViewModel(formSessionRepository, sessionId, settingsProvider, autoSendSettingsProvider)
 
     @Test
-    fun `when 'Save as draft' is enabled, isSaveDraftEnabled should return true`() {
+    fun `when 'Save Form' and 'Save as draft' are enabled and 'Drafts' button is visible, isSaveDraftEnabled should return true`() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, true)
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
         assertThat(formEndViewModel.isSaveDraftEnabled(), equalTo(true))
     }
 
     @Test
+    fun `when 'Save Form' is disabled, isSaveDraftEnabled should return false`() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, false)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
+        assertThat(formEndViewModel.isSaveDraftEnabled(), equalTo(false))
+    }
+
+    @Test
     fun `when 'Save as draft' is disabled, isSaveDraftEnabled should return false`() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, true)
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
+        assertThat(formEndViewModel.isSaveDraftEnabled(), equalTo(false))
+    }
+
+    @Test
+    fun `when 'Drafts' buttons is hidden, isSaveDraftEnabled should return false`() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, true)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
         assertThat(formEndViewModel.isSaveDraftEnabled(), equalTo(false))
     }
 
