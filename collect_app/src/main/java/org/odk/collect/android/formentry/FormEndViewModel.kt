@@ -14,7 +14,9 @@ class FormEndViewModel(
 ) : ViewModel() {
 
     fun isSaveDraftEnabled(): Boolean {
-        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)
+        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID) &&
+            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT) &&
+            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
     }
 
     fun isFinalizeEnabled(): Boolean {
