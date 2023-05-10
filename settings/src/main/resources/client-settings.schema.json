@@ -157,7 +157,8 @@
           "type": "boolean"
         },
         "default_completed": {
-          "type": "boolean"
+          "type": "boolean",
+          "deprecated": true
         },
         "constraint_behavior": {
           "type": "string",
@@ -313,7 +314,8 @@
           "type": "boolean"
         },
         "mark_as_finalized": {
-          "type": "boolean"
+          "type": "boolean",
+          "deprecated": true
         },
         "save_as_draft": {
           "type": "boolean"
