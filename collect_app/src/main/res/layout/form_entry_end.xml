@@ -30,26 +30,63 @@ the specific language governing permissions and limitations under the License.
             android:textColor="?colorOnSurface"
             android:textSize="21sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/save_as_draft"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/form_edits_warning"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="You are at the end of All widgets" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/form_edits_warning"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            app:cardBackgroundColor="?colorSurfaceContainerHighest"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            app:layout_constraintBottom_toTopOf="@+id/save_as_draft"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin">
+
+                <ImageView
+                    android:id="@+id/instance_name_info_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_outline_info_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="?colorPrimary" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin"
+                    android:text="@string/form_edits_warning"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
+                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_as_draft"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_marginTop="@dimen/margin_extra_large"
             android:layout_marginEnd="@dimen/margin_small"
             android:text="@string/save_as_draft"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/finalize"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description" />
+            app:layout_constraintTop_toBottomOf="@+id/form_edits_warning" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/finalize"
