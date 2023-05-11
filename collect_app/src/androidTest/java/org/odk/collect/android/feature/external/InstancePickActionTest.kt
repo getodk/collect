@@ -29,7 +29,7 @@ class InstancePickActionTest {
             .copyAndSyncForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .clickFinalize()
+            .clickSaveAsDraft()
 
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = InstancesContract.CONTENT_TYPE

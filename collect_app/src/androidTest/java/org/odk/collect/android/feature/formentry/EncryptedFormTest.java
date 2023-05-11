@@ -38,21 +38,6 @@ public class EncryptedFormTest {
             .around(rule);
 
     @Test
-    public void instanceOfEncryptedForm_cantBeEditedWhenFinalized() {
-        rule.startAtMainMenu()
-                .copyForm("encrypted.xml")
-                .startBlankForm("encrypted")
-                .assertQuestion("Question 1")
-                .swipeToEndScreen()
-                .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok)
-                .clickEditSavedForm()
-                .checkInstanceState("encrypted", Instance.STATUS_COMPLETE)
-                .clickOnFormWithDialog("encrypted")
-                .assertText(R.string.cannot_edit_completed_form);
-    }
-
-    @Test
     public void instanceOfEncryptedForm_cantBeViewedAfterSending() {
         rule.startAtMainMenu()
                 .copyForm("encrypted.xml")

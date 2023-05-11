@@ -25,6 +25,11 @@ public class FormEndPage extends Page<FormEndPage> {
         return this;
     }
 
+    public <D extends Page<D>> D clickSaveAsDraft(D destination) {
+        clickOnString(R.string.save_as_draft);
+        return destination.assertOnPage();
+    }
+
     public MainMenuPage clickSaveAsDraft() {
         clickOnString(R.string.save_as_draft);
         return new MainMenuPage().assertOnPage();
@@ -45,7 +50,7 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormMapPage clickSaveAndExitBackToMap() {
-        return clickFinalize(new FormMapPage(formName));
+        return clickSaveAsDraft(new FormMapPage(formName));
     }
 
     public FormEntryPage clickSaveAndExitWithError(String errorText) {

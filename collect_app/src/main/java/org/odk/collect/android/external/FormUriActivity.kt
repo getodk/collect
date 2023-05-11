@@ -189,7 +189,7 @@ class FormUriActivity : ComponentActivity() {
 
         val formBlankOrUnsent = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.status == Instance.STATUS_INCOMPLETE || instance.status == Instance.STATUS_COMPLETE
+            instance!!.status == Instance.STATUS_INCOMPLETE
         } else {
             true
         }

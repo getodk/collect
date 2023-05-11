@@ -43,7 +43,7 @@ public class DeleteBlankFormTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "22")
                 .swipeToEndScreen()
-                .clickFinalize()
+                .clickSaveAsDraft()
 
                 .clickDeleteSavedForm()
                 .clickBlankForms()

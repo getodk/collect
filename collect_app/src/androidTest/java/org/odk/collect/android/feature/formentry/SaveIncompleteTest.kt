@@ -5,7 +5,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
@@ -44,57 +43,5 @@ class SaveIncompleteTest {
             .clickEditSavedForm(1)
             .clickOnForm("Two Question Save Incomplete Required")
             .assertText("Dez")
-    }
-
-    @Test
-    fun whenEditingAFinalizedForm_viewingSaveIncompleteQuestion_savesCurrentAnswers_andUnfinalizesForm() {
-        rule.startAtMainMenu()
-            .copyForm("two-question-save-incomplete-required.xml")
-            .startBlankForm("Two Question Save Incomplete Required")
-            .fillOutAndFinalize(
-                QuestionAndAnswer("What is your name?", "Dez"),
-                QuestionAndAnswer("[saveIncomplete] What is your age?", "56", true)
-            )
-            .assertNumberOfFinalizedForms(1)
-
-            .clickEditSavedForm(1)
-            .clickOnForm("Two Question Save Incomplete Required")
-            .clickGoToStart()
-            .answerQuestion("What is your name?", "Meg")
-            .swipeToNextQuestion("[saveIncomplete] What is your age?", true)
-            .pressBackAndDiscardChanges()
-
-            .assertNumberOfFinalizedForms(0)
-            .clickEditSavedForm(1)
-            .clickOnForm("Two Question Save Incomplete Required")
-            .assertText("Meg")
-            .assertText("56")
-    }
-
-    @Test
-    fun whenEditingAFinalizedForm_viewingSaveIncompleteQuestion_whenConstrainsAreViolated_savesCurrentAnswers_andUnfinalizesForm() {
-        rule.startAtMainMenu()
-            .copyForm("two-question-save-incomplete-required.xml")
-            .startBlankForm("Two Question Save Incomplete Required")
-            .fillOutAndFinalize(
-                QuestionAndAnswer("What is your name?", "Dez"),
-                QuestionAndAnswer("[saveIncomplete] What is your age?", "56", true)
-            )
-            .assertNumberOfFinalizedForms(1)
-
-            .clickEditSavedForm(1)
-            .clickOnForm("Two Question Save Incomplete Required")
-            .clickOnQuestion("[saveIncomplete] What is your age?", true)
-            .longPressOnQuestion("[saveIncomplete] What is your age?", true)
-            .removeResponse()
-            .swipeToPreviousQuestion("What is your name?")
-            .answerQuestion("What is your name?", "Bradley")
-            .swipeToNextQuestion("[saveIncomplete] What is your age?")
-            .pressBackAndDiscardChanges()
-
-            .assertNumberOfFinalizedForms(0)
-            .clickEditSavedForm(1)
-            .clickOnForm("Two Question Save Incomplete Required")
-            .assertText("Bradley")
     }
 }

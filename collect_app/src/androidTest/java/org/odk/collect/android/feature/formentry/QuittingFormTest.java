@@ -8,8 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
@@ -108,63 +106,5 @@ public class QuittingFormTest {
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question Required")
                 .assertText("Another Reuben");
-    }
-
-    @Test
-    public void whenEditingAFinalizedForm_withViolatedConstraintsOnCurrentScreen_pressingBack_andClickingSaveChanges_showsError() {
-        rule.startAtMainMenu()
-                .copyForm("two-question-required.xml")
-                .startBlankForm("Two Question Required")
-                .fillOutAndFinalize(
-                        new QuestionAndAnswer("What is your name?", "Reuben"),
-                        new QuestionAndAnswer("What is your age?", "32", true)
-                )
-
-                .clickEditSavedForm(1)
-                .clickOnForm("Two Question Required")
-                .clickGoToStart()
-                .answerQuestion("What is your name?", "Another Reuben")
-                .swipeToNextQuestion("What is your age?", true)
-                .longPressOnQuestion("What is your age?", true)
-                .removeResponse()
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
-                .clickSaveChangesWithError(R.string.required_answer_error)
-                .pressBackAndDiscardChanges()
-
-                .clickEditSavedForm(1)
-                .clickOnForm("Two Question Required")
-                .assertText("Reuben")
-                .assertText("32");
-    }
-
-    @Test
-    public void whenEditingAFinalizedForm_withViolatedConstraintsOnAnotherScreen_pressingBack_andClickingSaveChanges_showsViolatedConstraint() {
-        rule.startAtMainMenu()
-                .copyForm("two-question-required.xml")
-                .startBlankForm("Two Question Required")
-                .fillOutAndFinalize(
-                        new QuestionAndAnswer("What is your name?", "Reuben"),
-                        new QuestionAndAnswer("What is your age?", "32", true)
-                )
-
-                .clickEditSavedForm(1)
-                .clickOnForm("Two Question Required")
-                .clickGoToStart()
-                .answerQuestion("What is your name?", "Another Reuben")
-                .swipeToNextQuestion("What is your age?", true)
-                .longPressOnQuestion("What is your age?", true)
-                .removeResponse()
-                .swipeToPreviousQuestion("What is your name?")
-                .closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new FormEntryPage("Two Question Required")))
-                .clickSaveChangesWithError(R.string.required_answer_error)
-                .assertQuestion("What is your age?", true)
-                .pressBackAndDiscardChanges()
-
-                .clickEditSavedForm(1)
-                .clickOnForm("Two Question Required")
-                .assertText("Reuben")
-                .assertText("32");
     }
 }
