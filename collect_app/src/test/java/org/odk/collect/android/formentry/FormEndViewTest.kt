@@ -18,7 +18,7 @@ import org.odk.collect.android.R
 class FormEndViewTest {
     private val context: Application =
         ApplicationProvider.getApplicationContext<Application>().also {
-            it.setTheme(R.style.Theme_Material3_Light)
+            it.setTheme(R.style.Theme_Collect) // Needed for ?colorSurfaceContainerHighest
         }
     private val formEndViewModel = mock<FormEndViewModel>()
     private val listener = mock<FormEndView.Listener>()
