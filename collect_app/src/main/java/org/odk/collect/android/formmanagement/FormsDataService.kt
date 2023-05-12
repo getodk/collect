@@ -141,7 +141,7 @@ class FormsDataService(
         finishSync(projectId)
     }
 
-    fun syncWithStorage(projectId: String) {
+    private fun syncWithStorage(projectId: String) {
         val sandbox = projectDependencyProviderFactory.create(projectId)
         sandbox.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             if (acquiredLock) {
@@ -176,11 +176,12 @@ class FormsDataService(
         appState.get("$KEY_PREFIX_ERROR:$projectId", MutableLiveData<FormSourceException>(null))
 
     private fun getDiskErrorLiveData(projectId: String): MutableLiveData<String?> =
-        appState.get("diskError:$projectId", MutableLiveData<String?>(null))
+        appState.get("$KEY_PREFIX_DISK_ERROR:$projectId", MutableLiveData<String?>(null))
 
     companion object {
         const val KEY_PREFIX_SYNCING = "syncStatusSyncing"
         const val KEY_PREFIX_ERROR = "syncStatusError"
+        const val KEY_PREFIX_DISK_ERROR = "diskError"
     }
 }
 
