@@ -90,23 +90,30 @@ the specific language governing permissions and limitations under the License.
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_small"
                 android:text="@string/save_as_draft"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/finalize"
+                app:layout_constraintEnd_toStartOf="@+id/space_box"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/space_box"
+                android:layout_width="@dimen/margin_standard"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/save_as_draft"
+                app:layout_constraintEnd_toStartOf="@id/finalize"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/finalize"
                 style="@style/Widget.Material3.Button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
                 android:text="@string/finalize"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/save_as_draft"
+                app:layout_constraintStart_toEndOf="@id/space_box"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

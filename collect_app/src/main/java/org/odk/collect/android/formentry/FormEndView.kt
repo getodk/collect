@@ -31,6 +31,8 @@ class FormEndView(
         if (formEndViewModel.shouldFormBeSentAutomatically()) {
             binding.finalize.text = context.getString(R.string.send)
         }
+
+        binding.spaceBox.isVisible = binding.saveAsDraft.isVisible && binding.finalize.isVisible
     }
 
     override fun shouldSuppressFlingGesture() = false
