@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry
 
 import android.content.Context
 import android.view.LayoutInflater
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.FormEntryEndBinding
@@ -18,12 +19,12 @@ class FormEndView(
     init {
         binding.description.text = context.getString(R.string.save_enter_data_description, formTitle)
 
-        binding.saveAsDraft.isEnabled = formEndViewModel.isSaveDraftEnabled()
+        binding.saveAsDraft.isVisible = formEndViewModel.isSaveDraftEnabled()
         binding.saveAsDraft.setOnClickListener {
             listener.onSaveClicked(false)
         }
 
-        binding.finalize.isEnabled = formEndViewModel.isFinalizeEnabled()
+        binding.finalize.isVisible = formEndViewModel.isFinalizeEnabled()
         binding.finalize.setOnClickListener {
             listener.onSaveClicked(true)
         }
