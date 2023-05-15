@@ -225,8 +225,11 @@ configurations.all {
 
         force 'org.objenesis:objenesis:2.6'
 
-        // Newer Jackson versions cannot be ued until Collect minSDK >= 26 (https://github.com/FasterXML/jackson-databind#android)
+        // Newer Jackson versions cannot be used until Collect minSDK >= 26 (https://github.com/FasterXML/jackson-databind#android)
         force 'com.fasterxml.jackson.core:jackson-databind:2.13.5'
+
+        // Newer Commons IO versions cannot be used until Collect minSDK >= 26
+        force 'commons-io:commons-io:2.5'
     }
     
     transitive = true
