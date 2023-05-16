@@ -34,6 +34,7 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- Normal permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
