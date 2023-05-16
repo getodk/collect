@@ -1,5 +1,6 @@
 package org.odk.collect.android.mainmenu
 
+import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -33,6 +34,8 @@ import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -40,6 +43,7 @@ import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
 class MainMenuActivity : LocalizedActivity() {
+
     @Inject
     lateinit var viewModelFactory: MainMenuViewModel.Factory
 
@@ -48,6 +52,9 @@ class MainMenuActivity : LocalizedActivity() {
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
+
+    @Inject
+    lateinit var permissionsProvider: PermissionsProvider
 
     private lateinit var binding: MainMenuBinding
     private lateinit var mainMenuViewModel: MainMenuViewModel
@@ -90,6 +97,14 @@ class MainMenuActivity : LocalizedActivity() {
         initMapbox()
         initButtons()
         initAppName()
+
+        permissionsProvider.requestPermissions(
+            this,
+            object : PermissionListener {
+                override fun granted() { }
+            },
+            Manifest.permission.POST_NOTIFICATIONS
+        )
     }
 
     override fun onResume() {

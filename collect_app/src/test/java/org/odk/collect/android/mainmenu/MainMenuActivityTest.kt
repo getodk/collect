@@ -1,5 +1,6 @@
 package org.odk.collect.android.mainmenu
 
+import android.Manifest
 import android.app.Application
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -27,6 +28,7 @@ import org.odk.collect.android.activities.InstanceChooserList
 import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -38,6 +40,8 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.async.Scheduler
+import org.odk.collect.permissions.PermissionsChecker
+import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -57,6 +61,8 @@ class MainMenuActivityTest {
         on { hasCurrentProject() } doReturn true
         on { currentProject } doReturn MutableNonNullLiveData(project)
     }
+
+    private val permissionsProvider = FakePermissionsProvider()
 
     @get:Rule
     val launcherRule = ActivityScenarioLauncherRule()
@@ -98,6 +104,10 @@ class MainMenuActivityTest {
                         return currentProjectViewModel as T
                     }
                 }
+            }
+
+            override fun providesPermissionsProvider(permissionsChecker: PermissionsChecker?): PermissionsProvider {
+                return permissionsProvider
             }
         })
     }
@@ -390,5 +400,15 @@ class MainMenuActivityTest {
             val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.manage_forms)
             assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
         }
+    }
+
+    @Test
+    fun `asks for notification permissions`() {
+        launcherRule.launch(MainMenuActivity::class.java)
+
+        assertThat(
+            permissionsProvider.requestedPermissions,
+            equalTo(listOf(Manifest.permission.POST_NOTIFICATIONS))
+        )
     }
 }
