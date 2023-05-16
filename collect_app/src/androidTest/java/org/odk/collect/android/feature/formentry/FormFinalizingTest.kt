@@ -71,7 +71,7 @@ class FormFinalizingTest {
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .assertDisabled(R.string.save_as_draft)
+            .assertTextDoesNotExist(R.string.save_as_draft)
     }
 
     @Test
@@ -88,7 +88,7 @@ class FormFinalizingTest {
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .assertDisabled(R.string.finalize)
+            .assertTextDoesNotExist(R.string.finalize)
     }
 
     companion object {
