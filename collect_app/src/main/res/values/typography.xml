@@ -44,7 +44,7 @@
         <item name="android:textColor">?colorPrimary</item>
     </style>
 
-    <style name="TextAppearanceLabelExtraLarge" parent="TextAppearance.Material3.TitleLarge">
+    <style name="TextAppearance.Collect.LabelExtraLarge" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textSize">18sp</item>
     </style>
 </resources>
