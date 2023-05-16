@@ -24,7 +24,8 @@ object TestRuleChain {
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.CAMERA,
                     Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.GET_ACCOUNTS
+                    Manifest.permission.GET_ACCOUNTS,
+                    Manifest.permission.POST_NOTIFICATIONS
                 )
             )
             .around(ResetRotationRule())
