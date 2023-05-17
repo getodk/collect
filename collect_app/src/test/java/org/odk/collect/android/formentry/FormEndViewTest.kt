@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textview.MaterialTextView
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
@@ -86,5 +88,57 @@ class FormEndViewTest {
         whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
         assertThat(view.findViewById<MaterialButton>(R.id.finalize).text, equalTo(context.getString(R.string.send)))
+    }
+
+    @Test
+    fun `when only 'Save as draft' button is visible do not display the warning`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", formEndViewModel, listener)
+
+        assertThat(view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility, equalTo(View.GONE))
+    }
+
+    @Test
+    fun `when only 'Finalize' button is visible display the warning with an appropriate message`() {
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", formEndViewModel, listener)
+
+        assertThat(view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text, equalTo(context.getString(R.string.form_edits_warning_only_finalize_enabled)))
+    }
+
+    @Test
+    fun `when only 'Send' button is visible do not display the warning`() {
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", formEndViewModel, listener)
+
+        assertThat(view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility, equalTo(View.GONE))
+    }
+
+    @Test
+    fun `when 'Save as draft' and 'Finalize' buttons are visible display the warning with an appropriate message`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", formEndViewModel, listener)
+
+        assertThat(view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text, equalTo(context.getString(R.string.form_edits_warning_save_as_draft_and_finalize_enabled)))
+    }
+
+    @Test
+    fun `when 'Save as draft' and 'Send' buttons are visible display the warning with an appropriate message`() {
+        whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
+        whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
+        whenever(formEndViewModel.shouldFormBeSentAutomatically()).thenReturn(true)
+
+        val view = FormEndView(context, "blah", formEndViewModel, listener)
+
+        assertThat(view.findViewById<MaterialCardView>(R.id.form_edits_warning).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text, equalTo(context.getString(R.string.form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled)))
     }
 }
