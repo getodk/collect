@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import org.odk.collect.android.R
@@ -28,8 +29,22 @@ class FormEndView(
         binding.finalize.setOnClickListener {
             listener.onSaveClicked(true)
         }
-        if (formEndViewModel.shouldFormBeSentAutomatically()) {
+
+        val shouldFormBeSentAutomatically = formEndViewModel.shouldFormBeSentAutomatically()
+        if (shouldFormBeSentAutomatically) {
             binding.finalize.text = context.getString(R.string.send)
+        }
+
+        if (!binding.saveAsDraft.isVisible && !shouldFormBeSentAutomatically) {
+            binding.formEditsWarningMessage.setText(R.string.form_edits_warning_only_finalize_enabled)
+        } else if (binding.saveAsDraft.isVisible && binding.finalize.isVisible) {
+            if (shouldFormBeSentAutomatically) {
+                binding.formEditsWarningMessage.setText(R.string.form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled)
+            } else {
+                binding.formEditsWarningMessage.setText(R.string.form_edits_warning_save_as_draft_and_finalize_enabled)
+            }
+        } else {
+            binding.formEditsWarning.visibility = View.GONE
         }
     }
 
