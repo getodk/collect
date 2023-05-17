@@ -2,7 +2,7 @@ package org.odk.collect.android.mainmenu
 
 import android.Manifest
 import android.app.Dialog
-import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,13 +16,18 @@ class PermissionsDialogFragment(
     private val permissionsProvider: PermissionsProvider
 ) : DialogFragment() {
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+    override fun onResume() {
+        super.onResume()
 
-        val shouldAskForPermission = permissionChecker.shouldAskForPermission(
+        val shouldAskForPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            permissionChecker.shouldAskForPermission(
                 requireActivity(),
                 Manifest.permission.POST_NOTIFICATIONS
             )
+        } else {
+            false
+        }
+
         if (!shouldAskForPermission) {
             dismiss()
         }

@@ -13,9 +13,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.*
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -400,17 +399,6 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.manage_forms)
             assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
-        }
-    }
-
-    @Test
-    @Ignore("Need to record fragment as it dismisses")
-    fun `asks for permissions`() {
-        val scenario = launcherRule.launch(MainMenuActivity::class.java)
-
-        scenario.onActivity {
-            val fragments = it.supportFragmentManager.fragments
-            assertThat(fragments[0].javaClass, Matchers.equalTo(PermissionsDialogFragment::class.java))
         }
     }
 }
