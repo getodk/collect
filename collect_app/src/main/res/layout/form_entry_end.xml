@@ -43,12 +43,11 @@ the specific language governing permissions and limitations under the License.
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large"
             app:cardBackgroundColor="?colorSurfaceContainerHighest"
-            app:layout_constraintBottom_toTopOf="@+id/save_as_draft"
+            app:layout_constraintBottom_toTopOf="@+id/buttons_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/description"
-            app:layout_constraintWidth_max="640dp"
-            tools:visibility="visible">
+            app:layout_constraintWidth_max="640dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -76,30 +75,41 @@ the specific language governing permissions and limitations under the License.
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_as_draft"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/buttons_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:text="@string/save_as_draft"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/finalize"
-            app:layout_constraintStart_toStartOf="@id/form_edits_warning"
-            app:layout_constraintTop_toBottomOf="@+id/form_edits_warning" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/finalize"
-            style="@style/Widget.Material3.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
-            android:text="@string/finalize"
-            app:layout_constraintBottom_toBottomOf="@id/save_as_draft"
             app:layout_constraintEnd_toEndOf="@id/form_edits_warning"
-            app:layout_constraintStart_toEndOf="@id/save_as_draft"
-            app:layout_constraintTop_toTopOf="@id/save_as_draft" />
+            app:layout_constraintStart_toStartOf="@id/form_edits_warning"
+            app:layout_constraintTop_toBottomOf="@+id/form_edits_warning">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_as_draft"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/save_as_draft"
+                android:layout_marginEnd="@dimen/margin_small"
+                app:layout_goneMarginEnd="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/finalize"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/finalize"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/finalize"
+                android:layout_marginStart="@dimen/margin_small"
+                app:layout_goneMarginStart="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/save_as_draft"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

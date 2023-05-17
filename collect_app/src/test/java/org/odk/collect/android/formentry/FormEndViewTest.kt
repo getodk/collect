@@ -1,6 +1,7 @@
 package org.odk.collect.android.formentry
 
 import android.app.Application
+import android.view.View
 import android.widget.TextView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -30,17 +31,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when saving drafts is enabled in settings should 'Save as draft' button be enabled`() {
+    fun `when saving drafts is enabled in settings should 'Save as draft' button be visible`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
-        assertThat(view.findViewById<MaterialButton>(R.id.save_as_draft).isEnabled, equalTo(true))
+        assertThat(view.findViewById<MaterialButton>(R.id.save_as_draft).visibility, equalTo(View.VISIBLE))
     }
 
     @Test
-    fun `when saving drafts is disabled in settings should 'Save as draft' button be disabled`() {
+    fun `when saving drafts is disabled in settings should 'Save as draft' button be hidden`() {
         whenever(formEndViewModel.isSaveDraftEnabled()).thenReturn(false)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
-        assertThat(view.findViewById<MaterialButton>(R.id.save_as_draft).isEnabled, equalTo(false))
+        assertThat(view.findViewById<MaterialButton>(R.id.save_as_draft).visibility, equalTo(View.GONE))
     }
 
     @Test
@@ -52,17 +53,17 @@ class FormEndViewTest {
     }
 
     @Test
-    fun `when finalizing forms is enabled in settings should 'Finalize' button be enabled`() {
+    fun `when finalizing forms is enabled in settings should 'Finalize' button be visible`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(true)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
-        assertThat(view.findViewById<MaterialButton>(R.id.finalize).isEnabled, equalTo(true))
+        assertThat(view.findViewById<MaterialButton>(R.id.finalize).visibility, equalTo(View.VISIBLE))
     }
 
     @Test
-    fun `when finalizing forms is disabled in settings should 'Finalize' button be disabled`() {
+    fun `when finalizing forms is disabled in settings should 'Finalize' button be hidden`() {
         whenever(formEndViewModel.isFinalizeEnabled()).thenReturn(false)
         val view = FormEndView(context, "blah", formEndViewModel, listener)
-        assertThat(view.findViewById<MaterialButton>(R.id.finalize).isEnabled, equalTo(false))
+        assertThat(view.findViewById<MaterialButton>(R.id.finalize).visibility, equalTo(View.GONE))
     }
 
     @Test
