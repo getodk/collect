@@ -1188,4 +1188,7 @@
     <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
     <string name="predicate_caching">Predicate caching</string>
 
+    <string name="permission_text">On the next screen, you will be asked if you want to allow ODK Collect access to the features below.\n\nIf you want to allow access, select “Allow” on the next screen.</string>
+    <string name="allow_to_show_notifications">Allow to show notifications</string>
+
 </resources>

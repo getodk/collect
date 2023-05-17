@@ -1,6 +1,5 @@
 package org.odk.collect.android.mainmenu
 
-import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -32,9 +31,10 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.crashhandler.CrashHandler
-import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
@@ -56,24 +56,38 @@ class MainMenuActivity : LocalizedActivity() {
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
 
+    @Inject
+    lateinit var permissionChecker: PermissionsChecker
+
     private lateinit var binding: MainMenuBinding
     private lateinit var mainMenuViewModel: MainMenuViewModel
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
-        super.onCreate(savedInstanceState)
-        binding = MainMenuBinding.inflate(layoutInflater)
 
         CrashHandler.getInstance(this)?.also {
             if (it.hasCrashed(this)) {
+                super.onCreate(null)
                 ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity::class.java)
                 return
             }
         }
 
-        ThemeUtils(this).setDarkModeForCurrentProject()
         DaggerUtils.getComponent(this).inject(this)
+        this.supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(PermissionsDialogFragment::class) {
+                PermissionsDialogFragment(
+                    permissionChecker,
+                    permissionsProvider
+                )
+            }
+            .build()
+
+        super.onCreate(savedInstanceState)
+        binding = MainMenuBinding.inflate(layoutInflater)
+
+        ThemeUtils(this).setDarkModeForCurrentProject()
 
         mainMenuViewModel = ViewModelProvider(this, viewModelFactory)[MainMenuViewModel::class.java]
         currentProjectViewModel = ViewModelProvider(
@@ -98,13 +112,7 @@ class MainMenuActivity : LocalizedActivity() {
         initButtons()
         initAppName()
 
-        permissionsProvider.requestPermissions(
-            this,
-            object : PermissionListener {
-                override fun granted() { }
-            },
-            Manifest.permission.POST_NOTIFICATIONS
-        )
+        showIfNotShowing(PermissionsDialogFragment::class.java, this.supportFragmentManager)
     }
 
     override fun onResume() {

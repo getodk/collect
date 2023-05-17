@@ -58,6 +58,7 @@
 
         <item name="colorOnPrimaryContainer">?colorOnPrimary</item>
 
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
         <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>
         <item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
         <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge</item>
