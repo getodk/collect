@@ -64,7 +64,7 @@
     <string name="no_items_display">Nothing available to display.</string>
     <string name="no_items_display_forms">Nothing available to display.\n\nTry getting and filling out a blank form.</string>
     <string name="no_items_display_sent_forms">Nothing available to display.\n\nTry sending finalized forms before viewing.</string>
-    <string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing saved forms before sending.</string>
+    <string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing drafts before sending.</string>
 
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="storage_runtime_permission_denied_title">Storage permissions</string>
@@ -96,7 +96,7 @@
     <string name="survey_loading_reading_csv_message">Reading CSV files…</string>
     <string name="parse_error">Sorry, unable to parse form.</string>
     <string name="loading_form_failed">An error occurred while loading the form. Please try again.</string>
-    <string name="parent_form_not_present">Unable to edit this saved form because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
+    <string name="parent_form_not_present">Unable to edit this draft because the corresponding blank form is not present or was deleted.\n\nForm ID: %1$s</string>
     <string name="cannot_edit_completed_form">This form cannot be edited once it has been marked as finalized. It may be encrypted.</string>
 
     <!-- Displayed when loading a form if that form was previously filled but closed because of a crash or system failure -->
@@ -580,7 +580,7 @@
     <string name="select_item">Select</string>
     <string name="new_item">New item</string>
     <!-- Name of an action button -->
-    <string name="edit_data">Edit Saved Form</string>
+    <string name="edit_data">Edit Draft</string>
     <string name="view_data">View Saved Form</string>
 
     <!-- Name for the location tracking notifications. Will be seen in Android settings. -->
@@ -954,11 +954,11 @@
     <!-- Name of a setting that determines whether users can navigate backwards in a form -->
     <string name="moving_backwards_title">Moving backwards</string>
     <string name="moving_backwards_disabled_title">Moving backwards disabled</string>
-    <string name="moving_backwards_disabled_message">Configure the device to prevent users from bypassing this setting?\n\nThe changes are:\n\u2022 Disable Edit Saved Form\n\u2022 Disable Save Form\n\u2022 Disable Go To Prompt\n\u2022 Set Constraint processing to Validate upon forward swipe</string>
+    <string name="moving_backwards_disabled_message">Configure the device to prevent users from bypassing this setting?\n\nThe changes are:\n\u2022 Disable Edit Draft\n\u2022 Disable Save Form\n\u2022 Disable Go To Prompt\n\u2022 Set Constraint processing to Validate upon forward swipe</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="moving_backwards_enabled_title">Moving backwards enabled</string>
-    <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022 Edit Saved Form\n\u2022 Save Form\n\u2022 Go To Prompt\n\u2022 Constraint processing</string>
+    <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022 Edit Draft\n\u2022 Save Form\n\u2022 Go To Prompt\n\u2022 Constraint processing</string>
 
     <!-- Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end -->
     <string name="save_mid">Save Form</string>
