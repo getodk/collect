@@ -91,6 +91,7 @@ object SnackbarUtils {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.MATCH_PARENT
                     )
+                    params.setMargins(16, 0, 0, 0)
 
                     (it.parent as ViewGroup).addView(dismissButton, params)
                 }
