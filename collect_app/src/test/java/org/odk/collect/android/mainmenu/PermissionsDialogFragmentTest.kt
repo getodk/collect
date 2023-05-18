@@ -1,6 +1,7 @@
 package org.odk.collect.android.mainmenu
 
 import android.Manifest
+import android.Manifest.permission.POST_NOTIFICATIONS
 import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
@@ -13,10 +14,15 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
+import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
 import org.robolectric.annotation.Config
@@ -25,12 +31,16 @@ import org.robolectric.annotation.Config
 @Config(sdk = [33])
 class PermissionsDialogFragmentTest {
 
+    private val permissionChecker = mock<PermissionsChecker>() {
+        on { isPermissionGranted(any()) } doReturn false
+    }
+
     private val permissionsProvider = FakePermissionsProvider()
     private val settingsProvider = InMemSettingsProvider()
 
     private val fragmentFactory = FragmentFactoryBuilder()
         .forClass(PermissionsDialogFragment::class) {
-            PermissionsDialogFragment(settingsProvider, permissionsProvider)
+            PermissionsDialogFragment(settingsProvider, permissionsProvider, permissionChecker)
         }
         .build()
 
@@ -43,6 +53,21 @@ class PermissionsDialogFragmentTest {
     @Test
     @Config(sdk = [32])
     fun whenNoNeedToAskForNotificationPermission_dismisses() {
+        val scenario = launcherRule.launch(
+            initialState = Lifecycle.State.INITIALIZED,
+            fragmentClass = PermissionsDialogFragment::class.java
+        )
+
+        scenario.onFragment {
+            scenario.moveToState(Lifecycle.State.RESUMED)
+            assertThat(it.dialog?.isShowing, equalTo(false))
+        }
+    }
+
+    @Test
+    fun whenPermissionsHaveAlreadyBeenGranted_dismisses() {
+        whenever(permissionChecker.isPermissionGranted(POST_NOTIFICATIONS)).doReturn(true)
+
         val scenario = launcherRule.launch(
             initialState = Lifecycle.State.INITIALIZED,
             fragmentClass = PermissionsDialogFragment::class.java

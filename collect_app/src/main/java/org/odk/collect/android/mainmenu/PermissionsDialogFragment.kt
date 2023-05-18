@@ -9,24 +9,30 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.permissions.PermissionListener
+import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
 
-class PermissionsDialogFragment(
+class PermissionsDialogFragment constructor(
     private val settingsProvider: SettingsProvider,
-    private val permissionsProvider: PermissionsProvider
+    private val permissionsProvider: PermissionsProvider,
+    private val permissionChecker: PermissionsChecker
 ) : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
 
-        val oldAPI = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
-        val permissionsAlreadyRequested =
-            settingsProvider.getMetaSettings().getBoolean(MetaKeys.PERMISSIONS_REQUESTED)
-
-        if (oldAPI || permissionsAlreadyRequested) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             dismiss()
+        } else {
+            val permissionsAlreadyRequested =
+                settingsProvider.getMetaSettings().getBoolean(MetaKeys.PERMISSIONS_REQUESTED)
+            val permissionsGranted = permissionChecker.isPermissionGranted(*permissions)
+
+            if (permissionsAlreadyRequested || permissionsGranted) {
+                dismiss()
+            }
         }
     }
 
@@ -43,9 +49,14 @@ class PermissionsDialogFragment(
                     object : PermissionListener {
                         override fun granted() {}
                     },
-                    Manifest.permission.POST_NOTIFICATIONS
+                    *permissions
                 )
             }
             .create()
+    }
+
+    companion object {
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        private val permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS)
     }
 }

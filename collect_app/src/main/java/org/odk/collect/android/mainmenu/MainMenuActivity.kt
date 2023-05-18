@@ -79,7 +79,8 @@ class MainMenuActivity : LocalizedActivity() {
             .forClass(PermissionsDialogFragment::class) {
                 PermissionsDialogFragment(
                     settingsProvider,
-                    permissionsProvider
+                    permissionsProvider,
+                    permissionChecker
                 )
             }
             .build()
