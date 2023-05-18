@@ -43,6 +43,8 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.testshared.RecyclerViewMatcher
+import org.odk.collect.testshared.clickOnItemWith
+import org.odk.collect.testshared.recyclerView
 
 @RunWith(AndroidJUnit4::class)
 class DeleteBlankFormFragmentTest {
@@ -101,8 +103,8 @@ class DeleteBlankFormFragmentTest {
             blankFormListItem(databaseId = 3, formName = "Form 3")
         )
 
-        onView(withText("Form 1")).perform(click())
-        onView(withText("Form 3")).perform(click())
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 3")))
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 3)))
     }
@@ -115,10 +117,10 @@ class DeleteBlankFormFragmentTest {
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
 
-        onView(withText("Form 1")).perform(click())
-        onView(withText("Form 2")).perform(click())
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
 
-        onView(withText("Form 2")).perform(click())
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1)))
     }

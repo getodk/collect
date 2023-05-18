@@ -48,6 +48,7 @@ dependencies {
     implementation Dependencies.robolectric
     implementation Dependencies.junit
     implementation Dependencies.androidx_test_espresso_intents
+    implementation Dependencies.androidx_test_espresso_contrib
     implementation Dependencies.android_material
     implementation Dependencies.danlew_android_joda
     implementation(Dependencies.androidx_fragment_testing) {
