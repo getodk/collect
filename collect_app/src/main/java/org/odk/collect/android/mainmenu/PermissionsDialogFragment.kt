@@ -33,7 +33,7 @@ class PermissionsDialogFragment(
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle("About permissions")
+            .setTitle(R.string.permission_dialog_title)
             .setView(R.layout.permissions_dialog_layout)
             .setPositiveButton(R.string.ok) { _, _ ->
                 settingsProvider.getMetaSettings().save(MetaKeys.PERMISSIONS_REQUESTED, true)
