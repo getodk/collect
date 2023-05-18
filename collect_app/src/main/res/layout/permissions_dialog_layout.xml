@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/notification_icon"
+        android:id="@+id/notifications_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_extra_large"
@@ -25,13 +25,27 @@
         app:srcCompat="@drawable/ic_baseline_notifications_24" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/notifications_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin"
-        android:text="@string/allow_to_show_notifications"
+        android:text="@string/notifications"
         android:textAppearance="?textAppearanceBodyLarge"
-        app:layout_constraintBottom_toBottomOf="@id/notification_icon"
-        app:layout_constraintStart_toEndOf="@id/notification_icon"
-        app:layout_constraintTop_toTopOf="@id/notification_icon" />
+        app:layout_constraintBottom_toTopOf="@id/notification_description"
+        app:layout_constraintStart_toEndOf="@id/notifications_icon"
+        app:layout_constraintTop_toTopOf="@id/notifications_icon" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/notification_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:text="@string/required_for_notifications"
+        android:textAppearance="?textAppearanceBodyMedium"
+        android:textColor="@color/color_on_surface_medium_emphasis"
+        app:layout_constraintBottom_toBottomOf="@id/notifications_icon"
+        app:layout_constraintStart_toEndOf="@id/notifications_icon"
+        app:layout_constraintTop_toBottomOf="@id/notifications_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
