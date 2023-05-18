@@ -3,10 +3,11 @@ package org.odk.collect.testshared
 import android.content.res.Resources
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import org.hamcrest.Description
 import org.hamcrest.Matcher
@@ -83,5 +84,5 @@ fun recyclerView(): Matcher<View> {
 }
 
 fun clickOnItemWith(matcher: Matcher<View>): ViewAction {
-    return actionOnItem<RecyclerView.ViewHolder>(ViewMatchers.hasDescendant(matcher), ViewActions.click())
+    return actionOnItem<ViewHolder>(hasDescendant(matcher), click())
 }

@@ -42,7 +42,7 @@ import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.odk.collect.testshared.RecyclerViewMatcher
+import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
 import org.odk.collect.testshared.clickOnItemWith
 import org.odk.collect.testshared.recyclerView
 
@@ -90,8 +90,8 @@ class DeleteBlankFormFragmentTest {
 
         multiSelectViewModel.select(2)
 
-        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
-        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
+        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
+        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
     }
 
     @Test
