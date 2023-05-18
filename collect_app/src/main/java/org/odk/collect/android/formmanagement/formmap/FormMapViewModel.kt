@@ -156,7 +156,6 @@ class FormMapViewModel(
         } else {
             val action = when (instance.status) {
                 Instance.STATUS_INCOMPLETE -> createEditAction()
-                Instance.STATUS_COMPLETE -> createEditAction()
                 else -> createViewAction()
             }
 
