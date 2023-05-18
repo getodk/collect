@@ -31,7 +31,6 @@ import android.widget.ProgressBar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
-import org.odk.collect.androidshared.ui.SnackbarUtils;
 
 import java.util.Arrays;
 
@@ -162,9 +161,5 @@ public abstract class FileManagerFragment extends AppListFragment implements Loa
     protected void showProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
         progressBarVisible = true;
-    }
-
-    protected void showSnackbar(@NonNull String result) {
-        SnackbarUtils.showShortSnackbar(llParent, result);
     }
 }
