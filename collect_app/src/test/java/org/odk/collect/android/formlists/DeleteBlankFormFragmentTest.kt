@@ -43,8 +43,8 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
-import org.odk.collect.testshared.clickOnItemWith
-import org.odk.collect.testshared.recyclerView
+import org.odk.collect.testshared.ViewActions.clickOnItemWith
+import org.odk.collect.testshared.ViewMatchers.recyclerView
 
 @RunWith(AndroidJUnit4::class)
 class DeleteBlankFormFragmentTest {
