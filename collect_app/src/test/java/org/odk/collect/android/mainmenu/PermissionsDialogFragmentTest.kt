@@ -1,5 +1,6 @@
 package org.odk.collect.android.mainmenu
 
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -12,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
@@ -58,5 +60,19 @@ class PermissionsDialogFragmentTest {
 
         onView(withText(R.string.ok)).inRoot(isDialog()).perform(click())
         verify(requestPermissionsViewModel).permissionsRequested()
+    }
+
+    @Test
+    fun dismissing_callsPermissionRequested() {
+        launcherRule.launch(PermissionsDialogFragment::class.java)
+
+        Espresso.pressBack()
+        verify(requestPermissionsViewModel).permissionsRequested()
+    }
+
+    @Test
+    fun recreating_doesNotCallPermissionsRequested() {
+        launcherRule.launch(PermissionsDialogFragment::class.java).recreate()
+        verify(requestPermissionsViewModel, never()).permissionsRequested()
     }
 }

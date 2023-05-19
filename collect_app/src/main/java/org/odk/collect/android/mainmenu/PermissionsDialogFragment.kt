@@ -1,6 +1,7 @@
 package org.odk.collect.android.mainmenu
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
@@ -32,5 +33,9 @@ class PermissionsDialogFragment(
                 )
             }
             .create()
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        requestPermissionsViewModel.permissionsRequested()
     }
 }
