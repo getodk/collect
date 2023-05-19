@@ -18,7 +18,6 @@ import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
 import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.WebViewActivity
-import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.application.MapboxClassInstanceCreator.createMapBoxInitializationFragment
 import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAvailable
 import org.odk.collect.android.databinding.MainMenuBinding
@@ -45,10 +44,7 @@ import javax.inject.Inject
 class MainMenuActivity : LocalizedActivity() {
 
     @Inject
-    lateinit var viewModelFactory: MainMenuViewModel.Factory
-
-    @Inject
-    lateinit var currentProjectViewModelFactory: CurrentProjectViewModel.Factory
+    lateinit var viewModelFactory: MainMenuViewModelFactory
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
@@ -82,6 +78,9 @@ class MainMenuActivity : LocalizedActivity() {
                     RequestPermissionsViewModel(settingsProvider, permissionChecker)
                 )
             }
+            .forClass(ProjectSettingsDialog::class) {
+                ProjectSettingsDialog(viewModelFactory)
+            }
             .build()
 
         super.onCreate(savedInstanceState)
@@ -89,11 +88,9 @@ class MainMenuActivity : LocalizedActivity() {
 
         ThemeUtils(this).setDarkModeForCurrentProject()
 
-        mainMenuViewModel = ViewModelProvider(this, viewModelFactory)[MainMenuViewModel::class.java]
-        currentProjectViewModel = ViewModelProvider(
-            this,
-            currentProjectViewModelFactory
-        )[CurrentProjectViewModel::class.java]
+        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+        mainMenuViewModel = viewModelProvider[MainMenuViewModel::class.java]
+        currentProjectViewModel = viewModelProvider[CurrentProjectViewModel::class.java]
 
         if (!currentProjectViewModel.hasCurrentProject()) {
             ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity::class.java)

@@ -25,14 +25,12 @@ import org.odk.collect.android.activities.DeleteSavedFormActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
 import org.odk.collect.android.activities.InstanceUploaderListActivity
-import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.version.VersionInformation
@@ -42,7 +40,6 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
-import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 
 @RunWith(AndroidJUnit4::class)
@@ -74,33 +71,25 @@ class MainMenuActivityTest {
                 application: Application,
                 settingsProvider: SettingsProvider,
                 instancesAppState: InstancesAppState,
-                scheduler: Scheduler
-            ): MainMenuViewModel.Factory {
-                return object : MainMenuViewModel.Factory(
+                scheduler: Scheduler,
+                currentProjectProvider: CurrentProjectProvider,
+                analyticsInitializer: AnalyticsInitializer
+            ): MainMenuViewModelFactory {
+                return object : MainMenuViewModelFactory(
                     versionInformation,
                     application,
                     settingsProvider,
                     instancesAppState,
-                    scheduler
-                ) {
-                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return mainMenuViewModel as T
-                    }
-                }
-            }
-
-            override fun providesCurrentProjectViewModel(
-                currentProjectProvider: CurrentProjectProvider,
-                analyticsInitializer: AnalyticsInitializer,
-                storagePathProvider: StoragePathProvider,
-                projectsRepository: ProjectsRepository
-            ): CurrentProjectViewModel.Factory {
-                return object : CurrentProjectViewModel.Factory(
+                    scheduler,
                     currentProjectProvider,
                     analyticsInitializer
                 ) {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                        return currentProjectViewModel as T
+                        return when (modelClass) {
+                            MainMenuViewModel::class.java -> mainMenuViewModel
+                            CurrentProjectViewModel::class.java -> currentProjectViewModel
+                            else -> throw IllegalArgumentException()
+                        } as T
                     }
                 }
             }

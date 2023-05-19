@@ -26,8 +26,6 @@ import org.odk.collect.analytics.BlockableFirebaseAnalytics;
 import org.odk.collect.analytics.NoopAnalytics;
 import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
-import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel;
-import org.odk.collect.android.mainmenu.MainMenuViewModel;
 import org.odk.collect.android.application.CollectSettingsChangeHandler;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
 import org.odk.collect.android.application.initialization.AnalyticsInitializer;
@@ -68,6 +66,7 @@ import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvi
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher;
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSender;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
+import org.odk.collect.android.mainmenu.MainMenuViewModelFactory;
 import org.odk.collect.android.notifications.NotificationManagerNotifier;
 import org.odk.collect.android.notifications.Notifier;
 import org.odk.collect.android.openrosa.CollectThenSystemContentTypeMapper;
@@ -493,20 +492,15 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public MainMenuViewModel.Factory providesMainMenuViewModelFactory(VersionInformation versionInformation, Application application,
-                                                                      SettingsProvider settingsProvider, InstancesAppState instancesAppState,
-                                                                      Scheduler scheduler) {
-        return new MainMenuViewModel.Factory(versionInformation, application, settingsProvider, instancesAppState, scheduler);
+    public MainMenuViewModelFactory providesMainMenuViewModelFactory(VersionInformation versionInformation, Application application,
+                                                                     SettingsProvider settingsProvider, InstancesAppState instancesAppState,
+                                                                     Scheduler scheduler, CurrentProjectProvider currentProjectProvider, AnalyticsInitializer analyticsInitializer) {
+        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesAppState, scheduler, currentProjectProvider, analyticsInitializer);
     }
 
     @Provides
     public AnalyticsInitializer providesAnalyticsInitializer(Analytics analytics, VersionInformation versionInformation, SettingsProvider settingsProvider) {
         return new AnalyticsInitializer(analytics, versionInformation, settingsProvider);
-    }
-
-    @Provides
-    public CurrentProjectViewModel.Factory providesCurrentProjectViewModel(CurrentProjectProvider currentProjectProvider, AnalyticsInitializer analyticsInitializer, StoragePathProvider storagePathProvider, ProjectsRepository projectsRepository) {
-        return new CurrentProjectViewModel.Factory(currentProjectProvider, analyticsInitializer);
     }
 
     @Provides
