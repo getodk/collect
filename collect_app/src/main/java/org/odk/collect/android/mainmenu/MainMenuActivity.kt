@@ -78,9 +78,8 @@ class MainMenuActivity : LocalizedActivity() {
         this.supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(PermissionsDialogFragment::class) {
                 PermissionsDialogFragment(
-                    settingsProvider,
                     permissionsProvider,
-                    permissionChecker
+                    RequestPermissionsViewModel(settingsProvider, permissionChecker)
                 )
             }
             .build()
