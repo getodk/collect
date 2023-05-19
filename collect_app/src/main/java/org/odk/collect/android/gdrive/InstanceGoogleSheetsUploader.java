@@ -89,8 +89,6 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     @Override
     public String uploadOneSubmission(Instance instance, String spreadsheetUrl) throws FormUploadException {
-        markSubmissionFailed(instance);
-
         File instanceFile = new File(instance.getInstanceFilePath());
         if (!instanceFile.exists()) {
             throw new FormUploadException(FAIL + "instance XML file does not exist!");
@@ -106,6 +104,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
             Form form = forms.get(0);
             if (form.getBASE64RSAPublicKey() != null) {
+                markSubmissionFailed(instance);
                 throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
             }
 
@@ -123,6 +122,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
             }
             insertRows(instance, instanceElement, null, key, instanceFile, spreadsheet.getSheets().get(0).getProperties().getTitle());
         } catch (GoogleJsonResponseException e) {
+            markSubmissionFailed(instance);
             throw new FormUploadException(getErrorMessageFromGoogleJsonResponseException(e));
         }
 

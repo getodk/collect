@@ -71,8 +71,6 @@ public class InstanceServerUploader extends InstanceUploader {
      */
     @Override
     public String uploadOneSubmission(Instance instance, String urlString) throws FormUploadException {
-        markSubmissionFailed(instance);
-
         Uri submissionUri = Uri.parse(urlString);
 
         long contentLength = 10000000L;
@@ -86,6 +84,7 @@ public class InstanceServerUploader extends InstanceUploader {
                     submissionUri.toString());
         } else {
             if (submissionUri.getHost() == null) {
+                markSubmissionFailed(instance);
                 throw new FormUploadException(FAIL + "Host name may not be null");
             }
 
@@ -93,6 +92,7 @@ public class InstanceServerUploader extends InstanceUploader {
             try {
                 uri = URI.create(submissionUri.toString());
             } catch (IllegalArgumentException e) {
+                markSubmissionFailed(instance);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
                 throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.url_error));
             }
@@ -113,11 +113,13 @@ public class InstanceServerUploader extends InstanceUploader {
                 }
 
             } catch (Exception e) {
+                markSubmissionFailed(instance);
                 throw new FormUploadException(FAIL
                         + (e.getMessage() != null ? e.getMessage() : e.toString()));
             }
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
+                markSubmissionFailed(instance);
                 throw new FormUploadAuthRequestedException(getLocalizedString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
@@ -138,17 +140,20 @@ public class InstanceServerUploader extends InstanceUploader {
                         } else {
                             // Don't follow a redirection attempt to a different host.
                             // We can't tell if this is a spoof or not.
+                            markSubmissionFailed(instance);
                             throw new FormUploadException(FAIL
                                     + "Unexpected redirection attempt to a different host: "
                                     + newURI.toString());
                         }
                     } catch (Exception e) {
+                        markSubmissionFailed(instance);
                         throw new FormUploadException(FAIL + urlString + " " + e.toString());
                     }
                 }
             } else {
                 if (headResult.getStatusCode() >= HttpsURLConnection.HTTP_OK
                         && headResult.getStatusCode() < HttpsURLConnection.HTTP_MULT_CHOICE) {
+                    markSubmissionFailed(instance);
                     throw new FormUploadException("Failed to send to " + uri + ". Is this an OpenRosa " +
                             "submission endpoint? If you have a web proxy you may need to log in to " +
                             "your network.\n\nHEAD request result status code: " + headResult.getStatusCode());
@@ -170,6 +175,7 @@ public class InstanceServerUploader extends InstanceUploader {
         }
 
         if (!instanceFile.exists() && !submissionFile.exists()) {
+            markSubmissionFailed(instance);
             throw new FormUploadException(FAIL + "instance XML file does not exist!");
         }
 
@@ -210,10 +216,12 @@ public class InstanceServerUploader extends InstanceUploader {
                     }
 
                 }
+                markSubmissionFailed(instance);
                 throw exception;
             }
 
         } catch (Exception e) {
+            markSubmissionFailed(instance);
             throw new FormUploadException(FAIL + "Generic Exception: "
                     + (e.getMessage() != null ? e.getMessage() : e.toString()));
         }
