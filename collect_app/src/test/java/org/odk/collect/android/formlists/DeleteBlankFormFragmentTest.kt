@@ -42,7 +42,9 @@ import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.odk.collect.testshared.RecyclerViewMatcher
+import org.odk.collect.testshared.RecyclerViewMatcher.Companion.withRecyclerView
+import org.odk.collect.testshared.ViewActions.clickOnItemWith
+import org.odk.collect.testshared.ViewMatchers.recyclerView
 
 @RunWith(AndroidJUnit4::class)
 class DeleteBlankFormFragmentTest {
@@ -88,8 +90,8 @@ class DeleteBlankFormFragmentTest {
 
         multiSelectViewModel.select(2)
 
-        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
-        onView(RecyclerViewMatcher.withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
+        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
+        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
     }
 
     @Test
@@ -101,8 +103,8 @@ class DeleteBlankFormFragmentTest {
             blankFormListItem(databaseId = 3, formName = "Form 3")
         )
 
-        onView(withText("Form 1")).perform(click())
-        onView(withText("Form 3")).perform(click())
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 3")))
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 3)))
     }
@@ -115,10 +117,10 @@ class DeleteBlankFormFragmentTest {
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
 
-        onView(withText("Form 1")).perform(click())
-        onView(withText("Form 2")).perform(click())
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
 
-        onView(withText("Form 2")).perform(click())
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1)))
     }
