@@ -495,8 +495,10 @@ public class AppDependencyModule {
     public MainMenuViewModelFactory providesMainMenuViewModelFactory(VersionInformation versionInformation, Application application,
                                                                      SettingsProvider settingsProvider, InstancesAppState instancesAppState,
                                                                      Scheduler scheduler, CurrentProjectProvider currentProjectProvider,
-                                                                     AnalyticsInitializer analyticsInitializer, PermissionsChecker permissionChecker) {
-        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesAppState, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker);
+                                                                     AnalyticsInitializer analyticsInitializer, PermissionsChecker permissionChecker,
+                                                                     FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider,
+                                                                     AutoSendSettingsProvider autoSendSettingsProvider, NetworkStateProvider networkStateProvide) {
+        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesAppState, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider, networkStateProvide);
     }
 
     @Provides

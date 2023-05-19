@@ -71,6 +71,6 @@ class MainMenuViewModelTest {
     }
 
     private fun createViewModelWithVersion(version: String): MainMenuViewModel {
-        return MainMenuViewModel(mock(), VersionInformation { version }, mock(), mock(), mock())
+        return MainMenuViewModel(mock(), VersionInformation { version }, mock(), mock(), mock(), mock(), mock(), mock(), mock())
     }
 }

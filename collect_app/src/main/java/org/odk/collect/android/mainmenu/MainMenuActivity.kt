@@ -1,6 +1,7 @@
 package org.odk.collect.android.mainmenu
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
@@ -9,6 +10,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import javax.inject.Inject
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
@@ -22,6 +24,7 @@ import org.odk.collect.android.application.MapboxClassInstanceCreator.createMapB
 import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAvailable
 import org.odk.collect.android.databinding.MainMenuBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.gdrive.GoogleDriveActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectIconView
@@ -31,14 +34,15 @@ import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.LocalizedActivity
-import javax.inject.Inject
 
 class MainMenuActivity : LocalizedActivity() {
 
@@ -118,6 +122,12 @@ class MainMenuActivity : LocalizedActivity() {
         mainMenuViewModel.refreshInstances()
         setButtonsVisibility()
         manageGoogleDriveDeprecationBanner()
+
+        val formSavedUri = settingsProvider.getMetaSettings().getString(MetaKeys.LAST_SAVED_FORM_URI)
+        if (formSavedUri != null) {
+            displayFormSavedSnackbar(Uri.parse(formSavedUri))
+            settingsProvider.getMetaSettings().remove(MetaKeys.LAST_SAVED_FORM_URI)
+        }
     }
 
     private fun setButtonsVisibility() {
@@ -308,6 +318,21 @@ class MainMenuActivity : LocalizedActivity() {
             }
         } else {
             binding.googleDriveDeprecationBanner.root.visibility = View.GONE
+        }
+    }
+
+    private fun displayFormSavedSnackbar(uri: Uri) {
+        val formSavedSnackbarType = mainMenuViewModel.getFormSavedSnackbarType(uri)
+
+        formSavedSnackbarType?.let { it ->
+            SnackbarUtils.showLongSnackbar(
+                binding.root,
+                getString(it.message),
+                action = SnackbarUtils.Action(getString(it.actionName)) {
+                    startActivity(FormFillingIntentFactory.editInstanceIntent(this, uri))
+                },
+                displayDismissButton = true
+            )
         }
     }
 }
