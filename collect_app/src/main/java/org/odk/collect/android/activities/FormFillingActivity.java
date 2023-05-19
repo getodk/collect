@@ -1665,15 +1665,16 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 DialogFragmentUtils.dismissDialog(SaveFormProgressDialogFragment.class, getSupportFragmentManager());
                 DialogFragmentUtils.dismissDialog(ChangesReasonPromptDialogFragment.class, getSupportFragmentManager());
 
-                showShortToast(this, R.string.data_saved_ok);
-
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
                         instanceSubmitScheduler.scheduleSubmit(currentProjectProvider.getCurrentProject().getUuid());
                     }
 
                     finishAndReturnInstance();
+                } else {
+                    showShortToast(this, R.string.data_saved_ok);
                 }
+
                 formSaveViewModel.resumeFormEntry();
                 break;
 
