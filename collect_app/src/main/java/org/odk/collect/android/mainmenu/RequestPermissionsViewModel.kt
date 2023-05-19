@@ -3,6 +3,7 @@ package org.odk.collect.android.mainmenu
 import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.ViewModel
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
@@ -10,7 +11,7 @@ import org.odk.collect.settings.keys.MetaKeys
 class RequestPermissionsViewModel(
     private val settingsProvider: SettingsProvider,
     private val permissionChecker: PermissionsChecker
-) {
+) : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     val permissions = arrayOf(Manifest.permission.POST_NOTIFICATIONS)

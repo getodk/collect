@@ -8,6 +8,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.async.Scheduler
+import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider
 
 open class MainMenuViewModelFactory(
@@ -17,7 +18,8 @@ open class MainMenuViewModelFactory(
     private val instancesAppState: InstancesAppState,
     private val scheduler: Scheduler,
     private val currentProjectProvider: CurrentProjectProvider,
-    private val analyticsInitializer: AnalyticsInitializer
+    private val analyticsInitializer: AnalyticsInitializer,
+    private val permissionChecker: PermissionsChecker
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when (modelClass) {
@@ -29,7 +31,16 @@ open class MainMenuViewModelFactory(
                 scheduler
             )
 
-            CurrentProjectViewModel::class.java -> CurrentProjectViewModel(currentProjectProvider, analyticsInitializer)
+            CurrentProjectViewModel::class.java -> CurrentProjectViewModel(
+                currentProjectProvider,
+                analyticsInitializer
+            )
+
+            RequestPermissionsViewModel::class.java -> RequestPermissionsViewModel(
+                settingsProvider,
+                permissionChecker
+            )
+
             else -> throw IllegalArgumentException()
         } as T
     }

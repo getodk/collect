@@ -1,6 +1,5 @@
 package org.odk.collect.android.mainmenu
 
-import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -14,7 +13,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -42,21 +40,6 @@ class PermissionsDialogFragmentTest {
         defaultThemeResId = R.style.Theme_MaterialComponents,
         defaultFactory = fragmentFactory
     )
-
-    @Test
-    fun whenPermissionsHaveAlreadyBeenAskedFor_dismisses() {
-        whenever(requestPermissionsViewModel.shouldAskForPermissions()).doReturn(false)
-
-        val scenario = launcherRule.launch(
-            initialState = Lifecycle.State.INITIALIZED,
-            fragmentClass = PermissionsDialogFragment::class.java
-        )
-
-        scenario.onFragment {
-            scenario.moveToState(Lifecycle.State.RESUMED)
-            assertThat(it.dialog?.isShowing, equalTo(false))
-        }
-    }
 
     @Test
     fun clickingOK_asksForPermissions() {

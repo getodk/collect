@@ -71,11 +71,17 @@ class MainMenuActivity : LocalizedActivity() {
         }
 
         DaggerUtils.getComponent(this).inject(this)
+
+        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+        mainMenuViewModel = viewModelProvider[MainMenuViewModel::class.java]
+        currentProjectViewModel = viewModelProvider[CurrentProjectViewModel::class.java]
+        val permissionsViewModel = viewModelProvider[RequestPermissionsViewModel::class.java]
+
         this.supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(PermissionsDialogFragment::class) {
                 PermissionsDialogFragment(
                     permissionsProvider,
-                    RequestPermissionsViewModel(settingsProvider, permissionChecker)
+                    permissionsViewModel
                 )
             }
             .forClass(ProjectSettingsDialog::class) {
@@ -87,10 +93,6 @@ class MainMenuActivity : LocalizedActivity() {
         binding = MainMenuBinding.inflate(layoutInflater)
 
         ThemeUtils(this).setDarkModeForCurrentProject()
-
-        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
-        mainMenuViewModel = viewModelProvider[MainMenuViewModel::class.java]
-        currentProjectViewModel = viewModelProvider[CurrentProjectViewModel::class.java]
 
         if (!currentProjectViewModel.hasCurrentProject()) {
             ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity::class.java)
@@ -109,7 +111,9 @@ class MainMenuActivity : LocalizedActivity() {
         initButtons()
         initAppName()
 
-        showIfNotShowing(PermissionsDialogFragment::class.java, this.supportFragmentManager)
+        if (permissionsViewModel.shouldAskForPermissions()) {
+            showIfNotShowing(PermissionsDialogFragment::class.java, this.supportFragmentManager)
+        }
     }
 
     override fun onResume() {

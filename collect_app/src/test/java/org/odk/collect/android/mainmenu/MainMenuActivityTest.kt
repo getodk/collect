@@ -12,6 +12,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
@@ -58,6 +59,10 @@ class MainMenuActivityTest {
         on { currentProject } doReturn MutableNonNullLiveData(project)
     }
 
+    private val permissionsViewModel = mock<RequestPermissionsViewModel>() {
+        on { shouldAskForPermissions() } doReturn false
+    }
+
     private val permissionsProvider = FakePermissionsProvider()
 
     @get:Rule
@@ -73,7 +78,8 @@ class MainMenuActivityTest {
                 instancesAppState: InstancesAppState,
                 scheduler: Scheduler,
                 currentProjectProvider: CurrentProjectProvider,
-                analyticsInitializer: AnalyticsInitializer
+                analyticsInitializer: AnalyticsInitializer,
+                permissionChecker: PermissionsChecker
             ): MainMenuViewModelFactory {
                 return object : MainMenuViewModelFactory(
                     versionInformation,
@@ -82,12 +88,14 @@ class MainMenuActivityTest {
                     instancesAppState,
                     scheduler,
                     currentProjectProvider,
-                    analyticsInitializer
+                    analyticsInitializer,
+                    permissionChecker
                 ) {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return when (modelClass) {
                             MainMenuViewModel::class.java -> mainMenuViewModel
                             CurrentProjectViewModel::class.java -> currentProjectViewModel
+                            RequestPermissionsViewModel::class.java -> permissionsViewModel
                             else -> throw IllegalArgumentException()
                         } as T
                     }
@@ -387,6 +395,18 @@ class MainMenuActivityTest {
         scenario.onActivity { activity: MainMenuActivity ->
             val editSavedFormButton = activity.findViewById<MainMenuButton>(R.id.manage_forms)
             assertThat(editSavedFormButton.visibility, equalTo(View.GONE))
+        }
+    }
+
+    @Test
+    fun `when shouldAskForPermissions is true, shows permissions dialog`() {
+        whenever(permissionsViewModel.shouldAskForPermissions()).doReturn(true)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity {
+            val dialog =
+                it.supportFragmentManager.findFragmentByTag(PermissionsDialogFragment::class.java.name)
+            assertThat(dialog, notNullValue())
         }
     }
 }

@@ -15,14 +15,6 @@ class PermissionsDialogFragment(
     private val requestPermissionsViewModel: RequestPermissionsViewModel
 ) : DialogFragment() {
 
-    override fun onResume() {
-        super.onResume()
-
-        if (!requestPermissionsViewModel.shouldAskForPermissions()) {
-            dismiss()
-        }
-    }
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return MaterialAlertDialogBuilder(requireContext())
