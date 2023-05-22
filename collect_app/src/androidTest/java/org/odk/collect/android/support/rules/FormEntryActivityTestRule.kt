@@ -75,6 +75,20 @@ class FormEntryActivityTestRule : ExternalResource() {
         return this
     }
 
+    fun recreateActivity(): FormEntryActivityTestRule {
+        lateinit var scenarioActivity: Activity
+        scenario.onActivity {
+            scenarioActivity = it
+        }
+
+        if (ActivityHelpers.getActivity() != scenarioActivity) {
+            throw IllegalStateException("Can't pause backstack!")
+        }
+
+        scenario.recreate()
+        return this
+    }
+
     fun destroyActivity(): FormEntryActivityTestRule {
         lateinit var scenarioActivity: Activity
         scenario.onActivity {

@@ -109,7 +109,7 @@ class SavePointTest {
         rule.setUpProjectAndCopyForm("two-question-audit.xml")
             .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessRestore() }
+            .let { simulateProcessDeath() }
 
         // Start blank form and check save point is loaded
         rule.fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
@@ -148,7 +148,7 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessRestore() }
+            .let { simulateProcessDeath() }
 
         // Edit instance and check save point is loaded
         rule.editForm("two-question-audit.xml", "Two Question")
@@ -188,7 +188,7 @@ class SavePointTest {
         // Create save point for blank form
         rule.fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessRestore() }
+            .let { simulateProcessDeath() }
 
         // Check editing instance doesn't load save point
         rule.editForm("two-question-audit.xml", "Two Question")
@@ -212,7 +212,7 @@ class SavePointTest {
         rule.editForm("two-question-audit.xml", "Two Question")
             .clickGoToStart()
             .answerQuestion("What is your name?", "Alexei")
-            .let { simulateProcessRestore() }
+            .let { simulateProcessDeath() }
 
         // Check starting blank form does not load save point
         rule.fillNewForm("two-question-audit.xml", "Two Question")
@@ -228,10 +228,9 @@ class SavePointTest {
     }
 
     /**
-     * Simulate a "process restore" case where an app in the background is killed by Android
-     * to reclaim memory, change permissions etc
+     * Simulate a "process death" case where an app in the background is killed
      */
-    private fun simulateProcessRestore(): FormEntryActivityTestRule {
+    private fun simulateProcessDeath(): FormEntryActivityTestRule {
         rule.saveInstanceStateForActivity()
             .destroyActivity()
 
