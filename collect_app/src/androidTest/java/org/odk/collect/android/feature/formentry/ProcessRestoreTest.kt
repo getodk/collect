@@ -29,7 +29,7 @@ class ProcessRestoreTest {
             .let { simulateProcessRestore(FormHierarchyPage("One Question")) }
             .assertText("123")
             .pressBack(FormEntryPage("One Question"))
-            .assertQuestion("One Question")
+            .assertQuestion("what is your age")
     }
 
     /**
@@ -38,9 +38,9 @@ class ProcessRestoreTest {
      * when navigated back to
      */
     private fun <T : Page<T>> simulateProcessRestore(destination: Page<T>): Page<T> {
-        rule.saveInstanceStateForActivity()
-        CollectHelpers.simulateProcessRestart()
-        rule.recreateActivity()
+        rule.recreateActivity {
+            CollectHelpers.simulateProcessRestart()
+        }
 
         return destination.assertOnPage()
     }

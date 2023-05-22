@@ -19,6 +19,7 @@ import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
+import org.odk.collect.androidshared.system.OnSavedInstanceStateRegistry
 import org.odk.collect.projects.Project
 import timber.log.Timber
 import java.io.IOException
@@ -75,7 +76,7 @@ class FormEntryActivityTestRule : ExternalResource() {
         return this
     }
 
-    fun recreateActivity(): FormEntryActivityTestRule {
+    fun recreateActivity(betweenDestroyAndCreate: () -> Unit): FormEntryActivityTestRule {
         lateinit var scenarioActivity: Activity
         scenario.onActivity {
             scenarioActivity = it
@@ -85,7 +86,17 @@ class FormEntryActivityTestRule : ExternalResource() {
             throw IllegalStateException("Can't pause backstack!")
         }
 
-        scenario.recreate()
+        scenario.onActivity {
+            val outState = Bundle()
+            it.onSaveInstanceState(outState, PersistableBundle())
+            OnSavedInstanceStateRegistry.setState(outState)
+        }
+
+        destroyActivity()
+
+        betweenDestroyAndCreate()
+        scenario = ActivityScenario.launch(intent)
+
         return this
     }
 
