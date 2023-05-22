@@ -22,6 +22,8 @@ object CollectHelpers {
     }
 
     fun simulateProcessRestart(appDependencyModule: AppDependencyModule? = null) {
+        ApplicationProvider.getApplicationContext<Collect>().getState().clear()
+
         val newComponent =
             overrideAppDependencyModule(appDependencyModule ?: AppDependencyModule())
 

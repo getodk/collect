@@ -5,6 +5,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.R
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
@@ -22,14 +23,28 @@ class ProcessRestoreTest {
 
     @Test
     fun whenProcessIsKilledAndRestoredDuringFormEntry_returnsToHierarchy() {
-        // Create save point
         rule.setUpProjectAndCopyForm("one-question.xml")
             .fillNewForm("one-question.xml", "One Question")
             .answerQuestion("what is your age", "123")
             .let { simulateProcessRestore(FormHierarchyPage("One Question")) }
+
             .assertText("123")
             .pressBack(FormEntryPage("One Question"))
             .assertQuestion("what is your age")
+    }
+
+    @Test
+    fun whenProcessIsKilledAndRestoredDuringFormEntry_andThereADialogFragmentOpen_returnsToHierarchy() {
+        rule.setUpProjectAndCopyForm("all-widgets.xml")
+            .fillNewForm("all-widgets.xml", "All widgets")
+            .clickGoToArrow()
+            .clickOnGroup("Select one widgets")
+            .clickOnQuestion("Select one from map widget")
+            .clickOnString(R.string.select_place)
+            .let { simulateProcessRestore(FormHierarchyPage("All widgets")) }
+
+            .pressBack(FormEntryPage("All widgets"))
+            .assertQuestion("Welcome to ODK Collect! This form showcases the different available question types (widgets).")
     }
 
     /**
@@ -38,7 +53,7 @@ class ProcessRestoreTest {
      * when navigated back to
      */
     private fun <T : Page<T>> simulateProcessRestore(destination: Page<T>): Page<T> {
-        rule.recreateActivity {
+        rule.destroyAndRestoreActivity {
             CollectHelpers.simulateProcessRestart()
         }
 

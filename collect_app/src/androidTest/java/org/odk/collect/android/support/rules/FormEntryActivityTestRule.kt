@@ -76,7 +76,7 @@ class FormEntryActivityTestRule : ExternalResource() {
         return this
     }
 
-    fun recreateActivity(betweenDestroyAndCreate: () -> Unit): FormEntryActivityTestRule {
+    fun destroyAndRestoreActivity(betweenDestroyAndCreate: () -> Unit): FormEntryActivityTestRule {
         lateinit var scenarioActivity: Activity
         scenario.onActivity {
             scenarioActivity = it

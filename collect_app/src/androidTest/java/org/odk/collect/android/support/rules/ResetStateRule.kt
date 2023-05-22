@@ -30,7 +30,6 @@ private class ResetStateStatement(
 
         clearPrefs(oldComponent)
         clearDisk(oldComponent)
-        clearAppState(application)
         setTestState()
         CollectHelpers.simulateProcessRestart(appDependencyModule)
         base.evaluate()
