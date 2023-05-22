@@ -10,7 +10,6 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
-import javax.inject.Inject
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
@@ -43,6 +42,7 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.LocalizedActivity
+import javax.inject.Inject
 
 class MainMenuActivity : LocalizedActivity() {
 

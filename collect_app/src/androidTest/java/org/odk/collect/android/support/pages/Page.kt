@@ -170,7 +170,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun checkIsSnackbarWithMessageDisplayed(message: Int): T {
-        onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         return this as T
     }
 
