@@ -77,14 +77,7 @@ class FormEntryActivityTestRule : ExternalResource() {
     }
 
     fun destroyAndRestoreActivity(betweenDestroyAndCreate: () -> Unit): FormEntryActivityTestRule {
-        lateinit var scenarioActivity: Activity
-        scenario.onActivity {
-            scenarioActivity = it
-        }
-
-        if (ActivityHelpers.getActivity() != scenarioActivity) {
-            throw IllegalStateException("Can't pause backstack!")
-        }
+        assertNoBackstack()
 
         scenario.onActivity {
             val outState = Bundle()
@@ -101,17 +94,21 @@ class FormEntryActivityTestRule : ExternalResource() {
     }
 
     fun destroyActivity(): FormEntryActivityTestRule {
+        assertNoBackstack()
+
+        scenario.moveToState(Lifecycle.State.DESTROYED)
+        return this
+    }
+
+    private fun assertNoBackstack() {
         lateinit var scenarioActivity: Activity
         scenario.onActivity {
             scenarioActivity = it
         }
 
         if (ActivityHelpers.getActivity() != scenarioActivity) {
-            throw IllegalStateException("Can't destroy backstack!")
+            throw IllegalStateException("Can't manipulate state for backstack!")
         }
-
-        scenario.moveToState(Lifecycle.State.DESTROYED)
-        return this
     }
 
     private fun createNewFormIntent(formFilename: String): Intent {
