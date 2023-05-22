@@ -6,10 +6,33 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
+import org.odk.collect.android.external.InstancesContract
+import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
+import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.network.NetworkStateProvider
+import org.odk.collect.forms.instances.Instance
+import org.odk.collect.formstest.FormUtils
+import org.odk.collect.formstest.InMemFormsRepository
+import org.odk.collect.formstest.InMemInstancesRepository
+import org.odk.collect.projects.Project
+import org.odk.collect.shared.TempFiles
 
 @RunWith(AndroidJUnit4::class)
 class MainMenuViewModelTest {
+    private val formsRepository = InMemFormsRepository()
+    private val formsRepositoryProvider = mock<FormsRepositoryProvider>().apply {
+        whenever(get()).thenReturn(formsRepository)
+    }
+    private val instancesRepository = InMemInstancesRepository()
+    private val instancesRepositoryProvider = mock<InstancesRepositoryProvider>().apply {
+        whenever(get()).thenReturn(instancesRepository)
+    }
+    private val autoSendSettingsProvider = mock<AutoSendSettingsProvider>()
+    private val networkStateProvider = mock<NetworkStateProvider>()
+
     @Test
     fun `version when beta release returns semantic version with prefix and beta version`() {
         val viewModel = createViewModelWithVersion("v1.23.0-beta.1")
@@ -70,7 +93,133 @@ class MainMenuViewModelTest {
         assertThat(viewModel.versionCommitDescription, equalTo("181-ge51d004d4-dirty"))
     }
 
+    @Test
+    fun `getFormSavedSnackbarType should return SAVED_AS_DRAFT snackbar type when the corresponding instance is saved as draft`() {
+        val viewModel = createViewModelWithVersion("")
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
+        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.SAVED_AS_DRAFT))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarType should return FINALIZED snackbar type when the corresponding instance is finalized and auto send is disabled`() {
+        val viewModel = createViewModelWithVersion("")
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
+        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.FINALIZED))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarType should return SENDING snackbar type when the corresponding instance is finalized and auto send is enabled`() {
+        val viewModel = createViewModelWithVersion("")
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
+        whenever(networkStateProvider.isDeviceOnline).thenReturn(true)
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
+        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.SENDING))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarType should return SENDING_NO_INTERNET_CONNECTION snackbar type when the corresponding instance is finalized and auto send is enabled but there is no interenet connection`() {
+        val viewModel = createViewModelWithVersion("")
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .build()
+        )
+
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
+        whenever(networkStateProvider.isDeviceOnline).thenReturn(false)
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
+        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.SENDING_NO_INTERNET_CONNECTION))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarType should return null when the corresponding instance is already sent`() {
+        val viewModel = createViewModelWithVersion("")
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_SUBMITTED)
+                .build()
+        )
+
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
+        whenever(networkStateProvider.isDeviceOnline).thenReturn(false)
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
+        assertThat(formSavedSnackbarType, equalTo(null))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarType should return null when the corresponding instance failed to sent`() {
+        val viewModel = createViewModelWithVersion("")
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_SUBMISSION_FAILED)
+                .build()
+        )
+
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
+        whenever(networkStateProvider.isDeviceOnline).thenReturn(false)
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
+        assertThat(formSavedSnackbarType, equalTo(null))
+    }
+
     private fun createViewModelWithVersion(version: String): MainMenuViewModel {
-        return MainMenuViewModel(mock(), VersionInformation { version }, mock(), mock(), mock(), mock(), mock(), mock(), mock())
+        return MainMenuViewModel(mock(), VersionInformation { version }, mock(), mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider, networkStateProvider)
     }
 }
