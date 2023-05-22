@@ -172,6 +172,7 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.OnSavedInstanceStateRegistry;
+import org.odk.collect.androidshared.system.ProcessRestoreDetector;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
@@ -420,7 +421,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .build());
 
         savedInstanceState = OnSavedInstanceStateRegistry.getState(savedInstanceState);
+        if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
+            savedInstanceState = null;
+        }
+
         super.onCreate(savedInstanceState);
+
         formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
@@ -808,6 +814,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         outState.putString(KEY_ERROR, errorMessage);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
+
+        ProcessRestoreDetector.registerOnSaveInstanceState(this, outState);
     }
 
     @Override
