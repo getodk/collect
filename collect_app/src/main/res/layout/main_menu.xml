@@ -1,107 +1,130 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  Copyright (C) 2009 University of Washington Licensed under the Apache
-  License, Version 2.0 (the "License"); you may not use this file except in
-  compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-  Unless required by applicable law or agreed to in writing, software distributed
-  under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
-  OR CONDITIONS OF ANY KIND, either express or implied. See the License for
-  the specific language governing permissions and limitations under the License.
--->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/app_bar_with_progress_bar_layout" />
+    <include
+        android:id="@+id/app_bar_layout"
+        layout="@layout/app_bar_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:paddingBottom="@dimen/margin_standard"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/map_box_initialization_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <include
-                android:id="@+id/google_drive_deprecation_banner"
-                layout="@layout/google_drive_deprecation_banner" />
-
-            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/margin_small"
-                android:paddingBottom="@dimen/margin_standard">
+                android:id="@+id/google_drive_deprecation_banner"
+                layout="@layout/google_drive_deprecation_banner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/map_box_initialization_fragment" />
 
-                <org.odk.collect.android.mainmenu.StartNewFormButton
-                    android:id="@+id/enter_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+            <org.odk.collect.android.mainmenu.StartNewFormButton
+                android:id="@+id/enter_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/google_drive_deprecation_banner" />
 
-                <org.odk.collect.android.mainmenu.MainMenuButton
-                    android:id="@+id/review_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_edit_24"
-                    app:name="@string/review_data"/>
+            <org.odk.collect.android.mainmenu.MainMenuButton
+                android:id="@+id/review_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_edit_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/enter_data"
+                app:name="@string/review_data" />
 
-                <org.odk.collect.android.mainmenu.MainMenuButton
-                    android:id="@+id/send_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_send_24"
-                    app:name="@string/send_data"
-                    app:highlightable="true"/>
+            <org.odk.collect.android.mainmenu.MainMenuButton
+                android:id="@+id/send_data"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_send_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/review_data"
+                app:name="@string/send_data"
+                app:highlightable="true"/>
 
-                <org.odk.collect.android.mainmenu.MainMenuButton
-                    android:id="@+id/view_sent_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_check_circle_24"
-                    app:name="@string/view_sent_forms"/>
+            <org.odk.collect.android.mainmenu.MainMenuButton
+                android:id="@+id/view_sent_forms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_check_circle_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/send_data"
+                app:name="@string/view_sent_forms" />
 
-                <org.odk.collect.android.mainmenu.MainMenuButton
-                    android:id="@+id/get_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_download_24"
-                    app:name="@string/get_forms"/>
+            <org.odk.collect.android.mainmenu.MainMenuButton
+                android:id="@+id/get_forms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_download_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_sent_forms"
+                app:name="@string/get_forms" />
 
-                <org.odk.collect.android.mainmenu.MainMenuButton
-                    android:id="@+id/manage_forms"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:icon="@drawable/ic_delete_24"
-                    app:name="@string/manage_files"/>
+            <org.odk.collect.android.mainmenu.MainMenuButton
+                android:id="@+id/manage_forms"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_delete_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/get_forms"
+                app:name="@string/manage_files" />
 
-                <TextView
-                    android:id="@+id/app_name"
-                    android:textAppearance="?textAppearanceBody1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/margin_standard"
-                    android:textColor="@color/color_on_surface_medium_emphasis"
-                    tools:text="ODK Collect v2022.3" />
+            <TextView
+                android:id="@+id/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="?textAppearanceBody1"
+                android:textColor="@color/color_on_surface_medium_emphasis"
+                android:layout_marginTop="@dimen/margin_standard"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/manage_forms"
+                tools:text="ODK Collect v2022.3" />
 
-                <TextView
-                    android:id="@+id/version_sha"
-                    android:textAppearance="?textAppearanceCaption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    tools:text="commit sha" />
-            </LinearLayout>
-        </LinearLayout>
+            <TextView
+                android:id="@+id/version_sha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="?textAppearanceCaption"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/app_name"
+                tools:text="commit sha" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
