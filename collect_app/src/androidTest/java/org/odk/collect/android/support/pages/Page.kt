@@ -169,6 +169,11 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun checkIsSnackbarWithMessageDisplayed(message: Int): T {
+        onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)));
+        return this as T
+    }
+
     fun checkIsToastWithMessageDisplayed(message: String): T {
         Espresso.onIdle()
         if (!popRecordedToasts().stream().anyMatch { s: String -> s == message }) {
