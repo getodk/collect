@@ -13,12 +13,14 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
-import org.odk.collect.androidshared.system.OnSavedInstanceStateRegistry
+import org.odk.collect.androidshared.system.SavedInstanceStateProvider
 import org.odk.collect.projects.Project
 import timber.log.Timber
 import java.io.IOException
@@ -27,6 +29,18 @@ class FormEntryActivityTestRule : ExternalResource() {
 
     private lateinit var intent: Intent
     private lateinit var scenario: ActivityScenarioWrapper
+
+    private val savedInstanceStateProvider = InMemSavedInstanceStateProvider()
+
+    override fun before() {
+        super.before()
+
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesSavedInstanceStateProvider(): SavedInstanceStateProvider {
+                return savedInstanceStateProvider
+            }
+        })
+    }
 
     override fun after() {
         try {
@@ -79,7 +93,8 @@ class FormEntryActivityTestRule : ExternalResource() {
     }
 
     fun restoreActivity() {
-        scenario.restore()
+        savedInstanceStateProvider.setState(scenario.getSavedState())
+        scenario.relaunch()
     }
 
     private fun createNewFormIntent(formFilename: String): Intent {
@@ -127,8 +142,7 @@ private class ActivityScenarioWrapper private constructor(private var intent: In
         scenario.moveToState(newState)
     }
 
-    fun restore() {
-        OnSavedInstanceStateRegistry.setState(outState)
+    fun relaunch() {
         scenario = ActivityScenario.launch(intent)
     }
 
@@ -142,9 +156,32 @@ private class ActivityScenarioWrapper private constructor(private var intent: In
         scenario.close()
     }
 
+    fun getSavedState(): Bundle? {
+        return outState
+    }
+
     companion object {
         fun launch(intent: Intent): ActivityScenarioWrapper {
             return ActivityScenarioWrapper(intent)
+        }
+    }
+}
+
+class InMemSavedInstanceStateProvider : SavedInstanceStateProvider {
+
+    private var bundle: Bundle? = null
+
+    fun setState(savedInstanceState: Bundle?) {
+        bundle = savedInstanceState
+    }
+
+    override fun getState(savedInstanceState: Bundle?): Bundle? {
+        return if (bundle != null) {
+            bundle.also {
+                bundle = null
+            }
+        } else {
+            savedInstanceState
         }
     }
 }

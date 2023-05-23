@@ -171,8 +171,8 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
-import org.odk.collect.androidshared.system.OnSavedInstanceStateRegistry;
 import org.odk.collect.androidshared.system.ProcessRestoreDetector;
+import org.odk.collect.androidshared.system.SavedInstanceStateProvider;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
@@ -365,6 +365,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Inject
     public AutoSendSettingsProvider autoSendSettingsProvider;
 
+    @Inject
+    public SavedInstanceStateProvider savedInstanceStateProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -420,7 +423,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
 
-        savedInstanceState = OnSavedInstanceStateRegistry.getState(savedInstanceState);
+        savedInstanceState = savedInstanceStateProvider.getState(savedInstanceState);
 
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
             savedInstanceState = null;
