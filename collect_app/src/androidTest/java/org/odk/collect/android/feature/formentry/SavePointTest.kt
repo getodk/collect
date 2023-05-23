@@ -231,7 +231,7 @@ class SavePointTest {
      * Simulate a "process death" case where an app in the background is killed
      */
     private fun simulateProcessDeath(): FormEntryActivityTestRule {
-        rule.saveInstanceStateForActivity()
+        rule.navigateAwayFromActivity()
             .destroyActivity()
 
         CollectHelpers.simulateProcessRestart()

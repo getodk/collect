@@ -53,9 +53,11 @@ class ProcessRestoreTest {
      * when navigated back to
      */
     private fun <T : Page<T>> simulateProcessRestore(destination: Page<T>): Page<T> {
-        rule.destroyAndRestoreActivity {
-            CollectHelpers.simulateProcessRestart()
-        }
+        rule.navigateAwayFromActivity()
+        rule.destroyActivity()
+
+        CollectHelpers.simulateProcessRestart()
+        rule.restoreActivity()
 
         return destination.assertOnPage()
     }

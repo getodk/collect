@@ -421,6 +421,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .build());
 
         savedInstanceState = OnSavedInstanceStateRegistry.getState(savedInstanceState);
+
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
             savedInstanceState = null;
         }

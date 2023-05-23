@@ -14,7 +14,6 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.ActivityHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
@@ -27,7 +26,7 @@ import java.io.IOException
 class FormEntryActivityTestRule : ExternalResource() {
 
     private lateinit var intent: Intent
-    private lateinit var scenario: ActivityScenario<Activity>
+    private lateinit var scenario: ActivityScenarioWrapper
 
     override fun after() {
         try {
@@ -54,7 +53,7 @@ class FormEntryActivityTestRule : ExternalResource() {
 
     fun <D : Page<D>> fillNewForm(formFilename: String, destination: D): D {
         intent = createNewFormIntent(formFilename)
-        scenario = ActivityScenario.launch(intent)
+        scenario = ActivityScenarioWrapper.launch(intent)
         return destination.assertOnPage()
     }
 
@@ -64,51 +63,23 @@ class FormEntryActivityTestRule : ExternalResource() {
 
     fun editForm(formFilename: String, instanceName: String): FormHierarchyPage {
         intent = createEditFormIntent(formFilename)
-        scenario = ActivityScenario.launch(intent)
+        scenario = ActivityScenarioWrapper.launch(intent)
         return FormHierarchyPage(instanceName).assertOnPage()
     }
 
-    fun saveInstanceStateForActivity(): FormEntryActivityTestRule {
-        scenario.onActivity {
-            it.onSaveInstanceState(Bundle(), PersistableBundle())
-        }
-
-        return this
-    }
-
-    fun destroyAndRestoreActivity(betweenDestroyAndCreate: () -> Unit): FormEntryActivityTestRule {
-        assertNoBackstack()
-
-        scenario.onActivity {
-            val outState = Bundle()
-            it.onSaveInstanceState(outState, PersistableBundle())
-            OnSavedInstanceStateRegistry.setState(outState)
-        }
-
-        destroyActivity()
-
-        betweenDestroyAndCreate()
-        scenario = ActivityScenario.launch(intent)
-
+    fun navigateAwayFromActivity(): FormEntryActivityTestRule {
+        scenario.moveToState(Lifecycle.State.STARTED)
+        scenario.saveInstanceState()
         return this
     }
 
     fun destroyActivity(): FormEntryActivityTestRule {
-        assertNoBackstack()
-
         scenario.moveToState(Lifecycle.State.DESTROYED)
         return this
     }
 
-    private fun assertNoBackstack() {
-        lateinit var scenarioActivity: Activity
-        scenario.onActivity {
-            scenarioActivity = it
-        }
-
-        if (ActivityHelpers.getActivity() != scenarioActivity) {
-            throw IllegalStateException("Can't manipulate state for backstack!")
-        }
+    fun restoreActivity() {
+        scenario.restore()
     }
 
     private fun createNewFormIntent(formFilename: String): Intent {
@@ -120,7 +91,11 @@ class FormEntryActivityTestRule : ExternalResource() {
         val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
             .getCurrentProject().uuid
 
-        return FormFillingIntentFactory.newInstanceIntent(application, FormsContract.getUri(projectId, form!!.dbId), FormFillingActivity::class)
+        return FormFillingIntentFactory.newInstanceIntent(
+            application,
+            FormsContract.getUri(projectId, form!!.dbId),
+            FormFillingActivity::class
+        )
     }
 
     private fun createEditFormIntent(formFilename: String): Intent {
@@ -140,5 +115,36 @@ class FormEntryActivityTestRule : ExternalResource() {
             instance.dbId,
             FormFillingActivity::class
         )
+    }
+}
+
+private class ActivityScenarioWrapper private constructor(private var intent: Intent) {
+
+    private var outState: Bundle? = null
+    private var scenario: ActivityScenario<Activity> = ActivityScenario.launch(intent)
+
+    fun moveToState(newState: Lifecycle.State) {
+        scenario.moveToState(newState)
+    }
+
+    fun restore() {
+        OnSavedInstanceStateRegistry.setState(outState)
+        scenario = ActivityScenario.launch(intent)
+    }
+
+    fun saveInstanceState() {
+        val bundle = Bundle()
+        scenario.onActivity { it.onSaveInstanceState(bundle, PersistableBundle()) }
+        outState = bundle
+    }
+
+    fun close() {
+        scenario.close()
+    }
+
+    companion object {
+        fun launch(intent: Intent): ActivityScenarioWrapper {
+            return ActivityScenarioWrapper(intent)
+        }
     }
 }

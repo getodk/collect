@@ -6,7 +6,7 @@ object OnSavedInstanceStateRegistry {
 
     private var bundle: Bundle? = null
 
-    fun setState(savedInstanceState: Bundle) {
+    fun setState(savedInstanceState: Bundle?) {
         bundle = savedInstanceState
     }
 
