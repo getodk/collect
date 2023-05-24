@@ -1,11 +1,16 @@
 package org.odk.collect.android.mainmenu
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.badge.ExperimentalBadgeUtils
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.MainMenuButtonBinding
+import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 
 class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
@@ -13,6 +18,8 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
     constructor(context: Context) : this(context, null)
 
     private val binding = MainMenuButtonBinding.inflate(LayoutInflater.from(context), this, true)
+    private val badge: BadgeDrawable
+    private val highlightable: Boolean
 
     init {
         context.theme.obtainStyledAttributes(
@@ -24,12 +31,18 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
             try {
                 val buttonIcon = this.getResourceId(R.styleable.MainMenuButton_icon, 0)
                 val buttonName = this.getString(R.styleable.MainMenuButton_name)
+                highlightable = this.getBoolean(R.styleable.MainMenuButton_highlightable, false)
 
                 binding.icon.setImageResource(buttonIcon)
                 binding.name.text = buttonName
             } finally {
                 recycle()
             }
+        }
+
+        badge = BadgeDrawable.create(context).apply {
+            backgroundColor = getThemeAttributeValue(context, R.attr.colorPrimary)
+            badgeGravity = BadgeDrawable.BOTTOM_END
         }
     }
 
@@ -45,6 +58,19 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
             ""
         } else {
             number.toString()
+        }
+
+        @ExperimentalBadgeUtils
+        if (highlightable) {
+            if (number > 0) {
+                BadgeUtils.attachBadgeDrawable(badge, binding.icon)
+                binding.name.typeface = Typeface.DEFAULT_BOLD
+                binding.number.typeface = Typeface.DEFAULT_BOLD
+            } else {
+                BadgeUtils.detachBadgeDrawable(badge, binding.icon)
+                binding.name.typeface = Typeface.DEFAULT
+                binding.number.typeface = Typeface.DEFAULT
+            }
         }
     }
 }

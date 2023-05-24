@@ -60,7 +60,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_send_24"
-                    app:name="@string/send_data"/>
+                    app:name="@string/send_data"
+                    app:highlightable="true"/>
 
                 <org.odk.collect.android.mainmenu.MainMenuButton
                     android:id="@+id/view_sent_forms"
