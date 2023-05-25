@@ -85,6 +85,7 @@ object SnackbarUtils {
                         setOnClickListener {
                             dismiss()
                         }
+                        contentDescription = context.getString(R.string.close_snackbar)
                     }
 
                     val params = LinearLayout.LayoutParams(

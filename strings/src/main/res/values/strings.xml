@@ -1204,4 +1204,5 @@
     <string name="form_sending_failed">It looks like you\'re offline. Form will be sent when you\'re online.</string>
     <string name="edit_form">Edit</string>
     <string name="view_form">View</string>
+    <string name="close_snackbar">Close snackbar</string>
 </resources>

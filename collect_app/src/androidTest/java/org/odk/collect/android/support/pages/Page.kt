@@ -429,6 +429,11 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun closeSnackbar(): T {
+        onView(withContentDescription(R.string.close_snackbar)).perform(click())
+        return this as T
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
