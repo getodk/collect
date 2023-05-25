@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry
 
 import android.app.Activity
 import android.view.View
+import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -11,6 +12,8 @@ import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shadows.ShadowAndroidXAlertDialog
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
@@ -23,6 +26,7 @@ class QuitFormDialogTest {
 
     private val formSaveViewModel = mock(FormSaveViewModel::class.java)
     private val formEntryViewModel = mock(FormEntryViewModel::class.java)
+    private val settingsProvider = InMemSettingsProvider()
 
     @Test
     fun isCancellable() {
@@ -44,10 +48,48 @@ class QuitFormDialogTest {
         verify(formEntryViewModel).exit()
     }
 
+    @Test
+    fun whenSaveAsDraftIsEnabled_showsSaveExplanation() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+        assertThat(
+            shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
+            equalTo(activity.getString(R.string.save_explanation))
+        )
+    }
+
+    @Test
+    fun whenSaveAsDraftIsDisabled_showsWarningTitleAndMessage_andHidesButton() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+
+        assertThat(
+            shadowDialog.title,
+            equalTo(activity.getString(R.string.quit_form_continue_title))
+        )
+        assertThat(
+            shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
+            equalTo(activity.getString(R.string.discard_form_warning))
+        )
+        assertThat(
+            shadowDialog.getView().findViewById<View>(R.id.save_changes).visibility,
+            equalTo(View.GONE)
+        )
+    }
+
     private fun showDialog(activity: Activity) = QuitFormDialog.show(
         activity,
         formSaveViewModel,
         formEntryViewModel,
+        settingsProvider,
         null
     )
 }

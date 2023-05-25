@@ -1952,7 +1952,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     return true;
                 }
 
-                QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, () -> {
+                QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, () -> {
                     saveForm(true, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
                 });
                 return true;

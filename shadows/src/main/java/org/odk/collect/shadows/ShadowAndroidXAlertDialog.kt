@@ -18,6 +18,11 @@ class ShadowAndroidXAlertDialog : ShadowDialog() {
     @RealObject
     private lateinit var realObject: AlertDialog
 
+    override fun getTitle(): CharSequence {
+        val alertController = ReflectionHelpers.getField<Any>(realObject, "mAlert")
+        return ReflectionHelpers.getField(alertController, "mTitle")
+    }
+
     fun getView(): View {
         val alertController = ReflectionHelpers.getField<Any>(realObject, "mAlert")
         return ReflectionHelpers.getField(alertController, "mView")
