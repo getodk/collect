@@ -31,7 +31,7 @@ the specific language governing permissions and limitations under the License.
             android:textSize="21sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/form_edits_warning"
-            app:layout_constraintStart_toStartOf="@id/form_edits_warning"
+            app:layout_constraintStart_toStartOf="@id/buttons_container"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="You are at the end of All widgets" />
@@ -64,14 +64,15 @@ the specific language governing permissions and limitations under the License.
                     app:tint="?colorPrimary" />
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/form_edits_warning_message"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin"
-                    android:text="@string/form_edits_warning"
                     android:textAppearance="?textAppearanceBodyLarge"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
-                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />
+                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon"
+                    tools:text="@string/form_edits_warning_save_as_draft_and_finalize_enabled"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -80,9 +81,10 @@ the specific language governing permissions and limitations under the License.
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
+            app:layout_constraintWidth_max="640dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/form_edits_warning"
-            app:layout_constraintStart_toStartOf="@id/form_edits_warning"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/form_edits_warning">
 
             <com.google.android.material.button.MaterialButton
