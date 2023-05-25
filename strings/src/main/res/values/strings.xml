@@ -167,6 +167,7 @@
     <string name="do_not_save">Discard Form</string>
     <string name="discard_changes">Discard Changes</string>
     <string name="keep_changes">Save Changes</string>
+    <string name="keep_editing">Keep editing</string>
     <string name="quit_form_title">Save form?</string>
     <string name="save_explanation">You can save this form and access it from your drafts at any time.</string>
     <string name="quit_form_continue_title">Continue editing?</string>

@@ -69,6 +69,10 @@ object QuitFormDialog {
             }
         )
 
+        binding.keepEditing.setOnClickListener {
+            dialog.dismiss()
+        }
+
         binding.discardChanges.setOnClickListener {
             formSaveViewModel.ignoreChanges()
             formEntryViewModel.exit()

@@ -49,6 +49,18 @@ class QuitFormDialogTest {
     }
 
     @Test
+    fun clickingKeepEditing_dismissesDialog() {
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+        val view = shadowDialog.getView()
+        view.findViewById<View>(R.id.keep_editing).performClick()
+
+        assertThat(dialog.isShowing, equalTo(false))
+    }
+
+    @Test
     fun whenSaveAsDraftIsEnabled_showsSaveExplanation() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
 

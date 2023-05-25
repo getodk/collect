@@ -29,6 +29,19 @@
         app:layout_constraintTop_toBottomOf="@id/save_explanation" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/keep_editing"
+        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="@string/keep_editing"
+        app:icon="@drawable/ic_edit"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/discard_changes" />
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/save_changes"
         style="@style/Widget.Material3.Button.OutlinedButton.Icon"
         android:layout_width="0dp"
@@ -40,6 +53,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/discard_changes"
         app:layout_constraintStart_toStartOf="@id/discard_changes"
-        app:layout_constraintTop_toBottomOf="@id/discard_changes" />
+        app:layout_constraintTop_toBottomOf="@id/keep_editing" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
