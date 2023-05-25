@@ -168,6 +168,7 @@
     <string name="discard_changes">Discard Changes</string>
     <string name="keep_changes">Save Changes</string>
     <string name="quit_form_title">Save form?</string>
+    <string name="save_explanation">You can save this form and access it from your drafts at any time.</string>
 
     <string name="saving_form">Saving Form</string>
     <string name="survey_saving_validating_message">Validating answers…</string>

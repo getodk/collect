@@ -3,19 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/margin">
+    android:padding="@dimen/margin_large">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/save_explanation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/save_explanation"
+        android:textAppearance="?textAppearanceBodyMedium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/discard_changes"
         style="@style/Widget.Material3.Button.OutlinedButton.Icon"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_extra_large"
         android:text="@string/discard_changes"
         app:icon="@drawable/ic_delete"
         app:iconGravity="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/save_explanation" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/save_changes"
