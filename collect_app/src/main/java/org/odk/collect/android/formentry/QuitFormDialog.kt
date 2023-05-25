@@ -1,7 +1,6 @@
 package org.odk.collect.android.formentry
 
 import android.app.Activity
-import android.content.DialogInterface
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
@@ -66,9 +65,6 @@ object QuitFormDialog {
 
         val dialog = MaterialAlertDialogBuilder(activity)
             .setTitle(activity.resources.getString(R.string.quit_form_title))
-            .setNegativeButton(activity.resources.getString(R.string.do_not_exit)) { dialog: DialogInterface, id: Int ->
-                dialog.dismiss()
-            }
             .setView(listView)
             .create()
 
