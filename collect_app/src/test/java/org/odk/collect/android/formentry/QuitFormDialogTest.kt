@@ -33,7 +33,7 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun clickingIgnoreChanges_callsExitOnFormEntryViewModel() {
+    fun clickingDiscardChanges_callsExitOnFormEntryViewModel() {
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
 
