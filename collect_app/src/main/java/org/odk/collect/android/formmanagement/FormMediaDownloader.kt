@@ -17,12 +17,14 @@ class FormMediaDownloader(
     private val formSource: FormSource
 ) {
 
+    @JvmOverloads
     @Throws(IOException::class, FormSourceException::class, InterruptedException::class)
     fun download(
         formToDownload: ServerFormDetails,
         tempMediaPath: String,
         tempDir: File,
-        stateListener: OngoingWorkListener
+        stateListener: OngoingWorkListener,
+        test: Boolean = false
     ): Boolean {
         var atLeastOneNewMediaFileDetected = false
         val tempMediaDir = File(tempMediaPath).also { it.mkdir() }
@@ -43,10 +45,16 @@ class FormMediaDownloader(
                         interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
 
                         if (!getMd5Hash(tempMediaFile).contentEquals(existingFileHash)) {
+                            if (test) {
+                                throw Exception("Content does not equal")
+                            }
                             atLeastOneNewMediaFileDetected = true
                         }
                     }
                 } else {
+                    if (test) {
+                        throw Exception("File does not exist")
+                    }
                     val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                     interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
                     atLeastOneNewMediaFileDetected = true

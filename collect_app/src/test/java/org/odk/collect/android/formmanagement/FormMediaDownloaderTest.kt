@@ -50,7 +50,8 @@ class FormMediaDownloaderTest {
             serverFormDetails,
             File(TempFiles.createTempDir(), "temp").absolutePath,
             TempFiles.createTempDir(),
-            mock()
+            mock(),
+            true
         )
 
         assertThat(result, equalTo(false))
