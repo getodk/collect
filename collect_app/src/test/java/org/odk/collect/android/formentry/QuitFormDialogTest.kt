@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.DialogInterface
 import android.view.View
 import android.widget.ListView
-import android.widget.TextView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -12,7 +11,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.projects.CurrentProjectProvider
@@ -46,37 +44,6 @@ class QuitFormDialogTest {
         assertThat(
             dialog.getButton(DialogInterface.BUTTON_NEGATIVE).text,
             equalTo(activity.getString(R.string.do_not_exit))
-        )
-    }
-
-    @Test
-    fun shouldShowCorrectTitle_whenNoFormIsLoaded() {
-        val activity = Robolectric.buildActivity(Activity::class.java).get()
-        val dialog = showDialog(activity)
-
-        val dialogTitle = dialog.findViewById<TextView>(R.id.alertTitle)
-        assertThat(
-            dialogTitle!!.text.toString(),
-            equalTo(
-                activity.getString(
-                    R.string.quit_application,
-                    activity.getString(R.string.no_form_loaded)
-                )
-            )
-        )
-    }
-
-    @Test
-    fun shouldShowCorrectTitle_whenFormIsLoaded() {
-        whenever(formSaveViewModel.formName).thenReturn("blah")
-
-        val activity = Robolectric.buildActivity(Activity::class.java).get()
-        val dialog = showDialog(activity)
-
-        val dialogTitle = dialog.findViewById<TextView>(R.id.alertTitle)
-        assertThat(
-            dialogTitle!!.text.toString(),
-            equalTo(activity.getString(R.string.quit_application, "blah"))
         )
     }
 

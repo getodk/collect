@@ -41,7 +41,7 @@ public class FormLanguageTest {
                 .clickOptionsIcon()
                 .clickOnString(R.string.change_language)
                 .clickOnText("French (fr)")
-                .pressBack(new SaveOrDiscardFormDialog<>("One Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardForm()
 
                 .startBlankForm("One Question")

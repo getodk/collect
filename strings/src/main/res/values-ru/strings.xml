@@ -116,8 +116,7 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">Выйти из \"%s\"</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&lt;опросник не загружен&gt;</string>
-  <string name="keep_changes">Сохранить ответы</string>
+    <string name="keep_changes">Сохранить ответы</string>
   <string name="saving_form">Выполняется сохранение …</string>
   <string name="survey_saving_validating_message">Проверка ответов…</string>
   <string name="survey_saving_collecting_message">Сбор данных…</string>

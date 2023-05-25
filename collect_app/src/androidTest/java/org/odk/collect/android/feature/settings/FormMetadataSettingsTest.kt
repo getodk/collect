@@ -100,7 +100,7 @@ class FormMetadataSettingsTest {
             .pressBack(MainMenuPage())
             .startBlankForm("Metadata")
             .assertText("Chino")
-            .pressBack(SaveOrDiscardFormDialog("Metadata", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
             .clickDiscardForm()
             .openProjectSettingsDialog()
             .clickSettings()

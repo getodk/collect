@@ -48,9 +48,6 @@ object QuitFormDialog {
         currentProjectProvider: CurrentProjectProvider,
         onSaveChangesClicked: Runnable?
     ): AlertDialog {
-        val title: String =
-            if (formSaveViewModel.formName == null) activity.resources.getString(R.string.no_form_loaded) else formSaveViewModel.getFormName()
-
         val items: List<IconMenuItem> = if (
             settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)
         ) {
@@ -68,7 +65,7 @@ object QuitFormDialog {
         listView.adapter = adapter
 
         val dialog = MaterialAlertDialogBuilder(activity)
-            .setTitle(activity.resources.getString(R.string.quit_application, title))
+            .setTitle(activity.resources.getString(R.string.quit_form_title))
             .setNegativeButton(activity.resources.getString(R.string.do_not_exit)) { dialog: DialogInterface, id: Int ->
                 dialog.dismiss()
             }

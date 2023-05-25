@@ -93,8 +93,7 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">मधून निर्गमन करा %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&amp; Lt; कोणतेही फॉर्म लोड झाले &amp; gt;</string>
-  <string name="keep_changes">बदल जतन करा</string>
+    <string name="keep_changes">बदल जतन करा</string>
   <string name="saving_form">फॉर्म जतन केला जात आहे</string>
   <string name="survey_saving_validating_message">उत्तरे सत्यापित करीत आहे …</string>
   <string name="survey_saving_collecting_message">डेटा संकलित करत आहे …</string>

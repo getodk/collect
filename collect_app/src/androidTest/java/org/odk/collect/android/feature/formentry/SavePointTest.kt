@@ -40,7 +40,7 @@ class SavePointTest {
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog(AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log
@@ -84,7 +84,7 @@ class SavePointTest {
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog(AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log
@@ -116,7 +116,7 @@ class SavePointTest {
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog(AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log
@@ -156,7 +156,7 @@ class SavePointTest {
             .assertText("52")
             .pressBack(FormEntryPage("Two Question"))
             .assertQuestion("What is your name?")
-            .pressBack(SaveOrDiscardFormDialog("Two Question", AppClosedPage()))
+            .pressBack(SaveOrDiscardFormDialog(AppClosedPage()))
             .clickSaveChanges()
 
         // Check audit log

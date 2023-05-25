@@ -126,8 +126,7 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">Salir %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&lt;formulario no cargado&gt;</string>
-  <string name="do_not_save">Descartar formulario</string>
+    <string name="do_not_save">Descartar formulario</string>
   <string name="discard_changes">Descartar los cambios</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="saving_form">Guardando el formulario</string>

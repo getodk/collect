@@ -123,8 +123,7 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">خروج %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&lt; هیچ فورمی پر نشده است &gt;</string>
-  <string name="keep_changes">ذخیره تغییرات</string>
+    <string name="keep_changes">ذخیره تغییرات</string>
   <string name="saving_form">ذخیره فورم</string>
   <string name="survey_saving_validating_message">در حال اعتبار سنجی پاسخ ها</string>
   <string name="survey_saving_collecting_message">در حال جمع آوری داده ها…</string>

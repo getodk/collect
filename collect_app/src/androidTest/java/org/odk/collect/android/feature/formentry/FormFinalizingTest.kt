@@ -51,7 +51,7 @@ class FormFinalizingTest {
             .assertNumberOfFinalizedForms(0)
             .startBlankForm("One Question")
             .closeSoftKeyboard()
-            .pressBack(SaveOrDiscardFormDialog("One Question", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
             .clickSaveChanges()
             .assertNumberOfEditableForms(1)
             .assertNumberOfFinalizedForms(0)

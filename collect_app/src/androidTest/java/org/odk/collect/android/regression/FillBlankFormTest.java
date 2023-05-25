@@ -26,13 +26,13 @@ import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.pages.AddNewRepeatDialog;
 import org.odk.collect.android.support.pages.BlankFormSearchPage;
-import org.odk.collect.android.support.pages.ExitFormDialog;
 import org.odk.collect.android.support.pages.FillBlankFormPage;
 import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.FormHierarchyPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -55,7 +55,7 @@ public class FillBlankFormTest {
         rule.startAtMainMenu()
                 .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
-                .pressBack(new ExitFormDialog("All widgets"))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .assertText(R.string.save_as_draft)
                 .assertText(R.string.do_not_save)
                 .clickOnString(R.string.do_not_save)

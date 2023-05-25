@@ -4,13 +4,11 @@ import android.os.Build
 import org.odk.collect.android.R
 
 class SaveOrDiscardFormDialog<D : Page<D>>(
-    private val formName: String,
     private val destination: D
 ) : Page<SaveOrDiscardFormDialog<D>>() {
 
     override fun assertOnPage(): SaveOrDiscardFormDialog<D> {
-        val title = getTranslatedString(R.string.exit) + " " + formName
-        assertText(title)
+        assertText(R.string.quit_form_title)
         return this
     }
 

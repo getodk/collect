@@ -121,8 +121,7 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">%s を終了</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&lt;フォームが読み込まれていません&gt;</string>
-  <string name="keep_changes">変更を保存する</string>
+    <string name="keep_changes">変更を保存する</string>
   <string name="saving_form">フォームを保存中</string>
   <string name="survey_saving_validating_message">回答を検証中…</string>
   <string name="survey_saving_collecting_message">データ収集中…</string>

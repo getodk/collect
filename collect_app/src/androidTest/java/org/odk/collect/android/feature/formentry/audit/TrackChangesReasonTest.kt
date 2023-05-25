@@ -117,7 +117,6 @@ class TrackChangesReasonTest {
             .closeSoftKeyboard()
             .pressBack(
                 SaveOrDiscardFormDialog(
-                    "Track Changes Reason",
                     ChangesReasonPromptPage("Track Changes Reason")
                 )
             )
@@ -137,7 +136,7 @@ class TrackChangesReasonTest {
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
             .closeSoftKeyboard()
-            .pressBack(SaveOrDiscardFormDialog("Track Changes Reason", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
             .clickDiscardChanges()
     }
 
@@ -166,7 +165,7 @@ class TrackChangesReasonTest {
             .startBlankForm("Track Changes Reason")
             .clickSave()
             .closeSoftKeyboard()
-            .pressBack(SaveOrDiscardFormDialog("Track Changes Reason", MainMenuPage()))
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
             .clickSaveChanges()
     }
 }
