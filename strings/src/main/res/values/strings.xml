@@ -922,6 +922,7 @@
     <string name="found_in_main">Uncheck to hide from Main Menu</string>
     <string name="found_in_settings">Uncheck to hide from Unprotected Settings</string>
     <string name="form_entry">Uncheck to hide from Form Entry</string>
+    <string name="form_end">Uncheck to hide from Form End</string>
 
     <string name="reset_project_settings_title">Reset</string>
     <string name="reset_project_settings_subtext">Choose from settings, forms, data</string>
@@ -961,7 +962,8 @@
     <string name="moving_backwards_enabled_message">You may wish to review the following settings:\n\n\u2022 Edit Draft\n\u2022 Save Form\n\u2022 Go To Prompt\n\u2022 Constraint processing</string>
 
     <!-- Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end -->
-    <string name="save_mid">Save Form</string>
+    <string name="save_mid">Save as draft</string>
+    <string name="save_mid_summary">Save icon in top bar and \"Save as draft\" button when exiting form</string>
 
     <!--
      ##############################################
