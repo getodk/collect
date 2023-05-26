@@ -41,7 +41,7 @@ public class FormEntrySettingsTest {
                 .assertText(R.string.yes)
                 .assertText(R.string.no)
                 .clickOnString(R.string.yes)
-                .checkIfSaveFormOptionIsDisabled()
+                .checkIfSaveAsDraftInFormEntryOptionIsDisabled()
                 .pressBack(new AccessControlPage())
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())

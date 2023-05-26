@@ -1,11 +1,13 @@
 package org.odk.collect.android.support.pages
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.Matchers.not
 import org.odk.collect.android.R
+import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 
 class AccessControlPage : Page<AccessControlPage>() {
 
@@ -29,8 +31,13 @@ class AccessControlPage : Page<AccessControlPage>() {
         return this
     }
 
-    fun checkIfSaveFormOptionIsDisabled(): AccessControlPage {
-        onView(withText(getTranslatedString(R.string.save_all_answers))).check(matches(not(isEnabled())))
+    fun checkIfSaveAsDraftInFormEntryOptionIsDisabled(): AccessControlPage {
+        onView(withIndex(withText(getTranslatedString(R.string.save_mid)), 0)).check(matches(not(isEnabled())))
+        return this
+    }
+
+    fun clickOnSaveAsDraftInFormEnd(): AccessControlPage {
+        onView(withIndex(withText(getTranslatedString(R.string.save_mid)), 1)).perform(click())
         return this
     }
 
