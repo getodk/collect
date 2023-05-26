@@ -14,6 +14,7 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.verify;
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -82,6 +83,14 @@ public class TriggerWidgetTest {
 
         triggerButton.setChecked(true);
         verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test // https://github.com/getodk/collect/issues/5523
+    public void everyTriggerWidgetShouldHaveCheckboxWithUniqueID() {
+        TriggerWidget widget1 = createWidget(promptWithAnswer(new StringData("OK")));
+        TriggerWidget widget2 = createWidget(promptWithAnswer(new StringData("OK")));
+
+        assertThat(widget1.getCheckBox().getId(), not(equalTo(widget2.getCheckBox().getId())));
     }
 
     private TriggerWidget createWidget(FormEntryPrompt prompt) {
