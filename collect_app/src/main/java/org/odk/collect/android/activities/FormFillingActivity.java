@@ -190,7 +190,6 @@ import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -2238,7 +2237,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
 
             if (uri != null) {
-                settingsProvider.getMetaSettings().save(MetaKeys.LAST_SAVED_FORM_URI, uri.toString());
                 setResult(RESULT_OK, new Intent().setData(uri));
             }
         }

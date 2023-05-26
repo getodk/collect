@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
@@ -39,7 +40,6 @@ import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
@@ -58,6 +58,11 @@ class MainMenuActivity : LocalizedActivity() {
     private lateinit var binding: MainMenuBinding
     private lateinit var mainMenuViewModel: MainMenuViewModel
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
+
+    private val formLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            displayFormSavedSnackbar(it.data?.data)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
@@ -122,12 +127,6 @@ class MainMenuActivity : LocalizedActivity() {
         mainMenuViewModel.refreshInstances()
         setButtonsVisibility()
         manageGoogleDriveDeprecationBanner()
-
-        val formSavedUri = settingsProvider.getMetaSettings().getString(MetaKeys.LAST_SAVED_FORM_URI)
-        if (formSavedUri != null) {
-            displayFormSavedSnackbar(Uri.parse(formSavedUri))
-            settingsProvider.getMetaSettings().remove(MetaKeys.LAST_SAVED_FORM_URI)
-        }
     }
 
     private fun setButtonsVisibility() {
@@ -198,11 +197,13 @@ class MainMenuActivity : LocalizedActivity() {
 
     private fun initButtons() {
         binding.enterData.setOnClickListener {
-            startActivity(Intent(this, BlankFormListActivity::class.java))
+            formLauncher.launch(
+                Intent(this, BlankFormListActivity::class.java)
+            )
         }
 
         binding.reviewData.setOnClickListener {
-            startActivity(
+            formLauncher.launch(
                 Intent(this, InstanceChooserList::class.java).apply {
                     putExtra(
                         ApplicationConstants.BundleKeys.FORM_MODE,
@@ -321,7 +322,11 @@ class MainMenuActivity : LocalizedActivity() {
         }
     }
 
-    private fun displayFormSavedSnackbar(uri: Uri) {
+    private fun displayFormSavedSnackbar(uri: Uri?) {
+        if (uri == null) {
+            return
+        }
+
         val formSavedSnackbarType = mainMenuViewModel.getFormSavedSnackbarType(uri)
 
         formSavedSnackbarType?.let { it ->
@@ -329,7 +334,7 @@ class MainMenuActivity : LocalizedActivity() {
                 binding.root,
                 getString(it.message),
                 action = SnackbarUtils.Action(getString(it.actionName)) {
-                    startActivity(FormFillingIntentFactory.editInstanceIntent(this, uri))
+                    formLauncher.launch(FormFillingIntentFactory.editInstanceIntent(this, uri))
                 },
                 displayDismissButton = true
             )
