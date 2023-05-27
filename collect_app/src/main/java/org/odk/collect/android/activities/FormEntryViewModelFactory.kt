@@ -20,6 +20,7 @@ import org.odk.collect.android.formentry.saving.DiskFormSaver
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
@@ -42,7 +43,8 @@ class FormEntryViewModelFactory(
     private val permissionsChecker: PermissionsChecker,
     private val fusedLocationClient: LocationClient,
     private val permissionsProvider: PermissionsProvider,
-    private val autoSendSettingsProvider: AutoSendSettingsProvider
+    private val autoSendSettingsProvider: AutoSendSettingsProvider,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -50,6 +52,8 @@ class FormEntryViewModelFactory(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
+        val projectId = currentProjectProvider.getCurrentProject().uuid
+
         return when (modelClass) {
             FormEntryViewModel::class.java -> FormEntryViewModel(
                 System::currentTimeMillis,
@@ -58,17 +62,20 @@ class FormEntryViewModelFactory(
                 sessionId
             )
 
-            FormSaveViewModel::class.java -> FormSaveViewModel(
-                handle,
-                System::currentTimeMillis,
-                DiskFormSaver(),
-                mediaUtils,
-                scheduler,
-                audioRecorder,
-                currentProjectProvider,
-                formSessionRepository.get(sessionId),
-                entitiesRepositoryProvider.get(currentProjectProvider.getCurrentProject().uuid)
-            )
+            FormSaveViewModel::class.java -> {
+                FormSaveViewModel(
+                    handle,
+                    System::currentTimeMillis,
+                    DiskFormSaver(),
+                    mediaUtils,
+                    scheduler,
+                    audioRecorder,
+                    currentProjectProvider,
+                    formSessionRepository.get(sessionId),
+                    entitiesRepositoryProvider.get(projectId),
+                    instancesRepositoryProvider.get(projectId)
+                )
+            }
 
             BackgroundAudioViewModel::class.java -> {
                 val recordAudioActionRegistry = object : RecordAudioActionRegistry {
@@ -109,7 +116,12 @@ class FormEntryViewModelFactory(
 
             IdentityPromptViewModel::class.java -> IdentityPromptViewModel()
 
-            FormEndViewModel::class.java -> FormEndViewModel(formSessionRepository, sessionId, settingsProvider, autoSendSettingsProvider)
+            FormEndViewModel::class.java -> FormEndViewModel(
+                formSessionRepository,
+                sessionId,
+                settingsProvider,
+                autoSendSettingsProvider
+            )
 
             else -> throw IllegalArgumentException()
         } as T

@@ -62,7 +62,7 @@ object QuitFormDialog {
         )
 
         binding.discardChanges.setText(
-            if (formSaveViewModel.hasSaved()) {
+            if (formSaveViewModel.lastSavedTime != null) {
                 R.string.discard_changes
             } else {
                 R.string.do_not_save

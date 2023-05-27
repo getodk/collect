@@ -366,6 +366,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     public AutoSendSettingsProvider autoSendSettingsProvider;
 
     @Inject
+    public InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
     public SavedInstanceStateProvider savedInstanceStateProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
@@ -413,7 +416,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider, autoSendSettingsProvider);
+        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider, autoSendSettingsProvider, instancesRepositoryProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
