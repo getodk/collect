@@ -54,7 +54,6 @@ import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.forms.Form;
@@ -81,6 +80,7 @@ public class SaveFormToDisk {
     private final boolean shouldFinalize;
     private final FormController formController;
     private final MediaUtils mediaUtils;
+    private final InstancesRepository instancesRepository;
     private Uri uri;
     private String instanceName;
     private final ArrayList<String> tempFiles;
@@ -93,7 +93,7 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                          Uri uri, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository,  InstancesRepository instancesRepository) {
         this.formController = formController;
         this.mediaUtils = mediaUtils;
         this.uri = uri;
@@ -103,6 +103,7 @@ public class SaveFormToDisk {
         this.tempFiles = tempFiles;
         this.currentProjectId = currentProjectId;
         this.entitiesRepository = entitiesRepository;
+        this.instancesRepository = instancesRepository;
     }
 
     @Nullable
@@ -176,7 +177,7 @@ public class SaveFormToDisk {
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
-        InstancesRepository instances = new InstancesRepositoryProvider(Collect.getInstance()).get();
+        InstancesRepository instances = instancesRepository;
         Instance instance = instances.getOneByPath(instancePath);
 
         Instance.Builder instanceBuilder;
@@ -206,7 +207,7 @@ public class SaveFormToDisk {
                 instanceBuilder.geometry(geometryContentValues.second);
             }
 
-            Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
+            Instance newInstance = instancesRepository.save(instanceBuilder.build());
             uri = InstancesContract.getUri(currentProjectId, newInstance.getDbId());
         } else {
             Timber.i("No instance found, creating");
@@ -231,7 +232,7 @@ public class SaveFormToDisk {
             }
         }
 
-        Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
+        Instance newInstance = instancesRepository.save(instanceBuilder.build());
         uri = InstancesContract.getUri(currentProjectId, newInstance.getDbId());
     }
 
@@ -421,7 +422,6 @@ public class SaveFormToDisk {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                InstancesRepository instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
                 Instance instance = instancesRepository.get(ContentUriHelper.getIdFromUri(uri));
 
                 // Clear the geometry. Done outside of updateInstanceDatabase to avoid multiple

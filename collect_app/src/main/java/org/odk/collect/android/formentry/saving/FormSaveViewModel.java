@@ -222,7 +222,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                 handleTaskResult(saveToDiskResult, saveRequest);
                 clearMediaFiles();
             }
-        }, new ArrayList<>(originalFiles.values()), currentProjectProvider.getCurrentProject().getUuid(), entitiesRepository).execute();
+        }, new ArrayList<>(originalFiles.values()), currentProjectProvider.getCurrentProject().getUuid(), entitiesRepository, instancesRepository).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
@@ -471,9 +471,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         private final ArrayList<String> tempFiles;
         private final String currentProjectId;
         private final EntitiesRepository entitiesRepository;
+        private final InstancesRepository instancesRepository;
 
         SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaUtils mediaUtils,
-                 Listener listener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                 Listener listener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
@@ -482,6 +483,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             this.tempFiles = tempFiles;
             this.currentProjectId = currentProjectId;
             this.entitiesRepository = entitiesRepository;
+            this.instancesRepository = instancesRepository;
         }
 
         @Override
@@ -490,7 +492,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                     mediaUtils, saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
                     this::publishProgress, tempFiles,
-                    currentProjectId, entitiesRepository);
+                    currentProjectId, entitiesRepository, instancesRepository);
         }
 
         @Override
