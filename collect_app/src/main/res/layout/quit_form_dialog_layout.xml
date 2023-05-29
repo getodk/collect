@@ -24,6 +24,7 @@
         android:text="@string/discard_changes"
         app:icon="@drawable/ic_delete"
         app:iconGravity="textStart"
+        app:iconSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/save_explanation" />
@@ -37,6 +38,7 @@
         android:text="@string/keep_editing"
         app:icon="@drawable/ic_edit"
         app:iconGravity="textStart"
+        app:iconSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/discard_changes" />
@@ -50,6 +52,7 @@
         android:text="@string/save_as_draft"
         app:icon="@drawable/ic_save"
         app:iconGravity="textStart"
+        app:iconSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/discard_changes"
         app:layout_constraintStart_toStartOf="@id/discard_changes"
