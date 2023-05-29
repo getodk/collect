@@ -21,6 +21,8 @@ import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.shadow.api.Shadow.extract
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 @Config(shadows = [ShadowAndroidXAlertDialog::class])
@@ -110,9 +112,15 @@ class QuitFormDialogTest {
         val dialog = showDialog(activity)
 
         val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+
         assertThat(
             shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
-            equalTo(activity.getString(R.string.save_explanation_with_last_saved, 456L))
+            equalTo(
+                SimpleDateFormat(
+                    activity.getString(R.string.save_explanation_with_last_saved),
+                    Locale.getDefault()
+                ).format(456L)
+            )
         )
     }
 

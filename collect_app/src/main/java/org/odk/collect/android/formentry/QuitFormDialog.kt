@@ -9,6 +9,8 @@ import org.odk.collect.android.databinding.QuitFormDialogLayoutBinding
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object QuitFormDialog {
 
@@ -55,7 +57,8 @@ object QuitFormDialog {
             .create()
 
         binding.saveExplanation.text = if (lastSavedTime != null) {
-            activity.getString(R.string.save_explanation_with_last_saved, lastSavedTime)
+            val string = activity.getString(R.string.save_explanation_with_last_saved)
+            SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
         } else if (!saveAsDraft) {
             activity.getString(R.string.discard_form_warning)
         } else {
