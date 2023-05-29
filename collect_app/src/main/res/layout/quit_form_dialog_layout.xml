@@ -45,14 +45,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/save_changes"
-        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+        style="@style/Widget.Material3.Button.Icon"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/save_as_draft"
         app:icon="@drawable/ic_save"
         app:iconGravity="textStart"
-        app:iconSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/discard_changes"
         app:layout_constraintStart_toStartOf="@id/discard_changes"
