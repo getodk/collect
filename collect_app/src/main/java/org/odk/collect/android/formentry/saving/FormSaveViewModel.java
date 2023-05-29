@@ -83,6 +83,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private final CurrentProjectProvider currentProjectProvider;
     private final EntitiesRepository entitiesRepository;
     private final InstancesRepository instancesRepository;
+    private Instance instance;
 
     public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
         this.stateHandle = stateHandle;
@@ -102,7 +103,12 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             recentFiles = stateHandle.get(RECENT_FILES);
         }
 
-        LiveDataUtils.observe(formSession, it -> this.formController = it.getFormController());
+        LiveDataUtils.observe(formSession, it -> {
+            formController = it.getFormController();
+
+            File instanceFile = this.formController.getInstanceFile();
+            instance = instancesRepository.getOneByPath(instanceFile.getAbsolutePath());
+        });
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
@@ -229,6 +235,8 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         if (formController == null) {
             return;
         }
+
+        instance = taskResult.getInstance();
 
         switch (taskResult.getSaveResult()) {
             case SAVED:
@@ -390,8 +398,6 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     }
 
     public Long getLastSavedTime() {
-        Instance instance = instancesRepository.getOneByPath(formController.getInstanceFile().getAbsolutePath());
-
         if (instance != null) {
             return instance.getLastStatusChangeDate();
         } else {

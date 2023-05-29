@@ -23,6 +23,7 @@ import static org.odk.collect.androidshared.livedata.LiveDataUtils.liveDataOf;
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -82,6 +83,7 @@ public class FormSaveViewModelTest {
     private final EntitiesRepository entitiesRepository = mock(EntitiesRepository.class);
 
     private final InstancesRepository instancesRepository = new InMemInstancesRepository();
+    private MutableLiveData<FormSession> formSession;
 
     @Before
     public void setup() {
@@ -102,7 +104,7 @@ public class FormSaveViewModelTest {
         currentProjectProvider = mock(CurrentProjectProvider.class);
         when(currentProjectProvider.getCurrentProject()).thenReturn(Project.Companion.getDEMO_PROJECT());
 
-        LiveData<FormSession> formSession = liveDataOf(new FormSession(formController, form));
+        formSession = new MutableLiveData<>(new FormSession(formController, form));
         viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository, instancesRepository);
 
         CollectHelpers.createDemoProject(); // Needed to deal with `new StoragePathProvider()` calls in `FormSaveViewModel`
@@ -576,26 +578,29 @@ public class FormSaveViewModelTest {
     }
 
     @Test
-    public void getLastSavedTime_whenFormInstanceFileDoesNotExist_returnsNull() {
-        File emptyPath = new File(TempFiles.getPathInTempDir());
-        assertThat(emptyPath.exists(), equalTo(false));
-
-        when(formController.getInstanceFile()).thenReturn(emptyPath);
+    public void getLastSavedTime_whenNewInstance_returnsNull() {
         assertThat(viewModel.getLastSavedTime(), equalTo(null));
     }
 
     @Test
-    public void getLastSavedTime_whenFormInstanceFileExists_returnsLastStatusChange() {
-        File instanceFile = new File(TempFiles.getPathInTempDir());
-
-        instancesRepository.save(new Instance.Builder()
+    public void getLastSavedTime_whenInstanceNotSaved_returnsLastStatusChange() {
+        File instanceFile = TempFiles.createTempFile("instance", ".xml");
+        when(formController.getInstanceFile()).thenReturn(instanceFile.getAbsoluteFile());
+        Instance instance = instancesRepository.save(new Instance.Builder()
                 .instanceFilePath(instanceFile.getAbsolutePath())
-                .lastStatusChangeDate(123L)
                 .build()
         );
 
-        when(formController.getInstanceFile()).thenReturn(instanceFile);
-        assertThat(viewModel.getLastSavedTime(), equalTo(123L));
+        formSession.setValue(new FormSession(formController, form));
+        assertThat(viewModel.getLastSavedTime(), equalTo(instance.getLastStatusChangeDate()));
+    }
+
+    @Test
+    public void getLastSavedTime_whenInstanceSaved_returnsLastStatusChange() {
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
+
+        assertThat(viewModel.getLastSavedTime(), equalTo(formSaver.instance.getLastStatusChangeDate()));
     }
 
     private void whenReasonRequiredToSave() {
@@ -623,11 +628,21 @@ public class FormSaveViewModelTest {
 
         public int numberOfTimesCalled;
 
+        public final Instance instance = new Instance.Builder()
+                .lastStatusChangeDate(123L)
+                .build();
+
         @Override
         public SaveToDiskResult save(Uri instanceContentURI, FormController formController, MediaUtils mediaUtils, boolean shouldFinalize,
                                      boolean exitAfter, String updatedSaveName, ProgressListener progressListener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
             this.tempFiles = tempFiles;
             numberOfTimesCalled++;
+
+            if (saveToDiskResult.getSaveResult() == SaveFormToDisk.SAVED) {
+                saveToDiskResult.setInstance(new Instance.Builder()
+                        .lastStatusChangeDate(123L)
+                        .build());
+            }
 
             return saveToDiskResult;
         }
