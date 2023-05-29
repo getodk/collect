@@ -6,13 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.forms.Form
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.strings.UUIDGenerator
 
 interface FormSessionRepository {
     fun create(): String
     fun get(id: String): LiveData<FormSession>
-    fun set(id: String, formController: FormController, form: Form)
     fun clear(id: String)
+
+    fun set(id: String, formController: FormController, form: Form) {
+        set(id, formController, form, null)
+    }
+
+    fun set(id: String, formController: FormController, form: Form, instance: Instance?)
 }
 
 class AppStateFormSessionRepository(application: Application) : FormSessionRepository {
@@ -27,8 +33,8 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
         return getLiveData(id)
     }
 
-    override fun set(id: String, formController: FormController, form: Form) {
-        getLiveData(id).value = FormSession(formController, form)
+    override fun set(id: String, formController: FormController, form: Form, instance: Instance?) {
+        getLiveData(id).value = FormSession(formController, form, instance)
     }
 
     override fun clear(id: String) {
@@ -45,7 +51,8 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
     }
 }
 
-data class FormSession(
+data class FormSession @JvmOverloads constructor(
     val formController: FormController,
-    val form: Form
+    val form: Form,
+    val instance: Instance? = null
 )

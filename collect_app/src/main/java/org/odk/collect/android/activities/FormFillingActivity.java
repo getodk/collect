@@ -588,7 +588,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
-        formSessionRepository.set(sessionId, formController, formsRepository.getOneByPath(formPath));
+        Form form = formsRepository.getOneByPath(formPath);
+        String instancePath = formController.getInstanceFile().getAbsolutePath();
+        Instance instance = instancesRepositoryProvider.get().getOneByPath(instancePath);
+        formSessionRepository.set(sessionId, formController, form, instance);
 
         AnalyticsUtils.setForm(formController);
 

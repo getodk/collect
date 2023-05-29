@@ -584,14 +584,11 @@ public class FormSaveViewModelTest {
 
     @Test
     public void getLastSavedTime_whenInstanceNotSaved_returnsLastStatusChange() {
-        File instanceFile = TempFiles.createTempFile("instance", ".xml");
-        when(formController.getInstanceFile()).thenReturn(instanceFile.getAbsoluteFile());
-        Instance instance = instancesRepository.save(new Instance.Builder()
-                .instanceFilePath(instanceFile.getAbsolutePath())
-                .build()
-        );
+        Instance instance = new Instance.Builder()
+                .lastStatusChangeDate(123L)
+                .build();
 
-        formSession.setValue(new FormSession(formController, form));
+        formSession.setValue(new FormSession(formController, form, instance));
         assertThat(viewModel.getLastSavedTime(), equalTo(instance.getLastStatusChangeDate()));
     }
 

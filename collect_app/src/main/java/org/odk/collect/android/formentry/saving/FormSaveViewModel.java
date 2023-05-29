@@ -105,9 +105,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
         LiveDataUtils.observe(formSession, it -> {
             formController = it.getFormController();
-
-            File instanceFile = this.formController.getInstanceFile();
-            instance = instancesRepository.getOneByPath(instanceFile.getAbsolutePath());
+            instance = it.getInstance();
         });
     }
 
