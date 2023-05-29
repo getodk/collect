@@ -8,11 +8,18 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.CollectHelpers
 
 @RunWith(AndroidJUnit4::class)
 class FormHierarchyActivityTest {
+
+    @Before
+    fun setup() {
+        CollectHelpers.setupDemoProject()
+    }
 
     /**
      * This can happen if the app process is restored after being kicked from memory.
