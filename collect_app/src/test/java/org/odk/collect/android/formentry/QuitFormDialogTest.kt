@@ -8,8 +8,10 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.settings.InMemSettingsProvider
@@ -24,8 +26,11 @@ import org.robolectric.shadow.api.Shadow.extract
 @Config(shadows = [ShadowAndroidXAlertDialog::class])
 class QuitFormDialogTest {
 
-    private val formSaveViewModel = mock(FormSaveViewModel::class.java)
-    private val formEntryViewModel = mock(FormEntryViewModel::class.java)
+    private val formSaveViewModel = mock<FormSaveViewModel>() {
+        on { lastSavedTime } doReturn null
+    }
+
+    private val formEntryViewModel = mock<FormEntryViewModel>()
     private val settingsProvider = InMemSettingsProvider()
 
     @Test
@@ -94,6 +99,20 @@ class QuitFormDialogTest {
         assertThat(
             shadowDialog.getView().findViewById<View>(R.id.save_changes).visibility,
             equalTo(View.GONE)
+        )
+    }
+
+    @Test
+    fun whenLastSavedTimeIsNotNull_showsLastSavedTime() {
+        whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
+
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+        assertThat(
+            shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
+            equalTo(activity.getString(R.string.save_explanation_with_last_saved, 456L))
         )
     }
 

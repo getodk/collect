@@ -40,6 +40,7 @@ object QuitFormDialog {
     ): AlertDialog {
         val saveAsDraft = settingsProvider.getProtectedSettings()
             .getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)
+        val lastSavedTime = formSaveViewModel.lastSavedTime
 
         val binding = QuitFormDialogLayoutBinding.inflate(activity.layoutInflater)
         val dialog = MaterialAlertDialogBuilder(activity)
@@ -53,16 +54,16 @@ object QuitFormDialog {
             .setView(binding.root)
             .create()
 
-        binding.saveExplanation.setText(
-            if (saveAsDraft) {
-                R.string.save_explanation
-            } else {
-                R.string.discard_form_warning
-            }
-        )
+        binding.saveExplanation.text = if (lastSavedTime != null) {
+            activity.getString(R.string.save_explanation_with_last_saved, lastSavedTime)
+        } else if (!saveAsDraft) {
+            activity.getString(R.string.discard_form_warning)
+        } else {
+            activity.getString(R.string.save_explanation)
+        }
 
         binding.discardChanges.setText(
-            if (formSaveViewModel.lastSavedTime != null) {
+            if (lastSavedTime != null) {
                 R.string.discard_changes
             } else {
                 R.string.do_not_save

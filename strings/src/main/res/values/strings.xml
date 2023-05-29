@@ -170,6 +170,7 @@
     <string name="keep_editing">Keep editing</string>
     <string name="quit_form_title">Save form?</string>
     <string name="save_explanation">You can save this form and access it from your drafts at any time.</string>
+    <string name="save_explanation_with_last_saved">This form was last saved on %d. Save as draft to keep changes.</string>
     <string name="quit_form_continue_title">Continue editing?</string>
     <string name="discard_form_warning">If you discard form, you will lost any changes you made so far.</string>
 
