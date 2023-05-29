@@ -37,17 +37,18 @@ class FormMediaDownloader(
             val existingFile = searchForExistingMediaFile(formToDownload, mediaFile)
             existingFile.let {
                 if (it != null) {
-                    if (getMd5Hash(it).contentEquals(mediaFile.hash)) {
+                    val fileHash = getMd5Hash(it)
+                    if (fileHash.contentEquals(mediaFile.hash)) {
                         copyFile(it, tempMediaFile)
                     } else {
+                        if (test) {
+                            throw Exception("Content does not equal: $fileHash but mediafilehash: ${mediaFile.hash}")
+                        }
                         val existingFileHash = getMd5Hash(it)
                         val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                         interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
 
                         if (!getMd5Hash(tempMediaFile).contentEquals(existingFileHash)) {
-                            if (test) {
-                                throw Exception("Content does not equal")
-                            }
                             atLeastOneNewMediaFileDetected = true
                         }
                     }
