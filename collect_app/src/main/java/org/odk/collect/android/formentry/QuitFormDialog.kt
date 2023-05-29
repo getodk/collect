@@ -56,11 +56,11 @@ object QuitFormDialog {
             .setView(binding.root)
             .create()
 
-        binding.saveExplanation.text = if (lastSavedTime != null) {
+        binding.saveExplanation.text = if (!saveAsDraft) {
+            activity.getString(R.string.discard_form_warning)
+        } else if (lastSavedTime != null) {
             val string = activity.getString(R.string.save_explanation_with_last_saved)
             SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
-        } else if (!saveAsDraft) {
-            activity.getString(R.string.discard_form_warning)
         } else {
             activity.getString(R.string.save_explanation)
         }

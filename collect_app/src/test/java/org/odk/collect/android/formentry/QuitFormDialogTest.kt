@@ -68,8 +68,9 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun whenSaveAsDraftIsEnabled_showsSaveExplanation() {
+    fun whenSaveAsDraftIsEnabled_andLastSavedTimeIsNull_showsSaveExplanation() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
@@ -82,8 +83,30 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun whenSaveAsDraftIsDisabled_showsWarningTitleAndMessage_andHidesButton() {
+    fun whenSaveAsDraftIsEnabled_andLastSavedTimeIsNotNull_showsLastSavedTime() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
+
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+
+        assertThat(
+            shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
+            equalTo(
+                SimpleDateFormat(
+                    activity.getString(R.string.save_explanation_with_last_saved),
+                    Locale.getDefault()
+                ).format(456L)
+            )
+        )
+    }
+
+    @Test
+    fun whenSaveAsDraftIsDisabled__andLastSavedTimeIsNull_showsWarningTitleAndMessage_andHidesButton() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
@@ -105,7 +128,8 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun whenLastSavedTimeIsNotNull_showsLastSavedTime() {
+    fun whenSaveAsDraftIsDisabled__andLastSavedTimeIsNotNull_showsWarningTitleAndMessage_andHidesButton() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
         whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
@@ -114,13 +138,16 @@ class QuitFormDialogTest {
         val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
 
         assertThat(
+            shadowDialog.title,
+            equalTo(activity.getString(R.string.quit_form_continue_title))
+        )
+        assertThat(
             shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
-            equalTo(
-                SimpleDateFormat(
-                    activity.getString(R.string.save_explanation_with_last_saved),
-                    Locale.getDefault()
-                ).format(456L)
-            )
+            equalTo(activity.getString(R.string.discard_form_warning))
+        )
+        assertThat(
+            shadowDialog.getView().findViewById<View>(R.id.save_changes).visibility,
+            equalTo(View.GONE)
         )
     }
 
