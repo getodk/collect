@@ -409,4 +409,16 @@ class MainMenuActivityTest {
             assertThat(dialog, notNullValue())
         }
     }
+
+    @Test
+    fun `when shouldAskForPermissions is false, does not show permissions dialog`() {
+        whenever(permissionsViewModel.shouldAskForPermissions()).doReturn(false)
+
+        val scenario = launcherRule.launch(MainMenuActivity::class.java)
+        scenario.onActivity {
+            val dialog =
+                it.supportFragmentManager.findFragmentByTag(PermissionsDialogFragment::class.java.name)
+            assertThat(dialog, equalTo(null))
+        }
+    }
 }
