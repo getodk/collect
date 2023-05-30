@@ -50,6 +50,7 @@ class FormMediaDownloader(
                                     "firstOrNullLog: $firstOrNullLog"
                             )
                         }
+
                         val existingFileHash = getMd5Hash(it)
                         val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
                         interuptablyWriteFile(file, tempMediaFile, tempDir, stateListener)
