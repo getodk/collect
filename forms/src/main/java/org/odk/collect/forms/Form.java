@@ -295,6 +295,7 @@ public final class Form {
         return "Form{" +
                 "formId='" + formId + '\'' +
                 "version='" + version + '\'' +
+                "formMediaPath='" + formMediaPath + '\'' +
                 '}';
     }
 }

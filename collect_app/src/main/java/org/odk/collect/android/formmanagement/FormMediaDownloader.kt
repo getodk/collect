@@ -34,7 +34,7 @@ class FormMediaDownloader(
 
             val tempMediaFile = File(tempMediaDir, mediaFile.filename)
 
-            val existingFile = searchForExistingMediaFile(formToDownload, mediaFile, test)
+            val existingFile = searchForExistingMediaFile(formToDownload, mediaFile)
             existingFile.let {
                 if (it != null) {
                     val fileHash = getMd5Hash(it)
@@ -42,7 +42,11 @@ class FormMediaDownloader(
                         copyFile(it, tempMediaFile)
                     } else {
                         if (test) {
-                            throw Exception("Content does not equal: $fileHash but mediafilehash: ${mediaFile.hash}")
+                            throw Exception("Content does not equal: $fileHash but mediafilehash: ${mediaFile.hash}. " +
+                                    "allFormVersionsLog: $allFormVersionsLog " +
+                                    "allFormVersionsSortedLog: $allFormVersionsSortedLog " +
+                                    "allFormVersionsMappedLog: $allFormVersionsMappedLog " +
+                                    "firstOrNullLog: $firstOrNullLog")
                         }
                         val existingFileHash = getMd5Hash(it)
                         val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
@@ -68,19 +72,36 @@ class FormMediaDownloader(
 
     private fun searchForExistingMediaFile(
         formToDownload: ServerFormDetails,
-        mediaFile: MediaFile,
-        test: Boolean
+        mediaFile: MediaFile
     ): File? {
         val allFormVersions = formsRepository.getAllByFormId(formToDownload.formId)
-        if (test && allFormVersions.size == 1) {
-            throw Exception("allFormVersions with only 1 element")
-        }
-        return allFormVersions.sortedByDescending {
+        allFormVersionsLog = allFormVersions.toString()
+
+        val sortedList = allFormVersions.sortedByDescending {
             it.date
-        }.map { form: Form ->
+        }
+
+        allFormVersionsSortedLog = sortedList.toString()
+
+        val mappedList = sortedList.map { form: Form ->
             File(form.formMediaPath, mediaFile.filename)
-        }.firstOrNull { file: File ->
+        }
+
+        allFormVersionsMappedLog = mappedList.toString()
+
+        val firstOrNull = mappedList.firstOrNull { file: File ->
             file.exists()
         }
+
+        firstOrNullLog = firstOrNull.toString()
+
+        return firstOrNull
+    }
+
+    companion object {
+        private var allFormVersionsLog: String = ""
+        private var allFormVersionsSortedLog: String = ""
+        private var allFormVersionsMappedLog: String = ""
+        private var firstOrNullLog: String = ""
     }
 }
