@@ -42,11 +42,13 @@ class FormMediaDownloader(
                         copyFile(it, tempMediaFile)
                     } else {
                         if (test) {
-                            throw Exception("Content does not equal: $fileHash but mediafilehash: ${mediaFile.hash}. " +
+                            throw Exception(
+                                "Content does not equal: $fileHash but mediafilehash: ${mediaFile.hash}. " +
                                     "allFormVersionsLog: $allFormVersionsLog " +
                                     "allFormVersionsSortedLog: $allFormVersionsSortedLog " +
                                     "allFormVersionsMappedLog: $allFormVersionsMappedLog " +
-                                    "firstOrNullLog: $firstOrNullLog")
+                                    "firstOrNullLog: $firstOrNullLog"
+                            )
                         }
                         val existingFileHash = getMd5Hash(it)
                         val file = formSource.fetchMediaFile(mediaFile.downloadUrl)
