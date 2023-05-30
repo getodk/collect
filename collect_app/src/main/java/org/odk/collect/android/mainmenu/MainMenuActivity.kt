@@ -33,7 +33,6 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.crashhandler.CrashHandler
-import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
@@ -51,9 +50,6 @@ class MainMenuActivity : LocalizedActivity() {
 
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
-
-    @Inject
-    lateinit var permissionChecker: PermissionsChecker
 
     private lateinit var binding: MainMenuBinding
     private lateinit var mainMenuViewModel: MainMenuViewModel
