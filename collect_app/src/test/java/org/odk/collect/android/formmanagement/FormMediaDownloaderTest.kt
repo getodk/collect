@@ -18,9 +18,9 @@ class FormMediaDownloaderTest {
 
     @Test
     fun `returns false when there is an existing copy of a media file and an older one`() {
-
         // Save forms
         val formsRepository = InMemFormsRepository()
+
         val form1 = FormFixtures.form(
             version = "1",
             date = 1,
