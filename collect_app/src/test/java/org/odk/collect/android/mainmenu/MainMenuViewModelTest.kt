@@ -12,7 +12,6 @@ import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvi
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
@@ -31,7 +30,6 @@ class MainMenuViewModelTest {
         whenever(get()).thenReturn(instancesRepository)
     }
     private val autoSendSettingsProvider = mock<AutoSendSettingsProvider>()
-    private val networkStateProvider = mock<NetworkStateProvider>()
 
     @Test
     fun `version when beta release returns semantic version with prefix and beta version`() {
@@ -146,33 +144,10 @@ class MainMenuViewModelTest {
         )
 
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
-        whenever(networkStateProvider.isDeviceOnline).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
         val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
         assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.SENDING))
-    }
-
-    @Test
-    fun `getFormSavedSnackbarType should return SENDING_NO_INTERNET_CONNECTION snackbar type when the corresponding instance is finalized and auto send is enabled but there is no interenet connection`() {
-        val viewModel = createViewModelWithVersion("")
-
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
-        val instance = instancesRepository.save(
-            Instance.Builder()
-                .formId("1")
-                .formVersion("1")
-                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
-                .status(Instance.STATUS_COMPLETE)
-                .build()
-        )
-
-        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
-        whenever(networkStateProvider.isDeviceOnline).thenReturn(false)
-
-        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
-        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.SENDING_NO_INTERNET_CONNECTION))
     }
 
     @Test
@@ -190,7 +165,6 @@ class MainMenuViewModelTest {
         )
 
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
-        whenever(networkStateProvider.isDeviceOnline).thenReturn(false)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
         val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
@@ -212,7 +186,6 @@ class MainMenuViewModelTest {
         )
 
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
-        whenever(networkStateProvider.isDeviceOnline).thenReturn(false)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
         val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
@@ -220,6 +193,6 @@ class MainMenuViewModelTest {
     }
 
     private fun createViewModelWithVersion(version: String): MainMenuViewModel {
-        return MainMenuViewModel(mock(), VersionInformation { version }, mock(), mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider, networkStateProvider)
+        return MainMenuViewModel(mock(), VersionInformation { version }, mock(), mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider)
     }
 }

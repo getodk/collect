@@ -1201,7 +1201,6 @@
     <string name="form_saved_as_draft">Your form was saved as a draft.</string>
     <string name="form_saved">Your form was saved.</string>
     <string name="form_sending">Sending form…</string>
-    <string name="form_sending_failed">It looks like you\'re offline. Form will be sent when you\'re online.</string>
     <string name="edit_form">Edit</string>
     <string name="view_form">View</string>
     <string name="close_snackbar">Close snackbar</string>

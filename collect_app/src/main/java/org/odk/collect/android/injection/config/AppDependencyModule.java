@@ -497,8 +497,8 @@ public class AppDependencyModule {
                                                                      Scheduler scheduler, CurrentProjectProvider currentProjectProvider,
                                                                      AnalyticsInitializer analyticsInitializer, PermissionsChecker permissionChecker,
                                                                      FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider,
-                                                                     AutoSendSettingsProvider autoSendSettingsProvider, NetworkStateProvider networkStateProvide) {
-        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesAppState, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider, networkStateProvide);
+                                                                     AutoSendSettingsProvider autoSendSettingsProvider) {
+        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesAppState, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider);
     }
 
     @Provides

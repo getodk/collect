@@ -26,8 +26,7 @@ open class MainMenuViewModelFactory(
     private val permissionChecker: PermissionsChecker,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val autoSendSettingsProvider: AutoSendSettingsProvider,
-    private val networkStateProvider: NetworkStateProvider
+    private val autoSendSettingsProvider: AutoSendSettingsProvider
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when (modelClass) {
@@ -39,8 +38,7 @@ open class MainMenuViewModelFactory(
                 scheduler,
                 formsRepositoryProvider,
                 instancesRepositoryProvider,
-                autoSendSettingsProvider,
-                networkStateProvider
+                autoSendSettingsProvider
             )
 
             CurrentProjectViewModel::class.java -> CurrentProjectViewModel(

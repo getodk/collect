@@ -14,7 +14,6 @@ import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.settings.SettingsProvider
@@ -28,8 +27,7 @@ class MainMenuViewModel(
     private val scheduler: Scheduler,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val autoSendSettingsProvider: AutoSendSettingsProvider,
-    private val networkStateProvider: NetworkStateProvider
+    private val autoSendSettingsProvider: AutoSendSettingsProvider
 ) : ViewModel() {
 
     val version: String
@@ -114,11 +112,7 @@ class MainMenuViewModel(
                 Instance.STATUS_COMPLETE -> {
                     val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
                     if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
-                        if (networkStateProvider.isDeviceOnline) {
-                            FormSavedSnackbarType.SENDING
-                        } else {
-                            FormSavedSnackbarType.SENDING_NO_INTERNET_CONNECTION
-                        }
+                        FormSavedSnackbarType.SENDING
                     } else {
                         FormSavedSnackbarType.FINALIZED
                     }
