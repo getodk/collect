@@ -99,13 +99,16 @@ object SnackbarUtils {
             }
 
             if (action != null) {
-                setAction(action.text, action.listener)
+                setAction(action.text) {
+                    action.listener.invoke()
+                    dismiss()
+                }
             }
         }.show()
     }
 
     data class Action(
         val text: String,
-        val listener: View.OnClickListener
+        val listener: () -> Unit
     )
 }
