@@ -104,7 +104,7 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun whenSaveAsDraftIsDisabled__andLastSavedTimeIsNull_showsWarningTitleAndMessage_andHidesButton() {
+    fun whenSaveAsDraftIsDisabled_andLastSavedTimeIsNull_showsWarningTitleAndMessage_andHidesButton() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
         whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
@@ -128,7 +128,7 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun whenSaveAsDraftIsDisabled__andLastSavedTimeIsNotNull_showsWarningTitleAndMessage_andHidesButton() {
+    fun whenSaveAsDraftIsDisabled_andLastSavedTimeIsNotNull_showsWarningTitleAndMessage_andHidesButton() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
         whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
 
