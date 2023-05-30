@@ -78,7 +78,19 @@ object QuitFormDialog {
             }
         )
 
-        binding.keepEditing.setOnClickListener {
+        if (saveAsDraft) {
+            binding.keepEditingOutlined.isVisible = true
+            binding.keepEditingFilled.isVisible = false
+        } else {
+            binding.keepEditingOutlined.isVisible = false
+            binding.keepEditingFilled.isVisible = true
+        }
+
+        binding.keepEditingOutlined.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.keepEditingFilled.setOnClickListener {
             dialog.dismiss()
         }
 

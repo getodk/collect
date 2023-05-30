@@ -56,13 +56,25 @@ class QuitFormDialogTest {
     }
 
     @Test
-    fun clickingKeepEditing_dismissesDialog() {
+    fun clickingOutlinedKeepEditing_dismissesDialog() {
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
 
         val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
         val view = shadowDialog.getView()
-        view.findViewById<View>(R.id.keep_editing).performClick()
+        view.findViewById<View>(R.id.keep_editing_outlined).performClick()
+
+        assertThat(dialog.isShowing, equalTo(false))
+    }
+
+    @Test
+    fun clickingFilledKeepEditing_dismissesDialog() {
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+        val view = shadowDialog.getView()
+        view.findViewById<View>(R.id.keep_editing_filled).performClick()
 
         assertThat(dialog.isShowing, equalTo(false))
     }
@@ -100,6 +112,25 @@ class QuitFormDialogTest {
                     Locale.getDefault()
                 ).format(456L)
             )
+        )
+    }
+
+    @Test
+    fun whenSaveAsDraftIsEnabled_showsOutlinedKeepEditing_andHidesFilledKeepEditing() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+
+        assertThat(
+            shadowDialog.getView().findViewById<View>(R.id.keep_editing_outlined).visibility,
+            equalTo(View.VISIBLE)
+        )
+        assertThat(
+            shadowDialog.getView().findViewById<View>(R.id.keep_editing_filled).visibility,
+            equalTo(View.GONE)
         )
     }
 
@@ -153,6 +184,26 @@ class QuitFormDialogTest {
         assertThat(
             shadowDialog.getView().findViewById<View>(R.id.save_changes).visibility,
             equalTo(View.GONE)
+        )
+    }
+
+    @Test
+    fun whenSaveAsDraftIsDisabled_hidesOutlinedKeepEditing_andShowsFilledKeepEditing() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+        whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
+
+        val activity = Robolectric.buildActivity(Activity::class.java).get()
+        val dialog = showDialog(activity)
+
+        val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
+
+        assertThat(
+            shadowDialog.getView().findViewById<View>(R.id.keep_editing_outlined).visibility,
+            equalTo(View.GONE)
+        )
+        assertThat(
+            shadowDialog.getView().findViewById<View>(R.id.keep_editing_filled).visibility,
+            equalTo(View.VISIBLE)
         )
     }
 
