@@ -143,7 +143,12 @@ class QuitFormDialogTest {
         )
         assertThat(
             shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
-            equalTo(activity.getString(R.string.discard_form_warning))
+            equalTo(
+                SimpleDateFormat(
+                    activity.getString(R.string.discard_changes_warning),
+                    Locale.getDefault()
+                ).format(456L)
+            )
         )
         assertThat(
             shadowDialog.getView().findViewById<View>(R.id.save_changes).visibility,
