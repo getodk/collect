@@ -55,8 +55,6 @@
     <string name="sort_by_date_asc">Date, oldest first</string>
     <!-- A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first. -->
     <string name="sort_by_last_saved">Last saved first</string>
-    <string name="sort_by_status_asc">Status, finalized first</string>
-    <string name="sort_by_status_desc">Status, unfinalized first</string>
     <string name="filter_the_list">Filter the list</string>
     <!-- Displayed in search boxes for form lists or question types that involve search -->
     <string name="search">Search</string>

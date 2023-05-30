@@ -39,8 +39,6 @@
   <string name="sort_by_date_desc">За датою, найновіший перший</string>
   <string name="sort_by_date_asc">За датою, найстарший перший</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_asc">За статусом, завершені перші</string>
-  <string name="sort_by_status_desc">За статусом, незавершені перші</string>
   <string name="filter_the_list">Фільтрувати список</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Пошук</string>

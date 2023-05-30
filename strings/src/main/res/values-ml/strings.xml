@@ -29,8 +29,6 @@
   <string name="sort_by_date_desc">തിയതി, പുതിയത് ആദ്യം </string>
   <string name="sort_by_date_asc">തിയതി, പഴയത് ആദ്യം</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_asc">സ്റ്റാറ്റസ് , അവസാനിപ്പിച്ചത് ആദ്യം </string>
-  <string name="sort_by_status_desc">സ്റ്റാറ്റസ്, അവസാനിപ്പിക്കാത്തത് ആദ്യം </string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">തിരയുക</string>
   <string name="no_items_display">സ്‌ക്രീനിൽ കാണിക്കുവാൻ ഒന്നും ലഭ്യം അല്ല </string>

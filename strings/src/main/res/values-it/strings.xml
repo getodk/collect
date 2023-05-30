@@ -42,8 +42,6 @@
   <string name="sort_by_date_asc">Per data, prima i meno recenti</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_last_saved">L\'ultimo salvato per primo</string>
-  <string name="sort_by_status_asc">Per stato, prima quelli completati</string>
-  <string name="sort_by_status_desc">Per stato, prima quelli non completati</string>
   <string name="filter_the_list">Filtra la lista</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Ricerca</string>

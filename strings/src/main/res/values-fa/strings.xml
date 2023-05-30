@@ -40,8 +40,6 @@
   <string name="sort_by_date_desc">تاریخ،  جدیدترین در اولویت</string>
   <string name="sort_by_date_asc">تاریخ،  قدیمی ترها در اولویت</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_asc">وضعیت، ابتدا نهایی شد</string>
-  <string name="sort_by_status_desc">وضعیت، ابتدا نهایی نشده است</string>
   <string name="filter_the_list">فلتر لیست</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">جستجو</string>

@@ -37,8 +37,6 @@
   <string name="sort_by_date_desc">Datë, më të rejat në fillim</string>
   <string name="sort_by_date_asc">Datë, më të vjetrat në fillim</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_asc">Status, të përmbyllurat të parat</string>
-  <string name="sort_by_status_desc">Status, të papërmbyllurat të parat</string>
   <string name="filter_the_list">Filtro listën</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Kërko</string>

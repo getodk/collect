@@ -39,8 +39,6 @@
   <string name="sort_by_date_desc">Tanggal, baru ke lama</string>
   <string name="sort_by_date_asc">Tanggal, lama ke baru</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_asc">Status, terfinalisasi paling atas</string>
-  <string name="sort_by_status_desc">Status, belum terfinalisasi paling atas</string>
   <string name="filter_the_list">Pilah daftar</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Cari</string>
