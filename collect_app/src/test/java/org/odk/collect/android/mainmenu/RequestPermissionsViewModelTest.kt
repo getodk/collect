@@ -16,7 +16,6 @@ import org.odk.collect.settings.keys.MetaKeys
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class RequestPermissionsViewModelTest {
 
     private val permissionChecker = mock<PermissionsChecker>() {

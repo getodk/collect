@@ -19,10 +19,8 @@ import org.odk.collect.android.R
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
-import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
-@Config(sdk = [33])
 class PermissionsDialogFragmentTest {
 
     private val permissionsProvider = FakePermissionsProvider()
