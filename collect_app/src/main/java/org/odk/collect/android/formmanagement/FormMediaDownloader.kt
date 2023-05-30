@@ -34,7 +34,7 @@ class FormMediaDownloader(
 
             val tempMediaFile = File(tempMediaDir, mediaFile.filename)
 
-            val existingFile = searchForExistingMediaFile(formToDownload, mediaFile)
+            val existingFile = searchForExistingMediaFile(formToDownload, mediaFile, test)
             existingFile.let {
                 if (it != null) {
                     val fileHash = getMd5Hash(it)
@@ -68,9 +68,13 @@ class FormMediaDownloader(
 
     private fun searchForExistingMediaFile(
         formToDownload: ServerFormDetails,
-        mediaFile: MediaFile
+        mediaFile: MediaFile,
+        test: Boolean
     ): File? {
         val allFormVersions = formsRepository.getAllByFormId(formToDownload.formId)
+        if (test && allFormVersions.size == 1) {
+            throw Exception("allFormVersions with only 1 element")
+        }
         return allFormVersions.sortedByDescending {
             it.date
         }.map { form: Form ->
