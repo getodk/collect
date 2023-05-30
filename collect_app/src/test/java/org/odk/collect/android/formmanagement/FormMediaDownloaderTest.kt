@@ -26,6 +26,7 @@ class FormMediaDownloaderTest {
             date = 1,
             mediaFiles = listOf(Pair("file", "old"))
         )
+
         formsRepository.save(form1)
 
         val form2 = FormFixtures.form(
