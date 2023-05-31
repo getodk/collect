@@ -41,7 +41,12 @@ class NotificationDrawer {
             assertThat(bodyElement.text, `is`(body))
         }
 
-        val subtextElement = device.findObject(By.text(subtext))
+        var subtextElement = device.findObject(By.text(subtext))
+        if (subtextElement == null) {
+            device.findObject(By.text(appName)).click()
+            subtextElement = device.findObject(By.text(subtext))
+        }
+
         assertThat(subtextElement.text, `is`(subtext))
 
         return this
