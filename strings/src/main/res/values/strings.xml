@@ -1191,6 +1191,6 @@
     <string name="permission_dialog_title">About permissions</string>
     <string name="permission_dialog_text">You will be asked to allow ODK Collect access to the features below, select “allow” if you want to use them.</string>
     <string name="notifications">Notifications</string>
-    <string name="required_for_notifications">Required for notifications</string>
+    <string name="required_for_notifications">Required for showing updates when forms are download, updated and sent.</string>
 
 </resources>
