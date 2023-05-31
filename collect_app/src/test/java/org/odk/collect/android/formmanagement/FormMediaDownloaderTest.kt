@@ -43,8 +43,9 @@ class FormMediaDownloaderTest {
                 it.date
             }
 
-            assertThat(sortedForms[0].version, equalTo(form2.version))
-            assertThat(sortedForms[1].version, equalTo(form1.version))
+            if (sortedForms[0].version != form2.version) {
+                throw Exception("Sorting failed in loop number $i")
+            }
         }
     }
 
