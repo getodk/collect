@@ -18,18 +18,20 @@ class FormMediaDownloaderTest {
 
     @Test
     fun `returns false when there is an existing copy of a media file and an older one`() {
+        var date: Long = 0
         // Save forms
-        val formsRepository = InMemFormsRepository()
+        val formsRepository = InMemFormsRepository {
+            date += 1
+            date
+        }
         val form1 = FormFixtures.form(
             version = "1",
-            date = 1,
             mediaFiles = listOf(Pair("file", "old"))
         )
         formsRepository.save(form1)
 
         val form2 = FormFixtures.form(
             version = "2",
-            date = 2,
             mediaFiles = listOf(Pair("file", "existing"))
         )
         formsRepository.save(form2)
@@ -60,17 +62,19 @@ class FormMediaDownloaderTest {
     @Test
     fun `returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
         // Save forms
-        val formsRepository = InMemFormsRepository()
+        var date: Long = 0
+        val formsRepository = InMemFormsRepository {
+            date += 1
+            date
+        }
         val form1 = FormFixtures.form(
             version = "1",
-            date = 1,
             mediaFiles = listOf(Pair("file", "old"))
         )
         formsRepository.save(form1)
 
         val form2 = FormFixtures.form(
             version = "2",
-            date = 2,
             mediaFiles = listOf(Pair("file", "existing"))
         )
         formsRepository.save(form2)
