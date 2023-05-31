@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/margin_large">
+    android:paddingHorizontal="@dimen/margin_large"
+    android:paddingTop="@dimen/margin_standard"
+    android:paddingBottom="@dimen/margin_large">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/permission_text"
@@ -19,7 +21,7 @@
         android:id="@+id/notifications_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_large"
+        android:layout_marginTop="@dimen/margin_extra_extra_large"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/permission_text"
         app:srcCompat="@drawable/ic_baseline_notifications_24" />
