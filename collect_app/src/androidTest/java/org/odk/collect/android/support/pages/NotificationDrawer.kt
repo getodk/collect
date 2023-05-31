@@ -3,8 +3,11 @@ package org.odk.collect.android.support.pages
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.odk.collect.android.support.WaitFor.waitFor
 
@@ -34,20 +37,14 @@ class NotificationDrawer {
         val device = waitForNotification(appName)
 
         val titleElement = device.findObject(By.text(title))
-        assertThat(titleElement.text, `is`(title))
+        assertThat(titleElement, not(nullValue()))
 
         body?.let {
             val bodyElement = device.findObject(By.text(body))
-            assertThat(bodyElement.text, `is`(body))
+            assertThat(bodyElement, not(nullValue()))
         }
 
-        var subtextElement = device.findObject(By.text(subtext))
-        if (subtextElement == null) {
-            device.findObject(By.text(appName)).click()
-            subtextElement = device.findObject(By.text(subtext))
-        }
-
-        assertThat(subtextElement.text, `is`(subtext))
+        assertExpandedText(device, appName, subtext)
 
         return this
     }
@@ -59,14 +56,13 @@ class NotificationDrawer {
     ): D {
         val device = waitForNotification(appName)
 
-        var actionElement = device.findObject(By.text(actionText)) ?: device.findObject(By.text(actionText.uppercase()))
-        if (actionElement == null) {
-            device.findObject(By.text(appName)).click() // Expand notification to show actions
-            actionElement = device.findObject(By.text(actionText)) ?: device.findObject(By.text(actionText.uppercase()))
+        val actionElement = getExpandedElement(device, appName, actionText) ?: getExpandedElement(device, appName, actionText.uppercase())
+        if (actionElement != null) {
+            actionElement.click()
+            isOpen = false
+        } else {
+            throw AssertionError("Could not find \"$actionText\"")
         }
-
-        actionElement.click()
-        isOpen = false
 
         return waitFor {
             destination.assertOnPage()
@@ -79,8 +75,7 @@ class NotificationDrawer {
         destination: D
     ): D {
         val device = waitForNotification(appName)
-        val titleElement = device.findObject(By.text(title))
-        assertThat(titleElement.text, `is`(title))
+        val titleElement = assertText(device, title)
         titleElement.click()
         isOpen = false
 
@@ -108,6 +103,41 @@ class NotificationDrawer {
         device.wait(Until.gone(By.text("Notifications")), 1000L)
 
         isOpen = false
+    }
+
+    private fun assertText(device: UiDevice, text: String): UiObject2 {
+        val element = device.findObject(By.text(text))
+        if (element != null) {
+            return element
+        } else {
+            throw AssertionError("Could not find \"$text\"")
+        }
+    }
+
+    private fun assertExpandedText(
+        device: UiDevice,
+        appName: String,
+        text: String
+    ) {
+        val element = getExpandedElement(device, appName, text)
+        assertThat("Could not find \"$text\"", element, not(nullValue()))
+    }
+
+    private fun getExpandedElement(
+        device: UiDevice,
+        appName: String,
+        text: String
+    ): UiObject2? {
+        var element = device.findObject(By.text(text))
+        if (element == null) {
+            expandOrCollapseNotification(device, appName)
+            element = device.findObject(By.text(text))
+        }
+        return element
+    }
+
+    private fun expandOrCollapseNotification(device: UiDevice, appName: String) {
+        device.findObject(By.text(appName)).click()
     }
 
     private fun waitForNotification(appName: String): UiDevice {
