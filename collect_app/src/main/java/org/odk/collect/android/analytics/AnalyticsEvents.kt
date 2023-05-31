@@ -156,4 +156,11 @@ object AnalyticsEvents {
      */
     const val TEXT_NUMBER_WIDGET = "TextNumberWidget"
     const val TEXT_NUMBER_WIDGET_WITH_THOUSANDS_SEPARATOR = "TextNumberWidgetWithThousandsSeparator"
+
+    /**
+     * Tracks how many users cancel the permission dialog vs how many go through the permissions
+     * request flow.
+     */
+    const val PERMISSIONS_DIALOG_CANCEL = "PermissionsDialogCancel"
+    const val PERMISSIONS_DIALOG_OK = "PermissionsDialogOK"
 }
