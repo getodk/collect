@@ -16,38 +16,41 @@ import java.io.File
 
 class FormMediaDownloaderTest {
 
-//    @Test
-//    fun `myTest`() {
-//        for (i in 1..1000) {
-//            // Save forms
-//            val formsRepository = InMemFormsRepository()
-//            val form1 = FormFixtures.form(
-//                version = "1",
-//                date = 1,
-//                mediaFiles = listOf(Pair("file", "old"))
-//            )
-//            formsRepository.save(form1)
-//
-//            val form2 = FormFixtures.form(
-//                version = "2",
-//                date = 2,
-//                mediaFiles = listOf(Pair("file", "existing"))
-//            )
-//            formsRepository.save(form2)
-//
-//            val allFormVersions = formsRepository.getAllByFormId(form1.formId)
-//            assertThat(allFormVersions[0].version, equalTo(form1.version))
-//            assertThat(allFormVersions[1].version, equalTo(form2.version))
-//
-//            val sortedForms =  allFormVersions.sortedByDescending {
-//                it.date
-//            }
-//
-//            if (sortedForms[0].version != form2.version) {
-//                throw Exception("Sorting failed in loop number $i")
-//            }
-//        }
-//    }
+    @Test
+    fun `myTest`() {
+        for (i in 1..1000) {
+            // Save forms
+            val formsRepository = InMemFormsRepository()
+            val form1 = FormFixtures.form(
+                version = "1",
+                date = 1,
+                mediaFiles = listOf(Pair("file", "old"))
+            )
+            formsRepository.save(form1)
+
+            val form2 = FormFixtures.form(
+                version = "2",
+                date = 2,
+                mediaFiles = listOf(Pair("file", "existing"))
+            )
+            formsRepository.save(form2)
+
+            val allFormVersions = formsRepository.getAllByFormId(form1.formId)
+            assertThat(allFormVersions[0].version, equalTo(form1.version))
+            assertThat(allFormVersions[1].version, equalTo(form2.version))
+
+            val sortedForms =  allFormVersions.sortedByDescending {
+                it.date
+            }
+
+            if (sortedForms[0].version != form2.version) {
+                throw Exception("Sorting failed in loop number: $i. " +
+                        "sortedForms[0]: ${sortedForms[0]} " +
+                        "sortedForms[1]: ${sortedForms[1]} "
+                )
+            }
+        }
+    }
 
     @Test
     fun `returns false when there is an existing copy of a media file and an older one`() {

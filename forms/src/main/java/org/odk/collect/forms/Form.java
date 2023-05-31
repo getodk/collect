@@ -296,6 +296,7 @@ public final class Form {
                 "formId='" + formId + '\'' +
                 "version='" + version + '\'' +
                 "formMediaPath='" + formMediaPath + '\'' +
+                "date='" + date + '\'' +
                 '}';
     }
 }
