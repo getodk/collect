@@ -5,10 +5,10 @@ import org.odk.collect.shared.TempFiles
 import java.io.File
 
 object FormFixtures {
+    // If you set the date here, it might be overridden with the current date during saving to the database if dbId is not set too
     fun form(
         formId: String = "formId",
         version: String = "1",
-        date: Long = 1,
         mediaFiles: List<Pair<String, String>> = emptyList(),
         autoSend: String? = null
     ): Form {
@@ -25,7 +25,6 @@ object FormFixtures {
             .version(version)
             .formFilePath(FormUtils.createFormFixtureFile(formId, version, formFilesPath))
             .formMediaPath(mediaFilePath)
-            .date(date)
             .autoSend(autoSend)
             .build()
     }
