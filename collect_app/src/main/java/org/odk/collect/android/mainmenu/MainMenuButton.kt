@@ -63,7 +63,9 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
         @ExperimentalBadgeUtils
         if (highlightable) {
             if (number > 0) {
-                BadgeUtils.attachBadgeDrawable(badge, binding.icon)
+                binding.icon.viewTreeObserver.addOnGlobalLayoutListener {
+                    BadgeUtils.attachBadgeDrawable(badge, binding.icon)
+                }
                 binding.name.setTypeface(binding.name.typeface, Typeface.BOLD)
                 binding.number.setTypeface(binding.name.typeface, Typeface.BOLD)
             } else {
