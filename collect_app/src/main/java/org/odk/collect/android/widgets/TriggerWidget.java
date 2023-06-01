@@ -51,6 +51,7 @@ public class TriggerWidget extends QuestionWidget {
         triggerButton.setEnabled(!prompt.isReadOnly());
         triggerButton.setChecked(OK_TEXT.equals(prompt.getAnswerText()));
         triggerButton.setOnCheckedChangeListener((buttonView, isChecked) -> widgetValueChanged());
+        triggerButton.setId(View.generateViewId());
 
         return answerView;
     }
