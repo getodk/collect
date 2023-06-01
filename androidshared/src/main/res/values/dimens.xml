@@ -7,6 +7,8 @@
     <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_extra_large">32dp</dimen>
 
+    <dimen name="max_content_width">640dp</dimen>
+
     <dimen name="low_emphasis">0.12</dimen>
     <dimen name="medium_emphasis">0.6</dimen>
     <dimen name="high_emphasis">0.87</dimen>
