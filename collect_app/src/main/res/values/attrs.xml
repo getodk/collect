@@ -12,6 +12,7 @@
     <declare-styleable name="MainMenuButton">
         <attr name="icon" format="reference" />
         <attr name="name" format="string" />
+        <attr name="highlightable" format="boolean" />
     </declare-styleable>
 
     <!--  Should be removed when these attributes are added to Material Components  -->
