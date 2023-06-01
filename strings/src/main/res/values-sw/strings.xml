@@ -40,8 +40,6 @@
   <string name="sort_by_date_desc">Tarehe, mpya zaidi kwanza</string>
   <string name="sort_by_date_asc">Tarehe, zamani kwanza</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_asc">Hadhi, malizia kwanza</string>
-  <string name="sort_by_status_desc">Hadhi, ambayo haijamaliziwa kwanza</string>
   <string name="filter_the_list">Chuja orodha</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Tafuta</string>

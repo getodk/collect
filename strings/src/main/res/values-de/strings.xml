@@ -42,8 +42,6 @@
   <string name="sort_by_date_asc">Datum, ältestes zuerst</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_last_saved">Zuletzt gespeichertes zuerst</string>
-  <string name="sort_by_status_asc">Status, vollständig zuerst</string>
-  <string name="sort_by_status_desc">Status, unvollständig zuerst</string>
   <string name="filter_the_list">Liste filtern</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Suche</string>

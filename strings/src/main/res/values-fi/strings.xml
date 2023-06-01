@@ -42,8 +42,6 @@
   <string name="sort_by_date_asc">Päivämäärä, vanhin ensin</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="sort_by_last_saved">Viimeisenä tallennettu ensimmäisenä</string>
-  <string name="sort_by_status_asc">Tila, viimeistellyt ensin</string>
-  <string name="sort_by_status_desc">Tila, viimeistelemättömät ensin</string>
   <string name="filter_the_list">Suodata listaa</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Etsi</string>

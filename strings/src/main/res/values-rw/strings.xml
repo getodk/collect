@@ -39,8 +39,6 @@
   <string name="sort_by_date_desc">Itariki yanyuma iheruka </string>
   <string name="sort_by_date_asc">Itariki, yabanjirije iyanyuma iheruka.</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_asc">Ukobimeze, byarangiye bwambere</string>
-  <string name="sort_by_status_desc">Aho bigeze, ntibyarangiye</string>
   <string name="filter_the_list">Hisha urutonde</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Shakisha</string>

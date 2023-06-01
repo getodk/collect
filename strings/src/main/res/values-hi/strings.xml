@@ -36,7 +36,6 @@
   <string name="sort_by_date_desc">दिनांक, नयी पहले </string>
   <string name="sort_by_date_asc">दिनांक, सबसे पुराना पहले</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
-  <string name="sort_by_status_desc">अवस्था, बिना फाइनल हुए शब्द</string>
   <string name="filter_the_list">सूची को फ़िल्टर करें</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">खोज</string>
