@@ -2,7 +2,6 @@ package org.odk.collect.location
 
 import android.location.LocationManager
 import org.odk.collect.location.LocationClient.LocationClientListener
-import java.lang.ref.WeakReference
 
 /**
  * An abstract base LocationClient class that provides some shared functionality for determining
@@ -16,7 +15,7 @@ import java.lang.ref.WeakReference
 internal abstract class BaseLocationClient(protected val locationManager: LocationManager?) :
     LocationClient {
 
-    private var listenerRef: WeakReference<LocationClientListener?>? = null
+    private var listener: LocationClientListener? = null
     private var priority = LocationClient.Priority.PRIORITY_HIGH_ACCURACY
 
     override fun isLocationAvailable(): Boolean {
@@ -82,10 +81,10 @@ internal abstract class BaseLocationClient(protected val locationManager: Locati
     }
 
     override fun setListener(locationClientListener: LocationClientListener?) {
-        listenerRef = WeakReference(locationClientListener)
+        listener = locationClientListener
     }
 
     protected fun getListener(): LocationClientListener? {
-        return if (listenerRef != null) listenerRef!!.get() else null
+        return listener
     }
 }
