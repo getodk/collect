@@ -18,6 +18,8 @@ import static android.location.LocationManager.PASSIVE_PROVIDER;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -40,6 +42,16 @@ public class AndroidLocationClientTest {
     public void setUp() {
         locationManager = mock(LocationManager.class);
         androidLocationClient = new AndroidLocationClient(locationManager);
+    }
+
+    @Test
+    public void startingShouldSetListenerAndStoppingShouldRemoveIt() {
+        LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
+        androidLocationClient.start(listener);
+        assertThat(androidLocationClient.getListener(), is(notNullValue()));
+
+        androidLocationClient.stop();
+        assertThat(androidLocationClient.getListener(), is(nullValue()));
     }
 
     @Test

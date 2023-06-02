@@ -3,6 +3,8 @@ package org.odk.collect.location;
 import static android.location.LocationManager.GPS_PROVIDER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -42,6 +44,16 @@ public class GoogleFusedLocationClientTest {
         googleApiClient = mock(GoogleApiClient.class);
         LocationManager locationManager = mock(LocationManager.class);
         client = new GoogleFusedLocationClient(googleApiClient, fusedLocationProviderApi, locationManager);
+    }
+
+    @Test
+    public void startShouldSetListenerAndStopShouldRemoveIt() {
+        LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
+        client.start(listener);
+        assertThat(client.getListener(), is(notNullValue()));
+
+        client.stop();
+        assertThat(client.getListener(), is(nullValue()));
     }
 
     @Test
