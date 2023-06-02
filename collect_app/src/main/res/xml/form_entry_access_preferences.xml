@@ -27,7 +27,14 @@
         <CheckBoxPreference
             android:key="save_mid"
             android:title="@string/save_mid"
+            android:summary="@string/save_mid_summary"
             app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/form_end"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false" >
         <CheckBoxPreference
             android:key="save_as_draft"
             android:title="@string/save_as_draft"

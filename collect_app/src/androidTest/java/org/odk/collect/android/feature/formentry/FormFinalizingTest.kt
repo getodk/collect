@@ -64,7 +64,7 @@ class FormFinalizingTest {
             .clickSettings()
             .clickAccessControl()
             .clickFormEntrySettings()
-            .clickOnString(R.string.save_as_draft)
+            .clickOnSaveAsDraftInFormEnd()
             .pressBack(AccessControlPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
