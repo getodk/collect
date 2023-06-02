@@ -54,7 +54,6 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapper implements LocationCl
         timerHandler.removeCallbacksAndMessages(null);
         timerHandler.postDelayed(() -> {
             locationClient.stop();
-            locationClient.setListener(null);
             Timber.i("MaxAccuracyWithinTimeoutLocationClient: stopping location updates");
         }, timeoutSeconds * 1000);
     }

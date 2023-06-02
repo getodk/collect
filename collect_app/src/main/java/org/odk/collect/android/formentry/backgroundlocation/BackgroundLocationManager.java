@@ -231,7 +231,6 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
     }
 
     private void stopLocationRequests() {
-        locationClient.setListener(null);
         locationClient.stop();
 
         currentState = BackgroundLocationState.STOPPED;

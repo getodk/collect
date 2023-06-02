@@ -486,7 +486,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             locationClient.start();
         } else {
             Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
-            locationClient.setListener(null);
             locationClient.stop();
             myLocationOverlay.setEnabled(false);
             safelyDisableOverlayLocationFollowing();

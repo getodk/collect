@@ -81,6 +81,7 @@ public class AndroidLocationClient
         if (getListener() != null) {
             getListener().onClientStop();
         }
+        setListener(null);
     }
 
     @Override

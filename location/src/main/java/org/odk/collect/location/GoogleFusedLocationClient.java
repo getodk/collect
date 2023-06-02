@@ -120,6 +120,7 @@ public class GoogleFusedLocationClient
         if (getListener() != null) {
             getListener().onClientStop();
         }
+        setListener(null);
     }
 
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {

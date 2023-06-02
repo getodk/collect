@@ -62,6 +62,7 @@ public class FakeLocationClient implements LocationClient {
         if (getListener() != null) {
             getListener().onClientStop();
         }
+        setListener(null);
     }
 
     public boolean isLocationAvailable() {

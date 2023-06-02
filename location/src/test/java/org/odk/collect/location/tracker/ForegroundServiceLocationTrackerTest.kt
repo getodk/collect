@@ -109,6 +109,7 @@ private class FakeLocationClient : LocationClient {
     override fun stop() {
         this.started = false
         locationClientListener?.onClientStop()
+        setListener(null)
     }
 
     override fun requestLocationUpdates(locationListener: LocationListener) {
