@@ -80,6 +80,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
     }
 
     override fun onDestroy() {
+        locationClient.setListener(null)
         locationClient.stop()
         application.getState().clear(LOCATION_KEY)
     }

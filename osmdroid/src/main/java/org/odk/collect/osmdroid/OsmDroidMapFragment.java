@@ -206,8 +206,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         loadReferenceOverlay();
         addMapLayoutChangeListener(map);
 
-        locationClient.setListener(this);
-
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
         myLocationOverlay = new MyLocationNewOverlay(osmLocationClientWrapper, map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
@@ -482,13 +480,13 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     }
 
     private void enableLocationUpdates(boolean enable) {
-        locationClient.setListener(this);
-
         if (enable) {
             Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.setListener(this);
             locationClient.start();
         } else {
             Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this);
+            locationClient.setListener(null);
             locationClient.stop();
             myLocationOverlay.setEnabled(false);
             safelyDisableOverlayLocationFollowing();
