@@ -47,6 +47,7 @@
         android:textAppearance="?textAppearanceBodyMedium"
         android:textColor="@color/color_on_surface_medium_emphasis"
         app:layout_constraintBottom_toBottomOf="@id/notifications_icon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/notifications_icon"
         app:layout_constraintTop_toBottomOf="@id/notifications_title" />
 
