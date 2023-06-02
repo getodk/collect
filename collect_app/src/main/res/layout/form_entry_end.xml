@@ -47,7 +47,7 @@ the specific language governing permissions and limitations under the License.
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/description"
-            app:layout_constraintWidth_max="640dp">
+            app:layout_constraintWidth_max="@dimen/max_content_width">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
