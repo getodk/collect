@@ -100,7 +100,8 @@ public class GoogleFusedLocationClient
 
     // LocationClient:
 
-    public void start() {
+    public void start(LocationClientListener listener) {
+        setListener(listener);
         googleApiClient.registerConnectionCallbacks(this);
         googleApiClient.registerConnectionFailedListener(this);
 

@@ -20,7 +20,7 @@ public interface LocationClient {
      * to {@link LocationClient#requestLocationUpdates(LocationListener)}
      * or {@link LocationClient#getLastLocation()}.
      */
-    void start();
+    void start(LocationClientListener listener);
 
     /**
      * Stops the LocationClient, ending any current connections and allowing

@@ -74,8 +74,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
             )
         }
 
-        locationClient.setListener(this)
-        locationClient.start()
+        locationClient.start(this)
         return START_NOT_STICKY
     }
 

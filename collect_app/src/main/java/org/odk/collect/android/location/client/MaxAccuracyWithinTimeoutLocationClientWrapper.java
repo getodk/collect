@@ -44,8 +44,7 @@ public class MaxAccuracyWithinTimeoutLocationClientWrapper implements LocationCl
      */
     public void requestLocationUpdates(long timeoutSeconds) {
         new Handler(Looper.getMainLooper()).post(() -> {
-            locationClient.setListener(this);
-            locationClient.start();
+            locationClient.start(this);
         });
 
         // If updates are requested more than once, reset the highest accuracy

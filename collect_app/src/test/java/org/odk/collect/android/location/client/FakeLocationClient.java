@@ -45,7 +45,8 @@ public class FakeLocationClient implements LocationClient {
 
     // Implementation of the LocationClient interface.
 
-    public void start() {
+    public void start(LocationClientListener listener) {
+        setListener(listener);
         running = true;
         if (getListener() != null) {
             if (failOnStart) {

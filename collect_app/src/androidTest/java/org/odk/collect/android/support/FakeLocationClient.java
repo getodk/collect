@@ -14,7 +14,8 @@ public class FakeLocationClient implements LocationClient {
     private LocationListener locationListener;
     private Location lastLocation;
 
-    public void start() {
+    public void start(LocationClientListener listener) {
+        setListener(listener);
         if (getListener() != null) {
             getListener().onClientStart();
         }

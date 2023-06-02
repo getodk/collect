@@ -49,9 +49,8 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true)).thenReturn(providers);
 
         TestClientListener testListener = new TestClientListener();
-        androidLocationClient.setListener(testListener);
 
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
         assertFalse(testListener.wasStopCalled());
@@ -68,10 +67,9 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true)).thenReturn(providers);
 
         TestClientListener testListener = new TestClientListener();
-        androidLocationClient.setListener(testListener);
 
         // Without any providers enabled, start shouldn't be called, but startFailure should be:
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
         assertFalse(testListener.wasStartCalled());
         assertTrue(testListener.wasStartFailureCalled());
         assertFalse(testListener.wasStopCalled());
@@ -88,7 +86,7 @@ public class AndroidLocationClientTest {
         List<String> providers = asList(GPS_PROVIDER, NETWORK_PROVIDER);
         when(locationManager.getProviders(true)).thenReturn(providers);
 
-        androidLocationClient.start();
+        androidLocationClient.start(null);
 
         TestLocationListener firstListener = new TestLocationListener();
         androidLocationClient.requestLocationUpdates(firstListener);
@@ -139,12 +137,11 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true)).thenReturn(highAccuracyProviders);
 
         TestClientListener testListener = new TestClientListener();
-        androidLocationClient.setListener(testListener);
 
         // HIGH_ACCURACY and BALANCED_POWER_ACCURACY should fail with only
         // PASSIVE_PROVIDER enabled:
         androidLocationClient.setPriority(PRIORITY_HIGH_ACCURACY);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertFalse(testListener.wasStartCalled());
         assertTrue(testListener.wasStartFailureCalled());
@@ -153,7 +150,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
 
         androidLocationClient.setPriority(PRIORITY_BALANCED_POWER_ACCURACY);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertFalse(testListener.wasStartCalled());
         assertTrue(testListener.wasStartFailureCalled());
@@ -164,7 +161,7 @@ public class AndroidLocationClientTest {
         // PRIORITY_LOW_POWER and PRIORITY_NO_POWER should succeed with only
         // PASSIVE_PROVIDER enabled:
         androidLocationClient.setPriority(PRIORITY_LOW_POWER);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
@@ -173,7 +170,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
 
         androidLocationClient.setPriority(PRIORITY_NO_POWER);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
@@ -188,12 +185,11 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true)).thenReturn(highAccuracyProviders);
 
         TestClientListener testListener = new TestClientListener();
-        androidLocationClient.setListener(testListener);
 
         // PRIORITY_NO_POWER should fail with only
         // NETWORK_PROVIDER enabled:
         androidLocationClient.setPriority(PRIORITY_NO_POWER);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertFalse(testListener.wasStartCalled());
         assertTrue(testListener.wasStartFailureCalled());
@@ -205,7 +201,7 @@ public class AndroidLocationClientTest {
         // PRIORITY_HIGH_ACCURACY should succeed with only
         // NETWORK_PROVIDER enabled:
         androidLocationClient.setPriority(PRIORITY_LOW_POWER);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
@@ -214,7 +210,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
 
         androidLocationClient.setPriority(PRIORITY_BALANCED_POWER_ACCURACY);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
@@ -223,7 +219,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
 
         androidLocationClient.setPriority(PRIORITY_HIGH_ACCURACY);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
@@ -238,12 +234,11 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true)).thenReturn(highAccuracyProviders);
 
         TestClientListener testListener = new TestClientListener();
-        androidLocationClient.setListener(testListener);
 
         // PRIORITY_NO_POWER and PRIORITY_LOW_POWER should fail with only
         // GPS_PROVIDER enabled:
         androidLocationClient.setPriority(PRIORITY_NO_POWER);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertFalse(testListener.wasStartCalled());
         assertTrue(testListener.wasStartFailureCalled());
@@ -252,7 +247,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
 
         androidLocationClient.setPriority(PRIORITY_LOW_POWER);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertFalse(testListener.wasStartCalled());
         assertTrue(testListener.wasStartFailureCalled());
@@ -264,7 +259,7 @@ public class AndroidLocationClientTest {
         // should succeed with only GPS_PROVIDER enabled:
 
         androidLocationClient.setPriority(PRIORITY_BALANCED_POWER_ACCURACY);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
@@ -273,7 +268,7 @@ public class AndroidLocationClientTest {
         testListener.reset();
 
         androidLocationClient.setPriority(PRIORITY_HIGH_ACCURACY);
-        androidLocationClient.start();
+        androidLocationClient.start(testListener);
 
         assertTrue(testListener.wasStartCalled());
         assertFalse(testListener.wasStartFailureCalled());
@@ -361,7 +356,7 @@ public class AndroidLocationClientTest {
     public void whenNewlyReceivedLocationAccuracyIsNegative_shouldBeSetToZero() {
         when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
 
-        androidLocationClient.start();
+        androidLocationClient.start(null);
 
         TestLocationListener listener = new TestLocationListener();
         androidLocationClient.requestLocationUpdates(listener);
@@ -376,7 +371,7 @@ public class AndroidLocationClientTest {
     public void whenNewlyReceivedLocationIsMocked_shouldAccuracyBeSetToZero() {
         when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
 
-        androidLocationClient.start();
+        androidLocationClient.start(null);
 
         TestLocationListener listener = new TestLocationListener();
         androidLocationClient.requestLocationUpdates(listener);
@@ -392,7 +387,7 @@ public class AndroidLocationClientTest {
         when(locationManager.getProviders(true)).thenReturn(Collections.singletonList(GPS_PROVIDER));
 
         androidLocationClient.setRetainMockAccuracy(true);
-        androidLocationClient.start();
+        androidLocationClient.start(null);
 
         TestLocationListener listener = new TestLocationListener();
         androidLocationClient.requestLocationUpdates(listener);

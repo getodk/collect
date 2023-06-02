@@ -49,9 +49,8 @@ public class GoogleFusedLocationClientTest {
         doAnswer(new OnConnectedAnswer()).when(googleApiClient).connect();
 
         LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
-        client.setListener(listener);
 
-        client.start();
+        client.start(listener);
         verify(listener).onClientStart();
         verify(listener, never()).onClientStartFailure();
         verify(listener, never()).onClientStop();
@@ -61,7 +60,7 @@ public class GoogleFusedLocationClientTest {
         reset(listener);
         doAnswer(new OnConnectionFailedAnswer()).when(googleApiClient).connect();
 
-        client.start();
+        client.start(listener);
         verify(listener, never()).onClientStart();
         verify(listener).onClientStartFailure();
         verify(listener, never()).onClientStop();
@@ -75,7 +74,7 @@ public class GoogleFusedLocationClientTest {
     @Test
     public void stopShouldDisconnectFromGoogleApiIfConnected_andAlwaysCallOnClientStopIfListenerSet() {
         LocationClient.LocationClientListener listener = mock(LocationClient.LocationClientListener.class);
-        client.setListener(listener);
+        client.start(listener);
 
         // Previously connected, disconnection succeeds
         when(googleApiClient.isConnected()).thenReturn(true);
@@ -85,6 +84,7 @@ public class GoogleFusedLocationClientTest {
 
         reset(listener);
 
+        client.start(listener);
         // Previously connected, disconnection calls onConnectionSuspended
         doAnswer(new OnDisconnectedAnswer()).when(googleApiClient).disconnect();
         client.stop();
@@ -92,6 +92,7 @@ public class GoogleFusedLocationClientTest {
 
         reset(listener);
 
+        client.start(listener);
         // Not previously connected
         when(googleApiClient.isConnected()).thenReturn(false);
         client.stop();
@@ -102,7 +103,7 @@ public class GoogleFusedLocationClientTest {
     public void whenGoogleApiClientNotConnected_shouldNotRemoveLocationUpdatesBeCalled() {
         when(googleApiClient.isConnected()).thenReturn(false);
 
-        client.start();
+        client.start(null);
 
         TestLocationListener listener = new TestLocationListener();
         client.requestLocationUpdates(listener);
@@ -115,7 +116,7 @@ public class GoogleFusedLocationClientTest {
     public void whenGoogleApiClientNotConnected_shouldNotRequestLocationUpdatesBeCalled() {
         when(googleApiClient.isConnected()).thenReturn(false);
 
-        client.start();
+        client.start(null);
         client.requestLocationUpdates(new TestLocationListener());
 
         verify(fusedLocationProviderApi, never()).requestLocationUpdates(any(), any(), (LocationListener) any());
@@ -123,7 +124,7 @@ public class GoogleFusedLocationClientTest {
 
     @Test
     public void requestingLocationUpdatesShouldUpdateCorrectListener() {
-        client.start();
+        client.start(null);
 
         TestLocationListener firstListener = new TestLocationListener();
         client.requestLocationUpdates(firstListener);
@@ -174,7 +175,7 @@ public class GoogleFusedLocationClientTest {
         verify(googleApiClient).blockingConnect();
 
         when(googleApiClient.isConnected()).thenReturn(true);
-        client.start();
+        client.start(null);
 
         client.getLastLocation();
         verify(googleApiClient).blockingConnect(); // 'verify' checks if called *once*.
