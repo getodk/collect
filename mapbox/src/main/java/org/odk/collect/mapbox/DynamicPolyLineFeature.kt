@@ -14,7 +14,7 @@ import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 
 /** A polyline that can be manipulated by dragging Symbols at its vertices. */
-internal class PolyLineFeature(
+internal class DynamicPolyLineFeature(
     private val context: Context,
     private val pointAnnotationManager: PointAnnotationManager,
     private val polylineAnnotationManager: PolylineAnnotationManager,
@@ -22,7 +22,6 @@ internal class PolyLineFeature(
     private val featureClickListener: MapFragment.FeatureListener?,
     private val featureDragEndListener: MapFragment.FeatureListener?,
     private val closedPolygon: Boolean,
-    private val draggable: Boolean,
     initMapPoints: Iterable<MapPoint>
 ) : MapFeature {
     val mapPoints = mutableListOf<MapPoint>()
@@ -38,7 +37,7 @@ internal class PolyLineFeature(
                 MapUtils.createPointAnnotation(
                     pointAnnotationManager,
                     it,
-                    draggable,
+                    true,
                     MapFragment.CENTER,
                     R.drawable.ic_map_point,
                     context
@@ -83,7 +82,7 @@ internal class PolyLineFeature(
             MapUtils.createPointAnnotation(
                 pointAnnotationManager,
                 point,
-                draggable,
+                true,
                 MapFragment.CENTER,
                 R.drawable.ic_map_point,
                 context
