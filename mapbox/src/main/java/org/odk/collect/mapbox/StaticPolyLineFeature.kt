@@ -6,6 +6,7 @@ import com.mapbox.maps.extension.style.utils.ColorUtils
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolylineAnnotationOptions
+import org.odk.collect.maps.MapConsts.MAPBOX_POLYLINE_STROKE_WIDTH
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 
@@ -46,7 +47,7 @@ internal class StaticPolyLineFeature(
                 PolylineAnnotationOptions()
                     .withPoints(points)
                     .withLineColor(ColorUtils.colorToRgbaString(context.resources.getColor(R.color.mapLineColor)))
-                    .withLineWidth(5.0)
+                    .withLineWidth(MAPBOX_POLYLINE_STROKE_WIDTH.toDouble())
             ).also {
                 polylineAnnotationManager.update(it)
             }

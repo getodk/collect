@@ -14,6 +14,8 @@
 
 package org.odk.collect.android.geo;
 
+import static org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY;
+import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 
 import android.annotation.SuppressLint;
@@ -795,7 +797,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     /** A polyline or polygon that can not be manipulated by dragging markers at its vertices. */
     private static class StaticPolyLineFeature implements MapFeature {
-        public static final int STROKE_WIDTH = 5;
 
         private Polyline polyline;
 
@@ -814,7 +815,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = map.addPolyline(new PolylineOptions()
                         .color(context.getResources().getColor(R.color.mapLineColor))
                         .zIndex(1)
-                        .width(STROKE_WIDTH)
+                        .width(POLYLINE_STROKE_WIDTH)
                         .addAll(latLngs)
                         .clickable(true)
                 );
@@ -857,7 +858,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     /** A polyline or polygon that can be manipulated by dragging markers at its vertices. */
     private static class DynamicPolyLineFeature implements MapFeature {
-        public static final int STROKE_WIDTH = 5;
 
         private final Context context;
         private final GoogleMap map;
@@ -911,7 +911,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 polyline = map.addPolyline(new PolylineOptions()
                     .color(context.getResources().getColor(R.color.mapLineColor))
                     .zIndex(1)
-                    .width(STROKE_WIDTH)
+                    .width(POLYLINE_STROKE_WIDTH)
                     .addAll(latLngs)
                     .clickable(true)
                 );
@@ -969,8 +969,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
             polygon = map.addPolygon(new PolygonOptions()
                     .addAll(StreamSupport.stream(points.spliterator(), false).map(mapPoint -> new LatLng(mapPoint.latitude, mapPoint.longitude)).collect(Collectors.toList()))
                     .strokeColor(strokeLineColor)
-                    .strokeWidth(5)
-                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, 68))
+                    .strokeWidth(POLYLINE_STROKE_WIDTH)
+                    .fillColor(ColorUtils.setAlphaComponent(strokeLineColor, POLYGON_FILL_COLOR_OPACITY))
                     .clickable(true)
             );
         }

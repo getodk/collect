@@ -7,6 +7,7 @@ import com.mapbox.maps.plugin.annotation.generated.OnPolygonAnnotationClickListe
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
+import org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapPoint
 
@@ -21,10 +22,11 @@ class StaticPolygonFeature(
     private val polygonAnnotation: PolygonAnnotation = polygonAnnotationManager.create(
         PolygonAnnotationOptions()
             .withPoints(listOf(points.map { Point.fromLngLat(it.longitude, it.latitude) }))
+            .withFillOutlineColor(context.resources.getColor(R.color.mapLineColor))
             .withFillColor(
                 ColorUtils.setAlphaComponent(
                     context.resources.getColor(R.color.mapLineColor),
-                    68
+                    POLYGON_FILL_COLOR_OPACITY
                 )
             )
     )
