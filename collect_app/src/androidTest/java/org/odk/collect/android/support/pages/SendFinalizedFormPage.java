@@ -18,9 +18,9 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
         return this;
     }
 
-    public SendFinalizedFormPage clickOnForm(String formLabel) {
+    public ViewFormPage clickOnForm(String formLabel) {
         clickOnText(formLabel);
-        return this;
+        return new ViewFormPage(formLabel).assertOnPage();
     }
 
     public OkDialog clickSendSelected() {
@@ -31,5 +31,10 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
     public ServerAuthDialog clickSendSelectedWithAuthenticationError() {
         clickOnText(getTranslatedString(R.string.send_selected_data));
         return new ServerAuthDialog().assertOnPage();
+    }
+
+    public SendFinalizedFormPage clickSelectAll() {
+        clickOnString(R.string.select_all);
+        return this;
     }
 }

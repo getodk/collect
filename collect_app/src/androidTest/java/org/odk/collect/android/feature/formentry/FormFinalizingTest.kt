@@ -7,6 +7,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.support.pages.AccessControlPage
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
@@ -21,6 +22,19 @@ class FormFinalizingTest {
     val copyFormChain: RuleChain = chain().around(rule)
 
     @Test
+    fun fillingForm_andPressingFinalize_finalizesForm() {
+        rule.startAtMainMenu()
+            .copyForm(FORM)
+            .assertNumberOfFinalizedForms(0)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "52"))
+            .assertNumberOfEditableForms(0)
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question")
+            .assertText("52")
+    }
+
+    @Test
     fun fillingForm_andPressingSaveAsDraft_doesNotFinalizesForm() {
         rule.startAtMainMenu()
             .copyForm(FORM)
@@ -30,18 +44,6 @@ class FormFinalizingTest {
             .clickSaveAsDraft()
             .assertNumberOfEditableForms(1)
             .assertNumberOfFinalizedForms(0)
-    }
-
-    @Test
-    fun fillingForm_andPressingFinalize_finalizesForm() {
-        rule.startAtMainMenu()
-            .copyForm(FORM)
-            .assertNumberOfFinalizedForms(0)
-            .startBlankForm("One Question")
-            .swipeToEndScreen()
-            .clickFinalize()
-            .assertNumberOfEditableForms(0)
-            .assertNumberOfFinalizedForms(1)
     }
 
     @Test

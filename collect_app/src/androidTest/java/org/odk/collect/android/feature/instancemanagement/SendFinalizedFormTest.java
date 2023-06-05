@@ -42,7 +42,7 @@ public class SendFinalizedFormTest {
                 .clickFinalize()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm("One Question")
+                .clickSelectAll()
                 .clickSendSelectedWithAuthenticationError()
                 .fillUsername("Draymond")
                 .fillPassword("Green")
@@ -61,7 +61,7 @@ public class SendFinalizedFormTest {
                 .clickFinalize()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm("One Question")
+                .clickSelectAll()
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
@@ -91,7 +91,7 @@ public class SendFinalizedFormTest {
                 .clickFinalize()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm("One Question")
+                .clickSelectAll()
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
@@ -123,7 +123,7 @@ public class SendFinalizedFormTest {
                 .clickFinalize()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm("One Question Google")
+                .clickSelectAll()
                 .clickSendSelected()
                 .assertText("One Question Google - Success");
     }

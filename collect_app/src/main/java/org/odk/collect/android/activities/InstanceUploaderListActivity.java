@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -43,14 +42,16 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
@@ -273,15 +274,20 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
-        if (listView.isItemChecked(position)) {
-            selectedInstances.add(listView.getItemIdAtPosition(position));
-        } else {
-            selectedInstances.remove(listView.getItemIdAtPosition(position));
-        }
+//        if (listView.isItemChecked(position)) {
+//            selectedInstances.add(listView.getItemIdAtPosition(position));
+//        } else {
+//            selectedInstances.remove(listView.getItemIdAtPosition(position));
+//        }
+//
+//        binding.uploadButton.setEnabled(areCheckedItems());
+//        Button toggleSelectionsButton = findViewById(R.id.toggle_button);
+//        toggleButtonLabel(toggleSelectionsButton, listView);
 
-        binding.uploadButton.setEnabled(areCheckedItems());
-        Button toggleSelectionsButton = findViewById(R.id.toggle_button);
-        toggleButtonLabel(toggleSelectionsButton, listView);
+        Cursor c = (Cursor) listView.getAdapter().getItem(position);
+        long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
+        Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
+        startActivity(intent);
     }
 
     @Override
