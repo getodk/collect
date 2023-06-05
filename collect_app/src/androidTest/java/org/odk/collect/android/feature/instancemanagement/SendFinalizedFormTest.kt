@@ -21,7 +21,7 @@ import org.odk.collect.projects.Project.New
 class SendFinalizedFormTest {
 
     private val testDependencies = TestDependencies()
-    private val rule = CollectTestRule()
+    private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
     val chain: RuleChain = chain(testDependencies)
@@ -31,9 +31,8 @@ class SendFinalizedFormTest {
     @Test
     fun whenThereIsAnAuthenticationError_allowsUserToReenterCredentials() {
         testDependencies.server.setCredentials("Draymond", "Green")
-        rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
@@ -49,9 +48,8 @@ class SendFinalizedFormTest {
 
     @Test
     fun canViewSentForms() {
-        rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
-            .copyForm("one-question.xml")
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
@@ -69,15 +67,14 @@ class SendFinalizedFormTest {
 
     @Test
     fun whenDeleteAfterSendIsEnabled_deletesFilledForm() {
-        rule.startAtMainMenu()
-            .setServer(testDependencies.server.url)
+        rule.withProject(testDependencies.server.url)
             .openProjectSettingsDialog()
             .clickSettings()
             .clickFormManagement()
             .scrollToRecyclerViewItemAndClickText(R.string.delete_after_send)
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
-            .copyForm("one-question.xml")
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
@@ -103,7 +100,9 @@ class SendFinalizedFormTest {
             "dani@davey.com",
             testDependencies
         )
-        rule.startAtMainMenu()
+
+        rule.startAtFirstLaunch()
+            .clickTryCollect()
             .openProjectSettingsDialog()
             .selectProject("GD Project")
             .copyForm("one-question-google.xml", null, false, "GD Project")
