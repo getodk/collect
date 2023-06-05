@@ -342,7 +342,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
     @Override
     public int addPolygon(@NonNull Iterable<MapPoint> points) {
         int featureId = nextFeatureId++;
-        features.put(featureId, new PolygonFeature(map, points));
+        features.put(featureId, new StaticPolygonFeature(map, points));
         return featureId;
     }
 
@@ -895,23 +895,18 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
     }
 
-    private class PolygonFeature implements MapFeature {
-
+    private class StaticPolygonFeature implements MapFeature {
         private final MapView map;
         private final Polygon polygon = new Polygon();
-        private final List<Marker> markers = new ArrayList<>();
 
-        PolygonFeature(MapView map, Iterable<MapPoint> points) {
+        StaticPolygonFeature(MapView map, Iterable<MapPoint> points) {
             this.map = map;
 
             map.getOverlays().add(polygon);
             int strokeColor = map.getContext().getResources().getColor(R.color.mapLineColor);
             polygon.getOutlinePaint().setColor(strokeColor);
             polygon.getFillPaint().setColor(ColorUtils.setAlphaComponent(strokeColor, 68));
-            polygon.setPoints(StreamSupport.stream(points.spliterator(), false).map(point -> {
-                return new GeoPoint(point.latitude, point.longitude);
-            }).collect(Collectors.toList()));
-
+            polygon.setPoints(StreamSupport.stream(points.spliterator(), false).map(point -> new GeoPoint(point.latitude, point.longitude)).collect(Collectors.toList()));
             polygon.setOnClickListener((polygon, mapView, eventPos) -> {
                 int featureId = findFeature(polygon);
                 if (featureClickListener != null && featureId != -1) {
@@ -921,15 +916,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
                 return false;
             });
-
-            for (MapPoint point : points) {
-                markers.add(createMarker(map, new MarkerDescription(point, false, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
-            }
         }
 
         @Override
         public boolean ownsMarker(Marker marker) {
-            return markers.contains(marker);
+            return false;
         }
 
         @Override
@@ -944,16 +935,11 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
         @Override
         public void update() {
-
         }
 
         @Override
         public void dispose() {
             map.getOverlays().remove(polygon);
-            for (Marker marker : markers) {
-                map.getOverlays().remove(marker);
-            }
-            markers.clear();
         }
     }
 
