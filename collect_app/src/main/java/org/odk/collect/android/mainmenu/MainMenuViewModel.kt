@@ -106,8 +106,8 @@ class MainMenuViewModel(
 
     fun getFormSavedSnackbarType(uri: Uri): FormSavedSnackbarType? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-        if (instance != null) {
-            return when (instance.status) {
+        return if (instance != null) {
+            when (instance.status) {
                 Instance.STATUS_INCOMPLETE -> FormSavedSnackbarType.SAVED_AS_DRAFT
                 Instance.STATUS_COMPLETE -> {
                     val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
@@ -119,7 +119,8 @@ class MainMenuViewModel(
                 }
                 else -> null
             }
+        } else {
+            null
         }
-        return null
     }
 }
