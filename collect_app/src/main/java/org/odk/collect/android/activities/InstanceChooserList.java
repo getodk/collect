@@ -14,6 +14,13 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -58,7 +65,7 @@ import javax.inject.Inject;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  * @author Carl Hartung (carlhartung@gmail.com)
  */
-public class InstanceChooserList extends InstanceListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class InstanceChooserList extends AppListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
@@ -241,5 +248,30 @@ public class InstanceChooserList extends InstanceListActivity implements Adapter
         alertDialog.setCancelable(false);
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
         alertDialog.show();
+    }
+
+    protected String getSortingOrder() {
+        String sortingOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + DatabaseInstanceColumns.STATUS + " DESC";
+        switch (getSelectedSortingOrder()) {
+            case BY_NAME_ASC:
+                sortingOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + DatabaseInstanceColumns.STATUS + " DESC";
+                break;
+            case BY_NAME_DESC:
+                sortingOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + DatabaseInstanceColumns.STATUS + " DESC";
+                break;
+            case BY_DATE_ASC:
+                sortingOrder = DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
+                break;
+            case BY_DATE_DESC:
+                sortingOrder = DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
+                break;
+            case BY_STATUS_ASC:
+                sortingOrder = DatabaseInstanceColumns.STATUS + " ASC, " + DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                break;
+            case BY_STATUS_DESC:
+                sortingOrder = DatabaseInstanceColumns.STATUS + " DESC, " + DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
+                break;
+        }
+        return sortingOrder;
     }
 }
