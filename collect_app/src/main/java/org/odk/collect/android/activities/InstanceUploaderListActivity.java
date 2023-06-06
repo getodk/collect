@@ -14,6 +14,10 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.android.activities.AppListActivity.LOADER_ID;
+import static org.odk.collect.android.activities.AppListActivity.setAllToCheckedState;
+import static org.odk.collect.android.activities.AppListActivity.toggleButtonLabel;
+import static org.odk.collect.android.activities.AppListActivity.toggleChecked;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
@@ -31,10 +35,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
@@ -50,10 +57,12 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
+import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
@@ -62,8 +71,11 @@ import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -78,7 +90,7 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderListActivity extends AppListActivity implements
+public class InstanceUploaderListActivity extends LocalizedActivity implements
         OnLongClickListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
@@ -105,6 +117,14 @@ public class InstanceUploaderListActivity extends AppListActivity implements
     @Inject
     SettingsProvider settingsProvider;
 
+    private ListView listView;
+    private CursorAdapter listAdapter;
+    private LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
+    private Integer selectedSortingOrder;
+    private List<FormListSortingOption> sortingOptions;
+    private ProgressBar progressBar;
+    private String filterText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,8 +140,6 @@ public class InstanceUploaderListActivity extends AppListActivity implements
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
-
-        init();
     }
 
     public void onUploadButtonsClicked() {
@@ -148,6 +166,24 @@ public class InstanceUploaderListActivity extends AppListActivity implements
             // no items selected
             ToastUtils.showLongToast(this, R.string.noselect_error);
         }
+    }
+
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+
+        listView = findViewById(android.R.id.list);
+        listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        listView.setEmptyView(findViewById(android.R.id.empty));
+        progressBar = findViewById(R.id.progressBar);
+
+        // Use the nicer-looking drawable with Material Design insets.
+        listView.setDivider(ContextCompat.getDrawable(this, R.drawable.list_item_divider));
+        listView.setDividerHeight(1);
+
+        setSupportActionBar(findViewById(R.id.toolbar));
+
+        init();
     }
 
     void init() {
@@ -226,6 +262,7 @@ public class InstanceUploaderListActivity extends AppListActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        restoreSelectedSortingOrder();
         binding.uploadButton.setText(R.string.send_selected_data);
     }
 
@@ -270,6 +307,24 @@ public class InstanceUploaderListActivity extends AppListActivity implements
                 showSentAndUnsentChoices();
                 return true;
         }
+
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
+        if (item.getItemId() == R.id.menu_sort) {
+            new FormListSortingBottomSheetDialog(
+                    this,
+                    sortingOptions,
+                    selectedSortingOrder,
+                    selectedOption -> {
+                        saveSelectedSortingOrder(selectedOption);
+                        updateAdapter();
+                    }
+            ).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -329,13 +384,11 @@ public class InstanceUploaderListActivity extends AppListActivity implements
         checkPreviouslyCheckedItems();
     }
 
-    @Override
-    protected String getSortingOrderKey() {
+    private String getSortingOrderKey() {
         return INSTANCE_UPLOADER_LIST_SORTING_ORDER;
     }
 
-    @Override
-    protected void updateAdapter() {
+    private void updateAdapter() {
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
@@ -401,7 +454,7 @@ public class InstanceUploaderListActivity extends AppListActivity implements
         return true;
     }
 
-    protected String getSortingOrder() {
+    private String getSortingOrder() {
         String sortingOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + DatabaseInstanceColumns.STATUS + " DESC";
         switch (getSelectedSortingOrder()) {
             case BY_NAME_ASC:
@@ -424,5 +477,65 @@ public class InstanceUploaderListActivity extends AppListActivity implements
                 break;
         }
         return sortingOrder;
+    }
+
+    private boolean areCheckedItems() {
+        return getCheckedCount() > 0;
+    }
+
+    private int getCheckedCount() {
+        return listView.getCheckedItemCount();
+    }
+
+    private int getSelectedSortingOrder() {
+        if (selectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        return selectedSortingOrder;
+    }
+
+    private void restoreSelectedSortingOrder() {
+        selectedSortingOrder = settingsProvider.getUnprotectedSettings().getInt(getSortingOrderKey());
+    }
+
+    private void checkPreviouslyCheckedItems() {
+        listView.clearChoices();
+        List<Integer> selectedPositions = new ArrayList<>();
+        int listViewPosition = 0;
+        Cursor cursor = listAdapter.getCursor();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                long instanceId = cursor.getLong(cursor.getColumnIndex(DatabaseInstanceColumns._ID));
+                if (selectedInstances.contains(instanceId)) {
+                    selectedPositions.add(listViewPosition);
+                }
+                listViewPosition++;
+            } while (cursor.moveToNext());
+        }
+
+        for (int position : selectedPositions) {
+            listView.setItemChecked(position, true);
+        }
+    }
+
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBarAndAllow() {
+        hideProgressBar();
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private CharSequence getFilterText() {
+        return filterText != null ? filterText : "";
+    }
+
+    private void saveSelectedSortingOrder(int selectedStringOrder) {
+        selectedSortingOrder = selectedStringOrder;
+        settingsProvider.getUnprotectedSettings().save(getSortingOrderKey(), selectedStringOrder);
     }
 }
