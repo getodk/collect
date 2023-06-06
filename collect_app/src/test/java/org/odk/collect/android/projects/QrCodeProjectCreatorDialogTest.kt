@@ -1,5 +1,6 @@
 package org.odk.collect.android.projects
 
+import android.Manifest
 import android.content.Context
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
@@ -16,10 +17,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.journeyapps.barcodescanner.BarcodeResult
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.notNullValue
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -80,11 +80,14 @@ class QrCodeProjectCreatorDialogTest {
     fun `requestCameraPermission() should be called in onStart() to make sure it is called after returning to the dialog`() {
         val scenario = launcherRule.launch(fragmentClass = QrCodeProjectCreatorDialog::class.java, initialState = Lifecycle.State.CREATED)
 
-        assertFalse(permissionsProvider.cameraPermissionRequested)
+        assertThat(permissionsProvider.requestedPermissions, equalTo(emptyList()))
 
         scenario.moveToState(Lifecycle.State.STARTED)
 
-        assertTrue(permissionsProvider.cameraPermissionRequested)
+        assertThat(
+            permissionsProvider.requestedPermissions,
+            equalTo(listOf(Manifest.permission.CAMERA))
+        )
     }
 
     @Test

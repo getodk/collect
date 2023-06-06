@@ -18,7 +18,6 @@ import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
 import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.WebViewActivity
-import org.odk.collect.android.activities.viewmodels.CurrentProjectViewModel
 import org.odk.collect.android.application.MapboxClassInstanceCreator.createMapBoxInitializationFragment
 import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAvailable
 import org.odk.collect.android.databinding.MainMenuBinding
@@ -31,8 +30,10 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.crashhandler.CrashHandler
+import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
@@ -40,14 +41,15 @@ import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
 class MainMenuActivity : LocalizedActivity() {
-    @Inject
-    lateinit var viewModelFactory: MainMenuViewModel.Factory
 
     @Inject
-    lateinit var currentProjectViewModelFactory: CurrentProjectViewModel.Factory
+    lateinit var viewModelFactory: MainMenuViewModelFactory
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
+
+    @Inject
+    lateinit var permissionsProvider: PermissionsProvider
 
     private lateinit var binding: MainMenuBinding
     private lateinit var mainMenuViewModel: MainMenuViewModel
@@ -55,24 +57,38 @@ class MainMenuActivity : LocalizedActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
-        super.onCreate(savedInstanceState)
-        binding = MainMenuBinding.inflate(layoutInflater)
 
         CrashHandler.getInstance(this)?.also {
             if (it.hasCrashed(this)) {
+                super.onCreate(null)
                 ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity::class.java)
                 return
             }
         }
 
-        ThemeUtils(this).setDarkModeForCurrentProject()
         DaggerUtils.getComponent(this).inject(this)
 
-        mainMenuViewModel = ViewModelProvider(this, viewModelFactory)[MainMenuViewModel::class.java]
-        currentProjectViewModel = ViewModelProvider(
-            this,
-            currentProjectViewModelFactory
-        )[CurrentProjectViewModel::class.java]
+        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+        mainMenuViewModel = viewModelProvider[MainMenuViewModel::class.java]
+        currentProjectViewModel = viewModelProvider[CurrentProjectViewModel::class.java]
+        val permissionsViewModel = viewModelProvider[RequestPermissionsViewModel::class.java]
+
+        this.supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(PermissionsDialogFragment::class) {
+                PermissionsDialogFragment(
+                    permissionsProvider,
+                    permissionsViewModel
+                )
+            }
+            .forClass(ProjectSettingsDialog::class) {
+                ProjectSettingsDialog(viewModelFactory)
+            }
+            .build()
+
+        super.onCreate(savedInstanceState)
+        binding = MainMenuBinding.inflate(layoutInflater)
+
+        ThemeUtils(this).setDarkModeForCurrentProject()
 
         if (!currentProjectViewModel.hasCurrentProject()) {
             ActivityUtils.startActivityAndCloseAllOthers(this, FirstLaunchActivity::class.java)
@@ -90,6 +106,10 @@ class MainMenuActivity : LocalizedActivity() {
         initMapbox()
         initButtons()
         initAppName()
+
+        if (permissionsViewModel.shouldAskForPermissions()) {
+            showIfNotShowing(PermissionsDialogFragment::class.java, this.supportFragmentManager)
+        }
     }
 
     override fun onResume() {

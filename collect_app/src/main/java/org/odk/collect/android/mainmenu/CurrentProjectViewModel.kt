@@ -1,7 +1,6 @@
-package org.odk.collect.android.activities.viewmodels
+package org.odk.collect.android.mainmenu
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
@@ -37,19 +36,6 @@ class CurrentProjectViewModel(
             true
         } catch (e: IllegalStateException) {
             false
-        }
-    }
-
-    open class Factory(
-        private val currentProjectProvider: CurrentProjectProvider,
-        private val analyticsInitializer: AnalyticsInitializer
-    ) :
-        ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CurrentProjectViewModel(
-                currentProjectProvider,
-                analyticsInitializer
-            ) as T
         }
     }
 }

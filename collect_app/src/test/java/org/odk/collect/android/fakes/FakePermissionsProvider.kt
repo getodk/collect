@@ -16,23 +16,20 @@ class FakePermissionsProvider :
     PermissionsProvider(ContextCompatPermissionChecker(InstrumentationRegistry.getInstrumentation().targetContext)) {
     private var isPermissionGranted = false
 
-    var cameraPermissionRequested = false
+    val requestedPermissions = mutableListOf<String>()
 
     override fun requestPermissions(
         activity: Activity,
         listener: PermissionListener,
         vararg permissions: String
     ) {
+        requestedPermissions.addAll(permissions)
+
         if (isPermissionGranted) {
             listener.granted()
         } else {
             listener.denied()
         }
-    }
-
-    override fun requestCameraPermission(activity: Activity, action: PermissionListener) {
-        super.requestCameraPermission(activity, action)
-        cameraPermissionRequested = true
     }
 
     fun setPermissionGranted(permissionGranted: Boolean) {

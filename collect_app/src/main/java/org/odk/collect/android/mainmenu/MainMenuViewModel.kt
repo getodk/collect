@@ -3,7 +3,6 @@ package org.odk.collect.android.mainmenu
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
@@ -94,22 +93,4 @@ class MainMenuViewModel(
 
     val sentInstancesCount: LiveData<Int>
         get() = instancesAppState.sentCount
-
-    open class Factory(
-        private val versionInformation: VersionInformation,
-        private val application: Application,
-        private val settingsProvider: SettingsProvider,
-        private val instancesAppState: InstancesAppState,
-        private val scheduler: Scheduler
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainMenuViewModel(
-                application,
-                versionInformation,
-                settingsProvider,
-                instancesAppState,
-                scheduler
-            ) as T
-        }
-    }
 }

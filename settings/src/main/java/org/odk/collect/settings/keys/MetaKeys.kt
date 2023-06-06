@@ -10,4 +10,5 @@ object MetaKeys {
     const val EXISTING_PROJECT_IMPORTED = "existing_project_imported"
     const val LAST_LAUNCHED = "last_launched"
     const val LAST_USED_PEN_COLOR = "last_used_pen_color"
+    const val PERMISSIONS_REQUESTED = "permissions_requested"
 }
