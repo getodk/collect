@@ -8,6 +8,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
@@ -63,6 +64,27 @@ class SendFinalizedFormTest {
             .clickOnForm("One Question")
             .assertText("123")
             .assertText(R.string.exit)
+    }
+
+    @Test
+    fun canSendIndividualForms() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "123"))
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "124"))
+
+            .clickSendFinalizedForm(2)
+            .selectForm(0)
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .pressBack(MainMenuPage())
+
+            .assertNumberOfFinalizedForms(1)
+            .clickViewSentForm(1)
+            .clickOnForm("One Question")
+            .assertText("123")
     }
 
     @Test
