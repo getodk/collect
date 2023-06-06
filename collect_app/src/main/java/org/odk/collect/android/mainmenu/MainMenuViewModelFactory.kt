@@ -10,7 +10,6 @@ import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.settings.SettingsProvider

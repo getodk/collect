@@ -39,7 +39,6 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.androidshared.network.NetworkStateProvider
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.async.Scheduler
 import org.odk.collect.permissions.PermissionsChecker
@@ -86,8 +85,7 @@ class MainMenuActivityTest {
                 permissionChecker: PermissionsChecker,
                 formsRepositoryProvider: FormsRepositoryProvider,
                 instancesRepositoryProvider: InstancesRepositoryProvider,
-                autoSendSettingsProvider: AutoSendSettingsProvider,
-                networkStateProvider: NetworkStateProvider
+                autoSendSettingsProvider: AutoSendSettingsProvider
             ): MainMenuViewModelFactory {
                 return object : MainMenuViewModelFactory(
                     versionInformation,
@@ -100,8 +98,7 @@ class MainMenuActivityTest {
                     permissionChecker,
                     formsRepositoryProvider,
                     instancesRepositoryProvider,
-                    autoSendSettingsProvider,
-                    networkStateProvider
+                    autoSendSettingsProvider
                 ) {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return when (modelClass) {
