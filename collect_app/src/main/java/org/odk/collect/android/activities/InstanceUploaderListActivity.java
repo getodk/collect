@@ -15,7 +15,6 @@
 package org.odk.collect.android.activities;
 
 import static org.odk.collect.android.activities.AppListActivity.LOADER_ID;
-import static org.odk.collect.android.activities.AppListActivity.setAllToCheckedState;
 import static org.odk.collect.android.activities.AppListActivity.toggleButtonLabel;
 import static org.odk.collect.android.activities.AppListActivity.toggleChecked;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
@@ -43,6 +42,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.work.WorkInfo;
@@ -67,16 +67,16 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.androidshared.ui.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -119,11 +119,12 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     private ListView listView;
     private CursorAdapter listAdapter;
-    private LinkedHashSet<Long> selectedInstances = new LinkedHashSet<>();
     private Integer selectedSortingOrder;
     private List<FormListSortingOption> sortingOptions;
     private ProgressBar progressBar;
     private String filterText;
+
+    private MultiSelectViewModel multiSelectViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,6 +132,11 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         Timber.i("onCreate");
 
         DaggerUtils.getComponent(this).inject(this);
+
+        multiSelectViewModel = new ViewModelProvider(this).get(MultiSelectViewModel.class);
+        multiSelectViewModel.getSelected().observe(this, ids -> {
+            binding.uploadButton.setEnabled(!ids.isEmpty());
+        });
 
         // set title
         setTitle(getString(R.string.send_data));
@@ -153,15 +159,12 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             return;
         }
 
-        long[] instanceIds = listView.getCheckedItemIds();
-
-        if (instanceIds.length > 0) {
-            selectedInstances.clear();
-            setAllToCheckedState(listView, false);
-            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+        Set<Long> selectedItems = multiSelectViewModel.getSelected().getValue();
+        if (!selectedItems.isEmpty()) {
             binding.uploadButton.setEnabled(false);
 
-            uploadSelectedFiles(instanceIds);
+            uploadSelectedFiles(selectedItems.stream().mapToLong(Long::longValue).toArray());
+            multiSelectViewModel.unselectAll();
         } else {
             // no items selected
             ToastUtils.showLongToast(this, R.string.noselect_error);
@@ -197,21 +200,15 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             binding.uploadButton.setEnabled(allChecked);
             if (allChecked) {
                 for (int i = 0; i < lv.getCount(); i++) {
-                    selectedInstances.add(lv.getItemIdAtPosition(i));
+                    multiSelectViewModel.select(lv.getItemIdAtPosition(i));
                 }
             } else {
-                selectedInstances.clear();
+                multiSelectViewModel.unselectAll();
             }
         });
         binding.toggleButton.setOnLongClickListener(this);
 
         setupAdapter();
-
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setItemsCanFocus(false);
-        listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            binding.uploadButton.setEnabled(areCheckedItems());
-        });
 
         sortingOptions = Arrays.asList(
                 new FormListSortingOption(
@@ -335,16 +332,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
-//        if (listView.isItemChecked(position)) {
-//            selectedInstances.add(listView.getItemIdAtPosition(position));
-//        } else {
-//            selectedInstances.remove(listView.getItemIdAtPosition(position));
-//        }
-//
-//        binding.uploadButton.setEnabled(areCheckedItems());
-//        Button toggleSelectionsButton = findViewById(R.id.toggle_button);
-//        toggleButtonLabel(toggleSelectionsButton, listView);
-
         Cursor c = (Cursor) listView.getAdapter().getItem(position);
         long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
         Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
@@ -360,7 +347,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_CANCELED) {
-            selectedInstances.clear();
+            multiSelectViewModel.unselectAll();
             return;
         }
 
@@ -379,9 +366,11 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     private void setupAdapter() {
-        listAdapter = new InstanceUploaderAdapter(this, null);
+        listAdapter = new InstanceUploaderAdapter(this, null, dbId -> {
+            multiSelectViewModel.toggle(dbId);
+        });
+
         listView.setAdapter(listAdapter);
-        checkPreviouslyCheckedItems();
     }
 
     private String getSortingOrderKey() {
@@ -407,7 +396,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         hideProgressBarAndAllow();
         listAdapter.changeCursor(cursor);
-        checkPreviouslyCheckedItems();
         toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
@@ -479,14 +467,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         return sortingOrder;
     }
 
-    private boolean areCheckedItems() {
-        return getCheckedCount() > 0;
-    }
-
-    private int getCheckedCount() {
-        return listView.getCheckedItemCount();
-    }
-
     private int getSelectedSortingOrder() {
         if (selectedSortingOrder == null) {
             restoreSelectedSortingOrder();
@@ -496,26 +476,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     private void restoreSelectedSortingOrder() {
         selectedSortingOrder = settingsProvider.getUnprotectedSettings().getInt(getSortingOrderKey());
-    }
-
-    private void checkPreviouslyCheckedItems() {
-        listView.clearChoices();
-        List<Integer> selectedPositions = new ArrayList<>();
-        int listViewPosition = 0;
-        Cursor cursor = listAdapter.getCursor();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                long instanceId = cursor.getLong(cursor.getColumnIndex(DatabaseInstanceColumns._ID));
-                if (selectedInstances.contains(instanceId)) {
-                    selectedPositions.add(listViewPosition);
-                }
-                listViewPosition++;
-            } while (cursor.moveToNext());
-        }
-
-        for (int position : selectedPositions) {
-            listView.setItemChecked(position, true);
-        }
     }
 
     private void showProgressBar() {
