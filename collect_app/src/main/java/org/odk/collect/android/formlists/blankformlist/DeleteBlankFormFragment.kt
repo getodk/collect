@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.core.view.MenuHost
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -15,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
+import org.odk.collect.androidshared.ui.updateSelectAll
 
 class DeleteBlankFormFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -100,21 +100,5 @@ class DeleteBlankFormFragment(
     ) {
         allSelected =
             updateSelectAll(binding.selectAll, adapter.formItems.size, adapter.selected.size)
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun updateSelectAll(button: Button, itemCount: Int, selectedCount: Int): Boolean {
-            val allSelected = itemCount > 0 && selectedCount == itemCount
-
-            if (allSelected) {
-                button.setText(R.string.clear_all)
-            } else {
-                button.setText(R.string.select_all)
-            }
-
-            return allSelected
-        }
     }
 }

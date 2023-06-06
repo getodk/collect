@@ -22,6 +22,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
+import static org.odk.collect.androidshared.ui.MultiSelectViewModelKt.updateSelectAll;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 
 import android.content.Intent;
@@ -55,7 +56,6 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
-import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment;
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
@@ -136,7 +136,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         multiSelectViewModel = new ViewModelProvider(this).get(MultiSelectViewModel.class);
         multiSelectViewModel.getSelected().observe(this, ids -> {
             binding.uploadButton.setEnabled(!ids.isEmpty());
-            allSelected = DeleteBlankFormFragment.updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
+            allSelected = updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
 
             listAdapter.setSelected(ids);
         });
