@@ -16,7 +16,6 @@ package org.odk.collect.android.activities;
 
 import static org.odk.collect.android.activities.AppListActivity.LOADER_ID;
 import static org.odk.collect.android.activities.AppListActivity.toggleButtonLabel;
-import static org.odk.collect.android.activities.AppListActivity.toggleChecked;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
@@ -34,7 +33,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -57,6 +55,7 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
+import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment;
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
@@ -118,13 +117,14 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     SettingsProvider settingsProvider;
 
     private ListView listView;
-    private CursorAdapter listAdapter;
+    private InstanceUploaderAdapter listAdapter;
     private Integer selectedSortingOrder;
     private List<FormListSortingOption> sortingOptions;
     private ProgressBar progressBar;
     private String filterText;
 
     private MultiSelectViewModel multiSelectViewModel;
+    private boolean allSelected;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -136,6 +136,9 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         multiSelectViewModel = new ViewModelProvider(this).get(MultiSelectViewModel.class);
         multiSelectViewModel.getSelected().observe(this, ids -> {
             binding.uploadButton.setEnabled(!ids.isEmpty());
+            allSelected = DeleteBlankFormFragment.updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
+
+            listAdapter.setSelected(ids);
         });
 
         // set title
@@ -194,13 +197,9 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
         binding.toggleButton.setLongClickable(true);
         binding.toggleButton.setOnClickListener(v -> {
-            ListView lv = listView;
-            boolean allChecked = toggleChecked(lv);
-            toggleButtonLabel(binding.toggleButton, lv);
-            binding.uploadButton.setEnabled(allChecked);
-            if (allChecked) {
-                for (int i = 0; i < lv.getCount(); i++) {
-                    multiSelectViewModel.select(lv.getItemIdAtPosition(i));
+            if (!allSelected) {
+                for (int i = 0; i < listView.getCount(); i++) {
+                    multiSelectViewModel.select(listView.getItemIdAtPosition(i));
                 }
             } else {
                 multiSelectViewModel.unselectAll();

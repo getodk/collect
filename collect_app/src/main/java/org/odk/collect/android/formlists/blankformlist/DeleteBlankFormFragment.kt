@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.view.MenuHost
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -93,13 +94,27 @@ class DeleteBlankFormFragment(
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
     }
 
-    fun updateAllSelected(binding: DeleteBlankFormLayoutBinding, adapter: SelectableBlankFormListAdapter) {
-        allSelected = adapter.formItems.isNotEmpty() && adapter.selected.size == adapter.formItems.size
+    private fun updateAllSelected(
+        binding: DeleteBlankFormLayoutBinding,
+        adapter: SelectableBlankFormListAdapter
+    ) {
+        allSelected =
+            updateSelectAll(binding.selectAll, adapter.formItems.size, adapter.selected.size)
+    }
 
-        if (allSelected) {
-            binding.selectAll.setText(R.string.clear_all)
-        } else {
-            binding.selectAll.setText(R.string.select_all)
+    companion object {
+
+        @JvmStatic
+        fun updateSelectAll(button: Button, itemCount: Int, selectedCount: Int): Boolean {
+            val allSelected = itemCount > 0 && selectedCount == itemCount
+
+            if (allSelected) {
+                button.setText(R.string.clear_all)
+            } else {
+                button.setText(R.string.select_all)
+            }
+
+            return allSelected
         }
     }
 }
