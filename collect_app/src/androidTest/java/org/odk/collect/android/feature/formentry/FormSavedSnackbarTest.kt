@@ -70,6 +70,25 @@ class FormSavedSnackbarTest {
     }
 
     @Test
+    fun whenDraftEditedAndSavedAsDraftAgain_displaySnackbarWithEditAction() {
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .answerQuestion(0, "25")
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+            .clickEditSavedForm()
+            .clickOnForm("One Question")
+            .clickGoToEnd()
+            .clickSaveAsDraft()
+            .assertText(R.string.form_saved_as_draft)
+            .clickOnString(R.string.edit_form)
+            .assertText("25")
+            .assertText(R.string.jump_to_beginning)
+            .assertText(R.string.jump_to_end)
+    }
+
+    @Test
     fun snackbarCanBeDismissed_andWillNotBeDisplayedAgainAfterRecreatingTheActivity() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
