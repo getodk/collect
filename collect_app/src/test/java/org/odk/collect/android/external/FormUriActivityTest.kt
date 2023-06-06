@@ -334,6 +334,21 @@ class FormUriActivityTest {
     }
 
     @Test
+    fun `When attempting to start a new form then there should be no form mode passed with the intent even if editing saved forms is disabled`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
+
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
+
+        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+
+        launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+
+        assertStartBlankFormIntent(project.uuid, form.dbId)
+    }
+
+    @Test
     fun `When attempting to edit a finalized form then start form for view only`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
@@ -538,6 +553,7 @@ class FormUriActivityTest {
         } else {
             Intents.intended(hasData(FormsContract.getUri(projectId, dbId)))
         }
+        Intents.intended(not(hasExtraWithKey(ApplicationConstants.BundleKeys.FORM_MODE)))
         Intents.intended(hasExtra("KEY_1", "Text"))
     }
 
