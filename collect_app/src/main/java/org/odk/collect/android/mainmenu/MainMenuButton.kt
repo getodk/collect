@@ -69,7 +69,9 @@ class MainMenuButton(context: Context, attrs: AttributeSet?) : FrameLayout(conte
                 binding.name.setTypeface(binding.name.typeface, Typeface.BOLD)
                 binding.number.setTypeface(binding.name.typeface, Typeface.BOLD)
             } else {
-                BadgeUtils.detachBadgeDrawable(badge, binding.icon)
+                binding.icon.viewTreeObserver.addOnGlobalLayoutListener {
+                    BadgeUtils.detachBadgeDrawable(badge, binding.icon)
+                }
                 binding.name.typeface = Typeface.DEFAULT
                 binding.number.typeface = Typeface.DEFAULT
             }
