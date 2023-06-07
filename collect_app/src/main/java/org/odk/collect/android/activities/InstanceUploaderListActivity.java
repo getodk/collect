@@ -20,8 +20,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_ASC;
-import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_STATUS_DESC;
 import static org.odk.collect.androidshared.ui.MultiSelectViewModelKt.updateSelectAll;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 
@@ -521,12 +519,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
                 break;
             case BY_DATE_DESC:
                 sortingOrder = DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
-                break;
-            case BY_STATUS_ASC:
-                sortingOrder = DatabaseInstanceColumns.STATUS + " ASC, " + DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
-                break;
-            case BY_STATUS_DESC:
-                sortingOrder = DatabaseInstanceColumns.STATUS + " DESC, " + DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC";
                 break;
         }
         return sortingOrder;
