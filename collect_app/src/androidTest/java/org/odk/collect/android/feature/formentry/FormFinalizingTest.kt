@@ -29,9 +29,7 @@ class FormFinalizingTest {
             .startBlankForm("One Question")
             .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "52"))
             .assertNumberOfEditableForms(0)
-            .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
-            .assertText("52")
+            .assertNumberOfFinalizedForms(1)
     }
 
     @Test

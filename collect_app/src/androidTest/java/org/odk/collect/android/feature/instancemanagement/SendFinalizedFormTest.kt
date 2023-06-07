@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
@@ -28,6 +28,17 @@ class SendFinalizedFormTest {
     val chain: RuleChain = chain(testDependencies)
         .around(RecordedIntentsRule())
         .around(rule)
+
+    @Test
+    fun canViewFormsBeforeSending() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question")
+            .assertText("52")
+    }
 
     @Test
     fun whenThereIsAnAuthenticationError_allowsUserToReenterCredentials() {
@@ -71,9 +82,9 @@ class SendFinalizedFormTest {
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "123"))
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "123"))
             .startBlankForm("One Question")
-            .fillOutAndFinalize(FormEntryPage.QuestionAndAnswer("what is your age", "124"))
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "124"))
 
             .clickSendFinalizedForm(2)
             .selectForm(0)
