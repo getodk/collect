@@ -7,6 +7,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.R
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -105,8 +106,9 @@ class MainMenuViewModelTest {
         )
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
-        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.SAVED_AS_DRAFT))
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)!!
+        assertThat(formSavedSnackbarType.message, equalTo(R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.actionName, equalTo(R.string.edit_form))
     }
 
     @Test
@@ -125,8 +127,9 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
-        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.FINALIZED))
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)!!
+        assertThat(formSavedSnackbarType.message, equalTo(R.string.form_saved))
+        assertThat(formSavedSnackbarType.actionName, equalTo(R.string.view_form))
     }
 
     @Test
@@ -146,8 +149,9 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
-        assertThat(formSavedSnackbarType, equalTo(FormSavedSnackbarType.SENDING))
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)!!
+        assertThat(formSavedSnackbarType.message, equalTo(R.string.form_sending))
+        assertThat(formSavedSnackbarType.actionName, equalTo(R.string.view_form))
     }
 
     @Test
