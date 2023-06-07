@@ -39,7 +39,9 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
@@ -94,6 +96,9 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
 
+    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
+    private static final String SEARCH_TEXT = "searchText";
+
     private static final int INSTANCE_UPLOADER = 0;
 
     InstanceUploaderListBinding binding;
@@ -126,10 +131,20 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private MultiSelectViewModel multiSelectViewModel;
     private boolean allSelected;
 
+    private boolean isSearchBoxShown;
+
+    private SearchView searchView;
+    private String savedFilterText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate");
+
+        if (savedInstanceState != null) {
+            isSearchBoxShown = savedInstanceState.getBoolean(IS_SEARCH_BOX_SHOWN);
+            savedFilterText = savedInstanceState.getString(SEARCH_TEXT);
+        }
 
         DaggerUtils.getComponent(this).inject(this);
 
@@ -286,6 +301,49 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
+
+        getMenuInflater().inflate(R.menu.form_list_menu, menu);
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getResources().getString(R.string.search));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                sortItem.setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                sortItem.setVisible(true);
+                return true;
+            }
+        });
+
+        if (isSearchBoxShown) {
+            searchItem.expandActionView();
+            searchView.setQuery(savedFilterText, false);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -340,6 +398,14 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        if (searchView != null) {
+            outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
+            outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
+        } else {
+            Timber.e(new Error("Unexpected null search view (issue #1412)"));
+        }
+
         outState.putBoolean(SHOW_ALL_MODE, showAllMode);
     }
 
