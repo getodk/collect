@@ -49,7 +49,7 @@ public class EncryptedFormTest {
                 .clickFinalize()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm("encrypted")
+                .clickSelectAll()
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())

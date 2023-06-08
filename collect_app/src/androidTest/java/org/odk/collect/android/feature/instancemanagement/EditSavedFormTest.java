@@ -34,7 +34,7 @@ public class EditSavedFormTest {
                 .clickFinalize()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm("One Question")
+                .clickSelectAll()
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())
@@ -62,7 +62,7 @@ public class EditSavedFormTest {
                 .clickFinalize()
 
                 .clickSendFinalizedForm(1)
-                .clickOnForm("One Question")
+                .clickSelectAll()
                 .clickSendSelected()
                 .clickOK(new SendFinalizedFormPage())
                 .pressBack(new MainMenuPage())

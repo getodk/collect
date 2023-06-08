@@ -1,11 +1,11 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.forms.DatabaseFormColumns;
-
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.CursorMatchers.withRowString;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.forms.DatabaseFormColumns;
 
 public class ViewSentFormPage extends Page<ViewSentFormPage> {
 
@@ -15,8 +15,8 @@ public class ViewSentFormPage extends Page<ViewSentFormPage> {
         return this;
     }
 
-    public FormHierarchyPage clickOnForm(String formName) {
+    public ViewFormPage clickOnForm(String formName) {
         onData(withRowString(DatabaseFormColumns.DISPLAY_NAME, formName)).perform(click());
-        return new FormHierarchyPage(formName);
+        return new ViewFormPage(formName).assertOnPage();
     }
 }

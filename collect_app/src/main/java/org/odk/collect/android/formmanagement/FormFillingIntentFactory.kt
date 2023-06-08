@@ -20,6 +20,8 @@ object FormFillingIntentFactory {
         }
     }
 
+    @JvmStatic
+    @JvmOverloads
     fun editInstanceIntent(
         context: Context,
         projectId: String,

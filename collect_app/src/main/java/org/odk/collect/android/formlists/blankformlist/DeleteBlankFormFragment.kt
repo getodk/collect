@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
+import org.odk.collect.androidshared.ui.updateSelectAll
 
 class DeleteBlankFormFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -93,13 +94,11 @@ class DeleteBlankFormFragment(
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
     }
 
-    fun updateAllSelected(binding: DeleteBlankFormLayoutBinding, adapter: SelectableBlankFormListAdapter) {
-        allSelected = adapter.formItems.isNotEmpty() && adapter.selected.size == adapter.formItems.size
-
-        if (allSelected) {
-            binding.selectAll.setText(R.string.clear_all)
-        } else {
-            binding.selectAll.setText(R.string.select_all)
-        }
+    private fun updateAllSelected(
+        binding: DeleteBlankFormLayoutBinding,
+        adapter: SelectableBlankFormListAdapter
+    ) {
+        allSelected =
+            updateSelectAll(binding.selectAll, adapter.formItems.size, adapter.selected.size)
     }
 }

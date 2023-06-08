@@ -16,13 +16,20 @@ import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Consumer;
 
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED;
 import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
-    public InstanceUploaderAdapter(Context context, Cursor cursor) {
+    private final Consumer<Long> onItemCheckboxClickListener;
+    private Set<Long> selected = new HashSet<>();
+
+    public InstanceUploaderAdapter(Context context, Cursor cursor, Consumer<Long> onItemCheckboxClickListener) {
         super(context, cursor);
+        this.onItemCheckboxClickListener = onItemCheckboxClickListener;
         Collect.getInstance().getComponent().inject(this);
     }
 
@@ -55,6 +62,17 @@ public class InstanceUploaderAdapter extends CursorAdapter {
             default:
                 viewHolder.statusIcon.setImageResource(R.drawable.form_state_finalized_circle);
         }
+
+        long dbId = cursor.getLong(cursor.getColumnIndex(DatabaseInstanceColumns._ID));
+        viewHolder.checkbox.setChecked(selected.contains(dbId));
+        viewHolder.checkbox.setOnClickListener(v -> {
+            onItemCheckboxClickListener.accept(dbId);
+        });
+    }
+
+    public void setSelected(Set<Long> ids) {
+        this.selected = ids;
+        notifyDataSetChanged();
     }
 
     static class ViewHolder {

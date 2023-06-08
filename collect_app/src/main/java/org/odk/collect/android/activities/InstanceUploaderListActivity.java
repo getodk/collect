@@ -14,6 +14,13 @@
 
 package org.odk.collect.android.activities;
 
+import static org.odk.collect.android.activities.AppListActivity.LOADER_ID;
+import static org.odk.collect.android.activities.AppListActivity.toggleButtonLabel;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
+import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
+import static org.odk.collect.androidshared.ui.MultiSelectViewModelKt.updateSelectAll;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 
 import android.content.Intent;
@@ -25,12 +32,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 import androidx.work.WorkInfo;
@@ -43,21 +54,28 @@ import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.CursorLoaderFactory;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.databinding.InstanceUploaderListBinding;
+import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
 import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.androidshared.ui.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -71,10 +89,13 @@ import timber.log.Timber;
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
 
-public class InstanceUploaderListActivity extends InstanceListActivity implements
+public class InstanceUploaderListActivity extends LocalizedActivity implements
         OnLongClickListener, AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String SHOW_ALL_MODE = "showAllMode";
     private static final String INSTANCE_UPLOADER_LIST_SORTING_ORDER = "instanceUploaderListSortingOrder";
+
+    private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
+    private static final String SEARCH_TEXT = "searchText";
 
     private static final int INSTANCE_UPLOADER = 0;
 
@@ -98,12 +119,40 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Inject
     SettingsProvider settingsProvider;
 
+    private ListView listView;
+    private InstanceUploaderAdapter listAdapter;
+    private Integer selectedSortingOrder;
+    private List<FormListSortingOption> sortingOptions;
+    private ProgressBar progressBar;
+    private String filterText;
+
+    private MultiSelectViewModel multiSelectViewModel;
+    private boolean allSelected;
+
+    private boolean isSearchBoxShown;
+
+    private SearchView searchView;
+    private String savedFilterText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.i("onCreate");
 
+        if (savedInstanceState != null) {
+            isSearchBoxShown = savedInstanceState.getBoolean(IS_SEARCH_BOX_SHOWN);
+            savedFilterText = savedInstanceState.getString(SEARCH_TEXT);
+        }
+
         DaggerUtils.getComponent(this).inject(this);
+
+        multiSelectViewModel = new ViewModelProvider(this).get(MultiSelectViewModel.class);
+        multiSelectViewModel.getSelected().observe(this, ids -> {
+            binding.uploadButton.setEnabled(!ids.isEmpty());
+            allSelected = updateSelectAll(binding.toggleButton, listAdapter.getCount(), ids.size());
+
+            listAdapter.setSelected(ids);
+        });
 
         // set title
         setTitle(getString(R.string.send_data));
@@ -113,8 +162,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
         if (savedInstanceState != null) {
             showAllMode = savedInstanceState.getBoolean(SHOW_ALL_MODE);
         }
-
-        init();
     }
 
     public void onUploadButtonsClicked() {
@@ -128,19 +175,34 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
             return;
         }
 
-        long[] instanceIds = listView.getCheckedItemIds();
-
-        if (instanceIds.length > 0) {
-            selectedInstances.clear();
-            setAllToCheckedState(listView, false);
-            toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+        Set<Long> selectedItems = multiSelectViewModel.getSelected().getValue();
+        if (!selectedItems.isEmpty()) {
             binding.uploadButton.setEnabled(false);
 
-            uploadSelectedFiles(instanceIds);
+            uploadSelectedFiles(selectedItems.stream().mapToLong(Long::longValue).toArray());
+            multiSelectViewModel.unselectAll();
         } else {
             // no items selected
             ToastUtils.showLongToast(this, R.string.noselect_error);
         }
+    }
+
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+
+        listView = findViewById(android.R.id.list);
+        listView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        listView.setEmptyView(findViewById(android.R.id.empty));
+        progressBar = findViewById(R.id.progressBar);
+
+        // Use the nicer-looking drawable with Material Design insets.
+        listView.setDivider(ContextCompat.getDrawable(this, R.drawable.list_item_divider));
+        listView.setDividerHeight(1);
+
+        setSupportActionBar(findViewById(R.id.toolbar));
+
+        init();
     }
 
     void init() {
@@ -148,27 +210,17 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
         binding.toggleButton.setLongClickable(true);
         binding.toggleButton.setOnClickListener(v -> {
-            ListView lv = listView;
-            boolean allChecked = toggleChecked(lv);
-            toggleButtonLabel(binding.toggleButton, lv);
-            binding.uploadButton.setEnabled(allChecked);
-            if (allChecked) {
-                for (int i = 0; i < lv.getCount(); i++) {
-                    selectedInstances.add(lv.getItemIdAtPosition(i));
+            if (!allSelected) {
+                for (int i = 0; i < listView.getCount(); i++) {
+                    multiSelectViewModel.select(listView.getItemIdAtPosition(i));
                 }
             } else {
-                selectedInstances.clear();
+                multiSelectViewModel.unselectAll();
             }
         });
         binding.toggleButton.setOnLongClickListener(this);
 
         setupAdapter();
-
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        listView.setItemsCanFocus(false);
-        listView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            binding.uploadButton.setEnabled(areCheckedItems());
-        });
 
         sortingOptions = Arrays.asList(
                 new FormListSortingOption(
@@ -219,6 +271,7 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Override
     protected void onResume() {
         super.onResume();
+        restoreSelectedSortingOrder();
         binding.uploadButton.setText(R.string.send_selected_data);
     }
 
@@ -246,6 +299,49 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
+
+        getMenuInflater().inflate(R.menu.form_list_menu, menu);
+        final MenuItem sortItem = menu.findItem(R.id.menu_sort);
+        final MenuItem searchItem = menu.findItem(R.id.menu_filter);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint(getResources().getString(R.string.search));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filterText = query;
+                updateAdapter();
+                searchView.clearFocus();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterText = newText;
+                updateAdapter();
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                sortItem.setVisible(false);
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                sortItem.setVisible(true);
+                return true;
+            }
+        });
+
+        if (isSearchBoxShown) {
+            searchItem.expandActionView();
+            searchView.setQuery(savedFilterText, false);
+        }
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -263,6 +359,24 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                 showSentAndUnsentChoices();
                 return true;
         }
+
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
+        if (item.getItemId() == R.id.menu_sort) {
+            new FormListSortingBottomSheetDialog(
+                    this,
+                    sortingOptions,
+                    selectedSortingOrder,
+                    selectedOption -> {
+                        saveSelectedSortingOrder(selectedOption);
+                        updateAdapter();
+                    }
+            ).show();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -273,27 +387,30 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
-        if (listView.isItemChecked(position)) {
-            selectedInstances.add(listView.getItemIdAtPosition(position));
-        } else {
-            selectedInstances.remove(listView.getItemIdAtPosition(position));
-        }
-
-        binding.uploadButton.setEnabled(areCheckedItems());
-        Button toggleSelectionsButton = findViewById(R.id.toggle_button);
-        toggleButtonLabel(toggleSelectionsButton, listView);
+        Cursor c = (Cursor) listView.getAdapter().getItem(position);
+        long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
+        Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
+        startActivity(intent);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        if (searchView != null) {
+            outState.putBoolean(IS_SEARCH_BOX_SHOWN, !searchView.isIconified());
+            outState.putString(SEARCH_TEXT, String.valueOf(searchView.getQuery()));
+        } else {
+            Timber.e(new Error("Unexpected null search view (issue #1412)"));
+        }
+
         outState.putBoolean(SHOW_ALL_MODE, showAllMode);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (resultCode == RESULT_CANCELED) {
-            selectedInstances.clear();
+            multiSelectViewModel.unselectAll();
             return;
         }
 
@@ -312,18 +429,18 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     }
 
     private void setupAdapter() {
-        listAdapter = new InstanceUploaderAdapter(this, null);
+        listAdapter = new InstanceUploaderAdapter(this, null, dbId -> {
+            multiSelectViewModel.toggle(dbId);
+        });
+
         listView.setAdapter(listAdapter);
-        checkPreviouslyCheckedItems();
     }
 
-    @Override
-    protected String getSortingOrderKey() {
+    private String getSortingOrderKey() {
         return INSTANCE_UPLOADER_LIST_SORTING_ORDER;
     }
 
-    @Override
-    protected void updateAdapter() {
+    private void updateAdapter() {
         getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
@@ -342,7 +459,6 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         hideProgressBarAndAllow();
         listAdapter.changeCursor(cursor);
-        checkPreviouslyCheckedItems();
         toggleButtonLabel(findViewById(R.id.toggle_button), listView);
     }
 
@@ -387,5 +503,56 @@ public class InstanceUploaderListActivity extends InstanceListActivity implement
                 }).create();
         alertDialog.show();
         return true;
+    }
+
+    private String getSortingOrder() {
+        String sortingOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + DatabaseInstanceColumns.STATUS + " DESC";
+        switch (getSelectedSortingOrder()) {
+            case BY_NAME_ASC:
+                sortingOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE ASC, " + DatabaseInstanceColumns.STATUS + " DESC";
+                break;
+            case BY_NAME_DESC:
+                sortingOrder = DatabaseInstanceColumns.DISPLAY_NAME + " COLLATE NOCASE DESC, " + DatabaseInstanceColumns.STATUS + " DESC";
+                break;
+            case BY_DATE_ASC:
+                sortingOrder = DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE + " ASC";
+                break;
+            case BY_DATE_DESC:
+                sortingOrder = DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC";
+                break;
+        }
+        return sortingOrder;
+    }
+
+    private int getSelectedSortingOrder() {
+        if (selectedSortingOrder == null) {
+            restoreSelectedSortingOrder();
+        }
+        return selectedSortingOrder;
+    }
+
+    private void restoreSelectedSortingOrder() {
+        selectedSortingOrder = settingsProvider.getUnprotectedSettings().getInt(getSortingOrderKey());
+    }
+
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBarAndAllow() {
+        hideProgressBar();
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private CharSequence getFilterText() {
+        return filterText != null ? filterText : "";
+    }
+
+    private void saveSelectedSortingOrder(int selectedStringOrder) {
+        selectedSortingOrder = selectedStringOrder;
+        settingsProvider.getUnprotectedSettings().save(getSortingOrderKey(), selectedStringOrder);
     }
 }
