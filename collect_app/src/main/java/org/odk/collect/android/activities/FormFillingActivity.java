@@ -111,6 +111,7 @@ import org.odk.collect.android.formentry.ODKView;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
+import org.odk.collect.android.formentry.SwipeHandler;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
@@ -139,7 +140,6 @@ import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.SavePointListener;
-import org.odk.collect.android.formentry.SwipeHandler;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
@@ -171,6 +171,8 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.system.ProcessRestoreDetector;
+import org.odk.collect.androidshared.system.SavedInstanceStateProvider;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
@@ -363,6 +365,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Inject
     public AutoSendSettingsProvider autoSendSettingsProvider;
 
+    @Inject
+    public SavedInstanceStateProvider savedInstanceStateProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -418,7 +423,14 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
 
+        savedInstanceState = savedInstanceStateProvider.getState(savedInstanceState);
+
+        if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
+            savedInstanceState = null;
+        }
+
         super.onCreate(savedInstanceState);
+
         formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
@@ -806,6 +818,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         outState.putString(KEY_ERROR, errorMessage);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
+
+        ProcessRestoreDetector.registerOnSaveInstanceState(this, outState);
     }
 
     @Override

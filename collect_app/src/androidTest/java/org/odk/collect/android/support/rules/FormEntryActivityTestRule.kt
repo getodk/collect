@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -13,12 +12,15 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.ActivityHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
+import org.odk.collect.androidshared.system.SavedInstanceStateProvider
+import org.odk.collect.androidtest.ActivityScenarioExtensions.saveInstanceState
 import org.odk.collect.projects.Project
 import timber.log.Timber
 import java.io.IOException
@@ -27,6 +29,20 @@ class FormEntryActivityTestRule : ExternalResource() {
 
     private lateinit var intent: Intent
     private lateinit var scenario: ActivityScenario<Activity>
+
+    private var outState: Bundle? = null
+
+    private val savedInstanceStateProvider = InMemSavedInstanceStateProvider()
+
+    override fun before() {
+        super.before()
+
+        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+            override fun providesSavedInstanceStateProvider(): SavedInstanceStateProvider {
+                return savedInstanceStateProvider
+            }
+        })
+    }
 
     override fun after() {
         try {
@@ -67,26 +83,20 @@ class FormEntryActivityTestRule : ExternalResource() {
         return FormHierarchyPage(instanceName).assertOnPage()
     }
 
-    fun saveInstanceStateForActivity(): FormEntryActivityTestRule {
-        scenario.onActivity {
-            it.onSaveInstanceState(Bundle(), PersistableBundle())
-        }
-
+    fun navigateAwayFromActivity(): FormEntryActivityTestRule {
+        scenario.moveToState(Lifecycle.State.STARTED)
+        outState = scenario.saveInstanceState()
         return this
     }
 
     fun destroyActivity(): FormEntryActivityTestRule {
-        lateinit var scenarioActivity: Activity
-        scenario.onActivity {
-            scenarioActivity = it
-        }
-
-        if (ActivityHelpers.getActivity() != scenarioActivity) {
-            throw IllegalStateException("Can't destroy backstack!")
-        }
-
         scenario.moveToState(Lifecycle.State.DESTROYED)
         return this
+    }
+
+    fun restoreActivity() {
+        savedInstanceStateProvider.setState(outState)
+        scenario = ActivityScenario.launch(intent)
     }
 
     private fun createNewFormIntent(formFilename: String): Intent {
@@ -98,7 +108,11 @@ class FormEntryActivityTestRule : ExternalResource() {
         val projectId = DaggerUtils.getComponent(application).currentProjectProvider()
             .getCurrentProject().uuid
 
-        return FormFillingIntentFactory.newInstanceIntent(application, FormsContract.getUri(projectId, form!!.dbId), FormFillingActivity::class)
+        return FormFillingIntentFactory.newInstanceIntent(
+            application,
+            FormsContract.getUri(projectId, form!!.dbId),
+            FormFillingActivity::class
+        )
     }
 
     private fun createEditFormIntent(formFilename: String): Intent {
@@ -118,5 +132,24 @@ class FormEntryActivityTestRule : ExternalResource() {
             instance.dbId,
             FormFillingActivity::class
         )
+    }
+}
+
+private class InMemSavedInstanceStateProvider : SavedInstanceStateProvider {
+
+    private var bundle: Bundle? = null
+
+    fun setState(savedInstanceState: Bundle?) {
+        bundle = savedInstanceState
+    }
+
+    override fun getState(savedInstanceState: Bundle?): Bundle? {
+        return if (bundle != null) {
+            bundle.also {
+                bundle = null
+            }
+        } else {
+            savedInstanceState
+        }
     }
 }
