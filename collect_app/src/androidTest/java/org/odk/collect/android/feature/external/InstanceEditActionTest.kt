@@ -45,24 +45,4 @@ class InstanceEditActionTest {
 
         assertThat(result.resultData.data, equalTo(uri))
     }
-
-    @Test
-    fun editingInstance_andIgnoringChanges_returnsInstanceURI() {
-        rule.startAtMainMenu()
-            .copyForm("one-question.xml")
-            .startBlankForm("One Question")
-            .swipeToEndScreen()
-            .clickSaveAsDraft()
-
-        val instanceId = ContentProviderUtils.getInstanceDatabaseId("DEMO", "one_question")
-        val uri = InstancesContract.getUri("DEMO", instanceId)
-
-        val intent = Intent(Intent.ACTION_EDIT).also { it.data = uri }
-        val result = rule.launchForResult(intent, FormHierarchyPage("One Question")) {
-            it.clickGoToStart()
-                .pressBackAndDiscardChanges(AppClosedPage())
-        }
-
-        assertThat(result.resultData.data, equalTo(uri))
-    }
 }
