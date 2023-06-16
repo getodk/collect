@@ -18,6 +18,8 @@ import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 
 @RunWith(AndroidJUnit4::class)
@@ -31,6 +33,7 @@ class MainMenuViewModelTest {
         whenever(get()).thenReturn(instancesRepository)
     }
     private val autoSendSettingsProvider = mock<AutoSendSettingsProvider>()
+    private val settingsProvider = InMemSettingsProvider()
 
     @Test
     fun `version when beta release returns semantic version with prefix and beta version`() {
@@ -93,8 +96,9 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun `getFormSavedSnackbarType should return SAVED_AS_DRAFT snackbar type when the corresponding instance is saved as draft`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft and editing drafts is enabled`() {
         val viewModel = createViewModelWithVersion("")
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -106,13 +110,33 @@ class MainMenuViewModelTest {
         )
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)!!
-        assertThat(formSavedSnackbarType.message, equalTo(R.string.form_saved_as_draft))
-        assertThat(formSavedSnackbarType.actionName, equalTo(R.string.edit_form))
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarType.first, equalTo(R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.second, equalTo(R.string.edit_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarType should return FINALIZED snackbar type when the corresponding instance is finalized and auto send is disabled`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft and editing drafts is disabled`() {
+        val viewModel = createViewModelWithVersion("")
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarType.first, equalTo(R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.second, equalTo(R.string.view_form))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized and auto send is disabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -127,13 +151,13 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)!!
-        assertThat(formSavedSnackbarType.message, equalTo(R.string.form_saved))
-        assertThat(formSavedSnackbarType.actionName, equalTo(R.string.view_form))
+        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarDetails.first, equalTo(R.string.form_saved))
+        assertThat(formSavedSnackbarDetails.second, equalTo(R.string.view_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarType should return SENDING snackbar type when the corresponding instance is finalized and auto send is enabled`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized and auto send is enabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -149,13 +173,13 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)!!
-        assertThat(formSavedSnackbarType.message, equalTo(R.string.form_sending))
-        assertThat(formSavedSnackbarType.actionName, equalTo(R.string.view_form))
+        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarDetails.first, equalTo(R.string.form_sending))
+        assertThat(formSavedSnackbarDetails.second, equalTo(R.string.view_form))
     }
 
     @Test
-    fun `getFormSavedSnackbarType should return null when the corresponding instance is already sent`() {
+    fun `getFormSavedSnackbarDetails should return null when the corresponding instance is already sent`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -171,12 +195,12 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
-        assertThat(formSavedSnackbarType, equalTo(null))
+        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)
+        assertThat(formSavedSnackbarDetails, equalTo(null))
     }
 
     @Test
-    fun `getFormSavedSnackbarType should return null when the corresponding instance failed to sent`() {
+    fun `getFormSavedSnackbarDetails should return null when the corresponding instance failed to sent`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -192,11 +216,11 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarType = viewModel.getFormSavedSnackbarType(uri)
-        assertThat(formSavedSnackbarType, equalTo(null))
+        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)
+        assertThat(formSavedSnackbarDetails, equalTo(null))
     }
 
     private fun createViewModelWithVersion(version: String): MainMenuViewModel {
-        return MainMenuViewModel(mock(), VersionInformation { version }, mock(), mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider)
+        return MainMenuViewModel(mock(), VersionInformation { version }, settingsProvider, mock(), mock(), formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider)
     }
 }

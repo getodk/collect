@@ -11,16 +11,15 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
+import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.Form
-import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProtectedProjectKeys
 import java.io.File
 import javax.inject.Inject
 
@@ -189,7 +188,7 @@ class FormUriActivity : ComponentActivity() {
 
         val formEditingEnabled = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.status == Instance.STATUS_INCOMPLETE && settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+            instance!!.canBeEdited(settingsProvider)
         } else {
             true
         }

@@ -4,10 +4,12 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
+import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -104,21 +106,29 @@ class MainMenuViewModel(
     val sentInstancesCount: LiveData<Int>
         get() = instancesAppState.sentCount
 
-    fun getFormSavedSnackbarType(uri: Uri): FormSavedSnackbarType? {
+    fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
-            when (instance.status) {
-                Instance.STATUS_INCOMPLETE -> FormSavedSnackbarType.SAVED_AS_DRAFT
-                Instance.STATUS_COMPLETE -> {
-                    val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
-                    if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
-                        FormSavedSnackbarType.SENDING
-                    } else {
-                        FormSavedSnackbarType.FINALIZED
-                    }
+            val message = if (instance.status == Instance.STATUS_INCOMPLETE) {
+                R.string.form_saved_as_draft
+            } else if (instance.status == Instance.STATUS_COMPLETE) {
+                val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
+                if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
+                    R.string.form_sending
+                } else {
+                    R.string.form_saved
                 }
-                else -> null
+            } else {
+                return null
             }
+
+            val action = if (instance.canBeEdited(settingsProvider)) {
+                R.string.edit_form
+            } else {
+                R.string.view_form
+            }
+
+            return Pair(message, action)
         } else {
             null
         }
