@@ -18,11 +18,9 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,7 +45,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
@@ -484,13 +481,9 @@ public class GoogleMapFragment extends SupportMapFragment implements
         lastLocationFix = fromLocation(locationClient.getLastLocation());
         Timber.i("Requesting location updates (to %s)", this);
         locationClient.requestLocationUpdates(this);
-        if (!locationClient.isLocationAvailable()) {
-            showGpsDisabledAlert();
-        }
     }
 
     @Override public void onClientStartFailure() {
-        showGpsDisabledAlert();
     }
 
     @Override public void onClientStop() {
@@ -694,19 +687,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     private static BitmapDescriptor getBitmapDescriptor(Context context, MarkerIconDescription markerIconDescription) {
         return BitmapDescriptorCache.getBitmapDescriptor(context, markerIconDescription);
-    }
-
-    private void showGpsDisabledAlert() {
-        new MaterialAlertDialogBuilder(getActivity())
-            .setMessage(getString(R.string.gps_enable_message))
-            .setCancelable(false)
-            .setPositiveButton(getString(R.string.enable_gps),
-                (dialog, id) -> startActivityForResult(
-                    new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
-            .setNegativeButton(getString(R.string.cancel),
-                (dialog, id) -> dialog.cancel())
-            .create()
-            .show();
     }
 
     private void onConfigChanged(Bundle config) {

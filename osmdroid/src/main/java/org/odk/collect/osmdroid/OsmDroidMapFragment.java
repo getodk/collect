@@ -28,7 +28,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.LocationListener;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.location.LocationClient;
@@ -470,7 +468,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
     @Override
     public void onClientStartFailure() {
-        showGpsDisabledAlert();
     }
 
     @Override
@@ -559,19 +556,6 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             map.getOverlays().add(0, referenceOverlay);
         }
         map.invalidate();
-    }
-
-    private void showGpsDisabledAlert() {
-        new MaterialAlertDialogBuilder(getContext())
-                .setMessage(getString(R.string.gps_enable_message))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.enable_gps),
-                        (dialog, id) -> startActivityForResult(
-                                new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0))
-                .setNegativeButton(getString(R.string.cancel),
-                        (dialog, id) -> dialog.cancel())
-                .create()
-                .show();
     }
 
     /**
