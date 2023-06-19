@@ -43,7 +43,7 @@ public class GeoPointMapActivityTest {
     public ActivityScenarioLauncherRule launcherRule = new ActivityScenarioLauncherRule();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         ShadowApplication shadowApplication = shadowOf(ApplicationProvider.<Application>getApplicationContext());
         shadowApplication.grantPermissions("android.permission.ACCESS_FINE_LOCATION");
         shadowApplication.grantPermissions("android.permission.ACCESS_COARSE_LOCATION");
@@ -68,28 +68,37 @@ public class GeoPointMapActivityTest {
     }
 
     @Test
-    public void shouldReturnPointFromSecondLocationFix() {
+    public void whenLocationNotSetShouldDisplayPleaseWaitMessage() {
         ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launchForResult(GeoPointMapActivity.class);
         mapFragment.ready();
 
-        // The very first fix is ignored.
+        scenario.onActivity(activity -> assertEquals(activity.getString(R.string.please_wait_long), activity.getLocationStatus()));
+    }
+
+    @Test
+    public void whenLocationSetShouldDisplayStatusMessage() {
+        ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launchForResult(GeoPointMapActivity.class);
+        mapFragment.ready();
         mapFragment.setLocationProvider("GPS");
         mapFragment.setLocation(new MapPoint(1, 2, 3, 4f));
-        scenario.onActivity(activity -> {
-            assertEquals(activity.getString(R.string.please_wait_long), activity.getLocationStatus());
-        });
 
+        scenario.onActivity(activity -> assertEquals(activity.formatLocationStatus("gps", 4f), activity.getLocationStatus()));
+    }
 
-        // The second fix changes the status message.
+    @Test
+    public void shouldReturnPointFromLastLocationFix() {
+        ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launchForResult(GeoPointMapActivity.class);
+        mapFragment.ready();
+        mapFragment.setLocationProvider("GPS");
+
+        // First location
+        mapFragment.setLocation(new MapPoint(1, 2, 3, 4f));
+
+        // Second location
         mapFragment.setLocation(new MapPoint(5, 6, 7, 8f));
-        scenario.onActivity(activity -> {
-            assertEquals(activity.formatLocationStatus("gps", 8f), activity.getLocationStatus());
-        });
 
         // When the user clicks the "Save" button, the fix location should be returned.
-        scenario.onActivity(activity -> {
-            activity.findViewById(R.id.accept_location).performClick();
-        });
+        scenario.onActivity(activity -> activity.findViewById(R.id.accept_location).performClick());
 
         assertThat(scenario.getResult().getResultCode(), is(RESULT_OK));
         scenario.onActivity(activity -> {
