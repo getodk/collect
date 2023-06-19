@@ -487,8 +487,6 @@ public class GoogleMapFragment extends SupportMapFragment implements
     }
 
     @Override public void onClientStop() {
-        Timber.i("Stopping location updates (to %s)", this);
-        locationClient.stopLocationUpdates();
     }
 
     private static @NonNull MapPoint fromLatLng(@NonNull LatLng latLng) {
