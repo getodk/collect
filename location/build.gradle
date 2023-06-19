@@ -45,6 +45,7 @@ dependencies {
     implementation project(':androidshared')
     implementation project(':icons')
     implementation project(':strings')
+    implementation project(':analytics')
     implementation Dependencies.kotlin_stdlib
     implementation Dependencies.androidx_core_ktx
     implementation Dependencies.play_services_location
