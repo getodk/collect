@@ -144,6 +144,6 @@
         android:layout_marginLeft="16dp"
         android:tag="0"
         app:fabSize="normal"
-        app:srcCompat="@drawable/ic_add_white"/>
+        app:srcCompat="@drawable/ic_add_white_24"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
