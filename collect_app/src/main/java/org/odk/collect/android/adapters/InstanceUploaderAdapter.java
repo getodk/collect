@@ -52,15 +52,15 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         switch (status) {
             case STATUS_SUBMISSION_FAILED:
-                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_submission_failed_circle);
+                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_submission_failed);
                 break;
 
             case STATUS_SUBMITTED:
-                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_submitted_circle);
+                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_submited);
                 break;
 
             default:
-                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_finalized_circle);
+                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_finalized);
         }
 
         long dbId = cursor.getLong(cursor.getColumnIndex(DatabaseInstanceColumns._ID));
