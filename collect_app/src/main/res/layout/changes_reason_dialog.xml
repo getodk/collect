@@ -42,7 +42,6 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:tint="?colorOnSurface"
                     app:srcCompat="@drawable/ic_chat_bubble_black_24dp" />
 
                 <TextView
