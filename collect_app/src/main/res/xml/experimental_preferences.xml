@@ -7,7 +7,7 @@
         android:key="predicate_caching" />
 
     <Preference
-        android:icon="@drawable/ic_person_black_24dp"
+        android:icon="@drawable/ic_person_24dp"
         android:title="@string/entities_title"
         android:key="entities"
         app:persistent="false"/>

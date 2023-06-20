@@ -42,7 +42,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_chat_bubble_black_24dp" />
+                    app:srcCompat="@drawable/ic_chat_bubble_24dp" />
 
                 <TextView
                     style="@style/TextAppearance.Collect.Headline6"
