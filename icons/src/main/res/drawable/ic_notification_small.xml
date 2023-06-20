@@ -13,7 +13,8 @@ limitations under the License.
         android:width="24dp"
         android:height="24dp"
         android:viewportWidth="16.0"
-        android:viewportHeight="16.0">
+        android:viewportHeight="16.0"
+        android:tint="@android:color/white">
     <path
         android:pathData="m6.507,0.667c-0.2,0 -0.361,0.133 -0.361,0.298l0,0.521l-0.5,0c-0.315,0 -0.568,0.278 -0.568,0.623l0,0.788l5.845,0l0,-0.788c0,-0.345 -0.254,-0.623 -0.569,-0.623l-0.5,0l0,-0.521c0,-0.165 -0.161,-0.298 -0.361,-0.298z"
         android:fillColor="@android:color/white" />
