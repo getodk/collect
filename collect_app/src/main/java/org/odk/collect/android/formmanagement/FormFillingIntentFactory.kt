@@ -24,6 +24,19 @@ object FormFillingIntentFactory {
     @JvmOverloads
     fun editInstanceIntent(
         context: Context,
+        uri: Uri?,
+        clazz: KClass<out Activity> = FormUriActivity::class
+    ): Intent {
+        return Intent(context, clazz.java).also {
+            it.action = Intent.ACTION_EDIT
+            it.data = uri
+        }
+    }
+
+    @JvmStatic
+    @JvmOverloads
+    fun editInstanceIntent(
+        context: Context,
         projectId: String,
         instanceId: Long,
         clazz: KClass<out Activity> = FormUriActivity::class

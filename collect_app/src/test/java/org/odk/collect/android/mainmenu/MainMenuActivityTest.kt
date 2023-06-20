@@ -31,9 +31,12 @@ import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
+import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
@@ -79,7 +82,10 @@ class MainMenuActivityTest {
                 scheduler: Scheduler,
                 currentProjectProvider: CurrentProjectProvider,
                 analyticsInitializer: AnalyticsInitializer,
-                permissionChecker: PermissionsChecker
+                permissionChecker: PermissionsChecker,
+                formsRepositoryProvider: FormsRepositoryProvider,
+                instancesRepositoryProvider: InstancesRepositoryProvider,
+                autoSendSettingsProvider: AutoSendSettingsProvider
             ): MainMenuViewModelFactory {
                 return object : MainMenuViewModelFactory(
                     versionInformation,
@@ -89,7 +95,10 @@ class MainMenuActivityTest {
                     scheduler,
                     currentProjectProvider,
                     analyticsInitializer,
-                    permissionChecker
+                    permissionChecker,
+                    formsRepositoryProvider,
+                    instancesRepositoryProvider,
+                    autoSendSettingsProvider
                 ) {
                     override fun <T : ViewModel> create(modelClass: Class<T>): T {
                         return when (modelClass) {

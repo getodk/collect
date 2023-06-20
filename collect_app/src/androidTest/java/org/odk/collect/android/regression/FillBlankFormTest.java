@@ -213,7 +213,7 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion("Any other notes?")
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
     }
 
     @Test
@@ -307,7 +307,7 @@ public class FillBlankFormTest {
                 .clickOnText("Oranges")
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
     }
 
     @Test
@@ -360,7 +360,7 @@ public class FillBlankFormTest {
                 .clickOK(new FormEntryPage("g6Error"))
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
 
         new MainMenuPage()
                 .copyForm("g6Error2.xml")
@@ -369,21 +369,21 @@ public class FillBlankFormTest {
                 .clickOK(new FormEntryPage("g6Error2"))
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
 
         new MainMenuPage()
                 .copyForm("emptyGroupFieldList.xml")
                 .clickFillBlankForm()
                 .clickOnEmptyForm("emptyGroupFieldList")
                 .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
 
         new MainMenuPage()
                 .copyForm("emptyGroupFieldList2.xml")
                 .startBlankForm("emptyGroupFieldList2")
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
     }
 
     @Test
@@ -394,7 +394,7 @@ public class FillBlankFormTest {
                 .clickFillBlankForm()
                 .clickOnEmptyForm("metadata2")
                 .clickFinalize()
-                .checkIsToastWithMessageDisplayed(R.string.data_saved_ok);
+                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
     }
 
     @Test

@@ -1,14 +1,23 @@
 package org.odk.collect.android.mainmenu
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
+import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
+import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
+import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
+import org.odk.collect.android.utilities.ContentUriHelper
+import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 
@@ -17,7 +26,10 @@ class MainMenuViewModel(
     private val versionInformation: VersionInformation,
     private val settingsProvider: SettingsProvider,
     private val instancesAppState: InstancesAppState,
-    private val scheduler: Scheduler
+    private val scheduler: Scheduler,
+    private val formsRepositoryProvider: FormsRepositoryProvider,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val autoSendSettingsProvider: AutoSendSettingsProvider
 ) : ViewModel() {
 
     val version: String
@@ -93,4 +105,32 @@ class MainMenuViewModel(
 
     val sentInstancesCount: LiveData<Int>
         get() = instancesAppState.sentCount
+
+    fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int>? {
+        val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+        return if (instance != null) {
+            val message = if (instance.status == Instance.STATUS_INCOMPLETE) {
+                R.string.form_saved_as_draft
+            } else if (instance.status == Instance.STATUS_COMPLETE) {
+                val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
+                if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
+                    R.string.form_sending
+                } else {
+                    R.string.form_saved
+                }
+            } else {
+                return null
+            }
+
+            val action = if (instance.canBeEdited(settingsProvider)) {
+                R.string.edit_form
+            } else {
+                R.string.view_form
+            }
+
+            return Pair(message, action)
+        } else {
+            null
+        }
+    }
 }

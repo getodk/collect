@@ -1,11 +1,13 @@
 package org.odk.collect.android.mainmenu
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +24,7 @@ import org.odk.collect.android.application.MapboxClassInstanceCreator.createMapB
 import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAvailable
 import org.odk.collect.android.databinding.MainMenuBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
+import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.gdrive.GoogleDriveActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectIconView
@@ -31,6 +34,7 @@ import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.SnackbarUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.permissions.PermissionsProvider
@@ -54,6 +58,11 @@ class MainMenuActivity : LocalizedActivity() {
     private lateinit var binding: MainMenuBinding
     private lateinit var mainMenuViewModel: MainMenuViewModel
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
+
+    private val formLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            displayFormSavedSnackbar(it.data?.data)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
@@ -188,11 +197,13 @@ class MainMenuActivity : LocalizedActivity() {
 
     private fun initButtons() {
         binding.enterData.setOnClickListener {
-            startActivity(Intent(this, BlankFormListActivity::class.java))
+            formLauncher.launch(
+                Intent(this, BlankFormListActivity::class.java)
+            )
         }
 
         binding.reviewData.setOnClickListener {
-            startActivity(
+            formLauncher.launch(
                 Intent(this, InstanceChooserList::class.java).apply {
                     putExtra(
                         ApplicationConstants.BundleKeys.FORM_MODE,
@@ -308,6 +319,25 @@ class MainMenuActivity : LocalizedActivity() {
             }
         } else {
             binding.googleDriveDeprecationBanner.root.visibility = View.GONE
+        }
+    }
+
+    private fun displayFormSavedSnackbar(uri: Uri?) {
+        if (uri == null) {
+            return
+        }
+
+        val formSavedSnackbarDetails = mainMenuViewModel.getFormSavedSnackbarDetails(uri)
+
+        formSavedSnackbarDetails?.let { it ->
+            SnackbarUtils.showLongSnackbar(
+                binding.root,
+                getString(it.first),
+                action = SnackbarUtils.Action(getString(it.second)) {
+                    formLauncher.launch(FormFillingIntentFactory.editInstanceIntent(this, uri))
+                },
+                displayDismissButton = true
+            )
         }
     }
 }

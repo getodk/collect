@@ -29,6 +29,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.loader.app.LoaderManager;
@@ -76,6 +78,11 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
+
+    private final ActivityResultLauncher<Intent> formLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        setResult(RESULT_OK, result.getData());
+        finish();
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,6 +141,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                 if (Intent.ACTION_PICK.equals(action)) {
                     // caller is waiting on a picked form
                     setResult(RESULT_OK, new Intent().setData(instanceUri));
+                    finish();
                 } else {
                     // the form can be edited if it is incomplete or if, when it was
                     // marked as complete, it was determined that it could be edited
@@ -158,12 +166,13 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                     if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
                         logFormEdit(c);
                         intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.EDIT_SAVED);
+                        formLauncher.launch(intent);
                     } else {
                         intent.putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT);
+                        startActivity(intent);
+                        finish();
                     }
-                    startActivity(intent);
                 }
-                finish();
             } else {
                 TextView disabledCause = view.findViewById(R.id.form_subtitle2);
                 Toast.makeText(this, disabledCause.getText(), Toast.LENGTH_SHORT).show();
