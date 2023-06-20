@@ -154,13 +154,13 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     public static int getFormStateImageResourceIdForStatus(String formStatus) {
         switch (formStatus) {
             case Instance.STATUS_INCOMPLETE:
-                return R.drawable.form_state_saved_circle;
+                return R.drawable.ic_form_state_saved_circle;
             case Instance.STATUS_COMPLETE:
-                return R.drawable.form_state_finalized_circle;
+                return R.drawable.ic_form_state_finalized_circle;
             case Instance.STATUS_SUBMITTED:
-                return R.drawable.form_state_submitted_circle;
+                return R.drawable.ic_form_state_submitted_circle;
             case Instance.STATUS_SUBMISSION_FAILED:
-                return R.drawable.form_state_submission_failed_circle;
+                return R.drawable.ic_form_state_submission_failed_circle;
         }
 
         return -1;

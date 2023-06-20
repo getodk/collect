@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
         android:text="@string/get_help_with_reference_layers"
-        app:icon="@drawable/information_outline"
+        app:icon="@drawable/ic_information_outline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

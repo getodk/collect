@@ -222,7 +222,7 @@ open class PermissionsProvider internal constructor(
                             activity,
                             R.string.storage_runtime_permission_denied_title,
                             R.string.storage_runtime_permission_denied_desc,
-                            R.drawable.sd,
+                            R.drawable.ic_storage,
                             listener
                         )
                     }
