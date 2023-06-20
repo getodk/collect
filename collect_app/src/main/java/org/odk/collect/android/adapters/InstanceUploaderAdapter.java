@@ -56,7 +56,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
                 break;
 
             case STATUS_SUBMITTED:
-                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_submited);
+                viewHolder.statusIcon.setImageResource(R.drawable.ic_form_state_submitted);
                 break;
 
             default:

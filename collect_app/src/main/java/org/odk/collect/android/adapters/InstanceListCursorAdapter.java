@@ -158,7 +158,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             case Instance.STATUS_COMPLETE:
                 return R.drawable.ic_form_state_finalized;
             case Instance.STATUS_SUBMITTED:
-                return R.drawable.ic_form_state_submited;
+                return R.drawable.ic_form_state_submitted;
             case Instance.STATUS_SUBMISSION_FAILED:
                 return R.drawable.ic_form_state_submission_failed;
         }

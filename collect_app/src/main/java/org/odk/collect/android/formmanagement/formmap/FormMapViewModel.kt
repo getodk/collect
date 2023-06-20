@@ -208,7 +208,7 @@ class FormMapViewModel(
     private fun getSubmissionSummaryStatusIcon(instanceStatus: String?): Int {
         return when (instanceStatus) {
             Instance.STATUS_COMPLETE -> R.drawable.ic_form_state_finalized
-            Instance.STATUS_SUBMITTED -> R.drawable.ic_form_state_submited
+            Instance.STATUS_SUBMITTED -> R.drawable.ic_form_state_submitted
             Instance.STATUS_SUBMISSION_FAILED -> R.drawable.ic_form_state_submission_failed
             else -> R.drawable.ic_form_state_saved
         }

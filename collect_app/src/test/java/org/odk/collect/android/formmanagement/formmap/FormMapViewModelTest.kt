@@ -286,7 +286,7 @@ class FormMapViewModelTest {
             instance.displayName,
             listOf(
                 MappableSelectItem.IconifiedText(
-                    R.drawable.ic_form_state_submited,
+                    R.drawable.ic_form_state_submitted,
                     formatDate(
                         R.string.sent_on_date_at_time,
                         instance.lastStatusChangeDate
