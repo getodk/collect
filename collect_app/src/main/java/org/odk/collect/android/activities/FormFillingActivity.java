@@ -193,7 +193,6 @@ import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
-import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
@@ -393,8 +392,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Timber.w("onCreate %s", Md5.getMd5Hash(getIntent().getData().toString()));
-
         // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
         // this issue by including WebViews
         if (Build.VERSION.SDK_INT >= 24) {
@@ -780,8 +777,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Timber.w("onSaveInstanceState %s", Md5.getMd5Hash(getIntent().getData().toString()));
-
         super.onSaveInstanceState(outState);
 
         outState.putString(KEY_SESSION_ID, sessionId);
@@ -1843,8 +1838,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Override
     protected void onStart() {
-        Timber.w("onStart %s", Md5.getMd5Hash(getIntent().getData().toString()));
-
         super.onStart();
         FormController formController = getFormController();
 
@@ -1863,8 +1856,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Override
     protected void onPause() {
-        Timber.w("onPause %s", Md5.getMd5Hash(getIntent().getData().toString()));
-
         backgroundLocationViewModel.activityHidden();
 
         super.onPause();
@@ -1872,8 +1863,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Override
     protected void onResume() {
-        Timber.w("onResume %s", Md5.getMd5Hash(getIntent().getData().toString()));
-
         super.onResume();
 
         activityDisplayed();
@@ -1976,8 +1965,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Override
     protected void onDestroy() {
-        Timber.w("onDestroy %s", Md5.getMd5Hash(getIntent().getData().toString()));
-
         if (formLoaderTask != null) {
             formLoaderTask.setFormLoaderListener(null);
             // We have to call cancel to terminate the thread, otherwise it
