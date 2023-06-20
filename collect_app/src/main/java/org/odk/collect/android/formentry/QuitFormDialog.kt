@@ -78,6 +78,13 @@ object QuitFormDialog {
             }
         )
 
+        binding.discardChanges.setOnClickListener {
+            formSaveViewModel.ignoreChanges()
+            formEntryViewModel.exit()
+            activity.finish()
+            dialog.dismiss()
+        }
+
         binding.keepEditingOutlined.isVisible = saveAsDraft
         binding.keepEditingFilled.isVisible = !saveAsDraft
 
@@ -86,13 +93,6 @@ object QuitFormDialog {
         }
 
         binding.keepEditingFilled.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        binding.discardChanges.setOnClickListener {
-            formSaveViewModel.ignoreChanges()
-            formEntryViewModel.exit()
-            activity.finish()
             dialog.dismiss()
         }
 
