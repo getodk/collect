@@ -189,6 +189,14 @@ public class RangeDecimalWidgetTest {
         verify(listener, never()).onLongClick(widget.slider);
     }
 
+    @Test // https://github.com/getodk/collect/issues/5530
+    public void everyTriggerWidgetShouldHaveCheckboxWithUniqueID() {
+        RangeDecimalWidget widget1 = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        RangeDecimalWidget widget2 = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+
+        assertThat(widget1.slider.getId(), not(equalTo(widget2.slider.getId())));
+    }
+
     private RangeDecimalWidget createWidget(FormEntryPrompt prompt) {
         return new RangeDecimalWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
