@@ -11,7 +11,7 @@
     </style>
 
     <style name="Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls.CloseIcon" parent="Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls">
-        <item name="navigationIcon">@drawable/ic_close_black_24dp</item>
+        <item name="navigationIcon">@drawable/ic_close</item>
         <item name="navigationContentDescription">@string/close</item>
     </style>
 </resources>
