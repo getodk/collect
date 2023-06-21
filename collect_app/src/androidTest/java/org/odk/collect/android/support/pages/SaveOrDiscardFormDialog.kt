@@ -3,12 +3,18 @@ package org.odk.collect.android.support.pages
 import android.os.Build
 import org.odk.collect.android.R
 
-class SaveOrDiscardFormDialog<D : Page<D>>(
-    private val destination: D
+class SaveOrDiscardFormDialog<D : Page<D>> @JvmOverloads constructor(
+    private val destination: D,
+    private val saveAsDraftEnabled: Boolean = true
 ) : Page<SaveOrDiscardFormDialog<D>>() {
 
     override fun assertOnPage(): SaveOrDiscardFormDialog<D> {
-        assertText(R.string.quit_form_title)
+        if (saveAsDraftEnabled) {
+            assertText(R.string.quit_form_title)
+        } else {
+            assertText(R.string.quit_form_continue_title)
+        }
+
         return this
     }
 
