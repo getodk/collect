@@ -45,6 +45,7 @@ public class ChoicesRecyclerView extends RecyclerView {
         }
         setAdapter(adapter);
         adjustRecyclerViewSize();
+        setLayoutDirection(LAYOUT_DIRECTION_LOCALE);
     }
 
     private void enableFlexboxLayout() {
