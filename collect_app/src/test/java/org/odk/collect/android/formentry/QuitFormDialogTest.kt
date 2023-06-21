@@ -15,7 +15,7 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.settings.InMemSettingsProvider
-import org.odk.collect.settings.keys.ProtectedProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_SAVE_MID
 import org.odk.collect.shadows.ShadowAndroidXAlertDialog
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
@@ -81,7 +81,7 @@ class QuitFormDialogTest {
 
     @Test
     fun whenSaveAsDraftIsEnabled_andLastSavedTimeIsNull_showsSaveExplanation() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, true)
         whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
@@ -96,7 +96,7 @@ class QuitFormDialogTest {
 
     @Test
     fun whenSaveAsDraftIsEnabled_andLastSavedTimeIsNotNull_showsLastSavedTime() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, true)
         whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
@@ -117,7 +117,7 @@ class QuitFormDialogTest {
 
     @Test
     fun whenSaveAsDraftIsEnabled_showsOutlinedKeepEditing_andHidesFilledKeepEditing() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
+        settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, true)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
         val dialog = showDialog(activity)
@@ -136,7 +136,7 @@ class QuitFormDialogTest {
 
     @Test
     fun whenSaveAsDraftIsDisabled_andLastSavedTimeIsNull_showsWarningTitleAndMessage_andHidesButton() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+        settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, false)
         whenever(formSaveViewModel.lastSavedTime).doReturn(null)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
@@ -160,7 +160,7 @@ class QuitFormDialogTest {
 
     @Test
     fun whenSaveAsDraftIsDisabled_andLastSavedTimeIsNotNull_showsWarningTitleAndMessage_andHidesButton() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+        settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, false)
         whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()
@@ -189,7 +189,7 @@ class QuitFormDialogTest {
 
     @Test
     fun whenSaveAsDraftIsDisabled_hidesOutlinedKeepEditing_andShowsFilledKeepEditing() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+        settingsProvider.getProtectedSettings().save(KEY_SAVE_MID, false)
         whenever(formSaveViewModel.lastSavedTime).doReturn(456L)
 
         val activity = Robolectric.buildActivity(Activity::class.java).get()

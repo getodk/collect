@@ -41,7 +41,7 @@ object QuitFormDialog {
         onSaveChangesClicked: Runnable?
     ): AlertDialog {
         val saveAsDraft = settingsProvider.getProtectedSettings()
-            .getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT)
+            .getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)
         val lastSavedTime = formSaveViewModel.lastSavedTime
 
         val binding = QuitFormDialogLayoutBinding.inflate(activity.layoutInflater)
