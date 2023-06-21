@@ -90,6 +90,8 @@ public class RangeWidgetUtils {
             slider.setEnabled(false);
         }
 
+        slider.setId(View.generateViewId());
+
         return new RangeWidgetLayoutElements(answerView, slider, currentValue);
     }
 
