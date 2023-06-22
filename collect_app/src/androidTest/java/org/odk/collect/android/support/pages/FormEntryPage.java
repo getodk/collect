@@ -73,7 +73,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public <D extends Page<D>> D fillOutAndSave(D destination, QuestionAndAnswer... questionsAndAnswers) {
         return fillOut(questionsAndAnswers)
-                .pressBack(new SaveOrDiscardFormDialog<>(formName, destination))
+                .pressBack(new SaveOrDiscardFormDialog<>(destination))
                 .clickSaveChanges();
     }
 
@@ -383,25 +383,25 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public MainMenuPage pressBackAndDiscardChanges() {
         return closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>(formName, new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardChanges();
     }
 
     public <D extends Page<D>> D pressBackAndDiscardChanges(D destination) {
         return closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>(formName, destination))
+                .pressBack(new SaveOrDiscardFormDialog<>(destination))
                 .clickDiscardChanges();
     }
 
     public MainMenuPage pressBackAndDiscardForm() {
         return closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>(formName, new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardForm();
     }
 
     public <D extends Page<D>> D pressBackAndDiscardForm(D destination) {
         return closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<D>(formName, destination))
+                .pressBack(new SaveOrDiscardFormDialog<D>(destination))
                 .clickDiscardForm();
     }
 

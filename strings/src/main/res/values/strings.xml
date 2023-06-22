@@ -161,13 +161,19 @@
     <string name="data_saved_ok">Form successfully saved!</string>
     <string name="save_point_error">Error saving recovery point: %s</string>
 
-    <!-- Dialog title when exiting a form. The name of the form will be included -->
+    <!-- Dialog title when exiting a drawing view. The name of the kind of drawing will be included -->
     <string name="quit_application">Exit %s</string>
     <!-- Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded> -->
-    <string name="no_form_loaded">&lt;no form loaded&gt;</string>
     <string name="do_not_save">Discard Form</string>
     <string name="discard_changes">Discard Changes</string>
     <string name="keep_changes">Save Changes</string>
+    <string name="keep_editing">Keep editing</string>
+    <string name="quit_form_title">Save form?</string>
+    <string name="save_explanation">You can save this form and access it from your drafts at any time.</string>
+    <string name="save_explanation_with_last_saved">\'This form was last saved on\' EEE, MMM dd, yyyy \'at\' HH:mm\'. Save as draft to keep changes.\'</string>
+    <string name="quit_form_continue_title">Continue editing?</string>
+    <string name="discard_form_warning">If you discard form, you will lose any changes you have made so far.</string>
+    <string name="discard_changes_warning">\'This form was last saved on\' EEE, MMM dd, yyyy \'at\' HH:mm\'. If you discard changes, you will lose any changes you have made since then.\'</string>
 
     <string name="saving_form">Saving Form</string>
     <string name="survey_saving_validating_message">Validating answers…</string>

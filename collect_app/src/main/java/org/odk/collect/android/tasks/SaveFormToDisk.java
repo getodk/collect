@@ -54,7 +54,6 @@ import org.odk.collect.android.utilities.EncryptionUtils;
 import org.odk.collect.android.utilities.EncryptionUtils.EncryptedFormInformation;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.forms.Form;
@@ -81,6 +80,7 @@ public class SaveFormToDisk {
     private final boolean shouldFinalize;
     private final FormController formController;
     private final MediaUtils mediaUtils;
+    private final InstancesRepository instancesRepository;
     private Uri uri;
     private String instanceName;
     private final ArrayList<String> tempFiles;
@@ -93,7 +93,7 @@ public class SaveFormToDisk {
     public static final int ENCRYPTION_ERROR = 505;
 
     public SaveFormToDisk(FormController formController, MediaUtils mediaUtils, boolean saveAndExit, boolean shouldFinalize, String updatedName,
-                          Uri uri, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                          Uri uri, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository,  InstancesRepository instancesRepository) {
         this.formController = formController;
         this.mediaUtils = mediaUtils;
         this.uri = uri;
@@ -103,6 +103,7 @@ public class SaveFormToDisk {
         this.tempFiles = tempFiles;
         this.currentProjectId = currentProjectId;
         this.entitiesRepository = entitiesRepository;
+        this.instancesRepository = instancesRepository;
     }
 
     @Nullable
@@ -141,13 +142,14 @@ public class SaveFormToDisk {
         }
 
         try {
-            exportData(shouldFinalize, progressListener);
+            Instance instance = exportData(shouldFinalize, progressListener);
 
             if (formController.getInstanceFile() != null) {
                 removeSavepointFiles(formController.getInstanceFile().getName());
             }
 
             saveToDiskResult.setSaveResult(saveAndExit ? SAVED_AND_EXIT : SAVED, shouldFinalize);
+            saveToDiskResult.setInstance(instance);
         } catch (EncryptionException e) {
             saveToDiskResult.setSaveErrorMessage(e.getMessage());
             saveToDiskResult.setSaveResult(ENCRYPTION_ERROR, shouldFinalize);
@@ -172,11 +174,11 @@ public class SaveFormToDisk {
      * Post-condition: the uri field is set to the URI of the instance database row that matches
      * the instance currently managed by the {@link FormController}.
      */
-    private void updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
+    private Instance updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
-        InstancesRepository instances = new InstancesRepositoryProvider(Collect.getInstance()).get();
+        InstancesRepository instances = instancesRepository;
         Instance instance = instances.getOneByPath(instancePath);
 
         Instance.Builder instanceBuilder;
@@ -206,7 +208,7 @@ public class SaveFormToDisk {
                 instanceBuilder.geometry(geometryContentValues.second);
             }
 
-            Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
+            Instance newInstance = instancesRepository.save(instanceBuilder.build());
             uri = InstancesContract.getUri(currentProjectId, newInstance.getDbId());
         } else {
             Timber.i("No instance found, creating");
@@ -231,8 +233,9 @@ public class SaveFormToDisk {
             }
         }
 
-        Instance newInstance = new InstancesRepositoryProvider(Collect.getInstance()).get().save(instanceBuilder.build());
+        Instance newInstance = instancesRepository.save(instanceBuilder.build());
         uri = InstancesContract.getUri(currentProjectId, newInstance.getDbId());
+        return newInstance;
     }
 
     /**
@@ -329,7 +332,7 @@ public class SaveFormToDisk {
      * In theory we don't have to write to disk, and this is where you'd add
      * other methods.
      */
-    private void exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
+    private Instance exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_collecting_message));
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
@@ -352,7 +355,7 @@ public class SaveFormToDisk {
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
         // occurs during the packaging of the data for the server fails (e.g., encryption),
         // we can still reopen the filled-out form and re-save it at a later time.
-        updateInstanceDatabase(true, true);
+        Instance instance = updateInstanceDatabase(true, true);
 
         if (markCompleted) {
             // now see if the packaging of the data for the server would make it
@@ -403,7 +406,7 @@ public class SaveFormToDisk {
             // 2. Overwrite the instanceXml with the submission.xml
             //    and remove the plaintext attachments if encrypting
 
-            updateInstanceDatabase(false, canEditAfterCompleted);
+            instance = updateInstanceDatabase(false, canEditAfterCompleted);
 
             if (!canEditAfterCompleted) {
                 manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);
@@ -421,8 +424,7 @@ public class SaveFormToDisk {
             // if encrypted, delete all plaintext files
             // (anything not named instanceXml or anything not ending in .enc)
             if (isEncrypted) {
-                InstancesRepository instancesRepository = new InstancesRepositoryProvider(Collect.getInstance()).get();
-                Instance instance = instancesRepository.get(ContentUriHelper.getIdFromUri(uri));
+                instance = instancesRepository.get(ContentUriHelper.getIdFromUri(uri));
 
                 // Clear the geometry. Done outside of updateInstanceDatabase to avoid multiple
                 // branches and because it has no knowledge of encryption status.
@@ -441,6 +443,8 @@ public class SaveFormToDisk {
                 }
             }
         }
+
+        return instance;
     }
 
     /**

@@ -59,6 +59,7 @@ import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
@@ -172,12 +173,15 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public AutoSendSettingsProvider autoSendSettingsProvider;
 
+    @Inject
+    public InstancesRepositoryProvider instancesRepositoryProvider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         DaggerUtils.getComponent(this).inject(this);
 
         String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
-        FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocationClient, permissionsProvider, autoSendSettingsProvider);
+        FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocationClient, permissionsProvider, autoSendSettingsProvider, instancesRepositoryProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(DeleteRepeatDialogFragment.class, () -> new DeleteRepeatDialogFragment(viewModelFactory))

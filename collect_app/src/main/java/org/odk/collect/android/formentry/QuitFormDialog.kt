@@ -1,21 +1,16 @@
 package org.odk.collect.android.formentry
 
 import android.app.Activity
-import android.content.DialogInterface
-import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.common.collect.ImmutableList
 import org.odk.collect.android.R
-import org.odk.collect.android.adapters.IconMenuListAdapter
-import org.odk.collect.android.adapters.model.IconMenuItem
+import org.odk.collect.android.databinding.QuitFormDialogLayoutBinding
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
-import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.utilities.DialogUtils
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object QuitFormDialog {
 
@@ -25,7 +20,6 @@ object QuitFormDialog {
         formSaveViewModel: FormSaveViewModel,
         formEntryViewModel: FormEntryViewModel,
         settingsProvider: SettingsProvider,
-        currentProjectProvider: CurrentProjectProvider,
         onSaveChangesClicked: Runnable?
     ): AlertDialog {
         return create(
@@ -33,7 +27,6 @@ object QuitFormDialog {
             formSaveViewModel,
             formEntryViewModel,
             settingsProvider,
-            currentProjectProvider,
             onSaveChangesClicked
         ).also {
             it.show()
@@ -45,58 +38,69 @@ object QuitFormDialog {
         formSaveViewModel: FormSaveViewModel,
         formEntryViewModel: FormEntryViewModel,
         settingsProvider: SettingsProvider,
-        currentProjectProvider: CurrentProjectProvider,
         onSaveChangesClicked: Runnable?
     ): AlertDialog {
-        val title: String =
-            if (formSaveViewModel.formName == null) activity.resources.getString(R.string.no_form_loaded) else formSaveViewModel.getFormName()
+        val saveAsDraft = settingsProvider.getProtectedSettings()
+            .getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)
+        val lastSavedTime = formSaveViewModel.lastSavedTime
 
-        val items: List<IconMenuItem> = if (
-            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_SAVE_MID)
-        ) {
-            ImmutableList.of(
-                IconMenuItem(R.drawable.ic_save, R.string.save_as_draft),
-                getDiscardItem(formSaveViewModel)
-            )
-        } else {
-            ImmutableList.of(getDiscardItem(formSaveViewModel))
-        }
-
-        val listView = DialogUtils.createActionListView(activity)
-
-        val adapter = IconMenuListAdapter(activity, items)
-        listView.adapter = adapter
-
+        val binding = QuitFormDialogLayoutBinding.inflate(activity.layoutInflater)
         val dialog = MaterialAlertDialogBuilder(activity)
-            .setTitle(activity.resources.getString(R.string.quit_application, title))
-            .setNegativeButton(activity.resources.getString(R.string.do_not_exit)) { dialog: DialogInterface, id: Int ->
-                dialog.dismiss()
-            }
-            .setView(listView)
+            .setTitle(
+                if (saveAsDraft) {
+                    R.string.quit_form_title
+                } else {
+                    R.string.quit_form_continue_title
+                }
+            )
+            .setView(binding.root)
             .create()
 
-        listView.onItemClickListener =
-            OnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
-                val item = adapter.getItem(position) as IconMenuItem
-                if (item.textResId == R.string.save_as_draft) {
-                    onSaveChangesClicked?.run()
-                } else {
-                    formSaveViewModel.ignoreChanges()
-                    formEntryViewModel.exit()
-                    activity.finish()
-                }
-
-                dialog.dismiss()
+        binding.saveExplanation.text = if (!saveAsDraft) {
+            if (lastSavedTime != null) {
+                val string = activity.getString(R.string.discard_changes_warning)
+                SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
+            } else {
+                activity.getString(R.string.discard_form_warning)
             }
+        } else if (lastSavedTime != null) {
+            val string = activity.getString(R.string.save_explanation_with_last_saved)
+            SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
+        } else {
+            activity.getString(R.string.save_explanation)
+        }
+
+        binding.discardChanges.setText(
+            if (lastSavedTime != null) {
+                R.string.discard_changes
+            } else {
+                R.string.do_not_save
+            }
+        )
+
+        binding.discardChanges.setOnClickListener {
+            formSaveViewModel.ignoreChanges()
+            formEntryViewModel.exit()
+            activity.finish()
+            dialog.dismiss()
+        }
+
+        binding.keepEditingOutlined.isVisible = saveAsDraft
+        binding.keepEditingFilled.isVisible = !saveAsDraft
+
+        binding.keepEditingOutlined.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.keepEditingFilled.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        binding.saveChanges.isVisible = saveAsDraft
+        binding.saveChanges.setOnClickListener {
+            onSaveChangesClicked?.run()
+        }
 
         return dialog
-    }
-
-    private fun getDiscardItem(formSaveViewModel: FormSaveViewModel): IconMenuItem {
-        return if (formSaveViewModel.hasSaved()) {
-            IconMenuItem(R.drawable.ic_delete, R.string.discard_changes)
-        } else {
-            IconMenuItem(R.drawable.ic_delete, R.string.do_not_save)
-        }
     }
 }

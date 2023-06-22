@@ -23,6 +23,7 @@ import static org.odk.collect.androidshared.livedata.LiveDataUtils.liveDataOf;
 import android.net.Uri;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -48,6 +49,9 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.entities.EntitiesRepository;
 import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
+import org.odk.collect.formstest.InMemInstancesRepository;
 import org.odk.collect.projects.Project;
 import org.odk.collect.shared.TempFiles;
 import org.odk.collect.testshared.FakeScheduler;
@@ -78,6 +82,9 @@ public class FormSaveViewModelTest {
 
     private final EntitiesRepository entitiesRepository = mock(EntitiesRepository.class);
 
+    private final InstancesRepository instancesRepository = new InMemInstancesRepository();
+    private MutableLiveData<FormSession> formSession;
+
     @Before
     public void setup() {
         // Useful given some methods will execute AsyncTasks
@@ -97,8 +104,8 @@ public class FormSaveViewModelTest {
         currentProjectProvider = mock(CurrentProjectProvider.class);
         when(currentProjectProvider.getCurrentProject()).thenReturn(Project.Companion.getDEMO_PROJECT());
 
-        LiveData<FormSession> formSession = liveDataOf(new FormSession(formController, form));
-        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository);
+        formSession = new MutableLiveData<>(new FormSession(formController, form));
+        viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, audioRecorder, currentProjectProvider, formSession, entitiesRepository, instancesRepository);
 
         CollectHelpers.createDemoProject(); // Needed to deal with `new StoragePathProvider()` calls in `FormSaveViewModel`
     }
@@ -470,7 +477,7 @@ public class FormSaveViewModelTest {
     public void deleteAnswerFile_whenAnswerFileHasAlreadyBeenDeleted_onRecreatingViewModel_actuallyDeletesNewFile() {
         viewModel.deleteAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository);
         restoredViewModel.deleteAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah2");
@@ -492,7 +499,7 @@ public class FormSaveViewModelTest {
     public void replaceAnswerFile_whenAnswerFileHasAlreadyBeenReplaced_afterRecreatingViewModel_deletesPreviousReplacement() {
         viewModel.replaceAnswerFile("index", "blah1");
 
-        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository);
+        FormSaveViewModel restoredViewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository);
         restoredViewModel.replaceAnswerFile("index", "blah2");
 
         verify(mediaUtils).deleteMediaFile("blah1");
@@ -566,8 +573,31 @@ public class FormSaveViewModelTest {
 
     @Test
     public void ignoreChanges_whenFormControllerNotSet_doesNothing() {
-        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository);
+        FormSaveViewModel viewModel = new FormSaveViewModel(savedStateHandle, () -> CURRENT_TIME, formSaver, mediaUtils, scheduler, mock(AudioRecorder.class), currentProjectProvider, liveDataOf(new FormSession(formController, form)), entitiesRepository, instancesRepository);
         viewModel.ignoreChanges(); // Checks nothing explodes
+    }
+
+    @Test
+    public void getLastSavedTime_whenNewInstance_returnsNull() {
+        assertThat(viewModel.getLastSavedTime(), equalTo(null));
+    }
+
+    @Test
+    public void getLastSavedTime_whenInstanceNotSaved_returnsLastStatusChange() {
+        Instance instance = new Instance.Builder()
+                .lastStatusChangeDate(123L)
+                .build();
+
+        formSession.setValue(new FormSession(formController, form, instance));
+        assertThat(viewModel.getLastSavedTime(), equalTo(instance.getLastStatusChangeDate()));
+    }
+
+    @Test
+    public void getLastSavedTime_whenInstanceSaved_returnsLastStatusChange() {
+        viewModel.saveForm(Uri.parse("file://form"), false, "", false);
+        whenFormSaverFinishes(SaveFormToDisk.SAVED);
+
+        assertThat(viewModel.getLastSavedTime(), equalTo(formSaver.instance.getLastStatusChangeDate()));
     }
 
     private void whenReasonRequiredToSave() {
@@ -595,11 +625,21 @@ public class FormSaveViewModelTest {
 
         public int numberOfTimesCalled;
 
+        public final Instance instance = new Instance.Builder()
+                .lastStatusChangeDate(123L)
+                .build();
+
         @Override
         public SaveToDiskResult save(Uri instanceContentURI, FormController formController, MediaUtils mediaUtils, boolean shouldFinalize,
-                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                                     boolean exitAfter, String updatedSaveName, ProgressListener progressListener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
             this.tempFiles = tempFiles;
             numberOfTimesCalled++;
+
+            if (saveToDiskResult.getSaveResult() == SaveFormToDisk.SAVED) {
+                saveToDiskResult.setInstance(new Instance.Builder()
+                        .lastStatusChangeDate(123L)
+                        .build());
+            }
 
             return saveToDiskResult;
         }

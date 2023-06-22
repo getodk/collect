@@ -33,6 +33,8 @@ import org.odk.collect.androidshared.livedata.LiveDataUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.entities.EntitiesRepository;
+import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.utilities.Result;
@@ -80,8 +82,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private final AudioRecorder audioRecorder;
     private final CurrentProjectProvider currentProjectProvider;
     private final EntitiesRepository entitiesRepository;
+    private final InstancesRepository instancesRepository;
+    private Instance instance;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
@@ -90,6 +94,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         this.audioRecorder = audioRecorder;
         this.currentProjectProvider = currentProjectProvider;
         this.entitiesRepository = entitiesRepository;
+        this.instancesRepository = instancesRepository;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -98,7 +103,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             recentFiles = stateHandle.get(RECENT_FILES);
         }
 
-        LiveDataUtils.observe(formSession, it -> this.formController = it.getFormController());
+        LiveDataUtils.observe(formSession, it -> {
+            formController = it.getFormController();
+            instance = it.getInstance();
+        });
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
@@ -218,13 +226,15 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                 handleTaskResult(saveToDiskResult, saveRequest);
                 clearMediaFiles();
             }
-        }, new ArrayList<>(originalFiles.values()), currentProjectProvider.getCurrentProject().getUuid(), entitiesRepository).execute();
+        }, new ArrayList<>(originalFiles.values()), currentProjectProvider.getCurrentProject().getUuid(), entitiesRepository, instancesRepository).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {
         if (formController == null) {
             return;
         }
+
+        instance = taskResult.getInstance();
 
         switch (taskResult.getSaveResult()) {
             case SAVED:
@@ -286,11 +296,6 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             return null;
         }
         return formController.getFormTitle();
-    }
-
-    public boolean hasSaved() {
-        File instanceFile = formController.getInstanceFile();
-        return instanceFile != null && instanceFile.exists();
     }
 
     @Override
@@ -390,6 +395,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         answerFileError.setValue(null);
     }
 
+    public Long getLastSavedTime() {
+        return instance != null ? instance.getLastStatusChangeDate() : null;
+    }
+
     public static class SaveResult {
         private final State state;
         private final String message;
@@ -462,9 +471,10 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         private final ArrayList<String> tempFiles;
         private final String currentProjectId;
         private final EntitiesRepository entitiesRepository;
+        private final InstancesRepository instancesRepository;
 
         SaveTask(SaveRequest saveRequest, FormSaver formSaver, FormController formController, MediaUtils mediaUtils,
-                 Listener listener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository) {
+                 Listener listener, ArrayList<String> tempFiles, String currentProjectId, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
             this.saveRequest = saveRequest;
             this.formSaver = formSaver;
             this.listener = listener;
@@ -473,6 +483,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             this.tempFiles = tempFiles;
             this.currentProjectId = currentProjectId;
             this.entitiesRepository = entitiesRepository;
+            this.instancesRepository = instancesRepository;
         }
 
         @Override
@@ -481,7 +492,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                     mediaUtils, saveRequest.shouldFinalize,
                     saveRequest.viewExiting, saveRequest.updatedSaveName,
                     this::publishProgress, tempFiles,
-                    currentProjectId, entitiesRepository);
+                    currentProjectId, entitiesRepository, instancesRepository);
         }
 
         @Override

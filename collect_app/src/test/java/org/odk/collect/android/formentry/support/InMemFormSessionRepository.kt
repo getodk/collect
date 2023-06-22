@@ -6,6 +6,7 @@ import org.odk.collect.android.formentry.FormSession
 import org.odk.collect.android.formentry.FormSessionRepository
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.forms.Form
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.shared.strings.UUIDGenerator
 
 class InMemFormSessionRepository : FormSessionRepository {
@@ -20,8 +21,8 @@ class InMemFormSessionRepository : FormSessionRepository {
         return getLiveData(id)
     }
 
-    override fun set(id: String, formController: FormController, form: Form) {
-        getLiveData(id).value = FormSession(formController, form)
+    override fun set(id: String, formController: FormController, form: Form, instance: Instance?) {
+        getLiveData(id).value = FormSession(formController, form, instance)
     }
 
     override fun clear(id: String) {

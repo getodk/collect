@@ -31,7 +31,7 @@ public class QuittingFormTest {
                         new QuestionAndAnswer("What is your name?", "Reuben"),
                         new QuestionAndAnswer("What is your age?", "10")
                 )
-                .pressBack(new SaveOrDiscardFormDialog<>("Two Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)
@@ -46,7 +46,7 @@ public class QuittingFormTest {
                 .copyForm("two-question.xml")
                 .startBlankForm("Two Question")
                 .answerQuestion("What is your name?", "Reuben")
-                .pressBack(new SaveOrDiscardFormDialog<>("Two Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardForm()
 
                 .assertNumberOfEditableForms(0);
@@ -77,7 +77,7 @@ public class QuittingFormTest {
                 .answerQuestion("What is your name?", "Reuben")
                 .swipeToNextQuestion("What is your age?", true)
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)
@@ -91,7 +91,7 @@ public class QuittingFormTest {
                 .copyForm("two-question-required.xml")
                 .startBlankForm("Two Question Required")
                 .answerQuestion("What is your name?", "Reuben")
-                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)
@@ -100,7 +100,7 @@ public class QuittingFormTest {
                 .answerQuestion("What is your name?", "Another Reuben")
                 .swipeToNextQuestion("What is your age?", true)
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>("Two Question Required", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
                 .clickEditSavedForm(1)

@@ -87,8 +87,7 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">ከ 1 %s ይውጡ</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&amp;lt፣ምንም ቅጽ አልተጫነም&amp;gt፣</string>
-  <string name="keep_changes">ለውጦችን አስቀምጥ</string>
+    <string name="keep_changes">ለውጦችን አስቀምጥ</string>
   <string name="saving_form">ቅጽን በማስቀመጥ ላይ</string>
   <string name="survey_saving_validating_message">መልሶችን በማረጋገጥ ላይ …</string>
   <string name="survey_saving_collecting_message">ውሂብ በመሰብሰብ ላይ …</string>

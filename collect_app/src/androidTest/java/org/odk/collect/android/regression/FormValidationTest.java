@@ -49,7 +49,7 @@ public class FormValidationTest {
                 .assertText("YY")
                 .pressBack(new FormEntryPage("OnePageFormShort"))
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>("OnePageFormShort", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardForm();
     }
 }

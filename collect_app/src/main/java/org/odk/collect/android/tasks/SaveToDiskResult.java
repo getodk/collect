@@ -18,6 +18,8 @@
 
 package org.odk.collect.android.tasks;
 
+import org.odk.collect.forms.instances.Instance;
+
 /**
  * Author: Meletis Margaritis
  * Date: 15/3/2013
@@ -28,6 +30,7 @@ public class SaveToDiskResult {
     private int saveResult;
     private boolean complete;
     private String saveErrorMessage;
+    private Instance instance;
 
     public int getSaveResult() {
         return saveResult;
@@ -48,5 +51,13 @@ public class SaveToDiskResult {
 
     public String getSaveErrorMessage() {
         return saveErrorMessage;
+    }
+
+    public void setInstance(Instance instance) {
+        this.instance = instance;
+    }
+
+    public Instance getInstance() {
+        return instance;
     }
 }

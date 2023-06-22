@@ -365,6 +365,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     public AutoSendSettingsProvider autoSendSettingsProvider;
 
     @Inject
+    public InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
     public SavedInstanceStateProvider savedInstanceStateProvider;
 
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
@@ -410,7 +413,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider, autoSendSettingsProvider);
+        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider, autoSendSettingsProvider, instancesRepositoryProvider);
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
@@ -582,7 +585,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
-        formSessionRepository.set(sessionId, formController, formsRepository.getOneByPath(formPath));
+        Form form = formsRepository.getOneByPath(formPath);
+        String instancePath = formController.getInstanceFile().getAbsolutePath();
+        Instance instance = instancesRepositoryProvider.get().getOneByPath(instancePath);
+        formSessionRepository.set(sessionId, formController, form, instance);
 
         AnalyticsUtils.setForm(formController);
 
@@ -1941,7 +1947,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     return true;
                 }
 
-                QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, currentProjectProvider, () -> {
+                QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, () -> {
                     saveForm(true, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
                 });
                 return true;

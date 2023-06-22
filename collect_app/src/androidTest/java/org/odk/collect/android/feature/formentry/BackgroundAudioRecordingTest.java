@@ -135,7 +135,7 @@ public class BackgroundAudioRecordingTest {
                 .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>("One Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges();
     }
 
@@ -152,7 +152,7 @@ public class BackgroundAudioRecordingTest {
         assertThat(stubAudioRecorderViewModel.getLastRecording(), is(nullValue()));
 
         formEntryPage.closeSoftKeyboard()
-                .pressBack(new SaveOrDiscardFormDialog<>("One Question", new MainMenuPage()))
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardForm()
                 .startBlankForm("One Question");
 

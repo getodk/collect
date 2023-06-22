@@ -121,8 +121,7 @@
   <!--Dialog title when exiting a form. The name of the form will be included-->
   <string name="quit_application">Sohoka 1%s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-  <string name="no_form_loaded">&amp;lt,nta nyandiko shingiro yagiyemo&amp;gt;</string>
-  <string name="keep_changes">Bika ibyo wahinduye</string>
+    <string name="keep_changes">Bika ibyo wahinduye</string>
   <string name="saving_form">Ibika ry\'amakuru yinyandiko shingiro.</string>
   <string name="survey_saving_validating_message">Porogaramu iragenzura amakuru yatanzwe</string>
   <string name="survey_saving_collecting_message">Gukusanya amakuru</string>
