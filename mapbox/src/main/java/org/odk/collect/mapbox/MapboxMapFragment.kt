@@ -333,25 +333,34 @@ class MapboxMapFragment :
 
     override fun addPolyLine(points: MutableIterable<MapPoint>, closed: Boolean, draggable: Boolean): Int {
         val featureId = nextFeatureId++
-        features[featureId] = PolyLineFeature(
-            requireContext(),
-            pointAnnotationManager,
-            polylineAnnotationManager,
-            featureId,
-            featureClickListener,
-            featureDragEndListener,
-            closed,
-            draggable,
-            points
-        )
+        if (draggable) {
+            features[featureId] = DynamicPolyLineFeature(
+                requireContext(),
+                pointAnnotationManager,
+                polylineAnnotationManager,
+                featureId,
+                featureClickListener,
+                featureDragEndListener,
+                closed,
+                points
+            )
+        } else {
+            features[featureId] = StaticPolyLineFeature(
+                requireContext(),
+                polylineAnnotationManager,
+                featureId,
+                featureClickListener,
+                closed,
+                points
+            )
+        }
         return featureId
     }
 
     override fun addPolygon(points: MutableIterable<MapPoint>): Int {
         val featureId = nextFeatureId++
-        features[featureId] = PolygonFeature(
+        features[featureId] = StaticPolygonFeature(
             requireContext(),
-            pointAnnotationManager,
             mapView.annotations.createPolygonAnnotationManager(),
             points,
             featureClickListener,
@@ -363,21 +372,21 @@ class MapboxMapFragment :
 
     override fun appendPointToPolyLine(featureId: Int, point: MapPoint) {
         val feature = features[featureId]
-        if (feature is PolyLineFeature) {
+        if (feature is DynamicPolyLineFeature) {
             feature.appendPoint(point)
         }
     }
 
     override fun removePolyLineLastPoint(featureId: Int) {
         val feature = features[featureId]
-        if (feature is PolyLineFeature) {
+        if (feature is DynamicPolyLineFeature) {
             feature.removeLastPoint()
         }
     }
 
     override fun getPolyLinePoints(featureId: Int): List<MapPoint> {
         val feature = features[featureId]
-        return if (feature is PolyLineFeature) {
+        return if (feature is DynamicPolyLineFeature) {
             feature.mapPoints
         } else {
             emptyList()
