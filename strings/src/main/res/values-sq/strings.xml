@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Mbush formular bosh</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Modifiko formularin e ruajtur</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Dërgo formularin e përfunduar</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Shih formularin e dërguar</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Ngarko formular bosh</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Fshi formularin e ruajtur</string>
   <string name="version_number">Versioni: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Shtuar më\' EEE, MMM dd, yyyy \'në orën\' HH:mm</string>
@@ -43,7 +37,6 @@
   <string name="no_items_display">Asgjë nuk mund të shfaqet</string>
   <string name="no_items_display_forms">Asgjë nuk mund të shfaqet.\n\nProvoni të ngarkoni dhe plotësoni një formular bosh.</string>
   <string name="no_items_display_sent_forms">Asgjë nuk mund të shfaqet.\n\nProvoni të përfundoni një formular përpara se të shihni</string>
-  <string name="no_items_display_instances">Asgjë nuk mund të shfaqet.\n\nProvoni të ruani një formular përpara se të ngarkoni.</string>
   <string name="storage_runtime_permission_denied_desc">Pa këto leje Collect nuk mund të aksesojë format tuaja apo të ruajë përgjigjet. Rihapeni applikacionin kur të të jeni gati të lejoni ato.</string>
   <string name="location_runtime_permissions_denied_title">Lejo aksesin në vendndodhje</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
@@ -61,7 +54,6 @@
   <string name="survey_loading_reading_data_message">Duke lexuar të dhënat e sondazhit…</string>
   <string name="survey_loading_reading_csv_message">Duke lexuar file-t CSV…</string>
   <string name="parse_error">Formulari nuk mund të dekodohet.</string>
-  <string name="parent_form_not_present">Është e pamundur të modifikohet ky formular i ruajtur pasi formulari bosh që i korrespondon nuk gjendet apo është fshirë.\n\nForm ID: %1$s</string>
   <string name="cannot_edit_completed_form">Ky formular nuk mund të modifikohet pasi është shënuar \'i plotësuar\'. Mund të jetë i enkriptuar.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Ndryshimet e paruajtura u rikthyen nga pika ku ishin ruajtur!</string>
@@ -69,7 +61,6 @@
   <string name="change_language">Ndrysho gjuhën</string>
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Ruaj formularin</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Shko në fillim</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -100,10 +91,10 @@
   <string name="data_saved_error">Ndjesë, ruajtja e formualrit dështoi!</string>
   <string name="data_saved_ok">Formulari u ruajt me sukses!</string>
   <string name="save_point_error">Gabim në ruajtjen e pikës së shpëtimit: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Dil %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Ruaj ndryshimet</string>
+  <string name="keep_changes">Ruaj ndryshimet</string>
   <string name="saving_form">Duke ruajtur formularin</string>
   <string name="survey_saving_validating_message">Duke validuar përgjigjet…</string>
   <string name="survey_saving_collecting_message">Duke mbledhur të dhëna…</string>
@@ -509,7 +500,6 @@
   <string name="no">Jo</string>
   <string name="moving_backwards_enabled_title">Të shkuarit mbrapsht është aktivizuar</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Ruaj formularin</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -590,8 +580,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -615,4 +603,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

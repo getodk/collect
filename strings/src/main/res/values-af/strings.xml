@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Vul Leë Vorm In</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Wysig Gestoorde Vorm</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Stuur Gefinaliseerde Vorm</string>
   <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Haal Leë Vorm</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Verwyder Gestoorde Vorm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Bygevoeg op\' EEE, MMM dd, yyyy \'om\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -30,7 +24,6 @@
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="no_items_display">Niks beskikbaar om te vertoon nie</string>
   <string name="no_items_display_forms">Niks beskikbaar om te vertoon nie.\n\nProbeer om \'n leë vorm te haal en in te vul.</string>
-  <string name="no_items_display_instances">Niks beskikbaar om te vertoon nie.\n\nProbeer om gestoorde vorms te finaliseer voordat u stuur.</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -43,7 +36,6 @@
   <string name="survey_loading_reading_data_message">Lees opname data…</string>
   <string name="survey_loading_reading_csv_message">Lees CSV leêrs…</string>
   <string name="parse_error">Jammer, kon nie vorm verwerk nie.</string>
-  <string name="parent_form_not_present">Kon nie hierdie gestoorde vorm wysig nie omdat die ooreenstemmende vorm of nie teenwoordig is nie of uitgevee is.\n\nVorm ID: %1$s</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Ongestoorde veranderinge is herstel vanaf stoor-punt!</string>
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
@@ -51,7 +43,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Gaan Na Vraag</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Stoor Vorm</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Gaan na Begin</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -80,7 +71,7 @@
   <string name="data_saved_error">Jammer, stoor van vorm het misluk!</string>
   <string name="data_saved_ok">Vorm suksesvol gestoor!</string>
   <string name="save_point_error">Fout tydens stoor van herstel-punt: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Verlaat %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="keep_changes">Stoor Veranderinge</string>
@@ -347,7 +338,6 @@
   <string name="reset_project_settings_title">Reset</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Stoor Vorm</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -400,8 +390,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -425,4 +413,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

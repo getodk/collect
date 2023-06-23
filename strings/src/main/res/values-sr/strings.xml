@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Popuni prazan formular</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Uredi sačuvani formular</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Pošalji završene formulare</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Vidi poslate formulare</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Preuzmi prazan formular</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Obriši sačuvani formular</string>
   <string name="version_number">Verzija: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -45,7 +39,6 @@
   <string name="no_items_display">Ništa nije dostupno za prikaz.</string>
   <string name="no_items_display_forms">Povezivanje na mrežu trenutno nije dostupno. Pokušaj preuzeti i popuniti prazan formular.</string>
   <string name="no_items_display_sent_forms">Ništa nije dostupno za prikaz. Pokušaj poslati završeni formular prije uvida.</string>
-  <string name="no_items_display_instances">Ništa nije dostupno za prikaz. Pokušaj završiti sačuvane formulare prije slanja.</string>
   <string name="not_granted_permission">Aktivnost koju pokušavate da pokrenete zahtijeva dozvolu koja nije odobrena.</string>
   <string name="storage_runtime_permission_denied_title">Dozvola za pristup memoriji</string>
   <string name="storage_runtime_permission_denied_desc">Bez ovih dozvola Collent ne može pristupiti formularima ili sačuvati odgovore. Ponovo otvorite aplikaciju kada budete spremni da dozvolite pristup.</string>
@@ -70,7 +63,6 @@
   <string name="survey_loading_reading_csv_message">Učitavam CSV fajlove…</string>
   <string name="parse_error">Nisam u stanju da analiziram formular!</string>
   <string name="loading_form_failed">Došlo je do greške prilikom učitavanja formulara. Molim pokušajte ponovo.</string>
-  <string name="parent_form_not_present">Ne mogu da uredim ili sačuvam formular jer prazna forma nije dostupna ili je obrisana.\n\nForm ID: %1$s</string>
   <string name="cannot_edit_completed_form">Ovaj formular ne može biti mijenjan nakon što je označen kao završen. Može biti pod enkripcijom.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Nesačuvane izmjene su preuzete sa memorijske tačke!</string>
@@ -79,7 +71,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Idi na Prompt</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Sačuvaj formular</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Idi na početak</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -115,10 +106,10 @@
   <string name="data_saved_error">Izvini, čuvanje formulara nije uspjelo!</string>
   <string name="data_saved_ok">Formular je uspješno sačuvan!</string>
   <string name="save_point_error">Greška u čuvanju tačke povratka: %s </string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Izlaz %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Sačuvaj izmjene</string>
+  <string name="keep_changes">Sačuvaj izmjene</string>
   <string name="saving_form">Čuvam formular</string>
   <string name="survey_saving_validating_message">Validiram odgovore…</string>
   <string name="survey_saving_collecting_message">Prikupljam podatke…</string>
@@ -625,13 +616,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Idi nazad</string>
   <string name="moving_backwards_disabled_title">Povratak nazad onemogućen</string>
-  <string name="moving_backwards_disabled_message">Podesi uređaj kako bi onemogućio korisnike u premošćavanju ove postavke?\n\nPromjene su:\n\u2022 Onemogući ispravke sačuvanih formulara\n\u2022 Onemogući Sačuvaj formular\n\u2022 Onemogući idi na promt\n\u2022 Postavi ograničenje procesuiranja da validira nakon prevlačenja unaprijed</string>
   <string name="yes">Da</string>
   <string name="no">Ne</string>
   <string name="moving_backwards_enabled_title">Kretanje unazad je omogućeno</string>
-  <string name="moving_backwards_enabled_message">Možda biste željeli da pogledate sljedeća podešavanja: :\n\n\u2022 Uredi sačuvani fprmular\n\u2022 Sačuvaj fomular\n\u2022 Idi na Prompt\n\u2022 Ograničenje procesuiranja</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Sačuvaj formular</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -725,8 +713,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -750,4 +736,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

@@ -1,22 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Formulário em Branco</string>
+  <string name="enter_data">Preencher novo formulário</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Editar Formulário Salvo</string>
+  <string name="review_data">Rascunhos</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Enviar Formulário Finalizado</string>
+  <string name="send_data">Pronto para enviar</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Ver Formulário Enviado</string>
+  <string name="view_sent_forms">Enviado</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Carregar Formulário em Branco</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Apagar Formulário Salvo</string>
+  <string name="manage_files">Apagar formulário</string>
+  <string name="saved_forms">Formulários salvos</string>
   <string name="version_number">Versão: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Adicionada em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Atualizado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Salvo em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -27,7 +28,7 @@
   <string name="sending_failed_on_date_at_time">\'O envio falhou em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'Apagado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
-  <string name="submission_deleted">Submissão apagada</string>
+  <string name="submission_deleted">Apagado formulário enviado</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="modified_on_date_at_time">\'Modificado em\' EEE, dd \'de\' MMM \'de\' yyyy \'às\' HH:mm</string>
   <string name="encrypted_form">Formulário encriptado</string>
@@ -39,18 +40,19 @@
   <string name="sort_by_date_desc">Data, mais nova primeiro</string>
   <string name="sort_by_date_asc">Data, mais antiga primeiro</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Mais recentemente salva primeiro</string>
   <string name="filter_the_list">Filtrar a lista</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Procurar</string>
   <string name="no_items_display">Nada disponível para mostrar</string>
   <string name="no_items_display_forms">Nada disponível para exibir.\n\nTente baixar e preencher um formulário em branco.</string>
   <string name="no_items_display_sent_forms">Nada disponível para exibir.\n\nTente enviar um formulário finalizado antes de visualizar.</string>
-  <string name="no_items_display_instances">Nada disponível para exibir.\n\nTente finalizar formulários salvos antes de enviar.</string>
   <string name="not_granted_permission">A atividade que você está tentando iniciar exige uma permissão que você não concedeu.</string>
   <string name="storage_runtime_permission_denied_title">Permissões de armazenamento</string>
-  <string name="storage_runtime_permission_denied_desc">Sem estas permissões, o ODK Collect não pode acessar os seus formulários ou salvar submissões. Abra o aplicativo novamente quando estiver pronto para conceder estas permissões.</string>
+  <string name="storage_runtime_permission_denied_desc">Sem estas permissões, o ODK Collect não pode acessar os seus formulários ou salvar formulários enviados. Abra o aplicativo novamente quando estiver pronto para conceder estas permissões.</string>
   <string name="location_runtime_permissions_denied_title">Permissões de localização</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">Sem a permissão de <b> Precise Location </b>, o ODK Collect não consegue registrar a sua localização. Por favor, tente novamente quando estiver pronto para conceder a permissão.</string>
   <string name="camera_runtime_permission_denied_title">Permissão de acesso à câmera</string>
   <string name="camera_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar sua câmera. Por favor, tente novamente quando estiver pronto a concedê-la.</string>
   <string name="record_audio_runtime_permission_denied_title">Permissão de gravar áudio</string>
@@ -61,6 +63,7 @@
     # FILL BLANK FORM
     ##############################################-->
   <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">Abrir o mapa do formulário</string>
   <string name="instance_scan_count">%1$dformulários adicionados.</string>
   <string name="finished_disk_scan">Varredura finalizada. Todos os formulários foram carregados.</string>
   <string name="xform_parse_error">Erro de leitura do XForm %1$s: %2$s está faltando ou é inválido.</string>
@@ -70,7 +73,6 @@
   <string name="survey_loading_reading_csv_message">Lendo arquivos CSV…</string>
   <string name="parse_error">Desculpe, não é possível analisar formulário.</string>
   <string name="loading_form_failed">Um erro ocorreu enquanto o formulário era carregado. Por favor, tente novamente.</string>
-  <string name="parent_form_not_present">Não foi possível editar o formulário salvo porque o formulário em branco correspondente não está presente ou foi apagado.\n\nID do formulário: %1$s</string>
   <string name="cannot_edit_completed_form">Este formulário não pode ser editado, pois ele foi marcado como finalizado. Ele pode estar criptografado.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Alterações não salvas recuperadas</string>
@@ -79,7 +81,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Ir para atual</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Salvar Formulário</string>
+  <string name="save_all_answers">Salvar como rascunho</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Ir para o Início</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -115,13 +117,17 @@
   <string name="too_complex_form">Este formulário é complexo demais para este dispositivo. Tente simplificar expressões ou peça ajuda no fórum.</string>
   <string name="survey_internal_error">Erro interno: falha ao abrir a questão.</string>
   <string name="save_enter_data_description">Você está no fim de \"%s\".</string>
+  <string name="save_as_draft">Salvar como rascunho</string>
+  <string name="finalize">Finalizar</string>
   <string name="data_saved_error">Desculpe, falha ao salvar formulário!</string>
   <string name="data_saved_ok">Formulário salvo com sucesso!</string>
   <string name="save_point_error">Erro ao salvar ponto de recuperação: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Saída %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Salvar Alterações</string>
+  <string name="do_not_save">Descartar Formulário</string>
+  <string name="discard_changes">Descartar Mudanças</string>
+  <string name="keep_changes">Salvar Alterações</string>
   <string name="saving_form">Salvando Formulário</string>
   <string name="survey_saving_validating_message">Validando respostas…</string>
   <string name="survey_saving_collecting_message">Coletando dados…</string>
@@ -180,6 +186,8 @@
   <string name="selected_invalid_image">O arquivo selecionado não é uma imagem válida</string>
   <string name="take_picture_instruction">Toque na tela para tirar uma fotografia</string>
   <string name="error_front_camera_unavailable">A câmera da frente não está disponível neste dispositivo</string>
+  <string name="camera_error">Houve um erro ao tirar a fotografia</string>
+  <string name="camera_failed_to_initialize">Não foi possível inicializar a câmera!</string>
   <string name="annotate_image">Imagem com anotações</string>
   <string name="invalid_file_type">A aplicação retornou um tipo de arquivo inválido</string>
   <!--Dialog heading for saving annotated image-->
@@ -340,6 +348,8 @@
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Salvar</string>
   <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">Selecione o lugar</string>
+  <string name="choices">Opções</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -463,6 +473,9 @@
   <string name="discard">Descartar</string>
   <string name="geoshape_view_change_location">Visualizar ou Modificar GeoShape</string>
   <string name="geotrace_view_change_location">Visualizar ou Modificar GeoTrace</string>
+  <string name="select_item_count">1 %s: 2 %d (2 %d mostrado no mapa)</string>
+  <string name="select_item">Selecionar</string>
+  <string name="new_item">Novo item</string>
   <!--Name of an action button-->
   <string name="view_data">Ver formulário salvo</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
@@ -472,10 +485,13 @@
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <string name="get_help_with_reference_layers">Obter ajuda com Camadas de Referência</string>
   <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Mostrar minha localização</string>
   <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">Zoom para enquadrar tudo</string>
   <!--Description for button that pauses automatic location recording-->
   <string name="pause_location_recording">Pausar</string>
   <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">Remover o último ponto</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -498,6 +514,7 @@
   <string name="forms_upload_succeeded">Formulários enviados com sucesso</string>
   <string name="forms_upload_failed">Falha no envio dos formulários</string>
   <string name="all_uploads_succeeded">Sucesso nos uploads!</string>
+  <string name="some_uploads_failed">1 %1$s de 2 %2$s uploads falharam!</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -759,13 +776,11 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Movendo-se para trás</string>
   <string name="moving_backwards_disabled_title">Movimento para trás desabilitado</string>
-  <string name="moving_backwards_disabled_message">Configure seu dispositivo para forçar usuários a preencher esta configuração?\n\nAs alterações são:\n\u2022 Desabilitar possibilidade de editar formulário salvo\n\u2022 Desabilitar salvamento de formulário\n\u2022 Desabilitar opção Ir Para\n\u2022 Definir processamento de condições quando avançar questão</string>
   <string name="yes">Sim</string>
   <string name="no">Não</string>
   <string name="moving_backwards_enabled_title">Movimento para trás habilitado</string>
-  <string name="moving_backwards_enabled_message">Talvez você queira revisar as configurações seguintes:\n\n\u2022 Editar formulário salvo\n\u2022 Salvar formulário\n\u2022 botão Ir Para\n\u2022 Processamento de condições em questões</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Mid-form saving</string>
+  <string name="save_mid">Salvar como rascunho</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -831,6 +846,7 @@
   <string name="invalid_qrcode">QR code não contém configurações válidas</string>
   <string name="qr_code_not_found">Um QR Code não foi encontrado na imagem selecionada</string>
   <string name="corrupt_imported_preferences_error">As configurações atuais estão corrompidas. Nas configurações de gerenciamento de projeto, restaure as configurações padrão ou importe configurações que estejam ok.</string>
+  <string name="settings_with_gd_protocol">Não podem mais ser criados projetos no Google Drive/Sheets</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -853,6 +869,7 @@
   <string name="survey_multiple_forms_error">Dois formulários foram descarregados com a mesma identificação e versão. Talvez eles sejam os mesmos formulários carregados várias vezes ou junto a servidores diferentes. De todo modo, um deles deve ser apagado.</string>
   <string name="select_odk_shortcut">Selecionar o Atalho ODK</string>
   <string name="background_audio_help">Esse formulário grava áudio do microfone do seu dispositivo.\n\nVocê pode usar o indicador de volume para garantir que o microfone esteja próximo o suficiente do som que você precisa gravar.\n\nPara parar a gravação, por favor, saia desse formulário.\n\nPara mais informações, por favor entre em contato com a pessoa que solicitou que você coletasse dados.</string>
+  <string name="loading">Carregando…</string>
   <!--##############################################
      # Projects
      ##############################################-->
@@ -878,6 +895,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Alternar para %s</string>
   <string name="delete_project_confirm_message">Todos os formulários em branco, respostas e configurações serão excluídas de forma permanente.</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Esse é um projeto do Google Drive/Sheets. Caso você o apague, você não poderá criá-lo novamente.\n\n Todos os formulários em branco, formulários enviados e configuraões serão apagadas permamentemente. &lt;/font&gt;</string>
   <string name="delete_project_yes">Sim</string>
   <string name="delete_project_no">Não</string>
   <string name="cannot_delete_project_title">O projeto não pode ser excluído.</string>
@@ -916,12 +934,17 @@
     ##############################################-->
   <string name="open_settings">Abrir configurações</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Entidades</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <string name="crash_last_run">Houve um \"crash\" na última vez que o app foi executado!</string>
+  <string name="cant_start_app">Não foi possível executar o app!</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
+  <string name="google_drive_deprecation_message">Esse projeto usa o Google Drive. Essa funcionalidade será removida na próxima atualização do app.</string>
+  <string name="learn_more_button_text">Saiba mais</string>
   <string name="dismiss_button_text">Cancelar</string>
   <!--##############################################
     # Developer tools
@@ -929,4 +952,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

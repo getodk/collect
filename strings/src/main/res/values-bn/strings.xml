@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">নতুন খালি ফরম পূরণ করুন</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">সংরক্ষিত ফরম পুনরায় সম্পাদনা করুন</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">চূড়ান্ত ফরম পাঠান</string>
   <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms"> খালি ফরম  নামিয়ে নিন</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">সংরক্ষিত ফরম মুছে দিন </string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">নিদিষ্ট সময় তারিখ যোগ করেন</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -29,7 +23,6 @@
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="no_items_display">প্রদর্শন করার মত কিছু পাওয়া যায়নি।</string>
   <string name="no_items_display_forms">প্রদর্শন করার মত কিছু পাওয়া যায়নি।\n\nTry নতুন ফরম নামিয়ে আবার পুরন করে চেষ্টা করে দেখুন।</string>
-  <string name="no_items_display_instances">প্রদর্শন করার মত কিছু পাওয়া যায়নি।\n\nTry ফরম পাঠানের পূর্বে চূড়ান্ত ফরম নিশ্চিত করে নিন।</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -44,7 +37,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">অনুক্রম  অনুসারে দেখা</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">সকল উত্তর সংরক্ষণ করুন </string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">ফরম শুরুর স্থানে যান</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -71,7 +63,7 @@
   <string name="data_saved_error">দু:খিত, ফরম সংরক্ষিত হয়নি</string>
   <string name="data_saved_ok">ফরম সংরক্ষিত হয়েছে</string>
   <string name="save_point_error">ত্রুটি সংরক্ষণ উদ্ধার পয়েন্টঃ %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">%s প্রস্থান</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="keep_changes">পরিবর্তন সংরক্ষণকরুন</string>
@@ -311,7 +303,6 @@
   <string name="reset_project_settings_title">রিসেট</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">সংরক্ষণ করুন ফরম </string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -356,8 +347,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -381,4 +370,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

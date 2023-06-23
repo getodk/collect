@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">خالی فارم پر کریں</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">محفوظ شدہ فارم میں ترمیم کریں</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">حتمی فارم  بھیجیں</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">بھیجا ہوا فارم دیکھیں </string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">خالی فارم حاصل کریں</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">محفوظ شدہ فارم کو ڈیلیٹ کردیں۔</string>
   <string name="version_number">ورژن:%s</string>
   <string name="id_number">آئی ڈی: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -44,7 +38,6 @@
   <string name="no_items_display">دکھانے کیلے کچھ بھی نہیں ہے</string>
   <string name="no_items_display_forms">دکھانے کیلئےکچھ نہیں ہے خالی فارم حاصل کریں اور پر کریں</string>
   <string name="no_items_display_sent_forms">دکھانے کے لئے کچھ بھی نہیں دستیاب. \ n \ دیکھنے سے پہلے فارم حتمی شکل میں بھیجیں</string>
-  <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے محفوظ شدہ فارم کو بھیجنےسے پہلےمکمل کریں</string>
   <string name="storage_runtime_permission_denied_title">سٹوریج پرمیشن</string>
   <string name="storage_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ آپ کے فارم تک رسائی حاصل نہیں کرسکتایا جواب محفوظ نہیں کر سکتا جب آپ پرمیشن دینے کے لئے تیار ہو تو ایپلکیشن دوبارہ کھولیں.</string>
   <string name="location_runtime_permissions_denied_title">لوکیشن پرمیشن</string>
@@ -68,7 +61,6 @@
   <string name="survey_loading_reading_csv_message">ریڈنگ سی ایس وی  فائلز…</string>
   <string name="parse_error">معافی، فارم پارس نہیں ہو سکا</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
-  <string name="parent_form_not_present">اس محفوظ شدہ فارم میںترمیم نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر ڈیلیٹ کر دیا گیا ہے، فارم کی شناخت: ‎%1$s‏</string>
   <string name="cannot_edit_completed_form">اس فارم میں ترمیم نہیں کی جاسکتی اگر ایک مرتبہ اس کو حتمی شکل دےدی گئ ہو۔ اس کو انکرپٹ کیا جاسکتا ہے</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used"> غیر محفوظ شدہ تبدیلیاںسیو پوائنٹ سےبحال کرلی گئی</string>
@@ -77,7 +69,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">پرامپٹ پر جائیں</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">فارم کو محفوظ کریں</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">سٹارٹ پر جائیں</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -109,10 +100,10 @@
   <string name="data_saved_error">معذرت, فارم محفوظ نہیں ہوسکا</string>
   <string name="data_saved_ok">فارم کامیابی سے محفوظ ہو گیا</string>
   <string name="save_point_error">ریکوری پوانٹ سیو کرتے وقت خرابی: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">‎%s‏ سے نکل جائیں</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
+  <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
   <string name="saving_form">فارم محفوظ ہو رہا ہے</string>
   <string name="survey_saving_validating_message"> جوابات کی تصدیق کی جا رہی ہے</string>
   <string name="survey_saving_collecting_message">ڈیٹا جمع ہورہا ہے</string>
@@ -591,13 +582,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">پیچھے کی طرف حرکت کرنا </string>
   <string name="moving_backwards_disabled_title">پیچھے کی طرف حرکت غیر فعال </string>
-  <string name="moving_backwards_disabled_message">ڈیوائس کو اس طرح سے ترتیب دیں کہ یوزر کو سیٹنگ بائی پاس کرنے سے روکا جا سکے؟ \n\n تبدیلیاں یہ ہیں: \n\u2022 محفوظ شدہ فارم میں ترمیم کوغیر فعال کریں n\u2022  فارم کو محفوظ کرناغیر فعال کریں \n\u2022 پرامپٹ پرجانا غیرفعال کریں n\u2022 فارورڈ سوائپ پر کنسٹرینٹ پراسیسنگ کی تصدیق کریں</string>
   <string name="yes">ہاں </string>
   <string name="no">نہیں </string>
   <string name="moving_backwards_enabled_title">پیچھے کی طرف حرکت  فعال</string>
-  <string name="moving_backwards_enabled_message">آپ دی گئی سیٹنگز کو دوبارہ دیکھ سکتے ہیں: \n\n\u2022 محفوظ فارم میں ترمیم n\u2022 فارم سیو کریںn\u2022 پرامپٹ پر جائیں n\u2022 کنسٹریٹ پراسیسنگ</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">فارم کو محفوظ کریں</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -686,8 +674,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -712,4 +698,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

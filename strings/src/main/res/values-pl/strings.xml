@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Wypełnij Pusty Formularz</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Edytuj Zapisany Formularz</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Wyślij Zakończony Formularz</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Pokaż Wysłany Formularz</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Pobierz Czysty Formularz</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Skasuj Zapisany Formularz</string>
   <string name="version_number">Wersja: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -45,7 +39,6 @@
   <string name="no_items_display">Brak informacji do wyświetlenia.</string>
   <string name="no_items_display_forms">Brak informacji do wyświetlenia.\n\nSpróbuj pobrać i wypełnić pusty formularz.</string>
   <string name="no_items_display_sent_forms">Brak informacji do wyświetlenia.\n\nSpróbuj wysłać skończone formularze przed obejrzeniem ich.</string>
-  <string name="no_items_display_instances">Brak informacji do wyświetlenia.\n\nSpróbuj zakończyć zapisane formularze przed wysłaniem.</string>
   <string name="not_granted_permission">Aktywność, którą próbujesz wykonać, wymaga autoryzacji, której nie posiadasz.</string>
   <string name="storage_runtime_permission_denied_title">Uprawnienia do przechowywania</string>
   <string name="storage_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do formularzy i nie może zapisywać odpowiedzi. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
@@ -70,7 +63,6 @@
   <string name="survey_loading_reading_csv_message">Wczytuję pliki CSV…</string>
   <string name="parse_error">Przykro mi, nie mogę zanalizować formularza.</string>
   <string name="loading_form_failed">Wystąpił błąd w trakcie ładowania formularza. Spróbuj ponownie,</string>
-  <string name="parent_form_not_present">Nie mogę edytować tego zapisanego formularza ponieważ powiązany czysty formularz jest niedostępny lub został skasowany.\n\nID Formularza: %1$s</string>
   <string name="cannot_edit_completed_form">Po zaznaczeniu jako skończony ten formularz nie może być edytowany. Może być zaszyfrowany.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Niezapisane zmiany odzyskane z punktu zapisu!</string>
@@ -79,7 +71,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Idź Do Pytania</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Zapisz Formularz</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Idź Do Początku</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -118,10 +109,10 @@
   <string name="data_saved_error">Przykro mi, zapis formularza się nie powiódł!</string>
   <string name="data_saved_ok">Formularz został zapisany pomyślnie!</string>
   <string name="save_point_error">Błąd przy zapisywaniu punktu odtwarzania: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Zakończ %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Zapisz Zmiany</string>
+  <string name="keep_changes">Zapisz Zmiany</string>
   <string name="saving_form">Zapisuję Formularz</string>
   <string name="survey_saving_validating_message">Sprawdzam poprawność odpowiedzi…</string>
   <string name="survey_saving_collecting_message">Zbieram danych…</string>
@@ -662,13 +653,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Cofanie się</string>
   <string name="moving_backwards_disabled_title">Cofanie się nie jest możliwe</string>
-  <string name="moving_backwards_disabled_message">Skonfiguruj urządzenie, aby uniemożliwić użytkownikom ominięcie tego ustawienia? \n\nZmiany są następujące:\n\u2022 Wyłącz Edycję Zapisanego Formularzu\n\u2022 Wyłącz Zapis Fromularzu\n\u2022 Wyłącz podpowiedź Przejdź Do\n\u2022 Ustaw Przetwarzanie Ograniczeń na Sprawdź po przewinięciu do przodu</string>
   <string name="yes">Tak</string>
   <string name="no">Nie</string>
   <string name="moving_backwards_enabled_title">Cofanie się jest możliwe</string>
-  <string name="moving_backwards_enabled_message">Możesz chcieć sprawdzić następujące ustawienia:\n\n\u2022 Edytuj Zapisany Formularz\n\u2022 Zapisz Formularz\n\u2022 Podpowiedź Przejdź Do\n\u2022 Przetwarzanie ograniczeń</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Zapisz Formularz</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -763,8 +751,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -788,4 +774,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Compila Modulo Vuoto</string>
+  <string name="enter_data">Inizia nuovo modulo</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Modifica Modulo Salvato</string>
+  <string name="review_data">Bozze</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Invia Modulo Completato</string>
+  <string name="send_data">Pronto per l\'invio</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Visualizza modulo inviato</string>
+  <string name="view_sent_forms">Inviati</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Scarica Modulo Vuoto</string>
+  <string name="get_forms">Scarica modulo</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Elimina Modulo Salvato</string>
+  <string name="manage_files">Elimina modulo</string>
   <string name="saved_forms">Moduli salvati</string>
   <string name="version_number">Versione: %s</string>
   <string name="id_number">ID: %s</string>
@@ -48,7 +48,6 @@
   <string name="no_items_display">Niente a disposizione da visualizzare.</string>
   <string name="no_items_display_forms">Niente da visualizzare.\n\nProva a caricare e riempire un modulo vuoto.</string>
   <string name="no_items_display_sent_forms">Nessun elemento visualizzabile.\n\nProva ad inviare i moduli completati prima di visualizzarli.</string>
-  <string name="no_items_display_instances">Nessuna visualizzazione disponibile.\n\nCerca di completare i moduli salvati prima dell\'invio.</string>
   <string name="not_granted_permission">L\'attività che stai tentando di avviare richiede un\'autorizzazione che non viene concessa.</string>
   <string name="storage_runtime_permission_denied_title">Autorizzazione all\'uso della memoria</string>
   <string name="storage_runtime_permission_denied_desc">Senza questi permessi Collect non può accedere ai tuoi questionari o salvare le risposte. Riapri la applicazione quando sei pronto ad autorizzarli.</string>
@@ -75,7 +74,6 @@
   <string name="survey_loading_reading_csv_message">Lettura file CSV…</string>
   <string name="parse_error">Spiacenti, non sono in grado di analizzare il modulo.</string>
   <string name="loading_form_failed">Si è verificato un errore durante il caricamento del modulo. Per favore riprova. </string>
-  <string name="parent_form_not_present">Impossibile modificare questo modulo salvato perché il corrispondente modulo vuoto non esiste o è stato cancellato.\n\nModulo: %1$s</string>
   <string name="cannot_edit_completed_form">Questo modulo non può essere modificato una volta che viene segnato come completato. Potrebbe venire cifrato.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Cambiamenti non salvati recuperati da punto salvato!</string>
@@ -84,7 +82,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Apri visione gerarchica</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Salva Modulo</string>
+  <string name="save_all_answers">Salva come bozza</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Vai all\'inizio</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -120,13 +118,17 @@
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Non sarai in grado di apportare modifiche una volta finalizzato. Se devi apportare modifiche, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
+  <string name="save_as_draft">Salva come bozza</string>
+  <string name="finalize">Finalizzare</string>
+  <string name="send">Invia</string>
   <string name="data_saved_error">Spiacenti, salvataggio modulo fallito!</string>
   <string name="data_saved_ok">Modulo salvato correttamente!</string>
   <string name="save_point_error">Errore nel salvataggio del punto di ripristino: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Uscita %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="do_not_save">Elimina formulario</string>
+  <string name="do_not_save">Elimina formulario</string>
   <string name="discard_changes">Non salvare le modifiche</string>
   <string name="keep_changes">Salva le modifiche</string>
   <string name="saving_form">Salvataggio Modulo</string>
@@ -777,13 +779,11 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Sfoglia indietro</string>
   <string name="moving_backwards_disabled_title">Sfoglia indietro disabilitato</string>
-  <string name="moving_backwards_disabled_message">Configurare il dispositivo per impedire agli utenti di ignorare questa impostazione?\n\nLe modifiche sono:\n\u2022 Disabilita modifica modulo salvato\n\u2022 Disabilita salva modulo\n\u2022 Disabilita prompt Vai a\n\u2022 Imposta elaborazione vincolo su Convalida dopo lo scorrimento in avanti</string>
   <string name="yes">Sì</string>
   <string name="no">No</string>
   <string name="moving_backwards_enabled_title">Sfoglia indietro abilitato</string>
-  <string name="moving_backwards_enabled_message">Potresti voler rivedere le seguenti impostazioni:\n\n\u2022 Modifica modulo salvato\n\u2022 Salva modulo\n\u2022 Vai al prompt\n\u2022 Elaborazione dei vincoli</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Salva Modulo</string>
+  <string name="save_mid">Salva come bozza</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -849,6 +849,7 @@
   <string name="invalid_qrcode">Il codice QR non contiene parametri validi</string>
   <string name="qr_code_not_found">Il codice QR non è stato rilevato nell\'immagine selezionata</string>
   <string name="corrupt_imported_preferences_error">Le impostazioni attuali sono danneggiate. Dalle impostazioni di gestione del progetto, ripristinare le impostazioni o importare quelle funzionanti.</string>
+  <string name="settings_with_gd_protocol">I progetti Google Drive/Fogli non possono più essere creati</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -897,6 +898,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambia a %s</string>
   <string name="delete_project_confirm_message">Tutti i formulari vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Questo è un progetto Google Drive/Fogli. Una volta eliminato, non sarai più in grado di crearlo di nuovo.&lt;/font&gt;\n\nTutti i moduli vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
   <string name="delete_project_yes">Sì</string>
   <string name="delete_project_no">No</string>
   <string name="cannot_delete_project_title">Il progetto non può essere cancellato</string>
@@ -956,4 +958,8 @@
   <string name="crash_app">Arresto anomalo dell\'app</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forza un\'eccezione non rilevata che causa l\'arresto anomalo dell\'app</string>
+  <string name="predicate_caching">Cache dei predicati</string>
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

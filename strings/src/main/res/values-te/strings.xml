@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">ఖాళీ ఫారం నింపండి</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">సేవ్ చేసిన ఫారంను సవరించండి</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">ఫైనల్ అయిన ఫారం పంపండి</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">పంపిన ఫారంను చూడండి</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">కొత్త ఫారం డౌన్లోడ్ చేసుకోండి</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">సేవ్ చేసిన ఫారంలను తొలగించండి </string>
   <string name="version_number">వెర్షన్: %s</string>
   <string name="id_number">ID:%s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -45,7 +39,6 @@
   <string name="no_items_display">చూపించడానికి ఏవీ అందుబాటులో లేవు</string>
   <string name="no_items_display_forms">చూడటానికి ఏ ఫారంలు లేవు.\n\n ఖాళీ ఫారంను పొందడానికి మరియు నింపటానికి ప్రయత్నించండి</string>
   <string name="no_items_display_sent_forms">చూడటానికి ఏ ఫారంలు లేవు.\n\n ముందు ఖరారు చేసిన ఫారంలను పంపడానికి ప్రయత్నించండి.</string>
-  <string name="no_items_display_instances">చూడటానికి ఏ ఫారంలు లేవు.\n\n పంపే ముందు సేవ్ చేసిన ఫారంలను ఫైనల్ చేయడానికి ప్రయత్నించండి.</string>
   <string name="not_granted_permission">మీరు మొదులు పెట్టడానికి ప్రయత్నిస్తున్న పనికి అనుమతి అవసరం. అది మీకు ఇవ్వబడలేదు.</string>
   <string name="storage_runtime_permission_denied_title">నిల్వ ఉంచటానికి అనుమతులు</string>
   <string name="storage_runtime_permission_denied_desc">ఈ అనుమతులు లేకుండా మీ ఫారమ్‌లను యాక్సెస్ చేయలేరు లేదా సమాధానాలను సేవ్ చేయలేరు. మీరు వాటిని మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు ఆప్ ని తిరిగి తెరవండి.</string>
@@ -70,7 +63,6 @@
   <string name="survey_loading_reading_csv_message">CSV ఫైళ్ళను చదువుతోంది… </string>
   <string name="parse_error">క్షమించండి, ఫారంను అన్వయించలేకపోయాము.</string>
   <string name="loading_form_failed">ఫారమ్‌ను లోడ్ చేస్తున్నప్పుడు లోపం సంభవించింది. దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
-  <string name="parent_form_not_present">సంబంధిత ఖాళీ ఫారం లేనందున లేదా తొలగించబడినందున ఈ సేవ్ చేసిన ఫారంను సవరించడం సాధ్యం కాలేదు. \ N \ n ఫార్మ్ ఐడి:%1$s</string>
   <string name="cannot_edit_completed_form">ఈ ఫారం గుర్తించబడిన తర్వాత దాన్ని సవరించడం సాధ్యం కాదు. ఇది ఎన్క్రిప్ట్ అయి ఉండవచ్చు.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">సేవ్ చేసినప్పటి  నుండి సేవ్ చేయని మార్పులు రికవర్ అయ్యాయి!</string>
@@ -79,7 +71,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">ప్రాంప్ట్ కు వెళ్ళండి</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">ఫారం ను సేవ్  చెయ్యి </string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">మొదటికి వెళ్లు </string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -118,10 +109,10 @@
   <string name="data_saved_error">క్షమించండి, ఫారం సేవ్ అవ్వలేదు</string>
   <string name="data_saved_ok">ఫారం విజయవంతంగా సేవ్ చేయబడింది!</string>
   <string name="save_point_error">రికవరీ పాయింట్‌ను సేవ్ చేయడంలో లోపం ఉంది: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Exit %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">మార్పులను సేవ్ చెయ్యి</string>
+  <string name="keep_changes">మార్పులను సేవ్ చెయ్యి</string>
   <string name="saving_form">ఫారం సేవ్ చేయబడుతుంది</string>
   <string name="survey_saving_validating_message">సమాధానాలను ధృవీకరిస్తోంది…</string>
   <string name="survey_saving_collecting_message">డేటాను సేకరిస్తోంది…</string>
@@ -667,13 +658,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">వెనుకకు వెలుతోంది</string>
   <string name="moving_backwards_disabled_title">వెనుకకు వెళ్లడం నిలిపివేయబడింది</string>
-  <string name="moving_backwards_disabled_message">ఈ సెట్టింగ్‌ను దాటవేయకుండా వినియోగదారులను నిరోధించడానికి పరికరాన్ని కాన్ఫిగర్ చేయాలా?\n\nమార్పులు:\n\u2022 Disable Edit Saved Form\n\u2022 Disable Save Form\n\u2022 Disable Go To Prompt\n\u2022 Set Constraint processing to Validate upon forward swipe</string>
   <string name="yes">అవును</string>
   <string name="no">లేదు</string>
   <string name="moving_backwards_enabled_title">వెనుకకు వెళ్ళటం ఆప్షన్ ప్రారంభించబడింది</string>
-  <string name="moving_backwards_enabled_message">మీరు ఈ క్రింది సెట్టింగులను సమీక్షించాలనుకోవచ్చు: \n\n\u2022 సేవ్ చేసిన ఫారమ్‌ను సవరించండి \n\u2022 ఫారమ్‌ను సేవ్ చేయండి \n\u2022 ప్రాంప్ట్‌కు వెళ్లండి \n\u2022 పరిమితి ప్రాసెసింగ్</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">ఫారమ్ ను సేవ్ చెయ్యి </string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -771,8 +759,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -797,4 +783,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

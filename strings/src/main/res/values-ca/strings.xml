@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Omplir nou formulari</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Editar formulari desat</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Enviar formulari finalitzat</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Veure formulari enviat.</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Descarregar formulari buit</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Eliminar formulari desat</string>
   <string name="version_number">Versió: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Afegit el\' EEE dd MMM yyyy, HH:mm</string>
@@ -36,7 +30,6 @@
   <string name="no_items_display">Res disponible per visualitzar.</string>
   <string name="no_items_display_forms">Res disponible per visualitzar.\n\nProva de seleccionar i omplir un formulari en blanc.</string>
   <string name="no_items_display_sent_forms">Res disponible per veure.\n\nProva enviant formularis finalitzats abans de visualitzar.</string>
-  <string name="no_items_display_instances">Res disponible per visualitzar.\n\nProva finalitzant formularis desats abans d\'enviar.</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -48,7 +41,6 @@
   <string name="survey_loading_reading_data_message">LLegint dades de enquesta…</string>
   <string name="survey_loading_reading_csv_message">LLegint arxius CSV…</string>
   <string name="parse_error">Ho sentim, incapaç d\'interpretar el formulari.</string>
-  <string name="parent_form_not_present">No es pot editar  aquest formulari desat perquè el formulari plantilla no hi és o s\'ha esborrat.\n\nForm ID: %1$s</string>
   <string name="cannot_edit_completed_form">No es pot editar un formulari un cop finalitzat.  Pot estar encriptat.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Canvis no desats llegits del punt de recuperació!</string>
@@ -57,7 +49,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Ves a entrada de dades</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Desar formulari </string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Anar a l\'inici</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -87,10 +78,10 @@
   <string name="data_saved_error">Ho sentim, el formulari no s\'ha desat be!</string>
   <string name="data_saved_ok">Formulari desat correctament!</string>
   <string name="save_point_error">Error al guardar el punt de recuperació: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Sortida %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Desar els canvis</string>
+  <string name="keep_changes">Desar els canvis</string>
   <string name="saving_form">Desant formulari</string>
   <string name="survey_saving_validating_message">Validant respostes…</string>
   <string name="survey_saving_collecting_message">Recollint dades…</string>
@@ -415,7 +406,6 @@
   <string name="form_entry_setting">Característiques d\'omplir formulari</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Desar mig formulari</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -481,8 +471,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -506,4 +494,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

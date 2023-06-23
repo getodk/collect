@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">ملء استمارة فارغة</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">تعديل الاستمارة المحفوظة</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">إرسال الاستمارة النهائية</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">عرض الاستمارات المرسلة</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">الحصول على استمارة فارغة</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">حذف الاستمارة المحفوظة</string>
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -45,7 +39,6 @@
   <string name="no_items_display">لا يوجد شيء للعرض.</string>
   <string name="no_items_display_forms">لا شيء متاح للعرض./n/n حاول الحصول على نموذج فارغ و قم بتعبئته.</string>
   <string name="no_items_display_sent_forms">لا شيء متاح للعرض./n/n حاول إرسال الاستمارات المكتملة قبل العرض.</string>
-  <string name="no_items_display_instances">لا شيء متاح للعرض./n/n حاول وضع الصيغ النهائية للاستمارات المحفوظة قبل الارسال.</string>
   <string name="not_granted_permission">النشاط الذي تحاول بدء القيام به يحتاج إلى إذن لم تحصل عليه بعد.</string>
   <string name="storage_runtime_permission_denied_title">أذونات التخزين</string>
   <string name="storage_runtime_permission_denied_desc">بدون هذه الأذونات لا يمكن لبرنامج ODK Collect الوصول إلى الاستمارات أو حفظ الإجابات. أعد فتح التطبيق عندما تكون مستعدًا لمنحهم.</string>
@@ -70,7 +63,6 @@
   <string name="survey_loading_reading_csv_message">قراءة ملفات CSV..</string>
   <string name="parse_error">عذراً لا يمكن تحليل الاستمارة.</string>
   <string name="loading_form_failed">حدث خطأ أثناء تحميل الاستمارة. الرجاء المحاولة مرة أخرى.</string>
-  <string name="parent_form_not_present">غير قادر على تعديل هذه الاستمارة المحفوظة لان الاستمارة المقابلة غير موجودة جاليا او قد تم مسحها./n/n اعدادات الاستمارة: %1$s</string>
   <string name="cannot_edit_completed_form">يتعذر تعديل هذه الاستمارة عندما يتم وضع علامة على أنها مكتملة. قد تكون مشفرة.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">التغييرات غير محفوظة يرجى استعادتها من نقطة الحفظ!</string>
@@ -79,7 +71,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">الذهاب الى الموجه</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">حفظ الاستمارة</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">الذهاب إلى البداية</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -118,10 +109,10 @@
   <string name="data_saved_error">عذرًا، لم يتمّ حفظ الاستمارة!</string>
   <string name="data_saved_ok">تمّ حفظ الاستمارة بنجاح!</string>
   <string name="save_point_error">خطأ في حفظ نقطة الاسترداد %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">خروج %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">حفظ التعديلات</string>
+  <string name="keep_changes">حفظ التعديلات</string>
   <string name="saving_form">جاري حفظ الاستمارة</string>
   <string name="survey_saving_validating_message">تدقيق الاجابات…</string>
   <string name="survey_saving_collecting_message">جمع البيانات</string>
@@ -716,13 +707,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">العودة إلى الوراء</string>
   <string name="moving_backwards_disabled_title">تم تعطيل العودة إلى الوراء</string>
-  <string name="moving_backwards_disabled_message">ضبط الجهاز لمنع المستخدمين من تجاوز هذا الإعداد؟\n\nالتغييرات هي:\n\u2022 تعطيل تحرير الاستمارة المحفوظة \n\u2022 تعطيل حفظ الاستمارة \n\u2022 تعطيل الانتقال إلى الموجه\n\u2022 ضبط معالجة القيد على التحقق من الصحة عند التمرير الأمامي</string>
   <string name="yes">نعم</string>
   <string name="no">لا</string>
   <string name="moving_backwards_enabled_title">تم تمكين التحرك إلى الوراء</string>
-  <string name="moving_backwards_enabled_message">قد ترغب في مراجعة الإعدادات التالية:\n\n\u2022 تحرير الاستمارة المحفوظة \n\u2022 الذهاب إلى الموجه\n\u2022 معالجة القيد</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">حفظ الاستمارة</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -825,8 +813,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -851,4 +837,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

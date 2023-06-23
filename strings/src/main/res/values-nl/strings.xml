@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Nieuw formulier invullen</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Wijzig formulier</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Verstuur Afgeronde Formulieren</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Bekijk verzonden formulier</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Download leeg formulier </string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Verwijder formulieren</string>
   <string name="saved_forms">Opgeslagen formulieren</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Toegevoegd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
@@ -43,7 +37,6 @@
   <string name="no_items_display">Leeg</string>
   <string name="no_items_display_forms">Leeg.\n\nDownload eerst een formulier en vul dat in.</string>
   <string name="no_items_display_sent_forms">Leeg.\n\nVerstuur eerst afgeronde formulieren om deze te kunnen bekijken.</string>
-  <string name="no_items_display_instances">Leeg\n\nEen formulier moet als voltooid zijn gemarkeerd voordat u het kunt verzenden.</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -57,7 +50,6 @@
   <string name="survey_loading_reading_data_message">Formulier gegevens inlezen…</string>
   <string name="survey_loading_reading_csv_message">Inlezen CSV bestanden…</string>
   <string name="parse_error">Formulier inlezen mislukt.</string>
-  <string name="parent_form_not_present">Opgeslagen formulier kan niet bewerkt worden omdat het benodigde lege formulier niet gevonden kon worden of was verwijderd.\n\nForm ID: %1$s</string>
   <string name="cannot_edit_completed_form">Dit formulier kan niet worden aangepast nadat het als afgewerkt is aangeduid. Mogelijk is het versleuteld.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Unsaved changes recovered from savepoint!</string>
@@ -66,7 +58,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Ga naar vraag</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Formulier opslaan</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Naar begin</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -105,7 +96,7 @@
   <string name="data_saved_error">Sorry, formulier opslaan mislukt!</string>
   <string name="data_saved_ok">Formulier is opgeslagen!</string>
   <string name="save_point_error">Fout bij maken herstelpunt: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Sluit %s af</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="keep_changes">Wijzigingen opslaan</string>
@@ -440,7 +431,6 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="no">Nee</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Formulier opslaan</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -504,8 +494,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -529,4 +517,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>
