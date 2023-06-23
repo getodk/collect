@@ -913,7 +913,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Changer à %s</string>
   <string name="delete_project_confirm_message">Tous les formulaires vierges, soumissions et paramètres seront définitivement supprimés.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Ceci est un projet basé sur Google Drive/Sheets. Quand vous l\'aurez supprimé, vous ne pourrez plus le créer à nouveau.&lt;/font&gt;\n\nL'ensemble des formulaires vierges, soumissions et paramètres seront supprimés définitivement.</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Ceci est un projet basé sur Google Drive/Sheets. Quand vous l\'aurez supprimé, vous ne pourrez plus le créer à nouveau.&lt;/font&gt;\n\nL\'ensemble des formulaires vierges, soumissions et paramètres seront supprimés définitivement.</string>
   <string name="delete_project_yes">Oui</string>
   <string name="delete_project_no">Non</string>
   <string name="cannot_delete_project_title">Le projet ne peut être supprimé</string>
