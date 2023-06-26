@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">रिक्त फॉर्म भरा</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">जतन फॉर्म संपादित करा</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">अंतिम फॉर्म पाठवा</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">प्रेषित फॉर्म पहा</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">रिक्त फॉर्म मिळवा</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">जतन केलेला फॉर्म हटवा</string>
   <string name="version_number">आवृत्ती: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'अॅड ईईई, एमएमएम डीडी, यॅय\' एचएच: मि.ह.</string>
@@ -37,7 +31,6 @@
   <string name="no_items_display">प्रदर्शनासाठी काहीही उपलब्ध नाही.</string>
   <string name="no_items_display_forms">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही. \n\nरिक्त फॉर्म मिळविणे आणि भरण्याचा प्रयत्न करा.</string>
   <string name="no_items_display_sent_forms">प्रदर्शनासाठी काहीही उपलब्ध नाही.\n\n पाहण्या पूर्वी अंतिम स्वरूप पाठविण्याचा प्रयत्न करा.</string>
-  <string name="no_items_display_instances">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही.\n\nपाठविण्यापूर्वी जतन केलेले फॉर्म्स ला अंतिम रूप देण्याचा प्रयत्न करा</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -51,7 +44,6 @@
   <string name="survey_loading_reading_data_message">सर्वेक्षण डेटा वाचत आहे …</string>
   <string name="survey_loading_reading_csv_message">CSV फायली वाचत आहे …</string>
   <string name="parse_error">क्षमस्व, फॉर्म विश्लेषित करण्यास अक्षम</string>
-  <string name="parent_form_not_present">हा जतन केलेला फॉर्म संपादित करण्यास अक्षम कारण संबंधीत रिक्त फॉर्म उपलब्ध नाही किंवा हटविला गेला नाही. \ n \ n फॉर्म ID %1$s</string>
   <string name="cannot_edit_completed_form">अंतिम रूपाने चिन्हांकित केल्यावर हे फॉर्म संपादित करणे शक्य नाही. हे कूटबद्ध केले जाऊ शकते.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">जतन न केलेले बदल पुनर्प्राप्त!</string>
@@ -60,7 +52,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">प्रॉम्प्ट वर जा</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">फॉर्म जतन करा</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">सुरू करण्यासाठी जा</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -90,10 +81,10 @@
   <string name="data_saved_error">क्षमस्व, एक फॉर्म हटविणे क्रिया आधीच प्रगतीपथावर आहे!</string>
   <string name="data_saved_ok">फॉर्म यशस्वीरित्या जतन केला!</string>
   <string name="save_point_error">पुनर्प्राप्ती बिंदू जतन करताना त्रुटी: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">मधून निर्गमन करा %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">बदल जतन करा</string>
+  <string name="keep_changes">बदल जतन करा</string>
   <string name="saving_form">फॉर्म जतन केला जात आहे</string>
   <string name="survey_saving_validating_message">उत्तरे सत्यापित करीत आहे …</string>
   <string name="survey_saving_collecting_message">डेटा संकलित करत आहे …</string>
@@ -470,7 +461,6 @@
   <string name="form_entry_setting">फॉर्म प्रवेश सेटिंग्ज</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">फॉर्म जतन करा</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -544,8 +534,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -569,4 +557,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

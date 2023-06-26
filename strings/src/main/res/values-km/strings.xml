@@ -1,22 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">បំពេញសំណុំបែបបទទទេ</string>
+  <string name="enter_data">ចាប់ផ្តើមទម្រង់ថ្មី</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">កែប្រែសំណុំ​បែប​បទ​ដែលបានរក្សាទុក</string>
+  <string name="review_data">សេចក្តីព្រាង</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">បញ្ជូនសំណុំ​បែប​បទ​ដែលបានបញ្ចប់</string>
+  <string name="send_data">រួចរាល់សម្រាប់ការផ្ញើចេញ</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ</string>
+  <string name="view_sent_forms">បានផ្ញើចេញ</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">ទាញសំណុំបែបបទ</string>
+  <string name="get_forms">ទាញយកទម្រង់</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">លុបសំណុំបែបបទដែលបានរក្សាទុក</string>
+  <string name="manage_files">លុបទម្រង់</string>
+  <string name="saved_forms">រក្សាទុកទម្រង់</string>
   <string name="version_number">ជំនាន់: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'បន្ថែមនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'បានធ្វើបច្ចុប្បន្នភាពនៅ\' EEE, MMM dd, yyyy \'ម៉ោង\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'រក្សាទុកនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -27,6 +29,7 @@
   <string name="sending_failed_on_date_at_time">\'ការផ្ញើចេញបរាជ័យនៅ\'  EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time">\'បានលុបនៅថ្ងៃទី \' EEE, MMM dd, yyyy \'ម៉ោង\' HH:mm</string>
+  <string name="submission_deleted">ការដាក់ស្នើត្រូវបានលុប</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="modified_on_date_at_time">\'កែប្រែនៅថ្ងៃ\' EEE, MMM dd, yyyy \'នៅម៉ោង\' HH:mm</string>
   <string name="encrypted_form">បម្លែងសំណុំបែបបទ​ជារហស្សលិខ</string>
@@ -44,9 +47,11 @@
   <string name="no_items_display">គ្មានអ្វីដែលត្រូវបង្ហាញបាន</string>
   <string name="no_items_display_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូមព្យាយាមទាញ និងបំពេញទិន្នន័យ​ពី​សំណុំ​បែប​បទ​ទទេ</string>
   <string name="no_items_display_sent_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន។\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​​មុននឹងបង្ហាញ។</string>
-  <string name="no_items_display_instances">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​ដែល​​បាន​​រក្សា​​ទុក​​មុន​​នឹង​​ផ្ញើ​​ចេញ</string>
+  <string name="no_items_display_instances">គ្មានអ្វីដែលត្រូវ​បង្ហាញ \n\n សូមព្យាយាមបំពេញបញ្ចាប់ទម្រង់ទិន្នន័យ​មុន​នឹង​ផ្ញើចេញ។</string>
+  <string name="not_granted_permission">សកម្មភាពដែលអ្នកកំពុងព្យាយាមធ្វើទាមទារការអនុញ្ញាតដែលមិនត្រូវបានផ្តល់ឱ្យ។</string>
   <string name="storage_runtime_permission_denied_title">សិទ្ធិក្នុងការផ្ទុក</string>
   <string name="storage_runtime_permission_denied_desc">បើគ្មានការអនុញ្ញាតទាំងនេះ Collect មិនអាចចូលប្រើទម្រង់របស់អ្នក ឬរក្សាទុកចម្លើយ​បើក​កម្មវិធី​ឡើង​វិញ​នៅ​ពេល​អ្នក​រួចរាល់​ដើម្បី​ផ្តល់​សិទ្ធិ​ទាំងនេះ។</string>
+  <string name="location_runtime_permissions_denied_title">ការអនុញ្ញាតទីតាំង</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -60,7 +65,6 @@
   <string name="survey_loading_reading_data_message">ការអានទិន្នន័យស្ទង់មតិ …</string>
   <string name="survey_loading_reading_csv_message">កំពុង​អាន​ឯកសារ CSV</string>
   <string name="parse_error">សុំទោស, សំណុំ​បែប​បទ​មិន​អាច​បែកចែកបាន</string>
-  <string name="parent_form_not_present">មិន​អាច​ធ្វើ​ការ​កែ​ប្រែ​សំុណុំ​បែប​បទ​ដែល​បាន​រក្សាទុក​ ពីព្រោះ​សំណុំបែប​បទ​ទទេ​ដែលត្រូវគ្នាមិន​នៅ ឬត្រូវ​បាន​លុប។ \n\nលេខ​សម្គាល់​សំណុំ​បែប​បទ: %1$s</string>
   <string name="cannot_edit_completed_form">ទម្រង់នេះមិនអាចកែប្រែម្តងទៀតទេ, វាត្រូវបានគេសម្គាល់ថាបានបញ្ចប់ហើយ។ វាប្រហែលជាត្រូវបានអ៊ិនគ្រីប។</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">ការផ្លាស់ប្តូរមិនបានរក្សាទុកត្រូវបានស្តារឡើងវិញពី savepoint!</string>
@@ -69,7 +73,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">ទៅ Prompt</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">រក្សាទុកសំណុំ​បែប​បទ​</string>
+  <string name="save_all_answers">រក្សាទុកជាសេចក្តីព្រាង</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">ទៅកន្លែងចាប់ផ្តើម</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -103,13 +107,18 @@
   <string name="invalid_space_in_answer_plural">ព្រមាន: តម្លៃមូលដ្ឋាន %s មានដកឃ្លា</string>
   <string name="survey_internal_error">កំហុសខាងក្នុង: ជំហានដើម្បីជំរុញឱ្យបរាជ័យ។</string>
   <string name="save_enter_data_description">អ្នកដល់ទីបញ្ចប់នៃ %s</string>
+  <string name="save_as_draft">រក្សាទុកជាពម្រាង</string>
+  <string name="finalize">បញ្ចប់</string>
+  <string name="send">ផ្ញើ</string>
   <string name="data_saved_error">សុំទោស, រក្សា​ទុកសំណុំ​បែបបទ​មិន​បាន​សម្រេច!</string>
   <string name="data_saved_ok">បាន​រក្សាទុកសំណុំ​បែបបទ​ដោយ​ជោគជ័យ!</string>
   <string name="save_point_error">បញ្ហាក្នុងការរក្សាទុកនូវចំនុចស្តារឡើងវិញ: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">ចាកចេញ %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
+  <string name="do_not_save">បោះបង់ទម្រង់</string>
+  <string name="discard_changes">បោះបង់ការផ្លាស់ប្តូរ</string>
+  <string name="keep_changes">រក្សាការផ្លាស់ប្តូរ</string>
   <string name="saving_form">កំពុងរក្សាទុកសំណុំ​បែប​បទ​</string>
   <string name="survey_saving_validating_message">កំពុងផ្ទៀងផ្ទាត់ចម្លើយ</string>
   <string name="survey_saving_collecting_message">កំពុងប្រមូលទិន្នន័យ</string>
@@ -127,7 +136,9 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">មិនស្គាល់ URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">មិនអាចចាប់ផ្តើមការថតបានទេ។</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">មីក្រូហ្វូនត្រូវបានប្រើប្រាស់រួចហើយ។</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <!--Error displayed when opened filled form has been deleted on disk-->
@@ -175,24 +186,35 @@
   <string name="play_video">ចាក់វីដេអូ</string>
   <string name="choose_file">ជ្រើសរើស​ឯកសារ</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">លុប</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">ថត​សំឡេង</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">ជ្រើសរើសសំឡេង</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">ផ្អាក</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">បន្ត</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">ថតសម្លេង</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">លុបឯកសារ?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">ឈប់</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">កំពុងថត…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">កំពុងថតសម្លេង…</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">ចាក់សម្លេង</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">កំពុងរក្សាទុកឯកសារ</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">អ្នកត្រូវតែបញ្ឈប់ការថតសម្លេងមុននឹងចាក់ចេញពីផ្ទាំងនេះ។</string>
   <string name="error_attaching_binary_file">មានបញ្ហាមួយបានកើតឡើងខណៈដែលភ្ជាប់ឯកសារមេឌៀ: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">ជ្រើសរើសតម្លៃ</string>
@@ -289,6 +311,7 @@
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">រក្សាទុក</string>
   <!--Button text to select a place from a list presented on a map-->
+  <string name="choices">ជម្រើស</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -308,6 +331,8 @@
   <string name="terrain">លក្ខណៈភូមិសាស្ត្រ</string>
   <string name="hybrid">ផែនទីកូនកាត់</string>
   <string name="satellite">ផ្កាយរណប</string>
+  <string name="light" tools:ignore="UnusedResources">ភ្លឺ</string>
+  <string name="dark" tools:ignore="UnusedResources">ងងឹត</string>
   <string name="google_play_services_error_occured">មិនអាចចូលដំណើរការផែនទី Google ។ តើសេវា Google Play បានដំឡើងហើយឬនៅ?</string>
   <string name="view_change_location">មើល ឬផ្លាស់ប្តូរទីតាំង</string>
   <string name="change_location">ផ្លាស់ប្តូរ​ទីតាំង</string>
@@ -343,7 +368,13 @@
   <string name="polygon_validator">ត្រូវការចំនុចយ៉ាងតិច 3 ដើម្បី​បង្កើតពហុកោណ</string>
   <string name="clear">លុ​បចេញ</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_seconds">
+    <item quantity="other">%d វិនាទី</item>
+  </plurals>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_minutes">
+    <item quantity="other">%d នាទី</item>
+  </plurals>
   <string name="none">គ្មាន</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
   <plurals name="number_of_meters">
@@ -361,6 +392,7 @@
   <!--Description for button that zooms to the user's current location on a map-->
   <!--Description for button that zooms a map so that it shows all items-->
   <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">ផ្អាក</string>
   <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
@@ -565,6 +597,7 @@
   <string name="found_in_main">ដោះ​ធីក​ដើម្បី​លាក់ចេញ​ពី​ម៉ឺនុយមេ</string>
   <string name="form_entry">ដោះ​ធីក​ដើម្បី​លាក់ពី​ទម្រង់​បញ្ចូល</string>
   <string name="reset_project_settings_title">កំណត់ឡើងវិញ</string>
+  <string name="delete_project">លុប</string>
   <string name="select_all">ជ្រើសរើសទាំងអស់</string>
   <string name="clear_all">លុបចេញទាំងអស់</string>
   <string name="reset_settings">ការកំណត់ទាំងអស់ (ការកំណត់ខាងក្នុង, ការកំណត់ដែលរក្សាទុក)</string>
@@ -588,13 +621,11 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">កំពុងរំកិលថយក្រោយ</string>
   <string name="moving_backwards_disabled_title">ការរំកិលថយក្រោយមិនបានអនុញ្ញាតិ</string>
-  <string name="moving_backwards_disabled_message">កំណត់រចនាសម្ព័ន្ធឧបករណ៍ដើម្បីរារាំងអ្នកប្រើពីការឆ្លងកាត់ការកំណត់នេះ?\n\nការប្រែប្រួលមាន:\n\u2022 បិទដំណើរការកែប្រែទម្រង់រក្សាទុក\n\u2022 បិទដំណើរការរក្សាទុកទម្រង់\n\u2022 បិទដំណើរការទៅប្រអប់បញ្ចូល\n\u2022 កំណត់ដំណើរការការរឹតបន្តឹងដើម្បីធ្វើឱ្យមានសុពលភាពលើការបញ្ច្រាស់ទៅមុខ</string>
   <string name="yes">បាទ/ចាស</string>
   <string name="no">ទេ</string>
   <string name="moving_backwards_enabled_title">អាច​ដំណើរការ​ត្រឡប់​ថយ​ក្រោយ​បាន</string>
-  <string name="moving_backwards_enabled_message">អ្នកប្រហែលជាចង់មើលម្តងទៀតអំពីការកំណត់៖ \n\n\u2022 កែប្រែទម្រង់ដែលបានរក្សាទុក\n\u2022 រក្សាទុកទម្រង់\n\u2022 ទៅកាន់កន្លែងបញ្ចូល\n\u2022 កំពុងដំណើរការកំហិត</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">រក្សាទុកសំណុំ​បែប​បទ</string>
+  <string name="save_mid">រក្សាទុកជាសេចក្តីព្រាង</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -684,8 +715,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -709,4 +738,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

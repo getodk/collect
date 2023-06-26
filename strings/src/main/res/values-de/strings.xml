@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Leeres Formular ausfüllen</string>
+  <string name="enter_data">Neues Formular beginnen</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Gespeichertes Formular ändern</string>
+  <string name="review_data">Entwürfe</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Vollständiges Formular hochladen</string>
+  <string name="send_data">Bereit zum Versenden</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Gesendete Formulare anzeigen</string>
+  <string name="view_sent_forms">Gesendet</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Leeres Formular herunterladen</string>
+  <string name="get_forms">Formular downloaden</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Formulare löschen</string>
+  <string name="manage_files">Formular löschen</string>
   <string name="saved_forms">Gespeicherte Formulare</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
@@ -48,7 +48,7 @@
   <string name="no_items_display">Keine Inhalte vorhanden.</string>
   <string name="no_items_display_forms">Nichts zum Anzeigen vorhanden.\n\nVersuchen Sie ein leeres Formular herunterzuladen und auszufüllen.</string>
   <string name="no_items_display_sent_forms">Nichts zum Anzeigen vorhanden.\n\nVersenden Sie abgeschlossene Formulare bevor sie diese anzeigen. </string>
-  <string name="no_items_display_instances">Nichts zum Anzeigen vorhanden.\n\nVersuchen Sie ein gespeichertes Formular abzuschließen, um es zu versenden.</string>
+  <string name="no_items_display_instances">Nichts zum Anzeigen vorhanden.\n\nVersuchen Sie Entwürfe abzuschließen, um sie zu versenden.</string>
   <string name="not_granted_permission">Die Aktivität, die Sie versuchen zu starten, benötigt eine Berechtigung, die nicht gewährt wurde. </string>
   <string name="storage_runtime_permission_denied_title">Speicher-Berechtigungen</string>
   <string name="storage_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf Formulare zugreifen und Antworten speichern. Starten Sie die App erneut, wenn sie bereit dazu sind die Berechtigung zu erteilen.</string>
@@ -75,7 +75,7 @@
   <string name="survey_loading_reading_csv_message">Lese CSV Dateien …</string>
   <string name="parse_error">Formularverarbeitung nicht möglich.</string>
   <string name="loading_form_failed">Beim Laden des Formulars ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.</string>
-  <string name="parent_form_not_present">Das gespeicherte Formular kann nicht bearbeitet werden, weil das zugehörige leere Formular nicht vorhanden ist oder gelöscht wurde.\n\nForm ID: %1$s</string>
+  <string name="parent_form_not_present">Der Entwurf kann nicht bearbeitet werden, weil das zugehörige leere Formular nicht vorhanden ist oder gelöscht wurde.\n\nForm ID: %1$s</string>
   <string name="cannot_edit_completed_form">Dieses Formular kann nicht mehr geändert werden, nachdem es als vollständig markiert wurde. Möglicherweise ist es verschlüsselt.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Nicht-gespeicherte Einträge aus dem letzten automatischen Speichern wiederhergestellt!</string>
@@ -84,7 +84,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Zur Eingabe</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Formular speichern</string>
+  <string name="save_all_answers">Als Entwurf speichern</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Zum Start</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -120,15 +120,28 @@
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="survey_internal_error">Interner Fehler: Sprung zur Eingabe fehlgeschlagen.</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
+  <string name="form_edits_warning_only_finalize_enabled">Nach dem Abschließen sind keine Änderungen mehr möglich.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Nach dem Abschließen sind keine Änderungen mehr möglich. Wenn noch Änderungen nötig sind, \"Als Entwurf speichern\" bis es bereit zum Senden ist.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Nach dem Senden sind keine Änderungen mehr möglich. Wenn noch Änderungen nötig sind, \"Als Entwurf speichern\" bis es bereit zum Senden ist.</string>
+  <string name="save_as_draft">Als Entwurf speichern</string>
+  <string name="finalize">Abschließen</string>
+  <string name="send">Senden</string>
   <string name="data_saved_error">Speichervorgang gescheitert!</string>
   <string name="data_saved_ok">Speichervorgang erfolgreich!</string>
   <string name="save_point_error">Fehler beim Speichern des Wiederherstellungspunkts: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">%s beenden</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="do_not_save">Formular verwerfen</string>
+  <string name="do_not_save">Formular verwerfen</string>
   <string name="discard_changes">Änderungen verwerfen</string>
   <string name="keep_changes">Änderungen speichern</string>
+  <string name="keep_editing">Bearbeiten fortsetzen</string>
+  <string name="quit_form_title">Formular speichern?</string>
+  <string name="save_explanation">Du kannst dieses Formular speichern und jederzeit in deinen Entwürfen darauf zugreifen.</string>
+  <string name="save_explanation_with_last_saved">\'Dieses Formular wurde zuletzt gespeichert am\' EEE, dd. MMM yyyy \'um\' HH:mm\'. Als Entwurf speichern um Änderungen zu behalten.\'</string>
+  <string name="quit_form_continue_title">Bearbeiten fortsetzen?</string>
+  <string name="discard_form_warning">Wenn du das Formular verwirfst, gehen alle bisherigen Änderungen verloren.</string>
+  <string name="discard_changes_warning">\'Dieses Formular wurde zuletzt gespeichert am\' EEE, dd. MMM yyyy \'um\' HH:mm\'. Wenn die Änderungen verworfen werden, gehen alle Änderungen seit diesem Zeitpunkt verloren.\'</string>
   <string name="saving_form">Formular wird gespeichert</string>
   <string name="survey_saving_validating_message">Antworten werden geprüft…</string>
   <string name="survey_saving_collecting_message">Daten werden gesammelt…</string>
@@ -475,6 +488,7 @@
   <string name="select_item">Auswählen</string>
   <string name="new_item">Neues Element</string>
   <!--Name of an action button-->
+  <string name="edit_data">Entwurf bearbeiten </string>
   <string name="view_data">Gespeichertes Formular anzeigen</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Standortverlauf</string>
@@ -745,6 +759,7 @@
   <string name="found_in_main">Deaktivieren, um aus dem Haupt-Menü auszublenden</string>
   <string name="found_in_settings">Abwählen, um unter Ungeschützten Einstellungen zu verbergen.</string>
   <string name="form_entry">Deaktivieren, um in der Formular-Eingabe auszublenden</string>
+  <string name="form_end">Abwählen um vom Formularende verbergen</string>
   <string name="reset_project_settings_title">Zurücksetzen (Reset)</string>
   <string name="reset_project_settings_subtext">Wähle aus Einstellungen, Formulare, Daten</string>
   <string name="delete_project">Löschen</string>
@@ -774,13 +789,14 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Rückwärts bewegen</string>
   <string name="moving_backwards_disabled_title">Rückwärts bewegen deaktiviert</string>
-  <string name="moving_backwards_disabled_message">Das Gerät so konfigurieren, dass Anwender diese Einstellung nicht umgehen können?\n\nDie Änderungen sind:\n\n\u2022 Deaktiviere \"Gespeichertes Formular bearbeiten\"\n\u2022 Deaktiviere \"Formular speichern\"\n\u2022 Deakktiviere \"Gehe zum Prompt\"\n\u2022 Aktiviere \"Validierung beim Vorwärts-Wischen\"</string>
+  <string name="moving_backwards_disabled_message">Das Gerät so konfigurieren, dass Anwender diese Einstellung nicht umgehen können?\n\nDie Änderungen sind:\n\n\u2022 Deaktiviere \"Entwurf bearbeiten\"\n\u2022 Deaktiviere \"Als Entwurf speichern\"\n\u2022 Deaktiviere \"Gehe zum Prompt\"\n\u2022 Aktiviere \"Validierung beim Vorwärts-Wischen\"</string>
   <string name="yes">Ja</string>
   <string name="no">Nein</string>
   <string name="moving_backwards_enabled_title">Rückwärts bewegen aktiviert</string>
-  <string name="moving_backwards_enabled_message">Bitte überprüfen Sie die folgenden Einstellungen:\n\n\u2022 Gespeichertes Formular bearbeiten\n\u2022 Formular speichern\n\u2022 Gehe zum Prompt\n\u2022 Validierung</string>
+  <string name="moving_backwards_enabled_message">Bitte überprüfen Sie die folgenden Einstellungen:\n\n\u2022 Entwurf bearbeiten\n\u2022 Als Entwurf speichern\n\u2022 Gehe zum Prompt\n\u2022 Validierung</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Formular speichern</string>
+  <string name="save_mid">Als Entwurf speichern</string>
+  <string name="save_mid_summary">Speichern-Icon in oberer Leiste und \"Als Entwurf speichern\"-Button beim Verlassen des Formulars</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -846,6 +862,7 @@
   <string name="invalid_qrcode">QR-Code enthält keine gültigen Einstellungen</string>
   <string name="qr_code_not_found">Kein QR-Code im ausgewählten Bild gefunden</string>
   <string name="corrupt_imported_preferences_error">Die aktuellen Einstellungen sind beschädigt. Setze die Einstellungen in den Projektmanagement-Einstellungen zurück oder importiere funktionierende.</string>
+  <string name="settings_with_gd_protocol">Google Drive/Sheets Projekte können nicht mehr erzeugt werden</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -894,6 +911,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Wechseln zu %s</string>
   <string name="delete_project_confirm_message">Alle Blanko-Formulare, Übermittlung und Einstellungen werden dauerhaft gelöscht. </string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Das ist ein Google Drive/Sheets Projekt. Sobald sie es löschen, können sie es nicht erneut erstellen.&lt;/font&gt;\n\nAlle Blanko-Formulare, Einsendungen und Einstellungen werden dauerhaft gelöscht.</string>
   <string name="delete_project_yes">Ja</string>
   <string name="delete_project_no">Nein</string>
   <string name="cannot_delete_project_title">Projekt kann nicht gelöscht werden</string>
@@ -953,4 +971,18 @@
   <string name="crash_app">App abstürzen lassen</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Unbehandelte Ausnahme erzwingen um die App abstürzen zu lassen</string>
+  <string name="predicate_caching">Prädikat-Caching</string>
+  <string name="permission_dialog_title">Über Berechtigungen</string>
+  <string name="permission_dialog_text">Du wirst aufgefordert, ODK Collect den Zugriff auf die unten aufgeführten Funktionen zu erlauben. Wähle \"Zulassen\", wenn du sie nutzen möchten.</string>
+  <string name="notifications">Benachrichtigungen</string>
+  <string name="required_for_notifications">Wird benötigt um Aktualisierungen anzuzeigen, wenn Formulare heruntergeladen, aktualisiert und übertragen werden.</string>
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
+  <string name="form_saved_as_draft">Dein Formular wurde als Entwurf gespeichert.</string>
+  <string name="form_saved">Dein Formular wurde gespeichert.</string>
+  <string name="form_sending">Formular wird übertragen…</string>
+  <string name="edit_form">Bearbeiten</string>
+  <string name="view_form">Ansicht</string>
+  <string name="close_snackbar">Snackbar schließen</string>
 </resources>

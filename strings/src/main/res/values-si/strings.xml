@@ -3,11 +3,7 @@
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
-  <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen. A form count is provided in parentheses.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -36,7 +32,7 @@
   <!--Displayed below repeat names in a form's table of contents-->
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
@@ -233,8 +229,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -258,4 +252,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

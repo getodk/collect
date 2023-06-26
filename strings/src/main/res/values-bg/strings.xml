@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Попълване на бланка</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Редактиране на записан формуляр</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Изпращане на завършен формуляр</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Преглед на изпратен формуляр</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Изтегляне на бланка</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Изтриване на записан формуляр</string>
   <string name="saved_forms">Запазени формуляри</string>
   <string name="version_number">Версия: %s</string>
   <string name="id_number">ID: %s</string>
@@ -47,7 +41,6 @@
   <string name="no_items_display">Няма нищо за показване.</string>
   <string name="no_items_display_forms">Няма нищо за показване.\n\nИзтеглете и попълнете бланка.</string>
   <string name="no_items_display_sent_forms">Няма нищо за показване.\n\nПърво изпратете приключени формуляри.</string>
-  <string name="no_items_display_instances">Няма нищо за показване.\n\nПреди изпращане, записаните формуляри трябва да се приключат.</string>
   <string name="not_granted_permission">Тази дейност изисква допълнително разрешение, което не е одобрено.</string>
   <string name="storage_runtime_permission_denied_title">Резрешения за хранилището</string>
   <string name="storage_runtime_permission_denied_desc">Без тези разрешения, приложението няма достъп до вашите формуляри и не може да попълва такива. </string>
@@ -73,7 +66,7 @@
   <!--Displayed below repeat names in a form's table of contents-->
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
@@ -255,8 +248,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -280,4 +271,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

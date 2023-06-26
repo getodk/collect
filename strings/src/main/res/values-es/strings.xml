@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Llenar Nuevo Formulario</string>
+  <string name="enter_data">Iniciar nuevo formulario</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Editar Formulario Guardado</string>
+  <string name="review_data">Borradores</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Enviar Formulario Finalizado</string>
+  <string name="send_data">Listo para enviar</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Ver Formularios Enviados</string>
+  <string name="view_sent_forms">Enviado</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Obtener Formulario en Blanco</string>
+  <string name="get_forms">Descargar formulario</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Borrar Formularios Guardados</string>
+  <string name="manage_files">Borrar formulario</string>
   <string name="saved_forms">Guardar formularios</string>
   <string name="version_number">Versión: %s</string>
   <string name="id_number">ID: %s</string>
@@ -48,7 +48,6 @@
   <string name="no_items_display">No hay nada que mostrar.</string>
   <string name="no_items_display_forms">No hay nada que mostrar.\n\nPruebe llenando un formulario en blanco.</string>
   <string name="no_items_display_sent_forms">No hay nada que mostrar.\n\nPrueba enviando formularios finalizados antes de verlos.</string>
-  <string name="no_items_display_instances">No hay nada que mostrar.\n\nPruebe finalizar los formularios antes de mandarlos.</string>
   <string name="not_granted_permission">La actividad que está intentando iniciar requiere un permiso que no se ha concedido.</string>
   <string name="storage_runtime_permission_denied_title">Permisos de Almacenamiento</string>
   <string name="storage_runtime_permission_denied_desc">Sin estos permisos no se puede accesar los formularios o guardar las respuetas. Abra la aplicación de nuevo cuando esté listo para dar acceso</string>
@@ -75,7 +74,6 @@
   <string name="survey_loading_reading_csv_message">Leyendo archivos CSV…</string>
   <string name="parse_error">No se pudo interpretar el formulario.</string>
   <string name="loading_form_failed">Ocurrió un error al cargar el formulario. Por favor intente de nuevo.</string>
-  <string name="parent_form_not_present">No se pudo editar este formulario guardado por que el formulario en blanco que le corresponde no esta o fue borrado.\n\nID de Formulario: %1$s</string>
   <string name="cannot_edit_completed_form">Este formulario no puede ser editado una vez que ha sido marcado como finalizado. Puede estar encriptado.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">¡Cambios no guardados recuperados del punto de recuperación!</string>
@@ -84,7 +82,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Ir a la Pregunta</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Guardar formulario</string>
+  <string name="save_all_answers">Guardar como borrador</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Ir al Inicio</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -120,13 +118,17 @@
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">No podrá realizar ediciones una vez que finalice. Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
+  <string name="save_as_draft">Guardar como borrador</string>
+  <string name="finalize">Finalizar</string>
+  <string name="send">Enviar</string>
   <string name="data_saved_error">¡Atención, el formulario no se ha guardado correctamente!</string>
   <string name="data_saved_ok">Formulario guardado correctamente</string>
   <string name="save_point_error">Error al guardar punto de recuperación: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Salir %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="do_not_save">Descartar formulario</string>
+  <string name="do_not_save">Descartar formulario</string>
   <string name="discard_changes">Descartar los cambios</string>
   <string name="keep_changes">Guardar los cambios</string>
   <string name="saving_form">Guardando el formulario</string>
@@ -777,13 +779,11 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Retroceder en Preguntas</string>
   <string name="moving_backwards_disabled_title">Retroceder en Preguntas Desactivado</string>
-  <string name="moving_backwards_disabled_message">Configure el dispositivo para prevenir que los usuarios se salten esta configuración?\n\nLos cambios son:\n\u2022 Desactivar Editar Formularios Guardados\n\u2022 Desactivar Guardar Formularios\n\u2022 Desactivar Ir a Pregunta\n\u2022 Establecer Manejo de Restricciones como Validar al desplazar hacia adelante</string>
   <string name="yes">Si</string>
   <string name="no">No</string>
   <string name="moving_backwards_enabled_title">Retroceder en Preguntas Activado</string>
-  <string name="moving_backwards_enabled_message">Se recomienda revisar la siguiente configuración:\n\n\u2022 Editar Formulario Guardado\n\u2022 Guardar Formularios\n\u2022 Ir a la Pregunta\n\u2022 Manejo de Restricciones</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Guardar sin completar el formulario</string>
+  <string name="save_mid">Guardar como borrador</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -849,6 +849,7 @@
   <string name="invalid_qrcode">El código QR no contiene ajustes válidos</string>
   <string name="qr_code_not_found">Código QR no encontrado en la imagen seleccionada</string>
   <string name="corrupt_imported_preferences_error">La configuración actual está dañada. Desde la configuración de gestión de proyectos, restablezca la configuración o importe las que funcionan.</string>
+  <string name="settings_with_gd_protocol">Ya no se pueden crear proyectos de Google Drive/Sheets</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -898,6 +899,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambiar a %s</string>
   <string name="delete_project_confirm_message">Todos los formularios, envíos y configuraciones en blanco se eliminarán de forma permanente.</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Este es un proyecto de Google Drive/Sheets. Una vez que lo elimine, no podrá crearlo de nuevo.&lt;/font&gt;\n\nTodos los formularios, envíos y configuraciones en blanco se eliminarán de forma permanente.</string>
   <string name="delete_project_yes">Si</string>
   <string name="delete_project_no">No</string>
   <string name="cannot_delete_project_title">El proyecto no se puede eliminar</string>
@@ -957,4 +959,8 @@
   <string name="crash_app">Aplicación bloqueada</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Se forzó una excepción no detectada que hace que la aplicación se bloquee</string>
+  <string name="predicate_caching">Caché de predicados</string>
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

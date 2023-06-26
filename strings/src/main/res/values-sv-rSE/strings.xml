@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Fyll i tomt formulär</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Redigera sparat formulär</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Skicka avslutat formulär</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Visa skickat formulär</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Hämta tomt formulär</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Radera sparat formulär</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: 1%s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -45,7 +39,6 @@
   <string name="no_items_display">Inget tillgängligt för visning.</string>
   <string name="no_items_display_forms">Inget tillgängligt för visning.\n\nProva att hämta och fylla i ett tomt formulär.</string>
   <string name="no_items_display_sent_forms">Inget tillgängligt för visning.\n\nProva att skicka ett avslutat formulär innan visning.</string>
-  <string name="no_items_display_instances">Inget tillgängligt för visning.\n\nProva att avsluta sparade formulär innan dessa skickas.</string>
   <string name="storage_runtime_permission_denied_title">Lagringsbehörigheter</string>
   <string name="location_runtime_permissions_denied_title">Platsbehörigheter</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
@@ -64,7 +57,6 @@
   <string name="survey_loading_reading_csv_message">Läser in CSV-filer…</string>
   <string name="parse_error">Tyvärr, ej möjligt att tolka formulär.</string>
   <string name="loading_form_failed">Ett fel uppstod vid laddning av formuläret. Var vänlig och försök igen.</string>
-  <string name="parent_form_not_present">Det är inte möjligt att redigera detta sparade formulär eftersom motsvarande tomt formulär inte finns eller har tagits bort.\n\nForm ID: %1$s</string>
   <string name="cannot_edit_completed_form">Det här formuläret kan inte redigeras efter det har avslutats. Det kan vara krypterat.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Osparade ändringar har återskapats från återställningspunkt!</string>
@@ -73,7 +65,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Gå till inmatningsrad</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Spara formulär</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Gå till början</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -111,10 +102,10 @@
   <string name="data_saved_error">Tyvärr, formuläret kunde inte sparas!</string>
   <string name="data_saved_ok">Formuläret har sparats!</string>
   <string name="save_point_error">Fel vid sparande av återställningspunkt: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Avsluta %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Spara ändringar</string>
+  <string name="keep_changes">Spara ändringar</string>
   <string name="saving_form">Sparar formulär</string>
   <string name="survey_saving_validating_message">Validerar svar…</string>
   <string name="survey_saving_collecting_message">Samlar in data…</string>
@@ -600,13 +591,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Navigera bakåt</string>
   <string name="moving_backwards_disabled_title">Bakåtnavigering inaktiverad</string>
-  <string name="moving_backwards_disabled_message">Vill du konfigurera enheten så att användare förhindras att åsidosätta dessa inställningar?\n\nÄndringarna är:\n\u2022 Avaktivera ändra sparat formulär\n\u2022 Avaktivera spara formulär\n\u2022 Avaktivera gå till post\n\u2022 Aktivera hantering av restriktioner till validering vid navigering framåt</string>
   <string name="yes">Ja</string>
   <string name="no">Nej</string>
   <string name="moving_backwards_enabled_title">Bakåtnavigering aktiverad</string>
-  <string name="moving_backwards_enabled_message">Du vill kanske se över dessa inställningar:\n\n\u2022 Redigera sparat formulär\n\u2022 Spara formulär\n\u2022 Gå till post\n\u2022 Hantering av restriktioner</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Spara formulär</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -699,8 +687,6 @@ Dela ODK Collect med dem.</string>
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -724,4 +710,7 @@ Dela ODK Collect med dem.</string>
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

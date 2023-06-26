@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">خالی فورمه ډک کړي</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">ثبت شوي فورمه تصحیح کړي</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">نهايی شوي فورمي ولیږی</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">لیږل شوي فورمي ښکاره کړي</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">سپینه فورمه تر لاسه کړی</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">ثبت شوی فورمه لري کړی</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -34,7 +28,6 @@
   <string name="change_language">ژبه تغیر کړی</string>
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">فورمه ثبت کړي</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">اولي برخي ته لاړ شی</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -61,7 +54,7 @@
   <string name="data_saved_error">اوبخښی، د فورمي ثبتول ناکامه شو!</string>
   <string name="data_saved_ok">فورمه په بریالی توکه ثبت شو!</string>
   <string name="save_point_error">د خطا ثبت بیا موندولو نښه: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">خارج شی %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="saving_form">فورمه د ثبت کیدو په حال کښی</string>
@@ -278,7 +271,6 @@
   <string name="no">نه</string>
   <string name="moving_backwards_enabled_title">د بيرته راګرځولو توانول فعال دي</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">فورمه ثبت کړي</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -326,8 +318,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -351,4 +341,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

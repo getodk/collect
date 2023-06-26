@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Täida vorm</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Muuda salvestatud vormi</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Saada lõpetatud vorm</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Vaata saadetud vormi</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Lae sisestusvorm alla</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Kustuta salvestatud vorm</string>
   <string name="version_number">Versoon: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Lisatud\' EEE, MMM dd, yyyy \'kell\' HH:mm</string>
@@ -35,7 +29,6 @@
   <string name="no_items_display">Puudub sisu mida näidata.</string>
   <string name="no_items_display_forms">Puudub sisu mida näidata.\n\nPalun lae vorm alla ja täida see.</string>
   <string name="no_items_display_sent_forms">Puudub sisu mida näidata.\n\nEnne vaatamist proovige saata lõpetatud vorm.</string>
-  <string name="no_items_display_instances">Puudub sisu mida näidata.\n\nEnnem ära saatmist märgi salvestatud vormid lõpetatuks.</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -47,7 +40,6 @@
   <string name="survey_loading_reading_data_message">Uuringu andmete lugemine…</string>
   <string name="survey_loading_reading_csv_message">CSV failide lugemine…</string>
   <string name="parse_error">Kahjuks ei ole vormi töötlemine võimalik.</string>
-  <string name="parent_form_not_present">Salvestatud vormi ei õnnestu muuta kuna vormi, kas ei ole olemas või on kustutatud. \n\nVormi ID: %1$s</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Salvestamata muudatused on taastatud!</string>
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
@@ -55,7 +47,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Liigu küsimusele</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Salvesta vorm</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Liigu algusesse</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -85,10 +76,10 @@
   <string name="data_saved_error">Kahjuks ebaõnnestus vormi salvestamine!</string>
   <string name="data_saved_ok">Vorm on edukalt salvestatud!</string>
   <string name="save_point_error">Vea parndamise taastuspunkt %s </string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Välju %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Muudatuste salvestamine</string>
+  <string name="keep_changes">Muudatuste salvestamine</string>
   <string name="saving_form">Vormi salvestamine</string>
   <string name="survey_saving_validating_message">Vastuste valideerimine…</string>
   <string name="survey_saving_collecting_message">Andmete kogumine…</string>
@@ -427,7 +418,6 @@
   <string name="reset_cache_result">Vormi laadimise vahemälu :: %s</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Salvesta vorm</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -487,8 +477,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -512,4 +500,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Boş Form Doldur</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Saklanan Formu Güncelle</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Dolu Formu gönder</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Gönderilen Formu Görüntüle</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Boş Form Al</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Kayitli Formu Sil</string>
   <string name="saved_forms">Kayıtlı Formlar</string>
   <string name="version_number">Versiyon 1 %s</string>
   <string name="id_number">ID: 1%s</string>
@@ -59,7 +53,6 @@
   <string name="change_language">Dil Değiştir</string>
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Formu Sakla</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Başlangıca Git</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -87,7 +80,7 @@
   <string name="delete_repeat_no">Vazgeç</string>
   <string name="data_saved_error">Form kaydedilirken hata oluştu</string>
   <string name="data_saved_ok">From başarılı bir şekilde saklandi</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Çıkış %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="keep_changes">Değişiklikleri Kaydet</string>
@@ -318,7 +311,6 @@
   <string name="yes">Evet</string>
   <string name="no">Hayır</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Formu Sakla</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -410,4 +402,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

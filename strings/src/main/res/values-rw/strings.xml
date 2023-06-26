@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Uzuza ahateganyijwe muri iyi nyandiko shingiro cg ngenderwaho</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Guhindura inyandiko shingiro cg ngenderwaho ibika.</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Ohereza ibyo umaze kuzuza</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Reba ibyo umaze kohereza</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Fungura inyandiko shingiro cg ngenderwaho.</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Siba inyandiko shingiro cg ngenderwaho wa bitse.</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -45,7 +39,6 @@
   <string name="no_items_display">Ntibibashije kuboneka</string>
   <string name="no_items_display_forms">Ntakintu byerekana./n/n gerageza gushaka kandi wuzuzuze form iriho ubusa. </string>
   <string name="no_items_display_sent_forms">Ntakibashije kugaragara.\n\n gerageza wohereze form zarangiye mbere yuko zisuzumwa.</string>
-  <string name="no_items_display_instances">Ntakintu byerekana./n/n gerageza gushaka kandi wuzuzuze form iriho ubusa. </string>
   <string name="not_granted_permission">Igikorwa mugerageza gutangira kirasaba uruhushya, kandi ntirwatanzwe</string>
   <string name="storage_runtime_permission_denied_title">Uburenganzira ku bubiko</string>
   <string name="storage_runtime_permission_denied_desc">Udafite ubwo burenganzira Collect ntabwo ishobora kwemera form cg ibike amakuru. Ongera ufungure iyo application mugihe ufite ubwo burenganzira</string>
@@ -70,7 +63,6 @@
   <string name="survey_loading_reading_csv_message">Usome ububiko bwa CSV </string>
   <string name="parse_error">Ihangane, ntibikunze kugenzura amakuru ari mu ifishi</string>
   <string name="loading_form_failed">Habayeho ikibazo ubwo wuzuzaga form. Mwongere mugerageze. </string>
-  <string name="parent_form_not_present">Ntibikunze guhindura ifishi bitewe nuko ifishi ya mbere yasibwe. \'%1$s\' </string>
   <string name="cannot_edit_completed_form">Iyi form ntabwo ushobora kugira icyo uhindura mugihe byerekanyeko yarangiye. Ishobora kuba yerekana amakuru mu buryo butagaragara. </string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Ibyo utasevinze byabashije kwisevinga!</string>
@@ -79,7 +71,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Jya kubyo ugomba gukora</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Bika amakuru</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Jya ahatangira </string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -118,10 +109,10 @@
   <string name="data_saved_error">Mwihangane, kubika amakuru byanze! </string>
   <string name="data_saved_ok">Amakuru yabitswe! </string>
   <string name="save_point_error">Ikosa mukwisevinga biragaruka: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Sohoka 1%s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Bika ibyo wahinduye</string>
+  <string name="keep_changes">Bika ibyo wahinduye</string>
   <string name="saving_form">Ibika ry\'amakuru yinyandiko shingiro.</string>
   <string name="survey_saving_validating_message">Porogaramu iragenzura amakuru yatanzwe</string>
   <string name="survey_saving_collecting_message">Gukusanya amakuru</string>
@@ -713,13 +704,10 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Gusubira inyuma</string>
   <string name="moving_backwards_disabled_title">Gusubira inyuma ntibikunda</string>
-  <string name="moving_backwards_disabled_message">Shyiraho igikoresho gicunga kugira ngo ubuze kwinjira abakoresha nabi igenamitarere?\n\n Ibyahinduwe ni:\n\u2022 Kutemeza ibyahindutse ku nyandiko shingiro ibitswe\n\u2022 Kutemeza ibyinjijwe nyuma\n\u2022 Garagaza ibyakozwe ku mbogamizi zabaye mwihitamo ryhuse kandi risobanutse.</string>
   <string name="yes">Yego</string>
   <string name="no">Oya</string>
   <string name="moving_backwards_enabled_title">Gusubira inyuma byemejwe</string>
-  <string name="moving_backwards_enabled_message">Mushobora gusura ku igenamiterere kuburyo bukurikira:\n\u2022 Guhindura inyandiko shingiroibitswe\n\u2022 Kubika inyandiko shingiro\n\u2022 Garagaza ibyinjijwe nyma\n\u2022 Imbogamizi z\'ibyakozwe.</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Bika amakuru</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -868,4 +856,7 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

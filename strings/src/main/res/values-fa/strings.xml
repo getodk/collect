@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">فورم خالی را تکمیل کنید.</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">ویرایش فورم ذخیره شده</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">ارسال فورم نهایی</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">مشاهده فورم ارسال شده</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">دریافت فورم خالی</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">حذف فورم ذخیره شده</string>
   <string name="saved_forms">ذخیره فورم ها</string>
   <string name="version_number">نسخه: %s</string>
   <string name="id_number">شماره شناسایی: %s</string>
@@ -46,7 +40,6 @@
   <string name="no_items_display">هیچ موردی برای نمایش وجورد ندارد.</string>
   <string name="no_items_display_forms">هیج موردی برای نمایش در دسترس نیست. \n\n\و سعی کنید فرم خالی را دریافت و پر کنید.</string>
   <string name="no_items_display_sent_forms">هیچ موردی برای نمایش در دسترس نیست. \n\n\ و سعی کنید فرم های نهایی را قبل از مشاهده ارسال کنید.</string>
-  <string name="no_items_display_instances">هیچ موردی برای نمایش در دسترس نیست. n\n\ و سعی کنید فرم‌های ذخیره‌شده را قبل از ارسال نهایی کنید.</string>
   <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
   <string name="storage_runtime_permission_denied_title">مجوزهای برای ذخیره سازی</string>
   <string name="storage_runtime_permission_denied_desc">بدون مجوزها، مجموعه نمی‌تواند به فرم‌های شما دسترسی داشته باشد یا پاسخ‌ها را ذخیره کند. زمانی که برای اعطای برنامه آماده شدید، دوباره آن را باز کنید.</string>
@@ -72,7 +65,6 @@
   <string name="survey_loading_reading_csv_message">خواندن اسناد CSV</string>
   <string name="parse_error">با عرض پوزش، نمی توان فورم را تجزیه کرد.</string>
   <string name="loading_form_failed">هنگام  آماده سازی فورم خطایی روی داد. لطفا دوباره تلاش کنید.</string>
-  <string name="parent_form_not_present">ویرایش این فورم ذخیره شده ممکن نیست زیرا فورم خالی وجود ندارد یا حذف شده است.\n\n شناسایی فورم: %1$s</string>
   <string name="cannot_edit_completed_form">این فورم بعد از نهایی شدن آن قابل ویرایش نیست. ممکن است رمگزاری شده باشد. </string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">تغییرات ذخیره نشده از savepoint بازیابی شد!</string>
@@ -81,7 +73,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">به Prompt بروید</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">ذخیره فورم</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">به شروع برو</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -120,10 +111,10 @@
   <string name="data_saved_error">متاسفانه فورم ذخیره نشد!</string>
   <string name="data_saved_ok">فورم با موفقیت ذخیره شد!</string>
   <string name="save_point_error">خطا در ذخیره نقطه یابی: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">خروج %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">ذخیره تغییرات</string>
+  <string name="keep_changes">ذخیره تغییرات</string>
   <string name="saving_form">ذخیره فورم</string>
   <string name="survey_saving_validating_message">در حال اعتبار سنجی پاسخ ها</string>
   <string name="survey_saving_collecting_message">در حال جمع آوری داده ها…</string>
@@ -720,13 +711,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">حرکت به سمت عقب</string>
   <string name="moving_backwards_disabled_title">حرکت به عقب غیرفعال است</string>
-  <string name="moving_backwards_disabled_message">دستگاه را طوری تنظیم کنید که کاربران از دور زدن این تنظیم جلوگیری کنند؟\n\nتغییرات عبارتند از:\n\u2022 ویرایش فورم ذخیره شده را غیرفعال کنید\n\u2022 غیرفعال کردن ذخیره فورم\n\u2022 غیرفعال کردن Go To Prompt\n\u2022 پردازش محدودیت را روی اعتبار تنظیم کنید با کشیدن انگشت به جلو</string>
   <string name="yes">بلی</string>
   <string name="no">نخیر</string>
   <string name="moving_backwards_enabled_title">حرکت به عقب فعال شد</string>
-  <string name="moving_backwards_enabled_message">ممکن است بخواهید تنظیمات زیر را مرور کنید: \n\n\u2022 ویرایش فورم ذخیره شده \n\u2022 ذخیره فورم\n\u2022 رفتن به درخواست\n\u2022 پردازش محدودیت</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">ذخیره فورم</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -890,4 +878,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Izpolni prazen obrazec</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Uredi shranjen ubrazec</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Pošlji zaključen obrazec</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Preglej poslan obrazec</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Prevzami prazen obrazec</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Briši shranjen obrazec</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Dodan na\' EEE,MMM dd, yyyy \'ob\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -35,7 +29,6 @@
   <string name="no_items_display">Ničesar nimam za prikaz</string>
   <string name="no_items_display_forms">Ničesar ni za prikaz.\n\nPoskusi  naložiti in izpolniti prazen obrazec.</string>
   <string name="no_items_display_sent_forms">Ničesar ni za prikaz.\n\nPoskusi poslati zaključen obrazec pred pregledovanjem.</string>
-  <string name="no_items_display_instances">Ničesar ni za prikaz.\n\nPoskusi zaključiti shranjene obrazce pred pošiljanjem.</string>
   <string name="storage_runtime_permission_denied_desc">Brez teh dovoljenj, Collect ne more dostopati do vaših obrazcev ali shraniti odgovorov. Aplikacijo znova odprite, ko ste jih pripravljeni odobriti.</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="camera_runtime_permission_denied_title">Dovljenje za fotoaparat</string>
@@ -53,7 +46,6 @@
   <string name="survey_loading_reading_data_message">Berem podatke obrazcev…</string>
   <string name="survey_loading_reading_csv_message">Berem CSV datoteke…</string>
   <string name="parse_error">Napaka, ne morem opredeliti obrazca.</string>
-  <string name="parent_form_not_present">Ne morem urejati shranjen obrazec ker je bil pripadajoči prazen obrazec  %1$s izbrisan ali ni na voljo.</string>
   <string name="cannot_edit_completed_form">Obrazca ni moč popravljati ko je bil zaključen. Lahko pa ga šifrirate.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Neshranjene spremembe vrnjene na shranjeno točko.</string>
@@ -62,7 +54,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Pojdi na vprašanje</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Shrani obrazec</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Pojdi na začetek</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -93,10 +84,10 @@
   <string name="data_saved_error">Shranjevanje obrazca ni uspelo!</string>
   <string name="data_saved_ok">Obrazec uspešno shranjen!</string>
   <string name="save_point_error">Napaka pri shranjevanju  obnovitvene točke %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Izhod %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Shrani spremembe</string>
+  <string name="keep_changes">Shrani spremembe</string>
   <string name="saving_form">Shrani obrazec</string>
   <string name="survey_saving_validating_message">Vrednotim odgovore…</string>
   <string name="survey_saving_collecting_message">Zbiram podatke…</string>
@@ -418,7 +409,6 @@
   <string name="form_entry_setting">Nastavitve za vnos obrazca</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Shrani obrazec</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -481,8 +471,6 @@
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
   <!--Text for the button that allows for manually entering project details. Should be short-->
-  <!--Immediately followed by "Configure" which is a link to configure a Google Drive project-->
-  <!--Preceded by "My project uses Google Drive." Tapping opens a dialog to configure a Google Drive Project-->
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
@@ -506,4 +494,7 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

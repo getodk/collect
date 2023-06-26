@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Remplir un formulaire</string>
+  <string name="enter_data">Démarrer un nouveau formulaire </string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Éditer formulaire enregistré</string>
+  <string name="review_data">Brouillons</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Envoyer un formulaire finalisé</string>
+  <string name="send_data">Prêt à envoyer</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Voir formulaire envoyé</string>
+  <string name="view_sent_forms">Envoyé</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Télécharger un formulaire vierge</string>
+  <string name="get_forms">Télécharger le formulaire</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Supprimer formulaire enregistré</string>
+  <string name="manage_files">Supprimer le formulaire</string>
   <string name="saved_forms">Formulaires enregistrés</string>
   <string name="version_number">Version: %s</string>
   <string name="id_number">ID: %s</string>
@@ -48,7 +48,7 @@
   <string name="no_items_display">Rien à afficher.</string>
   <string name="no_items_display_forms">Il n\'y a rien à afficher.\n\nEssayez d\'obtenir et de remplir un formulaire vierge.</string>
   <string name="no_items_display_sent_forms">Il n\'y a rien à afficher.\n\nEssayez d\'envoyer un formulaire finalisé.</string>
-  <string name="no_items_display_instances">Il n\'y a rien à afficher.\n\nFinalisez vos formulaires enregistrés avant de les envoyer.</string>
+  <string name="no_items_display_instances">Rien à afficher.\n\nEssayer de finaliser des ébauches avant d\'envoyer.</string>
   <string name="not_granted_permission">Vous n\'avez pas les permissions requises pour démarrer l\'activité demandée</string>
   <string name="storage_runtime_permission_denied_title">Autorisations de stockage</string>
   <string name="storage_runtime_permission_denied_desc">Sans ces permissions Collect ne peut pas accéder à vos formulaires ou enregistrer des réponses. Ré-ouvrez l\'application quand vous êtes prêt à donner les permissions requises. </string>
@@ -75,7 +75,7 @@
   <string name="survey_loading_reading_csv_message">Lecture des fichiers CSV…</string>
   <string name="parse_error">Désolé. Impossible d\'analyser le formulaire.</string>
   <string name="loading_form_failed">Une erreur s\'est produite lors du chargement du formulaire. Veuillez réessayer.</string>
-  <string name="parent_form_not_present">Il n\'est pas possible de modifier ce formulaire car le formulaire vierge correspondant n\'existe pas ou a été supprimé.\n\nID du formulaire: %1$s</string>
+  <string name="parent_form_not_present">Impossible d\'éditer cette ébauche car le formulaire vierge correspondant n\'est pas présent ou a été supprimé. \n\\nFrom ID : %1$s</string>
   <string name="cannot_edit_completed_form">Ce formulaire ne peut pas être modifié une fois finalisé. Il est peut-être encrypté.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Les modifications non enregistrées ont été récupérées à partir du point de sauvegarde !</string>
@@ -84,7 +84,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Aller à la ligne de saisie</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Enregistrer le formulaire</string>
+  <string name="save_all_answers">Enregistrer comme ébauche</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Aller au début</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -120,15 +120,27 @@
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
   <string name="survey_internal_error">Erreur interne : un ou plusieurs champs de saisie peuvent avoir été ignorés.</string>
   <string name="save_enter_data_description">Vous êtes à la fin de \"%s\".</string>
+  <string name="form_edits_warning_only_finalize_enabled">Vous ne pourrez plus éditer une fois que vous aurez finalisé.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Vous ne serez pourrez plus modifier une fois que vous aurez finalisé. Si vous devez faire des modifications, \"Enregistrer comme ébauche\" jusqu\'à ce que vous soyez prêt à envoyer.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Vous ne pourrez plus éditer une fois que vous aurez envoyé. Si vous avez besoin de faire des changements, \"Enregistrer comme ébauche\" jusqu\'à ce que vous soyez prêts à envoyer.</string>
+  <string name="save_as_draft">Enregistrer comme ébauche</string>
+  <string name="finalize">Finaliser</string>
+  <string name="send">Envoyer</string>
   <string name="data_saved_error">Désolé, l\'enregistrement du formulaire a échoué.</string>
   <string name="data_saved_ok">Le formulaire a été enregistré avec succès.</string>
   <string name="save_point_error">Erreur lors de l\'enregistrement du point de récupération: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Quitter %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="do_not_save">Supprimer le formulaire</string>
+  <string name="do_not_save">Supprimer le formulaire</string>
   <string name="discard_changes">Supprimer les modifications</string>
   <string name="keep_changes">Enregistrer les modifications</string>
+  <string name="quit_form_title">Enregistrer le formulaire ?</string>
+  <string name="save_explanation">Vous pouvez enregistrer ce formulaire et y accéder depuis vos ébauches à tout moment.</string>
+  <string name="save_explanation_with_last_saved">\'Ce formulaire a été enregistré pour la dernière fois le\' EEE, MMM dd, yyyy \'à\' HH:mm\'. Enregistrer comme ébauche pour conserver les modifications.\'</string>
+  <string name="quit_form_continue_title">Continuer l\'édition ?</string>
+  <string name="discard_form_warning">Si vous fermez le formulaire, vous perdrez toutes les modifications que vous y avez apportées.</string>
+  <string name="discard_changes_warning">\'Ce formulaire a été enregistré pour la dernière fois le\' EEE, MMM dd, yyyy \'à\' HH:mm\'. Si vous abandonnez les modifications, vous perdrez toutes celles apportées depuis.\'</string>
   <string name="saving_form">Sauvegarde du formulaire…</string>
   <string name="survey_saving_validating_message">Validation des réponses…</string>
   <string name="survey_saving_collecting_message">Récupération des données…</string>
@@ -478,6 +490,7 @@
   <string name="select_item">Sélectionner</string>
   <string name="new_item">Nouvel item</string>
   <!--Name of an action button-->
+  <string name="edit_data">Éditer l\'ébauche</string>
   <string name="view_data">Voir Questionnaire Enregistré </string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Suivi de la localisation</string>
@@ -748,6 +761,7 @@
   <string name="found_in_main">Désélectionner pour cacher sur le menu principal</string>
   <string name="found_in_settings">Désélectionner pour cacher dans les Paramètres</string>
   <string name="form_entry">Décochez pour cacher depuis la saisie du formulaire</string>
+  <string name="form_end">Décocher pour masquer à la fin du Formulaire.</string>
   <string name="reset_project_settings_title">Réinitialiser</string>
   <string name="reset_project_settings_subtext">Choisir depuis les paramètres, formulaires et données</string>
   <string name="delete_project">Supprimer</string>
@@ -777,13 +791,14 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">mouvement en recul</string>
   <string name="moving_backwards_disabled_title">mouvement en recul désactivé</string>
-  <string name="moving_backwards_disabled_message">Paramétrer Collect pour empêcher les utilisateurs de contourner ce paramètre ? \n\nLes modifications sont:\n\u2022 Désactiver bouton Éditer formulaire enregistré\n\u2022 Désactiver l\'enregistrement de formulaire\n\u2022 Désactiver Aller à la ligne de saisie\n\u2022 Définir le traitement de contrainte au moment de balayage vers l\'avant</string>
+  <string name="moving_backwards_disabled_message">Configurer l\'appareil pour empêcher les utilisateurs de contourner ce paramètre ?\n\nLes modifications sont les suivantes :\n\u2022 Désactiver la modification de l\'ébauche. \n\u2022 Désactiver l\'enregistrement en tant qu\'ébauche. \n\u2022 Désactiver le passage à l\'invite. \n\u2022 Régler le traitement des contraintes de validation lors du passage à l\'écran suivant.</string>
   <string name="yes">Oui</string>
   <string name="no">Non</string>
   <string name="moving_backwards_enabled_title">Le recul est activé</string>
-  <string name="moving_backwards_enabled_message">Vous souhaiterez peut-être reviser les paramètres suivants :\n\n\u2022 Éditer formulaire enregistré\n\u2022 Enregistré le formulaire\n\u2022 Aller à la ligne de saisie\n\u2022 Traitement des contraintes</string>
+  <string name="moving_backwards_enabled_message">Vous souhaiterez peut-être revoir les paramètres suivants:\n\n\u2022 Modifier l\'ébauche\n\n\n- Enregistrer comme ébauche\n\u2022Aller à l\'invite\n\u2022Traitement des contraintes</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Enregistrer le formulaire</string>
+  <string name="save_mid">Enregistrer comme ébauche</string>
+  <string name="save_mid_summary">Icône d\'enregistrement dans la barre supérieure et bouton \"Enregistrer comme ébauche\" en quittant le formulaire</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -849,6 +864,7 @@
   <string name="invalid_qrcode">Le QR code ne contient pas de paramètres valides</string>
   <string name="qr_code_not_found">Le code QR n\'a pas été trouvé dans l\'image sélectionnée. </string>
   <string name="corrupt_imported_preferences_error">Les paramètres actuels sont corrompus. À partir des paramètres de gestion de projet, réinitialisez les paramètres ou importez-en d\'autres qui fonctionnent.</string>
+  <string name="settings_with_gd_protocol">Les projets basés sur Google Drive/Sheets ne peuvent plus être créés.</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -897,6 +913,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Changer à %s</string>
   <string name="delete_project_confirm_message">Tous les formulaires vierges, soumissions et paramètres seront définitivement supprimés.</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Ceci est un projet basé sur Google Drive/Sheets. Quand vous l\'aurez supprimé, vous ne pourrez plus le créer à nouveau.&lt;/font&gt;\n\nL\'ensemble des formulaires vierges, soumissions et paramètres seront supprimés définitivement.</string>
   <string name="delete_project_yes">Oui</string>
   <string name="delete_project_no">Non</string>
   <string name="cannot_delete_project_title">Le projet ne peut être supprimé</string>
@@ -956,4 +973,17 @@
   <string name="crash_app">Faire planter l\'application</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forcer une exception qui fera planter l\'application </string>
+  <string name="predicate_caching">Mise en cache des prédicats</string>
+  <string name="permission_dialog_title">A propos des permissions</string>
+  <string name="permission_dialog_text">Il vous sera demandé d\'autoriser ODK Collect à accéder aux fonctions ci-dessous, sélectionnez \"autoriser\" si vous souhaitez les utiliser.</string>
+  <string name="notifications">Notifications</string>
+  <string name="required_for_notifications">Requis pour afficher les mises à jours quand les formulaires sont téléchargés, mis à jour ou envoyés.</string>
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
+  <string name="form_saved_as_draft">Votre formulaire a été enregistré comme ébauche</string>
+  <string name="form_saved">Votre formulaire a été enregistré.</string>
+  <string name="form_sending">Envoi du formualire en cours…</string>
+  <string name="edit_form">Éditer</string>
+  <string name="view_form">Voir</string>
 </resources>

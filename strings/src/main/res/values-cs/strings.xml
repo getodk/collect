@@ -1,17 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Vyplnit dotazník</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Editovat uložený dotazník</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Odeslat dokončený dotazník</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Zobrazit odeslaný formulář</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Získat dotazník k vyplnění</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Smazat uložený dotazník</string>
   <string name="saved_forms">Uložené formuláře</string>
   <string name="version_number">Verze: %s</string>
   <string name="id_number">ID: %s</string>
@@ -48,7 +42,6 @@
   <string name="no_items_display">Není co zobrazit.</string>
   <string name="no_items_display_forms">Není co zobrazit.\n\nZkuste stáhnout a vyplnit dotazník.</string>
   <string name="no_items_display_sent_forms">Není k dispozici žádné zobrazení. \n\n Vyzkoušejte odeslání dokončených formulářů před prohlížením.</string>
-  <string name="no_items_display_instances">Není co zobrazit.\n\nZkuste před odesláním označit formuláře jako dokončené.</string>
   <string name="not_granted_permission">Aktivita, kterou se pokoušíte spustit, vyžaduje oprávnění, které není uděleno.</string>
   <string name="storage_runtime_permission_denied_title">Povolení pro ukládání dat</string>
   <string name="storage_runtime_permission_denied_desc">Bez těchto oprávnění nelze přistupovat k formulářům nebo ukládat odpovědi. Opětovně otevřete aplikaci, až budete připraveni je udělit.</string>
@@ -75,7 +68,6 @@
   <string name="survey_loading_reading_csv_message">Načítám CSV soubory…</string>
   <string name="parse_error">Dotazník nejde načíst.</string>
   <string name="loading_form_failed">Během načítání formuláře došlo k chybě. Prosím zkuste to znovu.</string>
-  <string name="parent_form_not_present">Tento uložený dotazník nelze editovat, protože jeho předloha chybí nebo byla smazána.\n\n ID dotazníku: %1$s</string>
   <string name="cannot_edit_completed_form">Tento formulář nelze upravit, jakmile byl označen jako dokončený. Může být zašifrovaný.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Neuložené změny obnoveny z bodu obnovy!</string>
@@ -84,7 +76,6 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Přejít k otázce</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Uložit dotazník</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Přejít na začátek</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -123,10 +114,12 @@
   <string name="data_saved_error">Uložení dotazníku selhalo!</string>
   <string name="data_saved_ok">Dotazník úspěšně uložen!</string>
   <string name="save_point_error">Chyba při ukládání bodu obnovení: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Konec %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="keep_changes">Uložit změny</string>
+  <string name="do_not_save">Zrušit formulář</string>
+  <string name="discard_changes">Zrušit změny</string>
+  <string name="keep_changes">Uložit změny</string>
   <string name="saving_form">Ukládám dotazník</string>
   <string name="survey_saving_validating_message">Ověřuji odpovědi…</string>
   <string name="survey_saving_collecting_message">Sbírám data…</string>
@@ -778,13 +771,10 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Posun zpět</string>
   <string name="moving_backwards_disabled_title">Posun zpět je zakázán</string>
-  <string name="moving_backwards_disabled_message">Chcete-li zabránit tomu, aby uživatelé obcházeli toto nastavení, \n\u2022 Zakázat úpravu uloženého formuláře\n\u2022 Zakázat uložit dotazník\n \u2022 Zakázat přejít na výzvu \n\u2022 Nastavit omezení přístupu k ověření při posunutí dopředu</string>
   <string name="yes">Ano</string>
   <string name="no">Ne</string>
   <string name="moving_backwards_enabled_title">Posun zpět povolen</string>
-  <string name="moving_backwards_enabled_message">Můžete si přečíst následující nastavení: \n\n\u2022 Upravit uložený formulář \n\u2022 Uložit formulář\n\u2022 Jít na výzvu \n\u2022 Omezení zpracování</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Uložit dotazník</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -850,6 +840,7 @@
   <string name="invalid_qrcode">Kód QR neobsahuje platná nastavení</string>
   <string name="qr_code_not_found">QR kód nebyl nalezen ve vybraném snímku</string>
   <string name="corrupt_imported_preferences_error">Aktuální nastavení je poškozené. V nastavení správy projektů obnovte nastavení nebo importujte funkční nastavení.</string>
+  <string name="settings_with_gd_protocol">Projekty na Disku Google/Sheets již nelze vytvářet</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -898,6 +889,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Přepnout na %s</string>
   <string name="delete_project_confirm_message">Všechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Jedná se o projekt na Disku Google/Sheets. Jakmile jej odstraníte, nebude možné jej znovu vytvořit.&lt;/font&gt;\n\nVšechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
   <string name="delete_project_yes">Ano</string>
   <string name="delete_project_no">Ne</string>
   <string name="cannot_delete_project_title">Projekt nelze smazat</string>
@@ -957,4 +949,7 @@
   <string name="crash_app">Aplikace Crash</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Vynucení nezachycené výjimky, která způsobí pád aplikace</string>
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
 </resources>

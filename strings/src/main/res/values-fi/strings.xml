@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for an action button on the main screen.-->
-  <string name="enter_data">Täytä tyhjä lomake</string>
+  <string name="enter_data">Aloita uusi lomake</string>
   <!--Text for an action button on the main screen.-->
-  <string name="review_data">Muokkaa tallennettua lomaketta</string>
+  <string name="review_data">Luonnokset</string>
   <!--Text for an action button on the main screen.-->
-  <string name="send_data">Lähetä valmis lomake</string>
+  <string name="send_data">Valmiina lähettämään</string>
   <!--Text for an action button on the main screen.-->
-  <string name="view_sent_forms">Tarkastele lähetettyä lomaketta</string>
+  <string name="view_sent_forms">Lähetetty</string>
   <!--Text for an action button on the main screen.-->
-  <string name="get_forms">Hae tyhjä lomake</string>
+  <string name="get_forms">Lataa lomake</string>
   <!--Text for an action button on the main screen.-->
-  <string name="manage_files">Poista tallennettu lomake</string>
+  <string name="manage_files">Poista lomake</string>
   <string name="saved_forms">Tallennetut lomakkeet</string>
   <string name="version_number">Versio: %s</string>
   <string name="id_number">ID: %s</string>
@@ -48,7 +48,7 @@
   <string name="no_items_display">Ei näytettävää.</string>
   <string name="no_items_display_forms">Ei näytettävää.\n\nKokeile tyhjän lomakkeen hakemista ja täyttämistä.</string>
   <string name="no_items_display_sent_forms">Ei näytettävää.\n\nKokeile viimeistellyn lomakkeen lähettämistä ennen tarkastelua.</string>
-  <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile tallennetun lomakkeen viimeistelyä ennen lähettämistä.</string>
+  <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile luonnosten viimeistelyä ennen lähettämistä.</string>
   <string name="not_granted_permission">Toiminto, jota yrität käynnistää, vaatii käyttöluvan jota ei ole myönnetty.</string>
   <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
   <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>
@@ -75,16 +75,16 @@
   <string name="survey_loading_reading_csv_message">Luetaan CSV-tiedostoja…</string>
   <string name="parse_error">Pahoittelen, lomake ei ole tulkittavissa.</string>
   <string name="loading_form_failed">Lomaketta ladatessa tapahtui virhe. Ole hyvä ja yritä uudestaan.</string>
-  <string name="parent_form_not_present">Ei voitu muokata tallennettua lomaketta, koska vastaava tyhjää lomaketta ei ole tai se on poistettu.\n\nLomakkeen tunniste: %1$s</string>
+  <string name="parent_form_not_present">Tätä luonnosta ei voi muokata, koska vastaavaa tyhjää lomaketta ei ole tai se on poistettu.\n\nLomaketunnus: %1$s</string>
   <string name="cannot_edit_completed_form">Tätä lomaketta ei voi muokata, kun se on merkitty vimeistellyksi. Se saattaa olla salattu.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Tallentamattomat muutokset palautettu tallennuspisteestä!</string>
   <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
   <string name="change_language">Vaihda kieltä</string>
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
-  <string name="view_hierarchy">Siirry kysymykseen</string>
+  <string name="view_hierarchy">Siirry kehotteeseen</string>
   <!--Text for button displayed in the form filling menu to save the form-->
-  <string name="save_all_answers">Tallenna lomake</string>
+  <string name="save_all_answers">Tallenna luonnoksena</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Alkuun</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -102,7 +102,7 @@
   <string name="dont_add_repeat">Ei lisätä</string>
   <string name="add_another_menu">Lisää toinen</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
-  <string name="edit_prompt">Vastauksen muokkaus</string>
+  <string name="edit_prompt">Kehotteen muokkaus</string>
   <string name="clearanswer_confirm">Poistetaanko vastaus kysymykseen \"%s\"?</string>
   <string name="clear_answer">Poista vastaus</string>
   <string name="clear_answer_ask">Poistetaanko tämä vastaus?</string>
@@ -120,13 +120,19 @@
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
   <string name="survey_internal_error">Sisäinen virhe: siirtyminen kehotteeseen epäonnistui.</string>
   <string name="save_enter_data_description">Olet lomakkeen %s lopussa.</string>
+  <string name="form_edits_warning_only_finalize_enabled">Viimeistelyn jälkeen ei voi tehdä muutoksia.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Et voi tehdä muokkauksia viimeistelyn jälkeen. Jos sinun on tehtävä muutoksia, \"Tallenna luonnoksena\", kunnes olet valmis lähettämään.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Muutoksia ei voi tehdä enää lähettämisen jälkeen. Jos tarvitaan muutoksia, \"Tallenna luonnoksena\" kunnes olet valmis lähettämään.</string>
+  <string name="save_as_draft">Tallenna luonnoksena</string>
+  <string name="finalize">Viimeistele</string>
+  <string name="send">Lähetä</string>
   <string name="data_saved_error">Pahoittelut, lomakkeen tallennus epäonnistui!</string>
   <string name="data_saved_ok">Lomake tallennettu!</string>
   <string name="save_point_error">Virhe tallentaessa palautuspistettä: %s</string>
-  <!--Dialog title when exiting a form. The name of the form will be included-->
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">Poistu täältä: %s</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
-    <string name="do_not_save">Hylkää lomake</string>
+  <string name="do_not_save">Hylkää lomake</string>
   <string name="discard_changes">Hylkää muutokset</string>
   <string name="keep_changes">Tallenna muutokset</string>
   <string name="saving_form">Tallentamassa lomaketta</string>
@@ -475,6 +481,7 @@
   <string name="select_item">Valitse</string>
   <string name="new_item">Uusi kohde</string>
   <!--Name of an action button-->
+  <string name="edit_data">Muokkaa luonnosta</string>
   <string name="view_data">Tallennetun lomakkeen tarkastelu</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Sijainnin seuranta</string>
@@ -689,8 +696,8 @@
   <string name="delete_after_send">Poista lähettämisen jälkeen</string>
   <string name="delete_after_send_summary">Poistaa valmiiksi merkityt lomakkeet ja mediatiedostot kun ne on lähetetty palvelimelle</string>
   <string name="form_filling_category">Lomakkeen täyttö</string>
-  <string name="constraint_behavior_title">Rajoitusten käsittely</string>
-  <string name="constraint_behavior">Rajoitusten käsittely</string>
+  <string name="constraint_behavior_title">Rajoitekäsittely</string>
+  <string name="constraint_behavior">Rajoitekäsittely</string>
   <string name="constraint_behavior_on_swipe">Validointi pyyhkäistäessä eteepäin</string>
   <string name="constraint_behavior_on_finalize">Validoi vasta kun lomake on valmis</string>
   <string name="high_resolution_title">Korkean resoluution video</string>
@@ -745,6 +752,7 @@
   <string name="found_in_main">Poista rasti piilottaaksesi päävalikosta</string>
   <string name="found_in_settings">Poista rasti piilottaaksesi kohdasta Suojaamattomat asetukset</string>
   <string name="form_entry">Poista rasti piiloittaaksesi lomakesyötöstä</string>
+  <string name="form_end">Poista rasti piiloittaaksesi lomakkeen lopusta</string>
   <string name="reset_project_settings_title">Palautus alkutilaan</string>
   <string name="reset_project_settings_subtext">Valitse asetukset, lomakkeet tai data</string>
   <string name="delete_project">Poista</string>
@@ -774,13 +782,14 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Siirtyminen taaksepäin</string>
   <string name="moving_backwards_disabled_title">Siirtyminen taaksepäin pois päältä</string>
-  <string name="moving_backwards_disabled_message">Määritetäänkö laite jotta estettäisiin käyttäjiä ohittamasta tätä asetusta?\n\nMuutokset ovat:\n\u2022 Muokkaa talletettua lomaketta - pois päältä\n\u2022 Tallenna lomake - pois päältä\n\u2022 Siirtyminen kehotteeseen - pois päältä\n\u2022 Aseta rajoiteprosessointi vahvistustilaan eteenpäin pyyhkäistäessä</string>
+  <string name="moving_backwards_disabled_message">Määritelläänkö laite estämään käyttäjiä ohittamasta tätä asetusta?\n\nMuutokset ovat:\n\u2022 Poista käytöstä Muokkaa luonnasta\n\u2022 Poista käytöstä Tallenna luonnoksena\n\u2022 Poista käytöstä Siirry kehotteeseen\n\u2022 Aseta rajoiteprosessointi tilaan Tarkista eteenpäin pyyhkäistäessä</string>
   <string name="yes">Kyllä</string>
   <string name="no">Ei</string>
   <string name="moving_backwards_enabled_title">Siirtyminen taaksepäin päällä</string>
-  <string name="moving_backwards_enabled_message">Haluat ehkä tarkastella seuraavia asetuksia:\n\n\u2022 Muokkaa tallennettua lomaketta\n\u2022 Tallenna lomake\n\u2022 Siirry kehotteeseen\n\u2022 Rajoiteprosessointi</string>
+  <string name="moving_backwards_enabled_message">Voit halutessasi tarkistaa seuraavat asetukset:\n\n\u2022 Muokkaa luonnosta\n\u2022 Tallenna luonnoksena\n\u2022 Siirry kehotteeseen\n\u2022 Rajoitekäsittely</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <string name="save_mid">Tallenna lomake</string>
+  <string name="save_mid">Tallenna luonnoksena</string>
+  <string name="save_mid_summary">Tallennusikoni yläpalkissa ja \"Tallenna luonnoksena\" -painike lomakkeelta poistuessa</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -846,6 +855,7 @@
   <string name="invalid_qrcode">QR-koodi ei sisällä kelvollisia asetuksia</string>
   <string name="qr_code_not_found">Valitusta kuvasta ei löytynyt QR-koodia</string>
   <string name="corrupt_imported_preferences_error">Nykyiset asetukset ovat viallisia. Nollaa asetukset tai tuo toimivat Projektihallinta-asetuksissa.</string>
+  <string name="settings_with_gd_protocol">Google Drive/Sheets -projekteja ei enää voi luoda</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -894,6 +904,7 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Vaihda projektiin %s</string>
   <string name="delete_project_confirm_message">Kaikki tyhjät lomakkeet, lähetykset ja asetukset tullaan poistamaan pysyvästi.</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Tämä on Google Drive/Sheets -projekti. Jos poistat sen, et voi luoda sitä uudestaan.&lt;/font&gt;\n\nKaikki tyhjät lomakkeet, lähetykset ja asetukset poistetaan pysyvästi.</string>
   <string name="delete_project_yes">Kyllä</string>
   <string name="delete_project_no">Ei</string>
   <string name="cannot_delete_project_title">Projektia ei voida poistaa.</string>
@@ -953,4 +964,18 @@
   <string name="crash_app">Kaada sovellus</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Pakota havaitsematon poikkeus, joka aiheuttaa sovelluksen kaatumisen</string>
+  <string name="predicate_caching">Predikaattivälimuisti</string>
+  <string name="permission_dialog_title">Tietoa luvista</string>
+  <string name="permission_dialog_text">Sinulta tullaan pyytämään lupaa ODK Collectille pääsy toimintoihin alla, valitse \"Salli\" jos haluat käyttää niitä.</string>
+  <string name="notifications">Ilmoitukset</string>
+  <string name="required_for_notifications">Tarvitaan päivitysten näyttämiseen kun lomakkeita ladataan, päivitetään tai lähetetään.</string>
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
+  <string name="form_saved_as_draft">Lomakkeesi tallennettiin luonnoksena.</string>
+  <string name="form_saved">Lomakkeesi tallennettiin.</string>
+  <string name="form_sending">Lähetetään lomaketta…</string>
+  <string name="edit_form">Muokkaa</string>
+  <string name="view_form">Tarkastele</string>
+  <string name="close_snackbar">Sulje ilmoitus</string>
 </resources>
