@@ -1028,15 +1028,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
 
         // These actions should move into the `FormEntryMenuDelegate`
-        switch (item.getItemId()) {
-            case R.id.menu_languages:
-                createLanguageDialog();
-                return true;
-
-            case R.id.menu_save:
-                // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
-                return true;
+        if (item.getItemId() == R.id.menu_languages) {
+            createLanguageDialog();
+            return true;
+        } else if (item.getItemId() == R.id.menu_save) {
+            // don't exit
+            saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

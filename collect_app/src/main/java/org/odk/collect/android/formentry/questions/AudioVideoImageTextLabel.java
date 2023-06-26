@@ -166,13 +166,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.videoButton:
-                playVideo();
-                break;
-            case R.id.imageView:
-                onImageClick();
-                break;
+        if (v.getId() == R.id.videoButton) {
+            playVideo();
+        } else if (v.getId() == R.id.imageView) {
+            onImageClick();
         }
     }
 

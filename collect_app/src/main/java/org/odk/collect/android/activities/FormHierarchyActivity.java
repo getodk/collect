@@ -347,25 +347,21 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_delete_child:
-                DialogFragmentUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
-                return true;
+        if (item.getItemId() == R.id.menu_delete_child) {
+            DialogFragmentUtils.showIfNotShowing(DeleteRepeatDialogFragment.class, getSupportFragmentManager());
+            return true;
+        } else if (item.getItemId() == R.id.menu_add_repeat) {
+            formEntryViewModel.getFormController().jumpToIndex(repeatGroupPickerIndex);
+            formEntryViewModel.jumpToNewRepeat();
+            formEntryViewModel.addRepeat();
 
-            case R.id.menu_add_repeat:
-                formEntryViewModel.getFormController().jumpToIndex(repeatGroupPickerIndex);
-                formEntryViewModel.jumpToNewRepeat();
-                formEntryViewModel.addRepeat();
-
-                finish();
-                return true;
-
-            case R.id.menu_go_up:
-                goUpLevel();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+            finish();
+            return true;
+        } else if (item.getItemId() == R.id.menu_go_up) {
+            goUpLevel();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

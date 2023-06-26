@@ -123,13 +123,10 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
 
     @Override
     public void onButtonClick(int buttonId) {
-        switch (buttonId) {
-            case R.id.capture_image:
-                getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage);
-                break;
-            case R.id.choose_image:
-                imageCaptureHandler.chooseImage(R.string.choose_image);
-                break;
+        if (buttonId == R.id.capture_image) {
+            getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage);
+        } else if (buttonId == R.id.choose_image) {
+            imageCaptureHandler.chooseImage(R.string.choose_image);
         }
     }
 

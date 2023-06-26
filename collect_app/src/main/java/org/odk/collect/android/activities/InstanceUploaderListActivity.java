@@ -351,13 +351,12 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_preferences:
-                createPreferencesMenu();
-                return true;
-            case R.id.menu_change_view:
-                showSentAndUnsentChoices();
-                return true;
+        if (item.getItemId() == R.id.menu_preferences) {
+            createPreferencesMenu();
+            return true;
+        } else if (item.getItemId() == R.id.menu_change_view) {
+            showSentAndUnsentChoices();
+            return true;
         }
 
         if (!MultiClickGuard.allowClick(getClass().getName())) {

@@ -573,36 +573,30 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.root_button:
-                getResultsFromApi();
-                myDrive = !myDrive;
-                break;
-
-            case R.id.back_button:
-                folderIdStack.pop();
-                backButton.setEnabled(false);
-                rootButton.setEnabled(false);
-                downloadButton.setEnabled(false);
-                toDownload.clear();
-                driveList.clear();
-                if (connectivityProvider.isDeviceOnline()) {
-                    if (folderIdStack.empty()) {
-                        parentId = ROOT_KEY;
-                    } else {
-                        parentId = folderIdStack.peek();
-                    }
-                    listFiles(parentId);
-                    currentPath.pop();
-                    // }
+        if (v.getId() == R.id.root_button) {
+            getResultsFromApi();
+            myDrive = !myDrive;
+        } else if (v.getId() == R.id.back_button) {
+            folderIdStack.pop();
+            backButton.setEnabled(false);
+            rootButton.setEnabled(false);
+            downloadButton.setEnabled(false);
+            toDownload.clear();
+            driveList.clear();
+            if (connectivityProvider.isDeviceOnline()) {
+                if (folderIdStack.empty()) {
+                    parentId = ROOT_KEY;
                 } else {
-                    createAlertDialog(getString(R.string.no_connection));
+                    parentId = folderIdStack.peek();
                 }
-                break;
-
-            case R.id.download_button:
-                getFiles();
-                break;
+                listFiles(parentId);
+                currentPath.pop();
+                // }
+            } else {
+                createAlertDialog(getString(R.string.no_connection));
+            }
+        } else if (v.getId() == R.id.download_button) {
+            getFiles();
         }
     }
 

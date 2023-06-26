@@ -234,29 +234,25 @@ public class SavedFormListFragment extends FileManagerFragment implements Delete
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.delete_button:
-                int checkedItemCount = getCheckedCount();
-                if (checkedItemCount > 0) {
-                    createDeleteInstancesDialog();
-                } else {
-                    ToastUtils.showShortToast(requireContext(), R.string.noselect_error);
+        if (v.getId() == R.id.delete_button) {
+            int checkedItemCount = getCheckedCount();
+            if (checkedItemCount > 0) {
+                createDeleteInstancesDialog();
+            } else {
+                ToastUtils.showShortToast(requireContext(), R.string.noselect_error);
+            }
+        } else if (v.getId() == R.id.toggle_button) {
+            ListView lv = getListView();
+            boolean allChecked = toggleChecked(lv);
+            if (allChecked) {
+                for (int i = 0; i < lv.getCount(); i++) {
+                    selectedInstances.add(lv.getItemIdAtPosition(i));
                 }
-                break;
-
-            case R.id.toggle_button:
-                ListView lv = getListView();
-                boolean allChecked = toggleChecked(lv);
-                if (allChecked) {
-                    for (int i = 0; i < lv.getCount(); i++) {
-                        selectedInstances.add(lv.getItemIdAtPosition(i));
-                    }
-                } else {
-                    selectedInstances.clear();
-                }
-                toggleButtonLabel(toggleButton, getListView());
-                deleteButton.setEnabled(allChecked);
-                break;
+            } else {
+                selectedInstances.clear();
+            }
+            toggleButtonLabel(toggleButton, getListView());
+            deleteButton.setEnabled(allChecked);
         }
     }
 
