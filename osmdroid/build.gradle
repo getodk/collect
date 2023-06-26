@@ -48,6 +48,7 @@ dependencies {
     implementation project(':maps')
     implementation project(':location')
     implementation project(':settings')
+    implementation project(':strings')
 
     implementation Dependencies.osmdroid
     implementation Dependencies.androidx_fragment_ktx

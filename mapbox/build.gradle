@@ -44,6 +44,7 @@ dependencies {
     implementation project(':maps')
     implementation project(':settings')
     implementation project(':shared')
+    implementation project(':strings')
 
     implementation Dependencies.play_services_location
     implementation Dependencies.androidx_preference_ktx

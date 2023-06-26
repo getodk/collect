@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":androidshared"))
+    implementation(project(":strings"))
     implementation(Dependencies.android_material)
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.hamcrest)

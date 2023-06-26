@@ -47,6 +47,7 @@ dependencies {
     implementation Dependencies.androidx_fragment_ktx
     implementation Dependencies.kotlin_stdlib
     implementation project(':androidshared')
+    implementation project(':strings')
 
     debugImplementation project(':fragmentstest')
 
