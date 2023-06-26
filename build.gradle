@@ -16,13 +16,13 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.0.2'
         classpath 'com.google.gms:google-services:4.3.15'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
-        classpath "org.jlleitschuh.gradle:ktlint-gradle:11.3.1"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.6'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:11.4.2"
         classpath "com.github.ben-manes:gradle-versions-plugin:0.47.0"
-        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.6.0"
         classpath "com.google.android.gms:oss-licenses-plugin:0.10.6"
     }
 }
