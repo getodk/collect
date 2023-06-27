@@ -61,6 +61,7 @@ class FormUriActivity : ComponentActivity() {
             !assertCurrentProjectUsed() -> Unit
             !assertValidUri() -> Unit
             !assertFormExists() -> Unit
+            !assertFormNotEncrypted() -> Unit
             !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
             else -> startForm()
         }
@@ -148,6 +149,23 @@ class FormUriActivity : ComponentActivity() {
         return if (!doesFormExist) {
             displayErrorDialog(getString(R.string.bad_uri))
             false
+        } else {
+            true
+        }
+    }
+
+    private fun assertFormNotEncrypted(): Boolean {
+        val uri = intent.data!!
+        val uriMimeType = contentResolver.getType(uri)
+
+        return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            if (instance!!.canEditWhenComplete()) {
+                true
+            } else {
+                displayErrorDialog(getString(R.string.encrypted_form))
+                false
+            }
         } else {
             true
         }
