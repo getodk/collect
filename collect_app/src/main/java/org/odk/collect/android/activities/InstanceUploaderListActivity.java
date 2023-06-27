@@ -388,9 +388,14 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
         Cursor c = (Cursor) listView.getAdapter().getItem(position);
-        long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
-        Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
-        startActivity(intent);
+        boolean encryptedForm = !Boolean.parseBoolean(c.getString(c.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE)));
+        if (encryptedForm) {
+            ToastUtils.showLongToast(this, R.string.encrypted_form);
+        } else {
+            long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
+            Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
+            startActivity(intent);
+        }
     }
 
     @Override
