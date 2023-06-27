@@ -106,7 +106,7 @@ class MainMenuViewModel(
     val sentInstancesCount: LiveData<Int>
         get() = instancesAppState.sentCount
 
-    fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int>? {
+    fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
             val message = if (instance.status == Instance.STATUS_INCOMPLETE) {
@@ -125,7 +125,11 @@ class MainMenuViewModel(
             val action = if (instance.canBeEdited(settingsProvider)) {
                 R.string.edit_form
             } else {
-                R.string.view_form
+                if (instance.status == Instance.STATUS_INCOMPLETE || instance.canEditWhenComplete()) {
+                    R.string.view_form
+                } else {
+                    null
+                }
             }
 
             return Pair(message, action)
