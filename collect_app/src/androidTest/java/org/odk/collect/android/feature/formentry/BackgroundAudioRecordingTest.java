@@ -174,6 +174,18 @@ public class BackgroundAudioRecordingTest {
         new MainMenuPage().assertOnPage();
     }
 
+    @Test
+    public void viewForm_doesNotRecordAudio() {
+        rule.startAtMainMenu()
+                .copyForm("one-question-background-audio.xml")
+                .startBlankForm("One Question")
+                .fillOutAndFinalize(new FormEntryPage.QuestionAndAnswer("what is your age", "17"))
+                .clickSendFinalizedForm(1)
+                .clickOnForm("One Question");
+
+        assertThat(stubAudioRecorderViewModel.isRecording(), is(false));
+    }
+
     private static class RevokeableRecordAudioPermissionsChecker extends ContextCompatPermissionChecker {
 
         private boolean revoked;
