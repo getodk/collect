@@ -11,7 +11,7 @@ object DatabaseInstanceColumns : BaseColumns {
     const val JR_FORM_ID = "jrFormId"
     const val JR_VERSION = "jrVersion"
     const val STATUS = "status"
-    const val CAN_EDIT_WHEN_COMPLETE = "canEditWhenComplete"
+    const val CAN_EDIT_WHEN_COMPLETE = "canEditWhenComplete" // the only reason why a finalized form should not be opened for review is that it is encrypted
     const val LAST_STATUS_CHANGE_DATE = "date"
     const val DELETED_DATE = "deletedDate"
     const val GEOMETRY = "geometry"
