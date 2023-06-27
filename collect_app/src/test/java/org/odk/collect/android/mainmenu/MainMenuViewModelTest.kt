@@ -96,16 +96,18 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft and editing drafts is enabled`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is enabled and encryption is disabled`() {
         val viewModel = createViewModelWithVersion("")
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
 
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
         val instance = instancesRepository.save(
             Instance.Builder()
                 .formId("1")
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_INCOMPLETE)
+                .canEditWhenComplete(true)
                 .build()
         )
 
@@ -116,16 +118,40 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft and editing drafts is disabled`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is enabled and encryption is enabled`() {
         val viewModel = createViewModelWithVersion("")
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
 
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
         val instance = instancesRepository.save(
             Instance.Builder()
                 .formId("1")
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_INCOMPLETE)
+                .canEditWhenComplete(false)
+                .build()
+        )
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarType.first, equalTo(R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.second, equalTo(R.string.edit_form))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is disabled and encryption is disabled`() {
+        val viewModel = createViewModelWithVersion("")
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .canEditWhenComplete(true)
                 .build()
         )
 
@@ -136,7 +162,29 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized and auto send is disabled`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is saved as draft, editing drafts is disabled and encryption is enabled`() {
+        val viewModel = createViewModelWithVersion("")
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .canEditWhenComplete(false)
+                .build()
+        )
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarType = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarType.first, equalTo(R.string.form_saved_as_draft))
+        assertThat(formSavedSnackbarType.second, equalTo(R.string.view_form))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is disabled and encryption is disabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -146,6 +194,7 @@ class MainMenuViewModelTest {
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_COMPLETE)
+                .canEditWhenComplete(true)
                 .build()
         )
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
@@ -157,7 +206,7 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized and auto send is enabled`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is disabled and encryption is enabled`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -167,6 +216,29 @@ class MainMenuViewModelTest {
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_COMPLETE)
+                .canEditWhenComplete(false)
+                .build()
+        )
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarDetails.first, equalTo(R.string.form_saved))
+        assertThat(formSavedSnackbarDetails.second, equalTo(null))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is enabled and encryption is disabled`() {
+        val viewModel = createViewModelWithVersion("")
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .canEditWhenComplete(true)
                 .build()
         )
 
@@ -176,6 +248,29 @@ class MainMenuViewModelTest {
         val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
         assertThat(formSavedSnackbarDetails.first, equalTo(R.string.form_sending))
         assertThat(formSavedSnackbarDetails.second, equalTo(R.string.view_form))
+    }
+
+    @Test
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance is finalized, auto send is enabled and encryption is enabled`() {
+        val viewModel = createViewModelWithVersion("")
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_COMPLETE)
+                .canEditWhenComplete(false)
+                .build()
+        )
+
+        whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
+
+        val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
+        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarDetails.first, equalTo(R.string.form_sending))
+        assertThat(formSavedSnackbarDetails.second, equalTo(null))
     }
 
     @Test
