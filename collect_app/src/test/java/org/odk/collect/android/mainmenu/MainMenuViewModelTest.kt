@@ -107,7 +107,6 @@ class MainMenuViewModelTest {
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_INCOMPLETE)
-                .canEditWhenComplete(true)
                 .build()
         )
 
@@ -151,7 +150,6 @@ class MainMenuViewModelTest {
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_INCOMPLETE)
-                .canEditWhenComplete(true)
                 .build()
         )
 
@@ -194,7 +192,6 @@ class MainMenuViewModelTest {
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_COMPLETE)
-                .canEditWhenComplete(true)
                 .build()
         )
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(false)
@@ -238,7 +235,6 @@ class MainMenuViewModelTest {
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_COMPLETE)
-                .canEditWhenComplete(true)
                 .build()
         )
 
