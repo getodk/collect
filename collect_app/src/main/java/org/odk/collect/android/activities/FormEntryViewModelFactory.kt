@@ -20,6 +20,7 @@ import org.odk.collect.android.formentry.saving.DiskFormSaver
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.async.Scheduler
@@ -32,6 +33,7 @@ import java.util.function.BiConsumer
 
 class FormEntryViewModelFactory(
     owner: SavedStateRegistryOwner,
+    private val mode: String?,
     private val sessionId: String,
     private val scheduler: Scheduler,
     private val formSessionRepository: FormSessionRepository,
@@ -78,17 +80,25 @@ class FormEntryViewModelFactory(
             }
 
             BackgroundAudioViewModel::class.java -> {
-                val recordAudioActionRegistry = object : RecordAudioActionRegistry {
-                    override fun register(listener: BiConsumer<TreeReference, String?>) {
-                        RecordAudioActions.setRecordAudioListener { absoluteTargetRef: TreeReference, quality: String? ->
-                            listener.accept(absoluteTargetRef, quality)
+                val recordAudioActionRegistry =
+                    if (mode == ApplicationConstants.FormModes.VIEW_SENT) {
+                        object : RecordAudioActionRegistry {
+                            override fun register(listener: BiConsumer<TreeReference, String?>) {}
+                            override fun unregister() {}
+                        }
+                    } else {
+                        object : RecordAudioActionRegistry {
+                            override fun register(listener: BiConsumer<TreeReference, String?>) {
+                                RecordAudioActions.setRecordAudioListener { absoluteTargetRef: TreeReference, quality: String? ->
+                                    listener.accept(absoluteTargetRef, quality)
+                                }
+                            }
+
+                            override fun unregister() {
+                                RecordAudioActions.setRecordAudioListener(null)
+                            }
                         }
                     }
-
-                    override fun unregister() {
-                        RecordAudioActions.setRecordAudioListener(null)
-                    }
-                }
 
                 BackgroundAudioViewModel(
                     audioRecorder,

@@ -413,7 +413,22 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             sessionId = savedInstanceState.getString(KEY_SESSION_ID);
         }
 
-        viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocatonClient, permissionsProvider, autoSendSettingsProvider, instancesRepositoryProvider);
+        viewModelFactory = new FormEntryViewModelFactory(this,
+                getIntent().getStringExtra(ApplicationConstants.BundleKeys.FORM_MODE),
+                sessionId,
+                scheduler,
+                formSessionRepository,
+                mediaUtils,
+                audioRecorder,
+                currentProjectProvider,
+                entitiesRepositoryProvider,
+                settingsProvider,
+                permissionsChecker,
+                fusedLocatonClient,
+                permissionsProvider,
+                autoSendSettingsProvider,
+                instancesRepositoryProvider
+        );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))

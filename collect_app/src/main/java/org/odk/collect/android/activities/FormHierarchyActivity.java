@@ -57,6 +57,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.logic.HierarchyElement;
 import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -181,7 +182,22 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
         DaggerUtils.getComponent(this).inject(this);
 
         String sessionId = getIntent().getStringExtra(EXTRA_SESSION_ID);
-        FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this, sessionId, scheduler, formSessionRepository, mediaUtils, audioRecorder, currentProjectProvider, entitiesRepositoryProvider, settingsProvider, permissionsChecker, fusedLocationClient, permissionsProvider, autoSendSettingsProvider, instancesRepositoryProvider);
+        FormEntryViewModelFactory viewModelFactory = new FormEntryViewModelFactory(this,
+                ApplicationConstants.FormModes.EDIT_SAVED,
+                sessionId,
+                scheduler,
+                formSessionRepository,
+                mediaUtils,
+                audioRecorder,
+                currentProjectProvider,
+                entitiesRepositoryProvider,
+                settingsProvider,
+                permissionsChecker,
+                fusedLocationClient,
+                permissionsProvider,
+                autoSendSettingsProvider,
+                instancesRepositoryProvider
+        );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
                 .forClass(DeleteRepeatDialogFragment.class, () -> new DeleteRepeatDialogFragment(viewModelFactory))
