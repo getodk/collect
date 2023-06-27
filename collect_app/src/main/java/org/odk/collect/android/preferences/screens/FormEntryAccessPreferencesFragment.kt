@@ -42,7 +42,8 @@ class FormEntryAccessPreferencesFragment : BaseAdminPreferencesFragment() {
         findPreference(ProtectedProjectKeys.KEY_SAVE_MID).isEnabled =
             settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
 
-        findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled = findPreference(ProtectedProjectKeys.KEY_FINALIZE).isChecked
+        findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled =
+            settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM) && findPreference(ProtectedProjectKeys.KEY_FINALIZE).isChecked
         findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _: Preference, newValue: Any? ->
                 findPreference(ProtectedProjectKeys.KEY_FINALIZE).isEnabled = newValue as Boolean
@@ -60,20 +61,27 @@ class FormEntryAccessPreferencesFragment : BaseAdminPreferencesFragment() {
     fun preventOtherWaysOfEditingForm() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, false)
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, false)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_FINALIZE, true)
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_JUMP_TO, false)
         settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_CONSTRAINT_BEHAVIOR, ProjectKeys.CONSTRAINT_BEHAVIOR_ON_SWIPE)
 
         findPreference(ProtectedProjectKeys.KEY_JUMP_TO).isEnabled = false
         findPreference(ProtectedProjectKeys.KEY_SAVE_MID).isEnabled = false
+        findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled = false
+        findPreference(ProtectedProjectKeys.KEY_FINALIZE).isEnabled = false
         findPreference(ProtectedProjectKeys.KEY_JUMP_TO).isChecked = false
         findPreference(ProtectedProjectKeys.KEY_SAVE_MID).isChecked = false
+        findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isChecked = false
+        findPreference(ProtectedProjectKeys.KEY_FINALIZE).isChecked = true
     }
 
     private fun onMovingBackwardsEnabled() {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, true)
         findPreference(ProtectedProjectKeys.KEY_JUMP_TO).isEnabled = true
         findPreference(ProtectedProjectKeys.KEY_SAVE_MID).isEnabled = true
+        findPreference(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled = true
+        findPreference(ProtectedProjectKeys.KEY_FINALIZE).isEnabled = true
     }
 
     private fun findPreference(key: String): CheckBoxPreference {
