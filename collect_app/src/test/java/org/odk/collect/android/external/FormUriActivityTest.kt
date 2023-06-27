@@ -310,6 +310,29 @@ class FormUriActivityTest {
     }
 
     @Test
+    fun `When attempting to edit an encrypted form then display alert dialog`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
+
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath, FormUtils.createXFormBody("1", "1", "Form 1")).build())
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .canEditWhenComplete(false)
+                .build()
+        )
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+
+        assertErrorDialog(scenario, context.getString(R.string.encrypted_form))
+    }
+
+    @Test
     fun `When attempting to edit an incomplete form with disabled editing then start form for view only`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
