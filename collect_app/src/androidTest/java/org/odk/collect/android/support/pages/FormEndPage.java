@@ -7,12 +7,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.os.Build;
-
-import androidx.test.espresso.Espresso;
-
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.ActivityHelpers;
 
 public class FormEndPage extends Page<FormEndPage> {
 
@@ -80,23 +75,11 @@ public class FormEndPage extends Page<FormEndPage> {
     }
 
     public FormEndPage clickOptionsIcon() {
-        tryAgainOnFail(() -> {
-            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-            assertText(R.string.project_settings);
-        });
-
-        return this;
+        return clickOptionsIcon(R.string.project_settings);
     }
 
     public FormEntryPage assertConstraintDisplayed(String constraintText) {
-        // Constraints warnings show as dialogs in Android 11+
-        if (Build.VERSION.SDK_INT < 30) {
-            checkIsToastWithMessageDisplayed(constraintText);
-            return new FormEntryPage(formName).assertOnPage();
-        } else {
-            return new OkDialog().assertOnPage()
-                    .assertText(constraintText)
-                    .clickOK(new FormEntryPage(formName));
-        }
+        FormEntryPage formEntryPage = new FormEntryPage(formName);
+        return formEntryPage.assertConstraintDisplayed(constraintText);
     }
 }

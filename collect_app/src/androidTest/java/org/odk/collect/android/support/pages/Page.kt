@@ -1,6 +1,7 @@
 package org.odk.collect.android.support.pages
 
 import android.content.pm.ActivityInfo
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
@@ -36,6 +37,7 @@ import org.junit.Assert
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.support.ActivityHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
@@ -431,6 +433,15 @@ abstract class Page<T : Page<T>> {
 
     fun closeSnackbar(): T {
         onView(withContentDescription(R.string.close_snackbar)).perform(click())
+        return this as T
+    }
+
+    fun clickOptionsIcon(@StringRes expectedOptionString: Int): T {
+        tryAgainOnFail({
+            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity())
+            assertText(expectedOptionString)
+        })
+
         return this as T
     }
 
