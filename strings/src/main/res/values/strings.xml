@@ -499,7 +499,7 @@
     <string name="track_location">Track location</string>
     <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the %1$s menu above.</string>
     <string name="background_location_enabled">This form tracks your location. You can disable tracking in the %1$s menu above.</string>
-    <string name="validate">Validate</string>
+    <string name="validate">Check for errors</string>
 
     <string name="get_point">Start GeoPoint</string>
     <string name="geopoint_view_read_only">View GeoPoint</string>
