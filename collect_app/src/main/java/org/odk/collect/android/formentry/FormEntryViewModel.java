@@ -15,6 +15,7 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.exception.ExternalDataException;
@@ -288,6 +289,29 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     public void exit() {
         formSessionRepository.clear(sessionId);
+    }
+
+    public void validate() {
+        isLoading.setValue(true);
+        scheduler.immediate(
+                () -> {
+                    int result;
+                    try {
+                        result = formController.validateAnswers(true);
+                    } catch (JavaRosaException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    return result;
+                }, result -> {
+                    isLoading.setValue(false);
+
+                    if (result != FormEntryController.ANSWER_OK) {
+                        refresh();
+                        failedConstraint.setValue(new FailedConstraint(formController.getFormIndex(), result));
+                    }
+                }
+        );
     }
 
     public abstract static class FormError {

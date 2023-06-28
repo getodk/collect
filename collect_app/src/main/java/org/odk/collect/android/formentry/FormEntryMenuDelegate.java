@@ -153,6 +153,9 @@ public class FormEntryMenuDelegate implements MenuDelegate {
             }
 
             return true;
+        } else if (item.getItemId() == R.id.menu_validate) {
+            formEntryViewModel.validate();
+            return true;
         } else {
             return false;
         }

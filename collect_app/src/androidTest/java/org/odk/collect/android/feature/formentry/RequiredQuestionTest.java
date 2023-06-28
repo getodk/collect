@@ -6,6 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -26,5 +27,18 @@ public class RequiredQuestionTest {
                 .startBlankForm("required")
                 .assertText("* Foo") //TestCase1
                 .swipeToNextQuestionWithConstraintViolation("Custom required message");  //TestCase2
+    }
+
+    @Test
+    public void pressingValidateInOptionsMenu_shouldReturnToQuestionAndShowMessage() {
+        rule.startAtMainMenu()
+                .copyForm("requiredJR275.xml")
+                .startBlankForm("required")
+                .clickGoToArrow()
+                .clickGoToEnd()
+                .clickOptionsIcon()
+                .clickOnString(R.string.validate)
+                .assertConstraintDisplayed("Custom required message")
+                .assertQuestion("Foo", true);
     }
 }

@@ -33,6 +33,11 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_validate"
+        android:title="@string/validate"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/track_location"
         android:checkable="true"
         android:title="@string/track_location"

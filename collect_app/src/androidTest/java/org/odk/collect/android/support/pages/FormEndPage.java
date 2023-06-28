@@ -9,7 +9,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.os.Build;
 
+import androidx.test.espresso.Espresso;
+
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.ActivityHelpers;
 
 public class FormEndPage extends Page<FormEndPage> {
 
@@ -76,12 +79,22 @@ public class FormEndPage extends Page<FormEndPage> {
         return new FormEntryPage(formName).swipeToPreviousQuestion(questionText, isRequired);
     }
 
-    private void assertConstraintDisplayed(String constraintText) {
+    public FormEndPage clickOptionsIcon() {
+        tryAgainOnFail(() -> {
+            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
+            assertText(R.string.project_settings);
+        });
+
+        return this;
+    }
+
+    public FormEntryPage assertConstraintDisplayed(String constraintText) {
         // Constraints warnings show as dialogs in Android 11+
         if (Build.VERSION.SDK_INT < 30) {
             checkIsToastWithMessageDisplayed(constraintText);
+            return new FormEntryPage(formName).assertOnPage();
         } else {
-            new OkDialog().assertOnPage()
+            return new OkDialog().assertOnPage()
                     .assertText(constraintText)
                     .clickOK(new FormEntryPage(formName));
         }
