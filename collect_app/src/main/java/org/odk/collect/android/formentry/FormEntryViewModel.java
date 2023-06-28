@@ -295,18 +295,18 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         isLoading.setValue(true);
         scheduler.immediate(
                 () -> {
-                    int result;
+                    Integer result = null;
                     try {
                         result = formController.validateAnswers(true);
                     } catch (JavaRosaException e) {
-                        throw new RuntimeException(e);
+                        error.setValue(new NonFatal(e.getMessage()));
                     }
 
                     return result;
                 }, result -> {
                     isLoading.setValue(false);
 
-                    if (result != FormEntryController.ANSWER_OK) {
+                    if (result != null && result != FormEntryController.ANSWER_OK) {
                         refresh();
                         failedConstraint.setValue(new FailedConstraint(formController.getFormIndex(), result));
                     }

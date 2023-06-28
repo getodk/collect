@@ -370,4 +370,24 @@ public class FormEntryViewModelTest {
         scheduler.runBackground();
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
     }
+
+    @Test
+    public void validate_setsLoadingToTrueWhileBackgroundWorkHappens() {
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
+
+        viewModel.validate();
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(true));
+
+        scheduler.runBackground();
+        assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
+    }
+
+    @Test
+    public void validate_whenThereIsAnErrorValidating_setsError() throws Exception {
+        when(formController.validateAnswers(true)).thenThrow(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.validate();
+        scheduler.runBackground();
+        assertThat(viewModel.getError().getValue(), equalTo(new NonFatal("OH NO")));
+    }
 }
