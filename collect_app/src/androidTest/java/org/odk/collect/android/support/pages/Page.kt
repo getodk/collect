@@ -176,6 +176,15 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun assertToastNotDisplayed(message: String): T {
+        Espresso.onIdle()
+        if (popRecordedToasts().stream().anyMatch { s: String -> s == message }) {
+            throw RuntimeException("Toast with text \"$message\" shown on screen!")
+        }
+
+        return this as T
+    }
+
     fun checkIsToastWithMessageDisplayed(message: String): T {
         Espresso.onIdle()
         if (!popRecordedToasts().stream().anyMatch { s: String -> s == message }) {

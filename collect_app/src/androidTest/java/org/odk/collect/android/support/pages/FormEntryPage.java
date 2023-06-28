@@ -374,6 +374,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
         return this;
     }
 
+    public FormEntryPage assertConstraintNotDisplayed(String constraintText) {
+        // Constraints warnings show as dialogs in Android 11+
+        if (Build.VERSION.SDK_INT < 30) {
+            assertToastNotDisplayed(constraintText);
+        } else {
+            assertOnPage();
+        }
+
+        return this;
+    }
+
     public MainMenuPage pressBackAndDiscardChanges() {
         return closeSoftKeyboard()
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))

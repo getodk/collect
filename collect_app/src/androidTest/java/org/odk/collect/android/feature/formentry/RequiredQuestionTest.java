@@ -30,7 +30,18 @@ public class RequiredQuestionTest {
     }
 
     @Test
-    public void pressingValidateInOptionsMenu_shouldReturnToQuestionAndShowMessage() {
+    public void pressingValidateInOptionsMenuOnSameScreen_shouldUseLatestAnswers() {
+        rule.startAtMainMenu()
+                .copyForm("requiredJR275.xml")
+                .startBlankForm("required")
+                .answerQuestion("Foo", true, "blah")
+                .clickOptionsIcon()
+                .clickOnString(R.string.validate)
+                .assertConstraintNotDisplayed("Custom required message");
+    }
+
+    @Test
+    public void pressingValidateInOptionsMenuOnDifferentScreen_shouldReturnToQuestionAndShowMessage() {
         rule.startAtMainMenu()
                 .copyForm("requiredJR275.xml")
                 .startBlankForm("required")
