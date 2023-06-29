@@ -16,6 +16,7 @@ import static org.odk.collect.settings.migration.MigrationUtils.removeKey;
 import static org.odk.collect.settings.migration.MigrationUtils.renameKey;
 import static org.odk.collect.settings.migration.MigrationUtils.translateKey;
 import static org.odk.collect.settings.migration.MigrationUtils.translateValue;
+import static org.odk.collect.settings.migration.MigrationUtils.updateKeys;
 import static java.util.Arrays.asList;
 
 import org.odk.collect.settings.importing.SettingsMigrator;
@@ -167,7 +168,13 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                                 ProtectedProjectKeys.KEY_FINALIZE, true
                         ),
                 removeKey("mark_as_finalized"),
-                removeKey("default_completed")
+                removeKey("default_completed"),
+                updateKeys(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM)
+                        .withValues(false)
+                        .toPairs(
+                                ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
+                                ProtectedProjectKeys.KEY_FINALIZE, true
+                        )
         );
     }
 }

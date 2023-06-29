@@ -53,6 +53,13 @@ public final class MigrationUtils {
         return new KeyCombiner(oldKeys);
     }
 
+    /**
+     * It works like KeyCombiner BUT it does not remove the old keys
+     */
+    public static KeyUpdater updateKeys(String... oldKeys) {
+        return new KeyUpdater(oldKeys);
+    }
+
     public static KeyMover moveKey(String key) {
         return new KeyMover(key);
     }

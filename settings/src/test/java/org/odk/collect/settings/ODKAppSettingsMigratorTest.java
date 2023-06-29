@@ -317,6 +317,38 @@ public class ODKAppSettingsMigratorTest {
         assertThat(protectedSettings.contains("default_completed"), equalTo(false));
     }
 
+    @Test
+    public void when_AllowOtherWaysOfEditingFormIsDisabled_thenSaveAsDraftShouldBeDisabledAndFinalizeShouldBeEnabled() {
+        initSettings(protectedSettings,
+                ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, false,
+                ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true,
+                ProtectedProjectKeys.KEY_FINALIZE, false
+        );
+
+        runMigrations();
+
+        assertThat(protectedSettings.contains(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM), equalTo(true));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM), equalTo(false));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT), equalTo(false));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_FINALIZE), equalTo(true));
+    }
+
+    @Test
+    public void when_AllowOtherWaysOfEditingFormIsEnabled_thenDoNotUpdateSaveAsDraftOrFinalize() {
+        initSettings(protectedSettings,
+                ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, true,
+                ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true,
+                ProtectedProjectKeys.KEY_FINALIZE, false
+        );
+
+        runMigrations();
+
+        assertThat(protectedSettings.contains(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM), equalTo(true));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM), equalTo(true));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT), equalTo(true));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_FINALIZE), equalTo(false));
+    }
+
     private void runMigrations() {
         new ODKAppSettingsMigrator(metaSettings).migrate(unprotectedSettings, protectedSettings);
     }
