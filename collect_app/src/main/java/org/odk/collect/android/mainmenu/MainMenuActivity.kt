@@ -333,10 +333,8 @@ class MainMenuActivity : LocalizedActivity() {
             SnackbarUtils.showLongSnackbar(
                 binding.root,
                 getString(it.first),
-                action = if (it.second == null) {
-                    null
-                } else {
-                    SnackbarUtils.Action(getString(it.second!!)) {
+                action = it.second?.let { action ->
+                    SnackbarUtils.Action(getString(action)) {
                         formLauncher.launch(FormFillingIntentFactory.editInstanceIntent(this, uri))
                     }
                 },

@@ -41,7 +41,6 @@ public class EncryptedFormTest {
     public void instanceOfEncryptedForm_cantBeViewedAfterFinalizing() {
         rule.startAtMainMenu()
                 .copyForm("encrypted.xml")
-                .setServer(testDependencies.server.getURL())
 
                 .startBlankForm("encrypted")
                 .assertQuestion("Question 1")
