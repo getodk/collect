@@ -395,15 +395,16 @@ public class JavaRosaFormController implements FormController {
         }
     }
 
-    public ValidateOutcome validateAnswers(boolean markCompleted) throws JavaRosaException {
+    public ValidationResult validateAnswers(boolean markCompleted) throws JavaRosaException {
         ValidateOutcome validateOutcome = getFormDef().validate(markCompleted);
         if (validateOutcome != null) {
             this.jumpToIndex(validateOutcome.failedPrompt);
             if (indexIsInFieldList()) {
                 stepToPreviousScreenEvent();
             }
+            return new FailedValidationResult(validateOutcome.failedPrompt, validateOutcome.outcome);
         }
-        return validateOutcome;
+        return SuccessValidationResult.INSTANCE;
     }
 
     public boolean saveAnswer(FormIndex index, IAnswerData data) throws JavaRosaException {
@@ -605,31 +606,27 @@ public class JavaRosaFormController implements FormController {
         return !absRef.equals(bindRef);
     }
 
-    public FailedConstraint saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers, boolean evaluateConstraints) throws JavaRosaException {
+    public ValidationResult saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers, boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
-                FailedConstraint failedConstraint = saveOneScreenAnswer(
+                return saveOneScreenAnswer(
                         index,
                         answers.get(index),
                         evaluateConstraints
                 );
-
-                if (failedConstraint != null) {
-                    return failedConstraint;
-                }
             }
         }
 
-        return null;
+        return SuccessValidationResult.INSTANCE;
     }
 
-    public FailedConstraint saveOneScreenAnswer(FormIndex index, IAnswerData answer, boolean evaluateConstraints) throws JavaRosaException {
+    public ValidationResult saveOneScreenAnswer(FormIndex index, IAnswerData answer, boolean evaluateConstraints) throws JavaRosaException {
         // Within a group, you can only save for question events
         if (getEvent(index) == FormEntryController.EVENT_QUESTION) {
             if (evaluateConstraints) {
                 int saveStatus = answerQuestion(index, answer);
                 if (saveStatus != FormEntryController.ANSWER_OK) {
-                    return new FailedConstraint(index, saveStatus);
+                    return new FailedValidationResult(index, saveStatus);
                 }
             } else {
                 saveAnswer(index, answer);
@@ -638,7 +635,7 @@ public class JavaRosaFormController implements FormController {
             Timber.w("Attempted to save an index referencing something other than a question: %s",
                     index.getReference().toString());
         }
-        return null;
+        return SuccessValidationResult.INSTANCE;
     }
 
     public int stepToPreviousEvent() {

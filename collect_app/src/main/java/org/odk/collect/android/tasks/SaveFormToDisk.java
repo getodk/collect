@@ -23,7 +23,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
@@ -46,7 +45,9 @@ import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.saving.FormSaver;
+import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -113,10 +114,10 @@ public class SaveFormToDisk {
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_validating_message));
 
         try {
-            ValidateOutcome validateOutcome = formController.validateAnswers(shouldFinalize);
-            if (validateOutcome != null) {
+            ValidationResult validationResult = formController.validateAnswers(shouldFinalize);
+            if (validationResult instanceof FailedValidationResult) {
                 // validation failed, pass specific failure
-                saveToDiskResult.setSaveResult(validateOutcome.outcome, shouldFinalize);
+                saveToDiskResult.setSaveResult(((FailedValidationResult) validationResult).getStatus(), shouldFinalize);
                 return saveToDiskResult;
             }
         } catch (Exception e) {

@@ -2,7 +2,6 @@ package org.odk.collect.android.javarosawrapper
 
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.FormIndex
-import org.javarosa.core.model.ValidateOutcome
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.core.services.transport.payload.ByteArrayPayload
@@ -140,7 +139,7 @@ interface FormController {
      * type.
      */
     @Throws(JavaRosaException::class)
-    fun validateAnswers(markCompleted: Boolean): ValidateOutcome?
+    fun validateAnswers(markCompleted: Boolean): ValidationResult
 
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any
@@ -216,13 +215,13 @@ interface FormController {
     fun isDisplayableGroup(index: FormIndex?): Boolean
 
     @Throws(JavaRosaException::class)
-    fun saveOneScreenAnswer(index: FormIndex?, data: IAnswerData?, evaluateConstraints: Boolean): FailedConstraint?
+    fun saveOneScreenAnswer(index: FormIndex?, data: IAnswerData?, evaluateConstraints: Boolean): ValidationResult
 
     /**
      * @return FailedConstraint of first failed constraint or null if all questions were saved.
      */
     @Throws(JavaRosaException::class)
-    fun saveAllScreenAnswers(answers: HashMap<FormIndex, IAnswerData>?, evaluateConstraints: Boolean): FailedConstraint?
+    fun saveAllScreenAnswers(answers: HashMap<FormIndex, IAnswerData>?, evaluateConstraints: Boolean): ValidationResult
 
     /**
      * Creates a new repeated instance of the group referenced by the current FormIndex.

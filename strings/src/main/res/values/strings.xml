@@ -142,6 +142,7 @@
 
     <string name="invalid_answer_error">Sorry, this response is invalid!</string>
     <string name="required_answer_error">Sorry, this response is required!</string>
+    <string name="success_form_validation">Success! No errors found in your form.</string>
     <string name="invalid_space_in_answer_singular">Warning: underlying value %s has spaces</string>
     <string name="invalid_space_in_answer_plural">Warning: underlying values %s have spaces</string>
 

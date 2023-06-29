@@ -13,7 +13,6 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.SelectChoice;
-import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -22,8 +21,9 @@ import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.questions.SelectChoiceUtils;
-import org.odk.collect.android.javarosawrapper.FailedConstraint;
+import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
@@ -45,7 +45,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
-    private final MutableLiveData<FailedConstraint> failedConstraint = new MutableLiveData<>(null);
+    private final MutableLiveData<ValidationResult> validationResult = new MutableLiveData<>(null);
     @NonNull
     private final FormSessionRepository formSessionRepository;
     private final String sessionId;
@@ -96,8 +96,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return error;
     }
 
-    public LiveData<FailedConstraint> getFailedConstraint() {
-        return failedConstraint;
+    public LiveData<ValidationResult> getValidationResult() {
+        return validationResult;
     }
 
     public NonNullLiveData<Boolean> isLoading() {
@@ -236,9 +236,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }
 
         try {
-            FailedConstraint result = formController.saveAllScreenAnswers(answers, evaluateConstraints);
-            if (result != null) {
-                failedConstraint.postValue(result);
+            ValidationResult result = formController.saveAllScreenAnswers(answers, evaluateConstraints);
+            if (result instanceof FailedValidationResult) {
+                validationResult.postValue(result);
                 return false;
             }
         } catch (JavaRosaException e) {
@@ -295,7 +295,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         isLoading.setValue(true);
         scheduler.immediate(
                 () -> {
-                    ValidateOutcome result = null;
+                    ValidationResult result = null;
                     try {
                         result = formController.validateAnswers(true);
                     } catch (JavaRosaException e) {
@@ -306,10 +306,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 }, result -> {
                     isLoading.setValue(false);
 
-                    if (result != null) {
+                    if (result instanceof FailedValidationResult) {
                         refresh();
-                        failedConstraint.setValue(new FailedConstraint(result.failedPrompt, result.outcome));
                     }
+                    validationResult.setValue(result);
                 }
         );
     }
