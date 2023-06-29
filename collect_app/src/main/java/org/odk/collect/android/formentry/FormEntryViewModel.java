@@ -13,9 +13,9 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
-import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.exception.ExternalDataException;
@@ -295,7 +295,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         isLoading.setValue(true);
         scheduler.immediate(
                 () -> {
-                    Integer result = null;
+                    ValidateOutcome result = null;
                     try {
                         result = formController.validateAnswers(true);
                     } catch (JavaRosaException e) {
@@ -306,9 +306,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 }, result -> {
                     isLoading.setValue(false);
 
-                    if (result != null && result != FormEntryController.ANSWER_OK) {
+                    if (result != null) {
                         refresh();
-                        failedConstraint.setValue(new FailedConstraint(formController.getFormIndex(), result));
+                        failedConstraint.setValue(new FailedConstraint(result.failedPrompt, result.outcome));
                     }
                 }
         );

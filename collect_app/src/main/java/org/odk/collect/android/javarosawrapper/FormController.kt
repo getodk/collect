@@ -2,6 +2,7 @@ package org.odk.collect.android.javarosawrapper
 
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.FormIndex
+import org.javarosa.core.model.ValidateOutcome
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.core.services.transport.payload.ByteArrayPayload
@@ -139,7 +140,7 @@ interface FormController {
      * type.
      */
     @Throws(JavaRosaException::class)
-    fun validateAnswers(markCompleted: Boolean): Int
+    fun validateAnswers(markCompleted: Boolean): ValidateOutcome?
 
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any

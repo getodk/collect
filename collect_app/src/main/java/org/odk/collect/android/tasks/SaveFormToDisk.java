@@ -23,13 +23,13 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import org.javarosa.core.model.ValidateOutcome;
 import org.javarosa.core.model.condition.EvaluationContext;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
-import org.javarosa.form.api.FormEntryController;
 import org.javarosa.xpath.XPathException;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
@@ -113,10 +113,10 @@ public class SaveFormToDisk {
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_validating_message));
 
         try {
-            int validateStatus = formController.validateAnswers(shouldFinalize);
-            if (validateStatus != FormEntryController.ANSWER_OK) {
+            ValidateOutcome validateOutcome = formController.validateAnswers(shouldFinalize);
+            if (validateOutcome != null) {
                 // validation failed, pass specific failure
-                saveToDiskResult.setSaveResult(validateStatus, shouldFinalize);
+                saveToDiskResult.setSaveResult(validateOutcome.outcome, shouldFinalize);
                 return saveToDiskResult;
             }
         } catch (Exception e) {
