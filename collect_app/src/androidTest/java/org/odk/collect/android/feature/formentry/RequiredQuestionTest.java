@@ -37,6 +37,7 @@ public class RequiredQuestionTest {
                 .answerQuestion("Foo", true, "blah")
                 .clickOptionsIcon()
                 .clickOnString(R.string.validate)
+                .assertText(R.string.success_form_validation)
                 .assertConstraintNotDisplayed("Custom required message");
     }
 
