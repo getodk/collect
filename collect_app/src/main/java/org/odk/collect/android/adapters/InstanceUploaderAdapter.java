@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CursorAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,9 +66,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
 
         long dbId = cursor.getLong(cursor.getColumnIndex(DatabaseInstanceColumns._ID));
         viewHolder.checkbox.setChecked(selected.contains(dbId));
-        viewHolder.checkbox.setOnClickListener(v -> {
-            onItemCheckboxClickListener.accept(dbId);
-        });
+        viewHolder.selectView.setOnClickListener(v -> onItemCheckboxClickListener.accept(dbId));
     }
 
     public void setSelected(Set<Long> ids) {
@@ -81,6 +80,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         CheckBox checkbox;
         ImageView statusIcon;
         ImageView closeButton;
+        FrameLayout selectView;
 
         ViewHolder(View view) {
             formTitle = view.findViewById(R.id.form_title);
@@ -88,6 +88,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
             checkbox = view.findViewById(R.id.checkbox);
             statusIcon = view.findViewById(R.id.image);
             closeButton = view.findViewById(R.id.close_box);
+            selectView = view.findViewById(R.id.selectView);
         }
     }
 }

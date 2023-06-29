@@ -9,8 +9,7 @@ the specific language governing permissions and limitations under the License. -
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/margin_standard">
+    android:layout_height="wrap_content">
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
@@ -18,20 +17,24 @@ the specific language governing permissions and limitations under the License. -
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:paddingVertical="@dimen/margin_standard"
+        android:paddingHorizontal="@dimen/margin_standard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <include layout="@layout/form_chooser_list_item_icon" />
 
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/imageView"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="16dp"
-        android:layout_toStartOf="@id/selectView"
-        android:layout_toEndOf="@id/imageView">
+        android:paddingVertical="@dimen/margin_standard"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintEnd_toStartOf="@id/selectView"
+        app:layout_constraintTop_toTopOf="@id/imageView">
 
         <include layout="@layout/form_chooser_list_item_text" />
 
@@ -40,9 +43,12 @@ the specific language governing permissions and limitations under the License. -
     <FrameLayout
         android:id="@+id/selectView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true">
+        android:layout_height="0dp"
+        android:paddingVertical="@dimen/margin_standard"
+        android:paddingHorizontal="@dimen/margin_standard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imageView">
 
         <CheckBox
             android:id="@+id/checkbox"
@@ -61,5 +67,4 @@ the specific language governing permissions and limitations under the License. -
             tools:visibility="visible" />
 
     </FrameLayout>
-
 </org.odk.collect.android.views.TwoItemMultipleChoiceView>
