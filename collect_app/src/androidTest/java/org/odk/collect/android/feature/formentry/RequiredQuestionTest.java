@@ -52,4 +52,17 @@ public class RequiredQuestionTest {
                 .assertConstraintDisplayed("Custom required message")
                 .assertQuestion("Foo", true);
     }
+
+    @Test
+    public void pressingValidateInOptionsMenuOnDifferentScreen_shouldReturnToQuestionAndShowMessage_whenTheQuestionIsInFieldList() {
+        rule.startAtMainMenu()
+                .copyForm("requiredQuestionInFieldList.xml")
+                .startBlankForm("requiredQuestionInFieldList")
+                .clickGoToArrow()
+                .clickGoToEnd()
+                .clickOptionsIcon()
+                .clickOnString(R.string.validate)
+                .assertConstraintDisplayed("Custom required message")
+                .assertQuestion("Foo", true);
+    }
 }
