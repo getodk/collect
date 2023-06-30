@@ -154,7 +154,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
 
             return true;
         } else if (item.getItemId() == R.id.menu_validate) {
-            formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers(), false);
+            formEntryViewModel.saveScreenAnswersToFormController(answersProvider.getAnswers(), false);
             formEntryViewModel.validate();
             return true;
         } else {

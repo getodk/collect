@@ -8,10 +8,12 @@
           <text/>
           <meta>
             <instanceID/>
+            <orx:audit/>
           </meta>
         </required>
       </instance>
       <bind jr:requiredMsg="Custom required message" nodeset="/required/text" required="true()" type="string"/>
+      <bind nodeset="/data/orx:meta/audit" type="binary" />
       <bind calculate="concat('uuid:', uuid())" nodeset="/required/meta/instanceID" readonly="true()" type="string"/>
     </model>
   </h:head>
