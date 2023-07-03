@@ -18,11 +18,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 import android.widget.Checkable;
-import android.widget.RelativeLayout;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.odk.collect.android.R;
 
-public class TwoItemMultipleChoiceView extends RelativeLayout implements Checkable {
+public class TwoItemMultipleChoiceView extends ConstraintLayout implements Checkable {
 
     public TwoItemMultipleChoiceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
