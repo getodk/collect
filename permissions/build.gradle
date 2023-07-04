@@ -9,7 +9,7 @@ plugins {
 apply from: '../config/quality.gradle'
 
 android {
-    compileSdkVersion Versions.android_compile_sdk
+    compileSdk Versions.android_compile_sdk
 
     defaultConfig {
         minSdkVersion Versions.android_min_sdk

@@ -65,7 +65,7 @@ def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxAccessToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
-    compileSdkVersion Versions.android_compile_sdk
+    compileSdk Versions.android_compile_sdk
 
     buildFeatures {
         viewBinding true
