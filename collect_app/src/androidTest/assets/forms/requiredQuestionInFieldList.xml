@@ -7,6 +7,7 @@
                 <required id="requiredQuestionInFieldList">
                     <group>
                         <text/>
+                        <text2/>
                     </group>
                     <meta>
                         <instanceID/>
@@ -14,6 +15,7 @@
                 </required>
             </instance>
             <bind jr:requiredMsg="Custom required message" nodeset="/required/group/text" required="true()" type="string"/>
+            <bind jr:requiredMsg="Custom required message2" nodeset="/required/group/text2" required="true()" type="string"/>
             <bind calculate="concat('uuid:', uuid())" nodeset="/required/meta/instanceID" readonly="true()" type="string"/>
         </model>
     </h:head>
@@ -21,6 +23,9 @@
         <group appearance="field-list" ref="/required/group">
             <input ref="/required/group/text">
                 <label>Foo</label>
+            </input>
+            <input ref="/required/group/text2">
+                <label>Bar</label>
             </input>
         </group>
     </h:body>

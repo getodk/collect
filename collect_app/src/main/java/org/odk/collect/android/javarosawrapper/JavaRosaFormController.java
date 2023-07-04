@@ -609,11 +609,14 @@ public class JavaRosaFormController implements FormController {
     public ValidationResult saveAllScreenAnswers(HashMap<FormIndex, IAnswerData> answers, boolean evaluateConstraints) throws JavaRosaException {
         if (currentPromptIsQuestion()) {
             for (FormIndex index : answers.keySet()) {
-                return saveOneScreenAnswer(
+                ValidationResult validationResult = saveOneScreenAnswer(
                         index,
                         answers.get(index),
                         evaluateConstraints
                 );
+                if (validationResult instanceof FailedValidationResult) {
+                    return validationResult;
+                }
             }
         }
 

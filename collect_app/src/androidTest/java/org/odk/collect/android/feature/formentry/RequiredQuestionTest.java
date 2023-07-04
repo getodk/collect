@@ -99,4 +99,19 @@ public class RequiredQuestionTest {
         assertThat(auditLog.size(), equalTo(1));
         assertThat(auditLog.get(0).get(0), equalTo("form start"));
     }
+
+    @Test
+    public void ifRequiredQuestionIsInFieldListAndNotFirst_shouldBeValidatedProperly() {
+        rule.startAtMainMenu()
+                .copyForm("requiredQuestionInFieldList.xml")
+                .startBlankForm("requiredQuestionInFieldList")
+                .answerQuestion(0, "Foo")
+                .swipeToNextQuestionWithConstraintViolation("Custom required message2")
+                .clickOptionsIcon()
+                .clickOnString(R.string.validate)
+                .assertConstraintDisplayed("Custom required message2")
+                .clickGoToArrow()
+                .clickGoToEnd()
+                .clickSaveAndExitWithError("Custom required message2");
+    }
 }
