@@ -38,6 +38,22 @@ public class EncryptedFormTest {
             .around(rule);
 
     @Test
+    public void instanceOfEncryptedForm_cantBeViewedAfterFinalizing() {
+        rule.startAtMainMenu()
+                .copyForm("encrypted.xml")
+
+                .startBlankForm("encrypted")
+                .assertQuestion("Question 1")
+                .swipeToEndScreen()
+                .clickFinalize()
+
+                .clickSendFinalizedForm(1)
+                .clickOnText("encrypted")
+                .checkIsToastWithMessageDisplayed(R.string.encrypted_form)
+                .assertOnPage();
+    }
+
+    @Test
     public void instanceOfEncryptedForm_cantBeViewedAfterSending() {
         rule.startAtMainMenu()
                 .copyForm("encrypted.xml")

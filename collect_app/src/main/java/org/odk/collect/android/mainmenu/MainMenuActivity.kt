@@ -329,12 +329,14 @@ class MainMenuActivity : LocalizedActivity() {
 
         val formSavedSnackbarDetails = mainMenuViewModel.getFormSavedSnackbarDetails(uri)
 
-        formSavedSnackbarDetails?.let { it ->
+        formSavedSnackbarDetails?.let {
             SnackbarUtils.showLongSnackbar(
                 binding.root,
                 getString(it.first),
-                action = SnackbarUtils.Action(getString(it.second)) {
-                    formLauncher.launch(FormFillingIntentFactory.editInstanceIntent(this, uri))
+                action = it.second?.let { action ->
+                    SnackbarUtils.Action(getString(action)) {
+                        formLauncher.launch(FormFillingIntentFactory.editInstanceIntent(this, uri))
+                    }
                 },
                 displayDismissButton = true
             )

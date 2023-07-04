@@ -63,7 +63,7 @@ public final class Instance {
     public static class Builder {
         private String displayName;
         private String submissionUri;
-        private boolean canEditWhenComplete;
+        private boolean canEditWhenComplete = true;
         private String instanceFilePath;
         private String formId;
         private String formVersion;
