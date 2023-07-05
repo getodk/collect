@@ -107,8 +107,11 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         }
 
         TabLayoutMediator(binding.tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
-            tab.text = if (position == 0) getString(org.odk.collect.strings.R.string.data) else getString(
-                org.odk.collect.strings.R.string.forms)
+            tab.text = if (position == 0) {
+                getString(org.odk.collect.strings.R.string.data)
+            } else {
+                getString(org.odk.collect.strings.R.string.forms)
+            }
         }.attach()
     }
 

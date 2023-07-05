@@ -116,7 +116,10 @@ class FormUriActivityTest {
     fun `When there are no projects then display alert dialog`() {
         val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.app_not_configured))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.app_not_configured)
+        )
     }
 
     @Test
@@ -127,11 +130,25 @@ class FormUriActivityTest {
         projectsRepository.save(secondProject)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(firstProject)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(secondProject.uuid, form.dbId))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getBlankFormIntent(
+                secondProject.uuid,
+                form.dbId
+            )
+        )
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form)
+        )
     }
 
     @Test
@@ -142,11 +159,21 @@ class FormUriActivityTest {
         projectsRepository.save(secondProject)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(secondProject)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(null, form.dbId))
+        val scenario =
+            launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(null, form.dbId))
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form)
+        )
     }
 
     @Test
@@ -155,7 +182,13 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(
             getBlankFormIntent(project.uuid, form.dbId).apply {
@@ -163,7 +196,10 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.unrecognized_uri))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.unrecognized_uri)
+        )
     }
 
     @Test
@@ -172,7 +208,13 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(
             getBlankFormIntent(project.uuid, form.dbId).apply {
@@ -180,7 +222,10 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.unrecognized_uri))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.unrecognized_uri)
+        )
     }
 
     @Test
@@ -189,7 +234,8 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, 1))
+        val scenario =
+            launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, 1))
 
         assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
@@ -200,10 +246,21 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
         File(form.formFilePath).delete()
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getBlankFormIntent(
+                project.uuid,
+                form.dbId
+            )
+        )
 
         assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
@@ -214,7 +271,8 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, 1))
+        val scenario =
+            launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, 1))
 
         assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
@@ -225,7 +283,9 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -237,10 +297,18 @@ class FormUriActivityTest {
         )
 
         File(instance.instanceFilePath).delete()
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(
+                project.uuid,
+                instance.dbId
+            )
+        )
 
         assertThat(instancesRepository.get(instance.dbId), equalTo(null))
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.instance_deleted_message))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.instance_deleted_message)
+        )
     }
 
     @Test
@@ -257,9 +325,17 @@ class FormUriActivityTest {
                 .build()
         )
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(
+                project.uuid,
+                instance.dbId
+            )
+        )
 
-        val expectedMessage = context.getString(org.odk.collect.strings.R.string.parent_form_not_present, instance.formId)
+        val expectedMessage = context.getString(
+            org.odk.collect.strings.R.string.parent_form_not_present,
+            instance.formId
+        )
 
         assertErrorDialog(scenario, expectedMessage)
     }
@@ -279,11 +355,19 @@ class FormUriActivityTest {
                 .build()
         )
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(
+                project.uuid,
+                instance.dbId
+            )
+        )
 
         val expectedMessage = context.getString(
-            org.odk.collect.strings.R.string.parent_form_not_present, "${instance.formId}\n${context.getString(
-                org.odk.collect.strings.R.string.version)} ${instance.formVersion}")
+            org.odk.collect.strings.R.string.parent_form_not_present,
+            "${instance.formId}\n${
+            context.getString(org.odk.collect.strings.R.string.version)
+            } ${instance.formVersion}"
+        )
 
         assertErrorDialog(scenario, expectedMessage)
     }
@@ -294,8 +378,22 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath, FormUtils.createXFormBody("1", "1", "Form 1")).build())
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath, FormUtils.createXFormBody("1", "1", "Form 2")).build())
+        formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                FormUtils.createXFormBody("1", "1", "Form 1")
+            ).build()
+        )
+        formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                FormUtils.createXFormBody("1", "1", "Form 2")
+            ).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -306,9 +404,17 @@ class FormUriActivityTest {
                 .build()
         )
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(
+                project.uuid,
+                instance.dbId
+            )
+        )
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.survey_multiple_forms_error))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.survey_multiple_forms_error)
+        )
     }
 
     @Test
@@ -317,7 +423,14 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath, FormUtils.createXFormBody("1", "1", "Form 1")).build())
+        formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                FormUtils.createXFormBody("1", "1", "Form 1")
+            ).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -329,9 +442,17 @@ class FormUriActivityTest {
                 .build()
         )
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(
+                project.uuid,
+                instance.dbId
+            )
+        )
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.encrypted_form))
+        assertErrorDialog(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.encrypted_form)
+        )
     }
 
     @Test
@@ -342,7 +463,9 @@ class FormUriActivityTest {
 
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -366,7 +489,13 @@ class FormUriActivityTest {
 
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, false)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
         launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
 
@@ -379,7 +508,9 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -401,7 +532,9 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -423,7 +556,9 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -445,9 +580,16 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
-        val scenario = launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        val scenario =
+            launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         scenario.recreate()
 
         Intents.intended(hasComponent(FormFillingActivity::class.java.name), Intents.times(1))
@@ -459,7 +601,13 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
 
@@ -472,7 +620,9 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -494,7 +644,13 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        val form = formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(null, form.dbId))
 
@@ -507,7 +663,9 @@ class FormUriActivityTest {
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -592,7 +750,12 @@ class FormUriActivityTest {
         if (canBeEdited) {
             Intents.intended(not(hasExtraWithKey(ApplicationConstants.BundleKeys.FORM_MODE)))
         } else {
-            Intents.intended(hasExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT))
+            Intents.intended(
+                hasExtra(
+                    ApplicationConstants.BundleKeys.FORM_MODE,
+                    ApplicationConstants.FormModes.VIEW_SENT
+                )
+            )
         }
         Intents.intended(hasExtra("KEY_1", "Text"))
     }

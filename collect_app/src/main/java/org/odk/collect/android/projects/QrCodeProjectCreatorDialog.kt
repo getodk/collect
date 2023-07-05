@@ -175,7 +175,10 @@ class QrCodeProjectCreatorDialog :
                 R.id.menu_item_scan_sd_card -> {
                     val photoPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
                     photoPickerIntent.type = "image/*"
-                    intentLauncher.launchForResult(imageQrCodeImportResultLauncher, photoPickerIntent) {
+                    intentLauncher.launchForResult(
+                        imageQrCodeImportResultLauncher,
+                        photoPickerIntent
+                    ) {
                         showShortToast(
                             requireContext(),
                             getString(
@@ -249,7 +252,10 @@ class QrCodeProjectCreatorDialog :
             val settingsJson = try {
                 CompressionUtils.decompress(barcodeResult.text)
             } catch (e: Exception) {
-                showShortToast(requireContext(), getString(org.odk.collect.strings.R.string.invalid_qrcode))
+                showShortToast(
+                    requireContext(),
+                    getString(org.odk.collect.strings.R.string.invalid_qrcode)
+                )
                 ""
             }
             createProjectOrError(settingsJson)
@@ -288,10 +294,20 @@ class QrCodeProjectCreatorDialog :
                     )
                 )
             }
-            SettingsImportingResult.INVALID_SETTINGS -> ToastUtils.showLongToast(requireContext(), getString(
-                org.odk.collect.strings.R.string.invalid_qrcode))
-            SettingsImportingResult.GD_PROJECT -> ToastUtils.showLongToast(requireContext(), getString(
-                org.odk.collect.strings.R.string.settings_with_gd_protocol))
+
+            SettingsImportingResult.INVALID_SETTINGS -> ToastUtils.showLongToast(
+                requireContext(),
+                getString(
+                    org.odk.collect.strings.R.string.invalid_qrcode
+                )
+            )
+
+            SettingsImportingResult.GD_PROJECT -> ToastUtils.showLongToast(
+                requireContext(),
+                getString(
+                    org.odk.collect.strings.R.string.settings_with_gd_protocol
+                )
+            )
         }
     }
 
