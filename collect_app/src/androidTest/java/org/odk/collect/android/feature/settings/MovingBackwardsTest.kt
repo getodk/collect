@@ -23,15 +23,35 @@ class MovingBackwardsTest {
             .clickSettings()
             .clickAccessControl()
             .clickFormEntrySettings()
+            .clickOnString(R.string.finalize)
+
+            // before disabling moving backward
+            .assertGoToPromptEnabled()
+            .assertGoToPromptChecked()
+
+            .assertSaveAsDraftInFormEntryEnabled()
+            .assertSaveAsDraftInFormEntryChecked()
+
+            .assertSaveAsDraftInFormEndDisabled()
+            .assertSaveAsDraftInFormEndChecked()
+
+            .assertFinalizeEnabled()
+            .assertFinalizeUnchecked()
+
             .clickMovingBackwards()
             .clickOnString(R.string.yes)
+
+            // after disabling moving backward - the state of the 4 related options is reversed
             .assertGoToPromptDisabled()
-            .assertSaveAsDraftInFormEntryDisabled()
-            .assertSaveAsDraftInFormEndDisabled()
-            .assertFinalizeDisabled()
             .assertGoToPromptUnchecked()
+
+            .assertSaveAsDraftInFormEntryDisabled()
             .assertSaveAsDraftInFormEntryUnchecked()
+
+            .assertSaveAsDraftInFormEndDisabled()
             .assertSaveAsDraftInFormEndUnchecked()
+
+            .assertFinalizeDisabled()
             .assertFinalizeChecked()
     }
 
@@ -51,19 +71,6 @@ class MovingBackwardsTest {
             .assertGoToPromptChecked()
             .assertSaveAsDraftInFormEntryChecked()
             .assertSaveAsDraftInFormEndChecked()
-            .assertFinalizeChecked()
-    }
-
-    @Test
-    fun whenMovingBackwardDisabledWithPreventingUsersFormBypassingIt_finalizedShouldBecomeEnabled() {
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickAccessControl()
-            .clickFormEntrySettings()
-            .clickOnString(R.string.finalize)
-            .clickMovingBackwards()
-            .clickOnString(R.string.yes)
             .assertFinalizeChecked()
     }
 }

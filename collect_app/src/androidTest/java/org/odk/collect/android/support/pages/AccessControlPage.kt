@@ -110,6 +110,11 @@ class AccessControlPage : Page<AccessControlPage>() {
         return this
     }
 
+    fun assertFinalizeUnchecked(): AccessControlPage {
+        onView(withIndex(withClassName(endsWith("CheckBox")), 6)).check(matches(isNotChecked()))
+        return this
+    }
+
     fun clickOnSaveAsDraftInFormEnd(): AccessControlPage {
         onView(withIndex(withText(getTranslatedString(R.string.save_mid)), 1)).perform(click())
         return this
