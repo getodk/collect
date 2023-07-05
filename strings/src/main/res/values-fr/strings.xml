@@ -115,6 +115,7 @@
   <string name="delete_repeat_no">Annuler</string>
   <string name="invalid_answer_error">Désolé, la réponse n\'est pas valide.</string>
   <string name="required_answer_error">Réponse obligatoire!</string>
+  <string name="success_form_validation">Succès! Aucune erreur trouvée.</string>
   <string name="invalid_space_in_answer_singular">Attention: le nom 1%s contient des espaces</string>
   <string name="invalid_space_in_answer_plural">Attention: les noms 1%s contiennent des espaces</string>
   <string name="too_complex_form">Ce formulaire est trop complexe pour cet appareil. Essayez de simplifier les expressions ou demandez de l\'aide sur le forum.</string>
@@ -410,6 +411,7 @@
   <string name="background_location_disabled">Ce formulaire veut suivre votre position mais le suivi est désactivé. S\'il vous plaît activer dans le %1$s menu ci-dessus.</string>
   <string name="background_location_enabled">Ce formulaire suit votre position. Vous pouvez désactiver le suivi dans le %1$s menu ci-dessus.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">Vérifier s\'il y a des erreurs</string>
   <string name="get_point">Démarrer le point</string>
   <string name="geopoint_view_read_only">Voir le point</string>
   <string name="geoshape_view_read_only">Voir le polygone</string>
