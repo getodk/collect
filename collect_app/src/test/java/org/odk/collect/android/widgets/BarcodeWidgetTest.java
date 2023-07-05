@@ -10,7 +10,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -68,7 +67,7 @@ public class BarcodeWidgetTest {
     @Test
     public void whenPromptHasAnswer_replaceBarcodeButtonIsDisplayed() {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.binding.barcodeButton.getText().toString(), is(widgetTestActivity.getString(R.string.replace_barcode)));
+        assertThat(widget.binding.barcodeButton.getText().toString(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
     }
 
     @Test
@@ -95,7 +94,7 @@ public class BarcodeWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.binding.barcodeAnswerText.getText().toString(), is(""));
-        assertThat(widget.binding.barcodeButton.getText().toString(), is(widgetTestActivity.getString(R.string.get_barcode)));
+        assertThat(widget.binding.barcodeButton.getText().toString(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.get_barcode)));
     }
 
     @Test
@@ -118,7 +117,7 @@ public class BarcodeWidgetTest {
     public void setData_updatesButtonLabel() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("\ud800blah\b");
-        assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(R.string.replace_barcode)));
+        assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
     }
 
     @Test
@@ -171,7 +170,7 @@ public class BarcodeWidgetTest {
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
-        assertThat(ShadowToast.getTextOfLatestToast(), is(widgetTestActivity.getString(R.string.error_front_camera_unavailable)));
+        assertThat(ShadowToast.getTextOfLatestToast(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.error_front_camera_unavailable)));
     }
 
     @Test

@@ -44,7 +44,7 @@ class GeoWidgetUtilsTest {
         assertEquals(
             getGeoPointAnswerToDisplay(context, stringAnswer),
             context.getString(
-                R.string.gps_result,
+                org.odk.collect.strings.R.string.gps_result,
                 convertCoordinatesIntoDegreeFormat(context, parts[0].toDouble(), "lat"),
                 convertCoordinatesIntoDegreeFormat(context, parts[1].toDouble(), "lon"),
                 truncateDouble(parts[2]),

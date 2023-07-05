@@ -38,7 +38,8 @@ class FormsDownloadResultInterpreterTest {
     fun `When not all forms downloaded successfully getFailures() should return list of failures`() {
         assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context).size, `is`(1))
         assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].title, `is`("Form 2"))
-        assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].secondaryText, `is`(context.getString(R.string.form_details, "5", "4")))
+        assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].secondaryText, `is`(context.getString(
+            org.odk.collect.strings.R.string.form_details, "5", "4")))
         assertThat(FormsDownloadResultInterpreter.getFailures(resultWithOneError, context)[0].supportingText, `is`(FormDownloadExceptionMapper(context).getMessage(resultWithOneError[formDetails2])))
     }
 

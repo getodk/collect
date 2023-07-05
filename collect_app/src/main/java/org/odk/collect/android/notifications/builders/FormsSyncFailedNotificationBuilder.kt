@@ -29,13 +29,13 @@ object FormsSyncFailedNotificationBuilder {
             NotificationManagerNotifier.COLLECT_NOTIFICATION_CHANNEL
         ).apply {
             setContentIntent(contentIntent)
-            setContentTitle(application.getLocalizedString(R.string.form_update_error))
+            setContentTitle(application.getLocalizedString(org.odk.collect.strings.R.string.form_update_error))
             setSubText(projectName)
             setStyle(
                 NotificationCompat.BigTextStyle()
                     .bigText(FormSourceExceptionMapper(application).getMessage(exception))
             )
-            setSmallIcon(R.drawable.ic_notification_small)
+            setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }

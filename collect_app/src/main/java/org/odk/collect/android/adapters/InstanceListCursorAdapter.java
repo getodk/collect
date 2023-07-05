@@ -82,16 +82,16 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
 
             if (date != 0) {
                 try {
-                    String deletedTime = context.getString(R.string.deleted_on_date_at_time);
+                    String deletedTime = context.getString(org.odk.collect.strings.R.string.deleted_on_date_at_time);
                     disabledMessage = new SimpleDateFormat(deletedTime, Locale.getDefault()).format(new Date(date));
                 } catch (IllegalArgumentException e) {
                     Timber.e(e);
-                    disabledMessage = context.getString(R.string.submission_deleted);
+                    disabledMessage = context.getString(org.odk.collect.strings.R.string.submission_deleted);
                 }
             } else if (!formExists) {
-                disabledMessage = context.getString(R.string.deleted_form);
+                disabledMessage = context.getString(org.odk.collect.strings.R.string.deleted_form);
             } else {
-                disabledMessage = context.getString(R.string.encrypted_form);
+                disabledMessage = context.getString(org.odk.collect.strings.R.string.encrypted_form);
             }
 
             setDisabled(view, disabledMessage);

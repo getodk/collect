@@ -18,7 +18,7 @@ import org.mockito.kotlin.verify
 class CrashHandlerTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>().also {
-        it.setTheme(R.style.Theme_MaterialComponents)
+        it.setTheme(com.google.android.material.R.style.Theme_MaterialComponents)
     }
 
     private val processKiller = mock<Runnable>()
@@ -55,7 +55,7 @@ class CrashHandlerTest {
         val view = createCrashHandler().getCrashView(context)
         assertThat(
             view!!.findViewById<TextView>(R.id.title).text,
-            equalTo(context.getString(R.string.crash_last_run))
+            equalTo(context.getString(org.odk.collect.strings.R.string.crash_last_run))
         )
         assertThat(view.findViewById<TextView>(R.id.message).text, equalTo("crash!"))
     }
@@ -105,7 +105,7 @@ class CrashHandlerTest {
         val view = crashHandler.getCrashView(context)
         assertThat(
             view!!.findViewById<TextView>(R.id.title).text,
-            equalTo(context.getString(R.string.cant_start_app))
+            equalTo(context.getString(org.odk.collect.strings.R.string.cant_start_app))
         )
         assertThat(view.findViewById<TextView>(R.id.message).text, equalTo("blah"))
     }

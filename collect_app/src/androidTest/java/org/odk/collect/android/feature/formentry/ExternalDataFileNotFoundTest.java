@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.formentry;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.rules.BlankFormTestRule;
@@ -23,8 +22,8 @@ public class ExternalDataFileNotFoundTest {
         String formsDirPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS);
 
         activityTestRule.startInFormEntry()
-                .assertText(R.string.file_missing, formsDirPath + "/external_data_questions-media/fruits.csv")
+                .assertText(org.odk.collect.strings.R.string.file_missing, formsDirPath + "/external_data_questions-media/fruits.csv")
                 .swipeToNextQuestion("External csv")
-                .assertText(R.string.file_missing, formsDirPath + "/external_data_questions-media/itemsets.csv");
+                .assertText(org.odk.collect.strings.R.string.file_missing, formsDirPath + "/external_data_questions-media/itemsets.csv");
     }
 }

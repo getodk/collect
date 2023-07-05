@@ -10,7 +10,6 @@ import androidx.test.core.app.ApplicationProvider;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.Reference;
 import org.javarosa.core.reference.ReferenceManager;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
@@ -69,7 +68,7 @@ public final class CollectHelpers {
     }
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
-        return RobolectricHelpers.createThemedActivity(clazz, R.style.Theme_MaterialComponents);
+        return RobolectricHelpers.createThemedActivity(clazz, com.google.android.material.R.style.Theme_MaterialComponents);
     }
 
     public static FragmentActivity createThemedActivity() {
@@ -78,14 +77,14 @@ public final class CollectHelpers {
 
     public static <T extends FragmentActivity> ActivityController<T> buildThemedActivity(Class<T> clazz) {
         ActivityController<T> activity = Robolectric.buildActivity(clazz);
-        activity.get().setTheme(R.style.Theme_MaterialComponents);
+        activity.get().setTheme(com.google.android.material.R.style.Theme_MaterialComponents);
 
         return activity;
     }
 
     public static <T extends FragmentActivity> ActivityController<T> buildThemedActivity(Class<T> clazz, Intent intent) {
         ActivityController<T> activity = Robolectric.buildActivity(clazz, intent);
-        activity.get().setTheme(R.style.Theme_MaterialComponents);
+        activity.get().setTheme(com.google.android.material.R.style.Theme_MaterialComponents);
 
         return activity;
     }

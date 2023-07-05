@@ -257,8 +257,8 @@ class SelectChoicesMapDataTest {
 
         val data = loadDataForPrompt(prompt)
         val item = data.getMappableItems().getOrAwaitValue()!![0]
-        assertThat(item.smallIcon, equalTo(R.drawable.ic_map_marker_small))
-        assertThat(item.largeIcon, equalTo(R.drawable.ic_map_marker_big))
+        assertThat(item.smallIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_small))
+        assertThat(item.largeIcon, equalTo(org.odk.collect.icons.R.drawable.ic_map_marker_big))
     }
 
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {

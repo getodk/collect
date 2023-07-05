@@ -27,7 +27,7 @@ class BlankFormListItemViewHolderTest {
         val binding = BlankFormListItemBinding.bind(viewHolder.itemView)
         assertThat(
             binding.formVersion.text,
-            equalTo(context.getString(R.string.version_number, "myVersion"))
+            equalTo(context.getString(org.odk.collect.strings.R.string.version_number, "myVersion"))
         )
     }
 
@@ -54,7 +54,7 @@ class BlankFormListItemViewHolderTest {
         val binding = BlankFormListItemBinding.bind(viewHolder.itemView)
         assertThat(
             binding.formId.text,
-            equalTo(context.getString(R.string.id_number, "myId"))
+            equalTo(context.getString(org.odk.collect.strings.R.string.id_number, "myId"))
         )
     }
 }

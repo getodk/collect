@@ -9,17 +9,15 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
-
 public class RecordingWarningDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         return new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle(R.string.recording)
-                .setMessage(R.string.recording_warning)
-                .setPositiveButton(R.string.ok, null)
+                .setTitle(org.odk.collect.strings.R.string.recording)
+                .setMessage(org.odk.collect.strings.R.string.recording_warning)
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                 .create();
     }
 }

@@ -25,8 +25,6 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
-
 import timber.log.Timber;
 
 public class LocationProvidersDisabledDialog extends DialogFragment {
@@ -59,13 +57,13 @@ public class LocationProvidersDisabledDialog extends DialogFragment {
         setCancelable(false);
 
         return new MaterialAlertDialogBuilder(getActivity())
-                .setIcon(R.drawable.ic_room_24dp)
-                .setTitle(R.string.provider_disabled_error)
-                .setMessage(R.string.location_providers_disabled_dialog_message)
-                .setPositiveButton(R.string.go_to_settings, (dialog, id) -> {
+                .setIcon(org.odk.collect.permissions.R.drawable.ic_room_24dp)
+                .setTitle(org.odk.collect.strings.R.string.provider_disabled_error)
+                .setMessage(org.odk.collect.strings.R.string.location_providers_disabled_dialog_message)
+                .setPositiveButton(org.odk.collect.strings.R.string.go_to_settings, (dialog, id) -> {
                     startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                 })
-                .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                .setNegativeButton(org.odk.collect.strings.R.string.cancel, (dialog, id) -> {
                 })
                 .create();
     }

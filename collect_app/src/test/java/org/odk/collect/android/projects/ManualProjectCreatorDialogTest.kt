@@ -38,23 +38,23 @@ class ManualProjectCreatorDialogTest {
 
     @get:Rule
     val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
+        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
 
     @Test
     fun `Password should be protected`() {
         val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onView(withHint(R.string.server_url)).inRoot(isDialog())
+            onView(withHint(org.odk.collect.strings.R.string.server_url)).inRoot(isDialog())
                 .perform(replaceText("123456789"))
-            onView(withHint(R.string.server_url)).inRoot(isDialog())
+            onView(withHint(org.odk.collect.strings.R.string.server_url)).inRoot(isDialog())
                 .check(matches(not(isPasswordHidden())))
 
-            onView(withHint(R.string.username)).inRoot(isDialog()).perform(replaceText("123456789"))
-            onView(withHint(R.string.username)).inRoot(isDialog())
+            onView(withHint(org.odk.collect.strings.R.string.username)).inRoot(isDialog()).perform(replaceText("123456789"))
+            onView(withHint(org.odk.collect.strings.R.string.username)).inRoot(isDialog())
                 .check(matches(not(isPasswordHidden())))
 
-            onView(withHint(R.string.password)).inRoot(isDialog()).perform(replaceText("123456789"))
-            onView(withHint(R.string.password)).inRoot(isDialog())
+            onView(withHint(org.odk.collect.strings.R.string.password)).inRoot(isDialog()).perform(replaceText("123456789"))
+            onView(withHint(org.odk.collect.strings.R.string.password)).inRoot(isDialog())
                 .check(matches(isPasswordHidden()))
         }
     }
@@ -64,7 +64,7 @@ class ManualProjectCreatorDialogTest {
         val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onView(withText(R.string.cancel)).inRoot(isDialog()).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.cancel)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(false))
         }
     }
@@ -85,11 +85,11 @@ class ManualProjectCreatorDialogTest {
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
 
-            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.add)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(true))
 
-            onView(withHint(R.string.server_url)).inRoot(isDialog()).perform(replaceText(" "))
-            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
+            onView(withHint(org.odk.collect.strings.R.string.server_url)).inRoot(isDialog()).perform(replaceText(" "))
+            onView(withText(org.odk.collect.strings.R.string.add)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(true))
         }
     }
@@ -98,13 +98,13 @@ class ManualProjectCreatorDialogTest {
     fun `When URL has no protocol, a toast is displayed`() {
         val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onView(withHint(R.string.server_url)).inRoot(isDialog())
+            onView(withHint(org.odk.collect.strings.R.string.server_url)).inRoot(isDialog())
                 .perform(replaceText("demo.getodk.org"))
-            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.add)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(true))
 
             val toastText = ShadowToast.getTextOfLatestToast()
-            assertThat(toastText, `is`(it.getString(R.string.url_error)))
+            assertThat(toastText, `is`(it.getString(org.odk.collect.strings.R.string.url_error)))
         }
     }
 
@@ -135,12 +135,12 @@ class ManualProjectCreatorDialogTest {
 
         val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onView(withHint(R.string.server_url)).inRoot(isDialog())
+            onView(withHint(org.odk.collect.strings.R.string.server_url)).inRoot(isDialog())
                 .perform(replaceText("https://my-server.com"))
-            onView(withHint(R.string.username)).inRoot(isDialog()).perform(replaceText("adam"))
-            onView(withHint(R.string.password)).inRoot(isDialog()).perform(replaceText("1234"))
+            onView(withHint(org.odk.collect.strings.R.string.username)).inRoot(isDialog()).perform(replaceText("adam"))
+            onView(withHint(org.odk.collect.strings.R.string.password)).inRoot(isDialog()).perform(replaceText("1234"))
 
-            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.add)).inRoot(isDialog()).perform(click())
             verify(projectCreator).createNewProject("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{},\"project\":{}}")
         }
     }
@@ -149,11 +149,11 @@ class ManualProjectCreatorDialogTest {
     fun `Server project creation goes to main menu`() {
         val scenario = launcherRule.launch(ManualProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onView(withHint(R.string.server_url)).inRoot(isDialog())
+            onView(withHint(org.odk.collect.strings.R.string.server_url)).inRoot(isDialog())
                 .perform(replaceText("https://my-server.com"))
 
             Intents.init()
-            onView(withText(R.string.add)).inRoot(isDialog()).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.add)).inRoot(isDialog()).perform(click())
             Intents.intended(IntentMatchers.hasComponent(MainMenuActivity::class.java.name))
             Intents.release()
         }

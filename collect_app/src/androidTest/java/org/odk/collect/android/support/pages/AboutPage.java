@@ -12,7 +12,7 @@ public class AboutPage extends Page<AboutPage> {
 
     @Override
     public AboutPage assertOnPage() {
-        assertText(R.string.about_preferences);
+        assertText(org.odk.collect.strings.R.string.about_preferences);
         return this;
     }
 
@@ -22,7 +22,7 @@ public class AboutPage extends Page<AboutPage> {
     }
 
     public OpenSourceLicensesPage clickOnOpenSourceLibrariesLicenses() {
-        onView(withText(R.string.all_open_source_licenses)).perform(click());
+        onView(withText(org.odk.collect.strings.R.string.all_open_source_licenses)).perform(click());
         return new OpenSourceLicensesPage();
     }
 }

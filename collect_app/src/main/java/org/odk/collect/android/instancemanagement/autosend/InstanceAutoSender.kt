@@ -48,13 +48,13 @@ class InstanceAutoSender(
                     when (e.type) {
                         SubmitException.Type.GOOGLE_ACCOUNT_NOT_SET -> {
                             val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
-                                FormUploadException(context.getString(R.string.google_set_account))
+                                FormUploadException(context.getString(org.odk.collect.strings.R.string.google_set_account))
                             }
                             notifier.onSubmission(result, projectDependencyProvider.projectId)
                         }
                         SubmitException.Type.GOOGLE_ACCOUNT_NOT_PERMITTED -> {
                             val result: Map<Instance, FormUploadException?> = toUpload.associateWith {
-                                FormUploadException(context.getString(R.string.odk_permissions_fail))
+                                FormUploadException(context.getString(org.odk.collect.strings.R.string.odk_permissions_fail))
                             }
                             notifier.onSubmission(result, projectDependencyProvider.projectId)
                         }

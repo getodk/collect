@@ -38,7 +38,7 @@ public class ServerPreferencesAdder {
             fragment.addPreferencesFromResource(R.xml.odk_server_preferences);
             return true;
         } catch (ClassCastException e) {
-            Toast.makeText(fragment.getActivity(), R.string.corrupt_imported_preferences_error, Toast.LENGTH_LONG).show();
+            Toast.makeText(fragment.getActivity(), org.odk.collect.strings.R.string.corrupt_imported_preferences_error, Toast.LENGTH_LONG).show();
             return false;
         }
     }

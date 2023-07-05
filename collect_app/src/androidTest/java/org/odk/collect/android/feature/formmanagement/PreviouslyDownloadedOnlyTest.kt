@@ -139,7 +139,7 @@ class PreviouslyDownloadedOnlyTest {
     fun whenPreviouslyDownloadedOnlyEnabled_getBlankFormsIsAvailable() {
         rule.startAtMainMenu()
             .enablePreviouslyDownloadedOnlyUpdates()
-            .assertText(R.string.get_forms)
+            .assertText(org.odk.collect.strings.R.string.get_forms)
     }
 
     @Test

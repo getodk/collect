@@ -68,13 +68,13 @@ class ProjectManagementPreferencesFragment :
                 }
                 DELETE_PROJECT_KEY -> {
                     val isGDProject = ProjectKeys.PROTOCOL_GOOGLE_SHEETS == settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL)
-                    val message = if (isGDProject) R.string.delete_google_drive_project_confirm_message else R.string.delete_project_confirm_message
+                    val message = if (isGDProject) org.odk.collect.strings.R.string.delete_google_drive_project_confirm_message else org.odk.collect.strings.R.string.delete_project_confirm_message
 
                     MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(R.string.delete_project)
+                        .setTitle(org.odk.collect.strings.R.string.delete_project)
                         .setMessage(message)
-                        .setNegativeButton(R.string.delete_project_no) { _: DialogInterface?, _: Int -> }
-                        .setPositiveButton(R.string.delete_project_yes) { _: DialogInterface?, _: Int -> deleteProject() }
+                        .setNegativeButton(org.odk.collect.strings.R.string.delete_project_no) { _: DialogInterface?, _: Int -> }
+                        .setPositiveButton(org.odk.collect.strings.R.string.delete_project_yes) { _: DialogInterface?, _: Int -> deleteProject() }
                         .show()
                 }
             }
@@ -89,16 +89,16 @@ class ProjectManagementPreferencesFragment :
         when (val deleteProjectResult = projectDeleter.deleteCurrentProject()) {
             is DeleteProjectResult.UnsentInstances -> {
                 MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.cannot_delete_project_title)
-                    .setMessage(R.string.cannot_delete_project_message_one)
-                    .setPositiveButton(R.string.ok, null)
+                    .setTitle(org.odk.collect.strings.R.string.cannot_delete_project_title)
+                    .setMessage(org.odk.collect.strings.R.string.cannot_delete_project_message_one)
+                    .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                     .show()
             }
             is DeleteProjectResult.RunningBackgroundJobs -> {
                 MaterialAlertDialogBuilder(requireActivity())
-                    .setTitle(R.string.cannot_delete_project_title)
-                    .setMessage(R.string.cannot_delete_project_message_two)
-                    .setPositiveButton(R.string.ok, null)
+                    .setTitle(org.odk.collect.strings.R.string.cannot_delete_project_title)
+                    .setMessage(org.odk.collect.strings.R.string.cannot_delete_project_message_two)
+                    .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                     .show()
             }
             is DeleteProjectResult.DeletedSuccessfully -> {
@@ -111,7 +111,7 @@ class ProjectManagementPreferencesFragment :
                     ToastUtils.showLongToast(
                         requireContext(),
                         getString(
-                            R.string.switched_project,
+                            org.odk.collect.strings.R.string.switched_project,
                             newCurrentProject.name
                         )
                     )

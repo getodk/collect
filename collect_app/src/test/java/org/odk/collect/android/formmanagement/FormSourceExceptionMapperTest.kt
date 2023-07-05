@@ -24,16 +24,16 @@ class FormSourceExceptionMapperTest {
 
     @Test
     fun fetchError_returnsGenericMessage() {
-        val expectedString = context.getString(R.string.report_to_project_lead)
+        val expectedString = context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(mapper.getMessage(FormSourceException.FetchError()), `is`(expectedString))
     }
 
     @Test
     fun unreachable_returnsUnknownHostMessage() {
         val expectedString = context.getString(
-            R.string.unreachable_error,
+            org.odk.collect.strings.R.string.unreachable_error,
             "http://unknown.com"
-        ) + " " + context.getString(R.string.report_to_project_lead)
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormSourceException.Unreachable("http://unknown.com")),
             `is`(expectedString)
@@ -43,9 +43,9 @@ class FormSourceExceptionMapperTest {
     @Test
     fun securityError_returnsSecurityMessage() {
         val expectedString = context.getString(
-            R.string.security_error,
+            org.odk.collect.strings.R.string.security_error,
             "http://unknown.com"
-        ) + " " + context.getString(R.string.report_to_project_lead)
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormSourceException.SecurityError("http://unknown.com")),
             `is`(expectedString)
@@ -55,10 +55,10 @@ class FormSourceExceptionMapperTest {
     @Test
     fun serverError_returnsServerErrorMessage() {
         val expectedString = context.getString(
-            R.string.server_error,
+            org.odk.collect.strings.R.string.server_error,
             "http://unknown.com",
             500
-        ) + " " + context.getString(R.string.report_to_project_lead)
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(
                 FormSourceException.ServerError(
@@ -73,9 +73,9 @@ class FormSourceExceptionMapperTest {
     @Test
     fun parseError_returnsParserErrorMessage() {
         val expectedString = context.getString(
-            R.string.invalid_response,
+            org.odk.collect.strings.R.string.invalid_response,
             "http://unknown.com"
-        ) + " " + context.getString(R.string.report_to_project_lead)
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormSourceException.ParseError("http://unknown.com")),
             `is`(expectedString)
@@ -86,7 +86,7 @@ class FormSourceExceptionMapperTest {
     fun serverNotOpenRosaError_returnsNotOpenRosaMessage() {
         val expectedString =
             "This server does not correctly implement the OpenRosa formList API. " + context.getString(
-                R.string.report_to_project_lead
+                org.odk.collect.strings.R.string.report_to_project_lead
             )
         assertThat(
             mapper.getMessage(FormSourceException.ServerNotOpenRosaError()),

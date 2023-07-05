@@ -7,7 +7,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.odk.collect.android.R;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 
 public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragment {
@@ -26,13 +25,13 @@ public class SaveFormProgressDialogFragment extends MaterialProgressDialogFragme
         viewModel = new ViewModelProvider(requireActivity(), viewModelFactory).get(FormSaveViewModel.class);
 
         setCancelable(false);
-        setTitle(getString(R.string.saving_form));
+        setTitle(getString(org.odk.collect.strings.R.string.saving_form));
 
         viewModel.getSaveResult().observe(this, result -> {
             if (result != null && result.getState() == SAVING && result.getMessage() != null) {
-                setMessage(getString(R.string.please_wait) + "\n\n" + result.getMessage());
+                setMessage(getString(org.odk.collect.strings.R.string.please_wait) + "\n\n" + result.getMessage());
             } else {
-                setMessage(getString(R.string.please_wait));
+                setMessage(getString(org.odk.collect.strings.R.string.please_wait));
             }
         });
     }

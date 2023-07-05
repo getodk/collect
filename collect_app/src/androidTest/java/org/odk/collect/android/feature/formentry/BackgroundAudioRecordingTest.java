@@ -20,7 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.pages.FormEndPage;
@@ -167,7 +166,7 @@ public class BackgroundAudioRecordingTest {
         rule.startAtMainMenu()
                 .copyForm("one-question-background-audio.xml")
                 .startBlankFormWithDialog("One Question")
-                .assertText(R.string.background_audio_permission_explanation)
+                .assertText(org.odk.collect.strings.R.string.background_audio_permission_explanation)
                 .clickOK(new FormEntryPage("One Question"));
 
         permissionsProvider.additionalExplanationClosed();

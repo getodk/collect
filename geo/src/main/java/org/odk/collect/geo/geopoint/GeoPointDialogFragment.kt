@@ -51,21 +51,21 @@ class GeoPointDialogFragment : DialogFragment() {
         }
 
         binding.threshold.text =
-            getString(R.string.point_will_be_saved, formatAccuracy(context, accuracyThreshold))
+            getString(org.odk.collect.strings.R.string.point_will_be_saved, formatAccuracy(context, accuracyThreshold))
 
         viewModel.timeElapsed.observe(this) {
             binding.time.text =
-                getString(R.string.time_elapsed, DateUtils.formatElapsedTime(it / 1000))
+                getString(org.odk.collect.strings.R.string.time_elapsed, DateUtils.formatElapsedTime(it / 1000))
         }
 
         viewModel.satellites.observe(this) {
-            binding.satellites.text = getString(R.string.satellites, it.toString())
+            binding.satellites.text = getString(org.odk.collect.strings.R.string.satellites, it.toString())
         }
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
-            .setPositiveButton(R.string.save) { _, _ -> viewModel.forceLocation() }
-            .setNegativeButton(R.string.cancel) { _, _ -> listener?.onCancel() }
+            .setPositiveButton(org.odk.collect.strings.R.string.save) { _, _ -> viewModel.forceLocation() }
+            .setNegativeButton(org.odk.collect.strings.R.string.cancel) { _, _ -> listener?.onCancel() }
             .setOnKeyListener(OnBackPressedKeyListener { listener?.onCancel() })
             .create()
 

@@ -22,11 +22,11 @@ class FormSavedSnackbarTest {
             .answerQuestion(0, "25")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .assertText(R.string.form_saved_as_draft)
-            .clickOnString(R.string.edit_form)
+            .assertText(org.odk.collect.strings.R.string.form_saved_as_draft)
+            .clickOnString(org.odk.collect.strings.R.string.edit_form)
             .assertText("25")
-            .assertText(R.string.jump_to_beginning)
-            .assertText(R.string.jump_to_end)
+            .assertText(org.odk.collect.strings.R.string.jump_to_beginning)
+            .assertText(org.odk.collect.strings.R.string.jump_to_end)
     }
 
     @Test
@@ -41,12 +41,12 @@ class FormSavedSnackbarTest {
             .clickOnForm("One Question")
             .clickGoToEnd()
             .clickFinalize()
-            .assertText(R.string.form_saved)
-            .clickOnString(R.string.view_form)
+            .assertText(org.odk.collect.strings.R.string.form_saved)
+            .clickOnString(org.odk.collect.strings.R.string.view_form)
             .assertText("25")
-            .assertTextDoesNotExist(R.string.jump_to_beginning)
-            .assertTextDoesNotExist(R.string.jump_to_end)
-            .assertText(R.string.exit)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end)
+            .assertText(org.odk.collect.strings.R.string.exit)
     }
 
     @Test
@@ -56,10 +56,10 @@ class FormSavedSnackbarTest {
             .startBlankForm("One Question")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .assertText(R.string.form_saved_as_draft)
+            .assertText(org.odk.collect.strings.R.string.form_saved_as_draft)
             .closeSnackbar()
-            .assertTextDoesNotExist(R.string.form_saved_as_draft)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_saved_as_draft)
             .rotateToLandscape(MainMenuPage())
-            .assertTextDoesNotExist(R.string.form_saved_as_draft)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_saved_as_draft)
     }
 }

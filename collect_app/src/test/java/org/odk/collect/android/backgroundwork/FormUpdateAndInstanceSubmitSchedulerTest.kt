@@ -34,7 +34,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         generalSettings.save(KEY_FORM_UPDATE_MODE, PREVIOUSLY_DOWNLOADED_ONLY.getValue(application))
         generalSettings.save(
             KEY_PERIODIC_FORM_UPDATES_CHECK,
-            application.getString(R.string.every_one_hour_value)
+            application.getString(org.odk.collect.strings.R.string.every_one_hour_value)
         )
 
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)
@@ -72,7 +72,7 @@ class FormUpdateAndInstanceSubmitSchedulerTest {
         generalSettings.save(KEY_FORM_UPDATE_MODE, MATCH_EXACTLY.getValue(application))
         generalSettings.save(
             KEY_PERIODIC_FORM_UPDATES_CHECK,
-            application.getString(R.string.every_one_hour_value)
+            application.getString(org.odk.collect.strings.R.string.every_one_hour_value)
         )
 
         val manager = FormUpdateAndInstanceSubmitScheduler(scheduler, settingsProvider, application)

@@ -3,7 +3,6 @@ package org.odk.collect.android.regression;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.AccessControlPage;
@@ -28,14 +27,14 @@ public class ResetApplicationTest {
                 .clickSettings()
                 .clickProjectManagement()
                 .clickOnResetApplication()
-                .assertText(R.string.reset_settings_dialog_title)
-                .assertDisabled(R.string.reset_settings_button_reset)
+                .assertText(org.odk.collect.strings.R.string.reset_settings_dialog_title)
+                .assertDisabled(org.odk.collect.strings.R.string.reset_settings_button_reset)
                 .rotateToLandscape(new ResetApplicationDialog())
-                .assertText(R.string.reset_settings_dialog_title)
-                .assertDisabled(R.string.reset_settings_button_reset)
+                .assertText(org.odk.collect.strings.R.string.reset_settings_dialog_title)
+                .assertDisabled(org.odk.collect.strings.R.string.reset_settings_button_reset)
                 .rotateToPortrait(new ResetApplicationDialog())
-                .assertText(R.string.reset_settings_dialog_title)
-                .assertDisabled(R.string.reset_settings_button_reset);
+                .assertText(org.odk.collect.strings.R.string.reset_settings_dialog_title)
+                .assertDisabled(org.odk.collect.strings.R.string.reset_settings_button_reset);
     }
 
     @Test
@@ -54,10 +53,10 @@ public class ResetApplicationTest {
                 .clickSettings()
                 .clickProjectManagement()
                 .clickOnResetApplication()
-                .assertDisabled(R.string.reset_settings_button_reset)
-                .clickOnString(R.string.reset_saved_forms)
-                .clickOnString(R.string.reset_blank_forms)
-                .clickOnString(R.string.reset_settings_button_reset)
+                .assertDisabled(org.odk.collect.strings.R.string.reset_settings_button_reset)
+                .clickOnString(org.odk.collect.strings.R.string.reset_saved_forms)
+                .clickOnString(org.odk.collect.strings.R.string.reset_blank_forms)
+                .clickOnString(org.odk.collect.strings.R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
         new MainMenuPage()
                 .clickFillBlankForm()
@@ -87,8 +86,8 @@ public class ResetApplicationTest {
                 .clickSettings()
                 .clickProjectManagement()
                 .clickOnResetApplication()
-                .clickOnString(R.string.reset_settings)
-                .clickOnString(R.string.reset_settings_button_reset)
+                .clickOnString(org.odk.collect.strings.R.string.reset_settings)
+                .clickOnString(org.odk.collect.strings.R.string.reset_settings_button_reset)
                 .clickOKOnDialog();
         new MainMenuPage()
                 .openProjectSettingsDialog()
@@ -103,16 +102,16 @@ public class ResetApplicationTest {
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickOnUserInterface()
-                .assertText(R.string.theme_system)
+                .assertText(org.odk.collect.strings.R.string.theme_system)
                 .clickOnTheme()
-                .clickOnString(R.string.theme_dark);
+                .clickOnString(org.odk.collect.strings.R.string.theme_dark);
 
         new MainMenuPage()
                 .assertOnPage()
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickOnUserInterface()
-                .assertText(R.string.theme_dark)
+                .assertText(org.odk.collect.strings.R.string.theme_dark)
                 .clickOnLanguage()
                 .clickOnSelectedLanguage("español")
 
@@ -126,16 +125,16 @@ public class ResetApplicationTest {
                 .clickSettings()
                 .clickProjectManagement()
                 .clickOnResetApplication()
-                .clickOnString(R.string.reset_settings)
-                .clickOnString(R.string.reset_settings_button_reset)
+                .clickOnString(org.odk.collect.strings.R.string.reset_settings)
+                .clickOnString(org.odk.collect.strings.R.string.reset_settings_button_reset)
                 .clickOKOnDialog(new MainMenuPage())
 
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickOnUserInterface()
-                .assertText(R.string.theme_system)
-                .assertTextDoesNotExist(R.string.theme_dark)
-                .assertText(R.string.use_device_language)
+                .assertText(org.odk.collect.strings.R.string.theme_system)
+                .assertTextDoesNotExist(org.odk.collect.strings.R.string.theme_dark)
+                .assertText(org.odk.collect.strings.R.string.use_device_language)
                 .assertTextDoesNotExist("español");
     }
 }

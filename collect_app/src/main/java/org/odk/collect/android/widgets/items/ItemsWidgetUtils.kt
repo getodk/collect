@@ -20,10 +20,10 @@ object ItemsWidgetUtils {
         return try {
             selectChoiceLoader.loadSelectChoices(prompt)
         } catch (e: FileNotFoundException) {
-            widget.showWarning(widget.context.getString(R.string.file_missing, e.message))
+            widget.showWarning(widget.context.getString(org.odk.collect.strings.R.string.file_missing, e.message))
             emptyList()
         } catch (e: XPathSyntaxException) {
-            widget.showWarning(widget.context.getString(R.string.parser_exception, e.message))
+            widget.showWarning(widget.context.getString(org.odk.collect.strings.R.string.parser_exception, e.message))
             emptyList()
         } catch (e: ExternalDataException) {
             widget.showWarning(e.message)

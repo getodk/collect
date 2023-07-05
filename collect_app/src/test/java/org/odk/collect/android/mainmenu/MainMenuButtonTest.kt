@@ -19,7 +19,7 @@ import org.robolectric.Robolectric
 class MainMenuButtonTest {
     private val context: Application =
         ApplicationProvider.getApplicationContext<Application>().also {
-            it.setTheme(R.style.Theme_Material3_Light)
+            it.setTheme(com.google.android.material.R.style.Theme_Material3_Light)
         }
 
     @Test

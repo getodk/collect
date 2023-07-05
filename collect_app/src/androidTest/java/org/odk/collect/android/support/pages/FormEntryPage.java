@@ -40,15 +40,15 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public FormEntryPage assertOnPage() {
         // Make sure we wait for loading to finish
         WaitFor.waitFor((Callable<Void>) () -> {
-            assertTextDoesNotExist(R.string.loading_form);
+            assertTextDoesNotExist(org.odk.collect.strings.R.string.loading_form);
             return null;
         });
 
         assertToolbarTitle(formName);
 
         // Check we are not on the Form Hierarchy page
-        assertTextDoesNotExist(R.string.jump_to_beginning);
-        assertTextDoesNotExist(R.string.jump_to_end);
+        assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning);
+        assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end);
         
         return this;
     }
@@ -147,11 +147,11 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOptionsIcon() {
-        return clickOptionsIcon(R.string.project_settings);
+        return clickOptionsIcon(org.odk.collect.strings.R.string.project_settings);
     }
 
     public ProjectSettingsPage clickGeneralSettings() {
-        onView(withText(getTranslatedString(R.string.project_settings))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.project_settings))).perform(click());
         return new ProjectSettingsPage().assertOnPage();
     }
 
@@ -184,23 +184,23 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage deleteGroup(String questionText) {
         onView(withText(questionText)).perform(longClick());
-        onView(withText(R.string.delete_repeat)).perform(click());
-        clickOnButtonInDialog(R.string.discard_group, this);
+        onView(withText(org.odk.collect.strings.R.string.delete_repeat)).perform(click());
+        clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_group, this);
         return this;
     }
 
     public FormEntryPage clickForwardButton() {
-        onView(withText(getTranslatedString(R.string.form_forward))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.form_forward))).perform(click());
         return this;
     }
 
     public FormEndPage clickForwardButtonToEndScreen() {
-        onView(withText(getTranslatedString(R.string.form_forward))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.form_forward))).perform(click());
         return new FormEndPage(formName).assertOnPage();
     }
 
     public FormEntryPage clickBackwardButton() {
-        onView(withText(getTranslatedString(R.string.form_backward))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.form_backward))).perform(click());
         return this;
     }
 
@@ -253,8 +253,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage removeResponse() {
-        onView(withText(R.string.clear_answer)).perform(click());
-        return clickOnButtonInDialog(R.string.discard_answer, this);
+        onView(withText(org.odk.collect.strings.R.string.clear_answer)).perform(click());
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_answer, this);
     }
 
     public AddNewRepeatDialog swipeToNextQuestionWithRepeatGroup(String repeatName) {
@@ -352,12 +352,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public OkDialog swipeToEndScreenWhileRecording() {
         flingLeft();
         OkDialog okDialog = new OkDialog().assertOnPage();
-        assertText(R.string.recording_warning);
+        assertText(org.odk.collect.strings.R.string.recording_warning);
         return okDialog;
     }
 
     public CancelRecordingDialog clickRecordAudio() {
-        clickOnString(R.string.record_audio);
+        clickOnString(org.odk.collect.strings.R.string.record_audio);
         return new CancelRecordingDialog(formName);
     }
 
@@ -411,7 +411,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage assertBackgroundLocationSnackbarShown() {
         onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(R.string.background_location_enabled), "⋮"))));
+                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
         return this;
     }
 

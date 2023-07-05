@@ -147,7 +147,7 @@ class MainMenuActivity : LocalizedActivity() {
         (projectsMenuItem.actionView as ProjectIconView).apply {
             project = currentProjectViewModel.currentProject.value
             setOnClickListener { onOptionsItemSelected(projectsMenuItem) }
-            contentDescription = getString(R.string.projects)
+            contentDescription = getString(org.odk.collect.strings.R.string.projects)
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -271,7 +271,7 @@ class MainMenuActivity : LocalizedActivity() {
     private fun initAppName() {
         binding.appName.text = String.format(
             "%s %s",
-            getString(R.string.collect_app_name),
+            getString(org.odk.collect.strings.R.string.collect_app_name),
             mainMenuViewModel.version
         )
 

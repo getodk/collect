@@ -64,7 +64,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
         render();
 
-        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, R.string.annotate_image);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_ANNOTATE, RequestCodes.ANNOTATE_IMAGE, org.odk.collect.strings.R.string.annotate_image);
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         updateAnswer();
@@ -75,11 +75,11 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), getAnswerFontSize(), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(R.string.choose_image), getAnswerFontSize(), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), getAnswerFontSize(), this);
 
-        annotateButton = createSimpleButton(getContext(), R.id.markup_image, questionDetails.isReadOnly(), getContext().getString(R.string.markup_image), getAnswerFontSize(), this);
+        annotateButton = createSimpleButton(getContext(), R.id.markup_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), getAnswerFontSize(), this);
 
         annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
 
@@ -109,7 +109,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         annotateButton.setEnabled(false);
 
         // reset buttons
-        captureButton.setText(getContext().getString(R.string.capture_image));
+        captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
     }
 
     @Override
@@ -133,7 +133,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         if (buttonId == R.id.capture_image) {
             getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage);
         } else if (buttonId == R.id.choose_image) {
-            imageCaptureHandler.chooseImage(R.string.annotate_image);
+            imageCaptureHandler.chooseImage(org.odk.collect.strings.R.string.annotate_image);
         }
     }
 
@@ -182,7 +182,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
             Timber.e(e);
         }
 
-        imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.annotate_image);
+        imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.annotate_image);
     }
 
     @Override

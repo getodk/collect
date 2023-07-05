@@ -16,7 +16,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.RunnableRule;
@@ -57,9 +56,9 @@ public class ExternalAudioRecordingTest {
         new MainMenuPage()
                 .copyForm("external-audio-question.xml")
                 .startBlankForm("External Audio Question")
-                .clickOnString(R.string.capture_audio)
-                .assertContentDescriptionNotDisplayed(R.string.stop_recording)
-                .assertTextDoesNotExist(R.string.capture_audio)
-                .assertContentDescriptionDisplayed(R.string.play_audio);
+                .clickOnString(org.odk.collect.strings.R.string.capture_audio)
+                .assertContentDescriptionNotDisplayed(org.odk.collect.strings.R.string.stop_recording)
+                .assertTextDoesNotExist(org.odk.collect.strings.R.string.capture_audio)
+                .assertContentDescriptionDisplayed(org.odk.collect.strings.R.string.play_audio);
     }
 }

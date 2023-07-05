@@ -55,6 +55,7 @@ dependencies {
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.timber
     implementation Dependencies.play_services_location
+    implementation Dependencies.android_material
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
 }

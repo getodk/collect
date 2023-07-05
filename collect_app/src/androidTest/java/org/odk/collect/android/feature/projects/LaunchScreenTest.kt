@@ -62,7 +62,7 @@ class LaunchScreenTest {
             .clickConfigureWithQrCode()
 
         stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
-        page.checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
+        page.checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "my-server.com")
 
         MainMenuPage()
             .assertOnPage()

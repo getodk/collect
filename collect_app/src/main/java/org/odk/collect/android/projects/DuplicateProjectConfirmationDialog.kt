@@ -26,10 +26,10 @@ class DuplicateProjectConfirmationDialog : DialogFragment() {
         val matchingProject = arguments?.getString(MATCHING_PROJECT, "") ?: ""
 
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.duplicate_project)
-            .setMessage(R.string.duplicate_project_details)
-            .setPositiveButton(R.string.add_duplicate_project) { _, _ -> listener.createProject(settingsJson) }
-            .setNegativeButton(R.string.switch_to_existing) { _, _ ->
+            .setTitle(org.odk.collect.strings.R.string.duplicate_project)
+            .setMessage(org.odk.collect.strings.R.string.duplicate_project_details)
+            .setPositiveButton(org.odk.collect.strings.R.string.add_duplicate_project) { _, _ -> listener.createProject(settingsJson) }
+            .setNegativeButton(org.odk.collect.strings.R.string.switch_to_existing) { _, _ ->
                 run {
                     listener.switchToProject(matchingProject)
                     Analytics.log(AnalyticsEvents.DUPLICATE_PROJECT_SWITCH)

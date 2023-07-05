@@ -95,7 +95,7 @@ class NotificationManagerNotifier(
             notificationManager.createNotificationChannel(
                 NotificationChannel(
                     COLLECT_NOTIFICATION_CHANNEL,
-                    application.getLocalizedString(R.string.notification_channel_name),
+                    application.getLocalizedString(org.odk.collect.strings.R.string.notification_channel_name),
                     NotificationManager.IMPORTANCE_DEFAULT
                 )
             )

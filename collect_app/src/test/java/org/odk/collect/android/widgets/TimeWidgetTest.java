@@ -11,7 +11,6 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.WidgetTestActivity;
@@ -58,7 +57,7 @@ public class TimeWidgetTest {
     @Test
     public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.timeButton.getText(), widget.getContext().getString(R.string.select_time));
+        assertEquals(widget.binding.timeButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.select_time));
     }
 
     @Test
@@ -75,7 +74,7 @@ public class TimeWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoTimeSelected() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_time_selected));
     }
 
     @Test
@@ -106,7 +105,7 @@ public class TimeWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new TimeData(timeAnswer.toDateTime().toDate())));
         widget.clearAnswer();
-        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.timeAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_time_selected));
     }
 
     @Test

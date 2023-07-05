@@ -43,7 +43,7 @@ object Defaults {
             // server_preferences.xml
             hashMap[ProjectKeys.KEY_PROTOCOL] = ProjectKeys.PROTOCOL_SERVER
             // user_interface_preferences.xml
-            hashMap[ProjectKeys.KEY_APP_THEME] = Collect.getInstance().getString(R.string.app_theme_system)
+            hashMap[ProjectKeys.KEY_APP_THEME] = Collect.getInstance().getString(org.odk.collect.strings.R.string.app_theme_system)
             hashMap[ProjectKeys.KEY_APP_LANGUAGE] = ""
             hashMap[ProjectKeys.KEY_FONT_SIZE] = QuestionFontSizeUtils.DEFAULT_FONT_SIZE.toString()
             hashMap[ProjectKeys.KEY_NAVIGATION] = ProjectKeys.NAVIGATION_BOTH

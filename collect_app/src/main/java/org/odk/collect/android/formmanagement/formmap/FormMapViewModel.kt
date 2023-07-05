@@ -45,7 +45,7 @@ class FormMapViewModel(
     }
 
     override fun getItemType(): String {
-        return resources.getString(R.string.saved_forms)
+        return resources.getString(org.odk.collect.strings.R.string.saved_forms)
     }
 
     override fun getItemCount(): NonNullLiveData<Int> {
@@ -109,7 +109,7 @@ class FormMapViewModel(
         )
 
         return if (instance.deletedDate != null) {
-            val deletedTime = resources.getString(R.string.deleted_on_date_at_time)
+            val deletedTime = resources.getString(org.odk.collect.strings.R.string.deleted_on_date_at_time)
             val dateFormat = SimpleDateFormat(
                 deletedTime,
                 Locale.getDefault()
@@ -137,7 +137,7 @@ class FormMapViewModel(
                 Instance.STATUS_SUBMITTED
             ).contains(instance.status)
         ) {
-            val info = resources.getString(R.string.cannot_edit_completed_form)
+            val info = resources.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form)
             MappableSelectItem.WithInfo(
                 instance.dbId,
                 latitude,
@@ -181,7 +181,7 @@ class FormMapViewModel(
     private fun createViewAction(): MappableSelectItem.IconifiedText {
         return MappableSelectItem.IconifiedText(
             R.drawable.ic_visibility,
-            resources.getString(R.string.view_data)
+            resources.getString(org.odk.collect.strings.R.string.view_data)
         )
     }
 
@@ -191,7 +191,7 @@ class FormMapViewModel(
 
         return MappableSelectItem.IconifiedText(
             if (canEditSaved) R.drawable.ic_edit else R.drawable.ic_visibility,
-            resources.getString(if (canEditSaved) R.string.edit_data else R.string.view_data)
+            resources.getString(if (canEditSaved) org.odk.collect.strings.R.string.edit_data else org.odk.collect.strings.R.string.view_data)
         )
     }
 
@@ -201,7 +201,7 @@ class FormMapViewModel(
             Instance.STATUS_COMPLETE -> if (enlarged) R.drawable.ic_room_form_state_complete_48dp else R.drawable.ic_room_form_state_complete_24dp
             Instance.STATUS_SUBMITTED -> if (enlarged) R.drawable.ic_room_form_state_submitted_48dp else R.drawable.ic_room_form_state_submitted_24dp
             Instance.STATUS_SUBMISSION_FAILED -> if (enlarged) R.drawable.ic_room_form_state_submission_failed_48dp else R.drawable.ic_room_form_state_submission_failed_24dp
-            else -> R.drawable.ic_map_point
+            else -> org.odk.collect.icons.R.drawable.ic_map_point
         }
     }
 

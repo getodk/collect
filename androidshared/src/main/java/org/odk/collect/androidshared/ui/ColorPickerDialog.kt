@@ -39,9 +39,9 @@ class ColorPickerDialog : DialogFragment() {
 
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
-            .setTitle(R.string.project_color)
-            .setNegativeButton(R.string.cancel) { _, _ -> dismiss() }
-            .setPositiveButton(R.string.ok) { _, _ -> model.pickColor("#${binding.hexColor.text}") }
+            .setTitle(org.odk.collect.strings.R.string.project_color)
+            .setNegativeButton(org.odk.collect.strings.R.string.cancel) { _, _ -> dismiss() }
+            .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ -> model.pickColor("#${binding.hexColor.text}") }
             .create()
     }
 
@@ -80,7 +80,7 @@ class ColorPickerDialog : DialogFragment() {
                 it.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
             }
         } catch (e: Exception) {
-            binding.hexColor.error = getString(R.string.invalid_hex_code)
+            binding.hexColor.error = getString(org.odk.collect.strings.R.string.invalid_hex_code)
             (dialog as? AlertDialog)?.also {
                 it.getButton(AlertDialog.BUTTON_POSITIVE).alpha = 0.3f
                 it.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false

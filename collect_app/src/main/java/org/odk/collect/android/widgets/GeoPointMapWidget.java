@@ -24,7 +24,6 @@ import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -66,14 +65,14 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
             if (getFormEntryPrompt().isReadOnly()) {
                 binding.simpleButton.setVisibility(View.GONE);
             } else {
-                binding.simpleButton.setText(R.string.get_point);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
             }
             answerText = null;
         } else {
             if (getFormEntryPrompt().isReadOnly()) {
-                binding.simpleButton.setText(R.string.geopoint_view_read_only);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.geopoint_view_read_only);
             } else {
-                binding.simpleButton.setText(R.string.view_change_location);
+                binding.simpleButton.setText(org.odk.collect.strings.R.string.view_change_location);
             }
 
             binding.geoAnswerText.setText(answerToDisplay);
@@ -94,7 +93,7 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
     public void clearAnswer() {
         answerText = null;
         binding.geoAnswerText.setText(null);
-        binding.simpleButton.setText(R.string.get_point);
+        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
         widgetValueChanged();
     }
 
@@ -117,11 +116,11 @@ public class GeoPointMapWidget extends QuestionWidget implements WidgetDataRecei
         if (answerToDisplay.isEmpty()) {
             answerText = null;
             binding.geoAnswerText.setText("");
-            binding.simpleButton.setText(R.string.get_point);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
         } else {
             answerText = answer.toString();
             binding.geoAnswerText.setText(answerToDisplay);
-            binding.simpleButton.setText(R.string.view_change_location);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.view_change_location);
         }
         widgetValueChanged();
     }

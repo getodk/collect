@@ -28,7 +28,6 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
-import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -258,11 +257,11 @@ public class LikertWidget extends QuestionWidget {
                     imageView.setImageBitmap(b);
                 } else if (errorMsg == null) {
                     // Loading the image failed. The image work when in .jpg format
-                    errorMsg = getContext().getString(R.string.file_invalid, imageFile);
+                    errorMsg = getContext().getString(org.odk.collect.strings.R.string.file_invalid, imageFile);
 
                 }
             } else {
-                errorMsg = getContext().getString(R.string.file_missing, imageFile);
+                errorMsg = getContext().getString(org.odk.collect.strings.R.string.file_missing, imageFile);
             }
             if (errorMsg != null) {
                 Timber.e(new Error(errorMsg));

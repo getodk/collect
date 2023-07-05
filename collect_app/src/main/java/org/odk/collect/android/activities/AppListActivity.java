@@ -114,9 +114,9 @@ public abstract class AppListActivity extends LocalizedActivity {
     // Function to toggle button label
     public static void toggleButtonLabel(Button toggleButton, ListView lv) {
         if (lv.getCheckedItemCount() != lv.getCount()) {
-            toggleButton.setText(R.string.select_all);
+            toggleButton.setText(org.odk.collect.strings.R.string.select_all);
         } else {
-            toggleButton.setText(R.string.clear_all);
+            toggleButton.setText(org.odk.collect.strings.R.string.clear_all);
         }
     }
 
@@ -179,7 +179,7 @@ public abstract class AppListActivity extends LocalizedActivity {
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint(getResources().getString(R.string.search));
+        searchView.setQueryHint(getResources().getString(org.odk.collect.strings.R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

@@ -144,7 +144,7 @@ class MainMenuActivityTest {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button = activity.findViewById<StartNewFormButton>(R.id.enter_data)
-            assertThat(button.text, `is`(activity.getString(R.string.enter_data)))
+            assertThat(button.text, `is`(activity.getString(org.odk.collect.strings.R.string.enter_data)))
         }
     }
 
@@ -170,7 +170,7 @@ class MainMenuActivityTest {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button = activity.findViewById<MainMenuButton>(R.id.review_data)
-            assertThat(button.text, `is`(activity.getString(R.string.review_data)))
+            assertThat(button.text, `is`(activity.getString(org.odk.collect.strings.R.string.review_data)))
         }
     }
 
@@ -197,7 +197,7 @@ class MainMenuActivityTest {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button = activity.findViewById<MainMenuButton>(R.id.send_data)
-            assertThat(button.text, `is`(activity.getString(R.string.send_data)))
+            assertThat(button.text, `is`(activity.getString(org.odk.collect.strings.R.string.send_data)))
         }
     }
 
@@ -223,7 +223,7 @@ class MainMenuActivityTest {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button = activity.findViewById<MainMenuButton>(R.id.view_sent_forms)
-            assertThat(button.text, `is`(activity.getString(R.string.view_sent_forms)))
+            assertThat(button.text, `is`(activity.getString(org.odk.collect.strings.R.string.view_sent_forms)))
         }
     }
 
@@ -250,7 +250,7 @@ class MainMenuActivityTest {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button = activity.findViewById<MainMenuButton>(R.id.get_forms)
-            assertThat(button.text, `is`(activity.getString(R.string.get_forms)))
+            assertThat(button.text, `is`(activity.getString(org.odk.collect.strings.R.string.get_forms)))
         }
     }
 
@@ -276,7 +276,7 @@ class MainMenuActivityTest {
         val scenario = launcherRule.launch(MainMenuActivity::class.java)
         scenario.onActivity { activity: MainMenuActivity ->
             val button = activity.findViewById<MainMenuButton>(R.id.manage_forms)
-            assertThat(button.text, `is`(activity.getString(R.string.manage_files)))
+            assertThat(button.text, `is`(activity.getString(org.odk.collect.strings.R.string.manage_files)))
         }
     }
 

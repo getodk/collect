@@ -18,7 +18,7 @@ class ShadowAndroidXAlertDialogTest {
     @Test
     fun `getView returns view set on builder`() {
         val context = RuntimeEnvironment.getApplication().also {
-            it.setTheme(R.style.Theme_AppCompat)
+            it.setTheme(androidx.appcompat.R.style.Theme_AppCompat)
         }
 
         val view = View(context)

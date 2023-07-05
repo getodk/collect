@@ -30,7 +30,6 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.SelectImageMapWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -218,7 +217,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
             return convertDocumentToString(document);
         } catch (Exception e) {
             Timber.w(e);
-            return getContext().getString(R.string.svg_file_does_not_exist);
+            return getContext().getString(org.odk.collect.strings.R.string.svg_file_does_not_exist);
         }
     }
 
@@ -256,7 +255,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
         if (!selections.isEmpty()) {
             stringBuilder
                     .append("<b>")
-                    .append(getContext().getString(R.string.selected))
+                    .append(getContext().getString(org.odk.collect.strings.R.string.selected))
                     .append("</b> ");
             for (Selection selection : selections) {
                 String answer = getFormEntryPrompt().getSelectChoiceText(selection.choice);

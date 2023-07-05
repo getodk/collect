@@ -102,7 +102,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
         basemapSourcePref = PrefUtils.createListPref(
             requireContext(),
             KEY_BASEMAP_SOURCE,
-            getString(R.string.basemap_source),
+            getString(org.odk.collect.strings.R.string.basemap_source),
             MapConfiguratorProvider.getLabelIds(),
             MapConfiguratorProvider.getIds(),
             settingsProvider.getUnprotectedSettings()
@@ -174,7 +174,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
     private fun updateReferenceLayerSummary(value: Any?) {
         if (referenceLayerPref != null) {
             val summary: String = if (value == null) {
-                getString(R.string.none)
+                getString(org.odk.collect.strings.R.string.none)
             } else {
                 val referenceLayer = referenceLayerRepository.get(value.toString())
 
@@ -183,7 +183,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
                     val cftor = MapConfiguratorProvider.getConfigurator()
                     cftor.getDisplayName(File(path))
                 } else {
-                    getString(R.string.none)
+                    getString(org.odk.collect.strings.R.string.none)
                 }
             }
 

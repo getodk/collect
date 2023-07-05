@@ -34,7 +34,7 @@ public final class WidgetViewUtils {
 
     public static int getStandardMargin(Context context) {
         Resources resources = context.getResources();
-        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(R.dimen.margin_standard));
+        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(org.odk.collect.androidshared.R.dimen.margin_standard));
 
         return marginStandard - WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER;
     }

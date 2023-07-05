@@ -14,7 +14,6 @@ import androidx.preference.Preference;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.common.collect.ImmutableSet;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.maps.MapConfigurator;
@@ -46,7 +45,7 @@ class GoogleMapConfigurator implements MapConfigurator {
     @Override public void showUnavailableMessage(Context context) {
         if (!isGoogleMapsSdkAvailable(context)) {
             ToastUtils.showLongToast(context, context.getString(
-                R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
+                org.odk.collect.strings.R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
         }
         if (!isGooglePlayServicesAvailable(context)) {
             new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(context);
@@ -72,7 +71,7 @@ class GoogleMapConfigurator implements MapConfigurator {
             values[i] = Integer.toString(options[i].mapType);
         }
         String prefTitle = context.getString(
-            R.string.map_style_label, context.getString(sourceLabelId));
+            org.odk.collect.strings.R.string.map_style_label, context.getString(sourceLabelId));
         return Collections.singletonList(createListPref(
             context, prefKey, prefTitle, labelIds, values, settings
         ));

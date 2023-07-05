@@ -40,6 +40,6 @@ public class ContextMenuTest {
         activityTestRule.startInFormEntry()
                 .assertOnPage()
                 .longPressOnQuestion(R.id.answer_container, 0)
-                .assertTextDoesNotExist(R.string.clear_answer);
+                .assertTextDoesNotExist(org.odk.collect.strings.R.string.clear_answer);
     }
 }

@@ -74,7 +74,7 @@ class SendFinalizedFormTest {
             .clickViewSentForm(1)
             .clickOnForm("One Question")
             .assertText("123")
-            .assertText(R.string.exit)
+            .assertText(org.odk.collect.strings.R.string.exit)
     }
 
     @Test
@@ -104,7 +104,7 @@ class SendFinalizedFormTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickFormManagement()
-            .scrollToRecyclerViewItemAndClickText(R.string.delete_after_send)
+            .scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.delete_after_send)
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .copyForm("one-question.xml", projectName = testDependencies.server.hostName)

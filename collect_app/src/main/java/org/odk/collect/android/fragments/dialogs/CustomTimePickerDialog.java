@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.viewmodels.DateTimeViewModel;
@@ -59,7 +58,7 @@ public class CustomTimePickerDialog extends DialogFragment {
         TimePickerDialog dialog = new TimePickerDialog(requireContext(), viewModel.getDialogTheme(), viewModel.getTimeSetListener(),
                 viewModel.getLocalDateTime().getHourOfDay(), viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 
-        dialog.setTitle(requireContext().getString(R.string.select_time));
+        dialog.setTitle(requireContext().getString(org.odk.collect.strings.R.string.select_time));
         fixSpinner(requireContext(), dialog, viewModel.getLocalDateTime().getHourOfDay(),
                 viewModel.getLocalDateTime().getMinuteOfHour(), DateFormat.is24HourFormat(requireContext()));
 

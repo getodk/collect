@@ -37,8 +37,8 @@ class ExternalAppRecordingRequester(
                         Toast.makeText(
                             activity,
                             activity.getString(
-                                R.string.activity_not_found,
-                                activity.getString(R.string.capture_audio)
+                                org.odk.collect.strings.R.string.activity_not_found,
+                                activity.getString(org.odk.collect.strings.R.string.capture_audio)
                             ),
                             Toast.LENGTH_SHORT
                         ).show()

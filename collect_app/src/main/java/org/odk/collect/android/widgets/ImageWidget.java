@@ -78,9 +78,9 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = Appearances.isFrontCameraAppearance(getFormEntryPrompt());
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(R.string.capture_image), getAnswerFontSize(), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), getAnswerFontSize(), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(R.string.choose_image), getAnswerFontSize(), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), getAnswerFontSize(), this);
 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
@@ -104,7 +104,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons
-        captureButton.setText(getContext().getString(R.string.capture_image));
+        captureButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_image));
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         if (buttonId == R.id.capture_image) {
             getPermissionsProvider().requestCameraPermission((Activity) getContext(), this::captureImage);
         } else if (buttonId == R.id.choose_image) {
-            imageCaptureHandler.chooseImage(R.string.choose_image);
+            imageCaptureHandler.chooseImage(org.odk.collect.strings.R.string.choose_image);
         }
     }
 
@@ -141,7 +141,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         if (selfie && new CameraUtils().isFrontCameraAvailable(getContext())) {
             Intent intent = new Intent(getContext(), CaptureSelfieActivity.class);
             intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
-            imageCaptureHandler.captureImage(intent, RequestCodes.MEDIA_FILE_PATH, R.string.capture_image);
+            imageCaptureHandler.captureImage(intent, RequestCodes.MEDIA_FILE_PATH, org.odk.collect.strings.R.string.capture_image);
         } else {
             Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             // We give the camera an absolute filename/path where to put the
@@ -164,7 +164,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
                 Timber.e(e);
             }
 
-            imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, R.string.capture_image);
+            imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.capture_image);
         }
     }
 

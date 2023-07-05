@@ -103,11 +103,11 @@ class ShowQRCodeFragment : Fragment() {
 
     private fun passwordWarningClicked() {
         val items = arrayOf(
-            getString(R.string.admin_password),
-            getString(R.string.server_password)
+            getString(org.odk.collect.strings.R.string.admin_password),
+            getString(org.odk.collect.strings.R.string.server_password)
         )
         MaterialAlertDialogBuilder(requireActivity())
-            .setTitle(R.string.include_password_dialog)
+            .setTitle(org.odk.collect.strings.R.string.include_password_dialog)
             .setMultiChoiceItems(
                 items,
                 checkedItems
@@ -115,13 +115,13 @@ class ShowQRCodeFragment : Fragment() {
                 checkedItems[which] = isChecked
             }
             .setCancelable(false)
-            .setPositiveButton(R.string.generate) { dialog: DialogInterface, _: Int ->
+            .setPositiveButton(org.odk.collect.strings.R.string.generate) { dialog: DialogInterface, _: Int ->
                 qrCodeViewModel.setIncludedKeys(
                     selectedPasswordKeys
                 )
                 dialog.dismiss()
             }
-            .setNegativeButton(R.string.cancel) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
+            .setNegativeButton(org.odk.collect.strings.R.string.cancel) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
             .create()
             .apply {
                 // disable checkbox if password not set

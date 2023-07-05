@@ -116,7 +116,7 @@ class FormUriActivityTest {
     fun `When there are no projects then display alert dialog`() {
         val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
 
-        assertErrorDialog(scenario, context.getString(R.string.app_not_configured))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.app_not_configured))
     }
 
     @Test
@@ -131,7 +131,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(secondProject.uuid, form.dbId))
 
-        assertErrorDialog(scenario, context.getString(R.string.wrong_project_selected_for_form))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
     }
 
     @Test
@@ -146,7 +146,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(null, form.dbId))
 
-        assertErrorDialog(scenario, context.getString(R.string.wrong_project_selected_for_form))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
     }
 
     @Test
@@ -163,7 +163,7 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(scenario, context.getString(R.string.unrecognized_uri))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.unrecognized_uri))
     }
 
     @Test
@@ -180,7 +180,7 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(scenario, context.getString(R.string.unrecognized_uri))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.unrecognized_uri))
     }
 
     @Test
@@ -191,7 +191,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, 1))
 
-        assertErrorDialog(scenario, context.getString(R.string.bad_uri))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
 
     @Test
@@ -205,7 +205,7 @@ class FormUriActivityTest {
         File(form.formFilePath).delete()
         val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
 
-        assertErrorDialog(scenario, context.getString(R.string.bad_uri))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
 
     @Test
@@ -216,7 +216,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, 1))
 
-        assertErrorDialog(scenario, context.getString(R.string.bad_uri))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
 
     @Test
@@ -240,7 +240,7 @@ class FormUriActivityTest {
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
 
         assertThat(instancesRepository.get(instance.dbId), equalTo(null))
-        assertErrorDialog(scenario, context.getString(R.string.instance_deleted_message))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.instance_deleted_message))
     }
 
     @Test
@@ -259,7 +259,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
 
-        val expectedMessage = context.getString(R.string.parent_form_not_present, instance.formId)
+        val expectedMessage = context.getString(org.odk.collect.strings.R.string.parent_form_not_present, instance.formId)
 
         assertErrorDialog(scenario, expectedMessage)
     }
@@ -281,7 +281,9 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
 
-        val expectedMessage = context.getString(R.string.parent_form_not_present, "${instance.formId}\n${context.getString(R.string.version)} ${instance.formVersion}")
+        val expectedMessage = context.getString(
+            org.odk.collect.strings.R.string.parent_form_not_present, "${instance.formId}\n${context.getString(
+                org.odk.collect.strings.R.string.version)} ${instance.formVersion}")
 
         assertErrorDialog(scenario, expectedMessage)
     }
@@ -306,7 +308,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
 
-        assertErrorDialog(scenario, context.getString(R.string.survey_multiple_forms_error))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.survey_multiple_forms_error))
     }
 
     @Test
@@ -329,7 +331,7 @@ class FormUriActivityTest {
 
         val scenario = launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
 
-        assertErrorDialog(scenario, context.getString(R.string.encrypted_form))
+        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.encrypted_form))
     }
 
     @Test

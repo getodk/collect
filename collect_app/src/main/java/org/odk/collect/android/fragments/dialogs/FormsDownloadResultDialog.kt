@@ -32,12 +32,12 @@ class FormsDownloadResultDialog : DialogFragment() {
 
         val builder = MaterialAlertDialogBuilder(requireContext())
             .setMessage(getMessage())
-            .setPositiveButton(getString(R.string.ok)) { _, _ ->
+            .setPositiveButton(getString(org.odk.collect.strings.R.string.ok)) { _, _ ->
                 listener?.onCloseDownloadingResult()
             }
 
         if (!FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)) {
-            builder.setNegativeButton(getString(R.string.show_details)) { _, _ ->
+            builder.setNegativeButton(getString(org.odk.collect.strings.R.string.show_details)) { _, _ ->
                 val intent = Intent(context, ErrorActivity::class.java).apply {
                     putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, requireContext()) as Serializable)
                 }
@@ -51,9 +51,9 @@ class FormsDownloadResultDialog : DialogFragment() {
 
     private fun getMessage(): String {
         return if (FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)) {
-            getString(R.string.all_downloads_succeeded)
+            getString(org.odk.collect.strings.R.string.all_downloads_succeeded)
         } else {
-            getString(R.string.some_downloads_failed, FormsDownloadResultInterpreter.getNumberOfFailures(result).toString(), result.size.toString())
+            getString(org.odk.collect.strings.R.string.some_downloads_failed, FormsDownloadResultInterpreter.getNumberOfFailures(result).toString(), result.size.toString())
         }
     }
 

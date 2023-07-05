@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import androidx.test.core.app.ActivityScenario;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.external.AndroidShortcutsActivity;
 
 public class ShortcutsPage extends Page<ShortcutsPage> {
@@ -17,7 +16,7 @@ public class ShortcutsPage extends Page<ShortcutsPage> {
 
     @Override
     public ShortcutsPage assertOnPage() {
-        assertTextInDialog(R.string.select_odk_shortcut);
+        assertTextInDialog(org.odk.collect.strings.R.string.select_odk_shortcut);
         return this;
     }
 

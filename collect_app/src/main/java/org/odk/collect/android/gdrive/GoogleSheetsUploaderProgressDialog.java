@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.views.DayNightProgressDialog;
 
 import timber.log.Timber;
@@ -88,12 +87,12 @@ public class GoogleSheetsUploaderProgressDialog extends DialogFragment {
         setCancelable(false);
 
         dialog = new DayNightProgressDialog(getActivity());
-        dialog.setTitle(getString(R.string.uploading_data));
-        dialog.setMessage(getString(R.string.please_wait));
+        dialog.setTitle(getString(org.odk.collect.strings.R.string.uploading_data));
+        dialog.setMessage(getString(org.odk.collect.strings.R.string.please_wait));
         dialog.setCancelable(false);
         dialog.setIndeterminate(true);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        dialog.setButton(getString(R.string.cancel), (dialog1, which) -> onSendingFormsCanceled.onSendingFormsCanceled());
+        dialog.setButton(getString(org.odk.collect.strings.R.string.cancel), (dialog1, which) -> onSendingFormsCanceled.onSendingFormsCanceled());
         return dialog;
     }
 

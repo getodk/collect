@@ -11,7 +11,7 @@ import org.odk.collect.android.R
 class FormsDownloadResultPage : Page<FormsDownloadResultPage>() {
 
     override fun assertOnPage(): FormsDownloadResultPage {
-        onView(withText(R.string.ok)).inRoot(RootMatchers.isDialog()).check(matches(isDisplayed()))
+        onView(withText(org.odk.collect.strings.R.string.ok)).inRoot(RootMatchers.isDialog()).check(matches(isDisplayed()))
         return this
     }
 
@@ -21,7 +21,7 @@ class FormsDownloadResultPage : Page<FormsDownloadResultPage>() {
     }
 
     fun showDetails(): ErrorPage {
-        onView(withText(getTranslatedString(R.string.show_details))).perform(click())
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.show_details))).perform(click())
         return ErrorPage().assertOnPage()
     }
 }

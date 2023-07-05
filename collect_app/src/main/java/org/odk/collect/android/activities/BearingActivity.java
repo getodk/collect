@@ -22,7 +22,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.views.DayNightProgressDialog;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -44,7 +43,7 @@ public class BearingActivity extends LocalizedActivity implements SensorEventLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(getString(R.string.get_bearing));
+        setTitle(getString(org.odk.collect.strings.R.string.get_bearing));
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -99,13 +98,13 @@ public class BearingActivity extends LocalizedActivity implements SensorEventLis
         // back button doesn't cancel
         bearingDialog.setCancelable(false);
         bearingDialog.setIndeterminate(true);
-        bearingDialog.setTitle(getString(R.string.getting_bearing));
-        bearingDialog.setMessage(getString(R.string.please_wait_long));
+        bearingDialog.setTitle(getString(org.odk.collect.strings.R.string.getting_bearing));
+        bearingDialog.setMessage(getString(org.odk.collect.strings.R.string.please_wait_long));
         bearingDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-                getString(R.string.accept_bearing),
+                getString(org.odk.collect.strings.R.string.accept_bearing),
                 geopointButtonListener);
         bearingDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-                getString(R.string.cancel_location),
+                getString(org.odk.collect.strings.R.string.cancel_location),
                 geopointButtonListener);
     }
 
@@ -170,8 +169,8 @@ public class BearingActivity extends LocalizedActivity implements SensorEventLis
                 } else if (degrees > 292.5 && degrees <= 337.5) {
                     dir = "NW";
                 }
-                bearingDialog.setMessage(getString(R.string.direction, dir)
-                        + "\n" + getString(R.string.bearing, degrees));
+                bearingDialog.setMessage(getString(org.odk.collect.strings.R.string.direction, dir)
+                        + "\n" + getString(org.odk.collect.strings.R.string.bearing, degrees));
 
             }
         }

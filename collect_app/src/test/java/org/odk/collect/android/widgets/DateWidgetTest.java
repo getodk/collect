@@ -11,7 +11,6 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.DatePickerDetails;
@@ -60,7 +59,7 @@ public class DateWidgetTest {
     @Test
     public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.dateButton.getText(), widget.getContext().getString(R.string.select_date));
+        assertEquals(widget.binding.dateButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.select_date));
     }
 
     @Test
@@ -77,7 +76,7 @@ public class DateWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoDateSelected() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
-        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_date_selected));
     }
 
     @Test
@@ -114,7 +113,7 @@ public class DateWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
         widget.clearAnswer();
-        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
+        assertEquals(widget.binding.dateAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_date_selected));
     }
 
     @Test

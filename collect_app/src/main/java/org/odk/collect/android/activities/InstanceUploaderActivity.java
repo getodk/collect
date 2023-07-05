@@ -22,7 +22,6 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.fragments.dialogs.SimpleDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
@@ -104,9 +103,9 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     }
 
     private void init(Bundle savedInstanceState) {
-        alertMsg = getString(R.string.please_wait);
+        alertMsg = getString(org.odk.collect.strings.R.string.please_wait);
 
-        setTitle(getString(R.string.send_data));
+        setTitle(getString(org.odk.collect.strings.R.string.send_data));
 
         // Get simple saved state
         if (savedInstanceState != null) {
@@ -270,7 +269,7 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
 
     @Override
     public void progressUpdate(int progress, int total) {
-        alertMsg = getString(R.string.sending_items, String.valueOf(progress), String.valueOf(total));
+        alertMsg = getString(org.odk.collect.strings.R.string.sending_items, String.valueOf(progress), String.valueOf(total));
         progressDialog.setMessage(alertMsg);
     }
 
@@ -289,12 +288,12 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
                                 finish();
                             }
                         };
-                progressDialog.setTitle(getString(R.string.uploading_data));
+                progressDialog.setTitle(getString(org.odk.collect.strings.R.string.uploading_data));
                 progressDialog.setMessage(alertMsg);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                progressDialog.setButton(getString(org.odk.collect.strings.R.string.cancel), loadingButtonListener);
                 return progressDialog;
             case AUTH_DIALOG:
                 Timber.i("onCreateDialog(AUTH_DIALOG): for upload of %d instances!",
@@ -357,8 +356,8 @@ public class InstanceUploaderActivity extends LocalizedActivity implements Insta
     }
 
     private void createUploadInstancesResultDialog(String message) {
-        String dialogTitle = getString(R.string.upload_results);
-        String buttonTitle = getString(R.string.ok);
+        String dialogTitle = getString(org.odk.collect.strings.R.string.upload_results);
+        String buttonTitle = getString(org.odk.collect.strings.R.string.ok);
 
         SimpleDialog simpleDialog = SimpleDialog.newInstance(dialogTitle, 0, message, buttonTitle, true);
         simpleDialog.show(getSupportFragmentManager(), SimpleDialog.COLLECT_DIALOG_TAG);

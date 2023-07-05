@@ -240,7 +240,7 @@ class StringRequesterImplTest {
         assertThat(intentLauncher.launchForResultCallCounter, `is`(2))
         assertThat(intentLauncher.errorCounter, `is`(2))
 
-        verify(onError).invoke(activity.getString(R.string.no_app))
+        verify(onError).invoke(activity.getString(org.odk.collect.strings.R.string.no_app))
     }
 
     @Test
@@ -268,7 +268,7 @@ class StringRequesterImplTest {
         assertThat(intentLauncher.launchForResultCallCounter, `is`(0))
         assertThat(intentLauncher.errorCounter, `is`(2))
 
-        verify(onError).invoke(activity.getString(R.string.no_app))
+        verify(onError).invoke(activity.getString(org.odk.collect.strings.R.string.no_app))
     }
 
     @Test

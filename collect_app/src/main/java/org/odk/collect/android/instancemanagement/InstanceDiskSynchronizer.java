@@ -17,7 +17,6 @@ package org.odk.collect.android.instancemanagement;
 import android.net.Uri;
 
 import org.apache.commons.io.FileUtils;
-import org.odk.collect.android.R;
 import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.application.Collect;
@@ -148,7 +147,7 @@ public class InstanceDiskSynchronizer {
                     }
                 }
                 if (counter > 0) {
-                    currentStatus += getLocalizedString(Collect.getInstance(), R.string.instance_scan_count, counter);
+                    currentStatus += getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.instance_scan_count, counter);
                 }
             }
         } finally {

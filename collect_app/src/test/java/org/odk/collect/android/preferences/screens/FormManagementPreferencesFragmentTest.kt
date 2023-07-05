@@ -84,7 +84,7 @@ class FormManagementPreferencesFragmentTest {
         scenario.onFragment { f: FormManagementPreferencesFragment ->
             assertThat(
                 f.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.summary,
-                `is`(context.getString(R.string.manual))
+                `is`(context.getString(org.odk.collect.strings.R.string.manual))
             )
             assertThat(
                 generalSettings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE),

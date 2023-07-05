@@ -50,7 +50,7 @@ class InstancesAdbTest {
         mainMenuPage
             .clickEditSavedForm(1)
             .clickOnFormWithDialog("One Question")
-            .assertText(R.string.instance_deleted_message)
+            .assertText(org.odk.collect.strings.R.string.instance_deleted_message)
             .clickOK(MainMenuPage())
             .assertNumberOfEditableForms(0)
     }

@@ -110,23 +110,23 @@ class MainMenuViewModel(
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
             val message = if (instance.status == Instance.STATUS_INCOMPLETE) {
-                R.string.form_saved_as_draft
+                org.odk.collect.strings.R.string.form_saved_as_draft
             } else if (instance.status == Instance.STATUS_COMPLETE) {
                 val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
                 if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
-                    R.string.form_sending
+                    org.odk.collect.strings.R.string.form_sending
                 } else {
-                    R.string.form_saved
+                    org.odk.collect.strings.R.string.form_saved
                 }
             } else {
                 return null
             }
 
             val action = if (instance.canBeEdited(settingsProvider)) {
-                R.string.edit_form
+                org.odk.collect.strings.R.string.edit_form
             } else {
                 if (instance.status == Instance.STATUS_INCOMPLETE || instance.canEditWhenComplete()) {
-                    R.string.view_form
+                    org.odk.collect.strings.R.string.view_form
                 } else {
                     null
                 }

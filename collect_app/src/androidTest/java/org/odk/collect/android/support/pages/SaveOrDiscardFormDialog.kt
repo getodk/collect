@@ -10,21 +10,21 @@ class SaveOrDiscardFormDialog<D : Page<D>> @JvmOverloads constructor(
 
     override fun assertOnPage(): SaveOrDiscardFormDialog<D> {
         if (saveAsDraftEnabled) {
-            assertText(R.string.quit_form_title)
+            assertText(org.odk.collect.strings.R.string.quit_form_title)
         } else {
-            assertText(R.string.quit_form_continue_title)
+            assertText(org.odk.collect.strings.R.string.quit_form_continue_title)
         }
 
         return this
     }
 
     fun clickSaveChanges(): D {
-        clickOnString(R.string.save_as_draft)
+        clickOnString(org.odk.collect.strings.R.string.save_as_draft)
         return destination.assertOnPage()
     }
 
     fun clickSaveChangesWithError(errorMsg: Int): D {
-        clickOnString(R.string.save_as_draft)
+        clickOnString(org.odk.collect.strings.R.string.save_as_draft)
         if (Build.VERSION.SDK_INT < 30) {
             checkIsToastWithMessageDisplayed(errorMsg)
         } else {
@@ -35,12 +35,12 @@ class SaveOrDiscardFormDialog<D : Page<D>> @JvmOverloads constructor(
     }
 
     fun clickDiscardForm(): D {
-        clickOnString(R.string.do_not_save)
+        clickOnString(org.odk.collect.strings.R.string.do_not_save)
         return destination.assertOnPage()
     }
 
     fun clickDiscardChanges(): D {
-        clickOnString(R.string.discard_changes)
+        clickOnString(org.odk.collect.strings.R.string.discard_changes)
         return destination.assertOnPage()
     }
 }

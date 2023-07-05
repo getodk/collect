@@ -40,7 +40,7 @@ internal class DynamicPolyLineFeature(
                     it,
                     true,
                     MapFragment.CENTER,
-                    R.drawable.ic_map_point,
+                    org.odk.collect.icons.R.drawable.ic_map_point,
                     context
                 )
             )
@@ -85,7 +85,7 @@ internal class DynamicPolyLineFeature(
                 point,
                 true,
                 MapFragment.CENTER,
-                R.drawable.ic_map_point,
+                org.odk.collect.icons.R.drawable.ic_map_point,
                 context
             )
         )
@@ -121,7 +121,7 @@ internal class DynamicPolyLineFeature(
             polylineAnnotation = polylineAnnotationManager.create(
                 PolylineAnnotationOptions()
                     .withPoints(points)
-                    .withLineColor(ColorUtils.colorToRgbaString(context.resources.getColor(R.color.mapLineColor)))
+                    .withLineColor(ColorUtils.colorToRgbaString(context.resources.getColor(org.odk.collect.icons.R.color.mapLineColor)))
                     .withLineWidth(MAPBOX_POLYLINE_STROKE_WIDTH.toDouble())
             ).also {
                 polylineAnnotationManager.update(it)

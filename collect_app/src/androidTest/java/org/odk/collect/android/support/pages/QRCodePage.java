@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 
 import androidx.test.espresso.Espresso;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.support.matchers.DrawableMatcher;
@@ -20,20 +19,20 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 public class QRCodePage extends Page<QRCodePage> {
     @Override
     public QRCodePage assertOnPage() {
-        assertText(R.string.reconfigure_with_qr_code_settings_title);
+        assertText(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title);
         return this;
     }
 
     public QRCodePage clickScanFragment() {
-        onView(withText(R.string.scan_qr_code_fragment_title)).perform(click());
+        onView(withText(org.odk.collect.strings.R.string.scan_qr_code_fragment_title)).perform(click());
         return this;
     }
 
     public QRCodePage clickView() {
         // Switching tabs doesn't seem to work sometimes
         WaitFor.waitFor(() -> {
-            onView(withText(R.string.view_qr_code_fragment_title)).perform(click());
-            onView(withText(R.string.barcode_scanner_prompt)).check(doesNotExist());
+            onView(withText(org.odk.collect.strings.R.string.view_qr_code_fragment_title)).perform(click());
+            onView(withText(org.odk.collect.strings.R.string.barcode_scanner_prompt)).check(doesNotExist());
             return null;
         });
 
@@ -48,7 +47,7 @@ public class QRCodePage extends Page<QRCodePage> {
     public QRCodePage clickOnMenu() {
         tryAgainOnFail(() -> {
             Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-            onView(withText(getTranslatedString(R.string.import_qrcode_sd))).check(matches(isDisplayed()));
+            onView(withText(getTranslatedString(org.odk.collect.strings.R.string.import_qrcode_sd))).check(matches(isDisplayed()));
         });
 
         return this;

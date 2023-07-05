@@ -18,7 +18,6 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
@@ -56,7 +55,7 @@ public final class InstanceUploaderUtils {
         }
 
         if (message.length() == 0) {
-            message = new StringBuilder(context.getString(R.string.no_forms_uploaded));
+            message = new StringBuilder(context.getString(org.odk.collect.strings.R.string.no_forms_uploaded));
         }
 
         return message.toString().trim();
@@ -78,7 +77,7 @@ public final class InstanceUploaderUtils {
 
     private static String localizeDefaultAggregateSuccessfulText(String text) {
         if (text != null && text.equals(DEFAULT_SUCCESSFUL_TEXT)) {
-            text = getLocalizedString(Collect.getInstance(), R.string.success);
+            text = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.success);
         }
         return text;
     }

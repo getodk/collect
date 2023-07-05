@@ -80,7 +80,7 @@ public class IntentGroupTest {
     // Verifies that a value given to the label text with form buttonText is used as the button text.
     @Test
     public void buttonName_ShouldComeFromSpecialFormText() {
-        onView(withText(R.string.launch_app)).check(doesNotExist());
+        onView(withText(org.odk.collect.strings.R.string.launch_app)).check(doesNotExist());
         onView(withText("This is buttonText")).check(matches(isDisplayed()));
     }
 

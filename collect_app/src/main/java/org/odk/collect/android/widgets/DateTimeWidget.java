@@ -26,7 +26,6 @@ import org.javarosa.core.model.data.TimeData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.DateTimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.logic.DatePickerDetails;
@@ -152,8 +151,8 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
 
     private void resetAnswerFields() {
         selectedDateTime = DateTimeUtils.getCurrentDateTime();
-        binding.dateWidget.dateAnswerText.setText(R.string.no_date_selected);
-        binding.timeWidget.timeAnswerText.setText(R.string.no_time_selected);
+        binding.dateWidget.dateAnswerText.setText(org.odk.collect.strings.R.string.no_date_selected);
+        binding.timeWidget.timeAnswerText.setText(org.odk.collect.strings.R.string.no_time_selected);
     }
 
     private boolean isNullValue() {
@@ -163,10 +162,10 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     private boolean isDateNull() {
-        return binding.dateWidget.dateAnswerText.getText().equals(getContext().getString(R.string.no_date_selected));
+        return binding.dateWidget.dateAnswerText.getText().equals(getContext().getString(org.odk.collect.strings.R.string.no_date_selected));
     }
 
     private boolean isTimeNull() {
-        return binding.timeWidget.timeAnswerText.getText().equals(getContext().getString(R.string.no_time_selected));
+        return binding.timeWidget.timeAnswerText.getText().equals(getContext().getString(org.odk.collect.strings.R.string.no_time_selected));
     }
 }

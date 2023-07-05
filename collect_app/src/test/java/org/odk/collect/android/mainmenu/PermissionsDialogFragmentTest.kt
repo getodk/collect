@@ -37,7 +37,7 @@ class PermissionsDialogFragmentTest {
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
-        defaultThemeResId = R.style.Theme_MaterialComponents,
+        defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents,
         defaultFactory = fragmentFactory
     )
 
@@ -45,7 +45,7 @@ class PermissionsDialogFragmentTest {
     fun clickingOK_asksForPermissions() {
         launcherRule.launch(PermissionsDialogFragment::class.java)
 
-        onView(withText(R.string.ok)).inRoot(isDialog()).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.ok)).inRoot(isDialog()).perform(click())
         assertThat(
             permissionsProvider.requestedPermissions,
             equalTo(listOf("blah"))
@@ -56,7 +56,7 @@ class PermissionsDialogFragmentTest {
     fun clickingOK_callsPermissionRequested() {
         launcherRule.launch(PermissionsDialogFragment::class.java)
 
-        onView(withText(R.string.ok)).inRoot(isDialog()).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.ok)).inRoot(isDialog()).perform(click())
         verify(requestPermissionsViewModel).permissionsRequested()
     }
 

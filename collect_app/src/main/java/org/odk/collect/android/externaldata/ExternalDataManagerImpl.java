@@ -18,7 +18,6 @@
 
 package org.odk.collect.android.externaldata;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
 
@@ -50,7 +49,7 @@ public class ExternalDataManagerImpl implements ExternalDataManager {
         ExternalSQLiteOpenHelper sqLiteOpenHelper = dbMap.get(dataSetName);
         if (sqLiteOpenHelper == null) {
             if (mediaFolder == null) {
-                String msg = getLocalizedString(Collect.getInstance(), R.string.ext_not_initialized_error);
+                String msg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.ext_not_initialized_error);
                 Timber.e(new Error(msg));
                 if (required) {
                     throw new ExternalDataException(msg);

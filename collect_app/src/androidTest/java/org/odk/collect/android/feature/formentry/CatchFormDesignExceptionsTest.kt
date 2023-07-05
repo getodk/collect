@@ -31,7 +31,7 @@ class CatchFormDesignExceptionsTest {
             // They're then equal which makes the third question non-relevant. Trying to change the
             // value of a non-relevant node throws an exception.
             .answerQuestion(2, "D")
-            .assertTextInDialog(R.string.update_widgets_error)
+            .assertTextInDialog(org.odk.collect.strings.R.string.update_widgets_error)
             .clickOKOnDialog()
             .assertOnPage(MainMenuPage())
     }

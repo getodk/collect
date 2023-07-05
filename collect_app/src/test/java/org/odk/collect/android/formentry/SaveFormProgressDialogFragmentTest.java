@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
@@ -37,7 +36,7 @@ public class SaveFormProgressDialogFragmentTest {
 
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            R.style.Theme_MaterialComponents,
+            com.google.android.material.R.style.Theme_MaterialComponents,
             new FragmentFactoryBuilder()
                     .forClass(SaveFormProgressDialogFragment.class, () -> new SaveFormProgressDialogFragment(viewModelFactory))
                     .build()

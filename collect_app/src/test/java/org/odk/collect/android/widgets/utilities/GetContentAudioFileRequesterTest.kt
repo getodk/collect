@@ -49,8 +49,8 @@ class GetContentAudioFileRequesterTest {
             toastMessage,
             equalTo(
                 activity.getString(
-                    R.string.activity_not_found,
-                    activity.getString(R.string.choose_sound)
+                    org.odk.collect.strings.R.string.activity_not_found,
+                    activity.getString(org.odk.collect.strings.R.string.choose_sound)
                 )
             )
         )

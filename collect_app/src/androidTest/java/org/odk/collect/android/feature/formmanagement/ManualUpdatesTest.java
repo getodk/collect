@@ -27,7 +27,7 @@ public class ManualUpdatesTest {
     public void whenManualUpdatesEnabled_getBlankFormsIsAvailable() {
         rule.startAtMainMenu()
                 .enableManualUpdates()
-                .assertText(R.string.get_forms);
+                .assertText(org.odk.collect.strings.R.string.get_forms);
     }
 
     @Test

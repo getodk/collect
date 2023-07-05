@@ -37,19 +37,19 @@ class QRCodeActivityResultDelegate(
                     when (settingsImporter.fromJSON(response, project)) {
                         SettingsImportingResult.SUCCESS -> {
                             log(AnalyticsEvents.RECONFIGURE_PROJECT)
-                            showToast(R.string.successfully_imported_settings)
+                            showToast(org.odk.collect.strings.R.string.successfully_imported_settings)
                             ActivityUtils.startActivityAndCloseAllOthers(
                                 activity,
                                 MainMenuActivity::class.java
                             )
                         }
-                        SettingsImportingResult.INVALID_SETTINGS -> showToast(R.string.invalid_qrcode)
-                        SettingsImportingResult.GD_PROJECT -> showToast(R.string.settings_with_gd_protocol)
+                        SettingsImportingResult.INVALID_SETTINGS -> showToast(org.odk.collect.strings.R.string.invalid_qrcode)
+                        SettingsImportingResult.GD_PROJECT -> showToast(org.odk.collect.strings.R.string.settings_with_gd_protocol)
                     }
                 } catch (e: QRCodeDecoder.QRCodeInvalidException) {
-                    showToast(R.string.invalid_qrcode)
+                    showToast(org.odk.collect.strings.R.string.invalid_qrcode)
                 } catch (e: QRCodeDecoder.QRCodeNotFoundException) {
-                    showToast(R.string.qr_code_not_found)
+                    showToast(org.odk.collect.strings.R.string.qr_code_not_found)
                 }
             }
         }

@@ -71,7 +71,7 @@ class FormFinalizingTest {
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .assertTextDoesNotExist(R.string.save_as_draft)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.save_as_draft)
     }
 
     @Test
@@ -81,14 +81,14 @@ class FormFinalizingTest {
             .clickSettings()
             .clickAccessControl()
             .clickFormEntrySettings()
-            .clickOnString(R.string.finalize)
+            .clickOnString(org.odk.collect.strings.R.string.finalize)
             .pressBack(AccessControlPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .assertTextDoesNotExist(R.string.finalize)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.finalize)
     }
 
     companion object {

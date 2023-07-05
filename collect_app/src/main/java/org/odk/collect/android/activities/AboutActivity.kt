@@ -54,13 +54,13 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
             itemAnimator = DefaultItemAnimator()
         }
 
-        websiteUri = Uri.parse(getString(R.string.app_url))
-        forumUri = Uri.parse(getString(R.string.forum_url))
+        websiteUri = Uri.parse(getString(org.odk.collect.strings.R.string.app_url))
+        forumUri = Uri.parse(getString(org.odk.collect.strings.R.string.forum_url))
     }
 
     private fun initToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        title = getString(R.string.about_preferences)
+        title = getString(org.odk.collect.strings.R.string.about_preferences)
         setSupportActionBar(toolbar)
     }
 
@@ -93,13 +93,13 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
             type = "text/plain"
             putExtra(
                 Intent.EXTRA_TEXT,
-                getString(R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL + packageName
+                getString(org.odk.collect.strings.R.string.tell_your_friends_msg) + " " + GOOGLE_PLAY_URL + packageName
             )
         }
         startActivity(
             Intent.createChooser(
                 shareIntent,
-                getString(R.string.tell_your_friends)
+                getString(org.odk.collect.strings.R.string.tell_your_friends)
             )
         )
     }
@@ -125,28 +125,28 @@ class AboutActivity : LocalizedActivity(), AboutItemClickListener {
         private val ITEMS = arrayOf(
             intArrayOf(
                 R.drawable.ic_outline_website_24,
-                R.string.odk_website,
-                R.string.odk_website_summary
+                org.odk.collect.strings.R.string.odk_website,
+                org.odk.collect.strings.R.string.odk_website_summary
             ),
             intArrayOf(
                 R.drawable.ic_outline_forum_24,
-                R.string.odk_forum,
-                R.string.odk_forum_summary
+                org.odk.collect.strings.R.string.odk_forum,
+                org.odk.collect.strings.R.string.odk_forum_summary
             ),
             intArrayOf(
                 R.drawable.ic_outline_share_24,
-                R.string.tell_your_friends,
-                R.string.tell_your_friends_msg
+                org.odk.collect.strings.R.string.tell_your_friends,
+                org.odk.collect.strings.R.string.tell_your_friends_msg
             ),
             intArrayOf(
                 R.drawable.ic_outline_rate_review_24,
-                R.string.leave_a_review,
-                R.string.leave_a_review_msg
+                org.odk.collect.strings.R.string.leave_a_review,
+                org.odk.collect.strings.R.string.leave_a_review_msg
             ),
             intArrayOf(
                 R.drawable.ic_outline_stars_24,
-                R.string.all_open_source_licenses,
-                R.string.all_open_source_licenses_msg
+                org.odk.collect.strings.R.string.all_open_source_licenses,
+                org.odk.collect.strings.R.string.all_open_source_licenses_msg
             )
         )
     }

@@ -90,7 +90,7 @@ class QuitFormDialogTest {
         val shadowDialog = extract<ShadowAndroidXAlertDialog>(dialog)
         assertThat(
             shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
-            equalTo(activity.getString(R.string.save_explanation))
+            equalTo(activity.getString(org.odk.collect.strings.R.string.save_explanation))
         )
     }
 
@@ -108,7 +108,7 @@ class QuitFormDialogTest {
             shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
             equalTo(
                 SimpleDateFormat(
-                    activity.getString(R.string.save_explanation_with_last_saved),
+                    activity.getString(org.odk.collect.strings.R.string.save_explanation_with_last_saved),
                     Locale.getDefault()
                 ).format(456L)
             )
@@ -146,11 +146,11 @@ class QuitFormDialogTest {
 
         assertThat(
             shadowDialog.title,
-            equalTo(activity.getString(R.string.quit_form_continue_title))
+            equalTo(activity.getString(org.odk.collect.strings.R.string.quit_form_continue_title))
         )
         assertThat(
             shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
-            equalTo(activity.getString(R.string.discard_form_warning))
+            equalTo(activity.getString(org.odk.collect.strings.R.string.discard_form_warning))
         )
         assertThat(
             shadowDialog.getView().findViewById<View>(R.id.save_changes).visibility,
@@ -170,13 +170,13 @@ class QuitFormDialogTest {
 
         assertThat(
             shadowDialog.title,
-            equalTo(activity.getString(R.string.quit_form_continue_title))
+            equalTo(activity.getString(org.odk.collect.strings.R.string.quit_form_continue_title))
         )
         assertThat(
             shadowDialog.getView().findViewById<TextView>(R.id.save_explanation).text,
             equalTo(
                 SimpleDateFormat(
-                    activity.getString(R.string.discard_changes_warning),
+                    activity.getString(org.odk.collect.strings.R.string.discard_changes_warning),
                     Locale.getDefault()
                 ).format(456L)
             )

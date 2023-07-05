@@ -21,7 +21,7 @@ object ReferenceLayerPreferenceUtils {
     ) {
         val cftor = MapConfiguratorProvider.getConfigurator()
         val items: MutableList<CaptionedListPreference.Item> = ArrayList()
-        items.add(CaptionedListPreference.Item(null, context.getString(R.string.none), ""))
+        items.add(CaptionedListPreference.Item(null, context.getString(org.odk.collect.strings.R.string.none), ""))
         val supportedLayerFiles = getSupportedLayerFiles(cftor, referenceLayerRepository)
 
         for ((id, file) in supportedLayerFiles) {

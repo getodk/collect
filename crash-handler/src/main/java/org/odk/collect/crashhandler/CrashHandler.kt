@@ -34,7 +34,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             val crashMessage = conditionFailure
 
             createCrashView(context).also {
-                it.setCrash(context.getString(R.string.cant_start_app), crashMessage) {
+                it.setCrash(context.getString(org.odk.collect.strings.R.string.cant_start_app), crashMessage) {
                     processKiller.run()
                 }
             }
@@ -42,7 +42,7 @@ class CrashHandler(private val processKiller: Runnable = Runnable { exitProcess(
             val crashMessage = preferences.getString(KEY_CRASH, null)
 
             createCrashView(context).also {
-                it.setCrash(context.getString(R.string.crash_last_run), crashMessage) {
+                it.setCrash(context.getString(org.odk.collect.strings.R.string.crash_last_run), crashMessage) {
                     preferences.edit().remove(KEY_CRASH).apply()
                     onErrorDismissed?.run()
                 }

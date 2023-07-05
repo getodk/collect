@@ -22,7 +22,7 @@ public class BackgroundAudioHelpDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.background_audio_help_fragment_layout, null);
         return new MaterialAlertDialogBuilder(requireContext())
                 .setView(view)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                 .create();
     }
 }

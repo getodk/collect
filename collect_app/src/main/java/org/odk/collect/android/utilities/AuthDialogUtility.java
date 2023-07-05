@@ -80,11 +80,11 @@ public class AuthDialogUtility {
         password.setText(customPassword != null ? customPassword : overriddenUrl != null ? null : webCredentialsUtils.getPasswordFromPreferences());
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
-        builder.setTitle(context.getString(R.string.server_requires_auth));
-        builder.setMessage(context.getString(R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : webCredentialsUtils.getServerUrlFromPreferences()));
+        builder.setTitle(context.getString(org.odk.collect.strings.R.string.server_requires_auth));
+        builder.setMessage(context.getString(org.odk.collect.strings.R.string.server_auth_credentials, overriddenUrl != null ? overriddenUrl : webCredentialsUtils.getServerUrlFromPreferences()));
         builder.setView(dialogView);
         String finalOverriddenUrl = overriddenUrl;
-        builder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(context.getString(org.odk.collect.strings.R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String userNameValue = username.getText().toString();
@@ -104,7 +104,7 @@ public class AuthDialogUtility {
                 resultListener.updatedCredentials();
             }
         });
-        builder.setNegativeButton(context.getString(R.string.cancel),
+        builder.setNegativeButton(context.getString(org.odk.collect.strings.R.string.cancel),
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

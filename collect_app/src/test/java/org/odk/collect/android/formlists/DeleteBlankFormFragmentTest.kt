@@ -73,7 +73,7 @@ class DeleteBlankFormFragmentTest {
 
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
-        defaultThemeResId = R.style.Theme_MaterialComponents,
+        defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents,
         defaultFactory = FragmentFactoryBuilder()
             .forClass(DeleteBlankFormFragment::class) {
                 DeleteBlankFormFragment(viewModelFactory, menuHost)
@@ -133,7 +133,7 @@ class DeleteBlankFormFragmentTest {
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
 
-        onView(withText(R.string.select_all)).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.select_all)).perform(click())
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 2)))
     }
@@ -147,10 +147,10 @@ class DeleteBlankFormFragmentTest {
         )
 
         multiSelectViewModel.select(1)
-        onView(withText(R.string.select_all)).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.select_all)).perform(click())
 
         multiSelectViewModel.unselect(1)
-        onView(withText(R.string.select_all)).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.select_all)).perform(click())
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 2)))
     }
@@ -163,16 +163,16 @@ class DeleteBlankFormFragmentTest {
             blankFormListItem(databaseId = 2, formName = "Form 2")
         )
 
-        onView(withText(R.string.clear_all)).check(doesNotExist())
-        onView(withText(R.string.select_all)).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.clear_all)).check(doesNotExist())
+        onView(withText(org.odk.collect.strings.R.string.select_all)).perform(click())
 
-        onView(withText(R.string.select_all)).check(doesNotExist())
-        onView(withText(R.string.clear_all)).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.select_all)).check(doesNotExist())
+        onView(withText(org.odk.collect.strings.R.string.clear_all)).perform(click())
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(emptySet()))
 
-        onView(withText(R.string.select_all)).check(matches(isDisplayed()))
-        onView(withText(R.string.clear_all)).check(doesNotExist())
+        onView(withText(org.odk.collect.strings.R.string.select_all)).check(matches(isDisplayed()))
+        onView(withText(org.odk.collect.strings.R.string.clear_all)).check(doesNotExist())
     }
 
     @Test
@@ -186,11 +186,11 @@ class DeleteBlankFormFragmentTest {
         multiSelectViewModel.select(11)
         multiSelectViewModel.select(12)
 
-        onView(withText(R.string.delete_file)).perform(click())
-        onView(withText(context.getString(R.string.delete_confirm, 2)))
+        onView(withText(org.odk.collect.strings.R.string.delete_file)).perform(click())
+        onView(withText(context.getString(org.odk.collect.strings.R.string.delete_confirm, 2)))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
-        onView(withText(R.string.delete_yes)).inRoot(isDialog()).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.delete_yes)).inRoot(isDialog()).perform(click())
 
         verify(blankFormListViewModel).deleteForms(11, 12)
     }
@@ -206,11 +206,11 @@ class DeleteBlankFormFragmentTest {
         multiSelectViewModel.select(11)
         multiSelectViewModel.select(12)
 
-        onView(withText(R.string.delete_file)).perform(click())
-        onView(withText(context.getString(R.string.delete_confirm, 2)))
+        onView(withText(org.odk.collect.strings.R.string.delete_file)).perform(click())
+        onView(withText(context.getString(org.odk.collect.strings.R.string.delete_confirm, 2)))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
-        onView(withText(R.string.delete_no)).inRoot(isDialog()).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.delete_no)).inRoot(isDialog()).perform(click())
 
         verify(blankFormListViewModel, never()).deleteForms(any())
     }
@@ -225,11 +225,11 @@ class DeleteBlankFormFragmentTest {
 
         multiSelectViewModel.select(11)
 
-        onView(withText(R.string.delete_file)).perform(click())
-        onView(withText(context.getString(R.string.delete_confirm, 1)))
+        onView(withText(org.odk.collect.strings.R.string.delete_file)).perform(click())
+        onView(withText(context.getString(org.odk.collect.strings.R.string.delete_confirm, 1)))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
-        onView(withText(R.string.delete_yes)).inRoot(isDialog()).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.delete_yes)).inRoot(isDialog()).perform(click())
 
         assertThat(multiSelectViewModel.getSelected().value, equalTo(emptySet()))
     }
@@ -238,24 +238,24 @@ class DeleteBlankFormFragmentTest {
     fun `delete selected is disabled and enabled when forms are selected or not`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
-        onView(withText(R.string.delete_file)).check(matches(not(isEnabled())))
+        onView(withText(org.odk.collect.strings.R.string.delete_file)).check(matches(not(isEnabled())))
 
         multiSelectViewModel.select(11)
-        onView(withText(R.string.delete_file)).check(matches(isEnabled()))
+        onView(withText(org.odk.collect.strings.R.string.delete_file)).check(matches(isEnabled()))
 
         multiSelectViewModel.unselectAll()
-        onView(withText(R.string.delete_file)).check(matches(not(isEnabled())))
+        onView(withText(org.odk.collect.strings.R.string.delete_file)).check(matches(not(isEnabled())))
     }
 
     @Test
     fun `empty message shows when there are no forms`() {
         fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
-        onView(withText(R.string.no_items_display)).check(matches(isDisplayed()))
+        onView(withText(org.odk.collect.strings.R.string.no_items_display)).check(matches(isDisplayed()))
 
         formsToDisplay.value = listOf(blankFormListItem(databaseId = 1, formName = "Form 1"))
 
-        onView(withText(R.string.no_items_display)).check(matches(not(isDisplayed())))
+        onView(withText(org.odk.collect.strings.R.string.no_items_display)).check(matches(not(isDisplayed())))
     }
 
     @Test

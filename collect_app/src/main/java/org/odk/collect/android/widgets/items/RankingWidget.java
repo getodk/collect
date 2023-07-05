@@ -29,7 +29,6 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -142,7 +141,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     }
 
     private void setUpLayout(List<SelectChoice> items) {
-        showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(R.string.rank_items), getAnswerFontSize(), this);
+        showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.rank_items), getAnswerFontSize(), this);
         answerTextView = createAnswerTextView(getContext(), getAnswerText(), getAnswerFontSize());
 
         LinearLayout widgetLayout = new LinearLayout(getContext());

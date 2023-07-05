@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Button;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -44,7 +43,7 @@ public class SignatureWidget extends BaseImageWidget implements ButtonClickListe
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
         render();
 
-        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE, R.string.signature_capture);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_SIGNATURE, RequestCodes.SIGNATURE_CAPTURE, org.odk.collect.strings.R.string.signature_capture);
         setUpLayout();
         updateAnswer();
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
@@ -53,7 +52,7 @@ public class SignatureWidget extends BaseImageWidget implements ButtonClickListe
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        signButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(R.string.sign_button), getAnswerFontSize(), this);
+        signButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.sign_button), getAnswerFontSize(), this);
 
         answerLayout.addView(signButton);
         answerLayout.addView(errorTextView);
@@ -74,7 +73,7 @@ public class SignatureWidget extends BaseImageWidget implements ButtonClickListe
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons
-        signButton.setText(getContext().getString(R.string.sign_button));
+        signButton.setText(getContext().getString(org.odk.collect.strings.R.string.sign_button));
     }
 
     @Override

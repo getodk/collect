@@ -41,7 +41,7 @@ public class WebViewActivity extends LocalizedActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+        getSupportActionBar().setHomeAsUpIndicator(org.odk.collect.icons.R.drawable.ic_close);
 
         String url = getIntent().getStringExtra(ExternalWebPageHelper.OPEN_URL);
         webView = (WebView) findViewById(R.id.webView);

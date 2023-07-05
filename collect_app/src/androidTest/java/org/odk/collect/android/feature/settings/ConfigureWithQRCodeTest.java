@@ -80,7 +80,7 @@ public class ConfigureWithQRCodeTest {
 
         stubBarcodeViewDecoder.scan("{\"general\":{ \"server_url\": \"http://gallops.example\" },\"admin\":{}}");
         qrCodePage
-                .checkIsToastWithMessageDisplayed(R.string.successfully_imported_settings)
+                .checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.successfully_imported_settings)
                 .assertFileWithProjectNameUpdated("Demo project", "gallops.example");
 
         new MainMenuPage()
@@ -114,10 +114,10 @@ public class ConfigureWithQRCodeTest {
                 .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
-                .clickOnString(R.string.qrcode_with_admin_password)
-                .clickOnString(R.string.admin_password)
-                .clickOnString(R.string.generate)
-                .assertText(R.string.qrcode_without_passwords);
+                .clickOnString(org.odk.collect.strings.R.string.qrcode_with_admin_password)
+                .clickOnString(org.odk.collect.strings.R.string.admin_password)
+                .clickOnString(org.odk.collect.strings.R.string.generate)
+                .assertText(org.odk.collect.strings.R.string.qrcode_without_passwords);
     }
 
     @Test
@@ -137,15 +137,15 @@ public class ConfigureWithQRCodeTest {
                 .clickProjectManagement()
                 .clickConfigureQR()
                 .clickView()
-                .clickOnString(R.string.qrcode_with_server_password)
-                .clickOnString(R.string.server_password)
-                .clickOnString(R.string.generate)
-                .assertText(R.string.qrcode_without_passwords);
+                .clickOnString(org.odk.collect.strings.R.string.qrcode_with_server_password)
+                .clickOnString(org.odk.collect.strings.R.string.server_password)
+                .clickOnString(org.odk.collect.strings.R.string.generate)
+                .assertText(org.odk.collect.strings.R.string.qrcode_without_passwords);
     }
 
     private static class StubQRCodeGenerator implements QRCodeGenerator {
 
-        private static final int CHECKER_BACKGROUND_DRAWABLE_ID = R.drawable.checker_background;
+        private static final int CHECKER_BACKGROUND_DRAWABLE_ID = com.rarepebble.colorpicker.R.drawable.checker_background;
 
         @Override
         public String generateQRCode(Collection<String> selectedPasswordKeys, AppConfigurationGenerator appConfigurationGenerator) {

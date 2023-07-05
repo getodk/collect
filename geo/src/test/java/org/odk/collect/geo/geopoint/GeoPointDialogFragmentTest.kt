@@ -50,7 +50,7 @@ class GeoPointDialogFragmentTest {
 
     @get:Rule
     val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
+        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {
@@ -68,10 +68,10 @@ class GeoPointDialogFragmentTest {
     @Test
     fun `disables save until location is available`() {
         launcherRule.launch(GeoPointDialogFragment::class.java)
-        onView(withText(R.string.save)).inRoot(isDialog()).check(matches(not(isEnabled())))
+        onView(withText(org.odk.collect.strings.R.string.save)).inRoot(isDialog()).check(matches(not(isEnabled())))
 
         currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
-        onView(withText(R.string.save)).inRoot(isDialog()).check(matches(isEnabled()))
+        onView(withText(org.odk.collect.strings.R.string.save)).inRoot(isDialog()).check(matches(isEnabled()))
     }
 
     @Test
@@ -79,7 +79,7 @@ class GeoPointDialogFragmentTest {
         whenever(viewModel.accuracyThreshold).thenReturn(5.0f)
         launcherRule.launch(GeoPointDialogFragment::class.java)
 
-        onView(withText(application.getLocalizedString(R.string.point_will_be_saved, "5m")))
+        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.point_will_be_saved, "5m")))
             .inRoot(isDialog())
             .perform(scrollTo())
             .check(matches(isDisplayed()))
@@ -107,12 +107,12 @@ class GeoPointDialogFragmentTest {
         launcherRule.launch(GeoPointDialogFragment::class.java)
 
         timeElapsedLiveData.value = 0
-        onView(withText(application.getLocalizedString(R.string.time_elapsed, "00:00")))
+        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.time_elapsed, "00:00")))
             .inRoot(isDialog())
             .perform(scrollTo()).check(matches(isDisplayed()))
 
         timeElapsedLiveData.value = 62000
-        onView(withText(application.getLocalizedString(R.string.time_elapsed, "01:02")))
+        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.time_elapsed, "01:02")))
             .inRoot(isDialog())
             .perform(scrollTo()).check(matches(isDisplayed()))
     }
@@ -121,14 +121,14 @@ class GeoPointDialogFragmentTest {
     fun `shows and updates satellites`() {
         launcherRule.launch(GeoPointDialogFragment::class.java)
 
-        onView(withText(application.getLocalizedString(R.string.satellites, 0)))
+        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.satellites, 0)))
             .inRoot(isDialog())
             .perform(scrollTo())
             .check(matches(isDisplayed()))
 
         satellitesLiveData.value = 5
 
-        onView(withText(application.getLocalizedString(R.string.satellites, 5)))
+        onView(withText(application.getLocalizedString(org.odk.collect.strings.R.string.satellites, 5)))
             .inRoot(isDialog())
             .perform(scrollTo())
             .check(matches(isDisplayed()))
@@ -143,7 +143,7 @@ class GeoPointDialogFragmentTest {
             it.listener = listener
         }
 
-        onView(withText(R.string.cancel)).inRoot(isDialog()).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.cancel)).inRoot(isDialog()).perform(click())
         verify(listener).onCancel()
     }
 
@@ -165,7 +165,7 @@ class GeoPointDialogFragmentTest {
         launcherRule.launch(GeoPointDialogFragment::class.java)
         currentAccuracyLiveData.value = GeoPointAccuracy.Improving(5.0f)
 
-        onView(withText(R.string.save)).inRoot(isDialog()).perform(click())
+        onView(withText(org.odk.collect.strings.R.string.save)).inRoot(isDialog()).perform(click())
         verify(viewModel).forceLocation()
     }
 

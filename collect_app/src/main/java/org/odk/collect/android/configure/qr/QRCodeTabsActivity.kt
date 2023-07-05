@@ -61,7 +61,7 @@ class QRCodeTabsActivity : LocalizedActivity() {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.tabs_layout)
-        setupAppBarLayout(this, getString(R.string.reconfigure_with_qr_code_settings_title))
+        setupAppBarLayout(this, getString(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title))
 
         activityResultDelegate = QRCodeActivityResultDelegate(
             this,
@@ -96,8 +96,8 @@ class QRCodeTabsActivity : LocalizedActivity() {
 
     private fun setupViewPager() {
         val fragmentTitleList = arrayOf(
-            getString(R.string.scan_qr_code_fragment_title),
-            getString(R.string.view_qr_code_fragment_title)
+            getString(org.odk.collect.strings.R.string.scan_qr_code_fragment_title),
+            getString(org.odk.collect.strings.R.string.view_qr_code_fragment_title)
         )
 
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)

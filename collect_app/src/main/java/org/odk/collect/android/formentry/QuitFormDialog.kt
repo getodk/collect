@@ -48,9 +48,9 @@ object QuitFormDialog {
         val dialog = MaterialAlertDialogBuilder(activity)
             .setTitle(
                 if (saveAsDraft) {
-                    R.string.quit_form_title
+                    org.odk.collect.strings.R.string.quit_form_title
                 } else {
-                    R.string.quit_form_continue_title
+                    org.odk.collect.strings.R.string.quit_form_continue_title
                 }
             )
             .setView(binding.root)
@@ -58,23 +58,23 @@ object QuitFormDialog {
 
         binding.saveExplanation.text = if (!saveAsDraft) {
             if (lastSavedTime != null) {
-                val string = activity.getString(R.string.discard_changes_warning)
+                val string = activity.getString(org.odk.collect.strings.R.string.discard_changes_warning)
                 SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
             } else {
-                activity.getString(R.string.discard_form_warning)
+                activity.getString(org.odk.collect.strings.R.string.discard_form_warning)
             }
         } else if (lastSavedTime != null) {
-            val string = activity.getString(R.string.save_explanation_with_last_saved)
+            val string = activity.getString(org.odk.collect.strings.R.string.save_explanation_with_last_saved)
             SimpleDateFormat(string, Locale.getDefault()).format(lastSavedTime)
         } else {
-            activity.getString(R.string.save_explanation)
+            activity.getString(org.odk.collect.strings.R.string.save_explanation)
         }
 
         binding.discardChanges.setText(
             if (lastSavedTime != null) {
-                R.string.discard_changes
+                org.odk.collect.strings.R.string.discard_changes
             } else {
-                R.string.do_not_save
+                org.odk.collect.strings.R.string.do_not_save
             }
         )
 

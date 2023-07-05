@@ -31,10 +31,10 @@ object FormUpdatesAvailableNotificationBuilder {
             NotificationManagerNotifier.COLLECT_NOTIFICATION_CHANNEL
         ).apply {
             setContentIntent(contentIntent)
-            setContentTitle(application.getLocalizedString(R.string.form_updates_available))
+            setContentTitle(application.getLocalizedString(org.odk.collect.strings.R.string.form_updates_available))
             setContentText(null)
             setSubText(projectName)
-            setSmallIcon(R.drawable.ic_notification_small)
+            setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }

@@ -8,7 +8,6 @@ import android.content.Context;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
 import org.javarosa.core.model.data.helper.Selection;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
@@ -89,7 +88,7 @@ public class SelectOneMinimalWidget extends SelectMinimalWidget {
 
     private void updateAnswer() {
         if (selectedItem == null) {
-            binding.answer.setText(R.string.select_answer);
+            binding.answer.setText(org.odk.collect.strings.R.string.select_answer);
         } else {
             binding.answer.setText(HtmlUtils.textToHtml(getFormEntryPrompt().getSelectItemText(selectedItem)));
         }

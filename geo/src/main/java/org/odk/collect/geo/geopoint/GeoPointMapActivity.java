@@ -141,7 +141,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             setContentView(R.layout.geopoint_layout);
         } catch (NoClassDefFoundError e) {
             Timber.e(e, "Google maps not accessible due to: %s ", e.getMessage());
-            ToastUtils.showShortToast(this, R.string.google_play_services_error_occured);
+            ToastUtils.showShortToast(this, org.odk.collect.strings.R.string.google_play_services_error_occured);
             finish();
             return;
         }
@@ -251,7 +251,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
             intentDraggable = intent.getBooleanExtra(EXTRA_DRAGGABLE_ONLY, false);
             if (!intentDraggable) {
                 // Not Draggable, set text for Map else leave as placement-map text
-                locationInfo.setText(getString(R.string.geopoint_no_draggable_instruction));
+                locationInfo.setText(getString(org.odk.collect.strings.R.string.geopoint_no_draggable_instruction));
             }
 
             intentReadOnly = intent.getBooleanExtra(EXTRA_READ_ONLY, false);
@@ -354,8 +354,8 @@ public class GeoPointMapActivity extends LocalizedActivity {
     }
 
     public String formatLocationStatus(String provider, double accuracyRadius) {
-        return getString(R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius))
-                + " " + getString(R.string.location_provider, GeoUtils.capitalizeGps(provider));
+        return getString(org.odk.collect.strings.R.string.location_accuracy, new DecimalFormat("#.##").format(accuracyRadius))
+                + " " + getString(org.odk.collect.strings.R.string.location_provider, GeoUtils.capitalizeGps(provider));
     }
 
     public void onDragEnd(int draggedFeatureId) {
@@ -399,7 +399,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     /** Places the marker and enables the button to remove it. */
     private void placeMarker(@NonNull MapPoint point) {
         map.clearFeatures();
-        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, new MarkerIconDescription(R.drawable.ic_map_point)));
+        featureId = map.addMarker(new MarkerDescription(point, intentDraggable && !intentReadOnly && !isPointLocked, MapFragment.CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point)));
         if (!intentReadOnly) {
             clearButton.setEnabled(true);
         }

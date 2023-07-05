@@ -67,13 +67,13 @@ class QRCodeViewModel(
                         ProtectedProjectKeys.KEY_ADMIN_PW
                     )
                 ) {
-                    _warning.setValue(R.string.qrcode_with_both_passwords)
+                    _warning.setValue(org.odk.collect.strings.R.string.qrcode_with_both_passwords)
                 } else if (serverPasswordSet && includedKeys.contains(ProjectKeys.KEY_PASSWORD)) {
-                    _warning.setValue(R.string.qrcode_with_server_password)
+                    _warning.setValue(org.odk.collect.strings.R.string.qrcode_with_server_password)
                 } else if (adminPasswordSet && includedKeys.contains(ProtectedProjectKeys.KEY_ADMIN_PW)) {
-                    _warning.setValue(R.string.qrcode_with_admin_password)
+                    _warning.setValue(org.odk.collect.strings.R.string.qrcode_with_admin_password)
                 } else {
-                    _warning.setValue(R.string.qrcode_without_passwords)
+                    _warning.setValue(org.odk.collect.strings.R.string.qrcode_without_passwords)
                 }
             } else {
                 _warning.setValue(null)

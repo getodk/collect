@@ -78,11 +78,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(R.string.capture_video), getAnswerFontSize(), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), getAnswerFontSize(), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(R.string.choose_video), getAnswerFontSize(), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), getAnswerFontSize(), this);
 
-        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(R.string.play_video), getAnswerFontSize(), this);
+        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(org.odk.collect.strings.R.string.play_video), getAnswerFontSize(), this);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
@@ -199,8 +199,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.capture_video)), Toast.LENGTH_SHORT)
+                    getContext().getString(org.odk.collect.strings.R.string.activity_not_found,
+                            getContext().getString(org.odk.collect.strings.R.string.capture_video)), Toast.LENGTH_SHORT)
                     .show();
             waitingForDataRegistry.cancelWaitingForData();
         }
@@ -216,8 +216,8 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         } catch (ActivityNotFoundException e) {
             Toast.makeText(
                     getContext(),
-                    getContext().getString(R.string.activity_not_found,
-                            getContext().getString(R.string.choose_video)), Toast.LENGTH_SHORT)
+                    getContext().getString(org.odk.collect.strings.R.string.activity_not_found,
+                            getContext().getString(org.odk.collect.strings.R.string.choose_video)), Toast.LENGTH_SHORT)
                     .show();
 
             waitingForDataRegistry.cancelWaitingForData();

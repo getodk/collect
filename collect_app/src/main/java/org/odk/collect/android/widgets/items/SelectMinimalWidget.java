@@ -6,7 +6,6 @@ import android.view.View;
 
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.SelectMinimalWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
@@ -48,7 +47,7 @@ public abstract class SelectMinimalWidget extends QuestionWidget implements Widg
 
     @Override
     public void clearAnswer() {
-        binding.answer.setText(R.string.select_answer);
+        binding.answer.setText(org.odk.collect.strings.R.string.select_answer);
         widgetValueChanged();
     }
 

@@ -10,44 +10,44 @@ class FormSourceExceptionMapper(private val context: Context) {
         return when (exception) {
             is FormSourceException.Unreachable -> {
                 context.getLocalizedString(
-                    R.string.unreachable_error,
+                    org.odk.collect.strings.R.string.unreachable_error,
                     exception.serverUrl
                 ) + " " + context.getLocalizedString(
-                    R.string.report_to_project_lead
+                    org.odk.collect.strings.R.string.report_to_project_lead
                 )
             }
             is FormSourceException.SecurityError -> {
                 context.getLocalizedString(
-                    R.string.security_error,
+                    org.odk.collect.strings.R.string.security_error,
                     exception.serverUrl
                 ) + " " + context.getLocalizedString(
-                    R.string.report_to_project_lead
+                    org.odk.collect.strings.R.string.report_to_project_lead
                 )
             }
             is FormSourceException.ServerError -> {
                 context.getLocalizedString(
-                    R.string.server_error,
+                    org.odk.collect.strings.R.string.server_error,
                     exception.serverUrl,
                     exception.statusCode
                 ) + " " + context.getLocalizedString(
-                    R.string.report_to_project_lead
+                    org.odk.collect.strings.R.string.report_to_project_lead
                 )
             }
             is FormSourceException.ParseError -> {
                 context.getLocalizedString(
-                    R.string.invalid_response,
+                    org.odk.collect.strings.R.string.invalid_response,
                     exception.serverUrl
                 ) + " " + context.getLocalizedString(
-                    R.string.report_to_project_lead
+                    org.odk.collect.strings.R.string.report_to_project_lead
                 )
             }
             is FormSourceException.ServerNotOpenRosaError -> {
                 "This server does not correctly implement the OpenRosa formList API." + " " + context.getLocalizedString(
-                    R.string.report_to_project_lead
+                    org.odk.collect.strings.R.string.report_to_project_lead
                 )
             }
             else -> {
-                context.getLocalizedString(R.string.report_to_project_lead)
+                context.getLocalizedString(org.odk.collect.strings.R.string.report_to_project_lead)
             }
         }
     }

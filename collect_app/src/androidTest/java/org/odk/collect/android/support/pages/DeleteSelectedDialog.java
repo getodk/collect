@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 public class DeleteSelectedDialog extends Page<DeleteSelectedDialog> {
 
     private final int numberSelected;
@@ -14,12 +12,12 @@ public class DeleteSelectedDialog extends Page<DeleteSelectedDialog> {
 
     @Override
     public DeleteSelectedDialog assertOnPage() {
-        assertText(getTranslatedString(R.string.delete_confirm, numberSelected));
+        assertText(getTranslatedString(org.odk.collect.strings.R.string.delete_confirm, numberSelected));
         return this;
     }
 
     public DeleteSavedFormPage clickDeleteForms() {
-        clickOnString(R.string.delete_yes);
+        clickOnString(org.odk.collect.strings.R.string.delete_yes);
         return destination.assertOnPage();
     }
 }

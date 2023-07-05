@@ -27,7 +27,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.ScannerWithFlashlightActivity;
 import org.odk.collect.android.databinding.BarcodeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -71,7 +70,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
 
         String answer = prompt.getAnswerText();
         if (answer != null && !answer.isEmpty()) {
-            binding.barcodeButton.setText(getContext().getString(R.string.replace_barcode));
+            binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_barcode));
             binding.barcodeAnswerText.setText(answer);
         }
 
@@ -81,7 +80,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     @Override
     public void clearAnswer() {
         binding.barcodeAnswerText.setText(null);
-        binding.barcodeButton.setText(getContext().getString(R.string.get_barcode));
+        binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.get_barcode));
         widgetValueChanged();
     }
 
@@ -95,7 +94,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     public void setData(Object answer) {
         String response = (String) answer;
         binding.barcodeAnswerText.setText(stripInvalidCharacters(response));
-        binding.barcodeButton.setText(getContext().getString(R.string.replace_barcode));
+        binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_barcode));
         widgetValueChanged();
     }
 
@@ -134,7 +133,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
             if (cameraUtils.isFrontCameraAvailable(getContext())) {
                 intent.addExtra(FRONT, true);
             } else {
-                ToastUtils.showLongToast(getContext(), R.string.error_front_camera_unavailable);
+                ToastUtils.showLongToast(getContext(), org.odk.collect.strings.R.string.error_front_camera_unavailable);
             }
         }
     }

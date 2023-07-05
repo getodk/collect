@@ -41,7 +41,7 @@ class FirstLaunchActivityTest {
     fun `The QrCodeProjectCreatorDialog should be displayed after clicking on the 'Configure with QR code' button`() {
         val scenario = launcherRule.launch(FirstLaunchActivity::class.java)
         scenario.onActivity {
-            onView(withText(R.string.configure_with_qr_code)).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.configure_with_qr_code)).perform(click())
             assertThat(
                 it.supportFragmentManager.findFragmentByTag(QrCodeProjectCreatorDialog::class.java.name),
                 `is`(notNullValue())
@@ -53,7 +53,7 @@ class FirstLaunchActivityTest {
     fun `The ManualProjectCreatorDialog should be displayed after clicking on the 'Configure manually' button`() {
         val scenario = launcherRule.launch(FirstLaunchActivity::class.java)
         scenario.onActivity {
-            onView(withText(R.string.configure_manually)).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.configure_manually)).perform(click())
             assertThat(
                 it.supportFragmentManager.findFragmentByTag(ManualProjectCreatorDialog::class.java.name),
                 `is`(notNullValue())
@@ -85,7 +85,7 @@ class FirstLaunchActivityTest {
             onView(
                 withText(
                     ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
-                        R.string.collect_app_name
+                        org.odk.collect.strings.R.string.collect_app_name
                     ) + " vfake"
                 )
             ).check(matches(isDisplayed()))

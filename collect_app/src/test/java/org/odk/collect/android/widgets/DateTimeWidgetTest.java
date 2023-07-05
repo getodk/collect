@@ -14,7 +14,6 @@ import org.joda.time.LocalDateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.DatePickerDetails;
@@ -68,8 +67,8 @@ public class DateTimeWidgetTest {
     public void whenPromptIsNotReadOnly_buttonShowsCorrectText() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
 
-        assertEquals(widget.binding.dateWidget.dateButton.getText(), widget.getContext().getString(R.string.select_date));
-        assertEquals(widget.binding.timeWidget.timeButton.getText(), widget.getContext().getString(R.string.select_time));
+        assertEquals(widget.binding.dateWidget.dateButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.select_date));
+        assertEquals(widget.binding.timeWidget.timeButton.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.select_time));
     }
 
     @Test
@@ -80,7 +79,7 @@ public class DateTimeWidgetTest {
     @Test
     public void getAnswer_whenPromptHasDateAnswer_returnsDateAnswerAndCurrentTime() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDate())));
-        widget.binding.timeWidget.timeAnswerText.setText(widget.getContext().getString(R.string.no_time_selected));
+        widget.binding.timeWidget.timeAnswerText.setText(widget.getContext().getString(org.odk.collect.strings.R.string.no_time_selected));
 
         assertEquals(widget.getAnswer().getDisplayText(),
                 new DateTimeData(DateTimeUtils.getSelectedDate(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
@@ -89,7 +88,7 @@ public class DateTimeWidgetTest {
     @Test
     public void getAnswer_whenPromptHasTimeAnswer_returnsTimeAnswerAndCurrentDate() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, new DateTimeData(localDateTime.toDate())));
-        widget.binding.dateWidget.dateAnswerText.setText(widget.getContext().getString(R.string.no_date_selected));
+        widget.binding.dateWidget.dateAnswerText.setText(widget.getContext().getString(org.odk.collect.strings.R.string.no_date_selected));
 
         assertEquals(widget.getAnswer().getDisplayText(),
                 new DateTimeData(DateTimeUtils.getSelectedTime(localDateTime, LocalDateTime.now()).toDate()).getDisplayText());
@@ -105,8 +104,8 @@ public class DateTimeWidgetTest {
     public void whenPromptDoesNotHaveAnswer_answerTextViewShowsNoValueSelected() {
         DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
 
-        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
-        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_date_selected));
+        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_time_selected));
     }
 
     @Test
@@ -164,8 +163,8 @@ public class DateTimeWidgetTest {
         widget.clearAnswer();
 
         assertThat(widget.getAnswer(), nullValue());
-        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(), widget.getContext().getString(R.string.no_date_selected));
-        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), widget.getContext().getString(R.string.no_time_selected));
+        assertEquals(widget.binding.dateWidget.dateAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_date_selected));
+        assertEquals(widget.binding.timeWidget.timeAnswerText.getText(), widget.getContext().getString(org.odk.collect.strings.R.string.no_time_selected));
     }
 
     @Test

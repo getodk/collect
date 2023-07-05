@@ -36,7 +36,7 @@ class FormManagementSettingsTest {
             .clickSettings()
             .clickFormManagement()
             .clickUpdateForms()
-            .clickOption(R.string.match_exactly)
+            .clickOption(org.odk.collect.strings.R.string.match_exactly)
 
         deferredTasks = testDependencies.scheduler.deferredTasks
 
@@ -44,7 +44,7 @@ class FormManagementSettingsTest {
 
         val matchExactlyTag = deferredTasks[0].tag
 
-        page.clickAutomaticUpdateFrequency().clickOption(R.string.every_one_hour)
+        page.clickAutomaticUpdateFrequency().clickOption(org.odk.collect.strings.R.string.every_one_hour)
         deferredTasks = testDependencies.scheduler.deferredTasks
 
         assertThat(deferredTasks.size, `is`(1))
@@ -63,14 +63,14 @@ class FormManagementSettingsTest {
             .clickSettings()
             .clickFormManagement()
             .clickUpdateForms()
-            .clickOption(R.string.previously_downloaded_only)
+            .clickOption(org.odk.collect.strings.R.string.previously_downloaded_only)
 
         deferredTasks = testDependencies.scheduler.deferredTasks
 
         assertThat(deferredTasks.size, `is`(1))
 
         val previouslyDownloadedTag = deferredTasks[0].tag
-        page.clickAutomaticUpdateFrequency().clickOption(R.string.every_one_hour)
+        page.clickAutomaticUpdateFrequency().clickOption(org.odk.collect.strings.R.string.every_one_hour)
 
         deferredTasks = testDependencies.scheduler.deferredTasks
 

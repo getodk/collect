@@ -17,7 +17,7 @@ import org.odk.collect.testshared.RobolectricHelpers.getCreatedFromResId
 class SelectionSummarySheetTest {
 
     private val application = getApplicationContext<Application>().also {
-        it.setTheme(R.style.Theme_MaterialComponents)
+        it.setTheme(com.google.android.material.R.style.Theme_MaterialComponents)
     }
 
     @Test

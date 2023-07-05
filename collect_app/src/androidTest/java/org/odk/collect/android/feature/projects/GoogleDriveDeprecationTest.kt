@@ -42,7 +42,7 @@ class GoogleDriveDeprecationTest {
     fun bannerIsNotVisibleInNonGoogleDriveProjects() {
         rule
             .startAtMainMenu()
-            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
     }
 
     @Test
@@ -52,7 +52,7 @@ class GoogleDriveDeprecationTest {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .selectProject(gdProject1.name)
-            .assertText(R.string.google_drive_deprecation_message)
+            .assertText(org.odk.collect.strings.R.string.google_drive_deprecation_message)
     }
 
     @Test
@@ -62,7 +62,7 @@ class GoogleDriveDeprecationTest {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .selectProject(gdProject1.name)
-            .clickOnString(R.string.learn_more_button_text)
+            .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
 
         intended(
             allOf(
@@ -79,10 +79,10 @@ class GoogleDriveDeprecationTest {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .selectProject(gdProject1.name)
-            .assertTextDoesNotExist(R.string.dismiss_button_text)
-            .clickOnString(R.string.learn_more_button_text)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.dismiss_button_text)
+            .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
-            .assertText(R.string.dismiss_button_text)
+            .assertText(org.odk.collect.strings.R.string.dismiss_button_text)
     }
 
     @Test
@@ -92,12 +92,12 @@ class GoogleDriveDeprecationTest {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .selectProject(gdProject1.name)
-            .clickOnString(R.string.learn_more_button_text)
+            .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
-            .clickOnString(R.string.dismiss_button_text)
-            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
+            .clickOnString(org.odk.collect.strings.R.string.dismiss_button_text)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
             .rotateToLandscape(MainMenuPage())
-            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
     }
 
     @Test
@@ -108,13 +108,13 @@ class GoogleDriveDeprecationTest {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .selectProject(gdProject1.name)
-            .clickOnString(R.string.learn_more_button_text)
+            .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
             .pressBack(MainMenuPage())
-            .clickOnString(R.string.dismiss_button_text)
-            .assertTextDoesNotExist(R.string.google_drive_deprecation_message)
+            .clickOnString(org.odk.collect.strings.R.string.dismiss_button_text)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
             .openProjectSettingsDialog()
             .selectProject(gdProject2.name)
-            .assertText(R.string.google_drive_deprecation_message)
+            .assertText(org.odk.collect.strings.R.string.google_drive_deprecation_message)
     }
 
     @Test
@@ -125,7 +125,7 @@ class GoogleDriveDeprecationTest {
             .clickSettings()
             .clickProjectManagement()
             .clickOnDeleteProject()
-            .assertTextDoesNotExist(R.string.delete_google_drive_project_confirm_message)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.delete_google_drive_project_confirm_message)
     }
 
     @Test
@@ -140,6 +140,6 @@ class GoogleDriveDeprecationTest {
             .clickSettings()
             .clickProjectManagement()
             .clickOnDeleteProject()
-            .assertText(R.string.delete_google_drive_project_confirm_message)
+            .assertText(org.odk.collect.strings.R.string.delete_google_drive_project_confirm_message)
     }
 }

@@ -5,7 +5,7 @@ import org.odk.collect.android.R
 class EntitiesPage : Page<EntitiesPage>() {
 
     override fun assertOnPage(): EntitiesPage {
-        assertToolbarTitle(R.string.entities_title)
+        assertToolbarTitle(org.odk.collect.strings.R.string.entities_title)
         return this
     }
 

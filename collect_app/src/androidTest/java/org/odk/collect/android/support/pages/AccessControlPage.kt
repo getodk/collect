@@ -16,32 +16,32 @@ import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 class AccessControlPage : Page<AccessControlPage>() {
 
     override fun assertOnPage(): AccessControlPage {
-        assertText(R.string.access_control_section_title)
+        assertText(org.odk.collect.strings.R.string.access_control_section_title)
         return this
     }
 
     fun openUserSettings(): AccessControlPage {
-        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.user_settings))
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(org.odk.collect.strings.R.string.user_settings))
         return this
     }
 
     fun clickFormEntrySettings(): AccessControlPage {
-        scrollToRecyclerViewItemAndClickText(getTranslatedString(R.string.form_entry_setting))
+        scrollToRecyclerViewItemAndClickText(getTranslatedString(org.odk.collect.strings.R.string.form_entry_setting))
         return this
     }
 
     fun clickMovingBackwards(): AccessControlPage {
-        clickOnString(R.string.moving_backwards_title)
+        clickOnString(org.odk.collect.strings.R.string.moving_backwards_title)
         return this
     }
 
     fun assertGoToPromptEnabled(): AccessControlPage {
-        onView(withText(getTranslatedString(R.string.view_hierarchy))).check(matches(isEnabled()))
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.view_hierarchy))).check(matches(isEnabled()))
         return this
     }
 
     fun assertGoToPromptDisabled(): AccessControlPage {
-        onView(withText(getTranslatedString(R.string.view_hierarchy))).check(matches(not(isEnabled())))
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.view_hierarchy))).check(matches(not(isEnabled())))
         return this
     }
 
@@ -56,12 +56,12 @@ class AccessControlPage : Page<AccessControlPage>() {
     }
 
     fun assertSaveAsDraftInFormEntryEnabled(): AccessControlPage {
-        onView(withIndex(withText(getTranslatedString(R.string.save_mid)), 0)).check(matches(isEnabled()))
+        onView(withIndex(withText(getTranslatedString(org.odk.collect.strings.R.string.save_mid)), 0)).check(matches(isEnabled()))
         return this
     }
 
     fun assertSaveAsDraftInFormEntryDisabled(): AccessControlPage {
-        onView(withIndex(withText(getTranslatedString(R.string.save_mid)), 0)).check(matches(not(isEnabled())))
+        onView(withIndex(withText(getTranslatedString(org.odk.collect.strings.R.string.save_mid)), 0)).check(matches(not(isEnabled())))
         return this
     }
 
@@ -76,12 +76,12 @@ class AccessControlPage : Page<AccessControlPage>() {
     }
 
     fun assertSaveAsDraftInFormEndEnabled(): AccessControlPage {
-        onView(withIndex(withText(getTranslatedString(R.string.save_as_draft)), 1)).check(matches(isEnabled()))
+        onView(withIndex(withText(getTranslatedString(org.odk.collect.strings.R.string.save_as_draft)), 1)).check(matches(isEnabled()))
         return this
     }
 
     fun assertSaveAsDraftInFormEndDisabled(): AccessControlPage {
-        onView(withIndex(withText(getTranslatedString(R.string.save_as_draft)), 1)).check(matches(not(isEnabled())))
+        onView(withIndex(withText(getTranslatedString(org.odk.collect.strings.R.string.save_as_draft)), 1)).check(matches(not(isEnabled())))
         return this
     }
 
@@ -96,12 +96,12 @@ class AccessControlPage : Page<AccessControlPage>() {
     }
 
     fun assertFinalizeEnabled(): AccessControlPage {
-        onView(withText(getTranslatedString(R.string.finalize))).check(matches(isEnabled()))
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.finalize))).check(matches(isEnabled()))
         return this
     }
 
     fun assertFinalizeDisabled(): AccessControlPage {
-        onView(withText(getTranslatedString(R.string.finalize))).check(matches(not(isEnabled())))
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.finalize))).check(matches(not(isEnabled())))
         return this
     }
 
@@ -116,12 +116,12 @@ class AccessControlPage : Page<AccessControlPage>() {
     }
 
     fun clickOnSaveAsDraftInFormEnd(): AccessControlPage {
-        onView(withIndex(withText(getTranslatedString(R.string.save_mid)), 1)).perform(click())
+        onView(withIndex(withText(getTranslatedString(org.odk.collect.strings.R.string.save_mid)), 1)).perform(click())
         return this
     }
 
     fun uncheckServerOption(): AccessControlPage {
-        clickOnString(R.string.server_settings_title)
+        clickOnString(org.odk.collect.strings.R.string.server_settings_title)
         return this
     }
 }

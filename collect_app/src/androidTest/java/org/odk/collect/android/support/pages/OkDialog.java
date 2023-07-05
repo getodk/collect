@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
@@ -28,11 +26,11 @@ public class OkDialog extends Page<OkDialog> {
 
     @Override
     public OkDialog assertOnPage() {
-        onView(withText(R.string.ok)).inRoot(isDialog()).check(matches(isDisplayed()));
+        onView(withText(org.odk.collect.strings.R.string.ok)).inRoot(isDialog()).check(matches(isDisplayed()));
         return this;
     }
 
     public <D extends Page<D>> D clickOK(D destination) {
-        return clickOnButtonInDialog(R.string.ok, destination);
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.ok, destination);
     }
 }

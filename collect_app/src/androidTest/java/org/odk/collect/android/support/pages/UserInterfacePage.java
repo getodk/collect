@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -16,12 +14,12 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
 
     @Override
     public UserInterfacePage assertOnPage() {
-        assertText(R.string.client);
+        assertText(org.odk.collect.strings.R.string.client);
         return this;
     }
 
     public UserInterfacePage clickOnLanguage() {
-        onView(withText(getTranslatedString(R.string.language))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.language))).perform(click());
         return this;
     }
 
@@ -39,27 +37,27 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
     }
 
     public UserInterfacePage clickNavigation() {
-        clickOnString(R.string.navigation);
+        clickOnString(org.odk.collect.strings.R.string.navigation);
         return this;
     }
 
     public UserInterfacePage clickUseSwipesAndButtons() {
-        clickOnString(R.string.swipe_buttons_navigation);
+        clickOnString(org.odk.collect.strings.R.string.swipe_buttons_navigation);
         return this;
     }
 
     public UserInterfacePage clickOnTheme() {
-        onView(withText(getTranslatedString(R.string.app_theme))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.app_theme))).perform(click());
         return this;
     }
 
     public UserInterfacePage clickUseNavigationButtons() {
-        clickOnString(R.string.buttons_navigation);
+        clickOnString(org.odk.collect.strings.R.string.buttons_navigation);
         return this;
     }
 
     public UserInterfacePage clickSwipes() {
-        clickOnString(R.string.swipe_navigation);
+        clickOnString(org.odk.collect.strings.R.string.swipe_navigation);
         return this;
     }
 }

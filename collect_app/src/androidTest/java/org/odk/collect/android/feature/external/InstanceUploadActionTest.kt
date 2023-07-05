@@ -29,7 +29,7 @@ class InstanceUploadActionTest {
 
         OkDialog()
             .assertOnPage()
-            .assertText(R.string.no_forms_uploaded)
+            .assertText(org.odk.collect.strings.R.string.no_forms_uploaded)
     }
 
     private fun instanceUploadAction(instanceIds: LongArray) {

@@ -57,14 +57,14 @@ class QRCodeMenuDelegate internal constructor(
                     showShortToast(
                         activity,
                         activity.getString(
-                            R.string.activity_not_found,
-                            activity.getString(R.string.choose_image)
+                            org.odk.collect.strings.R.string.activity_not_found,
+                            activity.getString(org.odk.collect.strings.R.string.choose_image)
                         )
                     )
                     Timber.w(
                         activity.getString(
-                            R.string.activity_not_found,
-                            activity.getString(R.string.choose_image)
+                            org.odk.collect.strings.R.string.activity_not_found,
+                            activity.getString(org.odk.collect.strings.R.string.choose_image)
                         )
                     )
                 }

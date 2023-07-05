@@ -147,47 +147,47 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
             switch (action) {
                 case RESET_PREFERENCES:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(context.getString(R.string.reset_settings_result),
-                                context.getString(R.string.error_occured)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_settings_result),
+                                context.getString(org.odk.collect.strings.R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(context.getString(R.string.reset_settings_result),
-                                context.getString(R.string.success)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_settings_result),
+                                context.getString(org.odk.collect.strings.R.string.success)));
                     }
                     break;
                 case ProjectResetter.ResetAction.RESET_INSTANCES:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(context.getString(R.string.reset_saved_forms_result),
-                                context.getString(R.string.error_occured)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_saved_forms_result),
+                                context.getString(org.odk.collect.strings.R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(context.getString(R.string.reset_saved_forms_result),
-                                context.getString(R.string.success)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_saved_forms_result),
+                                context.getString(org.odk.collect.strings.R.string.success)));
                     }
                     break;
                 case ProjectResetter.ResetAction.RESET_FORMS:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(context.getString(R.string.reset_blank_forms_result),
-                                context.getString(R.string.error_occured)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_blank_forms_result),
+                                context.getString(org.odk.collect.strings.R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(context.getString(R.string.reset_blank_forms_result),
-                                context.getString(R.string.success)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_blank_forms_result),
+                                context.getString(org.odk.collect.strings.R.string.success)));
                     }
                     break;
                 case ProjectResetter.ResetAction.RESET_CACHE:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(context.getString(R.string.reset_cache_result),
-                                context.getString(R.string.error_occured)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_cache_result),
+                                context.getString(org.odk.collect.strings.R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(context.getString(R.string.reset_cache_result),
-                                context.getString(R.string.success)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_cache_result),
+                                context.getString(org.odk.collect.strings.R.string.success)));
                     }
                     break;
                 case ProjectResetter.ResetAction.RESET_LAYERS:
                     if (failedResetActions.contains(action)) {
-                        resultMessage.append(String.format(context.getString(R.string.reset_layers_result),
-                                context.getString(R.string.error_occured)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_layers_result),
+                                context.getString(org.odk.collect.strings.R.string.error_occured)));
                     } else {
-                        resultMessage.append(String.format(context.getString(R.string.reset_layers_result),
-                                context.getString(R.string.success)));
+                        resultMessage.append(String.format(context.getString(org.odk.collect.strings.R.string.reset_layers_result),
+                                context.getString(org.odk.collect.strings.R.string.success)));
                     }
                     break;
             }

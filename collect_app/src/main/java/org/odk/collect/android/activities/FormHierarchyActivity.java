@@ -659,7 +659,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
                         FormEntryCaption caption = formController.getCaptionPrompt();
                         HierarchyElement groupElement = new HierarchyElement(
-                                HtmlUtils.textToHtml(caption.getShortText()), getString(R.string.group_label),
+                                HtmlUtils.textToHtml(caption.getShortText()), getString(org.odk.collect.strings.R.string.group_label),
                                 ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
                                 HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
                         elementsToDisplay.add(groupElement);
@@ -718,7 +718,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                         } else if (fc.getMultiplicity() == 0) {
                             // Display the repeat header for the group.
                             HierarchyElement group = new HierarchyElement(
-                                    HtmlUtils.textToHtml(fc.getShortText()), getString(R.string.repeatable_group_label),
+                                    HtmlUtils.textToHtml(fc.getShortText()), getString(org.odk.collect.strings.R.string.repeatable_group_label),
                                     ContextCompat.getDrawable(this, R.drawable.ic_repeat),
                                     HierarchyElement.Type.REPEATABLE_GROUP, fc.getIndex());
                             elementsToDisplay.add(group);
@@ -855,7 +855,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     protected void createErrorDialog(String errorMsg) {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this).create();
 
-        alertDialog.setTitle(getString(R.string.error_occured));
+        alertDialog.setTitle(getString(org.odk.collect.strings.R.string.error_occured));
         alertDialog.setMessage(errorMsg);
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
@@ -869,7 +869,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), errorListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(org.odk.collect.strings.R.string.ok), errorListener);
         alertDialog.show();
     }
 

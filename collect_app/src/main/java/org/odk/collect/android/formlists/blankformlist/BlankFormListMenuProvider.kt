@@ -53,7 +53,7 @@ class BlankFormListMenuProvider(
             })
 
             (actionView as SearchView).apply {
-                queryHint = activity.resources.getString(R.string.search)
+                queryHint = activity.resources.getString(org.odk.collect.strings.R.string.search)
                 maxWidth = Int.MAX_VALUE
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String) = false
@@ -89,11 +89,11 @@ class BlankFormListMenuProvider(
                 if (networkStateProvider?.isDeviceOnline == true) {
                     viewModel.syncWithServer().observe(activity) { success: Boolean ->
                         if (success) {
-                            ToastUtils.showShortToast(activity, R.string.form_update_succeeded)
+                            ToastUtils.showShortToast(activity, org.odk.collect.strings.R.string.form_update_succeeded)
                         }
                     }
                 } else {
-                    ToastUtils.showShortToast(activity, R.string.no_connection)
+                    ToastUtils.showShortToast(activity, org.odk.collect.strings.R.string.no_connection)
                 }
                 true
             }
@@ -103,23 +103,23 @@ class BlankFormListMenuProvider(
                     listOf(
                         FormListSortingOption(
                             R.drawable.ic_sort_by_alpha,
-                            R.string.sort_by_name_asc
+                            org.odk.collect.strings.R.string.sort_by_name_asc
                         ),
                         FormListSortingOption(
                             R.drawable.ic_sort_by_alpha,
-                            R.string.sort_by_name_desc
+                            org.odk.collect.strings.R.string.sort_by_name_desc
                         ),
                         FormListSortingOption(
                             R.drawable.ic_access_time,
-                            R.string.sort_by_date_desc
+                            org.odk.collect.strings.R.string.sort_by_date_desc
                         ),
                         FormListSortingOption(
                             R.drawable.ic_access_time,
-                            R.string.sort_by_date_asc
+                            org.odk.collect.strings.R.string.sort_by_date_asc
                         ),
                         FormListSortingOption(
                             R.drawable.ic_sort_by_last_saved,
-                            R.string.sort_by_last_saved
+                            org.odk.collect.strings.R.string.sort_by_last_saved
                         )
                     ),
                     viewModel.sortingOrder

@@ -18,7 +18,7 @@ class FormEndView(
     private val binding = FormEntryEndBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
-        binding.description.text = context.getString(R.string.save_enter_data_description, formTitle)
+        binding.description.text = context.getString(org.odk.collect.strings.R.string.save_enter_data_description, formTitle)
 
         binding.saveAsDraft.isVisible = formEndViewModel.isSaveDraftEnabled()
         binding.saveAsDraft.setOnClickListener {
@@ -32,16 +32,16 @@ class FormEndView(
 
         val shouldFormBeSentAutomatically = formEndViewModel.shouldFormBeSentAutomatically()
         if (shouldFormBeSentAutomatically) {
-            binding.finalize.text = context.getString(R.string.send)
+            binding.finalize.text = context.getString(org.odk.collect.strings.R.string.send)
         }
 
         if (!binding.saveAsDraft.isVisible && !shouldFormBeSentAutomatically) {
-            binding.formEditsWarningMessage.setText(R.string.form_edits_warning_only_finalize_enabled)
+            binding.formEditsWarningMessage.setText(org.odk.collect.strings.R.string.form_edits_warning_only_finalize_enabled)
         } else if (binding.saveAsDraft.isVisible && binding.finalize.isVisible) {
             if (shouldFormBeSentAutomatically) {
-                binding.formEditsWarningMessage.setText(R.string.form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled)
+                binding.formEditsWarningMessage.setText(org.odk.collect.strings.R.string.form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled)
             } else {
-                binding.formEditsWarningMessage.setText(R.string.form_edits_warning_save_as_draft_and_finalize_enabled)
+                binding.formEditsWarningMessage.setText(org.odk.collect.strings.R.string.form_edits_warning_save_as_draft_and_finalize_enabled)
             }
         } else {
             binding.formEditsWarning.visibility = View.GONE

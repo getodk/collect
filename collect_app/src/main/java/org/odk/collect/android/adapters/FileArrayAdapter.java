@@ -67,7 +67,7 @@ public class FileArrayAdapter extends ArrayAdapter<DriveListItem> {
             if (item.getDate() != null) {
                 try {
                     dateModified = new SimpleDateFormat(getContext().getString(
-                            R.string.modified_on_date_at_time), Locale.getDefault())
+                            org.odk.collect.strings.R.string.modified_on_date_at_time), Locale.getDefault())
                             .format(new Date(item.getDate().getValue()));
                 } catch (IllegalArgumentException e) {
                     Timber.e(e);

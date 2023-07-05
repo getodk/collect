@@ -136,7 +136,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
-        setTitle(getString(R.string.google_drive));
+        setTitle(getString(org.odk.collect.strings.R.string.google_drive));
         setSupportActionBar(toolbar);
     }
 
@@ -175,7 +175,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             myDrive = false;
 
             if (!connectivityProvider.isDeviceOnline()) {
-                createAlertDialog(getString(R.string.no_connection));
+                createAlertDialog(getString(org.odk.collect.strings.R.string.no_connection));
             }
         }
 
@@ -209,9 +209,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
         rootButton = findViewById(R.id.root_button);
         if (myDrive) {
-            rootButton.setText(getString(R.string.go_shared));
+            rootButton.setText(getString(org.odk.collect.strings.R.string.go_shared));
         } else {
-            rootButton.setText(getString(R.string.go_drive));
+            rootButton.setText(getString(org.odk.collect.strings.R.string.go_drive));
         }
         rootButton.setOnClickListener(this);
 
@@ -228,11 +228,11 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         sortingOptions = Arrays.asList(
                 new FormListSortingOption(
                         R.drawable.ic_sort_by_alpha,
-                        R.string.sort_by_name_asc
+                        org.odk.collect.strings.R.string.sort_by_name_asc
                 ),
                 new FormListSortingOption(
                         R.drawable.ic_sort_by_alpha,
-                        R.string.sort_by_name_desc
+                        org.odk.collect.strings.R.string.sort_by_name_desc
                 )
         );
 
@@ -267,7 +267,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 downloadButton.setEnabled(false);
                 listFiles(ROOT_KEY);
             } else {
-                createAlertDialog(getString(R.string.no_connection));
+                createAlertDialog(getString(org.odk.collect.strings.R.string.no_connection));
             }
             currentPath.clear();
             currentPath.add(rootButton.getText().toString());
@@ -319,7 +319,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             }
         }
 
-        alertMsg = getString(R.string.drive_get_file, messageBuilder.toString());
+        alertMsg = getString(org.odk.collect.strings.R.string.drive_get_file, messageBuilder.toString());
         showDialog(PROGRESS_DIALOG);
 
         getFileTask = new GetFileTask();
@@ -394,19 +394,19 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                                 getFileTask.setGoogleDriveFormDownloadListener(null);
                             }
                         };
-                progressDialog.setTitle(getString(R.string.downloading_data));
+                progressDialog.setTitle(getString(org.odk.collect.strings.R.string.downloading_data));
                 progressDialog.setMessage(alertMsg);
                 progressDialog.setIndeterminate(true);
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressDialog.setCancelable(false);
-                progressDialog.setButton(getString(R.string.cancel), loadingButtonListener);
+                progressDialog.setButton(getString(org.odk.collect.strings.R.string.cancel), loadingButtonListener);
                 return progressDialog;
             case GOOGLE_USER_DIALOG:
                 MaterialAlertDialogBuilder gudBuilder = new MaterialAlertDialogBuilder(this);
 
-                gudBuilder.setTitle(getString(R.string.no_google_account));
-                gudBuilder.setMessage(getString(R.string.google_set_account));
-                gudBuilder.setPositiveButton(R.string.ok, (dialog, which) -> finish());
+                gudBuilder.setTitle(getString(org.odk.collect.strings.R.string.no_google_account));
+                gudBuilder.setMessage(getString(org.odk.collect.strings.R.string.google_set_account));
+                gudBuilder.setPositiveButton(org.odk.collect.strings.R.string.ok, (dialog, which) -> finish());
                 gudBuilder.setCancelable(false);
                 return gudBuilder.create();
         }
@@ -415,7 +415,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
     private void createAlertDialog(String message) {
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this).create();
-        alertDialog.setTitle(getString(R.string.download_forms_result));
+        alertDialog.setTitle(getString(org.odk.collect.strings.R.string.download_forms_result));
         alertDialog.setMessage(message);
         DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
             @Override
@@ -429,7 +429,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
             }
         };
         alertDialog.setCancelable(false);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), quitListener);
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(org.odk.collect.strings.R.string.ok), quitListener);
         alertShowing = true;
         alertMsg = message;
         DialogUtils.showDialog(alertDialog, this);
@@ -482,9 +482,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         }
 
         if (myDrive) {
-            rootButton.setText(getString(R.string.go_drive));
+            rootButton.setText(getString(org.odk.collect.strings.R.string.go_drive));
         } else {
-            rootButton.setText(getString(R.string.go_shared));
+            rootButton.setText(getString(org.odk.collect.strings.R.string.go_shared));
         }
 
         if (folderIdStack.empty()) {
@@ -496,9 +496,9 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
         if (currentPath.empty()) {
             if (myDrive) {
-                currentPath.add(getString(R.string.go_drive));
+                currentPath.add(getString(org.odk.collect.strings.R.string.go_drive));
             } else {
-                currentPath.add(getString(R.string.go_shared));
+                currentPath.add(getString(org.odk.collect.strings.R.string.go_shared));
             }
         }
 
@@ -593,7 +593,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 currentPath.pop();
                 // }
             } else {
-                createAlertDialog(getString(R.string.no_connection));
+                createAlertDialog(getString(org.odk.collect.strings.R.string.no_connection));
             }
         } else if (v.getId() == R.id.download_button) {
             getFiles();
@@ -612,7 +612,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 folderIdStack.push(item.getDriveId());
                 currentPath.push(item.getName());
             } else {
-                createAlertDialog(getString(R.string.no_connection));
+                createAlertDialog(getString(org.odk.collect.strings.R.string.no_connection));
             }
         } else {
             // file clicked, download the file, mark checkbox.
@@ -643,11 +643,11 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog = new DayNightProgressDialog(GoogleDriveActivity.this);
-            progressDialog.setMessage(getString(R.string.reading_files));
+            progressDialog.setMessage(getString(org.odk.collect.strings.R.string.reading_files));
             progressDialog.setIndeterminate(true);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.setCancelable(false);
-            progressDialog.setButton(getString(R.string.cancel), (dialog, which) -> {
+            progressDialog.setButton(getString(org.odk.collect.strings.R.string.cancel), (dialog, which) -> {
                 cancel(true);
                 rootButton.setEnabled(true);
                 driveList.clear();
@@ -666,7 +666,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                 } catch (IOException e) {
                     if (!isCancelled()) {
                         Timber.e(e);
-                        runOnUiThread(() -> createAlertDialog(getString(R.string.google_auth_io_exception_msg)));
+                        runOnUiThread(() -> createAlertDialog(getString(org.odk.collect.strings.R.string.google_auth_io_exception_msg)));
                     }
                 }
                 if (rootId == null) {
@@ -879,7 +879,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
 
                 try {
                     downloadFile(fileItem.getDriveId(), fileItem.getName());
-                    results.put(fileItem.getName(), getString(R.string.success));
+                    results.put(fileItem.getName(), getString(org.odk.collect.strings.R.string.success));
 
                     String mediaDirName = FileUtils.constructMediaPath(fileItem.getName());
 
@@ -887,7 +887,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                     try {
                         mediaFileList = getMediaFiles(fileItem);
                     } catch (MultipleFoldersFoundException exception) {
-                        results.put(fileItem.getName(), getString(R.string.multiple_media_folders_detected_notification));
+                        results.put(fileItem.getName(), getString(org.odk.collect.strings.R.string.multiple_media_folders_detected_notification));
                         return results;
                     }
 
@@ -897,7 +897,7 @@ public class GoogleDriveActivity extends FormListActivity implements View.OnClic
                         for (com.google.api.services.drive.model.File mediaFile : mediaFileList) {
                             String filePath = mediaDirName + File.separator + mediaFile.getName();
                             downloadFile(mediaFile.getId(), filePath);
-                            results.put(filePath, getString(R.string.success));
+                            results.put(filePath, getString(org.odk.collect.strings.R.string.success));
                         }
                     }
                 } catch (Exception e) {

@@ -72,8 +72,8 @@ class PermissionsProviderTest {
 
         verify(permissionsDialogCreator).showAdditionalExplanation(
             activity,
-            R.string.camera_runtime_permission_denied_title,
-            R.string.camera_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_desc,
             R.drawable.ic_photo_camera,
             permissionListener
         )
@@ -131,8 +131,8 @@ class PermissionsProviderTest {
 
         verify(permissionsDialogCreator).showAdditionalExplanation(
             activity,
-            R.string.location_runtime_permissions_denied_title,
-            R.string.location_runtime_permissions_denied_desc,
+            org.odk.collect.strings.R.string.location_runtime_permissions_denied_title,
+            org.odk.collect.strings.R.string.location_runtime_permissions_denied_desc,
             R.drawable.ic_room_24dp,
             permissionListener
         )
@@ -165,8 +165,8 @@ class PermissionsProviderTest {
 
         verify(permissionsDialogCreator).showAdditionalExplanation(
             activity,
-            R.string.record_audio_runtime_permission_denied_title,
-            R.string.record_audio_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.record_audio_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.record_audio_runtime_permission_denied_desc,
             R.drawable.ic_mic,
             permissionListener
         )
@@ -213,8 +213,8 @@ class PermissionsProviderTest {
 
         verify(permissionsDialogCreator).showAdditionalExplanation(
             activity,
-            R.string.camera_runtime_permission_denied_title,
-            R.string.camera_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_desc,
             R.drawable.ic_photo_camera,
             permissionListener
         )
@@ -260,8 +260,8 @@ class PermissionsProviderTest {
 
         verify(permissionsDialogCreator).showAdditionalExplanation(
             activity,
-            R.string.get_accounts_runtime_permission_denied_title,
-            R.string.get_accounts_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.get_accounts_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.get_accounts_runtime_permission_denied_desc,
             R.drawable.ic_get_accounts,
             permissionListener
         )

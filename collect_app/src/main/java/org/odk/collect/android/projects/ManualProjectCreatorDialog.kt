@@ -100,13 +100,13 @@ class ManualProjectCreatorDialog :
     }
 
     private fun setUpToolbar() {
-        toolbar.setTitle(R.string.add_project)
+        toolbar.setTitle(org.odk.collect.strings.R.string.add_project)
         toolbar.navigationIcon = null
     }
 
     private fun handleAddingNewProject() {
         if (!Validator.isUrlValid(binding.urlInputText.text?.trim().toString())) {
-            ToastUtils.showShortToast(requireContext(), R.string.url_error)
+            ToastUtils.showShortToast(requireContext(), org.odk.collect.strings.R.string.url_error)
         } else {
             val settingsJson = appConfigurationGenerator.getAppConfigurationAsJsonWithServerDetails(
                 binding.urlInputText.text?.trim().toString(),
@@ -135,7 +135,7 @@ class ManualProjectCreatorDialog :
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(
             requireContext(),
-            getString(R.string.switched_project, currentProjectProvider.getCurrentProject().name)
+            getString(org.odk.collect.strings.R.string.switched_project, currentProjectProvider.getCurrentProject().name)
         )
     }
 
@@ -145,7 +145,7 @@ class ManualProjectCreatorDialog :
         ToastUtils.showLongToast(
             requireContext(),
             getString(
-                org.odk.collect.projects.R.string.switched_project,
+                org.odk.collect.strings.R.string.switched_project,
                 currentProjectProvider.getCurrentProject().name
             )
         )

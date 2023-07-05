@@ -103,8 +103,8 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
 
     private fun createNotification(): Notification {
         val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
-            .setSmallIcon(R.drawable.ic_notification_small)
-            .setContentTitle(getLocalizedString(R.string.location_tracking_notification_title))
+            .setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
+            .setContentTitle(getLocalizedString(org.odk.collect.strings.R.string.location_tracking_notification_title))
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setContentIntent(createNotificationIntent())
 
@@ -119,7 +119,7 @@ class LocationTrackerService : Service(), LocationClient.LocationClientListener 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 NOTIFICATION_CHANNEL,
-                getLocalizedString(R.string.location_tracking_notification_channel_name),
+                getLocalizedString(org.odk.collect.strings.R.string.location_tracking_notification_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             )
 

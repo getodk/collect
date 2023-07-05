@@ -10,7 +10,6 @@ import androidx.test.core.app.ApplicationProvider;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -26,7 +25,7 @@ public class SetGeopointActionTest {
     @Test
     public void locationCollectionSnackbar_ShouldBeDisplayedAtFormLaunch() {
         onView(withId(com.google.android.material.R.id.snackbar_text))
-                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(R.string.background_location_enabled), "⋮"))));
+                .check(matches(withText(String.format(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.background_location_enabled), "⋮"))));
     }
 
     /**
@@ -36,6 +35,6 @@ public class SetGeopointActionTest {
     public void locationCollectionToggle_ShouldBeAvailable() {
         rule.startInFormEntry()
                 .clickOptionsIcon()
-                .assertText(R.string.track_location);
+                .assertText(org.odk.collect.strings.R.string.track_location);
     }
 }
