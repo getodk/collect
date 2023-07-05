@@ -17,7 +17,7 @@ jobs:
       - checkout
       - run:
           name: Generate combined build.gradle file for cache key
-          command: cat build.gradle */build.gradle .circleci/gradle.properties .circleci/config.yml > deps.txt
+          command: cat build.gradle */build.gradle .circleci/gradle.properties .circleci/config.yml buildSrc/src/main/java/dependencies/Dependencies.kt buildSrc/src/main/java/dependencies/Versions.kt > deps.txt
       - restore_cache:
           keys:
             - compile-deps-{{ checksum "deps.txt" }}
