@@ -7,8 +7,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.os.Build;
-
 import org.odk.collect.android.R;
 
 public class FormEndPage extends Page<FormEndPage> {
@@ -76,14 +74,12 @@ public class FormEndPage extends Page<FormEndPage> {
         return new FormEntryPage(formName).swipeToPreviousQuestion(questionText, isRequired);
     }
 
-    private void assertConstraintDisplayed(String constraintText) {
-        // Constraints warnings show as dialogs in Android 11+
-        if (Build.VERSION.SDK_INT < 30) {
-            checkIsToastWithMessageDisplayed(constraintText);
-        } else {
-            new OkDialog().assertOnPage()
-                    .assertText(constraintText)
-                    .clickOK(new FormEntryPage(formName));
-        }
+    public FormEndPage clickOptionsIcon() {
+        return clickOptionsIcon(R.string.project_settings);
+    }
+
+    public FormEntryPage assertConstraintDisplayed(String constraintText) {
+        FormEntryPage formEntryPage = new FormEntryPage(formName);
+        return formEntryPage.assertConstraintDisplayed(constraintText);
     }
 }

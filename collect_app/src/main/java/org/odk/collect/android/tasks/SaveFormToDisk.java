@@ -29,7 +29,6 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.instance.FormInstance;
 import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
-import org.javarosa.form.api.FormEntryController;
 import org.javarosa.xpath.XPathException;
 import org.javarosa.xpath.XPathNodeset;
 import org.javarosa.xpath.XPathParseTool;
@@ -46,7 +45,9 @@ import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.saving.FormSaver;
+import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
@@ -113,10 +114,10 @@ public class SaveFormToDisk {
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), R.string.survey_saving_validating_message));
 
         try {
-            int validateStatus = formController.validateAnswers(shouldFinalize);
-            if (validateStatus != FormEntryController.ANSWER_OK) {
+            ValidationResult validationResult = formController.validateAnswers(shouldFinalize);
+            if (validationResult instanceof FailedValidationResult) {
                 // validation failed, pass specific failure
-                saveToDiskResult.setSaveResult(validateStatus, shouldFinalize);
+                saveToDiskResult.setSaveResult(((FailedValidationResult) validationResult).getStatus(), shouldFinalize);
                 return saveToDiskResult;
             }
         } catch (Exception e) {

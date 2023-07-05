@@ -139,7 +139,7 @@ interface FormController {
      * type.
      */
     @Throws(JavaRosaException::class)
-    fun validateAnswers(markCompleted: Boolean): Int
+    fun validateAnswers(markCompleted: Boolean): ValidationResult
 
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any
@@ -215,13 +215,13 @@ interface FormController {
     fun isDisplayableGroup(index: FormIndex?): Boolean
 
     @Throws(JavaRosaException::class)
-    fun saveOneScreenAnswer(index: FormIndex?, data: IAnswerData?, evaluateConstraints: Boolean): FailedConstraint?
+    fun saveOneScreenAnswer(index: FormIndex?, data: IAnswerData?, evaluateConstraints: Boolean): ValidationResult
 
     /**
      * @return FailedConstraint of first failed constraint or null if all questions were saved.
      */
     @Throws(JavaRosaException::class)
-    fun saveAllScreenAnswers(answers: HashMap<FormIndex, IAnswerData>?, evaluateConstraints: Boolean): FailedConstraint?
+    fun saveAllScreenAnswers(answers: HashMap<FormIndex, IAnswerData>?, evaluateConstraints: Boolean): ValidationResult
 
     /**
      * Creates a new repeated instance of the group referenced by the current FormIndex.

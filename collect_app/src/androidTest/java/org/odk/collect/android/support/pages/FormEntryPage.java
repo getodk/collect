@@ -20,11 +20,9 @@ import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 
 import org.hamcrest.Matchers;
 import org.odk.collect.android.R;
-import org.odk.collect.android.support.ActivityHelpers;
 import org.odk.collect.android.support.WaitFor;
 import org.odk.collect.android.utilities.FlingRegister;
 
@@ -149,12 +147,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickOptionsIcon() {
-        tryAgainOnFail(() -> {
-            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity());
-            assertText(R.string.project_settings);
-        });
-
-        return this;
+        return clickOptionsIcon(R.string.project_settings);
     }
 
     public ProjectSettingsPage clickGeneralSettings() {
@@ -376,6 +369,17 @@ public class FormEntryPage extends Page<FormEntryPage> {
             new OkDialog().assertOnPage()
                     .assertText(constraintText)
                     .clickOK(this);
+        }
+
+        return this;
+    }
+
+    public FormEntryPage assertConstraintNotDisplayed(String constraintText) {
+        // Constraints warnings show as dialogs in Android 11+
+        if (Build.VERSION.SDK_INT < 30) {
+            assertToastNotDisplayed(constraintText);
+        } else {
+            assertOnPage();
         }
 
         return this;

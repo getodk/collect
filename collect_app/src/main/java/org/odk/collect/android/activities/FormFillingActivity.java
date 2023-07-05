@@ -135,8 +135,10 @@ import org.odk.collect.android.fragments.dialogs.NumberPickerDialog;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
+import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
+import org.odk.collect.android.javarosawrapper.SuccessValidationResult;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.SavePointListener;
@@ -544,18 +546,21 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         });
 
-        formEntryViewModel.getFailedConstraint().observe(this, failedConstraint -> {
-            if (failedConstraint != null) {
+        formEntryViewModel.getValidationResult().observe(this, validationResult -> {
+            if (validationResult instanceof FailedValidationResult) {
+                FailedValidationResult failedValidationResult = (FailedValidationResult) validationResult;
                 try {
-                    createConstraintToast(failedConstraint.index, failedConstraint.status);
+                    createConstraintToast(failedValidationResult.getIndex(), failedValidationResult.getStatus());
                     if (getFormController().indexIsInFieldList() && getFormController().getQuestionPrompts().length > 1) {
-                        getCurrentViewIfODKView().highlightWidget(failedConstraint.index);
+                        getCurrentViewIfODKView().highlightWidget(failedValidationResult.getIndex());
                     }
                 } catch (RepeatsInFieldListException e) {
                     createErrorDialog(e.getMessage(), false);
                 }
 
                 swipeHandler.setBeenSwiped(false);
+            } else if (validationResult instanceof SuccessValidationResult) {
+                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(R.string.success_form_validation), findViewById(R.id.buttonholder));
             }
         });
 
