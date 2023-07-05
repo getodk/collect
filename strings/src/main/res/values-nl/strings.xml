@@ -1,15 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
+  <string name="enter_data">Begin met nieuw formulier</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">Concepten</string>
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">Klaar voor verzending</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">Verzonden</string>
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">Download formulier</string>
   <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">Verwijder formulier</string>
   <string name="saved_forms">Opgeslagen formulieren</string>
+  <string name="version_number">Versie: %s</string>
+  <string name="id_number">ID: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Toegevoegd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\'Gewijzigd op\' EEE dd MMM yyyy \'om\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Opgeslagen op\' EEE dd MMM yyyy \'om\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -32,12 +41,19 @@
   <string name="sort_by_date_desc">Datum, nieuwste eerst</string>
   <string name="sort_by_date_asc">Datum, oudste eerst</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">Laatst bewaarde eerst</string>
   <string name="filter_the_list">Lijst filteren</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">Zoek</string>
   <string name="no_items_display">Leeg</string>
   <string name="no_items_display_forms">Leeg.\n\nDownload eerst een formulier en vul dat in.</string>
   <string name="no_items_display_sent_forms">Leeg.\n\nVerstuur eerst afgeronde formulieren om deze te kunnen bekijken.</string>
+  <string name="no_items_display_instances">Niet beschikbaar om te tonen.\n\nProbeer concepten af te ronden voor het te verzenden.</string>
+  <string name="storage_runtime_permission_denied_title">Opslagrechten</string>
+  <string name="location_runtime_permissions_denied_title">Locatie rechten</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="camera_runtime_permission_denied_title">Camera rechten</string>
+  <string name="record_audio_runtime_permission_denied_title">Geluidsopname rechten</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -58,6 +74,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">Ga naar vraag</string>
   <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">Bewaar als concept</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">Naar begin</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -91,8 +108,12 @@
   <string name="required_answer_error">Sorry, deze vraag is verplicht!</string>
   <string name="invalid_space_in_answer_singular">Waarschuwing: de onderliggende waarde, %s, heeft spaties</string>
   <string name="invalid_space_in_answer_plural">Waarschuwing: de onderliggende waardes, %s, hebben spaties</string>
+  <string name="too_complex_form">Dit formulier is te complex voor dit apparaat. Probeer de expressies te vereenvoudigen of vraag om hulp in het online forum.</string>
   <string name="survey_internal_error">Interne fout: doorgaan naar invoer mislukt.</string>
   <string name="save_enter_data_description">U bent aan het einde van \"%s\".</string>
+  <string name="save_as_draft">Bewaar als concept</string>
+  <string name="finalize">Afronden</string>
+  <string name="send">Verzend</string>
   <string name="data_saved_error">Sorry, formulier opslaan mislukt!</string>
   <string name="data_saved_ok">Formulier is opgeslagen!</string>
   <string name="save_point_error">Fout bij maken herstelpunt: %s</string>
@@ -100,6 +121,10 @@
   <string name="quit_application">Sluit %s af</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
   <string name="keep_changes">Wijzigingen opslaan</string>
+  <string name="keep_editing">Doorgaan met invullen</string>
+  <string name="quit_form_title">Bewaar formulier?</string>
+  <string name="save_explanation_with_last_saved">\'Dit formulier was voor het laatst bewaard op \' EEE dd MMM yyyy \'om\' HH:mm\'. Bewaar als concept om de wijzigingen te behouden.</string>
+  <string name="quit_form_continue_title">Doorgaan met wijzigen?</string>
   <string name="saving_form">Formulier opslaan</string>
   <string name="survey_saving_validating_message">Valideren antwoorden…</string>
   <string name="survey_saving_collecting_message">Data verzamelen…</string>
@@ -110,10 +135,13 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Kon opname niet starten.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Microfoon wordt reeds gebruikt.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">Ingevuld formulier is verwijderd!</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
   <!--##############################################
     # FORM FEATURES
@@ -127,11 +155,17 @@
   <string name="open_url">Open Url</string>
   <string name="capture_osm">OpenMapKit starten</string>
   <string name="recapture_osm">OSM Tagging opnieuw uitvoeren</string>
+  <string name="invalid_osm_data">Er is iets fout gegaan. We hebben geen correcte OSM data ontvangen.</string>
+  <string name="install_openmapkit">Installeer OpenMapKit alsjeblieft.</string>
   <string name="get_barcode">Scan barcode</string>
   <string name="replace_barcode">Vervang barcode</string>
+  <string name="barcode_scanner_prompt">Positioneer de barcode binnen het rechthoek</string>
   <string name="open_file">Open bestand</string>
+  <string name="svg_file_does_not_exist">SVG bestand bestaat niet!</string>
   <string name="capture_image">Foto nemen</string>
   <string name="choose_image">Selecteer afbeelding</string>
+  <string name="selected_invalid_image">Geselecteerd bestand is niet een valide afbeelding</string>
+  <string name="camera_failed_to_initialize">Kan de camera niet activeren!</string>
   <string name="annotate_image">Aantekening maken bij afbeelding</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Opslaan en sluiten</string>
@@ -146,29 +180,43 @@
   <string name="play_video">Bekijk video</string>
   <string name="choose_file">Bestand Kiezen</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">Verwijder</string>
   <!--Text for button that starts recording sound-->
   <string name="capture_audio">Audio vastleggen</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">Selecteer audio</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">Pauzeer</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">Doorgaan</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">Geluid opnemen</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">Verwijder bestand?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Stop</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Opnemen…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Geluidsopname</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">Speel geluid</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">Opslaan bestand</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">Je moet de opname stoppen voordat je dit scherm verlaat.</string>
   <string name="error_attaching_binary_file">Er is een fout opgetreden bij het koppelen van media: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_value">Selecteer waarde</string>
   <string name="select_answer">Kies een antwoord</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="edit_value">Wijzig waarde</string>
   <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="no_value_selected">Geen waarde geselecteerd</string>
   <string name="selected">Gekozen:</string>
   <string name="trigger">OK. Ga door.</string>
   <string name="ext_file_no_data_error">Het bestand is leeg!</string>
@@ -203,11 +251,17 @@
   <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
   <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
   <!--Action to close a full screen dialog-->
+  <string name="close">Sluit</string>
   <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes">Reden voor wijzigingen</string>
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason">Reden</string>
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes_description">Je moet de redenen voor de wijzigingen in dit formulier uitleggen.</string>
   <!--Action to save the contents of a full screen dialog-->
+  <string name="save">Bewaar</string>
   <!--Button text to select a place from a list presented on a map-->
+  <string name="choices">Keuzes</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -219,9 +273,11 @@
   <string name="streets">Straten</string>
   <string name="terrain">Terrein</string>
   <string name="hybrid">Hybride</string>
+  <string name="satellite">Satelliet</string>
   <string name="light" tools:ignore="UnusedResources">Licht</string>
   <string name="dark" tools:ignore="UnusedResources">Donker</string>
   <string name="outdoors" tools:ignore="UnusedResources">Buiten</string>
+  <string name="topographic">Topografisch</string>
   <string name="view_change_location">Bekijk of wijzig positie</string>
   <string name="change_location">Locatie wijzigen</string>
   <string name="get_location">Positie vastleggen</string>
@@ -229,6 +285,7 @@
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Ga naar instellingen</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
   <!--%1$s is the number of satellites being used to get location-->
@@ -240,14 +297,18 @@
   <string name="start">Start</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <string name="none">Geen</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <string name="select_item">Selecteer</string>
   <!--Name of an action button-->
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <!--Title for notification that lets user know their location is currently being tracked-->
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">Toon mijn locatie</string>
   <!--Description for button that zooms a map so that it shows all items-->
   <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">Pauzeer</string>
   <!--Description for button that removes the last recorded point-->
   <!--##############################################
     # SEND FINALIZED FORM
@@ -275,6 +336,7 @@
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
   <string name="version">Versie:</string>
   <string name="form_updates_available">Formulier updates beschikbaar</string>
+  <string name="forms_download_failed">Downloaden formulieren mislukt</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
@@ -285,6 +347,7 @@
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Dit formulier kan niet worden verwerkt.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--##############################################
@@ -299,31 +362,40 @@
   <string name="delete_no">Niet verwijderen</string>
   <string name="delete_yes">Verwijderen</string>
   <string name="file_deleted_error">Sorry, %1$s van de %2$s geselecteerde formulier(en) kon niet worden verwijderd!</string>
+  <string name="form_delete_message">Verwijderen van geselecteerde formulieren</string>
   <string name="file_deleted_ok">%s formulier(en) verwijderd!</string>
   <string name="file_delete_in_progress">Sorry, er is nog een verwijder opdracht actief!</string>
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->
+  <string name="project_settings">Project instellingen</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">Server</string>
   <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, gebruikersnaam, wachtwoord</string>
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
+  <string name="project_display_subtext">Naam, icoon, kleur</string>
   <!--Title of a settings section-->
   <string name="client">Gebruikersinterface</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="maps">Kaarten</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="form_management_preferences">Formulierbeheer</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section only available in beta or development builds.-->
+  <string name="protected_settings">Beveiligd</string>
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="project_management_section_title">Projectbeheer</string>
   <!--Subtext of a settings section-->
   <!--Title of a settings section-->
+  <string name="access_control_section_title">Toegangsbeheer</string>
   <!--Subtext of a settings section-->
   <string name="server_preferences">Server</string>
   <!--Label for server type setting-->
@@ -420,6 +492,7 @@
   <string name="show_password">Wachtwoord tonen</string>
   <string name="found_in_main">Uitvinken om te verbergen in hoofdmenu</string>
   <string name="reset_project_settings_title">Reset</string>
+  <string name="delete_project">Verwijder</string>
   <string name="select_all">Selecteer Alles</string>
   <string name="reset_settings_button_reset">Reset</string>
   <string name="reset_settings_result">Alle instellingen ::%s</string>
@@ -431,6 +504,7 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="no">Nee</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">Bewaar als concept</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->

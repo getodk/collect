@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -375,6 +375,7 @@
   <string name="track_location">Rekam pergerakan lokasi</string>
   <string name="background_location_disabled">Formulir ini hendak melacak lokasi Anda, tetapi pelacakan lokasi tidak aktif. Mohon aktifkan melalui menu %1$s di atas.</string>
   <string name="background_location_enabled">Formulir ini melacak lokasi Anda. Anda dapat menonaktifkan pelacakan melalui menu %1$s di atas.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">Mulai GeoPoint</string>
   <string name="geopoint_view_read_only">Lihat GeoPoint</string>
   <string name="geoshape_view_read_only">Lihat GeoShape</string>

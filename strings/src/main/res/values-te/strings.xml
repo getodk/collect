@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -352,6 +352,7 @@
   <string name="track_location">మీ ప్రదేశాన్ని ట్రాక్ చేయండి</string>
   <string name="background_location_disabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని ట్రాకింగ్ నిలిపివేయబడింది. దయచేసి పై మెను %1$sలో ప్రారంభించండి.</string>
   <string name="background_location_enabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేస్తుంది. పై మెను%1$sలో మీరు ట్రాకింగ్‌ను నిలిపివేయవచ్చు.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">జియోపాయింట్ ప్రారంభించండి</string>
   <string name="geopoint_view_read_only">జియోపాయింట్ చూడండి</string>
   <string name="get_shape">జియోషాప్ ప్రారంభించండి</string>
