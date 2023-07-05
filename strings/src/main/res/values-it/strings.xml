@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <string name="enter_data">Inizia nuovo modulo</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Bozze</string>
@@ -48,6 +48,7 @@
   <string name="no_items_display">Niente a disposizione da visualizzare.</string>
   <string name="no_items_display_forms">Niente da visualizzare.\n\nProva a caricare e riempire un modulo vuoto.</string>
   <string name="no_items_display_sent_forms">Nessun elemento visualizzabile.\n\nProva ad inviare i moduli completati prima di visualizzarli.</string>
+  <string name="no_items_display_instances">Niente disponibile da visualizzare.\n\nProva a finalizzare le bozze prima di inviarle.</string>
   <string name="not_granted_permission">L\'attività che stai tentando di avviare richiede un\'autorizzazione che non viene concessa.</string>
   <string name="storage_runtime_permission_denied_title">Autorizzazione all\'uso della memoria</string>
   <string name="storage_runtime_permission_denied_desc">Senza questi permessi Collect non può accedere ai tuoi questionari o salvare le risposte. Riapri la applicazione quando sei pronto ad autorizzarli.</string>
@@ -74,6 +75,7 @@
   <string name="survey_loading_reading_csv_message">Lettura file CSV…</string>
   <string name="parse_error">Spiacenti, non sono in grado di analizzare il modulo.</string>
   <string name="loading_form_failed">Si è verificato un errore durante il caricamento del modulo. Per favore riprova. </string>
+  <string name="parent_form_not_present">Impossibile modificare questa bozza perché il corrispondente modulo vuoto non esiste o è stato cancellato.\n\nID Modulo: %1$s</string>
   <string name="cannot_edit_completed_form">Questo modulo non può essere modificato una volta che viene segnato come completato. Potrebbe venire cifrato.</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used">Cambiamenti non salvati recuperati da punto salvato!</string>
@@ -118,7 +120,9 @@
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
+  <string name="form_edits_warning_only_finalize_enabled">Non sarai in grado di apportare modifiche una volta finalizzato.</string>
   <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Non sarai in grado di apportare modifiche una volta finalizzato. Se devi apportare modifiche, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Non sarai in grado di apportare modifiche una volta inviato. Se devi apportare modifiche, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
   <string name="save_as_draft">Salva come bozza</string>
   <string name="finalize">Finalizzare</string>
   <string name="send">Invia</string>
@@ -131,6 +135,13 @@
   <string name="do_not_save">Elimina formulario</string>
   <string name="discard_changes">Non salvare le modifiche</string>
   <string name="keep_changes">Salva le modifiche</string>
+  <string name="keep_editing">Continua a modificare</string>
+  <string name="quit_form_title">Salvare il Modulo?</string>
+  <string name="save_explanation">Puoi salvare questo modulo e accedervi dalle tue bozze in qualsiasi momento.</string>
+  <string name="save_explanation_with_last_saved">\'Questo modulo è stato salvato l\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Salva come bozza per conservare le modifiche.\'</string>
+  <string name="quit_form_continue_title">Continua con le modifiche?</string>
+  <string name="discard_form_warning">Se elimini il modulo, perderai tutte le modifiche apportate fino a quel momento.</string>
+  <string name="discard_changes_warning">\'Questo modulo è stato salvato l\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Se scarti le modifiche, perderai tutte le modifiche apportate da allora.\'</string>
   <string name="saving_form">Salvataggio Modulo</string>
   <string name="survey_saving_validating_message">Convalida risposte…</string>
   <string name="survey_saving_collecting_message">Raccolta dati in corso…</string>
@@ -398,6 +409,7 @@
   <string name="track_location">Registra la posizione</string>
   <string name="background_location_disabled">Questo modulo vuole tracciare la tua posizione ma il tracciamento è disabilitato. Abilita nel %1$s menu sopra.</string>
   <string name="background_location_enabled">Questo modulo tiene traccia della tua posizione. Puoi disabilitare il monitoraggio nel menu %1$s in alto.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
   <string name="geoshape_view_read_only">Visualizza Geo-contorno</string>
@@ -480,6 +492,7 @@
   <string name="select_item">Selezionare</string>
   <string name="new_item">Nuovo oggetto</string>
   <!--Name of an action button-->
+  <string name="edit_data">Modifica bozza</string>
   <string name="view_data">Visualizza modulo salvato</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
   <string name="location_tracking_notification_channel_name">Tracciamento della posizione</string>
@@ -750,6 +763,7 @@
   <string name="found_in_main">Deseleziona per nascondere dal Menu Principale</string>
   <string name="found_in_settings">Deseleziona per nascondere da Impostazioni non protette</string>
   <string name="form_entry">Deseleziona per nascondere dal Modulo d\'Entrata</string>
+  <string name="form_end">Deseleziona per nascondere dal Fine Modulo</string>
   <string name="reset_project_settings_title">Reimposta</string>
   <string name="reset_project_settings_subtext">Scegli tra impostazioni, moduli, dati</string>
   <string name="delete_project">Elimina</string>
@@ -779,11 +793,14 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">Sfoglia indietro</string>
   <string name="moving_backwards_disabled_title">Sfoglia indietro disabilitato</string>
+  <string name="moving_backwards_disabled_message">Configurare il dispositivo per impedire agli utenti di ignorare questa impostazione?\n\nLe modifiche sono:\n\u2022 Disabilita salva bozza\n\u2022 Disabilita prompt Vai a\n\u2022 Imposta elaborazione vincolo su Convalida dopo lo scorrimento in avanti</string>
   <string name="yes">Sì</string>
   <string name="no">No</string>
   <string name="moving_backwards_enabled_title">Sfoglia indietro abilitato</string>
+  <string name="moving_backwards_enabled_message">Potresti voler rivedere le seguenti impostazioni:\n\n\u2022 Modifica bozza\n\u2022 Salva bozza\n\u2022 Vai al prompt\n\u2022 Elaborazione dei vincoli</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Salva come bozza</string>
+  <string name="save_mid_summary">Icona Salva nella barra superiore e pulsante \"Salva come bozza\" all\'uscita dal modulo</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -959,7 +976,17 @@
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forza un\'eccezione non rilevata che causa l\'arresto anomalo dell\'app</string>
   <string name="predicate_caching">Cache dei predicati</string>
+  <string name="permission_dialog_title">In merito ai permessi</string>
+  <string name="permission_dialog_text">Ti verrà chiesto di consentire a ODK Collect di accedere alle funzionalità seguenti, seleziona \"consenti\" se desideri utilizzarle.</string>
+  <string name="notifications">Notifiche</string>
+  <string name="required_for_notifications">Richiesto per mostrare gli aggiornamenti quando i moduli vengono scaricati, aggiornati e inviati.</string>
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <string name="form_saved_as_draft">Il tuo modulo è stato salvato come bozza.</string>
+  <string name="form_saved">Il tuo modulo è stato salvato</string>
+  <string name="form_sending">Inviando il Modulo…</string>
+  <string name="edit_form">Modifica</string>
+  <string name="view_form">Guarda</string>
+  <string name="close_snackbar">Chiudere la notifica</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <string name="enter_data">ចាប់ផ្តើមទម្រង់ថ្មី</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">សេចក្តីព្រាង</string>
@@ -343,6 +343,7 @@
   <string name="go_to_settings">ទៅកាន់ការកំណត់</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <string name="track_location">តាមដានទីតាំង</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">ចាប់ផ្តើម GeoPoint</string>
   <string name="geopoint_view_read_only">មើល GeoPoint</string>
   <string name="get_shape">ចាប់ផ្តើម GeoShape</string>

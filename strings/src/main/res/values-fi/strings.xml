@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <string name="enter_data">Aloita uusi lomake</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Luonnokset</string>
@@ -135,6 +135,13 @@
   <string name="do_not_save">Hylkää lomake</string>
   <string name="discard_changes">Hylkää muutokset</string>
   <string name="keep_changes">Tallenna muutokset</string>
+  <string name="keep_editing">Jatka muokkausta</string>
+  <string name="quit_form_title">Tallennetaanko lomake?</string>
+  <string name="save_explanation">Voit tallentaa tämän lomakkeen ja löytää sen milloin tahansa luonnostesi joukosta.</string>
+  <string name="save_explanation_with_last_saved">\'Tämä lomake tallennettiin viimeksi\' EEE, MMM dd, yyyy \'kello\' HH:mm\'. Tallenna luonnos säilyttääksesi muutokset.\'</string>
+  <string name="quit_form_continue_title">Jatketaanko muokkausta?</string>
+  <string name="discard_form_warning">Jos hylkäät lomakkeen, tulet menettämään kaikki tähän mennessä tekemäsi muutokset.</string>
+  <string name="discard_changes_warning">\'Tämä lomake tallennettiin viimeksi\' EEE, MMM dd, yyyy \'kello\' HH:mm\'. Jos hylkäät muutokset, tulet menettämään kaikki tähän mennessä tekemäsi muutokset.\'</string>
   <string name="saving_form">Tallentamassa lomaketta</string>
   <string name="survey_saving_validating_message">Tarkistetaan vastauksia…</string>
   <string name="survey_saving_collecting_message">Kerätää dataa…</string>
@@ -402,6 +409,7 @@
   <string name="track_location">Sijainnin seuranta</string>
   <string name="background_location_disabled">Tämä lomake haluaa seurata sijaintiasi, mutta seuranta on poissa päältä. Ole hyvä ja laita se päälle valikossa %1$s yllä.</string>
   <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
   <string name="geoshape_view_read_only">Katso GeoShape</string>

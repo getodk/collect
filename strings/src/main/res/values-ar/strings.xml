@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -373,6 +373,7 @@
   <string name="track_location">تتبع الموقع</string>
   <string name="background_location_disabled">تريد هذه الاستمارة تتبع موقعك ولكن تم تعطيل التتبع. يرجى التمكين في القائمة %1$s أعلاه.</string>
   <string name="background_location_enabled">هذه الاستمارة تقوم بتتبع موقعك. يمكنك تعطيل التتبع في القائمة %1$s أعلاه.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">البدء بتحديد النقطة</string>
   <string name="geopoint_view_read_only">عرض نقاط الخريطة</string>
   <string name="geoshape_view_read_only">عرض GeoShape</string>

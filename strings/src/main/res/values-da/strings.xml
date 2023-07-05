@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -233,6 +233,7 @@
   <string name="provider_disabled_error">Geolokation er slået fra</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">Start GeoPoint</string>
   <string name="geopoint_view_read_only">Vis GeoPoint</string>
   <string name="geoshape_view_read_only">Vis GeoShape</string>

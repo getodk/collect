@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <string name="enter_data">Начать новую форму</string>
   <!--Text for an action button on the main screen.-->
   <string name="review_data">Черновики</string>
@@ -120,7 +120,9 @@
   <string name="too_complex_form">Эта форма слишком сложна для этого устройства. Попробуйте упростить структуру или обратитесь за помощью на форум.</string>
   <string name="survey_internal_error">Внутренняя ошибка: step to prompt failed.</string>
   <string name="save_enter_data_description">Вы в конце опросника \"%s\"</string>
+  <string name="form_edits_warning_only_finalize_enabled">Вы не сможете вносить изменения после финализирования.</string>
   <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Вы не сможете вносить изменения после завершения. Если вам нужно внести изменения, сохраните как черновик, пока вы не будете готовы к отправке.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Вы не сможете вносить изменения после отправки. Если вам нужно внести изменения, выберите «Сохранить как черновик», пока вы не будете готовы к отправке.</string>
   <string name="save_as_draft">Сохранить как черновик</string>
   <string name="finalize">Завершить</string>
   <string name="send">Отправить</string>
@@ -133,6 +135,13 @@
   <string name="do_not_save">Отменить форму</string>
   <string name="discard_changes">Отменить изменения</string>
   <string name="keep_changes">Сохранить ответы</string>
+  <string name="keep_editing">Продолжить редактирование</string>
+  <string name="quit_form_title">Сохранить форму?</string>
+  <string name="save_explanation">Вы можете сохранить эту форму и получить к ней доступ из своих черновиков в любое время.</string>
+  <string name="save_explanation_with_last_saved">\'В последний раз эта форма была сохранена\' EEE, MMM dd, yyyy \'в\' HH:mm\'. Сохраните как черновик, чтобы сохранить изменения\'.</string>
+  <string name="quit_form_continue_title">Продолжить редактирование?</string>
+  <string name="discard_form_warning">Если вы отмените форму, вы потеряете все изменения, которые вы сделали до сих пор.</string>
+  <string name="discard_changes_warning">\'В последний раз эта форма была сохранена\' EEE, MMM dd, yyyy \'в\' HH:mm\'. Если вы отмените изменения, вы потеряете все изменения, сделанные с тех пор\'.</string>
   <string name="saving_form">Выполняется сохранение …</string>
   <string name="survey_saving_validating_message">Проверка ответов…</string>
   <string name="survey_saving_collecting_message">Сбор данных…</string>
@@ -150,9 +159,13 @@
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
   <string name="unrecognized_uri">Не удалось распознать URI: %s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">Не удалось начать запись.</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">Микрофон уже используется.</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">Медиафайл не может быть прикреплен к форме, но доступен по адресу %1$s</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">Запись отключена. Включить в %s</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
   <string name="instance_deleted_message">Заполненная форма удалена!</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
@@ -215,17 +228,29 @@
   <string name="resume_recording">Продолжить</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
   <string name="record_audio">Записать звук</string>
+  <string name="background_audio_permission_explanation">Эта форма записывает звук в фоновом режиме. Вы должны предоставить разрешение на использование микрофона. В противном случае вы не сможете открыть эту форму.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">Эта форма запрашивает фоновую аудиозапись. Отключение остановит запись и удалит существующее аудио. Вы уверены, что хотите продолжить?</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">Отключить запись</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">Запись начнется не сразу. Вы должны повторно открыть форму для записи.</string>
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">Удалить файл?</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">Вы не сможете восстановить этот файл после его удаления. Вы уверены, что хотите продолжить?</string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">Остановить</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">Запись…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">Аудио запись</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">Воспроизвести аудио</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">Сохранение файла</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">Вы должны остановить запись, прежде чем покинуть этот экран.</string>
   <string name="error_attaching_binary_file">Произошла ошибка при добавлении файла: %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">Выбрать значение</string>
@@ -310,14 +335,19 @@
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
   <string name="file_missing">Файл: %s не найден.</string>
   <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="enter_identity">Введите имя</string>
   <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="identity">Опознание</string>
   <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="enter_identity_description">Эта форма требует, чтобы вы идентифицировали себя</string>
   <!--Action to close a full screen dialog-->
   <string name="close">Закрыть</string>
   <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes">Причина изменений</string>
   <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
   <string name="reason">Причина</string>
   <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes_description">Вам необходимо объяснить причину внесения изменений в эту форму</string>
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">Сохранить</string>
   <!--Button text to select a place from a list presented on a map-->
@@ -345,14 +375,20 @@
   <string name="google_play_services_error_occured">Не удалось получить доступ к Google картам. Установлен ли Google Play Services?</string>
   <string name="view_change_location">Показать или изменить местоположение</string>
   <string name="change_location">Изменить местоположение</string>
+  <string name="location_accuracy">Точность: %1$s м</string>
+  <string name="location_provider">Провайдер геолокации: %s</string>
   <string name="get_location">Записать местоположение</string>
   <string name="provider_disabled_error">Включите функцию определения местоположения на вашем устройстве!</string>
   <string name="gps_result">Широта: %1$s\nДолгота: %2$s\nВысота: %3$sм\nТочность:%4$sм</string>
+  <string name="google_play_services_not_available">Эта форма хочет отслеживать ваше местоположение, но сервисы Google Play недоступны.</string>
   <string name="location_providers_disabled_dialog_message">Эта форма хочет отслеживать ваше местоположение, но определение местоположения отключено. Включите в настройках Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Перейдите в настройки</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
   <string name="track_location">Отследить местоположение</string>
+  <string name="background_location_disabled">Эта форма хочет отслеживать ваше местоположение, но отслеживание отключено. Пожалуйста, включите в меню %1$s выше.</string>
+  <string name="background_location_enabled">Эта форма отслеживает ваше местоположение. Вы можете отключить отслеживание в меню %1$s выше.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">Определить местоположение</string>
   <string name="geopoint_view_read_only">Просмотреть геоточку</string>
   <string name="geoshape_view_read_only">Просмотр GeoShape</string>
@@ -391,17 +427,39 @@
   <string name="polygon_validator">В многоугольнике должно быть как минимум 3 точки</string>
   <string name="polyline_validator">Должно быть как минимум 2 точки, что бы создать ломаную линию</string>
   <string name="clear">Очистить</string>
+  <string name="placement_mode">Размещение нажатием</string>
+  <string name="manual_mode">Ручная запись местоположения</string>
+  <string name="automatic_mode">Автоматическая запись местоположения</string>
+  <string name="recording_interval">Интервал записи:</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <string name="accuracy_requirement">Требование к точности:</string>
+  <string name="none">Нет</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <string name="location_status_searching">Поиск местоположения, пожалуйста, подождите…</string>
+  <string name="location_status_accuracy">Точность местоположения: %.2f м</string>
+  <string name="location_status_acceptable">Точность местоположения: %.2f м (приемлемо)</string>
+  <string name="location_status_unacceptable">Точность местоположения: %.2f м (неприемлемо)</string>
+  <string name="collection_status_paused">Введено точек: %d</string>
+  <string name="collection_status_placement">Введено точек: %d (нажмите для добавления точек)</string>
+  <string name="collection_status_manual">Введено точек: %d (ручная запись)</string>
+  <string name="collection_status_auto_seconds">Введено точек: %1$d (запись каждые %2$d секунды)</string>
+  <string name="collection_status_auto_minutes">Введено точек: %1$d (запись каждые %2$d минуты)</string>
   <string name="geopoint_instruction">Используйте продолжительное нажатие, чтобы расставлять отметки или нажмите кнопку \"добавить отметку\".</string>
   <string name="geopoint_no_draggable_instruction">Нажмите кнопку \"добавить отметку\".</string>
   <string name="discard">Отменить</string>
   <string name="geoshape_view_change_location">Показать или изменить геофигуру</string>
   <string name="geotrace_view_change_location">Показать или изменить геослед</string>
+  <string name="select_item_count">%s: %d (%d показано на карте)</string>
+  <string name="select_item">Выбрать</string>
+  <string name="new_item">Новый элемент</string>
   <!--Name of an action button-->
+  <string name="edit_data">Редактировать Черновик</string>
+  <string name="view_data">Посмотреть Сохраненную Форму</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">Отслеживание местоположения</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">Отслеживание местоположения…</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
   <!--Description for button that zooms to the user's current location on a map-->
   <!--Description for button that zooms a map so that it shows all items-->
@@ -427,6 +485,10 @@
   <string name="media_upload_error">Не удалось загрузить медиа-файл, который не существует %1$s</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
   <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
+  <string name="forms_upload_succeeded">Загрузка форм выполнена успешно</string>
+  <string name="forms_upload_failed">Не удалось загрузить формы</string>
+  <string name="all_uploads_succeeded">Все загрузки выполнены успешно!</string>
+  <string name="some_uploads_failed">%1$s из %2$s не удалось загрузить!</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -439,16 +501,28 @@
   <string name="version">Версия:</string>
   <string name="form_updates_available">Доступен обновленный опросник</string>
   <string name="newer_version_of_a_form_info">Это обновление для уже имеющегося у вас опросника</string>
+  <string name="form_update_error">Не удалось обновить форму</string>
+  <string name="form_update_succeeded">Обновление формы выполнено успешно</string>
+  <string name="load_remote_form_error">Не удалось загрузить список форм</string>
+  <string name="forms_download_succeeded">Загрузка форм выполнена успешно</string>
+  <string name="forms_download_failed">Не удалось загрузить формы</string>
+  <string name="all_downloads_succeeded">Все загрузки прошли успешно!</string>
+  <string name="some_downloads_failed">%1$s из %2$s не удалось загрузить!</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="form_details">ID: %1$s Версия: %2$s</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
+  <string name="report_to_project_lead">Если вы продолжаете сталкиваться с этой проблемой, сообщите об этом человеку, который попросил вас собрать данные.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="unreachable_error">Collect не может связаться с сервером по адресу %s. Вы правильно ввели URL?</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="security_error">Collect не может безопасно подключиться к серверу по адресу %s. Вы правильно ввели URL?</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
-  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">Эта форма не может быть обработана.</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
   <!--##############################################
@@ -542,6 +616,7 @@
   <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
   <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
   <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <string name="form_update_frequency_title">Частота автоматического обновления</string>
   <!--Frequency for requesting blank form updates from the server-->
   <string name="every_fifteen_minutes">Каждые ¼ часа</string>
   <!--Frequency for requesting blank form updates from the server-->
@@ -599,6 +674,7 @@
   <string name="device_defined">Автоматически определено</string>
   <string name="device_id">Идентификатор устройства</string>
   <!--Displayed when a device property such as the phone number is not available-->
+  <string name="preference_not_available">Недоступно</string>
   <!--Label for an item displayed in the project settings menu to unlock settings-->
   <string name="unlock_settings">Разблокировать настройки</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
@@ -659,6 +735,7 @@
   <string name="download_selected">Загрузить выбранные</string>
   <string name="go_back">Назад</string>
   <string name="google_auth_io_exception_msg">Не удалось вызвать API. Если была запущена локальная сборка, пожалуйста, обратитесь к документации проекта.</string>
+  <string name="reading_files">Чтение файлов</string>
   <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
   <string name="google_search_browse">Поиск опросников. Или выберите \'Мой диск\' ниже для просмотра.</string>
@@ -689,7 +766,12 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">Перенастроить с помощью QR-кода</string>
   <string name="reconfigure_with_qr_code_settings_subtext">Заменить все существующие настройки</string>
+  <string name="qr_code">Настройка QR-кода</string>
+  <string name="scan_qr_code_fragment_title">Сканировать</string>
+  <string name="view_qr_code_fragment_title">QR-код</string>
+  <string name="import_qrcode_sd">Импортировать QR-код</string>
   <string name="successfully_imported_settings">Настройки успешно импортированы</string>
   <string name="encoding_max_limit" tools:ignore="UnusedResources">Превышен лимит количества символов: QR-код не удалось сгенерировать для всех настроек.</string>
   <string name="share">Поделиться</string>
@@ -699,6 +781,7 @@
   <string name="include_password_dialog">Пароли включены в код</string>
   <string name="generate">Сгенерировать</string>
   <string name="invalid_qrcode">В QR-коде не содержатся правильные настройки</string>
+  <string name="qr_code_not_found">QR-код не найден на выбранном изображении</string>
   <string name="corrupt_imported_preferences_error">Текущие настройки повреждены. Из настроек управления проектом сбросить настройки или импортировать рабочие.</string>
   <!--##############################################
      # MISC
@@ -711,6 +794,7 @@
   <string name="do_not_change">Отмена</string>
   <string name="do_not_exit">Отмена</string>
   <string name="canceling">Отменяю</string>
+  <string name="notification_channel_name">Общие уведомления</string>
   <string name="success">Успешно</string>
   <string name="error_occured">Произошла ошибка</string>
   <string name="please_wait">Подождите несколько секунд.</string>
@@ -720,32 +804,51 @@
   <string name="fs_file_copy_error">Не удалось скопировать \'%1$s\' в \'%2$s\'. Причина: %3$s</string>
   <string name="survey_multiple_forms_error">Вы загрузили два разных опросника с одинаковым ID и версией. Возможно, это один и тот же опросник загруженный в разное время или на разные сервера. В любом случае, вам следует удалить один из них.</string>
   <string name="select_odk_shortcut">Выбрать ярлык ODK</string>
+  <string name="background_audio_help">Эта форма записывает звук с микрофона вашего устройства.\n\nВы можете использовать индикатор громкости, чтобы убедиться, что микрофон находится достаточно близко к звуку, который вам нужно записать.\n\nЧтобы остановить запись, закройте эту форму.\n\ nДля получения дополнительной информации обратитесь к человеку, который попросил вас собрать данные.</string>
+  <string name="loading">Загрузка…</string>
   <!--##############################################
      # Projects
      ##############################################-->
+  <string name="projects">Проекты</string>
   <string name="settings">Настройки</string>
+  <string name="add_project">Добавить проект</string>
   <string name="add">Добавить</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">Дублированный проект</string>
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
   <string name="duplicate_project_details">У вас уже есть проект с такими настройками подключения. Вы хотите переключиться на существующий проект или добавить новый?</string>
   <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">Добавить дублированный проект</string>
   <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">Перейти к существующему проекту</string>
+  <string name="project_name">Имя проекта</string>
+  <string name="project_icon">Значок проекта</string>
+  <string name="project_color">Цвет проекта</string>
   <!--Toast text shown when the current project is changed-->
+  <string name="switched_project">Переключено на %s</string>
   <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
+  <string name="using_project">Используется %s</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
+  <string name="switch_to_project">Переключить на %s</string>
   <string name="delete_project_confirm_message">Все пустые формы, материалы и настройки будут удалены навсегда.</string>
   <string name="delete_project_yes">Да</string>
   <string name="delete_project_no">Нет</string>
+  <string name="cannot_delete_project_title">Невозможно удалить проект</string>
+  <string name="cannot_delete_project_message_one">У вас есть неотправленные материалы. Чтобы удалить проект, вы должны сначала отправить или удалить эти материалы.</string>
+  <string name="cannot_delete_project_message_two">Выполняются фоновые задания. Пожалуйста, повторите попытку позже.</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">Настроить с помощью QR-кода</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">Вручную введите данные проекта</string>
   <string name="project_config_tip">После того, как вы добавите свой проект, вы можете изменить его в настройках</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
   <!--Preceded by "Don't have a project yet?" question-->
+  <string name="scan_configuration_qr_code">Сканировать QR-код конфигурации</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <!--Error shown when a user tries to open a form when there are no projects-->
   <!--##############################################
@@ -759,6 +862,7 @@
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <string name="crash_last_run">При последнем запуске приложения произошел сбой!</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
@@ -768,7 +872,14 @@
   <!--Section title in settings-->
   <!--Option provided in the Developer tools settings to force an application crash-->
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="notifications">Уведомления</string>
+  <string name="required_for_notifications">Требуется для отображения обновлений при загрузке, обновлении и отправке форм.</string>
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <string name="form_saved_as_draft">Ваша форма сохранена как черновик.</string>
+  <string name="form_saved">Ваша форма сохранена.</string>
+  <string name="form_sending">Отправка формы…</string>
+  <string name="edit_form">Редактировать</string>
+  <string name="view_form">Просмотр</string>
 </resources>

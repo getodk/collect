@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for an action button on the main screen.-->
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -351,6 +351,7 @@
   <string name="track_location">ردیابی مکان</string>
   <string name="background_location_disabled">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما ردیابی غیرفعال است. لطفاً در منوی %1$s بالا فعال کنید.</string>
   <string name="background_location_enabled">این فورم موقعیت مکانی شما را ردیابی می کند. می‌توانید ردیابی را در منوی %1$s بالا غیرفعال کنید.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <string name="get_point">آغاز GeoPoint</string>
   <string name="geopoint_view_read_only">نمایش GeoPoint</string>
   <string name="geoshape_view_read_only">نمایش GeoShape</string>
