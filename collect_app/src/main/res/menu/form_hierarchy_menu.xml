@@ -19,7 +19,7 @@
 
     <item
         android:id="@+id/menu_go_up"
-        android:icon="@drawable/arrow_up"
+        android:icon="@drawable/ic_arrow_up"
         android:title="@string/jump_to_previous"
         android:visible="false"
         app:showAsAction="always" />

@@ -59,7 +59,7 @@ public class LocationProvidersDisabledDialog extends DialogFragment {
         setCancelable(false);
 
         return new MaterialAlertDialogBuilder(getActivity())
-                .setIcon(R.drawable.ic_room_black_24dp)
+                .setIcon(R.drawable.ic_room_24dp)
                 .setTitle(R.string.provider_disabled_error)
                 .setMessage(R.string.location_providers_disabled_dialog_message)
                 .setPositiveButton(R.string.go_to_settings, (dialog, id) -> {

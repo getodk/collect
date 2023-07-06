@@ -133,7 +133,7 @@ class PermissionsProviderTest {
             activity,
             R.string.location_runtime_permissions_denied_title,
             R.string.location_runtime_permissions_denied_desc,
-            R.drawable.ic_room_black_24dp,
+            R.drawable.ic_room_24dp,
             permissionListener
         )
 

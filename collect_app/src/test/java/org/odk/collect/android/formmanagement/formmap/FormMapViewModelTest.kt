@@ -111,7 +111,7 @@ class FormMapViewModelTest {
             instanceWithPoint.displayName,
             listOf(
                 MappableSelectItem.IconifiedText(
-                    R.drawable.form_state_saved,
+                    R.drawable.ic_form_state_saved,
                     formatDate(
                         R.string.saved_on_date_at_time,
                         instanceWithPoint.lastStatusChangeDate
@@ -155,7 +155,7 @@ class FormMapViewModelTest {
             instance.displayName,
             listOf(
                 MappableSelectItem.IconifiedText(
-                    R.drawable.form_state_finalized,
+                    R.drawable.ic_form_state_finalized,
                     formatDate(
                         R.string.finalized_on_date_at_time,
                         instance.lastStatusChangeDate
@@ -201,7 +201,7 @@ class FormMapViewModelTest {
             instance.displayName,
             listOf(
                 MappableSelectItem.IconifiedText(
-                    R.drawable.form_state_finalized,
+                    R.drawable.ic_form_state_finalized,
                     formatDate(
                         R.string.finalized_on_date_at_time,
                         instance.lastStatusChangeDate
@@ -245,7 +245,7 @@ class FormMapViewModelTest {
             instance.displayName,
             listOf(
                 MappableSelectItem.IconifiedText(
-                    R.drawable.form_state_saved,
+                    R.drawable.ic_form_state_saved,
                     formatDate(
                         R.string.saved_on_date_at_time,
                         instance.lastStatusChangeDate
@@ -286,7 +286,7 @@ class FormMapViewModelTest {
             instance.displayName,
             listOf(
                 MappableSelectItem.IconifiedText(
-                    R.drawable.form_state_submited,
+                    R.drawable.ic_form_state_submitted,
                     formatDate(
                         R.string.sent_on_date_at_time,
                         instance.lastStatusChangeDate
@@ -330,7 +330,7 @@ class FormMapViewModelTest {
             instance.displayName,
             listOf(
                 MappableSelectItem.IconifiedText(
-                    R.drawable.form_state_submission_failed,
+                    R.drawable.ic_form_state_submission_failed,
                     formatDate(
                         R.string.sending_failed_on_date_at_time,
                         instance.lastStatusChangeDate

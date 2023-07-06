@@ -22,7 +22,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/margin_standard"
             android:visibility="gone"
-            app:srcCompat="@drawable/information_outline"
+            app:srcCompat="@drawable/ic_information_outline"
             tools:visibility="visible" />
 
         <TextView
