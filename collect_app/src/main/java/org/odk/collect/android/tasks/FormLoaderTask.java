@@ -38,6 +38,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.application.Collect;
+import org.odk.collect.android.application.initialization.ContainsSearchOrPullDataExtra;
 import org.odk.collect.android.externaldata.ExternalAnswerResolver;
 import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.externaldata.ExternalDataReader;
@@ -162,12 +163,14 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
 
         externalDataManager = Collect.getInstance().getExternalDataManager();
 
-        try {
-            loadExternalData(formMediaDir);
-        } catch (Exception e) {
-            Timber.e(e, "Exception thrown while loading external data");
-            errorMsg = e.getMessage();
-            return null;
+        if (formDef.getExtras().get(ContainsSearchOrPullDataExtra.class).getContainsSearchOrPullData()) {
+            try {
+                loadExternalData(formMediaDir);
+            } catch (Exception e) {
+                Timber.e(e, "Exception thrown while loading external data");
+                errorMsg = e.getMessage();
+                return null;
+            }
         }
 
         if (isCancelled()) {
