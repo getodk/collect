@@ -88,7 +88,7 @@ public class IntentGroupTest {
     // text if no app is found.
     @Test
     public void appMissingErrorText_ShouldComeFromSpecialFormText() {
-        rule.startInFormEntry()
+        rule.fillNewForm()
                 .clickOnText("This is buttonText")
                 .checkIsToastWithMessageDisplayed("This is noAppErrorString");
     }

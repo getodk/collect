@@ -25,7 +25,7 @@ public class DynamicPreLoadedDataSelects {
 
     @Test
     public void withoutFilter_displaysAllChoices() {
-        rule.startInFormEntry()
+        rule.fillNewForm()
                 .assertOnPage()
                 .assertText("Artichoke")
                 .assertText("Apple")
@@ -38,7 +38,7 @@ public class DynamicPreLoadedDataSelects {
     @Test
     // Regression: https://github.com/getodk/collect/issues/3132
     public void withFilter_showsMatchingChoices() {
-        rule.startInFormEntry()
+        rule.fillNewForm()
                 .assertOnPage()
                 .swipeToNextQuestion("Produce search")
                 .inputText("A")

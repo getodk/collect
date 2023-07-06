@@ -139,7 +139,7 @@ public class FieldListUpdateTest {
 
     @Test
     public void longPress_ShouldClearAndUpdate() {
-        rule.startInFormEntry()
+        rule.fillNewForm()
                 .clickGoToArrow()
                 .clickGoUpIcon()
                 .clickOnGroup("Single relevance in middle")

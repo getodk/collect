@@ -42,7 +42,7 @@ public class LocationTrackingAuditTest {
         location1.setLongitude(1.0);
         locationClient.setLocation(location1);
 
-        rule.startInFormEntry()
+        rule.fillNewForm()
                 .assertBackgroundLocationSnackbarShown()
                 .assertQuestion("Text1")
                 .swipeToNextQuestion("Text2")
@@ -66,7 +66,7 @@ public class LocationTrackingAuditTest {
 
     @Test
     public void locationCollectionToggle_ShouldBeAvailable() {
-        rule.startInFormEntry()
+        rule.fillNewForm("location-audit.xml", "Audit with Location")
                 .clickOptionsIcon()
                 .assertText(org.odk.collect.strings.R.string.track_location);
     }
