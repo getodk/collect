@@ -192,6 +192,14 @@ public class RangeIntegerWidgetTest {
         verify(listener, never()).onLongClick(widget.slider);
     }
 
+    @Test // https://github.com/getodk/collect/issues/5530
+    public void everyTriggerWidgetShouldHaveCheckboxWithUniqueID() {
+        RangeIntegerWidget widget1 = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+        RangeIntegerWidget widget2 = createWidget(promptWithQuestionDefAndAnswer(rangeQuestion, null));
+
+        assertThat(widget1.slider.getId(), not(equalTo(widget2.slider.getId())));
+    }
+
     private RangeIntegerWidget createWidget(FormEntryPrompt prompt) {
         return new RangeIntegerWidget(widgetTestActivity(), new QuestionDetails(prompt));
     }
