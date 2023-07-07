@@ -53,6 +53,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
+import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
 import org.odk.collect.osmdroid.OsmDroidDependencyComponent;
@@ -190,6 +191,7 @@ public class Collect extends Application implements
         objectProvider.addSupplier(SettingsProvider.class, applicationComponent::settingsProvider);
         objectProvider.addSupplier(NetworkStateProvider.class, applicationComponent::networkStateProvider);
         objectProvider.addSupplier(ReferenceLayerRepository.class, applicationComponent::referenceLayerRepository);
+        objectProvider.addSupplier(LocationClient.class, applicationComponent::locationClient);
     }
 
     @NotNull

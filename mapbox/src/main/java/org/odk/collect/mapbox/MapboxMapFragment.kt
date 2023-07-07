@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.startup.AppInitializer
 import com.google.android.gms.location.LocationListener
-import com.mapbox.android.core.location.LocationEngineProvider
-import com.mapbox.android.core.location.LocationEngineRequest
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
 import com.mapbox.maps.MapView
@@ -50,6 +48,8 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.odk.collect.androidshared.utils.ScreenUtils
+import org.odk.collect.location.LocationClient
+import org.odk.collect.location.LocationClient.LocationClientListener
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragment.ErrorListener
 import org.odk.collect.maps.MapFragment.FeatureListener
@@ -74,7 +74,8 @@ class MapboxMapFragment :
     MapFragment,
     OnMapClickListener,
     OnMapLongClickListener,
-    LocationListener {
+    LocationListener,
+    LocationClientListener {
 
     private lateinit var mapView: MapView
     private lateinit var mapboxMap: MapboxMap
@@ -117,6 +118,10 @@ class MapboxMapFragment :
 
     private val referenceLayerRepository: ReferenceLayerRepository by lazy {
         (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(ReferenceLayerRepository::class.java)
+    }
+
+    private val locationClient: LocationClient by lazy {
+        (requireActivity().applicationContext as ObjectProviderHost).getObjectProvider().provide(LocationClient::class.java)
     }
 
     override fun init(readyListener: ReadyListener?, errorListener: ErrorListener?) {
@@ -490,22 +495,16 @@ class MapboxMapFragment :
 
     @SuppressWarnings("MissingPermission") // permission checks for location services are handled in widgets
     private fun enableLocationUpdates(enabled: Boolean) {
-        val engine = LocationEngineProvider.getBestLocationEngine(requireContext())
+        locationClient.setListener(this)
+
         if (enabled) {
-            Timber.i("Requesting location updates from %s (to %s)", engine, this)
-            engine.requestLocationUpdates(
-                LocationEngineRequest.Builder(1000)
-                    .setPriority(LocationEngineRequest.PRIORITY_HIGH_ACCURACY)
-                    .setMaxWaitTime(5000)
-                    .build(),
-                locationCallback,
-                null
-            )
-            engine.getLastLocation(locationCallback)
+            Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this)
+            locationClient.start()
         } else {
-            Timber.i("Stopping location updates from %s (to %s)", engine, this)
-            engine.removeLocationUpdates(locationCallback)
+            Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this)
+            locationClient.stop()
         }
+
         mapView.location.enabled = enabled
     }
 
@@ -633,6 +632,17 @@ class MapboxMapFragment :
         if (mapboxMap.getStyle()?.getSource(source.sourceId) == null) {
             mapboxMap.getStyle()?.addSource(source)
         }
+    }
+
+    override fun onClientStart() {
+        Timber.i("Requesting location updates (to %s)", this)
+        locationClient.requestLocationUpdates(this)
+    }
+
+    override fun onClientStartFailure() {
+    }
+
+    override fun onClientStop() {
     }
 
     companion object {

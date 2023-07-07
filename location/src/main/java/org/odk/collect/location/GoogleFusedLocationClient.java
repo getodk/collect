@@ -19,6 +19,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import org.odk.collect.analytics.Analytics;
+
 import timber.log.Timber;
 
 /**
@@ -196,6 +198,7 @@ public class GoogleFusedLocationClient
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Analytics.log("GoogleFusedLocationClientConnectionFailed");
         if (getListener() != null) {
             getListener().onClientStartFailure();
         }

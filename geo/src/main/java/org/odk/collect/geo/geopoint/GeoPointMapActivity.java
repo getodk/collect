@@ -330,25 +330,22 @@ public class GeoPointMapActivity extends LocalizedActivity {
             placeMarkerButton.setEnabled(true);
         }
 
-        MapPoint previousLocation = this.location;
         this.location = point;
 
         if (point != null) {
-            if (previousLocation != null) {
-                enableZoomButton(true);
+            enableZoomButton(true);
 
-                if (!captureLocation && !setClear) {
-                    placeMarker(point);
-                    placeMarkerButton.setEnabled(true);
-                }
-
-                if (!foundFirstLocation) {
-                    map.zoomToPoint(map.getGpsLocation(), true);
-                    foundFirstLocation = true;
-                }
-
-                locationStatus.setText(formatLocationStatus(map.getLocationProvider(), point.accuracy));
+            if (!captureLocation && !setClear) {
+                placeMarker(point);
+                placeMarkerButton.setEnabled(true);
             }
+
+            if (!foundFirstLocation) {
+                map.zoomToPoint(map.getGpsLocation(), true);
+                foundFirstLocation = true;
+            }
+
+            locationStatus.setText(formatLocationStatus(map.getLocationProvider(), point.accuracy));
         }
     }
 
