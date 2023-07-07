@@ -142,6 +142,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
+        unzipMediaFiles(formMediaDir);
         setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
 
         FormDef formDef = null;
@@ -224,6 +225,25 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         }
         data = new FECWrapper(fc, usedSavepoint);
         return data;
+    }
+
+    private static void unzipMediaFiles(File formMediaDir) {
+        File[] zipFiles = formMediaDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.getName().toLowerCase(Locale.US).endsWith(".zip");
+            }
+        });
+
+        if (zipFiles != null) {
+            ZipUtils.unzip(zipFiles);
+            for (File zipFile : zipFiles) {
+                boolean deleted = zipFile.delete();
+                if (!deleted) {
+                    Timber.w("Cannot delete %s. It will be re-unzipped next time. :(", zipFile.toString());
+                }
+            }
+        }
     }
 
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) throws XFormParser.ParseException {
@@ -348,24 +368,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
 
     @SuppressWarnings("unchecked")
     private void loadExternalData(File mediaFolder) {
-        // SCTO-594
-        File[] zipFiles = mediaFolder.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.getName().toLowerCase(Locale.US).endsWith(".zip");
-            }
-        });
-
-        if (zipFiles != null) {
-            ZipUtils.unzip(zipFiles);
-            for (File zipFile : zipFiles) {
-                boolean deleted = zipFile.delete();
-                if (!deleted) {
-                    Timber.w("Cannot delete %s. It will be re-unzipped next time. :(", zipFile.toString());
-                }
-            }
-        }
-
         File[] csvFiles = mediaFolder.listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {
