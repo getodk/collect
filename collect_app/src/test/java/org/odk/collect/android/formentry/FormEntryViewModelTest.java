@@ -387,6 +387,6 @@ public class FormEntryViewModelTest {
 
         viewModel.validate();
         scheduler.runBackground();
-        assertThat(viewModel.getError().getValue(), equalTo(new NonFatal("OH NO")));
+        assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 }

@@ -298,7 +298,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     try {
                         result = formController.validateAnswers(true);
                     } catch (JavaRosaException e) {
-                        error.setValue(new NonFatal(e.getMessage()));
+                        error.setValue(new FormError.NonFatal(e.getMessage()));
                     }
 
                     return result;
