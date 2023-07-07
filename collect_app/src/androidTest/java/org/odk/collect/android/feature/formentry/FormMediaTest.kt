@@ -5,7 +5,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
@@ -19,17 +18,9 @@ class FormMediaTest {
         .around(rule)
 
     @Test
-    fun loadingFormWithZippedMedia_unzipsIntoMediaDirectory_whichCanBeUsedInTheNextLoad() {
-        // Load form once and check media not useable
+    fun loadingFormWithZippedMedia_unzipsIntoMediaDirectory() {
         rule.setUpProjectAndCopyForm("external_select_10.xml", listOf("external_data_10.zip"))
             .fillNewForm("external_select_10.xml", "external select 10")
-            .clickOnText("a")
-            .swipeToNextQuestion("Second")
-            .assertTextDoesNotExist("aa")
-            .pressBackAndDiscardForm(AppClosedPage())
-
-        // Should be useable on the second load
-        rule.fillNewForm("external_select_10.xml", "external select 10")
             .clickOnText("a")
             .swipeToNextQuestion("Second")
             .assertText("aa")
