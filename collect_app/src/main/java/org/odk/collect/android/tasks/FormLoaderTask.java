@@ -38,7 +38,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.application.initialization.DynamicPreloadExtra;
+import org.odk.collect.android.dynamicpreload.DynamicPreloadExtra;
 import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.dynamicpreload.ExternalDataReader;
