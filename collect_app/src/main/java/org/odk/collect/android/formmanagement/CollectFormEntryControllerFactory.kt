@@ -5,8 +5,8 @@ import org.javarosa.entities.EntityFormFinalizationProcessor
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.externaldata.ExternalDataManagerImpl
-import org.odk.collect.android.externaldata.handler.ExternalDataHandlerPull
+import org.odk.collect.android.dynamicpreload.ExternalDataManagerImpl
+import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import java.io.File
 

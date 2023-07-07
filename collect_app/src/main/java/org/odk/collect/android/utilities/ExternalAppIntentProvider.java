@@ -7,7 +7,7 @@ import android.net.Uri;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.exception.ExternalParamsException;
-import org.odk.collect.android.externaldata.ExternalAppsUtils;
+import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.util.Map;

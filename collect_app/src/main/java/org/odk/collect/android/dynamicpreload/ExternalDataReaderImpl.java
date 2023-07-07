@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.externaldata;
+package org.odk.collect.android.dynamicpreload;
 
 import android.database.sqlite.SQLiteDatabase;
 

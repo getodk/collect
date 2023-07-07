@@ -39,7 +39,7 @@ import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
 import org.odk.collect.android.R;
-import org.odk.collect.android.externaldata.ExternalSelectChoice;
+import org.odk.collect.android.dynamicpreload.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;

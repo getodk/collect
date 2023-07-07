@@ -17,7 +17,7 @@
 package org.odk.collect.android.utilities;
 
 import org.junit.Test;
-import org.odk.collect.android.externaldata.ExternalAppsUtils;
+import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package org.odk.collect.android.externaldata;
+package org.odk.collect.android.dynamicpreload;
 
 import org.junit.Assert;
 import org.junit.Test;

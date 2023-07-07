@@ -18,7 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
-import org.odk.collect.android.externaldata.ExternalDataManager;
+import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;

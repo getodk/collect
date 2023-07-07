@@ -17,7 +17,7 @@ package org.odk.collect.android.utilities
 
 import android.content.res.Configuration
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.externaldata.ExternalDataUtil
+import org.odk.collect.android.dynamicpreload.ExternalDataUtil
 import org.odk.collect.androidshared.utils.ScreenUtils
 import java.lang.Exception
 

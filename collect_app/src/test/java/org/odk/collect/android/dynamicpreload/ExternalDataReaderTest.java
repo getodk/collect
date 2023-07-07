@@ -1,4 +1,4 @@
-package org.odk.collect.android.externaldata;
+package org.odk.collect.android.dynamicpreload;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,10 +32,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.COLUMN_DATASET_FILENAME;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.COLUMN_MD5_HASH;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.COLUMN_DATASET_FILENAME;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.COLUMN_MD5_HASH;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME;
 
 @RunWith(AndroidJUnit4.class)
 public class ExternalDataReaderTest {

@@ -26,8 +26,8 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer
-import org.odk.collect.android.externaldata.ExternalDataUtil
-import org.odk.collect.android.externaldata.handler.ExternalDataHandlerPull
+import org.odk.collect.android.dynamicpreload.ExternalDataUtil
+import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.ProjectsRepository

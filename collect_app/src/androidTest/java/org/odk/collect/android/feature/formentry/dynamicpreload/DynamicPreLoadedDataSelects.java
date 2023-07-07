@@ -1,4 +1,4 @@
-package org.odk.collect.android.feature.formentry;
+package org.odk.collect.android.feature.formentry.dynamicpreload;
 
 import org.junit.Rule;
 import org.junit.Test;
