@@ -198,7 +198,7 @@ public class GoogleFusedLocationClient
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Analytics.log("GoogleFusedLocationClient", "onConnectionFailed", connectionResult.toString());
+        Analytics.log("GoogleFusedLocationClientConnectionFailed");
         if (getListener() != null) {
             getListener().onClientStartFailure();
         }
