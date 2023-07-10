@@ -1,5 +1,6 @@
 package org.odk.collect.android.dynamicpreload
 
+import org.javarosa.core.model.FormDef
 import org.odk.collect.android.application.Collect
 import java.io.File
 import java.util.function.Consumer
@@ -8,10 +9,15 @@ import java.util.function.Supplier
 class ExternalDataCreator {
 
     fun create(
+        form: FormDef,
         mediaDir: File,
         isCancelled: Supplier<Boolean>,
         progressReporter: Consumer<String>
     ) {
+        if (!form.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload) {
+            return
+        }
+
         val csvFiles = mediaDir.listFiles { file ->
             val lowerCaseName = file.name.lowercase()
             lowerCaseName.endsWith(".csv") && !lowerCaseName.equals(

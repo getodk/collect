@@ -38,7 +38,6 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.dynamicpreload.DynamicPreloadExtra;
 import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver;
 import org.odk.collect.android.dynamicpreload.ExternalDataCreator;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
@@ -161,14 +160,12 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
 
         externalDataManager = Collect.getInstance().getExternalDataManager();
 
-        if (formDef.getExtras().get(DynamicPreloadExtra.class).getUsesDynamicPreload()) {
-            try {
-                new ExternalDataCreator().create(formMediaDir, this::isCancelled, this::publishProgress);
-            } catch (Exception e) {
-                Timber.e(e, "Exception thrown while loading external data");
-                errorMsg = e.getMessage();
-                return null;
-            }
+        try {
+            new ExternalDataCreator().create(formDef, formMediaDir, this::isCancelled, this::publishProgress);
+        } catch (Exception e) {
+            Timber.e(e, "Exception thrown while loading external data");
+            errorMsg = e.getMessage();
+            return null;
         }
 
         if (isCancelled()) {
