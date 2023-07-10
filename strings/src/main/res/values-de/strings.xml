@@ -115,6 +115,7 @@
   <string name="delete_repeat_no">Nicht löschen</string>
   <string name="invalid_answer_error">Diese Antwort ist ungültig!</string>
   <string name="required_answer_error">Diese Antwort ist erforderlich!</string>
+  <string name="success_form_validation">Erfolgreich! Keine Fehler im Formular gefunden.</string>
   <string name="invalid_space_in_answer_singular">Warnung: hinterlegter Wert %s enthält Leerzeichen</string>
   <string name="invalid_space_in_answer_plural">Warnung: hinterlegte Werte %s enthalten Leerzeichen</string>
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
@@ -410,6 +411,7 @@
   <string name="background_location_disabled">Dieses Formular möchte Ihren Standort aufzeichnen, aber die Standortaufzeichnung ist deaktiviert. Bitte oben im %1$s Menü aktivieren.</string>
   <string name="background_location_enabled">Dieses Formular zeichnet Ihren Standort auf. Sie können die Standortaufzeichnung oben im %1$s Menü deaktivieren.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">Auf Fehler überprüfen</string>
   <string name="get_point">Standort erfassen</string>
   <string name="geopoint_view_read_only">Standort anzeigen</string>
   <string name="geoshape_view_read_only">GeoShape anzeigen</string>
