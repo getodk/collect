@@ -40,9 +40,8 @@ import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dynamicpreload.DynamicPreloadExtra;
 import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver;
+import org.odk.collect.android.dynamicpreload.ExternalDataCreator;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
-import org.odk.collect.android.dynamicpreload.ExternalDataReader;
-import org.odk.collect.android.dynamicpreload.ExternalDataReaderImpl;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
@@ -58,9 +57,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import timber.log.Timber;
 
@@ -166,7 +163,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
 
         if (formDef.getExtras().get(DynamicPreloadExtra.class).getUsesDynamicPreload()) {
             try {
-                loadExternalData(formMediaDir);
+                new ExternalDataCreator().create(formMediaDir, this::isCancelled, this::publishProgress);
             } catch (Exception e) {
                 Timber.e(e, "Exception thrown while loading external data");
                 errorMsg = e.getMessage();
@@ -364,38 +361,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
             formDef.initialize(true, instanceInit);
         }
         return usedSavepoint;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void loadExternalData(File mediaFolder) {
-        File[] csvFiles = mediaFolder.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                String lowerCaseName = file.getName().toLowerCase(Locale.US);
-                return lowerCaseName.endsWith(".csv") && !lowerCaseName.equalsIgnoreCase(
-                        ITEMSETS_CSV);
-            }
-        });
-
-        Map<String, File> externalDataMap = new HashMap<>();
-
-        if (csvFiles != null) {
-
-            for (File csvFile : csvFiles) {
-                String dataSetName = csvFile.getName().substring(0,
-                        csvFile.getName().lastIndexOf("."));
-                externalDataMap.put(dataSetName, csvFile);
-            }
-
-            if (!externalDataMap.isEmpty()) {
-
-                publishProgress(Collect.getInstance()
-                        .getString(org.odk.collect.strings.R.string.survey_loading_reading_csv_message));
-
-                ExternalDataReader externalDataReader = new ExternalDataReaderImpl(this::isCancelled, message -> publishProgress(message));
-                externalDataReader.doImport(externalDataMap);
-            }
-        }
     }
 
     @Override

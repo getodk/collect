@@ -41,7 +41,8 @@ class DynamicPreloadXFormParserFactory(private val wrapped: IXFormParserFactory)
 }
 
 private class DynamicPreloadParseProcessor :
-    XFormParser.BindAttributeProcessor, XFormParser.QuestionProcessor,
+    XFormParser.BindAttributeProcessor,
+    XFormParser.QuestionProcessor,
     XFormParser.FormDefProcessor {
 
     private var containsSearchOrPullData = false
