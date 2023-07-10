@@ -392,14 +392,10 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
                 publishProgress(Collect.getInstance()
                         .getString(org.odk.collect.strings.R.string.survey_loading_reading_csv_message));
 
-                ExternalDataReader externalDataReader = new ExternalDataReaderImpl(this);
+                ExternalDataReader externalDataReader = new ExternalDataReaderImpl(this::isCancelled, message -> publishProgress(message));
                 externalDataReader.doImport(externalDataMap);
             }
         }
-    }
-
-    public void publishExternalDataLoadingProgress(String message) {
-        publishProgress(message);
     }
 
     @Override

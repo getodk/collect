@@ -21,11 +21,12 @@ package org.odk.collect.android.dynamicpreload;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.apache.commons.io.FileUtils;
-import org.odk.collect.android.tasks.FormLoaderTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import timber.log.Timber;
 
@@ -36,10 +37,12 @@ import timber.log.Timber;
  */
 public class ExternalDataReaderImpl implements ExternalDataReader {
 
-    private final FormLoaderTask formLoaderTask;
+    private final Supplier<Boolean> isCancelled;
+    private final Consumer<String> progressReporter;
 
-    public ExternalDataReaderImpl(FormLoaderTask formLoaderTask) {
-        this.formLoaderTask = formLoaderTask;
+    public ExternalDataReaderImpl(Supplier<Boolean> isCancelled, Consumer<String> progressReporter) {
+        this.isCancelled = isCancelled;
+        this.progressReporter = progressReporter;
     }
 
     @Override
@@ -73,9 +76,9 @@ public class ExternalDataReaderImpl implements ExternalDataReader {
         }
         ExternalSQLiteOpenHelper externalSQLiteOpenHelper = new ExternalSQLiteOpenHelper(
                 dbFile);
-        externalSQLiteOpenHelper.importFromCSV(dataSetFile, this, formLoaderTask);
+        externalSQLiteOpenHelper.importFromCSV(dataSetFile, this, isCancelled, progressReporter);
 
-        if (formLoaderTask != null && formLoaderTask.isCancelled()) {
+        if (isCancelled.get()) {
             Timber.w(
                     "The import was cancelled, so we need to rollback.");
 
