@@ -1,16 +1,24 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
+  <string name="enter_data">نیا فارم بھرنا شروع کریں</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">ڈرافٹس</string>
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">بھیجنے کے لیئے تیار</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">بھیجے جا چکے</string>
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">فارم کو ڈاؤن لوڈ کریں</string>
   <!--Text for an action button on the main screen.-->
+  <string name="manage_files">فارم کوڈیلیٹ کریں</string>
+  <string name="saved_forms">محفوظ شدہ فارم</string>
   <string name="version_number">ورژن:%s</string>
   <string name="id_number">آئی ڈی: %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">EEE, MMM dd, yyyy\'کو\' HH:mm \'جمع کیا گیا\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">  EEE, MMM dd, yyyy \'کو\' HH:mm \'پراپ ڈیٹ کیا گیا\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">  EEE, MMM dd, yyyy \'کو\' HH:mm \'پرمحفوظ کیا گیا\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -21,6 +29,7 @@
   <string name="sending_failed_on_date_at_time">‎EEE, MMM dd, yyyy\'کو\' HH:mm \'پرسینڈ فیل ہوگیا\'</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="deleted_on_date_at_time"> ‎EEE, MMM dd, yyyy\'کو\' HH:mm \' پرڈیلیٹ کیا گیا\'</string>
+  <string name="submission_deleted">جمع شدہ فارم کو حذف کر دیا گیا</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="modified_on_date_at_time"> EEE, MMM dd, yyyy\'کو\' HH:mm \'پر موڈیفائی کیا گیا\'</string>
   <string name="encrypted_form">انکرپٹڈ فارم</string>
@@ -32,16 +41,20 @@
   <string name="sort_by_date_desc">تاریخ، سب سے پہلےنئی</string>
   <string name="sort_by_date_asc">تاریخ، سب سے پہلے پرانی </string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="sort_by_last_saved">آخر میں جمع شدہ سب سے اوپر ہے</string>
   <string name="filter_the_list">فہرست فلٹر کریں</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">سرچ </string>
   <string name="no_items_display">دکھانے کیلے کچھ بھی نہیں ہے</string>
   <string name="no_items_display_forms">دکھانے کیلئےکچھ نہیں ہے خالی فارم حاصل کریں اور پر کریں</string>
   <string name="no_items_display_sent_forms">دکھانے کے لئے کچھ بھی نہیں دستیاب. \ n \ دیکھنے سے پہلے فارم حتمی شکل میں بھیجیں</string>
+  <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے. ڈرافٹ فارم کو بھیجنےسے پہلےمکمل کریں</string>
+  <string name="not_granted_permission">آپ کو یہ کام کرنے کی اجازت نہیں ہے</string>
   <string name="storage_runtime_permission_denied_title">سٹوریج پرمیشن</string>
   <string name="storage_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ آپ کے فارم تک رسائی حاصل نہیں کرسکتایا جواب محفوظ نہیں کر سکتا جب آپ پرمیشن دینے کے لئے تیار ہو تو ایپلکیشن دوبارہ کھولیں.</string>
   <string name="location_runtime_permissions_denied_title">لوکیشن پرمیشن</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">اس <b>مخصوص</b> اجازت کے بغیر کولیکٹ آپ کی لوکیشن ریکارڈ نہیں کرسکتا۔ برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو </string>
   <string name="camera_runtime_permission_denied_title">کمیرہ پرمیشن </string>
   <string name="camera_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو کیمرے تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ  پرمیشن دینے کے لئے تیار ہو</string>
   <string name="record_audio_runtime_permission_denied_title">ریکارڈ آڈیو پرمیشن</string>
@@ -52,15 +65,17 @@
     # FILL BLANK FORM
     ##############################################-->
   <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">فارم کے ساتھ کا نقشہ کھولیں</string>
   <string name="instance_scan_count">%1$dفارم شامل ہیں.</string>
   <string name="finished_disk_scan">سکیننگ ختم ہو گئ ۔ تمام فارمز لوڈ ہو گئے</string>
   <string name="xform_parse_error">%1$s میں ایکس فارم پارس کی خرابی: %2$s غائب یا غلط ہے</string>
   <string name="loading_form">فارم لوڈ ہو رہا ہے</string>
-  <string name="survey_loading_reading_form_message">ریڈنگ فارم ڈیفینیشن </string>
-  <string name="survey_loading_reading_data_message">ریڈنگ سروے ڈیٹا</string>
-  <string name="survey_loading_reading_csv_message">ریڈنگ سی ایس وی  فائلز…</string>
-  <string name="parse_error">معافی، فارم پارس نہیں ہو سکا</string>
+  <string name="survey_loading_reading_form_message">فارم کی تفصیلات دیکھی جا رہی ہیں</string>
+  <string name="survey_loading_reading_data_message">سروے کا ڈیٹا دیکھا جا رہا ہے</string>
+  <string name="survey_loading_reading_csv_message">CSV فائلز دیکھی جا رہی ہیں</string>
+  <string name="parse_error">معذرت،مگر فارم صحیح طرح پڑھا نہیں جا سکا</string>
   <string name="loading_form_failed">فارم لوڈ کرتے ہوئے ایک خرابی واقع ہوئی. دوبارہ کوشش کریں.</string>
+  <string name="parent_form_not_present">اس ڈرافٹ میں ترمیم نہیں ہو رہی، کیونکہ اسکا مماثل خالی فارم موجود نہیں یا پھر ڈیلیٹ کر دیا گیا ہے، فارم کی شناخت: ‎%1$s‏</string>
   <string name="cannot_edit_completed_form">اس فارم میں ترمیم نہیں کی جاسکتی اگر ایک مرتبہ اس کو حتمی شکل دےدی گئ ہو۔ اس کو انکرپٹ کیا جاسکتا ہے</string>
   <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
   <string name="savepoint_used"> غیر محفوظ شدہ تبدیلیاںسیو پوائنٹ سےبحال کرلی گئی</string>
@@ -69,6 +84,7 @@
   <!--Text for button displayed in the form filling menu to see the form's table of contents-->
   <string name="view_hierarchy">پرامپٹ پر جائیں</string>
   <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">ڈرافٹ میں محفوظ کریں</string>
   <!--Text of button from the form's table of contents to jump to the beginning of the form-->
   <string name="jump_to_beginning">سٹارٹ پر جائیں</string>
   <!--Text of button from the form's table of contents to jump to the end of the form-->
@@ -76,9 +92,15 @@
   <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
   <string name="jump_to_previous">اوپر جائیں</string>
   <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">گروپ</string>
   <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">دہرایا جانے والا گروپ</string>
   <string name="exit">باہر نکلیں</string>
   <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">ایک اور \"1 %s\"؟</string>
+  <string name="add_repeat">ایک دفعہ مزید</string>
+  <string name="dont_add_repeat">مزید نہیں</string>
+  <string name="add_another_menu">ایک اور شامل کریں</string>
   <!--Title of overlay menu displayed when long pressing on a question in a form-->
   <string name="edit_prompt">پرامپٹ کی ترمیم کریں</string>
   <string name="clearanswer_confirm">‎%s‏ کو دیا گیا جواب ہٹائیں</string>
@@ -93,17 +115,34 @@
   <string name="delete_repeat_no">منسوخ</string>
   <string name="invalid_answer_error">معذرت، یہ جواب غلط ہے</string>
   <string name="required_answer_error">معذرت، یہ جواب دینا ضروری ہے</string>
+  <string name="success_form_validation">آپ کے فارم میں اب کوئی غلطی نہیں ہے۔</string>
   <string name="invalid_space_in_answer_singular">نیچے دی گئی ویلیو %sمیں سپیسز ہیں</string>
   <string name="invalid_space_in_answer_plural">انتباہ: نیچے دی گئی ویلیو%s میں خالی جگہیں ہیں</string>
+  <string name="too_complex_form">یہ فارم اس فون کے لئے بہت پیچیدہ ہے۔ اس کو سادہ کرنے کی کوشش کریں، یا پھر فورم پہ مدد حاصل کریں۔</string>
   <string name="survey_internal_error">اندرونی خرابی: فوری طور پر سیٹ اپ ناکام ہوگیا</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
+  <string name="form_edits_warning_only_finalize_enabled">فارم کو فائنل کرنے کے بعد آپ اس میں مزید ترامیم نہیں کر سکیں گے۔</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">ایک دفعہ فائنل کرنے کے بعد آپ ترامیم نہیں کر سکیں گے۔ اگر آپ نے تبدیلیاں کرنی ہیں، تو فارم کو پہلے ڈرافٹ میں محفوظ کریں، اور اس وقت تک وہاں رکھیں جب تک آپ اسے بھیجنے کے لئے تیار نہ ہوں۔</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">ایک دفعہ بھیجنے کے بعد آپ ترامیم نہیں کر سکیں گے۔ اگر آپ نے تبدیلیاں کرنی ہیں، تو فارم کو پہلے ڈرافٹ میں محفوظ کریں، اور اس وقت تک وہاں رکھیں جب تک آپ اسے بھیجنے کے لئے تیار نہ ہوں۔</string>
+  <string name="save_as_draft">ڈرافٹ میں محفوظ کریں</string>
+  <string name="finalize">فائنل کریں</string>
+  <string name="send">بھیجیں</string>
   <string name="data_saved_error">معذرت, فارم محفوظ نہیں ہوسکا</string>
   <string name="data_saved_ok">فارم کامیابی سے محفوظ ہو گیا</string>
   <string name="save_point_error">ریکوری پوانٹ سیو کرتے وقت خرابی: %s</string>
   <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
   <string name="quit_application">‎%s‏ سے نکل جائیں</string>
   <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">فارم کو مسترد کر دیں</string>
+  <string name="discard_changes">تبدیلیوں کو مسترد کر دیں</string>
   <string name="keep_changes">تبدیلیوں کو محفوظ کریں</string>
+  <string name="keep_editing">ترامیم کرتے رہیں</string>
+  <string name="quit_form_title">کیا فارم کو محفوظ کر لیا جائے؟</string>
+  <string name="save_explanation">آواز کی ریکارڈنگ</string>
+  <string name="save_explanation_with_last_saved"> یہ فارم آخری دفعہEEE, MMM dd, yyyy کو HH:mm بجے محفوظ کیا گیا تھا۔ نئی تبدیلیاں محفوظ کرنے کی لئے ڈرافٹ میں محفوظ کریں۔</string>
+  <string name="quit_form_continue_title">کیا آپ ترامیم جاری رکھنا چاہتے ہیں؟</string>
+  <string name="discard_form_warning">اگر آپ فارم مسترد کرتے ہیں تو آپ کی کی گئی تبدیلیاں ختم ہو جائیں گی۔</string>
+  <string name="discard_changes_warning">یہ فارم آخری دفعہEEE, MMM dd, yyyy کو HH:mm بجے محفوظ کیا گیا تھا۔ اگر آپ تبدیلیاں مسترد کرتے ہیں توآپ کی دئیے گئے آخری وقت کے بعد کی ساری تبدیلیاں ضائع ہو جائیں گی۔</string>
   <string name="saving_form">فارم محفوظ ہو رہا ہے</string>
   <string name="survey_saving_validating_message"> جوابات کی تصدیق کی جا رہی ہے</string>
   <string name="survey_saving_collecting_message">ڈیٹا جمع ہورہا ہے</string>
@@ -117,15 +156,22 @@
   <string name="invalid_rsa_public_key">غلط آر ایس اے  پبلک کی.</string>
   <string name="encryption_error_message">%sفارم کو حتمی طور پر محفوظ نہیں کیا گیا ہے.</string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
-  <string name="bad_uri">خراب یوآرائی:%s </string>
+  <string name="bad_uri">خراب URI:%s </string>
   <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
-  <string name="unrecognized_uri">ناقابل شناخت یوآرائی:%s</string>
+  <string name="unrecognized_uri">ناقابل شناخت URI:%s</string>
   <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">ریکارڈنگ شروع نہیں ہو سکی۔</string>
   <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">فون کا مائیک پہلے سے کہیں اور استعمال میں ہے۔</string>
   <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">میڈیا اس فارم کے ساتھ اٹیچ نہیں ہو سکا، لیکن ابھی بھی %1$s پر موجود ہے۔</string>
   <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">ریکارڈنگ بند ہے۔ 1%s میں دوبارہ سٹارٹ کریں۔</string>
   <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">بھرا ہوا فارم ختم کر دیا گیا ہے۔</string>
   <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">ڈیٹا اپ ڈیٹ نہیں ہو پا رہا۔ اس کی عمومی وجہ یہ ہو سکتی ہے کہ فارم ڈیزائن میں Calculations کو صحیح طریقے سے استعمال نہیں کیا گیا۔ 
+اگر آپ کو بار بار یہی مسئلہ درپیش آ رہا ہے تو پراجیکٹ کے انچارج کو مطلع کریں۔</string>
   <!--##############################################
     # FORM FEATURES
     ##############################################-->
@@ -148,14 +194,18 @@
   <string name="barcode_scanner_prompt">بارکوڈ کو مستطیل کے اندر رکھیں</string>
   <string name="open_file">فائل کھولیں</string>
   <string name="rank_items"> رینک آئٹمز</string>
+  <string name="number_picker_title">نمبر منتخب کرنے کی جگہ</string>
   <string name="invalid_range_widget">اس ویجیٹ میں غلط پیرامیٹرز ہیں!</string>
-  <string name="svg_file_does_not_exist">ایس وی جی فائل موجود نہیں ہے </string>
+  <string name="svg_file_does_not_exist">SVG فائل موجود نہیں ہے </string>
   <string name="capture_image">تصویر لیں</string>
   <string name="choose_image">تصویر کا انتخاب کریں</string>
   <string name="selected_invalid_image">منتخب فائل ایک درست تصویر نہیں ہے</string>
   <string name="take_picture_instruction"> تصویر کھینچنے کے لئے اسکرین کو ٹیپ کریں</string>
   <string name="error_front_camera_unavailable">اس ڈیوائس پر فرنٹ کمیرہ دستیاب نہیں ہے</string>
+  <string name="camera_error">تصویر لینے میں کوئی مسئلہ ہے۔</string>
+  <string name="camera_failed_to_initialize">کیمرا سٹارٹ نہیں ہو سکا</string>
   <string name="annotate_image">تصویر کی تفصیل لکھیے </string>
+  <string name="invalid_file_type">ایپ کو دی گئی فائل درست نہیں</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">محفوظ کرکے بند کردیں</string>
   <string name="signature_capture">دستخط محفوظ کریں </string>
@@ -164,29 +214,45 @@
   <string name="draw_image">اسکیچ تصویر</string>
   <string name="reset_image">ریس سیٹ کریں</string>
   <string name="set_color">رنگ ترتیب دیں</string>
-  <string name="capture_video">وڈیو ریکارڈ کریں</string>
+  <string name="capture_video">ویڈیو ریکارڈ کریں</string>
   <string name="choose_video">ویڈیو منتخب کریں </string>
   <string name="play_video">وڈیو لگا دیں</string>
   <string name="choose_file">فائل منتخب کریں</string>
   <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">ختم کریں</string>
   <!--Text for button that starts recording sound-->
-  <string name="capture_audio">آوازریکارڈ کریں</string>
+  <string name="capture_audio">آواز ریکارڈ کریں</string>
   <!--Text for button that lets the user choose a sound file on their device-->
   <string name="choose_sound">آواز کا انتخاب کریں</string>
   <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">عارضی وقفہ</string>
   <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">وقفہ ختم کریں</string>
   <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">آواز ریکارڈ کریں</string>
+  <string name="background_audio_permission_explanation">یہ فارم آواز کی ریکارڈنگ بیک گراونڈ میں کرتا ہے۔ آپ اگر اس کو مائک استعمال کرنے کی اجازت نہیں دیں گے تو آپ فارم نہیں کھول سکیں گے۔</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">یہ فارم آواز کی ریکارڈنگ بیک گراونڈ میں کرنے کی اجازت لیتا ہے۔ اگر آپ یہ روکیں گے تو نہ صرف آواز کی ریکارڈنگ رک جائے گی، بلکہ موجودہ ریکارڈنگ بھی ضائع ہو جائے گی۔ کیا آپ آگے جانا چاہتے ہیں؟</string>
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">ریکارڈنگ کو روک دیں</string>
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">ریکارڈنگ فورا شروع نہیں ہوگی۔ اس کے لئے آپ کو فارم دوبارہ کھولنا پڑے گا۔</string>
   <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">فائل کوڈیلیٹ کردیں؟</string>
   <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">ایک مرتبہ ڈیلیٹ ہونے کے بعد یہ فائل دوبارہ دستیاب نہیں ہوگی۔ کیا آپ یہ جانتے ہوئے آگے جانا چاہتے ہیں؟ </string>
   <!--Text for button that stops audio recording-->
+  <string name="stop_recording">روک دیں</string>
   <!--Text to let the user know a recording is in progress-->
+  <string name="recording">ریکارڈنگ ہو رہی ہے…</string>
   <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">آواز کی ریکارڈنگ</string>
   <!--Text for button that plays audio clip-->
+  <string name="play_audio">آواز چلائیں</string>
   <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">فائل محفوظ کی جا رہی ہے</string>
   <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">اس سکرین کو چھوڑنے سے پہلے ریکارڈنگ کو روکنا پڑے گا۔</string>
   <string name="error_attaching_binary_file">میڈیا کو اٹیچ کرتے ہوئے ایک خرابی واقع ہوئی %s</string>
   <!--Displayed in form questions for which the user needs to select a value-->
   <string name="select_value">سلیکٹ ویلیو </string>
@@ -263,7 +329,18 @@
   <string name="islamic_month_10">شوال </string>
   <string name="islamic_month_11">ذو القعدة</string>
   <string name="islamic_month_12">ذو الحجة</string>
+  <string name="persian_month_1">Farvardin</string>
+  <string name="persian_month_2">Ordibehesht</string>
+  <string name="persian_month_3">Khordad</string>
   <string name="persian_month_4">تر </string>
+  <string name="persian_month_5">Mordad</string>
+  <string name="persian_month_6">Shahrivar</string>
+  <string name="persian_month_7">Mehr</string>
+  <string name="persian_month_8">Aban</string>
+  <string name="persian_month_9">Azar</string>
+  <string name="persian_month_10">Dey</string>
+  <string name="persian_month_11">Bahman</string>
+  <string name="persian_month_12">Esfand</string>
   <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
   <string name="custom_date">%1$s (%2$s)</string>
   <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
@@ -287,6 +364,8 @@
   <!--Action to save the contents of a full screen dialog-->
   <string name="save">محفوظ کریں</string>
   <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">جگہ منتخب کریں</string>
+  <string name="choices">انتخاب</string>
   <!--##############################################
     # GEO
     ##############################################-->
@@ -300,27 +379,59 @@
   <string name="openmap_cartodb_positron">کارٹو ڈی بی پوزٹران</string>
   <string name="openmap_cartodb_darkmatter">کارٹو ڈی ڈی ڈارک میٹر</string>
   <string name="basemap">بیس میپ</string>
+  <string name="basemap_source">ذریعہ</string>
+  <string name="basemap_source_unavailable">ہم معذرت خواہ ہیں کہ اس فون پہ basemaps %s موجود نہیں ہیں۔ براہ مہربانی سیٹنگز &gt; Maps میں سے کوئی اور basemap منتخب کریں۔</string>
+  <string name="map_style_label">%s میپ کا سٹائل</string>
   <string name="streets">سٹریٹس </string>
   <string name="terrain">ٹیرین</string>
   <string name="hybrid">ہائبرڈ</string>
   <string name="satellite">سیٹیلائٹ</string>
+  <string name="light" tools:ignore="UnusedResources">لائٹ/ہلکا رنگ</string>
+  <string name="dark" tools:ignore="UnusedResources">ڈارک/گہرا رنگ</string>
+  <string name="outdoors" tools:ignore="UnusedResources">باہر</string>
+  <string name="topographic">جغرافیائی</string>
   <string name="google_play_services_error_occured">گوگل میپس تک رسائی حاصل کرنے میں ناکام۔ کیا گوگل پلے سروسز  انسٹالڈہے؟</string>
+  <string name="carto_map_style_positron">Positron</string>
+  <string name="carto_map_style_dark_matter">Dark Matter</string>
+  <string name="reference_layer">ریفرنس Layer</string>
+  <string name="layer_data_file">Layer کی ڈیٹا فائل</string>
   <string name="view_change_location">مقام کو دیکھیں یا تبدیل کریں۔</string>
   <string name="change_location">جگہ تبدیل کریں </string>
+  <string name="record_geopoint">پوائنٹ کو ریکارڈ کریں</string>
+  <string name="location_accuracy">درستگی: %1$s میٹر</string>
+  <string name="location_provider">لوکیشن مہیا کرنے والا: %s</string>
   <string name="get_location">لوکیشن ریکارڈ کریں</string>
   <string name="provider_disabled_error">معذرت، لوکیشن فراہم کرنے والے نااہل کئے گئے ہیں</string>
   <string name="gps_result">طول عرض:  %1$s \nطول بلد: %2$s \n اونچائی:  %3$s میٹر\n ایکیوریسی: %4$s میٹر</string>
+  <string name="google_play_services_not_available">یہ فارم آپ کی لوکیشن کو ریکارڈ کرنا چاہتا ہے، مگر Google Play Services دستیاب نہیں ہیں۔</string>
+  <string name="location_providers_disabled_dialog_message">یہ فارم آپ کی لوکیشن حاصل کرنا چاہتا ہے، لیکن لوکیشن سیٹنگ بند ہے۔ براہ مہربانی اس کو اینڈرائڈ سیٹنگز سے کھولیں۔</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <string name="go_to_settings">سیٹنگز پہ جائیں</string>
   <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="track_location">لوکیشن کا پتہ لگائیں</string>
+  <string name="background_location_disabled">یہ فارم آپ کی لوکیشن حاصل کرنا چاہتا ہے، لیکن لوکیشن سیٹنگ بند ہے۔ براہ مہربانی اس کو اوپر والے %1$s مینیو سے کھولیں۔</string>
+  <string name="background_location_enabled">یہ فارم آپ کی لوکیشن ریکارڈ کرتا ہے۔ لوکیشن ریکارڈنگ کو روکنے کے لئے %1$s مینیو دبایئں۔</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">غلطیوں کو چیک کریں</string>
   <string name="get_point">جیو پوائنٹ شروع کریں</string>
   <string name="geopoint_view_read_only">جیوپوائنٹ دیکھیں</string>
+  <string name="geoshape_view_read_only"> Geoshape کو دیکھیں</string>
+  <string name="geotrace_view_read_only"> Geotrace کو دیکھیں</string>
   <string name="get_shape">جیوشیپ شروع کریں</string>
   <string name="get_trace">جیو ٹریس شروع کریں</string>
   <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">کتنا ٹائم گزرا: %1$s</string>
   <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">پوائنٹ%1$s جگہ پر محفوظ کیا جائے گا۔</string>
   <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">سیٹلائٹس: %1$s</string>
+  <string name="waiting_for_location">لوکیشن ڈھونڈی جا رہی ہے۔ انتظار کریں</string>
+  <string name="poor_accuracy">درستگی مناسب نہیں ہے۔ انتظار کریں۔</string>
+  <string name="unacceptable_accuracy">درستگی صحیح نہیں ہے۔ انتظار کریں۔</string>
+  <string name="improving_accuracy">درستگی کو زیادہ کیا جا رہا ہے۔ انتظار کریں۔</string>
+  <string name="accuracy_status_title">لوکیشن حاصل کی جا رہی ہے۔</string>
   <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$s میٹر</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
   <string name="west">ڈبلیو%1$s%2$s%3$s</string>
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
@@ -330,30 +441,73 @@
   <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
   <string name="north">این:%1$s%2$s%3$s</string>
   <string name="geoshape_title">جیو شیپ </string>
+  <string name="input_method">اینٹری کی طریقہ</string>
   <string name="start">شروع </string>
   <string name="enable_gps">جی پی ایس کو فعال  کریں</string>
   <string name="geotrace_title">جیو ٹریس </string>
+  <string name="gps_enable_message">آپ کے فون کا GPS بند ہے۔ کیا آپ اس کو کھولنا چاھیں گے؟</string>
   <string name="geo_clear_warning">فیچر پہلے سے ہی بنائی گئی ہے. کیا آپ کو فیچرکو ختم کرنا چاہیں گے؟</string>
   <string name="geo_exit_warning">تبدیلیوں کو ختم کریں اور او ڈی کے  کے پاس واپس جائیں؟</string>
   <string name="polygon_validator">قطبون بنانے کے لئے کم از کم 3 پوائنٹس لازمی ہیں</string>
   <string name="polyline_validator">پولی لائن بنانے کے لئے کم سے کم 2 پوائنٹس لازمی ہیں</string>
   <string name="clear">صاف کریں </string>
+  <string name="placement_mode">کلک کرکے اندراج کریں</string>
+  <string name="manual_mode">دستی لوکیشن ریکارڈنگ</string>
+  <string name="automatic_mode">لوکیشن کی خود بخود ریکارڈنگ</string>
+  <string name="recording_interval">ریکارڈنگ کا وقفہ:</string>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_seconds">
+    <item quantity="one">%d سیکنڈز</item>
+    <item quantity="other">%d سیکنڈز</item>
+  </plurals>
   <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_minutes">
+    <item quantity="one">%d منٹس</item>
+    <item quantity="other">%d منٹس</item>
+  </plurals>
+  <string name="accuracy_requirement">درستگی کی ضروریات</string>
+  <string name="none">کوئی نہیں</string>
   <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <plurals name="number_of_meters">
+    <item quantity="one"> %d میٹرز</item>
+    <item quantity="other"> %d میٹرز</item>
+  </plurals>
+  <string name="location_status_searching">لوکیشن منتخب کی جا رہی ہے۔ انتظار کریں۔۔۔</string>
+  <string name="location_status_accuracy">لوکیشن درستگی: %.2f میٹر</string>
+  <string name="location_status_acceptable">لوکیشن درستگی: %.2f میٹر (مناسب)</string>
+  <string name="location_status_unacceptable">لوکیشن درستگی: %.2f میٹر (نامناسب)</string>
+  <string name="collection_status_paused">درج شدہ پوائنٹس: %d</string>
+  <string name="collection_status_placement">درج شدہ پوائنٹس: %d (کلک کرکے پوائنٹس کو سیٹ کریں)</string>
+  <string name="collection_status_manual">درج شدہ پوائنٹس: %d (دستی ریکارڈنگ)</string>
+  <string name="collection_status_auto_seconds">درج شدہ پوائنٹس: %1$d (ہر %2$d سیکنڈز بعد ریکارڈنگ)</string>
+  <string name="collection_status_auto_minutes">درج شدہ پوائنٹس: %1$d (ہر %2$d منٹ بعد ریکارڈنگ)</string>
+  <string name="collection_status_auto_seconds_accuracy">درج شدہ پوائنٹس: %1$d (ہر %2$d سیکنڈز بعد ریکارڈنگ، درستگی %3$d میٹر)</string>
+  <string name="collection_status_auto_minutes_accuracy">درج شدہ پوائنٹس: %1$d (ہر %2$d منٹ بعد ریکارڈنگ، درستگی %3$d میٹر)</string>
   <string name="geopoint_instruction">پلیس مارک کرنے کے لیے طویل دبائیں یا ایڈ مارکر بٹن ٹیپ کریں</string>
   <string name="geopoint_no_draggable_instruction"> مارکر بٹن پر کلک کریں.</string>
   <string name="discard">ختم کر دینا</string>
   <string name="geoshape_view_change_location">جیو شیپ دیکھیں یا تبدیل کریں</string>
   <string name="geotrace_view_change_location">جیو ٹریس دیکھیں یا تبدیل کریں</string>
+  <string name="select_item_count">%s: %d (%d میپ پہ موجود)</string>
+  <string name="select_item">منتخب کریں</string>
+  <string name="new_item">نیا آئٹم</string>
   <!--Name of an action button-->
+  <string name="edit_data">ڈرافٹ میں ترمیم کریں</string>
+  <string name="view_data">محفوظ شدہ فارم دیکھیں</string>
   <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">لوکیشن کو ٹریک کریں</string>
   <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">لوکیشن کا پتہ لگایا جا رہا ہے۔۔۔</string>
   <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">ریفرنس layers  کے متعلق مدد حاصل کریں</string>
   <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">میری لوکیشن دکھایئں</string>
   <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">اس طرح زوم کریں کہ تمام پوائنٹ نظر آیئں</string>
   <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">عارضی وقفہ</string>
   <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">آخری پوائنٹ کو ختم کریں</string>
   <!--##############################################
     # SEND FINALIZED FORM
     ##############################################-->
@@ -373,6 +527,10 @@
   <string name="media_upload_error"> میڈیا فائل کو اپ لوڈ کرنے میں ناکام جو کہ موجود نہیں:%1$s</string>
   <string name="send_in_progress">پس منظر چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
   <string name="odk_permissions_fail">او ڈی کے آٹو خود اجازت کی ناکامی، براہ کرم یقینی بنائیں کہ آپ نے تمام مستحق اجازت دی ہے</string>
+  <string name="forms_upload_succeeded">فارمز کا اپ لوڈ کامیابی سے مکمل ہو گیا ہے۔</string>
+  <string name="forms_upload_failed">فارمز کا اپ لوڈ نہیں ہو سکا</string>
+  <string name="all_uploads_succeeded">تمام اپ لوڈز کامیابی سے مکمل ہو گئے ہیں۔</string>
+  <string name="some_uploads_failed">%2$s میں سے %1$s اپ لوڈ ناکام ہو گیا ہے۔</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -385,18 +543,35 @@
   <string name="version">ورژن</string>
   <string name="form_updates_available">فارم اپ ڈیٹس دستیاب ہیں</string>
   <string name="newer_version_of_a_form_info">یہ اس فارم کی اپ ڈیٹ ہے جو آپ کے پاس ہے</string>
+  <string name="form_update_error">فارم اپ ڈیٹ نہیں ہو سکا</string>
+  <string name="form_update_succeeded">فارمز کا اپ ڈیٹ کامیابی سے مکمل ہو گیا ہے۔</string>
+  <string name="load_remote_form_error">فارمز کی لسٹ ڈاون لوڈ نہیں ہو سکی</string>
+  <string name="forms_download_succeeded">فارمز کا ڈاون لوڈ کامیابی سے مکمل ہو گیا ہے۔</string>
+  <string name="forms_download_failed">فارمز کا ڈاون لوڈ نہیں ہو سکا</string>
+  <string name="all_downloads_succeeded">تمام ڈاون لوڈز کامیابی سے مکمل ہو گئے ہیں۔</string>
+  <string name="some_downloads_failed">%2$s میں سے %1$s ڈاون لوڈ ناکام ہو گیا ہے۔</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="form_details">ID: %1$s Version: %2$s</string>
   <!--##############################################
     # GET BLANK FORM - ERROR MESSAGES
     ##############################################-->
+  <string name="report_to_project_lead">اگر آپ کو یہی مسئلہ بار بار آ رہا ہے تو پراجیکٹ کے انچارج سے رابطہ کریں</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="unreachable_error">Collect کا %s پر سرور سے رابطہ نہیں ہو رہا۔ کیا آپ نے URL کا صحیح اندراج کیا تھا؟</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="security_error">Collect کا %s پر محفوظ طریقے سے سرور سے رابطہ نہیں ہو رہا۔ کیا آپ نے URL کا صحیح اندراج کیا تھا؟</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="server_error">سرور %1$s  نے جواب میں %2$s  status کوڈ بھیجا ہے۔</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="invalid_response">سرور %s  نے صحیح جواب نہیں بھیجا</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_no_hash_error">سرور نے اس فارم کا hash مہیا نہیں کیا۔</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">اس فارم پر کام نہیں ہو سکتا۔</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_save_disk_error">اس فارم کو ڈاون لوڈ کرتے وقت فون کی ڈسک کا مسئلہ آ رہا ہے۔</string>
   <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_invalid_submission_error">اس فارم کی submission URL صحیح نہیں ہے۔</string>
   <!--##############################################
     # DELETE SAVED FORM
     ##############################################-->
@@ -416,30 +591,47 @@
   <!--##############################################
     # UNPROTECTED SETTINGS
     ##############################################-->
+  <string name="project_settings">پراجیکٹ سیٹنگز</string>
   <!--Title of a settings section-->
   <string name="server_settings_title">سرور </string>
   <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, ، یوزر نیم، پاس ورڈ</string>
   <!--Title of a settings section-->
+  <string name="project_display_title">پراجیکٹ ڈسپلے</string>
   <!--Subtext of a settings section-->
+  <string name="project_display_subtext">نام، آئکون، رنگ</string>
   <!--Title of a settings section-->
   <string name="client">یوزر انٹرفیس</string>
   <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">ایپ کی زبان، تھیم، الفاظ کا سائز</string>
   <!--Title of a settings section-->
   <string name="maps">نقشہ جات</string>
   <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">Basemap, styles, layers</string>
   <!--Title of a settings section-->
   <string name="form_management_preferences">فارم مینجمنٹ</string>
   <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">خودکاراپ ڈیٹ، خودکارطریقے سے بھیجنا، خودکار طریقے سے ڈیلیٹ کرنا</string>
   <!--Title of a settings section-->
   <string name="user_and_device_identity_title">صارف اور ڈیوائس کی شناخت</string>
   <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">یوزر نیم، فون نمبر، ڈیوائس ID</string>
   <!--Title of a settings section only available in beta or development builds.-->
+  <string name="experimental">تجرباتی</string>
+  <string name="protected_settings">محفوظ</string>
   <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">محفوظ سیٹنگز کو کھولیں</string>
   <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">پاس ورڈ تبدیلی، Access کنٹرول کرنا</string>
+  <string name="set_admin_password">ایڈمن کا پاس ورڈ سیٹ کریں</string>
   <!--Title of a settings section-->
+  <string name="project_management_section_title">پراجیکٹ کا انتظام</string>
   <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">سیٹنگ صحیح کرنا، دوبارہ سے سیٹنگ کرنا، ڈیلیٹ کرنا</string>
   <!--Title of a settings section-->
+  <string name="access_control_section_title">استعمال کا کنٹرول</string>
   <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">یوزر کی ایپ کو محدود کریں</string>
   <string name="server_preferences">سرور کی ترتیب</string>
   <!--Label for server type setting-->
   <string name="type">قسم</string>
@@ -462,6 +654,7 @@
   <string name="app_theme">تھیم </string>
   <string name="theme_light">لائٹ تھیم </string>
   <string name="theme_dark">ڈارک تھیم </string>
+  <string name="theme_system">فون کی منتخب تھیم استعمال کریں</string>
   <string name="language">زبان </string>
   <string name="use_device_language">ڈیوائس کی زبان استعمال کریں</string>
   <string name="font_size">ٹیکسٹ فونٹ سائز</string>
@@ -478,13 +671,19 @@
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <string name="form_forward">اگلا</string>
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_backward">واپس</string>
   <!--Heading for the settings category about updating blank forms-->
   <string name="form_update_category">فارم اپ ڈیٹ</string>
   <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <string name="form_update_mode_title">خالی فارم کواپ ڈیٹ کرنے کی سہولت</string>
   <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <string name="manual">دستی</string>
   <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <string name="previously_downloaded_only">صرف پہلے سے ڈاون لوڈ کئے گئے فارمز</string>
   <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <string name="match_exactly">سرورسے مکمل میچنگ کریں</string>
   <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <string name="form_update_frequency_title">خودکار اپ ڈیٹ کی تعداد</string>
   <!--Frequency for requesting blank form updates from the server-->
   <string name="every_fifteen_minutes">ہر پندرہ منٹ</string>
   <!--Frequency for requesting blank form updates from the server-->
@@ -500,7 +699,7 @@
   <string name="hide_old_form_versions_setting_summary">صرف نئے ورژن  خالی فارم پرکریں میں نظر آئیں گے</string>
   <string name="form_submission_category">فارم سبمیشن</string>
   <string name="autosend_selector_title">خود بیجھے </string>
-  <string name="autosend">خود بھیجھیں </string>
+  <string name="autosend">خودکار طریقے سے بھیجیں</string>
   <string name="off">بند </string>
   <string name="wifi_autosend">صرف وائی فائی </string>
   <string name="cellular_autosend">صرف سیلولر</string>
@@ -528,11 +727,13 @@
   <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
   <string name="guidance_yes_collapsed">جی ہاں - منہدم ہو گیا</string>
   <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">آواز کی ریکارڈنگ کے لئے کسی دوسری ایپ کا استعمال کریں</string>
   <string name="form_import_category">فارم امپورٹ </string>
   <string name="instance_sync">امپورٹ پر فارم کو حتمی شکل دیں</string>
   <string name="instance_sync_summary">افیکٹس فارمز براہ راست انسٹنسز فولڈر میں شامل کیا گئے.</string>
   <string name="analytics_preferences">استعمال کا ڈیٹا</string>
   <string name="analytics">انانمس ڈیٹا جمع کریں</string>
+  <string name="analytics_summary">بغیر شناخت کے ڈیٹا سے ODK کی ٹیم کو ایپ کے مسائل حل کرنے اور نئی سہولیات بنانے میں مدد ملتی ہے</string>
   <string name="form_metadata_title">فارم میٹا ڈیٹا</string>
   <string name="form_metadata">فارم میٹا ڈیٹا</string>
   <string name="form_metadata_summary">ان ویلیوزکو فارمز میں شامل کیا جائے گا جس میں ڈیٹا جمع کرنے والے شخص کو شناخت کرنے کے لئے صارف کا نام، ای میل اور / یاٹیلی فون پہلے سے لوڈ شدہ فیلڈ موجود ہیں.</string>
@@ -545,7 +746,9 @@
   <!--Displayed when a device property such as the phone number is not available-->
   <string name="preference_not_available">موجود نھیں ہے</string>
   <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">سیٹنگز کو کھولیں</string>
   <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">سیٹنگز کھل چکی ہیں</string>
   <!--##############################################
      # PROTECTED SETTINGS
      ##############################################-->
@@ -558,8 +761,12 @@
   <string name="change_admin_password">ایڈمن پاسورڈ تبدیل کریں</string>
   <string name="show_password">پاس ورڈ دکھائیں</string>
   <string name="found_in_main">نشان ہٹا کرکے مرکزی فہرست سے ہٹا دیں</string>
+  <string name="found_in_settings">Unprotected settings سے چھپانے کے لئے چیک مارک ہٹا دیں</string>
   <string name="form_entry">فارم اندراج سے چھپانے کے لئے انچیک کریں</string>
+  <string name="form_end">Form End سے چھپانے کے لئے چیک مارک ہٹا دیں</string>
   <string name="reset_project_settings_title">ریس سیٹ کریں</string>
+  <string name="reset_project_settings_subtext">سیٹنگز، فارمز یا ڈیٹا میں سے منتخب کریں</string>
+  <string name="delete_project">ختم کریں</string>
   <string name="select_all">تمام منتخب کریں</string>
   <string name="clear_all">تمام کو صاف کریں</string>
   <string name="reset_settings">تمام سیٹنگز(اندرونی سیٹنگز، محفوظ کردہ سیٹنگز)</string>
@@ -578,15 +785,31 @@
   <string name="reset_layers_result">میپ لیؑیرز:: %s</string>
   <string name="reset_cache_result">فارم لوڈ کیشے::%s</string>
   <string name="main_menu_settings">مین مینو سیٹنگز </string>
+  <string name="main_menu_settings_summary">بٹن کو دکھائیں یا چھپائیں</string>
   <string name="user_settings">یوزر سیٹنگز </string>
+  <string name="user_setting_summary">سیٹنگز کو دکھائیں یا چھپائیں</string>
   <string name="form_entry_setting">فارم انٹری سیٹنگز </string>
+  <string name="form_entry_settings_summary">Actions کو دکھائیں یا چھپائیں</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <string name="moving_backwards_title">پیچھے کی طرف حرکت کرنا </string>
   <string name="moving_backwards_disabled_title">پیچھے کی طرف حرکت غیر فعال </string>
+  <string name="moving_backwards_disabled_message">کیا آپ فون کو اس طرح سیٹ کرنا چاہتے ہیں کہ یوزر سیٹنگ کو خود تبدیل نہ کر سکے؟
+اس کے لئے یہ سیٹنگز استعمال ہوتی ہیں:
+ڈرافٹ میں ترامیم کی اجازت بند کریں
+ڈرافٹ میں محفوظ کرنے کی اجازت بند کر دیں
+Go to Prompt کی اجازت بند کر دیں
+Constraint processing کو forward swipe پہ validate کرنا لازمی کر دیں</string>
   <string name="yes">ہاں </string>
   <string name="no">نہیں </string>
   <string name="moving_backwards_enabled_title">پیچھے کی طرف حرکت  فعال</string>
+  <string name="moving_backwards_enabled_message">آپ ان سیٹنگز کو غور سے دیکھ سکتے ہیں:
+ڈرافٹ میں ترامیم
+ڈرافٹ میں محفوظ کرنا
+Go to prompt
+Constraint processing</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">ڈرافٹ میں محفوظ کریں</string>
+  <string name="save_mid_summary">محفوظ کرنے کا بٹن top bar میں ہے، جبکہ ڈرافٹ میں محفوظ کرنے کا طریقہ فارم ختم کرتے وقت آتا ہے۔</string>
   <!--##############################################
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
@@ -598,12 +821,16 @@
   <string name="download_selected">منتخب کردہ ڈاؤنلوڈ کریں</string>
   <string name="go_back">واپس جاؤ</string>
   <string name="google_auth_io_exception_msg">اے پی آئ کالز بنانے میں ناکام اگر آپ لوکل بلڈ چلا رہے ہیں تو، براہ کرم پراجیکٹ ریڈمی پڑھ لیں.</string>
+  <string name="reading_files">فائلز کو دیکھا جا رہا ہے</string>
   <string name="drive_get_file">%1$sاور میڈیا فائلز کو حاصل کیا جا رہا ہے</string>
   <string name="no_google_account">کوئی گوگل اکاؤنٹ منتخب نہیں ہوا!</string>
+  <string name="google_set_account">آپ نے Google Sheets کو سرور کے طور پہ منتخب کیا ہے۔ براہ مہربانی سیٹنگز میں سے متعلقہ Google اکاوئنٹ کا انتخاب کریں۔</string>
   <string name="google_search_browse">فارم تلاش کریں. یا  \'مائی ڈرائیو\' کو منتخب کریں.</string>
   <string name="invalid_sheet_id">غلط شیٹ ID:%1$s</string>
+  <string name="missing_submission_url"> Submission URL موجود نہیں ہے</string>
   <string name="google_sheets_access_denied">رسائی مسترد کر دی . براہ کرم یقینی بنائیں کہ اسپریڈ شیٹ مالک نے آپ کو ترمیم کی  اجازت دی ہے</string>
   <string name="google_sheets_missing_columns">اسپریڈ شیٹ میں مندرجہ بالا کالم غائب ہیں:%1$s</string>
+  <string name="google_sheets_encrypted_message">Encrypted  فارمز Google Sheets کو نہیں بھیجے جا سکتے</string>
   <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <string name="instance_upload_cancelled">انسٹنس اپ لوڈ منسوخ</string>
@@ -619,6 +846,7 @@
   <string name="leave_a_review">پلے اسٹور پر رائے دیجیے</string>
   <string name="leave_a_review_msg">آپ ( امید ہے مثبت) کی رائے سے پلے اسٹورمیں اپپ کی نمائش میں اضافہ ہوتا ہے </string>
   <string name="odk_website">او ڈی کے ویب سائٹ وزٹ کریں</string>
+  <string name="odk_website_summary">ODK مشکل حالات میں معاشرتی بہتری کے لئے ڈیٹا اکٹھا کرنے میں استعمال ہوتا ہے۔</string>
   <string name="odk_forum">او ڈی کے فورم میں شمولیت اختیار کریں</string>
   <string name="odk_forum_summary">تعاون حاصل کرنے کے لئے فورم میں شمولیت اختیار کریں، خصوصیات کی درخواست کریں، کوڈ / ترجمہ کرنے میں اپنا حصہ ڈالیں  !</string>
   <string name="all_open_source_licenses">اوپن سورس لائبریری / لائسنسس</string>
@@ -626,16 +854,28 @@
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">QR کوڈ سے دوبارہ سیٹنگ کریں</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">پہلے سے موجود تمام سیٹنگز کو تبدیل کر دیں</string>
+  <string name="qr_code">QR کوڈ کی سیٹنگ</string>
+  <string name="scan_qr_code_fragment_title">سکین کریں</string>
+  <string name="view_qr_code_fragment_title">QR کوڈ</string>
+  <string name="import_qrcode_sd"> QR کوڈ باہر سے لایئں</string>
   <string name="successfully_imported_settings">سیٹنگز کامیابی سےامپورٹ ہوگئیں</string>
   <string name="encoding_max_limit" tools:ignore="UnusedResources">زیادہ سے زیادہ حروف کی حدپہنچ گئی:کیو آر کوڈ تمام سیٹنگنزکے لئے بنایا نہیں کیا جا سکتا</string>
   <string name="share">شیئر </string>
   <string name="turn_on_flashlight">فلیش لائٹ چالو کریں</string>
   <string name="turn_off_flashlight">فلیش لائٹ بند کریں</string>
-  <string name="server_password">سرور پاس ورڈ</string>
+  <string name="qrcode_with_both_passwords">اس میں مندرجہ ذیل حساس معلومات ہیں: <b>ایڈمن پاس ورڈ</b> اور <b>سرور پاس ورڈ</b></string>
+  <string name="qrcode_without_passwords">QR کوڈ میں <b>ایڈمن</b> یا <b>سرور</b> کا پاس ورڈ نہیں ہے۔ اس کو ڈالنے کے لئے کلک کریں۔</string>
+  <string name="qrcode_with_admin_password">اس میں مندرجہ ذیل حساس معلومات ہیں: <b>ایڈمن پاس ورڈ</b></string>
+  <string name="qrcode_with_server_password">اس میں مندرجہ ذیل حساس معلومات ہیں: <b>سرور پاس ورڈ</b></string>
+  <string name="server_password">سرور کا پاس ورڈ</string>
   <string name="include_password_dialog">کوڈ میں شامل پاس ورڈ</string>
   <string name="generate">جنریٹ </string>
-  <string name="invalid_qrcode">کیو آر کوڈ درست سیٹنگنز پر مشتمل نہیں ہے</string>
+  <string name="invalid_qrcode">QR کوڈ درست سیٹنگنز پر مشتمل نہیں ہے</string>
   <string name="qr_code_not_found">منتخب تصویر میں QR کوڈ موجود نھیں ہے</string>
+  <string name="corrupt_imported_preferences_error">موجودہ سیٹنگز خراب ہو چکی ہیں۔ پراجیکٹ سیٹنگز سے دوبارہ ڈالیں، یا صحیح سیٹنگز دوبارہ امپورٹ کریں۔</string>
+  <string name="settings_with_gd_protocol">Google drive/sheets کے پراجیکٹس اب مزید نہیں بنائے جا سکتے۔</string>
   <!--##############################################
      # MISC
      ##############################################-->
@@ -647,59 +887,125 @@
   <string name="do_not_change">منسوخ</string>
   <string name="do_not_exit">منسوخ</string>
   <string name="canceling">مسنوخ کیا جا رہا ہے </string>
+  <string name="notification_channel_name">عمومی نوٹس</string>
   <string name="success">کامیابی</string>
   <string name="error_occured">غلطی ہوگئ</string>
-  <string name="please_wait">براہ مہربانی چند منٹ انتظار کرلیں</string>
+  <string name="please_wait">براہ مہربانی تھوڑا انتظار کریں</string>
   <string name="please_wait_long">براہ مہربانی انتظار کریں۔ اسکو چند منٹ لگ سکتے ہیں</string>
   <string name="fs_delete_media_path_if_file_error">\'%s\'ڈیلیٹ نہیں ھو سکا۔ برائے مہربانی فائل کو خود سے ڈٰیلیٹ کریں اور فارم دوبارہ ڈاؤنلوڈ کریں،</string>
-  <string name="fs_create_media_folder_error">میڈیا فولڈر نہیں بن سکا\'%s\'.</string>
+  <string name="fs_create_media_folder_error">میڈیا فولڈر %s نہیں بن سکا.</string>
   <string name="fs_file_copy_error">کاپی نہیں کر سکا \'%1$s\' اوور \'%2$s\'. وجہ:%3$s</string>
   <string name="survey_multiple_forms_error">آپ نے ایک ہی  ID اور ورژن کے ساتھ دو مختلف فارم ڈاؤن لوڈ کیے ہیں. شاید وہ وہی وقت تھے جو مختلف اوقات میں یا مختلف سرورز میں اپ لوڈ کیے گئے ہیں. کسی بھی صورت میں، آپ کو ایک کو ڈیلیٹ کرنا چاہئے.</string>
   <string name="select_odk_shortcut">او ڈی کے شارٹ کٹ منتخب کریں</string>
+  <string name="background_audio_help">یہ فارم آوازکی ریکارڈنگ آپ کے فون کے مائک سے کرتا ہے۔
+
+آپ Volume Indicator  کے استعمال سے یہ ممکن بنا سکتے ہیں کہ مائک ریکارڈ کرنے والی آواز کے بالکل پاس موجود ہو۔
+
+ریکارڈنگ روکنے کے لئے اس فارم کو بند کر دیں۔
+
+مزید معلومات کے لئے پراجیکٹ کے انچارج سے رابطہ کریں۔</string>
+  <string name="loading">لوڈ ہو رہا ہے۔۔۔</string>
   <!--##############################################
      # Projects
      ##############################################-->
+  <string name="projects">پراجیکٹس</string>
+  <string name="settings">سیٹنگز </string>
+  <string name="add_project">پراجیکٹ شامل کریں</string>
+  <string name="add">ایک دفعہ مزید</string>
   <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">ڈپلیکیٹ پراجیکٹ</string>
   <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">آپ کے پاس ان پراجیکٹ سیٹنگز والا ایک اور پراجیکٹ پہلے ہی موجود ہے۔ کیا آپ اس پراجیکٹ کو کھولنا چاہیں گے، یا ایک اور نیا پراجیکٹ شروع کرنا چاہیں گے؟</string>
   <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">ڈپلیکیٹ پراجیکٹ شامل کریں</string>
   <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">پہلے سے موجود پراجیکٹ پر جائیں</string>
+  <string name="project_name">پراجیکٹ کا نام</string>
+  <string name="project_icon">پراجیکٹ کا آئکون</string>
+  <string name="project_color">پراجیکٹ کا رنگ</string>
   <!--Toast text shown when the current project is changed-->
+  <string name="switched_project">%s  میں تبدیلی ہو چکی ہے</string>
   <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
+  <string name="using_project">%s  کا استعمال ہو رہا ہے</string>
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
+  <string name="switch_to_project">%s میں تبدیل کریں</string>
+  <string name="delete_project_confirm_message">تمام خالی فارمز، بھیجا گیا ڈیٹا، اور سیٹنگز مستقل طور پر ختم ہو جایئں گی</string>
+  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;یہ ایک Google drive/sheets  کا پراجیکٹ ہے۔ اگر آپ اس کو ڈیلیٹ کرتے ہیں، تو آپ اسکو دوبارہ شروع نہیں کر سکیں گے۔&lt;/font&gt; 
+
+اس سے متعلقہ تمام خالی فارمز، ڈیٹا اور سیٹنگز بھی مستقل ڈیلیٹ ہو جائیں گی۔</string>
   <string name="delete_project_yes">ہاں </string>
   <string name="delete_project_no">نہیں </string>
+  <string name="cannot_delete_project_title">پراجیکٹ ختم نہیں ہو سکتا</string>
+  <string name="cannot_delete_project_message_one">آپ کے فون میں ابھی ایسا ڈیٹا موجود ہے جو سرور کو بھیجا نہیں گیا۔ پراجیکٹ کو ڈیلیٹ کرنے سے پہلے یا تو وہ ڈیٹا بھیجیں، یا پھر اس ڈیٹا کو ڈیلیٹ کریں۔</string>
+  <string name="cannot_delete_project_message_two">پس منظر میں کام چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
+  <string name="or">OR</string>
+  <string name="hex_color">hex color</string>
+  <string name="invalid_hex_code">hex code صحیح نہیں ہے</string>
   <!--##############################################
      # First launch and initial configuration
      ##############################################-->
   <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
     select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">کہیں پر بھی ڈیٹا اکٹھا کریں</string>
   <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">QR کوڈ سے سیٹنگ کریں</string>
   <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">پراجیکٹ کی تفصیل خود ڈالیں</string>
+  <string name="project_config_tip">اپنا پراجیکٹ شامل کرنے کے بعد آپ سیٹنگز سے اس کی تفصیل کو تبدیل کر سکتے ہیں</string>
   <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">کیا ابھی کوئی پراجیکٹ نہیں ہے؟</string>
   <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">ڈیمو دیکھیں</string>
+  <string name="scan_configuration_qr_code">سیٹنگز کا QR کوڈ سکین کریں</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">اس فارم کو کھولنے کے لئے پہلے ODK Collect کھولیں اور اس پراجیکٹ کا انتخاب کریں جس میں یہ موجود ہے۔</string>
   <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">ODK Collect ابھی تک Configure نہیں کیا گیا۔ براہ مہربانی ODK Collect کو کھولیں اور سیٹنگ کریں۔
+
+اگر آپ نے کسی Shortcut پہ کلک کیا ہے، تو آپ کوODK Collect سیٹ کرنے کی بعد اس کو دوبارہ بنانا پڑے گا۔</string>
   <!--##############################################
     # Errors
     ##############################################-->
+  <string name="show_details">تفصیلات دکھائیں</string>
+  <string name="errors">غلطیاں</string>
   <!--##############################################
     # Permissions
     ##############################################-->
+  <string name="open_settings">سیٹنگز کھولیں</string>
   <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">Entities</string>
   <!--##############################################
     # Crash handling
     ##############################################-->
+  <string name="crash_last_run">پچھلی دفعہ یہ ایپ کریش ہو گئی تھی</string>
+  <string name="cant_start_app">ایپ سٹارٹ نہیں ہو سکتی!</string>
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
+  <string name="google_drive_deprecation_message">یہ پراجیکٹ Google Drive استعمال کرتا ہے۔ یہ سہولت ایپلیکیشن کی اگلی اپ ڈیٹ میں ختم کر دی جائے گی۔</string>
+  <string name="learn_more_button_text">مزید جانیں</string>
   <string name="dismiss_button_text">ختم کریں</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
   <!--Section title in settings-->
+  <string name="dev_tools">ڈویلیپرز کے ٹولز</string>
   <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">Crash app</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
+  <string name="predicate_caching">Predicate caching</string>
+  <string name="permission_dialog_title">اجازت کی تفصیل</string>
+  <string name="permission_dialog_text">آپ سے پوچھا جائے گا کہ ODK Collect نیچے دی گئی چیزوں کو استعمال کر سکتا ہے۔ اگر آپ مطمئن ہیں تو Allow کا بٹن دبایئں۔</string>
+  <string name="notifications">نوٹس</string>
+  <string name="required_for_notifications">Required for showing updates when forms are downloaded, updated and sent.</string>
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <string name="form_saved_as_draft">آپ کا فارم ایک ڈرافٹ کی شکل میں محفوظ ہو گیا ہے۔</string>
+  <string name="form_saved">آپ کا فارم محفوظ ہو گیا ہے۔</string>
+  <string name="form_sending">فارم بھیجا جا رہا ہے۔۔۔</string>
+  <string name="edit_form">ترمیم کریں</string>
+  <string name="view_form">دیکھیں</string>
+  <string name="close_snackbar">snackbar کو بند کر دیں</string>
 </resources>

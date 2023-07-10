@@ -115,6 +115,7 @@
   <string name="delete_repeat_no">Zrušit</string>
   <string name="invalid_answer_error">Tato odpověď je neplatná!</string>
   <string name="required_answer_error">Tato odpověď je povinná!</string>
+  <string name="success_form_validation">Úspěch! Ve formuláři nebyly nalezeny žádné chyby.</string>
   <string name="invalid_space_in_answer_singular">Upozornění: základní hodnota %s má mezery</string>
   <string name="invalid_space_in_answer_plural">Upozornění: základní hodnoty %s mají mezery</string>
   <string name="too_complex_form">Tento formulář je pro toto zařízení příliš složitý. Zkuste zjednodušit výrazy nebo požádat o pomoc na fóru.</string>
@@ -410,6 +411,7 @@
   <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím v nabídce %1$s výše.</string>
   <string name="background_location_enabled">Tento formulář sleduje vaši polohu. Sledování můžete zakázat v nabídce %1$s výše.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">Kontrola chyb</string>
   <string name="get_point">Začít GeoPoint</string>
   <string name="geopoint_view_read_only">Zobrazit GeoPoint</string>
   <string name="geoshape_view_read_only">Zobrazit GeoShape</string>
