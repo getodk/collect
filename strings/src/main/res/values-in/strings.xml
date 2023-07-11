@@ -139,7 +139,7 @@
   <string name="keep_editing">Terus mengubah</string>
   <string name="quit_form_title">Simpan formulir?</string>
   <string name="save_explanation">Anda dapat menyimpan formulir ini dan mengaksesnya dari draf anda kapan saja.</string>
-  <string name="save_explanation_with_last_saved">\'Formulir ini terakhir disimpan pada\' EEE, dd MMM yyyy\', pukul\' HH:mm\'\'. Simpan sebagai draf untuk menyimpan perubahan.\'</string>
+  <string name="save_explanation_with_last_saved">\'Formulir ini terakhir disimpan pada\' EEE, dd MMM yyyy\', pukul\' HH:mm\'. Simpan sebagai draf untuk menyimpan perubahan.\'</string>
   <string name="quit_form_continue_title">Lanjutkan pengubahan?</string>
   <string name="discard_form_warning">Jika anda membuang formulir, anda akan kehilangan perubahan yang telah anda buat sejauh ini.</string>
   <string name="discard_changes_warning">\'Formulir ini terakhir disimpan pada\' EEE, dd MMM yyyy\', pukul\' HH:mm\'. Jika anda membuang perubahan, anda akan kehilangan perubahan yang telah anda buat sejak saat itu.\'</string>
