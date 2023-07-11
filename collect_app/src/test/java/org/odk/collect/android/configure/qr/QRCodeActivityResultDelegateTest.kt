@@ -55,7 +55,7 @@ class QRCodeActivityResultDelegateTest {
         assertThat(
             ShadowToast.getTextOfLatestToast(),
             equalTo(
-                context.getString(R.string.successfully_imported_settings)
+                context.getString(org.odk.collect.strings.R.string.successfully_imported_settings)
             )
         )
     }
@@ -71,7 +71,7 @@ class QRCodeActivityResultDelegateTest {
     @Test
     fun forSelectPhoto_whenImportingFails_showsInvalidToast() {
         importSettingsFromQRCode_withFailedImport()
-        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(R.string.invalid_qrcode)))
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(org.odk.collect.strings.R.string.invalid_qrcode)))
     }
 
     private fun importSettingsFromQRCode_withFailedImport() {
@@ -90,13 +90,13 @@ class QRCodeActivityResultDelegateTest {
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.GD_PROJECT)
         delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
 
-        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(R.string.settings_with_gd_protocol)))
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(org.odk.collect.strings.R.string.settings_with_gd_protocol)))
     }
 
     @Test
     fun forSelectPhoto_whenQRCodeDecodeFailsWithInvalid_showsInvalidToast() {
         importSettingsFromQrCode_withInvalidQrCode()
-        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(R.string.invalid_qrcode)))
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(org.odk.collect.strings.R.string.invalid_qrcode)))
     }
 
     private fun importSettingsFromQrCode_withInvalidQrCode() {
@@ -110,7 +110,7 @@ class QRCodeActivityResultDelegateTest {
     @Test
     fun forSelectPhoto_whenQRCodeDecodeFailsWithNotFound_showsNoQRToast() {
         importSettingsFromImage_withoutQrCode()
-        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(R.string.qr_code_not_found)))
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(org.odk.collect.strings.R.string.qr_code_not_found)))
     }
 
     private fun importSettingsFromImage_withoutQrCode() {

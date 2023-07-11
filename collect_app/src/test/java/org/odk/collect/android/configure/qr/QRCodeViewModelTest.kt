@@ -56,6 +56,6 @@ class QRCodeViewModelTest {
         adminSettings.save(ProtectedProjectKeys.KEY_ADMIN_PW, "blah")
 
         fakeScheduler.runBackground()
-        assertThat(viewModel.warning.value, equalTo(R.string.qrcode_with_both_passwords))
+        assertThat(viewModel.warning.value, equalTo(org.odk.collect.strings.R.string.qrcode_with_both_passwords))
     }
 }

@@ -40,7 +40,7 @@ class ProcessRestoreTest {
             .clickGoToArrow()
             .clickOnGroup("Select one widgets")
             .clickOnQuestion("Select one from map widget")
-            .clickOnString(R.string.select_place)
+            .clickOnString(org.odk.collect.strings.R.string.select_place)
             .let { simulateProcessRestore(FormHierarchyPage("All widgets")) }
 
             .pressBack(FormEntryPage("All widgets"))

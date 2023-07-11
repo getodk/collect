@@ -72,7 +72,7 @@ public class GeoPointMapActivityTest {
         ActivityScenario<GeoPointMapActivity> scenario = launcherRule.launchForResult(GeoPointMapActivity.class);
         mapFragment.ready();
 
-        scenario.onActivity(activity -> assertEquals(activity.getString(R.string.please_wait_long), activity.getLocationStatus()));
+        scenario.onActivity(activity -> assertEquals(activity.getString(org.odk.collect.strings.R.string.please_wait_long), activity.getLocationStatus()));
     }
 
     @Test

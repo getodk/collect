@@ -39,7 +39,7 @@ class FormNavigationTest {
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
             .assertQuestion("What is your name?")
-            .assertTextDoesNotExist(R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_backward)
             .clickForwardButton()
             .assertQuestion("What is your age?")
             .clickBackwardButton()
@@ -47,8 +47,8 @@ class FormNavigationTest {
             .clickForwardButton()
             .assertQuestion("What is your age?")
             .clickForwardButtonToEndScreen()
-            .assertText(R.string.form_backward)
-            .assertTextDoesNotExist(R.string.form_forward)
+            .assertText(org.odk.collect.strings.R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_forward)
     }
 
     @Test
@@ -59,20 +59,20 @@ class FormNavigationTest {
             .clickAccessControl()
             .clickFormEntrySettings()
             .clickMovingBackwards()
-            .clickOnString(R.string.yes)
+            .clickOnString(org.odk.collect.strings.R.string.yes)
             .pressBack(AccessControlPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
             .assertQuestion("What is your name?")
-            .assertTextDoesNotExist(R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_backward)
             .clickForwardButton()
             .assertQuestion("What is your age?")
-            .assertTextDoesNotExist(R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_backward)
             .clickForwardButtonToEndScreen()
-            .assertTextDoesNotExist(R.string.form_backward)
-            .assertTextDoesNotExist(R.string.form_forward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_forward)
     }
 
     @Test
@@ -87,14 +87,14 @@ class FormNavigationTest {
             .pressBack(MainMenuPage())
             .copyForm("two-question.xml")
             .startBlankForm("Two Question")
-            .assertTextDoesNotExist(R.string.form_backward)
-            .assertTextDoesNotExist(R.string.form_forward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_forward)
             .swipeToNextQuestion("What is your age?")
-            .assertTextDoesNotExist(R.string.form_backward)
-            .assertTextDoesNotExist(R.string.form_forward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_forward)
             .swipeToEndScreen()
-            .assertTextDoesNotExist(R.string.form_backward)
-            .assertTextDoesNotExist(R.string.form_forward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_backward)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.form_forward)
     }
 
     @Test

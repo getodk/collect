@@ -8,18 +8,18 @@ class SaveOrIgnoreDrawingDialog<D : Page<D>>(
 ) : Page<SaveOrIgnoreDrawingDialog<D>>() {
 
     override fun assertOnPage(): SaveOrIgnoreDrawingDialog<D> {
-        val title = getTranslatedString(R.string.exit) + " " + drawingName
+        val title = getTranslatedString(org.odk.collect.strings.R.string.exit) + " " + drawingName
         assertText(title)
         return this
     }
 
     fun clickSaveChanges(): D {
-        clickOnString(R.string.keep_changes)
+        clickOnString(org.odk.collect.strings.R.string.keep_changes)
         return destination.assertOnPage()
     }
 
     fun clickDiscardChanges(): D {
-        clickOnString(R.string.discard_changes)
+        clickOnString(org.odk.collect.strings.R.string.discard_changes)
         return destination.assertOnPage()
     }
 }

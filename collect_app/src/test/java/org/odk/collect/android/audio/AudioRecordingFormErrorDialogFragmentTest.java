@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -33,7 +32,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
 
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            R.style.Theme_MaterialComponents
+            com.google.android.material.R.style.Theme_MaterialComponents
     );
 
     @Before
@@ -56,7 +55,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
             AlertDialog dialog = (AlertDialog) f.getDialog();
 
             Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-            assertThat(button.getText(), is(f.getString(R.string.ok)));
+            assertThat(button.getText(), is(f.getString(org.odk.collect.strings.R.string.ok)));
 
             button.performClick();
             RobolectricHelpers.runLooper();

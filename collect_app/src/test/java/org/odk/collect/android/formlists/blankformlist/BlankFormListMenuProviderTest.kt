@@ -110,7 +110,7 @@ class BlankFormListMenuProviderTest {
 
         assertThat(
             ShadowToast.getTextOfLatestToast(),
-            `is`(activity.getString(R.string.form_update_succeeded))
+            `is`(activity.getString(org.odk.collect.strings.R.string.form_update_succeeded))
         )
     }
 
@@ -133,7 +133,7 @@ class BlankFormListMenuProviderTest {
 
         assertThat(
             ShadowToast.getTextOfLatestToast(),
-            `is`(activity.getString(R.string.no_connection))
+            `is`(activity.getString(org.odk.collect.strings.R.string.no_connection))
         )
         verify(viewModel, never()).syncWithServer()
     }

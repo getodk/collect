@@ -13,7 +13,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
@@ -68,13 +67,13 @@ public class BearingWidgetTest {
     @Test
     public void whenPromptDoesNotHaveAnswer_getBearingButtonIsShown() {
         assertThat(createWidget(promptWithAnswer(null)).binding.bearingButton.getText(),
-                is(widgetActivity.getString(R.string.get_bearing)));
+                is(widgetActivity.getString(org.odk.collect.strings.R.string.get_bearing)));
     }
 
     @Test
     public void whenPromptHasAnswer_replaceBearingButtonIsShown() {
         assertThat(createWidget(promptWithAnswer(new StringData("blah"))).binding.bearingButton.getText(),
-                is(widgetActivity.getString(R.string.replace_bearing)));
+                is(widgetActivity.getString(org.odk.collect.strings.R.string.replace_bearing)));
     }
 
     @Test
@@ -103,7 +102,7 @@ public class BearingWidgetTest {
     public void clearAnswer_updatesButtonLabel() {
         BearingWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.clearAnswer();
-        assertThat(widget.binding.bearingButton.getText(), is(widgetActivity.getString(R.string.get_bearing)));
+        assertThat(widget.binding.bearingButton.getText(), is(widgetActivity.getString(org.odk.collect.strings.R.string.get_bearing)));
     }
 
     @Test
@@ -126,7 +125,7 @@ public class BearingWidgetTest {
     public void setData_updatesButtonLabel() {
         BearingWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("blah");
-        assertThat(widget.binding.bearingButton.getText(), is(widgetActivity.getString(R.string.replace_bearing)));
+        assertThat(widget.binding.bearingButton.getText(), is(widgetActivity.getString(org.odk.collect.strings.R.string.replace_bearing)));
     }
 
     @Test
@@ -225,7 +224,7 @@ public class BearingWidgetTest {
         widget.binding.bearingButton.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
-        assertThat(ShadowToast.getTextOfLatestToast(), is(widgetActivity.getString(R.string.bearing_lack_of_sensors)));
+        assertThat(ShadowToast.getTextOfLatestToast(), is(widgetActivity.getString(org.odk.collect.strings.R.string.bearing_lack_of_sensors)));
     }
 
     private void assertAnswerTextIsEditableWhenSensorIsUnavailable(int sensorType) {

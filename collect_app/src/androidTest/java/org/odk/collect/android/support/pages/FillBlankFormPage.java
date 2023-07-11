@@ -25,7 +25,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
 
     @Override
     public FillBlankFormPage assertOnPage() {
-        assertToolbarTitle(R.string.enter_data);
+        assertToolbarTitle(org.odk.collect.strings.R.string.enter_data);
         return this;
     }
 
@@ -45,27 +45,27 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public BlankFormSearchPage searchInBar(String query) {
-        onView(withId(R.id.search_src_text)).perform(replaceText(query));
+        onView(withId(androidx.appcompat.R.id.search_src_text)).perform(replaceText(query));
         return new BlankFormSearchPage().assertOnPage();
     }
 
     public FillBlankFormPage checkMapIconDisplayedForForm(String formName) {
         onView(withId(R.id.form_list))
                 .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()))
-                .check(matches(hasDescendant(allOf(withContentDescription(R.string.open_form_map), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))));
+                .check(matches(hasDescendant(allOf(withContentDescription(org.odk.collect.strings.R.string.open_form_map), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))));
         return this;
     }
 
     public FillBlankFormPage checkMapIconNotDisplayedForForm(String formName) {
         onView(withId(R.id.form_list))
                 .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()))
-                .check(matches(hasDescendant(allOf(withContentDescription(R.string.open_form_map), withEffectiveVisibility(ViewMatchers.Visibility.GONE)))));
+                .check(matches(hasDescendant(allOf(withContentDescription(org.odk.collect.strings.R.string.open_form_map), withEffectiveVisibility(ViewMatchers.Visibility.GONE)))));
         return this;
     }
 
     public FormMapPage clickOnMapIconForForm(String formName) {
         onView(withId(R.id.form_list))
-                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), clickOnViewContentDescription(R.string.open_form_map, ApplicationProvider.getApplicationContext())));
+                .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), clickOnViewContentDescription(org.odk.collect.strings.R.string.open_form_map, ApplicationProvider.getApplicationContext())));
 
         return new FormMapPage(formName).assertOnPage();
     }
@@ -104,7 +104,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage assertFormExists(String formName) {
         // Seen problems with disk syncing not being waited for even though it's an AsyncTask
         return WaitFor.waitFor(() -> {
-            assertTextDoesNotExist(R.string.no_items_display_forms);
+            assertTextDoesNotExist(org.odk.collect.strings.R.string.no_items_display_forms);
 
             onView(withId(R.id.form_list))
                     .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()));
@@ -120,7 +120,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage assertNoForms() {
-        assertText(R.string.no_items_display_forms);
+        assertText(org.odk.collect.strings.R.string.no_items_display_forms);
         return this;
     }
 }

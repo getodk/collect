@@ -5,6 +5,9 @@
 -dontwarn org.xmlpull.v1.**
 -dontwarn org.hamcrest.**
 -dontwarn com.rarepebble.**
+-dontwarn com.networknt.**
+-dontwarn android.content.res.**
+-dontwarn org.kxml2.io.**
 
 -keep class org.javarosa.**
 -keep class org.odk.collect.android.logic.actions.**

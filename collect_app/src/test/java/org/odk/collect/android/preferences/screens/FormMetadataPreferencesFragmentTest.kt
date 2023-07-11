@@ -62,7 +62,7 @@ class FormMetadataPreferencesFragmentTest {
                 )
                 assertThat(
                     it.findPreference<Preference>("deviceid")!!.summary,
-                    equalTo(it.context!!.getString(R.string.preference_not_available))
+                    equalTo(it.context!!.getString(org.odk.collect.strings.R.string.preference_not_available))
                 )
             }
     }

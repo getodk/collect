@@ -39,7 +39,7 @@ class AdminPasswordDialogFragmentTest {
 
     @get:Rule
     val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
+        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {

@@ -210,7 +210,7 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         }
 
         private String getErrorMsg(File imageFile) {
-            return context.getString(R.string.file_missing, imageFile);
+            return context.getString(org.odk.collect.strings.R.string.file_missing, imageFile);
         }
 
         private void enableLongClickToAllowRemovingAnswers(View view) {

@@ -207,7 +207,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 final PlaybackFailedException playbackFailedException = (PlaybackFailedException) e;
                 Toast.makeText(
                         getContext(),
-                        getContext().getString(playbackFailedException.getExceptionMsg() == 0 ? R.string.file_missing : R.string.file_invalid, playbackFailedException.getURI()),
+                        getContext().getString(playbackFailedException.getExceptionMsg() == 0 ? org.odk.collect.strings.R.string.file_missing : org.odk.collect.strings.R.string.file_invalid, playbackFailedException.getURI()),
                         Toast.LENGTH_SHORT
                 ).show();
 
@@ -397,9 +397,9 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         final String buttonText;
         final String errorString;
         String v = c.getSpecialFormQuestionText("buttonText");
-        buttonText = (v != null) ? v : context.getString(R.string.launch_app);
+        buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_app);
         v = c.getSpecialFormQuestionText("noAppErrorString");
-        errorString = (v != null) ? v : context.getString(R.string.no_app);
+        errorString = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.no_app);
 
         // set button formatting
         MaterialButton launchIntentButton = findViewById(R.id.launchIntentButton);
@@ -545,7 +545,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                                 break;
                             default:
                                 throw new RuntimeException(
-                                        getContext().getString(R.string.ext_assign_value_error,
+                                        getContext().getString(org.odk.collect.strings.R.string.ext_assign_value_error,
                                                 treeReference.toString(false)));
                         }
                         break;

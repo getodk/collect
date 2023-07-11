@@ -7,7 +7,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.javarosa.core.model.SelectChoice;
-import org.odk.collect.android.R;
 import org.odk.collect.android.utilities.UnderlyingValuesConcat;
 import org.odk.collect.android.widgets.QuestionWidget;
 
@@ -136,7 +135,7 @@ public class SpacesInUnderlyingValuesWarning {
         @Override
         public String create(List<SelectChoice> invalidValues, Context context) {
             return context.getResources().getString(
-                    invalidValues.size() > 1 ? R.string.invalid_space_in_answer_plural : R.string.invalid_space_in_answer_singular,
+                    invalidValues.size() > 1 ? org.odk.collect.strings.R.string.invalid_space_in_answer_plural : org.odk.collect.strings.R.string.invalid_space_in_answer_singular,
                     formatter.asString(invalidValues));
         }
     }

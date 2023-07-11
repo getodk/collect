@@ -2,13 +2,11 @@ package org.odk.collect.android.preferences.utilities;
 
 import android.content.Context;
 
-import org.odk.collect.android.R;
-
 public enum FormUpdateMode {
 
-    MANUAL(R.string.form_update_mode_manual),
-    PREVIOUSLY_DOWNLOADED_ONLY(R.string.form_update_mode_previously_downloaded),
-    MATCH_EXACTLY(R.string.form_update_mode_match_exactly);
+    MANUAL(org.odk.collect.strings.R.string.form_update_mode_manual),
+    PREVIOUSLY_DOWNLOADED_ONLY(org.odk.collect.strings.R.string.form_update_mode_previously_downloaded),
+    MATCH_EXACTLY(org.odk.collect.strings.R.string.form_update_mode_match_exactly);
 
     private final int string;
 

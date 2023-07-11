@@ -56,9 +56,9 @@ public class FillBlankFormTest {
                 .copyForm("all-widgets.xml")
                 .startBlankForm("All widgets")
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
-                .assertText(R.string.save_as_draft)
-                .assertText(R.string.do_not_save)
-                .clickOnString(R.string.do_not_save)
+                .assertText(org.odk.collect.strings.R.string.save_as_draft)
+                .assertText(org.odk.collect.strings.R.string.do_not_save)
+                .clickOnString(org.odk.collect.strings.R.string.do_not_save)
                 .checkIsIdDisplayed(R.id.enter_data)
                 .checkIsIdDisplayed(R.id.get_forms);
     }
@@ -213,7 +213,7 @@ public class FillBlankFormTest {
                 .swipeToNextQuestion("Any other notes?")
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
     }
 
     @Test
@@ -307,7 +307,7 @@ public class FillBlankFormTest {
                 .clickOnText("Oranges")
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
     }
 
     @Test
@@ -360,7 +360,7 @@ public class FillBlankFormTest {
                 .clickOK(new FormEntryPage("g6Error"))
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
 
         new MainMenuPage()
                 .copyForm("g6Error2.xml")
@@ -369,21 +369,21 @@ public class FillBlankFormTest {
                 .clickOK(new FormEntryPage("g6Error2"))
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
 
         new MainMenuPage()
                 .copyForm("emptyGroupFieldList.xml")
                 .clickFillBlankForm()
                 .clickOnEmptyForm("emptyGroupFieldList")
                 .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
 
         new MainMenuPage()
                 .copyForm("emptyGroupFieldList2.xml")
                 .startBlankForm("emptyGroupFieldList2")
                 .swipeToEndScreen()
                 .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
     }
 
     @Test
@@ -394,7 +394,7 @@ public class FillBlankFormTest {
                 .clickFillBlankForm()
                 .clickOnEmptyForm("metadata2")
                 .clickFinalize()
-                .checkIsSnackbarWithMessageDisplayed(R.string.form_saved);
+                .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved);
     }
 
     @Test

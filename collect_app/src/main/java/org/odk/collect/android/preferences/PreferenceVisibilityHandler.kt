@@ -17,8 +17,8 @@ package org.odk.collect.android.preferences
 
 import androidx.preference.PreferenceGroup
 import androidx.preference.PreferenceScreen
+import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.settings.BuildConfig
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys

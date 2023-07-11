@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
@@ -27,7 +26,7 @@ public class FormLanguageTest {
                 .startBlankForm("One Question")
                 .answerQuestion("what is your age", "64")
                 .clickOptionsIcon()
-                .clickOnString(R.string.change_language)
+                .clickOnString(org.odk.collect.strings.R.string.change_language)
                 .clickOnText("French (fr)")
                 .assertQuestion("quel âge as-tu")
                 .assertText("64"); // Check answer hasn't been cleared/changed
@@ -39,7 +38,7 @@ public class FormLanguageTest {
                 .copyForm("one-question-translation.xml")
                 .startBlankForm("One Question")
                 .clickOptionsIcon()
-                .clickOnString(R.string.change_language)
+                .clickOnString(org.odk.collect.strings.R.string.change_language)
                 .clickOnText("French (fr)")
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardForm()

@@ -173,7 +173,7 @@ class FileRequesterImplTest {
         assertThat(intentLauncher.errorCounter, `is`(2))
 
         val toastText = ShadowToast.getTextOfLatestToast()
-        assertThat(toastText, `is`(activity.getString(R.string.no_app)))
+        assertThat(toastText, `is`(activity.getString(org.odk.collect.strings.R.string.no_app)))
     }
 
     @Test

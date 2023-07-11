@@ -12,7 +12,7 @@ import org.odk.collect.android.R
 class ErrorPage : Page<ErrorPage>() {
 
     override fun assertOnPage(): ErrorPage {
-        assertText(R.string.errors)
+        assertText(org.odk.collect.strings.R.string.errors)
         return this
     }
 
@@ -22,7 +22,7 @@ class ErrorPage : Page<ErrorPage>() {
     }
 
     fun navigateBack(): MainMenuPage {
-        onView(allOf(instanceOf(AppCompatImageButton::class.java), withParent(withId(R.id.toolbar)))).perform(click())
+        onView(allOf(instanceOf(AppCompatImageButton::class.java), withParent(withId(org.odk.collect.androidshared.R.id.toolbar)))).perform(click())
         return MainMenuPage()
     }
 }

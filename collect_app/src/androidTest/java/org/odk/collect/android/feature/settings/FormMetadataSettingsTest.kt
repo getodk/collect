@@ -53,10 +53,10 @@ class FormMetadataSettingsTest {
             .inputText("chino@whitepony.com")
             .clickOKOnDialog()
 
-            .assertPreference(R.string.username, "Chino")
-            .assertPreference(R.string.phone_number, "123")
-            .assertPreference(R.string.email, "chino@whitepony.com")
-            .assertPreference(R.string.device_id, installIDProvider.installID)
+            .assertPreference(org.odk.collect.strings.R.string.username, "Chino")
+            .assertPreference(org.odk.collect.strings.R.string.phone_number, "123")
+            .assertPreference(org.odk.collect.strings.R.string.email, "chino@whitepony.com")
+            .assertPreference(org.odk.collect.strings.R.string.device_id, installIDProvider.installID)
     }
 
     @Test

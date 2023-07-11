@@ -99,7 +99,7 @@ class SelectionMapFragment(
                 Manifest.permission.ACCESS_COARSE_LOCATION
             )
         ) {
-            ToastUtils.showLongToast(requireContext(), R.string.not_granted_permission)
+            ToastUtils.showLongToast(requireContext(), org.odk.collect.strings.R.string.not_granted_permission)
             requireActivity().finish()
         }
 
@@ -109,7 +109,7 @@ class SelectionMapFragment(
             childFragmentManager
         ) {
             MaterialProgressDialogFragment().also { dialog ->
-                dialog.message = getString(R.string.loading)
+                dialog.message = getString(org.odk.collect.strings.R.string.loading)
             }
         }
     }
@@ -210,7 +210,7 @@ class SelectionMapFragment(
 
     private fun updateCounts(binding: SelectionMapLayoutBinding) {
         binding.geometryStatus.text = getString(
-            R.string.select_item_count,
+            org.odk.collect.strings.R.string.select_item_count,
             selectionMapData.getItemType(),
             itemCount,
             featureCount

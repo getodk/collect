@@ -252,8 +252,8 @@ public class FieldListUpdateTest {
         onView(withText("A1B")).perform(scrollTo(), click());
 
         onView(withText("Level1")).perform(scrollTo(), longClick());
-        onView(withText(R.string.clear_answer)).perform(click());
-        onView(withText(R.string.discard_answer)).perform(click());
+        onView(withText(org.odk.collect.strings.R.string.clear_answer)).perform(click());
+        onView(withText(org.odk.collect.strings.R.string.discard_answer)).perform(click());
 
         onView(withIndex(withClassName(endsWith("RadioButton")), 0)).check(matches(isNotChecked()));
         onView(withText("A1")).check(doesNotExist());
@@ -340,7 +340,7 @@ public class FieldListUpdateTest {
 
         onView(withText("Target12")).check(doesNotExist());
 
-        onView(withText(R.string.select_date)).perform(click());
+        onView(withText(org.odk.collect.strings.R.string.select_date)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withText("Target12")).check(matches(isDisplayed()));
@@ -356,8 +356,8 @@ public class FieldListUpdateTest {
         onView(withText("Target13")).check(matches(isDisplayed()));
 
         onView(withText("Source13")).perform(longClick());
-        onView(withText(R.string.clear_answer)).perform(click());
-        onView(withText(R.string.discard_answer)).perform(click());
+        onView(withText(org.odk.collect.strings.R.string.clear_answer)).perform(click());
+        onView(withText(org.odk.collect.strings.R.string.discard_answer)).perform(click());
         onView(withText("Target13")).check(doesNotExist());
     }
 

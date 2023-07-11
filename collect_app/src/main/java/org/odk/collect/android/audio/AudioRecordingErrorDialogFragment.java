@@ -11,7 +11,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.recording.MicInUseException;
@@ -38,12 +37,12 @@ public class AudioRecordingErrorDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(requireContext())
-                .setPositiveButton(R.string.ok, null);
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, null);
 
         if (exception != null && exception.getValue() instanceof MicInUseException) {
-            dialogBuilder.setMessage(R.string.mic_in_use);
+            dialogBuilder.setMessage(org.odk.collect.strings.R.string.mic_in_use);
         } else {
-            dialogBuilder.setMessage(R.string.start_recording_failed);
+            dialogBuilder.setMessage(org.odk.collect.strings.R.string.start_recording_failed);
         }
 
         return dialogBuilder.create();

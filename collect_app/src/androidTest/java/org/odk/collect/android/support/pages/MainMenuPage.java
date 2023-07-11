@@ -20,8 +20,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
     @Override
     public MainMenuPage assertOnPage() {
         return WaitFor.waitFor(() -> {
-            onView(withText(R.string.enter_data)).check(matches(isDisplayed()));
-            onView(withText(containsString(getTranslatedString(R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
+            onView(withText(org.odk.collect.strings.R.string.enter_data)).check(matches(isDisplayed()));
+            onView(withText(containsString(getTranslatedString(org.odk.collect.strings.R.string.collect_app_name)))).perform(scrollTo()).check(matches(isDisplayed()));
             return this;
         });
     }
@@ -29,7 +29,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     public ProjectSettingsDialogPage openProjectSettingsDialog() {
         assertOnPage(); // Make sure we've waited for the application load correctly
 
-        clickOnContentDescription(R.string.projects);
+        clickOnContentDescription(org.odk.collect.strings.R.string.projects);
         return new ProjectSettingsDialogPage().assertOnPage();
     }
 
@@ -102,7 +102,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public GetBlankFormPage clickGetBlankForm() {
-        onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.get_forms))).perform(scrollTo(), click());
         return new GetBlankFormPage().assertOnPage();
     }
 
@@ -128,7 +128,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOption(R.string.manual)
+                .clickOption(org.odk.collect.strings.R.string.manual)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
@@ -138,7 +138,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOption(R.string.previously_downloaded_only)
+                .clickOption(org.odk.collect.strings.R.string.previously_downloaded_only)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
@@ -148,8 +148,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOption(R.string.previously_downloaded_only)
-                .clickOnString(R.string.automatic_download)
+                .clickOption(org.odk.collect.strings.R.string.previously_downloaded_only)
+                .clickOnString(org.odk.collect.strings.R.string.automatic_download)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
@@ -159,7 +159,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .clickSettings()
                 .clickFormManagement()
                 .clickUpdateForms()
-                .clickOption(R.string.match_exactly)
+                .clickOption(org.odk.collect.strings.R.string.match_exactly)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
@@ -168,8 +168,8 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return openProjectSettingsDialog()
                 .clickSettings()
                 .clickFormManagement()
-                .clickOnString(R.string.autosend)
-                .clickOnString(R.string.wifi_cellular_autosend)
+                .clickOnString(org.odk.collect.strings.R.string.autosend)
+                .clickOnString(org.odk.collect.strings.R.string.wifi_cellular_autosend)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
     }
@@ -183,23 +183,23 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public ServerAuthDialog clickGetBlankFormWithAuthenticationError() {
-        onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.get_forms))).perform(scrollTo(), click());
         return new ServerAuthDialog().assertOnPage();
     }
 
     public OkDialog clickGetBlankFormWithError() {
-        onView(withText(getTranslatedString(R.string.get_forms))).perform(scrollTo(), click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.get_forms))).perform(scrollTo(), click());
         return new OkDialog().assertOnPage();
     }
 
     public ViewSentFormPage clickViewSentForm(int number) {
         assertNumberOfSentForms(number);
-        onView(withText(getTranslatedString(R.string.view_sent_forms))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.view_sent_forms))).perform(click());
         return new ViewSentFormPage().assertOnPage();
     }
 
     public DeleteSavedFormPage clickDeleteSavedForm() {
-        onView(withText(getTranslatedString(R.string.manage_files))).perform(scrollTo(), click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.manage_files))).perform(scrollTo(), click());
         return new DeleteSavedFormPage().assertOnPage();
     }
 
@@ -218,7 +218,7 @@ public class MainMenuPage extends Page<MainMenuPage> {
         openProjectSettingsDialog()
                 .clickSettings()
                 .clickExperimental()
-                .clickOnString(R.string.entities_title);
+                .clickOnString(org.odk.collect.strings.R.string.entities_title);
 
         return new EntitiesPage().assertOnPage();
     }

@@ -14,7 +14,7 @@ object FormsDownloadResultInterpreter {
     }.map {
         ErrorItem(
             it.key.formName ?: "",
-            context.getLocalizedString(R.string.form_details, it.key.formId ?: "", it.key.formVersion ?: ""),
+            context.getLocalizedString(org.odk.collect.strings.R.string.form_details, it.key.formId ?: "", it.key.formVersion ?: ""),
             FormDownloadExceptionMapper(context).getMessage(it.value)
         )
     }

@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.rules.TestRuleChain;
@@ -42,7 +41,7 @@ public class GetBlankFormsTest {
 
         rule.withProject(testDependencies.server.getURL())
                 .clickGetBlankFormWithError()
-                .assertText(R.string.load_remote_form_error)
+                .assertText(org.odk.collect.strings.R.string.load_remote_form_error)
                 .clickOK(new GetBlankFormPage());
     }
 

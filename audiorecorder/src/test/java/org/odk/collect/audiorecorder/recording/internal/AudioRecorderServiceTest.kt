@@ -61,7 +61,7 @@ class AudioRecorderServiceTest {
         assertThat(notification, not(nullValue()))
         assertThat(
             shadowOf(notification).contentTitle,
-            equalTo(application.getString(R.string.recording))
+            equalTo(application.getString(org.odk.collect.strings.R.string.recording))
         )
         assertThat(
             shadowOf(notification.contentIntent).savedIntent.component?.className,

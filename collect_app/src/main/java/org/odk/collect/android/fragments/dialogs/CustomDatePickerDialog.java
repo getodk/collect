@@ -76,14 +76,14 @@ public abstract class CustomDatePickerDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new MaterialAlertDialogBuilder(getActivity())
-                .setTitle(R.string.select_date)
+                .setTitle(org.odk.collect.strings.R.string.select_date)
                 .setView(R.layout.custom_date_picker_dialog)
-                .setPositiveButton(R.string.ok, (dialog, id) -> {
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, (dialog, id) -> {
                     LocalDateTime date = DateTimeUtils.getDateAsGregorian(getOriginalDate());
                     viewModel.setSelectedDate(date.getYear(), date.getMonthOfYear() - 1, date.getDayOfMonth());
                     dismiss();
                 })
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dismiss())
+                .setNegativeButton(org.odk.collect.strings.R.string.cancel, (dialog, id) -> dismiss())
                 .create();
     }
 

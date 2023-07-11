@@ -56,19 +56,19 @@ class AdminPasswordDialogFragment : DialogFragment() {
 
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
-            .setTitle(getString(R.string.enter_admin_password))
-            .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
+            .setTitle(getString(org.odk.collect.strings.R.string.enter_admin_password))
+            .setPositiveButton(getString(org.odk.collect.strings.R.string.ok)) { _: DialogInterface?, _: Int ->
                 if (adminPasswordProvider.adminPassword == binding.editText.text.toString()) {
                     projectPreferencesViewModel.setStateUnlocked()
                 } else {
                     ToastUtils.showShortToast(
                         requireContext(),
-                        R.string.admin_password_incorrect
+                        org.odk.collect.strings.R.string.admin_password_incorrect
                     )
                 }
                 dismiss()
             }
-            .setNegativeButton(getString(R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
+            .setNegativeButton(getString(org.odk.collect.strings.R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
             .create()
     }
 }

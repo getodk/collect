@@ -514,7 +514,7 @@ class MapboxMapFragment :
             this.locationPuck = LocationPuck2D(
                 AppCompatResources.getDrawable(
                     requireContext(),
-                    R.drawable.ic_crosshairs
+                    org.odk.collect.maps.R.drawable.ic_crosshairs
                 )
             )
         }

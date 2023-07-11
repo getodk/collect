@@ -42,7 +42,7 @@ class AddNewProjectTest {
             .clickAddProject()
 
         testDependencies.stubBarcodeViewDecoder.scan("{\"general\":{\"server_url\":\"https:\\/\\/my-server.com\",\"username\":\"adam\",\"password\":\"1234\"},\"admin\":{}}")
-        page.checkIsToastWithMessageDisplayed(R.string.switched_project, "my-server.com")
+        page.checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "my-server.com")
 
         MainMenuPage()
             .assertOnPage()
@@ -61,7 +61,7 @@ class AddNewProjectTest {
 
         page.assertDuplicateDialogShown()
             .switchToExistingProject()
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "Demo project")
             .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertNotInactiveProject("Demo project")
@@ -77,7 +77,7 @@ class AddNewProjectTest {
 
         page.assertDuplicateDialogShown()
             .addDuplicateProject()
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "Demo project")
             .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertInactiveProject("Demo project", "demo.getodk.org")
@@ -92,7 +92,7 @@ class AddNewProjectTest {
             .inputUrl("https://demo.getodk.org")
             .addProjectAndAssertDuplicateDialogShown()
             .switchToExistingProject()
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "Demo project")
             .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertNotInactiveProject("Demo project")
@@ -107,7 +107,7 @@ class AddNewProjectTest {
             .inputUrl("https://demo.getodk.org")
             .addProjectAndAssertDuplicateDialogShown()
             .addDuplicateProject()
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "Demo project")
             .openProjectSettingsDialog()
             .assertCurrentProject("Demo project", "demo.getodk.org")
             .assertInactiveProject("Demo project", "demo.getodk.org")

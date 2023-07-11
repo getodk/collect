@@ -10,13 +10,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.core.AllOf.allOf;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
-import org.odk.collect.android.R;
-
 public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
 
     @Override
     public SendFinalizedFormPage assertOnPage() {
-        onView(allOf(withText(getTranslatedString(R.string.send_data)), isDescendantOfA(withId(R.id.toolbar)))).check(matches(isDisplayed()));
+        onView(allOf(withText(getTranslatedString(org.odk.collect.strings.R.string.send_data)), isDescendantOfA(withId(org.odk.collect.androidshared.R.id.toolbar)))).check(matches(isDisplayed()));
         return this;
     }
 
@@ -26,22 +24,22 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
     }
 
     public OkDialog clickSendSelected() {
-        clickOnText(getTranslatedString(R.string.send_selected_data));
+        clickOnText(getTranslatedString(org.odk.collect.strings.R.string.send_selected_data));
         return new OkDialog();
     }
 
     public ServerAuthDialog clickSendSelectedWithAuthenticationError() {
-        clickOnText(getTranslatedString(R.string.send_selected_data));
+        clickOnText(getTranslatedString(org.odk.collect.strings.R.string.send_selected_data));
         return new ServerAuthDialog().assertOnPage();
     }
 
     public SendFinalizedFormPage clickSelectAll() {
-        clickOnString(R.string.select_all);
+        clickOnString(org.odk.collect.strings.R.string.select_all);
         return this;
     }
 
     public SendFinalizedFormPage selectForm(int index) {
-        onView(withIndex(withId(R.id.checkbox), index)).perform(click());
+        onView(withIndex(withId(androidx.appcompat.R.id.checkbox), index)).perform(click());
         return this;
     }
 }

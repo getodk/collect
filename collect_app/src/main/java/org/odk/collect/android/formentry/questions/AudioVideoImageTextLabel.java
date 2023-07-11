@@ -115,7 +115,7 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
             binding.imageView.setOnClickListener(this);
         } else {
             binding.missingImage.setVisibility(VISIBLE);
-            binding.missingImage.setText(getContext().getString(R.string.file_missing, imageFile));
+            binding.missingImage.setText(getContext().getString(org.odk.collect.strings.R.string.file_missing, imageFile));
         }
     }
 
@@ -166,13 +166,10 @@ public class AudioVideoImageTextLabel extends RelativeLayout implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.videoButton:
-                playVideo();
-                break;
-            case R.id.imageView:
-                onImageClick();
-                break;
+        if (v.getId() == R.id.videoButton) {
+            playVideo();
+        } else if (v.getId() == R.id.imageView) {
+            onImageClick();
         }
     }
 

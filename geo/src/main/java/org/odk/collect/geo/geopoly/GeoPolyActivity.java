@@ -150,7 +150,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setTitle(getString(outputMode == OutputMode.GEOTRACE ?
-            R.string.geotrace_title : R.string.geoshape_title));
+            org.odk.collect.strings.R.string.geotrace_title : org.odk.collect.strings.R.string.geoshape_title));
         setContentView(R.layout.geopoly_layout);
 
         MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
@@ -287,7 +287,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         if (map.getPolyLinePoints(featureId).size() > 1) {
             finishWithResult();
         } else {
-            ToastUtils.showShortToastInMiddle(this, getString(R.string.polyline_validator));
+            ToastUtils.showShortToastInMiddle(this, getString(org.odk.collect.strings.R.string.polyline_validator));
         }
     }
 
@@ -301,7 +301,7 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
             }
             finishWithResult();
         } else {
-            ToastUtils.showShortToastInMiddle(this, getString(R.string.polygon_validator));
+            ToastUtils.showShortToastInMiddle(this, getString(org.odk.collect.strings.R.string.polygon_validator));
         }
     }
 
@@ -472,29 +472,29 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         int minutes = seconds / 60;
         int meters = ACCURACY_THRESHOLD_OPTIONS[accuracyThresholdIndex];
         locationStatus.setText(
-            location == null ? getString(R.string.location_status_searching)
-                : !usingThreshold ? getString(R.string.location_status_accuracy, location.accuracy)
-                : acceptable ? getString(R.string.location_status_acceptable, location.accuracy)
-                : getString(R.string.location_status_unacceptable, location.accuracy)
+            location == null ? getString(org.odk.collect.strings.R.string.location_status_searching)
+                : !usingThreshold ? getString(org.odk.collect.strings.R.string.location_status_accuracy, location.accuracy)
+                : acceptable ? getString(org.odk.collect.strings.R.string.location_status_acceptable, location.accuracy)
+                : getString(org.odk.collect.strings.R.string.location_status_unacceptable, location.accuracy)
         );
         locationStatus.setBackgroundColor(
-                location == null ? getThemeAttributeValue(this, R.attr.colorPrimary)
-                        : acceptable ? getThemeAttributeValue(this, R.attr.colorPrimary)
-                        : getThemeAttributeValue(this, R.attr.colorError)
+                location == null ? getThemeAttributeValue(this, com.google.android.material.R.attr.colorPrimary)
+                        : acceptable ? getThemeAttributeValue(this, com.google.android.material.R.attr.colorPrimary)
+                        : getThemeAttributeValue(this, com.google.android.material.R.attr.colorError)
         );
         collectionStatus.setText(
-            !inputActive ? getString(R.string.collection_status_paused, numPoints)
-                : !recordingEnabled ? getString(R.string.collection_status_placement, numPoints)
-                : !recordingAutomatic ? getString(R.string.collection_status_manual, numPoints)
+            !inputActive ? getString(org.odk.collect.strings.R.string.collection_status_paused, numPoints)
+                : !recordingEnabled ? getString(org.odk.collect.strings.R.string.collection_status_placement, numPoints)
+                : !recordingAutomatic ? getString(org.odk.collect.strings.R.string.collection_status_manual, numPoints)
                 : !usingThreshold ? (
                     minutes > 0 ?
-                        getString(R.string.collection_status_auto_minutes, numPoints, minutes) :
-                        getString(R.string.collection_status_auto_seconds, numPoints, seconds)
+                        getString(org.odk.collect.strings.R.string.collection_status_auto_minutes, numPoints, minutes) :
+                        getString(org.odk.collect.strings.R.string.collection_status_auto_seconds, numPoints, seconds)
                 )
                 : (
                     minutes > 0 ?
-                        getString(R.string.collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
-                        getString(R.string.collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
+                        getString(org.odk.collect.strings.R.string.collection_status_auto_minutes_accuracy, numPoints, minutes, meters) :
+                        getString(org.odk.collect.strings.R.string.collection_status_auto_seconds_accuracy, numPoints, seconds, meters)
                 )
         );
     }
@@ -502,18 +502,18 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     private void showClearDialog() {
         if (!map.getPolyLinePoints(featureId).isEmpty()) {
             new MaterialAlertDialogBuilder(this)
-                .setMessage(R.string.geo_clear_warning)
-                .setPositiveButton(R.string.clear, (dialog, id) -> clear())
-                .setNegativeButton(R.string.cancel, null)
+                .setMessage(org.odk.collect.strings.R.string.geo_clear_warning)
+                .setPositiveButton(org.odk.collect.strings.R.string.clear, (dialog, id) -> clear())
+                .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
                 .show();
         }
     }
 
     private void showBackDialog() {
         new MaterialAlertDialogBuilder(this)
-            .setMessage(getString(R.string.geo_exit_warning))
-            .setPositiveButton(R.string.discard, (dialog, id) -> finish())
-            .setNegativeButton(R.string.cancel, null)
+            .setMessage(getString(org.odk.collect.strings.R.string.geo_exit_warning))
+            .setPositiveButton(org.odk.collect.strings.R.string.discard, (dialog, id) -> finish())
+            .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
             .show();
 
     }

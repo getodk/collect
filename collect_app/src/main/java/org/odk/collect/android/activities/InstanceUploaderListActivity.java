@@ -155,7 +155,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         });
 
         // set title
-        setTitle(getString(R.string.send_data));
+        setTitle(getString(org.odk.collect.strings.R.string.send_data));
         binding = InstanceUploaderListBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
         binding.uploadButton.setOnClickListener(v -> onUploadButtonsClicked());
@@ -166,12 +166,12 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     public void onUploadButtonsClicked() {
         if (!connectivityProvider.isDeviceOnline()) {
-            ToastUtils.showShortToast(this, R.string.no_connection);
+            ToastUtils.showShortToast(this, org.odk.collect.strings.R.string.no_connection);
             return;
         }
 
         if (autoSendOngoing) {
-            ToastUtils.showShortToast(this, R.string.send_in_progress);
+            ToastUtils.showShortToast(this, org.odk.collect.strings.R.string.send_in_progress);
             return;
         }
 
@@ -183,7 +183,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             multiSelectViewModel.unselectAll();
         } else {
             // no items selected
-            ToastUtils.showLongToast(this, R.string.noselect_error);
+            ToastUtils.showLongToast(this, org.odk.collect.strings.R.string.noselect_error);
         }
     }
 
@@ -206,7 +206,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     void init() {
-        binding.uploadButton.setText(R.string.send_selected_data);
+        binding.uploadButton.setText(org.odk.collect.strings.R.string.send_selected_data);
 
         binding.toggleButton.setLongClickable(true);
         binding.toggleButton.setOnClickListener(v -> {
@@ -225,19 +225,19 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         sortingOptions = Arrays.asList(
                 new FormListSortingOption(
                         R.drawable.ic_sort_by_alpha,
-                        R.string.sort_by_name_asc
+                        org.odk.collect.strings.R.string.sort_by_name_asc
                 ),
                 new FormListSortingOption(
                         R.drawable.ic_sort_by_alpha,
-                        R.string.sort_by_name_desc
+                        org.odk.collect.strings.R.string.sort_by_name_desc
                 ),
                 new FormListSortingOption(
                         R.drawable.ic_access_time,
-                        R.string.sort_by_date_desc
+                        org.odk.collect.strings.R.string.sort_by_date_desc
                 ),
                 new FormListSortingOption(
                         R.drawable.ic_access_time,
-                        R.string.sort_by_date_asc
+                        org.odk.collect.strings.R.string.sort_by_date_asc
                 )
         );
 
@@ -272,7 +272,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     protected void onResume() {
         super.onResume();
         restoreSelectedSortingOrder();
-        binding.uploadButton.setText(R.string.send_selected_data);
+        binding.uploadButton.setText(org.odk.collect.strings.R.string.send_selected_data);
     }
 
     private void uploadSelectedFiles(long[] instanceIds) {
@@ -304,7 +304,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setQueryHint(getResources().getString(R.string.search));
+        searchView.setQueryHint(getResources().getString(org.odk.collect.strings.R.string.search));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -351,13 +351,12 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_preferences:
-                createPreferencesMenu();
-                return true;
-            case R.id.menu_change_view:
-                showSentAndUnsentChoices();
-                return true;
+        if (item.getItemId() == R.id.menu_preferences) {
+            createPreferencesMenu();
+            return true;
+        } else if (item.getItemId() == R.id.menu_change_view) {
+            showSentAndUnsentChoices();
+            return true;
         }
 
         if (!MultiClickGuard.allowClick(getClass().getName())) {
@@ -390,7 +389,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         Cursor c = (Cursor) listView.getAdapter().getItem(position);
         boolean encryptedForm = !Boolean.parseBoolean(c.getString(c.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE)));
         if (encryptedForm) {
-            ToastUtils.showLongToast(this, R.string.encrypted_form);
+            ToastUtils.showLongToast(this, org.odk.collect.strings.R.string.encrypted_form);
         } else {
             long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
             Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
@@ -482,12 +481,12 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
      * saving
      */
     private boolean showSentAndUnsentChoices() {
-        String[] items = {getString(R.string.show_unsent_forms),
-                getString(R.string.show_sent_and_unsent_forms)};
+        String[] items = {getString(org.odk.collect.strings.R.string.show_unsent_forms),
+                getString(org.odk.collect.strings.R.string.show_sent_and_unsent_forms)};
 
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.change_view))
-                .setNeutralButton(getString(R.string.cancel), (dialog, id) -> {
+                .setTitle(getString(org.odk.collect.strings.R.string.change_view))
+                .setNeutralButton(getString(org.odk.collect.strings.R.string.cancel), (dialog, id) -> {
                     dialog.cancel();
                 })
                 .setItems(items, (dialog, which) -> {

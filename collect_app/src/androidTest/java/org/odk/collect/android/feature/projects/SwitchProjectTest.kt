@@ -42,7 +42,7 @@ class SwitchProjectTest {
             .assertCurrentProject("my-server.com", "John / my-server.com")
             .assertInactiveProject("Demo project", "demo.getodk.org")
             .selectProject("Demo project")
-            .checkIsToastWithMessageDisplayed(R.string.switched_project, "Demo project")
+            .checkIsToastWithMessageDisplayed(org.odk.collect.strings.R.string.switched_project, "Demo project")
             .assertProjectIcon("D")
     }
 

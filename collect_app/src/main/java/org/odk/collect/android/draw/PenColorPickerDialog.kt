@@ -8,7 +8,6 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rarepebble.colorpicker.ColorPickerView
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.androidshared.R
 import javax.inject.Inject
 
 class PenColorPickerDialog : DialogFragment() {
@@ -31,8 +30,8 @@ class PenColorPickerDialog : DialogFragment() {
 
         return MaterialAlertDialogBuilder(requireContext())
             .setView(picker)
-            .setTitle(R.string.project_color)
-            .setPositiveButton(R.string.ok) { _, _ -> model.setPenColor(picker.color) }
+            .setTitle(org.odk.collect.strings.R.string.project_color)
+            .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ -> model.setPenColor(picker.color) }
             .create()
     }
 }

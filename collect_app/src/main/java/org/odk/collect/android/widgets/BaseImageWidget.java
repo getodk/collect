@@ -35,7 +35,6 @@ import androidx.annotation.Nullable;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.InvalidReferenceException;
-import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.ApplicationConstants;
@@ -154,7 +153,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
     protected void setUpLayout() {
         errorTextView = new TextView(getContext());
         errorTextView.setId(View.generateViewId());
-        errorTextView.setText(R.string.selected_invalid_image);
+        errorTextView.setText(org.odk.collect.strings.R.string.selected_invalid_image);
 
         answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
@@ -272,7 +271,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             ((Activity) getContext()).startActivityForResult(intent, resourceCode);
         } catch (ActivityNotFoundException e) {
             Toast.makeText(getContext(),
-                    getContext().getString(R.string.activity_not_found, getContext().getString(errorStringResource)),
+                    getContext().getString(org.odk.collect.strings.R.string.activity_not_found, getContext().getString(errorStringResource)),
                     Toast.LENGTH_SHORT).show();
             waitingForDataRegistry.cancelWaitingForData();
         }

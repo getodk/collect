@@ -211,7 +211,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         osmLocationClientWrapper = new OsmLocationClientWrapper(locationClient);
         myLocationOverlay = new MyLocationNewOverlay(osmLocationClientWrapper, map);
         myLocationOverlay.setDrawAccuracyEnabled(true);
-        Drawable drawable = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_crosshairs);
+        Drawable drawable = ContextCompat.getDrawable(requireActivity(), org.odk.collect.maps.R.drawable.ic_crosshairs);
         Bitmap crosshairs = toBitmap(drawable, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), null);
         myLocationOverlay.setDirectionArrow(crosshairs, crosshairs);
         myLocationOverlay.setPersonHotspot(crosshairs.getWidth() / 2.0f, crosshairs.getHeight() / 2.0f);
@@ -808,7 +808,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();
-            polyline.setColor(map.getContext().getResources().getColor(R.color.mapLineColor));
+            polyline.setColor(map.getContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor));
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
                 int featureId = findFeature(clickedPolyline);
                 if (featureClickListener != null && featureId != -1) {
@@ -867,7 +867,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             this.map = map;
             this.closedPolygon = closedPolygon;
             polyline = new Polyline();
-            polyline.setColor(map.getContext().getResources().getColor(R.color.mapLineColor));
+            polyline.setColor(map.getContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor));
             polyline.setOnClickListener((clickedPolyline, mapView, eventPos) -> {
                 int featureId = findFeature(clickedPolyline);
                 if (featureClickListener != null && featureId != -1) {
@@ -880,7 +880,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             paint.setStrokeWidth(POLYLINE_STROKE_WIDTH);
             map.getOverlays().add(polyline);
             for (MapPoint point : points) {
-                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+                markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point))));
             }
             update();
         }
@@ -931,7 +931,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
         }
 
         public void addPoint(MapPoint point) {
-            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(R.drawable.ic_map_point))));
+            markers.add(createMarker(map, new MarkerDescription(point, true, CENTER, new MarkerIconDescription(org.odk.collect.icons.R.drawable.ic_map_point))));
             update();
         }
 
@@ -953,7 +953,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
             this.map = map;
 
             map.getOverlays().add(polygon);
-            int strokeColor = map.getContext().getResources().getColor(R.color.mapLineColor);
+            int strokeColor = map.getContext().getResources().getColor(org.odk.collect.icons.R.color.mapLineColor);
             polygon.getOutlinePaint().setColor(strokeColor);
             polygon.setStrokeWidth(POLYLINE_STROKE_WIDTH);
             polygon.getFillPaint().setColor(ColorUtils.setAlphaComponent(strokeColor, POLYGON_FILL_COLOR_OPACITY));
@@ -1008,7 +1008,7 @@ public class OsmDroidMapFragment extends Fragment implements MapFragment,
 
             paint = new Paint();
             paint.setAntiAlias(true);
-            paint.setColor(ContextUtils.getThemeAttributeValue(context, R.attr.colorOnSurface));
+            paint.setColor(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface));
             paint.setTextSize(FONT_SIZE_DP *
                     context.getResources().getDisplayMetrics().density);
             paint.setTextAlign(Paint.Align.RIGHT);

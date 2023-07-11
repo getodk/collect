@@ -18,7 +18,6 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.openrosa.CaseInsensitiveHeaders;
 import org.odk.collect.android.openrosa.HttpHeadResult;
@@ -94,7 +93,7 @@ public class InstanceServerUploader extends InstanceUploader {
             } catch (IllegalArgumentException e) {
                 markSubmissionFailed(instance);
                 Timber.d(e.getMessage() != null ? e.getMessage() : e.toString());
-                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.url_error));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.url_error));
             }
 
             HttpHeadResult headResult;
@@ -120,7 +119,7 @@ public class InstanceServerUploader extends InstanceUploader {
 
             if (headResult.getStatusCode() == HttpsURLConnection.HTTP_UNAUTHORIZED) {
                 markSubmissionFailed(instance);
-                throw new FormUploadAuthRequestedException(getLocalizedString(Collect.getInstance(), R.string.server_auth_credentials, submissionUri.getHost()),
+                throw new FormUploadAuthRequestedException(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.server_auth_credentials, submissionUri.getHost()),
                         submissionUri);
             } else if (headResult.getStatusCode() == HttpsURLConnection.HTTP_NO_CONTENT) {
                 // Redirect header received

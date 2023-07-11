@@ -79,13 +79,13 @@ class DeleteBlankFormFragment(
 
         binding.deleteSelected.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.delete_file)
-                .setMessage(getString(R.string.delete_confirm, adapter.selected.size.toString()))
-                .setPositiveButton(getString(R.string.delete_yes)) { _, _ ->
+                .setTitle(org.odk.collect.strings.R.string.delete_file)
+                .setMessage(getString(org.odk.collect.strings.R.string.delete_confirm, adapter.selected.size.toString()))
+                .setPositiveButton(getString(org.odk.collect.strings.R.string.delete_yes)) { _, _ ->
                     blankFormListViewModel.deleteForms(*adapter.selected.toLongArray())
                     multiSelectViewModel.unselectAll()
                 }
-                .setNegativeButton(getString(R.string.delete_no), null)
+                .setNegativeButton(getString(org.odk.collect.strings.R.string.delete_no), null)
                 .show()
         }
 

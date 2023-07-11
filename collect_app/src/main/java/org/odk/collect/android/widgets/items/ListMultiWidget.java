@@ -167,14 +167,14 @@ public class ListMultiWidget extends QuestionWidget implements MultiChoiceWidget
                                 // An error hasn't been logged and loading the image failed, so it's
                                 // likely
                                 // a bad file.
-                                errorMsg = getContext().getString(R.string.file_invalid, imageFile);
+                                errorMsg = getContext().getString(org.odk.collect.strings.R.string.file_invalid, imageFile);
 
                             }
                         } else {
                             // An error hasn't been logged. We should have an image, but the file
                             // doesn't
                             // exist.
-                            errorMsg = getContext().getString(R.string.file_missing, imageFile);
+                            errorMsg = getContext().getString(org.odk.collect.strings.R.string.file_missing, imageFile);
                         }
 
                         if (errorMsg != null) {

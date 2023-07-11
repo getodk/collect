@@ -40,17 +40,17 @@ object FormUpdatesDownloadedNotificationBuilder {
 
         val title =
             if (allFormsDownloadedSuccessfully) {
-                application.getLocalizedString(R.string.forms_download_succeeded)
+                application.getLocalizedString(org.odk.collect.strings.R.string.forms_download_succeeded)
             } else {
-                application.getLocalizedString(R.string.forms_download_failed)
+                application.getLocalizedString(org.odk.collect.strings.R.string.forms_download_failed)
             }
 
         val message =
             if (allFormsDownloadedSuccessfully) {
-                application.getLocalizedString(R.string.all_downloads_succeeded)
+                application.getLocalizedString(org.odk.collect.strings.R.string.all_downloads_succeeded)
             } else {
                 application.getLocalizedString(
-                    R.string.some_downloads_failed,
+                    org.odk.collect.strings.R.string.some_downloads_failed,
                     FormsDownloadResultInterpreter.getNumberOfFailures(result),
                     result.size
                 )
@@ -64,7 +64,7 @@ object FormUpdatesDownloadedNotificationBuilder {
             setContentTitle(title)
             setContentText(message)
             setSubText(projectName)
-            setSmallIcon(R.drawable.ic_notification_small)
+            setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
             setAutoCancel(true)
         }.build()
     }

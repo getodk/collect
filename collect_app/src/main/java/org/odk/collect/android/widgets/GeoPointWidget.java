@@ -23,7 +23,6 @@ import android.view.View;
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.GeoWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.GeoDataRequester;
@@ -65,11 +64,11 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
 
         String answerToDisplay = GeoWidgetUtils.getGeoPointAnswerToDisplay(getContext(), answerText);
         if (answerToDisplay.isEmpty()) {
-            binding.simpleButton.setText(R.string.get_point);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
             answerText = null;
         } else {
             binding.geoAnswerText.setText(answerToDisplay);
-            binding.simpleButton.setText(R.string.change_location);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_location);
         }
 
         return binding.getRoot();
@@ -87,7 +86,7 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     public void clearAnswer() {
         answerText = null;
         binding.geoAnswerText.setText(null);
-        binding.simpleButton.setText(R.string.get_point);
+        binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
         widgetValueChanged();
     }
 
@@ -110,11 +109,11 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
         if (answerToDisplay.isEmpty()) {
             answerText = null;
             binding.geoAnswerText.setText("");
-            binding.simpleButton.setText(R.string.get_point);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.get_point);
         } else {
             answerText = answer.toString();
             binding.geoAnswerText.setText(answerToDisplay);
-            binding.simpleButton.setText(R.string.change_location);
+            binding.simpleButton.setText(org.odk.collect.strings.R.string.change_location);
         }
         widgetValueChanged();
     }

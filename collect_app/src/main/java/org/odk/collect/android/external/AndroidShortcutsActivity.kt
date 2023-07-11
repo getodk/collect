@@ -50,7 +50,7 @@ class AndroidShortcutsActivity : AppCompatActivity() {
 
     private fun showFormListDialog(blankFormListItems: List<BlankFormListItem>) {
         MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.select_odk_shortcut)
+            .setTitle(org.odk.collect.strings.R.string.select_odk_shortcut)
             .setItems(
                 blankFormListItems
                     .map { it.formName }

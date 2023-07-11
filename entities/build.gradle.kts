@@ -11,6 +11,8 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
+    namespace = "org.odk.collect.entities"
+
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -29,8 +31,8 @@ android {
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     testOptions {

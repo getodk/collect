@@ -43,7 +43,7 @@ public class ServerPreferencesAdderTest {
         assertFalse(result);
 
         String toastText = ShadowToast.getTextOfLatestToast();
-        assertEquals(toastText, getString(R.string.corrupt_imported_preferences_error));
+        assertEquals(toastText, getString(org.odk.collect.strings.R.string.corrupt_imported_preferences_error));
     }
 
     private String getString(int id) {

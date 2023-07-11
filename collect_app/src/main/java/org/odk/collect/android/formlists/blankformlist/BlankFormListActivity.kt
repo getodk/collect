@@ -47,7 +47,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
         setContentView(R.layout.activity_blank_form_list)
-        title = getString(R.string.enter_data)
+        title = getString(org.odk.collect.strings.R.string.enter_data)
         setSupportActionBar(findViewById(R.id.toolbar))
 
         val menuProvider = BlankFormListMenuProvider(this, viewModel, networkStateProvider)

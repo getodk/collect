@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 public class CancelRecordingDialog extends Page<CancelRecordingDialog> {
 
     private final String formName;
@@ -12,7 +10,7 @@ public class CancelRecordingDialog extends Page<CancelRecordingDialog> {
 
     @Override
     public CancelRecordingDialog assertOnPage() {
-        assertText(R.string.stop_recording_confirmation);
+        assertText(org.odk.collect.strings.R.string.stop_recording_confirmation);
         return this;
     }
 

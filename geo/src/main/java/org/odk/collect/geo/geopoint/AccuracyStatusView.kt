@@ -50,22 +50,22 @@ internal class AccuracyStatusView(context: Context, attrs: AttributeSet?) :
     private fun getBackgroundAndTextColor(accuracy: GeoPointAccuracy): Pair<Int, Int> {
         return if (accuracy is GeoPointAccuracy.Unacceptable) {
             Pair(
-                getThemeAttributeValue(context, R.attr.colorError),
-                getThemeAttributeValue(context, R.attr.colorOnError)
+                getThemeAttributeValue(context, com.google.android.material.R.attr.colorError),
+                getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnError)
             )
         } else {
             Pair(
-                getThemeAttributeValue(context, R.attr.colorPrimary),
-                getThemeAttributeValue(context, R.attr.colorOnPrimary)
+                getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary),
+                getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimary)
             )
         }
     }
 
     private fun getTextAndStrength(accuracy: GeoPointAccuracy): Pair<Int, Int> {
         return when (accuracy) {
-            is GeoPointAccuracy.Improving -> Pair(R.string.improving_accuracy, 80)
-            is GeoPointAccuracy.Poor -> Pair(R.string.poor_accuracy, 60)
-            is GeoPointAccuracy.Unacceptable -> Pair(R.string.unacceptable_accuracy, 40)
+            is GeoPointAccuracy.Improving -> Pair(org.odk.collect.strings.R.string.improving_accuracy, 80)
+            is GeoPointAccuracy.Poor -> Pair(org.odk.collect.strings.R.string.poor_accuracy, 60)
+            is GeoPointAccuracy.Unacceptable -> Pair(org.odk.collect.strings.R.string.unacceptable_accuracy, 40)
         }
     }
 }

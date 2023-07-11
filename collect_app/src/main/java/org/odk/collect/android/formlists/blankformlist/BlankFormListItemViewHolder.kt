@@ -29,22 +29,22 @@ class BlankFormListItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
                 binding.formTitle.text = it.formName
 
                 binding.formVersion.text =
-                    binding.root.context.getString(R.string.version_number, it.formVersion)
+                    binding.root.context.getString(org.odk.collect.strings.R.string.version_number, it.formVersion)
                 binding.formVersion.visibility =
                     if (it.formVersion.isNotBlank()) View.VISIBLE else View.GONE
 
                 binding.formId.text =
-                    binding.root.context.getString(R.string.id_number, it.formId)
+                    binding.root.context.getString(org.odk.collect.strings.R.string.id_number, it.formId)
 
                 binding.formHistory.text = try {
                     if (it.dateOfLastDetectedAttachmentsUpdate != null) {
                         SimpleDateFormat(
-                            binding.root.context.getString(R.string.updated_on_date_at_time),
+                            binding.root.context.getString(org.odk.collect.strings.R.string.updated_on_date_at_time),
                             Locale.getDefault()
                         ).format(it.dateOfLastDetectedAttachmentsUpdate)
                     } else {
                         SimpleDateFormat(
-                            binding.root.context.getString(R.string.added_on_date_at_time),
+                            binding.root.context.getString(org.odk.collect.strings.R.string.added_on_date_at_time),
                             Locale.getDefault()
                         ).format(it.dateOfCreation)
                     }

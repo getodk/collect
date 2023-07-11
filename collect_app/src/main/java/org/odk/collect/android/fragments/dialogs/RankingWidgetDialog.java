@@ -40,7 +40,6 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
-import org.odk.collect.android.R.string;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.fragments.viewmodels.RankingViewModel;
 import org.odk.collect.android.utilities.QuestionFontSizeUtils;
@@ -84,11 +83,11 @@ public class RankingWidgetDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new MaterialAlertDialogBuilder(getActivity())
                 .setView(setUpRankingLayout())
-                .setPositiveButton(string.ok, (dialog, id) -> {
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, (dialog, id) -> {
                     listener.onRankingChanged(rankingListAdapter.getItems());
                     dismiss();
                 })
-                .setNegativeButton(string.cancel, (dialog, id) -> dismiss())
+                .setNegativeButton(org.odk.collect.strings.R.string.cancel, (dialog, id) -> dismiss())
                 .create();
     }
 

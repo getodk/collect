@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages;
 
-import org.odk.collect.android.R;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
@@ -18,18 +16,18 @@ public class AddNewRepeatDialog extends Page<AddNewRepeatDialog> {
 
     @Override
     public AddNewRepeatDialog assertOnPage() {
-        onView(withText(getTranslatedString(R.string.add_repeat_question, repeatName)))
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.add_repeat_question, repeatName)))
                 .inRoot(isDialog())
                 .check(matches(isDisplayed()));
         return this;
     }
 
     public <D extends Page<D>> D clickOnAdd(D destination) {
-        return clickOnButtonInDialog(R.string.add_repeat, destination);
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.add_repeat, destination);
     }
 
     public <D extends Page<D>> D clickOnDoNotAdd(D destination) {
-        return clickOnButtonInDialog(R.string.dont_add_repeat, destination);
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.dont_add_repeat, destination);
     }
 
 }

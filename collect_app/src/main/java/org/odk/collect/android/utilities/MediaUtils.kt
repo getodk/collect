@@ -42,7 +42,7 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
 
     fun openFile(context: Context, file: File, expectedMimeType: String?) {
         if (!file.exists()) {
-            val errorMsg: String = context.getString(R.string.file_missing, file)
+            val errorMsg: String = context.getString(org.odk.collect.strings.R.string.file_missing, file)
             Timber.d("File %s is missing", file)
             ToastUtils.showLongToast(context, errorMsg)
             return
@@ -67,8 +67,8 @@ class MediaUtils(private val intentLauncher: IntentLauncher, private val content
 
         intentLauncher.launch(context, intent) {
             val message = context.getString(
-                R.string.activity_not_found,
-                context.getString(R.string.open_file)
+                org.odk.collect.strings.R.string.activity_not_found,
+                context.getString(org.odk.collect.strings.R.string.open_file)
             )
             ToastUtils.showLongToast(context, message)
             Timber.w(message)

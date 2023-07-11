@@ -136,16 +136,16 @@ public class FormEntryMenuDelegate implements MenuDelegate {
 
             if (!enabled) {
                 new MaterialAlertDialogBuilder(activity)
-                        .setMessage(R.string.stop_recording_confirmation)
-                        .setPositiveButton(R.string.disable_recording, (dialog, which) -> backgroundAudioViewModel.setBackgroundRecordingEnabled(false))
-                        .setNegativeButton(R.string.cancel, null)
+                        .setMessage(org.odk.collect.strings.R.string.stop_recording_confirmation)
+                        .setPositiveButton(org.odk.collect.strings.R.string.disable_recording, (dialog, which) -> backgroundAudioViewModel.setBackgroundRecordingEnabled(false))
+                        .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
                         .create()
                         .show();
             } else {
                 new MaterialAlertDialogBuilder(activity)
-                        .setMessage(R.string.background_audio_recording_enabled_explanation)
+                        .setMessage(org.odk.collect.strings.R.string.background_audio_recording_enabled_explanation)
                         .setCancelable(false)
-                        .setPositiveButton(R.string.ok, null)
+                        .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                         .create()
                         .show();
 

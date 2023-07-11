@@ -24,8 +24,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
-
 public class ResetSettingsResultDialog extends DialogFragment {
     public static final String RESET_SETTINGS_RESULT_DIALOG_TAG = "resetSettingsResultDialogTag";
 
@@ -61,9 +59,9 @@ public class ResetSettingsResultDialog extends DialogFragment {
         String message = getArguments() != null ? getArguments().getString(MESSAGE) : "";
 
         return new MaterialAlertDialogBuilder(getActivity())
-                .setTitle(R.string.reset_app_state_result)
+                .setTitle(org.odk.collect.strings.R.string.reset_app_state_result)
                 .setMessage(message)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         listener.onDialogClosed();

@@ -11,7 +11,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.ServerAuthDialogBinding;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.settings.SettingsProvider;
@@ -44,10 +43,10 @@ public class ServerAuthDialogFragment extends DialogFragment {
         binding.passwordEdit.setText(generalSettings.getString(ProjectKeys.KEY_PASSWORD));
 
         return new MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.server_requires_auth)
-                .setMessage(requireContext().getString(R.string.server_auth_credentials, generalSettings.getString(ProjectKeys.KEY_SERVER_URL)))
+                .setTitle(org.odk.collect.strings.R.string.server_requires_auth)
+                .setMessage(requireContext().getString(org.odk.collect.strings.R.string.server_auth_credentials, generalSettings.getString(ProjectKeys.KEY_SERVER_URL)))
                 .setView(dialogView)
-                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, (dialogInterface, i) -> {
                     generalSettings.save(ProjectKeys.KEY_USERNAME, binding.usernameEdit.getText().toString());
                     generalSettings.save(ProjectKeys.KEY_PASSWORD, binding.passwordEdit.getText().toString());
                 })

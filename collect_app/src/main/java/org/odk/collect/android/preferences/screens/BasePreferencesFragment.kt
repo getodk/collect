@@ -38,8 +38,8 @@ abstract class BasePreferencesFragment : PreferenceFragmentCompat(), OnSettingCh
         // the preference dialogs. This appears to have something to with the `updateLocale`
         // calls in `CollectAbstractActivity` and weirdly only happens for English.
         val dialogPreference = preference as DialogPreference
-        dialogPreference.setNegativeButtonText(R.string.cancel)
-        dialogPreference.setPositiveButtonText(R.string.ok)
+        dialogPreference.setNegativeButtonText(org.odk.collect.strings.R.string.cancel)
+        dialogPreference.setPositiveButtonText(org.odk.collect.strings.R.string.ok)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -52,7 +52,7 @@ class FileRequesterImpl(
 
     private fun getErrorMessage(formEntryPrompt: FormEntryPrompt, activity: Activity): String {
         val customErrorMessage = formEntryPrompt.getSpecialFormQuestionText("noAppErrorString")
-        return customErrorMessage ?: activity.getString(R.string.no_app)
+        return customErrorMessage ?: activity.getString(org.odk.collect.strings.R.string.no_app)
     }
 }
 

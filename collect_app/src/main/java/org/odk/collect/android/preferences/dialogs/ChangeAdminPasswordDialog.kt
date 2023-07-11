@@ -56,9 +56,9 @@ class ChangeAdminPasswordDialog : DialogFragment() {
 
         return MaterialAlertDialogBuilder(requireContext())
             .setView(binding.root)
-            .setTitle(R.string.change_admin_password)
+            .setTitle(org.odk.collect.strings.R.string.change_admin_password)
             .setView(binding.root)
-            .setPositiveButton(getString(R.string.ok)) { _: DialogInterface?, _: Int ->
+            .setPositiveButton(getString(org.odk.collect.strings.R.string.ok)) { _: DialogInterface?, _: Int ->
                 val password = binding.pwdField.text.toString()
 
                 settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_ADMIN_PW, password)
@@ -67,18 +67,18 @@ class ChangeAdminPasswordDialog : DialogFragment() {
                     projectPreferencesViewModel.setStateNotProtected()
                     ToastUtils.showShortToast(
                         requireContext(),
-                        R.string.admin_password_disabled
+                        org.odk.collect.strings.R.string.admin_password_disabled
                     )
                 } else {
                     projectPreferencesViewModel.setStateUnlocked()
                     ToastUtils.showShortToast(
                         requireContext(),
-                        R.string.admin_password_changed
+                        org.odk.collect.strings.R.string.admin_password_changed
                     )
                 }
                 dismiss()
             }
-            .setNegativeButton(getString(R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
+            .setNegativeButton(getString(org.odk.collect.strings.R.string.cancel)) { _: DialogInterface?, _: Int -> dismiss() }
             .setCancelable(false)
             .create()
     }

@@ -70,7 +70,7 @@ class SelectionMapFragmentTest {
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
-        R.style.Theme_MaterialComponents,
+        com.google.android.material.R.style.Theme_MaterialComponents,
         object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
                 return SelectionMapFragment(data, onBackPressedDispatcher = { onBackPressedDispatcher })
@@ -157,11 +157,11 @@ class SelectionMapFragmentTest {
         launcherRule.launchInContainer(SelectionMapFragment::class.java)
         map.ready()
 
-        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 2)))
+        onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 2)))
             .check(matches(isDisplayed()))
 
         itemsLiveData.value = emptyList()
-        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 0)))
+        onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 0)))
             .check(matches(isDisplayed()))
     }
 
@@ -185,7 +185,7 @@ class SelectionMapFragmentTest {
 
         assertThat(map.getPolyLines(), equalTo(itemsLiveData.value?.map { it.points }))
         assertThat(map.isPolyDraggable(0), equalTo(false))
-        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 1)))
+        onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }
 
@@ -209,7 +209,7 @@ class SelectionMapFragmentTest {
         map.ready()
 
         assertThat(map.getPolygons(), equalTo(itemsLiveData.value?.map { it.points }))
-        onView(withText(application.getString(R.string.select_item_count, "Things", 0, 1)))
+        onView(withText(application.getString(org.odk.collect.strings.R.string.select_item_count, "Things", 0, 1)))
             .check(matches(isDisplayed()))
     }
 
@@ -725,7 +725,7 @@ class SelectionMapFragmentTest {
         )
         map.ready()
 
-        onView(withContentDescription(R.string.new_item)).check(matches(not(isDisplayed())))
+        onView(withContentDescription(org.odk.collect.strings.R.string.new_item)).check(matches(not(isDisplayed())))
     }
 
     @Test

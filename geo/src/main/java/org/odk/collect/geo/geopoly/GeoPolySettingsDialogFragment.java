@@ -102,16 +102,16 @@ public class GeoPolySettingsDialogFragment extends DialogFragment {
         }
 
         return new MaterialAlertDialogBuilder(getActivity())
-                .setTitle(getString(R.string.input_method))
+                .setTitle(getString(org.odk.collect.strings.R.string.input_method))
                 .setView(settingsView)
-                .setPositiveButton(getString(R.string.start), (dialog, id) -> {
+                .setPositiveButton(getString(org.odk.collect.strings.R.string.start), (dialog, id) -> {
                     callback.updateRecordingMode(radioGroup.getCheckedRadioButtonId());
                     callback.setIntervalIndex(intervalIndex);
                     callback.setAccuracyThresholdIndex(accuracyThresholdIndex);
                     callback.startInput();
                     dismiss();
                 })
-                .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                .setNegativeButton(org.odk.collect.strings.R.string.cancel, (dialog, id) -> {
                     dismiss();
                 })
                 .create();
@@ -121,8 +121,8 @@ public class GeoPolySettingsDialogFragment extends DialogFragment {
     private String formatInterval(int seconds) {
         int minutes = seconds / 60;
         return minutes > 0
-                ? getResources().getQuantityString(R.plurals.number_of_minutes, minutes, minutes)
-                : getResources().getQuantityString(R.plurals.number_of_seconds, seconds, seconds);
+                ? getResources().getQuantityString(org.odk.collect.strings.R.plurals.number_of_minutes, minutes, minutes)
+                : getResources().getQuantityString(org.odk.collect.strings.R.plurals.number_of_seconds, seconds, seconds);
     }
 
     /** Populates a Spinner with the option labels in the given array. */
@@ -136,8 +136,8 @@ public class GeoPolySettingsDialogFragment extends DialogFragment {
     /** Formats an entry in the accuracy threshold dropdown. */
     private String formatAccuracyThreshold(int meters) {
         return meters > 0
-                ? getResources().getQuantityString(R.plurals.number_of_meters, meters, meters)
-                : getString(R.string.none);
+                ? getResources().getQuantityString(org.odk.collect.strings.R.plurals.number_of_meters, meters, meters)
+                : getString(org.odk.collect.strings.R.string.none);
     }
 
     public interface SettingsDialogCallback {

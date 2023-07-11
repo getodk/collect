@@ -10,7 +10,6 @@ import static org.hamcrest.CoreMatchers.not;
 
 import androidx.test.espresso.matcher.ViewMatchers;
 
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -21,16 +20,8 @@ import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.settings.keys.ProjectKeys;
 
-import tools.fastlane.screengrab.Screengrab;
-import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy;
-
 public class GuidanceHintFormTest {
     private static final String GUIDANCE_SAMPLE_FORM = "guidance_hint_form.xml";
-
-    @BeforeClass
-    public static void beforeAll() {
-        Screengrab.setDefaultScreenshotStrategy(new UiAutomatorScreenshotStrategy());
-    }
 
     public BlankFormTestRule activityTestRule = new BlankFormTestRule(GUIDANCE_SAMPLE_FORM, "Guidance Form Sample");
 
@@ -49,8 +40,6 @@ public class GuidanceHintFormTest {
         // jump to force recreation of the view after the settings change
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());
-
-        Screengrab.screenshot("guidance_hint");
 
         onView(withId(R.id.guidance_text_view)).check(matches(withText("If the age is less than 18, the remainder of the survey will be hidden.")));
     }

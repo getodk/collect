@@ -94,7 +94,7 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         super.onCreate(savedInstanceState)
         binding = TabsLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupAppBarLayout(this, getString(R.string.manage_files))
+        setupAppBarLayout(this, getString(org.odk.collect.strings.R.string.manage_files))
         setUpViewPager(blankFormsListViewModel)
     }
 
@@ -107,7 +107,11 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         }
 
         TabLayoutMediator(binding.tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
-            tab.text = if (position == 0) getString(R.string.data) else getString(R.string.forms)
+            tab.text = if (position == 0) {
+                getString(org.odk.collect.strings.R.string.data)
+            } else {
+                getString(org.odk.collect.strings.R.string.forms)
+            }
         }.attach()
     }
 

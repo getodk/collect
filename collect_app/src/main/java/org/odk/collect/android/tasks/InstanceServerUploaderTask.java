@@ -15,7 +15,6 @@
 package org.odk.collect.android.tasks;
 
 import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -78,7 +77,7 @@ public class InstanceServerUploaderTask extends InstanceUploaderTask {
                 String destinationUrl = uploader.getUrlToSubmitTo(instance, deviceId, completeDestinationUrl, null);
                 String customMessage = uploader.uploadOneSubmission(instance, destinationUrl);
                 outcome.messagesByInstanceId.put(instance.getDbId().toString(),
-                        customMessage != null ? customMessage : getLocalizedString(Collect.getInstance(), R.string.success));
+                        customMessage != null ? customMessage : getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.success));
 
                 Analytics.log(SUBMISSION, "HTTP", Collect.getFormIdentifierHash(instance.getFormId(), instance.getFormVersion()));
             } catch (FormUploadAuthRequestedException e) {

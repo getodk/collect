@@ -32,7 +32,7 @@ class PermissionsDialogCreatorTest {
 
     @Before
     fun setup() {
-        activity = createThemedActivity(FragmentActivity::class.java, R.style.Theme_MaterialComponents)
+        activity = createThemedActivity(FragmentActivity::class.java, com.google.android.material.R.style.Theme_MaterialComponents)
     }
 
     @Test
@@ -78,8 +78,8 @@ class PermissionsDialogCreatorTest {
     fun `PermissionListener should not be called immediately after displaying explanation dialog`() {
         PermissionsDialogCreatorImpl.showAdditionalExplanation(
             activity,
-            R.string.camera_runtime_permission_denied_title,
-            R.string.camera_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_desc,
             R.drawable.ic_photo_camera,
             permissionListener
         )
@@ -91,8 +91,8 @@ class PermissionsDialogCreatorTest {
     fun `PermissionListener#additionalExplanationClosed should be called after clicking on the positive button in explanation dialog`() {
         PermissionsDialogCreatorImpl.showAdditionalExplanation(
             activity,
-            R.string.camera_runtime_permission_denied_title,
-            R.string.camera_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_desc,
             R.drawable.ic_photo_camera,
             permissionListener
         )
@@ -109,8 +109,8 @@ class PermissionsDialogCreatorTest {
     fun `PermissionListener#additionalExplanationClosed should be called after clicking on the 'Open Settings' button in explanation dialog`() {
         PermissionsDialogCreatorImpl.showAdditionalExplanation(
             activity,
-            R.string.camera_runtime_permission_denied_title,
-            R.string.camera_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_desc,
             R.drawable.ic_photo_camera,
             permissionListener
         )
@@ -127,8 +127,8 @@ class PermissionsDialogCreatorTest {
     fun `Settings should be open after clicking on the neutral button in explanation dialog`() {
         PermissionsDialogCreatorImpl.showAdditionalExplanation(
             activity,
-            R.string.camera_runtime_permission_denied_title,
-            R.string.camera_runtime_permission_denied_desc,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_title,
+            org.odk.collect.strings.R.string.camera_runtime_permission_denied_desc,
             R.drawable.ic_photo_camera,
             permissionListener
         )

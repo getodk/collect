@@ -65,10 +65,11 @@ def googleMapsApiKey = secrets.getProperty('GOOGLE_MAPS_API_KEY', '')
 def mapboxAccessToken = secrets.getProperty('MAPBOX_ACCESS_TOKEN', '')
 
 android {
-    compileSdkVersion Versions.android_compile_sdk
+    compileSdk Versions.android_compile_sdk
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
     defaultConfig {
@@ -157,7 +158,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources {
             // These library licenses will be referenced in-app
             excludes += ['META-INF/ASL-2.0.txt', 'META-INF/LGPL-3.0.txt']
@@ -182,8 +183,8 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     testOptions {
@@ -279,7 +280,6 @@ dependencies {
     implementation Dependencies.androidx_appcompat
     implementation Dependencies.androidx_work_runtime
 
-    implementation Dependencies.androidx_cardview
     implementation Dependencies.androidx_multidex
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.androidx_fragment_ktx
@@ -389,8 +389,6 @@ dependencies {
 
     androidTestImplementation project(':androidtest')
 
-    // Used to generate documentation screenshots.
-    androidTestImplementation Dependencies.fastlane_screengrab
     androidTestImplementation Dependencies.mockito_android
     androidTestImplementation Dependencies.androidx_test_ext_junit
     androidTestImplementation Dependencies.androidx_test_espresso_core

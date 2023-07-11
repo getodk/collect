@@ -63,6 +63,6 @@ public final class GeoUtils {
 
     public static String formatAccuracy(Context context, float accuracy) {
         String formattedValue = new DecimalFormat("#.##").format(accuracy);
-        return context.getString(R.string.accuracy_m, formattedValue);
+        return context.getString(org.odk.collect.strings.R.string.accuracy_m, formattedValue);
     }
 }

@@ -9,7 +9,6 @@ import org.apache.commons.csv.CSVRecord;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.FakeLocationClient;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestDependencies;
@@ -69,6 +68,6 @@ public class LocationTrackingAuditTest {
     public void locationCollectionToggle_ShouldBeAvailable() {
         rule.startInFormEntry()
                 .clickOptionsIcon()
-                .assertText(R.string.track_location);
+                .assertText(org.odk.collect.strings.R.string.track_location);
     }
 }

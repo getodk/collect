@@ -30,7 +30,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.StringData;
-import org.odk.collect.android.R;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -113,7 +112,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     private String getButtonText() {
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
-        return v != null ? v : getContext().getString(R.string.launch_app);
+        return v != null ? v : getContext().getString(org.odk.collect.strings.R.string.launch_app);
     }
 
     protected Serializable getAnswerForIntent() {

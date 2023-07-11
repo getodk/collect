@@ -22,10 +22,10 @@ class StaticPolygonFeature(
     private val polygonAnnotation: PolygonAnnotation = polygonAnnotationManager.create(
         PolygonAnnotationOptions()
             .withPoints(listOf(points.map { Point.fromLngLat(it.longitude, it.latitude) }))
-            .withFillOutlineColor(context.resources.getColor(R.color.mapLineColor))
+            .withFillOutlineColor(context.resources.getColor(org.odk.collect.icons.R.color.mapLineColor))
             .withFillColor(
                 ColorUtils.setAlphaComponent(
-                    context.resources.getColor(R.color.mapLineColor),
+                    context.resources.getColor(org.odk.collect.icons.R.color.mapLineColor),
                     POLYGON_FILL_COLOR_OPACITY
                 )
             )

@@ -24,7 +24,6 @@ import org.kxml2.io.KXmlSerializer;
 import org.kxml2.kdom.Document;
 import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.external.FormsContract;
@@ -270,7 +269,7 @@ public class EncryptionUtils {
         if (InstancesContract.CONTENT_ITEM_TYPE.equals(Collect.getInstance().getContentResolver().getType(uri))) {
             Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
             if (instance == null) {
-                String msg = getLocalizedString(Collect.getInstance(), R.string.not_exactly_one_record_for_this_instance);
+                String msg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.not_exactly_one_record_for_this_instance);
                 Timber.e(new Error(msg));
                 throw new EncryptionException(msg, null);
             }
@@ -283,7 +282,7 @@ public class EncryptionUtils {
             // OK to finalize with form definition that was soft-deleted. OK if there are multiple
             // forms with the same formid/version as long as only one is active (not deleted).
             if (forms.isEmpty() || new FormsRepositoryProvider(Collect.getInstance()).get().getAllNotDeletedByFormIdAndVersion(formId, formVersion).size() > 1) {
-                String msg = getLocalizedString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id);
+                String msg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.not_exactly_one_blank_form_for_this_form_id);
                 Timber.d(msg);
                 throw new EncryptionException(msg, null);
             }
@@ -295,7 +294,7 @@ public class EncryptionUtils {
 
         formId = form.getFormId();
         if (formId == null || formId.length() == 0) {
-            String msg = getLocalizedString(Collect.getInstance(), R.string.no_form_id_specified);
+            String msg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.no_form_id_specified);
             Timber.d(msg);
             throw new EncryptionException(msg, null);
         }
@@ -312,14 +311,14 @@ public class EncryptionUtils {
         try {
             kf = KeyFactory.getInstance(RSA_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
-            String msg = getLocalizedString(Collect.getInstance(), R.string.phone_does_not_support_rsa);
+            String msg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.phone_does_not_support_rsa);
             Timber.d(e, "%s due to %s ", msg, e.getMessage());
             throw new EncryptionException(msg, e);
         }
         try {
             pk = kf.generatePublic(publicKeySpec);
         } catch (InvalidKeySpecException e) {
-            String msg = getLocalizedString(Collect.getInstance(), R.string.invalid_rsa_public_key);
+            String msg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.invalid_rsa_public_key);
             Timber.d(e, "%s due to %s ", msg, e.getMessage());
             throw new EncryptionException(msg, e);
         }

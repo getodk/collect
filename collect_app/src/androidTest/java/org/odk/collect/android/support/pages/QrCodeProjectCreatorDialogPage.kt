@@ -9,16 +9,16 @@ import org.odk.collect.android.R
 
 class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
     override fun assertOnPage(): QrCodeProjectCreatorDialogPage {
-        assertText(R.string.add_project)
+        assertText(org.odk.collect.strings.R.string.add_project)
         return this
     }
 
     fun switchToManualMode(): ManualProjectCreatorDialogPage {
-        return clickOnButtonInDialog(R.string.configure_manually, ManualProjectCreatorDialogPage())
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.configure_manually, ManualProjectCreatorDialogPage())
     }
 
     fun assertDuplicateDialogShown(): QrCodeProjectCreatorDialogPage {
-        onView(withText(getTranslatedString(R.string.duplicate_project_details)))
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.duplicate_project_details)))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
 
@@ -26,10 +26,10 @@ class QrCodeProjectCreatorDialogPage : Page<QrCodeProjectCreatorDialogPage>() {
     }
 
     fun switchToExistingProject(): MainMenuPage {
-        return clickOnButtonInDialog(R.string.switch_to_existing, MainMenuPage())
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.switch_to_existing, MainMenuPage())
     }
 
     fun addDuplicateProject(): MainMenuPage {
-        return clickOnButtonInDialog(R.string.add_duplicate_project, MainMenuPage())
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.add_duplicate_project, MainMenuPage())
     }
 }

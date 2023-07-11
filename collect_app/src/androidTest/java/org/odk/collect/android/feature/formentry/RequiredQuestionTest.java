@@ -10,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
@@ -44,8 +43,8 @@ public class RequiredQuestionTest {
                 .startBlankForm("required")
                 .answerQuestion("Foo", true, "blah")
                 .clickOptionsIcon()
-                .clickOnString(R.string.validate)
-                .assertText(R.string.success_form_validation)
+                .clickOnString(org.odk.collect.strings.R.string.validate)
+                .assertText(org.odk.collect.strings.R.string.success_form_validation)
                 .assertConstraintNotDisplayed("Custom required message");
     }
 
@@ -57,7 +56,7 @@ public class RequiredQuestionTest {
                 .clickGoToArrow()
                 .clickGoToEnd()
                 .clickOptionsIcon()
-                .clickOnString(R.string.validate)
+                .clickOnString(org.odk.collect.strings.R.string.validate)
                 .assertConstraintDisplayed("Custom required message")
                 .assertQuestion("Foo", true);
     }
@@ -70,7 +69,7 @@ public class RequiredQuestionTest {
                 .clickGoToArrow()
                 .clickGoToEnd()
                 .clickOptionsIcon()
-                .clickOnString(R.string.validate)
+                .clickOnString(org.odk.collect.strings.R.string.validate)
                 .assertConstraintDisplayed("Custom required message")
                 .assertQuestion("Foo", true);
     }
@@ -93,7 +92,7 @@ public class RequiredQuestionTest {
                 .copyForm("requiredJR275.xml")
                 .startBlankForm("required")
                 .clickOptionsIcon()
-                .clickOnString(R.string.validate);
+                .clickOnString(org.odk.collect.strings.R.string.validate);
 
         List<CSVRecord> auditLog = StorageUtils.getAuditLogForFirstInstance();
         assertThat(auditLog.size(), equalTo(1));
@@ -108,7 +107,7 @@ public class RequiredQuestionTest {
                 .answerQuestion(0, "Foo")
                 .swipeToNextQuestionWithConstraintViolation("Custom required message2")
                 .clickOptionsIcon()
-                .clickOnString(R.string.validate)
+                .clickOnString(org.odk.collect.strings.R.string.validate)
                 .assertConstraintDisplayed("Custom required message2")
                 .clickGoToArrow()
                 .clickGoToEnd()

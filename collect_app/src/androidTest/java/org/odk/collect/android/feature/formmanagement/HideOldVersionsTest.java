@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.ProjectSettingsPage;
@@ -40,7 +39,7 @@ public class HideOldVersionsTest {
                 .openProjectSettingsDialog()
                 .clickSettings()
                 .clickFormManagement()
-                .scrollToRecyclerViewItemAndClickText(R.string.hide_old_form_versions_setting_title)
+                .scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.hide_old_form_versions_setting_title)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage())
 

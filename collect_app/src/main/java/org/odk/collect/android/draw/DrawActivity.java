@@ -217,14 +217,14 @@ public class DrawActivity extends LocalizedActivity {
         // output -- where the output should be written
 
         if (OPTION_SIGNATURE.equals(loadOption)) {
-            alertTitleString = getString(R.string.quit_application,
-                    getString(R.string.sign_button));
+            alertTitleString = getString(org.odk.collect.strings.R.string.quit_application,
+                    getString(org.odk.collect.strings.R.string.sign_button));
         } else if (OPTION_ANNOTATE.equals(loadOption)) {
-            alertTitleString = getString(R.string.quit_application,
-                    getString(R.string.markup_image));
+            alertTitleString = getString(org.odk.collect.strings.R.string.quit_application,
+                    getString(org.odk.collect.strings.R.string.markup_image));
         } else {
-            alertTitleString = getString(R.string.quit_application,
-                    getString(R.string.draw_image));
+            alertTitleString = getString(org.odk.collect.strings.R.string.quit_application,
+                    getString(org.odk.collect.strings.R.string.draw_image));
         }
 
         drawView = findViewById(R.id.drawView);
@@ -313,8 +313,8 @@ public class DrawActivity extends LocalizedActivity {
         ListView listView = DialogUtils.createActionListView(this);
 
         List<IconMenuItem> items;
-        items = ImmutableList.of(new IconMenuItem(R.drawable.ic_save, R.string.keep_changes),
-                new IconMenuItem(R.drawable.ic_delete, R.string.discard_changes));
+        items = ImmutableList.of(new IconMenuItem(org.odk.collect.geo.R.drawable.ic_save, org.odk.collect.strings.R.string.keep_changes),
+                new IconMenuItem(org.odk.collect.geo.R.drawable.ic_delete, org.odk.collect.strings.R.string.discard_changes));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
         listView.setAdapter(adapter);
@@ -322,7 +322,7 @@ public class DrawActivity extends LocalizedActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IconMenuItem item = (IconMenuItem) adapter.getItem(position);
-                if (item.getTextResId() == R.string.keep_changes) {
+                if (item.getTextResId() == org.odk.collect.strings.R.string.keep_changes) {
                     saveAndClose();
                 } else {
                     cancelAndClose();
@@ -332,7 +332,7 @@ public class DrawActivity extends LocalizedActivity {
         });
         alertDialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(alertTitleString)
-                .setPositiveButton(getString(R.string.do_not_exit), null)
+                .setPositiveButton(getString(org.odk.collect.strings.R.string.do_not_exit), null)
                 .setView(listView).create();
         alertDialog.show();
     }

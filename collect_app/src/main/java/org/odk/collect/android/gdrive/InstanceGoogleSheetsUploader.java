@@ -34,7 +34,6 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.BadUrlException;
 import org.odk.collect.android.exception.MultipleFoldersFoundException;
@@ -99,13 +98,13 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         try {
             if (forms.size() != 1) {
-                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.not_exactly_one_blank_form_for_this_form_id));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.not_exactly_one_blank_form_for_this_form_id));
             }
 
             Form form = forms.get(0);
             if (form.getBASE64RSAPublicKey() != null) {
                 markSubmissionFailed(instance);
-                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_encrypted_message));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.google_sheets_encrypted_message));
             }
 
             String formFilePath = PathUtils.getAbsoluteFilePath(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS), form.getFormFilePath());
@@ -136,7 +135,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
         if (e.getDetails() != null) {
             switch (e.getDetails().getCode()) {
                 case 403:
-                    message = getLocalizedString(Collect.getInstance(), R.string.google_sheets_access_denied);
+                    message = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.google_sheets_access_denied);
                     break;
                 case 429:
                     message = FAIL + "Too many requests per 100 seconds";
@@ -259,7 +258,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
         if (!new File(filePath).exists()) {
             throw new FormUploadException(Collect.getInstance()
-                    .getString(R.string.media_upload_error, filePath));
+                    .getString(org.odk.collect.strings.R.string.media_upload_error, filePath));
         }
 
         String folderId;
@@ -460,7 +459,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
     private void disallowMissingColumns(List<Object> columnHeaders, List<Object> columnTitles) throws FormUploadException {
         for (Object columnTitle : columnTitles) {
             if (!columnHeaders.contains(columnTitle)) {
-                throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.google_sheets_missing_columns, columnTitle));
+                throw new FormUploadException(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.google_sheets_missing_columns, columnTitle));
             }
         }
     }
@@ -570,7 +569,7 @@ public class InstanceGoogleSheetsUploader extends InstanceUploader {
 
     private void ensureNumberOfColumnsIsValid(int numberOfColumns) throws FormUploadException {
         if (numberOfColumns == 0) {
-            throw new FormUploadException(getLocalizedString(Collect.getInstance(), R.string.no_columns_to_upload));
+            throw new FormUploadException(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.no_columns_to_upload));
         }
     }
 

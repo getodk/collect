@@ -33,7 +33,7 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @get:Rule
     val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
+        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {
@@ -73,7 +73,7 @@ class ProjectDisplayPreferencesFragmentTest {
                 it.findPreference<EditTextPreference>(ProjectDisplayPreferencesFragment.PROJECT_NAME_KEY)!!.title,
                 `is`(
                     ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
-                        R.string.project_name
+                        org.odk.collect.strings.R.string.project_name
                     )
                 )
             )
@@ -111,7 +111,7 @@ class ProjectDisplayPreferencesFragmentTest {
                 `is`(
 
                     ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
-                        R.string.project_icon
+                        org.odk.collect.strings.R.string.project_icon
                     )
                 )
             )
@@ -148,7 +148,7 @@ class ProjectDisplayPreferencesFragmentTest {
                 it.findPreference<Preference>(ProjectDisplayPreferencesFragment.PROJECT_COLOR_KEY)!!.title,
                 `is`(
                     ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
-                        R.string.project_color
+                        org.odk.collect.strings.R.string.project_color
                     )
                 )
             )

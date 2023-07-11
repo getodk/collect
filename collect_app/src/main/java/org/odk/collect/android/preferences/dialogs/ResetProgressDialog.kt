@@ -9,8 +9,8 @@ class ResetProgressDialog : MaterialProgressDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        setTitle(context.getLocalizedString(R.string.please_wait))
-        setMessage(context.getLocalizedString(R.string.reset_in_progress))
+        setTitle(context.getLocalizedString(org.odk.collect.strings.R.string.please_wait))
+        setMessage(context.getLocalizedString(org.odk.collect.strings.R.string.reset_in_progress))
         isCancelable = false
     }
 }

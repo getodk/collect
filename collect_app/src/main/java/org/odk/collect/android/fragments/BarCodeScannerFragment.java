@@ -86,7 +86,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
     }
 
     private void startScanning(Bundle savedInstanceState) {
-        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, savedInstanceState, getSupportedCodeFormats(), getContext().getString(R.string.barcode_scanner_prompt));
+        capture = codeCaptureManagerFactory.getCaptureManager(requireActivity(), barcodeScannerView, savedInstanceState, getSupportedCodeFormats(), getContext().getString(org.odk.collect.strings.R.string.barcode_scanner_prompt));
 
         // Must be called after setting up CaptureManager
         if (frontCameraUsed()) {
@@ -99,7 +99,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
             try {
                 handleScanningResult(barcodeResult);
             } catch (IOException | DataFormatException | IllegalArgumentException e) {
-                ToastUtils.showShortToast(requireContext(), getString(R.string.invalid_qrcode));
+                ToastUtils.showShortToast(requireContext(), getString(org.odk.collect.strings.R.string.invalid_qrcode));
             }
         });
     }
@@ -147,7 +147,7 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
     }
 
     private void switchFlashlight() {
-        if (getString(R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
+        if (getString(org.odk.collect.strings.R.string.turn_on_flashlight).equals(switchFlashlightButton.getText())) {
             barcodeScannerView.setTorchOn();
         } else {
             barcodeScannerView.setTorchOff();
@@ -156,12 +156,12 @@ public abstract class BarCodeScannerFragment extends Fragment implements Decorat
 
     @Override
     public void onTorchOn() {
-        switchFlashlightButton.setText(R.string.turn_off_flashlight);
+        switchFlashlightButton.setText(org.odk.collect.strings.R.string.turn_off_flashlight);
     }
 
     @Override
     public void onTorchOff() {
-        switchFlashlightButton.setText(R.string.turn_on_flashlight);
+        switchFlashlightButton.setText(org.odk.collect.strings.R.string.turn_on_flashlight);
     }
 
     protected abstract Collection<String> getSupportedCodeFormats();

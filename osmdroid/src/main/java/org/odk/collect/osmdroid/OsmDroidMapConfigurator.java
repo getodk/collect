@@ -56,7 +56,7 @@ public class OsmDroidMapConfigurator implements MapConfigurator {
                 values[i] = options[i].id;
             }
             String prefTitle = context.getString(
-                R.string.map_style_label, context.getString(sourceLabelId));
+                org.odk.collect.strings.R.string.map_style_label, context.getString(sourceLabelId));
             return Collections.singletonList(PrefUtils.createListPref(
                 context, prefKey, prefTitle, labelIds, values, settings
             ));

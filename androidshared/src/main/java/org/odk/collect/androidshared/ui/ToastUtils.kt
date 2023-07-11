@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.androidshared.R
 import org.odk.collect.strings.localization.getLocalizedString
 
 /**
@@ -103,7 +102,7 @@ object ToastUtils {
         } else {
             MaterialAlertDialogBuilder(activity)
                 .setMessage(message)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                 .create()
                 .show()
         }

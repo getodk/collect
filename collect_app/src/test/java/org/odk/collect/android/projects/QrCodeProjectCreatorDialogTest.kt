@@ -49,7 +49,7 @@ class QrCodeProjectCreatorDialogTest {
 
     @get:Rule
     val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
+        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
 
     @Before
     fun setup() {
@@ -95,7 +95,7 @@ class QrCodeProjectCreatorDialogTest {
         val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
             assertThat(it.isVisible, `is`(true))
-            onView(withText(R.string.cancel)).inRoot(isDialog()).perform(click())
+            onView(withText(org.odk.collect.strings.R.string.cancel)).inRoot(isDialog()).perform(click())
             assertThat(it.isVisible, `is`(false))
         }
     }
@@ -114,7 +114,7 @@ class QrCodeProjectCreatorDialogTest {
     fun `The ManualProjectCreatorDialog should be displayed after switching to the manual mode`() {
         val scenario = launcherRule.launch(QrCodeProjectCreatorDialog::class.java)
         scenario.onFragment {
-            onView(withText(R.string.configure_manually)).inRoot(isDialog())
+            onView(withText(org.odk.collect.strings.R.string.configure_manually)).inRoot(isDialog())
                 .perform(scrollTo(), click())
             assertThat(
                 it.activity!!.supportFragmentManager.findFragmentByTag(
@@ -178,7 +178,7 @@ class QrCodeProjectCreatorDialogTest {
             ShadowToast.getTextOfLatestToast(),
             `is`(
                 ApplicationProvider.getApplicationContext<Context>()
-                    .getString(R.string.invalid_qrcode)
+                    .getString(org.odk.collect.strings.R.string.invalid_qrcode)
             )
         )
         verifyNoInteractions(projectCreator)
@@ -215,7 +215,7 @@ class QrCodeProjectCreatorDialogTest {
             ShadowToast.getTextOfLatestToast(),
             `is`(
                 ApplicationProvider.getApplicationContext<Context>()
-                    .getString(R.string.settings_with_gd_protocol)
+                    .getString(org.odk.collect.strings.R.string.settings_with_gd_protocol)
             )
         )
         verifyNoInteractions(projectCreator)

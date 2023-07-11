@@ -73,8 +73,8 @@ class FormMapTest {
 
             .assertText(
                 getApplicationContext<Context>().resources.getString(
-                    R.string.select_item_count,
-                    getApplicationContext<Context>().resources.getString(R.string.saved_forms),
+                    org.odk.collect.strings.R.string.select_item_count,
+                    getApplicationContext<Context>().resources.getString(org.odk.collect.strings.R.string.saved_forms),
                     1,
                     1
                 )

@@ -16,26 +16,26 @@ class AccuracyStatusViewTest {
 
     private val context = getApplicationContext<Application>().also {
         // Need a theme where primary and secondary are different for tests
-        it.setTheme(R.style.Theme_MaterialComponents)
+        it.setTheme(com.google.android.material.R.style.Theme_MaterialComponents)
     }
 
-    private val colorPrimary = getThemeAttributeValue(context, R.attr.colorPrimary)
-    private val colorOnPrimary = getThemeAttributeValue(context, R.attr.colorOnPrimary)
-    private val colorError = getThemeAttributeValue(context, R.attr.colorError)
-    private val colorOnError = getThemeAttributeValue(context, R.attr.colorOnError)
+    private val colorPrimary = getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary)
+    private val colorOnPrimary = getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimary)
+    private val colorError = getThemeAttributeValue(context, com.google.android.material.R.attr.colorError)
+    private val colorOnError = getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnError)
 
     @Test
     fun `updates current accuracy`() {
         val view = AccuracyStatusView(context)
         assertThat(
             view.binding.currentAccuracy.text,
-            equalTo(context.getString(R.string.empty_accuracy))
+            equalTo(context.getString(org.odk.collect.strings.R.string.empty_accuracy))
         )
 
         view.accuracy = GeoPointAccuracy.Improving(52f)
         assertThat(
             view.binding.currentAccuracy.text,
-            equalTo(context.getString(R.string.accuracy_m, "52"))
+            equalTo(context.getString(org.odk.collect.strings.R.string.accuracy_m, "52"))
         )
     }
 
@@ -45,23 +45,23 @@ class AccuracyStatusViewTest {
 
         assertThat(
             view.binding.text.text,
-            equalTo(context.getString(R.string.waiting_for_location))
+            equalTo(context.getString(org.odk.collect.strings.R.string.waiting_for_location))
         )
         assertThat(view.binding.strength.progress, equalTo(20))
 
         view.accuracy = GeoPointAccuracy.Unacceptable(10f)
         assertThat(
             view.binding.text.text,
-            equalTo(context.getString(R.string.unacceptable_accuracy))
+            equalTo(context.getString(org.odk.collect.strings.R.string.unacceptable_accuracy))
         )
         assertThat(view.binding.strength.progress, equalTo(40))
 
         view.accuracy = GeoPointAccuracy.Poor(10f)
-        assertThat(view.binding.text.text, equalTo(context.getString(R.string.poor_accuracy)))
+        assertThat(view.binding.text.text, equalTo(context.getString(org.odk.collect.strings.R.string.poor_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(60))
 
         view.accuracy = GeoPointAccuracy.Improving(10f)
-        assertThat(view.binding.text.text, equalTo(context.getString(R.string.improving_accuracy)))
+        assertThat(view.binding.text.text, equalTo(context.getString(org.odk.collect.strings.R.string.improving_accuracy)))
         assertThat(view.binding.strength.progress, equalTo(80))
     }
 

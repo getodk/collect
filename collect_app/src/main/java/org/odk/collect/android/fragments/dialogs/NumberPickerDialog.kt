@@ -51,15 +51,15 @@ class NumberPickerDialog : DialogFragment() {
         }
 
         return MaterialAlertDialogBuilder(requireActivity())
-            .setTitle(R.string.number_picker_title)
+            .setTitle(org.odk.collect.strings.R.string.number_picker_title)
             .setView(view)
-            .setPositiveButton(R.string.ok) { _, _ ->
+            .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ ->
                 listener?.onNumberPickerValueSelected(
                     requireArguments().getInt(WIDGET_ID),
                     numberPicker.value
                 )
             }
-            .setNegativeButton(R.string.cancel) { _, _ -> }
+            .setNegativeButton(org.odk.collect.strings.R.string.cancel) { _, _ -> }
             .create()
     }
 

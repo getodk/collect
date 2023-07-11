@@ -27,7 +27,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.CollectHelpers;
@@ -79,7 +78,7 @@ public class DeleteRepeatDialogFragmentTest {
         AlertDialog dialog = launchDialog();
         String message = ((TextView) dialog.findViewById(android.R.id.message)).getText().toString();
 
-        assertThat(message, equalTo(ApplicationProvider.getApplicationContext().getString(R.string.delete_repeat_confirm, "blah (1)")));
+        assertThat(message, equalTo(ApplicationProvider.getApplicationContext().getString(org.odk.collect.strings.R.string.delete_repeat_confirm, "blah (1)")));
     }
 
     @Test

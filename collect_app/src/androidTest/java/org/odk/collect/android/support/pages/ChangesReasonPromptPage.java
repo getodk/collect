@@ -9,7 +9,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.WaitFor;
 
 import java.util.concurrent.Callable;
@@ -27,26 +26,26 @@ public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
         closeSoftKeyboard(); // Might open before assertion has a chance to run
 
         assertToolbarTitle(formName);
-        onView(withText(getTranslatedString(R.string.reason_for_changes))).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.reason_for_changes))).check(matches(isDisplayed()));
         return this;
     }
 
     public ChangesReasonPromptPage enterReason(String reason) {
-        onView(withHint(getTranslatedString(R.string.reason))).perform(replaceText(reason));
+        onView(withHint(getTranslatedString(org.odk.collect.strings.R.string.reason))).perform(replaceText(reason));
         return this;
     }
 
     public MainMenuPage clickSave() {
-        clickOnString(R.string.save);
+        clickOnString(org.odk.collect.strings.R.string.save);
         return new MainMenuPage().assertOnPage();
     }
 
     public <D extends Page<D>> D clickSave(D destination) {
-        clickOnString(R.string.save);
+        clickOnString(org.odk.collect.strings.R.string.save);
 
         // Make sure we wait for form saving to finish
         WaitFor.waitFor((Callable<Void>) () -> {
-            assertTextDoesNotExist(R.string.saving_form);
+            assertTextDoesNotExist(org.odk.collect.strings.R.string.saving_form);
             return null;
         });
 
@@ -54,12 +53,12 @@ public class ChangesReasonPromptPage extends Page<ChangesReasonPromptPage> {
     }
 
     public <D extends Page<D>> D pressClose(D destination) {
-        onView(withContentDescription(getTranslatedString(R.string.close))).perform(click());
+        onView(withContentDescription(getTranslatedString(org.odk.collect.strings.R.string.close))).perform(click());
         return destination.assertOnPage();
     }
 
     public ChangesReasonPromptPage clickSaveWithValidationError() {
-        clickOnString(R.string.save);
+        clickOnString(org.odk.collect.strings.R.string.save);
         return this.assertOnPage();
     }
 }

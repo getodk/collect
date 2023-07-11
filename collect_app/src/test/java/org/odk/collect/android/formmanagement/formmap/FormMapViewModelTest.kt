@@ -113,14 +113,14 @@ class FormMapViewModelTest {
                 MappableSelectItem.IconifiedText(
                     R.drawable.ic_form_state_saved,
                     formatDate(
-                        R.string.saved_on_date_at_time,
+                        org.odk.collect.strings.R.string.saved_on_date_at_time,
                         instanceWithPoint.lastStatusChangeDate
                     )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_edit,
-                application.getString(R.string.edit_data)
+                application.getString(org.odk.collect.strings.R.string.edit_data)
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -157,14 +157,14 @@ class FormMapViewModelTest {
                 MappableSelectItem.IconifiedText(
                     R.drawable.ic_form_state_finalized,
                     formatDate(
-                        R.string.finalized_on_date_at_time,
+                        org.odk.collect.strings.R.string.finalized_on_date_at_time,
                         instance.lastStatusChangeDate
                     )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(R.string.view_data)
+                application.getString(org.odk.collect.strings.R.string.view_data)
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -203,14 +203,14 @@ class FormMapViewModelTest {
                 MappableSelectItem.IconifiedText(
                     R.drawable.ic_form_state_finalized,
                     formatDate(
-                        R.string.finalized_on_date_at_time,
+                        org.odk.collect.strings.R.string.finalized_on_date_at_time,
                         instance.lastStatusChangeDate
                     )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(R.string.view_data)
+                application.getString(org.odk.collect.strings.R.string.view_data)
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -247,12 +247,12 @@ class FormMapViewModelTest {
                 MappableSelectItem.IconifiedText(
                     R.drawable.ic_form_state_saved,
                     formatDate(
-                        R.string.saved_on_date_at_time,
+                        org.odk.collect.strings.R.string.saved_on_date_at_time,
                         instance.lastStatusChangeDate
                     )
                 )
             ),
-            info = formatDate(R.string.deleted_on_date_at_time, 123L)
+            info = formatDate(org.odk.collect.strings.R.string.deleted_on_date_at_time, 123L)
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
     }
@@ -288,14 +288,14 @@ class FormMapViewModelTest {
                 MappableSelectItem.IconifiedText(
                     R.drawable.ic_form_state_submitted,
                     formatDate(
-                        R.string.sent_on_date_at_time,
+                        org.odk.collect.strings.R.string.sent_on_date_at_time,
                         instance.lastStatusChangeDate
                     )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(R.string.view_data)
+                application.getString(org.odk.collect.strings.R.string.view_data)
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -332,14 +332,14 @@ class FormMapViewModelTest {
                 MappableSelectItem.IconifiedText(
                     R.drawable.ic_form_state_submission_failed,
                     formatDate(
-                        R.string.sending_failed_on_date_at_time,
+                        org.odk.collect.strings.R.string.sending_failed_on_date_at_time,
                         instance.lastStatusChangeDate
                     )
                 )
             ),
             action = MappableSelectItem.IconifiedText(
                 R.drawable.ic_visibility,
-                application.getString(R.string.view_data)
+                application.getString(org.odk.collect.strings.R.string.view_data)
             )
         )
         assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
@@ -393,17 +393,17 @@ class FormMapViewModelTest {
 
         assertThat(
             (items!![0] as MappableSelectItem.WithInfo).info,
-            equalTo(application.getString(R.string.cannot_edit_completed_form))
+            equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
 
         assertThat(
             (items[1] as MappableSelectItem.WithInfo).info,
-            equalTo(application.getString(R.string.cannot_edit_completed_form))
+            equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
 
         assertThat(
             (items[2] as MappableSelectItem.WithInfo).info,
-            equalTo(application.getString(R.string.cannot_edit_completed_form))
+            equalTo(application.getString(org.odk.collect.strings.R.string.cannot_edit_completed_form))
         )
     }
 

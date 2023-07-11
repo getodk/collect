@@ -28,10 +28,10 @@ internal object PermissionsDialogCreatorImpl : PermissionsDialogCreator {
         action: PermissionListener
     ) {
         MaterialAlertDialogBuilder(activity)
-            .setMessage(activity.getString(R.string.gps_enable_message))
+            .setMessage(activity.getString(org.odk.collect.strings.R.string.gps_enable_message))
             .setCancelable(false)
             .setPositiveButton(
-                activity.getString(R.string.enable_gps)
+                activity.getString(org.odk.collect.strings.R.string.enable_gps)
             ) { _: DialogInterface?, _: Int ->
                 activity.startActivityForResult(
                     Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS),
@@ -39,7 +39,7 @@ internal object PermissionsDialogCreatorImpl : PermissionsDialogCreator {
                 )
             }
             .setNegativeButton(
-                activity.getString(R.string.cancel)
+                activity.getString(org.odk.collect.strings.R.string.cancel)
             ) { dialog: DialogInterface, _: Int ->
                 action.denied()
                 dialog.cancel()
@@ -60,10 +60,10 @@ internal object PermissionsDialogCreatorImpl : PermissionsDialogCreator {
             .setTitle(title)
             .setMessage(message)
             .setCancelable(false)
-            .setPositiveButton(R.string.ok) { _, _ ->
+            .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ ->
                 action.additionalExplanationClosed()
             }
-            .setNeutralButton(R.string.open_settings) { _, _ ->
+            .setNeutralButton(org.odk.collect.strings.R.string.open_settings) { _, _ ->
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                     data = Uri.fromParts("package", activity.packageName, null)
                     activity.startActivity(this)

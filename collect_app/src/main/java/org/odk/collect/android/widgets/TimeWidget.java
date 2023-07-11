@@ -26,7 +26,6 @@ import org.javarosa.form.api.FormEntryPrompt;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
-import org.odk.collect.android.R;
 import org.odk.collect.android.databinding.TimeWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.DateTimeUtils;
@@ -81,13 +80,13 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     @Override
     public void clearAnswer() {
         selectedTime = DateTimeUtils.getCurrentDateTime();
-        binding.timeAnswerText.setText(R.string.no_time_selected);
+        binding.timeAnswerText.setText(org.odk.collect.strings.R.string.no_time_selected);
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        return binding.timeAnswerText.getText().equals(getContext().getString(R.string.no_time_selected))
+        return binding.timeAnswerText.getText().equals(getContext().getString(org.odk.collect.strings.R.string.no_time_selected))
                 ? null
                 : new TimeData(selectedTime.toDateTime().toDate());
     }

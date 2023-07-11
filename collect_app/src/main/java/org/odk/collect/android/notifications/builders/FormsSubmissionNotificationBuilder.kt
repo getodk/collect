@@ -30,13 +30,13 @@ object FormsSubmissionNotificationBuilder {
             setContentTitle(getTitle(application, allFormsUploadedSuccessfully))
             setContentText(getMessage(application, allFormsUploadedSuccessfully, result))
             setSubText(projectName)
-            setSmallIcon(R.drawable.ic_notification_small)
+            setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
             setAutoCancel(true)
 
             if (!allFormsUploadedSuccessfully) {
                 addAction(
                     R.drawable.ic_outline_info_small,
-                    application.getLocalizedString(R.string.show_details),
+                    application.getLocalizedString(org.odk.collect.strings.R.string.show_details),
                     getShowDetailsPendingIntent(application, result)
                 )
             }
@@ -45,18 +45,18 @@ object FormsSubmissionNotificationBuilder {
 
     private fun getTitle(application: Application, allFormsUploadedSuccessfully: Boolean): String {
         return if (allFormsUploadedSuccessfully) {
-            application.getLocalizedString(R.string.forms_upload_succeeded)
+            application.getLocalizedString(org.odk.collect.strings.R.string.forms_upload_succeeded)
         } else {
-            application.getLocalizedString(R.string.forms_upload_failed)
+            application.getLocalizedString(org.odk.collect.strings.R.string.forms_upload_failed)
         }
     }
 
     private fun getMessage(application: Application, allFormsUploadedSuccessfully: Boolean, result: Map<Instance, FormUploadException?>): String {
         return if (allFormsUploadedSuccessfully) {
-            application.getLocalizedString(R.string.all_uploads_succeeded)
+            application.getLocalizedString(org.odk.collect.strings.R.string.all_uploads_succeeded)
         } else {
             application.getLocalizedString(
-                R.string.some_uploads_failed,
+                org.odk.collect.strings.R.string.some_uploads_failed,
                 FormsUploadResultInterpreter.getNumberOfFailures(result),
                 result.size
             )

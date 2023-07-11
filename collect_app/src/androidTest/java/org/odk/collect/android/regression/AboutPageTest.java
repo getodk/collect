@@ -48,11 +48,11 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.title))
-                .check(matches(withText(R.string.odk_website)));
+                .check(matches(withText(org.odk.collect.strings.R.string.odk_website)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.summary))
-                .check(matches(withText(R.string.odk_website_summary)));
+                .check(matches(withText(org.odk.collect.strings.R.string.odk_website_summary)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(0, R.id.imageView))
@@ -60,11 +60,11 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(1, R.id.title))
-                .check(matches(withText(R.string.odk_forum)));
+                .check(matches(withText(org.odk.collect.strings.R.string.odk_forum)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(1, R.id.summary))
-                .check(matches(withText(R.string.odk_forum_summary)));
+                .check(matches(withText(org.odk.collect.strings.R.string.odk_forum_summary)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(1, R.id.imageView))
@@ -72,11 +72,11 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.title))
-                .check(matches(withText(R.string.tell_your_friends)));
+                .check(matches(withText(org.odk.collect.strings.R.string.tell_your_friends)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.summary))
-                .check(matches(withText(R.string.tell_your_friends_msg)));
+                .check(matches(withText(org.odk.collect.strings.R.string.tell_your_friends_msg)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(2, R.id.imageView))
@@ -84,11 +84,11 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.title))
-                .check(matches(withText(R.string.leave_a_review)));
+                .check(matches(withText(org.odk.collect.strings.R.string.leave_a_review)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.summary))
-                .check(matches(withText(R.string.leave_a_review_msg)));
+                .check(matches(withText(org.odk.collect.strings.R.string.leave_a_review_msg)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(3, R.id.imageView))
@@ -96,11 +96,11 @@ public class AboutPageTest {
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(4, R.id.title))
-                .check(matches(withText(R.string.all_open_source_licenses)));
+                .check(matches(withText(org.odk.collect.strings.R.string.all_open_source_licenses)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(4, R.id.summary))
-                .check(matches(withText(R.string.all_open_source_licenses_msg)));
+                .check(matches(withText(org.odk.collect.strings.R.string.all_open_source_licenses_msg)));
 
         onView(withRecyclerView(R.id.recyclerView)
                 .atPositionOnView(4, R.id.imageView))

@@ -29,7 +29,6 @@ import android.widget.EditText;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.databinding.BearingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -70,7 +69,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
         String answerText = prompt.getAnswerText();
         if (answerText != null && !answerText.isEmpty()) {
-            binding.bearingButton.setText(getContext().getString(R.string.replace_bearing));
+            binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
             binding.answerText.setText(answerText);
         }
 
@@ -80,7 +79,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     @Override
     public void clearAnswer() {
         binding.answerText.setText(null);
-        binding.bearingButton.setText(getContext().getString(R.string.get_bearing));
+        binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.get_bearing));
         widgetValueChanged();
     }
 
@@ -93,7 +92,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     @Override
     public void setData(Object answer) {
         binding.answerText.setText((String) answer);
-        binding.bearingButton.setText(getContext().getString(R.string.replace_bearing));
+        binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
         widgetValueChanged();
     }
 
@@ -122,7 +121,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
         } else {
-            ToastUtils.showLongToast(getContext(), R.string.bearing_lack_of_sensors);
+            ToastUtils.showLongToast(getContext(), org.odk.collect.strings.R.string.bearing_lack_of_sensors);
 
             binding.bearingButton.setEnabled(false);
 

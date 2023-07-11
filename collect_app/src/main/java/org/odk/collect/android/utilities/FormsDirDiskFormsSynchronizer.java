@@ -3,7 +3,6 @@ package org.odk.collect.android.utilities;
 import android.database.SQLException;
 
 import org.javarosa.xform.parse.XFormParser;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -171,7 +170,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             if (errors.length() != 0) {
                 statusMessage = errors.toString();
             } else {
-                Timber.d(getLocalizedString(Collect.getInstance(), R.string.finished_disk_scan));
+                Timber.d(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.finished_disk_scan));
             }
             return statusMessage;
         } finally {
@@ -224,7 +223,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             builder.displayName(title);
         } else {
             throw new IllegalArgumentException(
-                    getLocalizedString(Collect.getInstance(), R.string.xform_parse_error,
+                    getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.xform_parse_error,
                             formDefFile.getName(), "title"));
         }
         String formid = fields.get(FileUtils.FORMID);
@@ -232,7 +231,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
             builder.formId(formid);
         } else {
             throw new IllegalArgumentException(
-                    getLocalizedString(Collect.getInstance(), R.string.xform_parse_error,
+                    getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.xform_parse_error,
                             formDefFile.getName(), "id"));
         }
         String version = fields.get(FileUtils.VERSION);
@@ -245,7 +244,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
                 builder.submissionUri(submission);
             } else {
                 throw new IllegalArgumentException(
-                        getLocalizedString(Collect.getInstance(), R.string.xform_parse_error,
+                        getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.xform_parse_error,
                                 formDefFile.getName(), "submission url"));
             }
         }

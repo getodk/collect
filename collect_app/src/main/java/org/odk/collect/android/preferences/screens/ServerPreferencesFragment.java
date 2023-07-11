@@ -150,7 +150,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
         String currentGoogleSheetsURL = googleSheetsUrlPreference.getText();
         if (currentGoogleSheetsURL != null && currentGoogleSheetsURL.length() > 0) {
             googleSheetsUrlPreference.setSummary(currentGoogleSheetsURL + "\n\n"
-                    + getString(R.string.google_sheets_url_hint));
+                    + getString(org.odk.collect.strings.R.string.google_sheets_url_hint));
         }
         initAccountPreferences();
     }
@@ -194,7 +194,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                     if (Validator.isUrlValid(url)) {
                         preference.setSummary(newValue.toString());
                     } else {
-                        ToastUtils.showShortToast(requireContext(), R.string.url_error);
+                        ToastUtils.showShortToast(requireContext(), org.odk.collect.strings.R.string.url_error);
                         return false;
                     }
                     break;
@@ -204,7 +204,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
 
                     // do not allow leading and trailing whitespace
                     if (!username.equals(username.trim())) {
-                        ToastUtils.showShortToast(requireContext(), R.string.username_error_whitespace);
+                        ToastUtils.showShortToast(requireContext(), org.odk.collect.strings.R.string.username_error_whitespace);
                         return false;
                     }
 
@@ -216,7 +216,7 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
 
                     // do not allow leading and trailing whitespace
                     if (!pw.equals(pw.trim())) {
-                        ToastUtils.showShortToast(requireContext(), R.string.password_error_whitespace);
+                        ToastUtils.showShortToast(requireContext(), org.odk.collect.strings.R.string.password_error_whitespace);
                         return false;
                     }
 
@@ -227,11 +227,11 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                     url = newValue.toString();
 
                     if (Validator.isUrlValid(url)) {
-                        preference.setSummary(url + "\n\n" + getString(R.string.google_sheets_url_hint));
+                        preference.setSummary(url + "\n\n" + getString(org.odk.collect.strings.R.string.google_sheets_url_hint));
                     } else if (url.length() == 0) {
-                        preference.setSummary(getString(R.string.google_sheets_url_hint));
+                        preference.setSummary(getString(org.odk.collect.strings.R.string.google_sheets_url_hint));
                     } else {
-                        ToastUtils.showShortToast(requireContext(), R.string.url_error);
+                        ToastUtils.showShortToast(requireContext(), org.odk.collect.strings.R.string.url_error);
                         return false;
                     }
                     break;
@@ -268,9 +268,9 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
         if (TextUtils.isEmpty(account) && protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
 
             AlertDialog alertDialog = new MaterialAlertDialogBuilder(getActivity())
-                    .setTitle(R.string.missing_google_account_dialog_title)
-                    .setMessage(R.string.missing_google_account_dialog_desc)
-                    .setPositiveButton(getString(R.string.ok), (dialog, which) -> dialog.dismiss())
+                    .setTitle(org.odk.collect.strings.R.string.missing_google_account_dialog_title)
+                    .setMessage(org.odk.collect.strings.R.string.missing_google_account_dialog_desc)
+                    .setPositiveButton(getString(org.odk.collect.strings.R.string.ok), (dialog, which) -> dialog.dismiss())
                     .create();
 
             showDialog(alertDialog, getActivity());

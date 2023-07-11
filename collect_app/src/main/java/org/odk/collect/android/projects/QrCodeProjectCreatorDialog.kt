@@ -100,13 +100,13 @@ class QrCodeProjectCreatorDialog :
                                     } catch (e: QRCodeDecoder.QRCodeInvalidException) {
                                         showShortToast(
                                             requireContext(),
-                                            R.string.invalid_qrcode
+                                            org.odk.collect.strings.R.string.invalid_qrcode
                                         )
                                         ""
                                     } catch (e: QRCodeDecoder.QRCodeNotFoundException) {
                                         showShortToast(
                                             requireContext(),
-                                            R.string.qr_code_not_found
+                                            org.odk.collect.strings.R.string.qr_code_not_found
                                         )
                                         ""
                                     }
@@ -175,18 +175,21 @@ class QrCodeProjectCreatorDialog :
                 R.id.menu_item_scan_sd_card -> {
                     val photoPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
                     photoPickerIntent.type = "image/*"
-                    intentLauncher.launchForResult(imageQrCodeImportResultLauncher, photoPickerIntent) {
+                    intentLauncher.launchForResult(
+                        imageQrCodeImportResultLauncher,
+                        photoPickerIntent
+                    ) {
                         showShortToast(
                             requireContext(),
                             getString(
-                                R.string.activity_not_found,
-                                getString(R.string.choose_image)
+                                org.odk.collect.strings.R.string.activity_not_found,
+                                getString(org.odk.collect.strings.R.string.choose_image)
                             )
                         )
                         Timber.w(
                             getString(
-                                R.string.activity_not_found,
-                                getString(R.string.choose_image)
+                                org.odk.collect.strings.R.string.activity_not_found,
+                                getString(org.odk.collect.strings.R.string.choose_image)
                             )
                         )
                     }
@@ -249,7 +252,10 @@ class QrCodeProjectCreatorDialog :
             val settingsJson = try {
                 CompressionUtils.decompress(barcodeResult.text)
             } catch (e: Exception) {
-                showShortToast(requireContext(), getString(R.string.invalid_qrcode))
+                showShortToast(
+                    requireContext(),
+                    getString(org.odk.collect.strings.R.string.invalid_qrcode)
+                )
                 ""
             }
             createProjectOrError(settingsJson)
@@ -283,13 +289,25 @@ class QrCodeProjectCreatorDialog :
                 ToastUtils.showLongToast(
                     requireContext(),
                     getString(
-                        R.string.switched_project,
+                        org.odk.collect.strings.R.string.switched_project,
                         currentProjectProvider.getCurrentProject().name
                     )
                 )
             }
-            SettingsImportingResult.INVALID_SETTINGS -> ToastUtils.showLongToast(requireContext(), getString(R.string.invalid_qrcode))
-            SettingsImportingResult.GD_PROJECT -> ToastUtils.showLongToast(requireContext(), getString(R.string.settings_with_gd_protocol))
+
+            SettingsImportingResult.INVALID_SETTINGS -> ToastUtils.showLongToast(
+                requireContext(),
+                getString(
+                    org.odk.collect.strings.R.string.invalid_qrcode
+                )
+            )
+
+            SettingsImportingResult.GD_PROJECT -> ToastUtils.showLongToast(
+                requireContext(),
+                getString(
+                    org.odk.collect.strings.R.string.settings_with_gd_protocol
+                )
+            )
         }
     }
 
@@ -299,7 +317,7 @@ class QrCodeProjectCreatorDialog :
         ToastUtils.showLongToast(
             requireContext(),
             getString(
-                R.string.switched_project,
+                org.odk.collect.strings.R.string.switched_project,
                 currentProjectProvider.getCurrentProject().name
             )
         )

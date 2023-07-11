@@ -56,7 +56,7 @@ class FirstLaunchActivity : LocalizedActivity() {
 
             appName.text = String.format(
                 "%s %s",
-                getString(R.string.collect_app_name),
+                getString(org.odk.collect.strings.R.string.collect_app_name),
                 versionInformation.versionToDisplay
             )
 

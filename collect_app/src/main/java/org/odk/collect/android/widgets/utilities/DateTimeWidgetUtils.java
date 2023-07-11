@@ -176,7 +176,7 @@ public class DateTimeWidgetUtils {
                 }
         }
 
-        return String.format(context.getString(R.string.custom_date), customDateText, gregorianDateText);
+        return String.format(context.getString(org.odk.collect.strings.R.string.custom_date), customDateText, gregorianDateText);
     }
 
     public void showTimePickerDialog(Context context, LocalDateTime dateTime) {

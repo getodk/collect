@@ -41,7 +41,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     @Override
     public EditSavedFormPage assertOnPage() {
-        assertText(R.string.review_data);
+        assertText(org.odk.collect.strings.R.string.review_data);
         return this;
     }
 
@@ -90,7 +90,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     }
 
     public EditSavedFormPage searchInBar(String query) {
-        onView(withId(R.id.search_src_text)).perform(replaceText(query));
+        onView(withId(androidx.appcompat.R.id.search_src_text)).perform(replaceText(query));
         return this;
     }
 }

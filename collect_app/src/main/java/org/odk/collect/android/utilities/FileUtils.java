@@ -36,7 +36,6 @@ import org.javarosa.core.model.instance.TreeElement;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.async.OngoingWorkListener;
 import org.odk.collect.shared.strings.StringUtils;
@@ -353,7 +352,7 @@ public final class FileUtils {
             boolean deleted = mediaDir.delete();
             if (!deleted) {
                 throw new RuntimeException(
-                        getLocalizedString(Collect.getInstance(), R.string.fs_delete_media_path_if_file_error,
+                        getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.fs_delete_media_path_if_file_error,
                                 mediaDir.getAbsolutePath()));
             }
         }
@@ -362,7 +361,7 @@ public final class FileUtils {
         boolean createdOrExisted = createFolder(mediaDir.getAbsolutePath());
         if (!createdOrExisted) {
             throw new RuntimeException(
-                    getLocalizedString(Collect.getInstance(), R.string.fs_create_media_folder_error,
+                    getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.fs_create_media_folder_error,
                             mediaDir.getAbsolutePath()));
         }
     }
@@ -559,7 +558,7 @@ public final class FileUtils {
             Timber.d("Copied %s over %s", tempFile.getAbsolutePath(), destinationFile.getAbsolutePath());
             FileUtils.deleteAndReport(tempFile);
         } else {
-            String msg = Collect.getInstance().getString(R.string.fs_file_copy_error,
+            String msg = Collect.getInstance().getString(org.odk.collect.strings.R.string.fs_file_copy_error,
                     tempFile.getAbsolutePath(), destinationFile.getAbsolutePath(), errorMessage);
             throw new RuntimeException(msg);
         }

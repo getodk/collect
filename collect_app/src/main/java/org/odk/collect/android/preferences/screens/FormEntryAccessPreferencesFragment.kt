@@ -23,10 +23,10 @@ class FormEntryAccessPreferencesFragment : BaseAdminPreferencesFragment() {
                     )
                 } else {
                     SimpleDialog.newInstance(
-                        requireActivity().getString(R.string.moving_backwards_enabled_title),
+                        requireActivity().getString(org.odk.collect.strings.R.string.moving_backwards_enabled_title),
                         0,
-                        requireActivity().getString(R.string.moving_backwards_enabled_message),
-                        requireActivity().getString(R.string.ok),
+                        requireActivity().getString(org.odk.collect.strings.R.string.moving_backwards_enabled_message),
+                        requireActivity().getString(org.odk.collect.strings.R.string.ok),
                         false
                     ).show(
                         requireActivity().supportFragmentManager,

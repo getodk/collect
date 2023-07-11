@@ -9,7 +9,7 @@ plugins {
 apply from: '../config/quality.gradle'
 
 android {
-    compileSdkVersion Versions.android_compile_sdk
+    compileSdk Versions.android_compile_sdk
 
     defaultConfig {
         minSdkVersion Versions.android_min_sdk
@@ -27,8 +27,8 @@ android {
 
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     testOptions {
@@ -47,6 +47,7 @@ dependencies {
     implementation Dependencies.androidx_fragment_ktx
     implementation Dependencies.kotlin_stdlib
     implementation project(':androidshared')
+    implementation project(':strings')
 
     debugImplementation project(':fragmentstest')
 

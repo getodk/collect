@@ -38,7 +38,6 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
-import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.externaldata.ExternalAnswerResolver;
 import org.odk.collect.android.externaldata.ExternalDataHandler;
@@ -145,7 +144,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             formDef = createFormDefFromCacheOrXml(formPath, formXml);
         } catch (StackOverflowError e) {
             Timber.e(e);
-            errorMsg = getLocalizedString(Collect.getInstance(), R.string.too_complex_form);
+            errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.too_complex_form);
         } catch (Exception | Error e) {
             Timber.w(e);
             errorMsg = "An unknown error has occurred. Please ask your project leadership to email support@getodk.org with information about this form.";
@@ -227,7 +226,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) throws XFormParser.ParseException {
         publishProgress(
-                getLocalizedString(Collect.getInstance(), R.string.survey_loading_reading_form_message));
+                getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_form_message));
 
         final FormDef formDefFromCache = FormDefCache.readCache(formXml);
         if (formDefFromCache != null) {
@@ -319,7 +318,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
                 // This order is important. Import data, then initialize.
                 try {
                     Timber.i("Importing data");
-                    publishProgress(getLocalizedString(Collect.getInstance(), R.string.survey_loading_reading_data_message));
+                    publishProgress(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_data_message));
                     importData(instanceXml, fec);
                     formDef.initialize(false, instanceInit);
                 } catch (IOException | RuntimeException e) {
@@ -387,7 +386,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             if (!externalDataMap.isEmpty()) {
 
                 publishProgress(Collect.getInstance()
-                        .getString(R.string.survey_loading_reading_csv_message));
+                        .getString(org.odk.collect.strings.R.string.survey_loading_reading_csv_message));
 
                 ExternalDataReader externalDataReader = new ExternalDataReaderImpl(this);
                 externalDataReader.doImport(externalDataMap);

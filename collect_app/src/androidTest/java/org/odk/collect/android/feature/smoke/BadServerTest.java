@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.support.TestDependencies;
 import org.odk.collect.android.support.TranslatedStringBuilder;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -40,8 +39,8 @@ public class BadServerTest {
                 .assertMessage("1 of 1 downloads failed!")
                 .showDetails()
                 .assertError(new TranslatedStringBuilder()
-                        .addString(R.string.form_with_no_hash_error)
-                        .addString(R.string.report_to_project_lead)
+                        .addString(org.odk.collect.strings.R.string.form_with_no_hash_error)
+                        .addString(org.odk.collect.strings.R.string.report_to_project_lead)
                         .build()
                 )
                 .navigateBack();
@@ -61,7 +60,7 @@ public class BadServerTest {
         rule.withProject(testDependencies.server.getURL())
                 .copyForm("one-question.xml", Arrays.asList("fruits.csv"), false, testDependencies.server.getHostName())
                 .clickGetBlankForm()
-                .assertText(R.string.newer_version_of_a_form_info);
+                .assertText(org.odk.collect.strings.R.string.newer_version_of_a_form_info);
     }
 
     @Test
@@ -78,7 +77,7 @@ public class BadServerTest {
         rule.withProject(testDependencies.server.getURL())
                 .copyForm("one-question.xml", Arrays.asList("fruits.csv"), false, testDependencies.server.getHostName())
                 .clickGetBlankForm()
-                .assertText(R.string.newer_version_of_a_form_info)
+                .assertText(org.odk.collect.strings.R.string.newer_version_of_a_form_info)
                 .clickGetSelected()
                 .clickOKOnDialog(new MainMenuPage())
                 .clickFillBlankForm()

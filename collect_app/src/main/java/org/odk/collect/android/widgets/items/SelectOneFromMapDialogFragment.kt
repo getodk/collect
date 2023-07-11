@@ -160,13 +160,13 @@ internal class SelectChoicesMapData(
                             list + MappableSelectItem.WithAction(
                                 index.toLong(),
                                 points,
-                                if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_small else R.drawable.ic_map_marker_small,
-                                if (markerSymbol == null) R.drawable.ic_map_marker_with_hole_big else R.drawable.ic_map_marker_big,
+                                if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_small else org.odk.collect.icons.R.drawable.ic_map_marker_small,
+                                if (markerSymbol == null) org.odk.collect.icons.R.drawable.ic_map_marker_with_hole_big else org.odk.collect.icons.R.drawable.ic_map_marker_big,
                                 prompt.getSelectChoiceText(selectChoice),
                                 properties,
                                 MappableSelectItem.IconifiedText(
-                                    R.drawable.ic_save,
-                                    resources.getString(R.string.select_item)
+                                    org.odk.collect.geo.R.drawable.ic_save,
+                                    resources.getString(org.odk.collect.strings.R.string.select_item)
                                 ),
                                 selectChoice.index == selectedIndex,
                                 markerColor,
@@ -196,7 +196,7 @@ internal class SelectChoicesMapData(
     }
 
     override fun getItemType(): String {
-        return resources.getString(R.string.choices)
+        return resources.getString(org.odk.collect.strings.R.string.choices)
     }
 
     override fun getItemCount(): NonNullLiveData<Int> {

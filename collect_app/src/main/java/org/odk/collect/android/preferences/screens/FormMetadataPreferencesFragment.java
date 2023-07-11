@@ -57,7 +57,7 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
         emailPreference.setOnPreferenceChangeListener((preference, newValue) -> {
             String newValueString = newValue.toString();
             if (!newValueString.isEmpty() && !Validator.isEmailAddressValid(newValueString)) {
-                ToastUtils.showLongToast(requireContext(), R.string.invalid_email_address);
+                ToastUtils.showLongToast(requireContext(), org.odk.collect.strings.R.string.invalid_email_address);
                 return false;
             }
 
@@ -84,7 +84,7 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
             if (!TextUtils.isEmpty(value)) {
                 return value;
             } else {
-                return getString(R.string.preference_not_available);
+                return getString(org.odk.collect.strings.R.string.preference_not_available);
             }
         }
     }

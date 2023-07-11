@@ -26,7 +26,7 @@ public class ServerAuthDialogFragmentTest {
 
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            R.style.Theme_MaterialComponents
+            com.google.android.material.R.style.Theme_MaterialComponents
     );
 
     @Test

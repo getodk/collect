@@ -24,8 +24,8 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formWithNoHashError_returnsFormWithNoHashErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_with_no_hash_error
-        ) + " " + context.getString(R.string.report_to_project_lead)
+            org.odk.collect.strings.R.string.form_with_no_hash_error
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.FormWithNoHash()),
             `is`(expectedString)
@@ -35,8 +35,8 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formParsingError_returnsFormParsingErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_parsing_error
-        ) + " " + context.getString(R.string.report_to_project_lead)
+            org.odk.collect.strings.R.string.form_parsing_error
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.FormParsingError()),
             `is`(expectedString)
@@ -46,8 +46,8 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formSaveError_returnsFormSaveErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_save_disk_error
-        ) + " " + context.getString(R.string.report_to_project_lead)
+            org.odk.collect.strings.R.string.form_save_disk_error
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.DiskError()),
             `is`(expectedString)
@@ -57,8 +57,8 @@ class FormDownloadExceptionMapperTest {
     @Test
     fun formWithInvalidSubmissionError_returnsFormInvalidSubmissionErrorMessage() {
         val expectedString = context.getString(
-            R.string.form_with_invalid_submission_error
-        ) + " " + context.getString(R.string.report_to_project_lead)
+            org.odk.collect.strings.R.string.form_with_invalid_submission_error
+        ) + " " + context.getString(org.odk.collect.strings.R.string.report_to_project_lead)
         assertThat(
             mapper.getMessage(FormDownloadException.InvalidSubmission()),
             `is`(expectedString)

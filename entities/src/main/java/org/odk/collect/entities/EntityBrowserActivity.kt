@@ -19,7 +19,7 @@ class EntityBrowserActivity : LocalizedActivity() {
         val navController = navHostFragment.navController
 
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(org.odk.collect.androidshared.R.id.toolbar)
         toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 }

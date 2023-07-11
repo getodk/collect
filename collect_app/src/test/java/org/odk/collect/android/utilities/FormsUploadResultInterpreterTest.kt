@@ -49,7 +49,10 @@ class FormsUploadResultInterpreterTest {
     fun `When not all forms uploaded successfully getFailures() should return list of failures`() {
         assertThat(FormsUploadResultInterpreter.getFailures(resultWithOneError, context).size, `is`(1))
         assertThat(FormsUploadResultInterpreter.getFailures(resultWithOneError, context)[0].title, `is`("Instance 2"))
-        assertThat(FormsUploadResultInterpreter.getFailures(resultWithOneError, context)[0].secondaryText, `is`(context.getString(R.string.form_details, "2", "2")))
+        assertThat(
+            FormsUploadResultInterpreter.getFailures(resultWithOneError, context)[0].secondaryText,
+            `is`(context.getString(org.odk.collect.strings.R.string.form_details, "2", "2"))
+        )
         assertThat(FormsUploadResultInterpreter.getFailures(resultWithOneError, context)[0].supportingText, `is`("Something went wrong!"))
     }
 

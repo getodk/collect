@@ -19,7 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Button;
 
-import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
@@ -44,7 +43,7 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
         super(context, prompt, questionMediaManager, waitingForDataRegistry, tmpImageFilePath);
         render();
 
-        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, R.string.draw_image);
+        imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, org.odk.collect.strings.R.string.draw_image);
         setUpLayout();
         updateAnswer();
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
@@ -53,7 +52,7 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        drawButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(R.string.draw_image), getAnswerFontSize(), this);
+        drawButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.draw_image), getAnswerFontSize(), this);
 
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);
@@ -74,7 +73,7 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
     public void clearAnswer() {
         super.clearAnswer();
         // reset buttons
-        drawButton.setText(getContext().getString(R.string.draw_image));
+        drawButton.setText(getContext().getString(org.odk.collect.strings.R.string.draw_image));
     }
 
     @Override

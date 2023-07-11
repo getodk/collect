@@ -104,7 +104,7 @@ class CaptureSelfieActivityTest {
         onView(withId(R.id.preview)).perform(click())
 
         val latestToast = ShadowToast.getTextOfLatestToast()
-        assertThat(latestToast, equalTo(application.getString(R.string.camera_error)))
+        assertThat(latestToast, equalTo(application.getString(org.odk.collect.strings.R.string.camera_error)))
     }
 
     @Test
@@ -117,7 +117,7 @@ class CaptureSelfieActivityTest {
 
         launcher.launch<CaptureSelfieActivity>(intent)
         val latestToast = ShadowToast.getTextOfLatestToast()
-        assertThat(latestToast, equalTo(application.getString(R.string.camera_failed_to_initialize)))
+        assertThat(latestToast, equalTo(application.getString(org.odk.collect.strings.R.string.camera_failed_to_initialize)))
     }
 }
 

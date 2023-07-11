@@ -23,7 +23,7 @@ class MovingBackwardsTest {
             .clickSettings()
             .clickAccessControl()
             .clickFormEntrySettings()
-            .clickOnString(R.string.finalize)
+            .clickOnString(org.odk.collect.strings.R.string.finalize)
 
             // before disabling moving backward
             .assertGoToPromptEnabled()
@@ -39,7 +39,7 @@ class MovingBackwardsTest {
             .assertFinalizeUnchecked()
 
             .clickMovingBackwards()
-            .clickOnString(R.string.yes)
+            .clickOnString(org.odk.collect.strings.R.string.yes)
 
             // after disabling moving backward - the state of the 4 related options is reversed
             .assertGoToPromptDisabled()
@@ -63,7 +63,7 @@ class MovingBackwardsTest {
             .clickAccessControl()
             .clickFormEntrySettings()
             .clickMovingBackwards()
-            .clickOnString(R.string.no)
+            .clickOnString(org.odk.collect.strings.R.string.no)
             .assertGoToPromptEnabled()
             .assertSaveAsDraftInFormEntryEnabled()
             .assertSaveAsDraftInFormEndEnabled()

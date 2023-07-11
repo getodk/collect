@@ -65,7 +65,7 @@ class RangePickerDecimalWidgetTest {
         assertThat(widget.answer, Matchers.nullValue())
         assertThat(
             widget.binding.widgetAnswerText.text,
-            equalTo(widget.context.getString(R.string.no_value_selected))
+            equalTo(widget.context.getString(org.odk.collect.strings.R.string.no_value_selected))
         )
     }
 

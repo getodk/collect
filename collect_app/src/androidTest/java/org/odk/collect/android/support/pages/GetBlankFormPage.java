@@ -6,18 +6,16 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import org.odk.collect.android.R;
-
 public class GetBlankFormPage extends Page<GetBlankFormPage> {
 
     @Override
     public GetBlankFormPage assertOnPage() {
-        onView(withText(getTranslatedString(R.string.get_forms))).check(matches(isDisplayed()));
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.get_forms))).check(matches(isDisplayed()));
         return this;
     }
 
     public FormsDownloadResultPage clickGetSelected() {
-        onView(withText(getTranslatedString(R.string.download))).perform(click());
+        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.download))).perform(click());
         return new FormsDownloadResultPage().assertOnPage();
     }
 }

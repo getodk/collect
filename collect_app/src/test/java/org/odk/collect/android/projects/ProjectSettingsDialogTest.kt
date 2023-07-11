@@ -61,7 +61,7 @@ class ProjectSettingsDialogTest {
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
-        defaultThemeResId = R.style.Theme_MaterialComponents,
+        defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents,
         defaultFactory = FragmentFactoryBuilder()
             .forClass(ProjectSettingsDialog::class) { ProjectSettingsDialog(viewModelFactory) }
             .build()

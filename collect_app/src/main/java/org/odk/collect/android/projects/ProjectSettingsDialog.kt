@@ -53,7 +53,7 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
         currentProjectViewModel.currentProject.observe(this) { project ->
             binding.currentProject.setupView(project, settingsProvider.getUnprotectedSettings())
             binding.currentProject.contentDescription =
-                getString(R.string.using_project, project.name)
+                getString(org.odk.collect.strings.R.string.using_project, project.name)
             inflateListOfInActiveProjects(requireContext(), project)
         }
 
@@ -101,7 +101,7 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
             }
 
             projectView.setupView(project, settingsProvider.getUnprotectedSettings(project.uuid))
-            projectView.contentDescription = getString(R.string.switch_to_project, project.name)
+            projectView.contentDescription = getString(org.odk.collect.strings.R.string.switch_to_project, project.name)
             binding.projectList.addView(projectView)
         }
     }
@@ -112,7 +112,7 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
         ActivityUtils.startActivityAndCloseAllOthers(requireActivity(), MainMenuActivity::class.java)
         ToastUtils.showLongToast(
             requireContext(),
-            getString(R.string.switched_project, project.name)
+            getString(org.odk.collect.strings.R.string.switched_project, project.name)
         )
         dismiss()
     }

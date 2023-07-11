@@ -33,7 +33,7 @@ class FormsDownloadResultDialogTest {
 
     @get:Rule
     val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = R.style.Theme_MaterialComponents)
+        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
 
     @Test
     fun `The dialog should be dismissed after clicking out of it's area or on device back button`() {
@@ -63,7 +63,7 @@ class FormsDownloadResultDialogTest {
         scenario.onFragment {
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
-                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok))
+                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(org.odk.collect.strings.R.string.ok))
             )
         }
     }
@@ -132,7 +132,7 @@ class FormsDownloadResultDialogTest {
         )
 
         launcherRule.launch(FormsDownloadResultDialog::class.java, args)
-        onView(withText(R.string.all_downloads_succeeded)).inRoot(isDialog())
+        onView(withText(org.odk.collect.strings.R.string.all_downloads_succeeded)).inRoot(isDialog())
             .check(matches(isDisplayed()))
     }
 
@@ -166,7 +166,7 @@ class FormsDownloadResultDialogTest {
         onView(
             withText(
                 ApplicationProvider.getApplicationContext<Collect>()
-                    .getString(R.string.some_downloads_failed, "1", "1")
+                    .getString(org.odk.collect.strings.R.string.some_downloads_failed, "1", "1")
             )
         ).inRoot(isDialog()).check(matches(isDisplayed()))
     }
@@ -190,7 +190,7 @@ class FormsDownloadResultDialogTest {
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text,
                 `is`(
                     ApplicationProvider.getApplicationContext<Collect>()
-                        .getString(R.string.show_details)
+                        .getString(org.odk.collect.strings.R.string.show_details)
                 )
             )
         }
@@ -229,13 +229,13 @@ class FormsDownloadResultDialogTest {
             assertThat(Shadows.shadowOf(it.dialog).title, `is`(""))
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
-                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok))
+                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(org.odk.collect.strings.R.string.ok))
             )
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text,
                 `is`(
                     ApplicationProvider.getApplicationContext<Collect>()
-                        .getString(R.string.show_details)
+                        .getString(org.odk.collect.strings.R.string.show_details)
                 )
             )
         }
@@ -246,13 +246,13 @@ class FormsDownloadResultDialogTest {
             assertThat(Shadows.shadowOf(it.dialog).title, `is`(""))
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).text,
-                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(R.string.ok))
+                `is`(ApplicationProvider.getApplicationContext<Collect>().getString(org.odk.collect.strings.R.string.ok))
             )
             assertThat(
                 (it.dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).text,
                 `is`(
                     ApplicationProvider.getApplicationContext<Collect>()
-                        .getString(R.string.show_details)
+                        .getString(org.odk.collect.strings.R.string.show_details)
                 )
             )
         }
