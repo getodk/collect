@@ -62,7 +62,7 @@ class DynamicPreloadExtra(usesDynamicPreload: Boolean) : Externalizable {
         private set
 
     override fun readExternal(`in`: DataInputStream?, pf: PrototypeFactory?) {
-        usesDynamicPreload = ExtUtil.read(`in`, Boolean::class.java) as Boolean
+        usesDynamicPreload = ExtUtil.read(`in`, Boolean::class.javaObjectType) as Boolean
     }
 
     override fun writeExternal(out: DataOutputStream?) {
