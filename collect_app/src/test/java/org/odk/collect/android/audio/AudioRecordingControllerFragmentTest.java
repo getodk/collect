@@ -65,7 +65,7 @@ public class AudioRecordingControllerFragmentTest {
     };
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(com.google.android.material.R.style.Theme_MaterialComponents, new FragmentFactoryBuilder()
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(new FragmentFactoryBuilder()
             .forClass(AudioRecordingControllerFragment.class, () -> new AudioRecordingControllerFragment(viewModelFactory))
             .build());
 

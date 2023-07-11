@@ -21,7 +21,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.CurrentProjectViewModel
@@ -61,7 +60,6 @@ class ProjectSettingsDialogTest {
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
-        defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents,
         defaultFactory = FragmentFactoryBuilder()
             .forClass(ProjectSettingsDialog::class) { ProjectSettingsDialog(viewModelFactory) }
             .build()

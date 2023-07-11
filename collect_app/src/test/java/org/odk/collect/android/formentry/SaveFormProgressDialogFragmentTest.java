@@ -36,7 +36,6 @@ public class SaveFormProgressDialogFragmentTest {
 
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            com.google.android.material.R.style.Theme_MaterialComponents,
             new FragmentFactoryBuilder()
                     .forClass(SaveFormProgressDialogFragment.class, () -> new SaveFormProgressDialogFragment(viewModelFactory))
                     .build()

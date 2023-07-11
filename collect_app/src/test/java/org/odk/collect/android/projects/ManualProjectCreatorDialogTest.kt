@@ -37,8 +37,7 @@ import org.robolectric.shadows.ShadowToast
 class ManualProjectCreatorDialogTest {
 
     @get:Rule
-    val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
     fun `Password should be protected`() {

@@ -70,7 +70,6 @@ class SelectionMapFragmentTest {
 
     @get:Rule
     val launcherRule = FragmentScenarioLauncherRule(
-        com.google.android.material.R.style.Theme_MaterialComponents,
         object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
                 return SelectionMapFragment(data, onBackPressedDispatcher = { onBackPressedDispatcher })

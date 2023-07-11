@@ -21,9 +21,7 @@ import org.odk.collect.testshared.RobolectricHelpers;
 public class RefreshFormListDialogFragmentTest {
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            com.google.android.material.R.style.Theme_MaterialComponents
-    );
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Test
     public void dialogIsNotCancellable() {

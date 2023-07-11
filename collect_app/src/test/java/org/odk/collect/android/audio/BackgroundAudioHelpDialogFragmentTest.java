@@ -19,9 +19,7 @@ import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule;
 public class BackgroundAudioHelpDialogFragmentTest {
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            com.google.android.material.R.style.Theme_MaterialComponents
-    );
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Test
     public void hasOkButton() {
