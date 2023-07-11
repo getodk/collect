@@ -8,35 +8,17 @@ import org.javarosa.core.util.externalizable.Externalizable
 import org.javarosa.core.util.externalizable.PrototypeFactory
 import org.javarosa.xform.parse.IXFormParserFactory
 import org.javarosa.xform.parse.XFormParser
-import org.javarosa.xform.parse.XFormParserFactory
-import org.kxml2.kdom.Document
 import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import java.io.DataInputStream
 import java.io.DataOutputStream
-import java.io.Reader
 
-class DynamicPreloadXFormParserFactory(private val wrapped: IXFormParserFactory) :
-    XFormParserFactory() {
-    override fun getXFormParser(reader: Reader?): XFormParser {
-        return configureDetector(wrapped.getXFormParser(reader))
-    }
+class DynamicPreloadXFormParserFactory(base: IXFormParserFactory) :
+    IXFormParserFactory.Wrapper(base) {
 
-    override fun getXFormParser(doc: Document?): XFormParser {
-        return configureDetector(wrapped.getXFormParser(doc))
-    }
-
-    override fun getXFormParser(form: Reader?, instance: Reader?): XFormParser {
-        return configureDetector(wrapped.getXFormParser(form, instance))
-    }
-
-    override fun getXFormParser(form: Document?, instance: Document?): XFormParser {
-        return configureDetector(wrapped.getXFormParser(form, instance))
-    }
-
-    private fun configureDetector(xFormParser: XFormParser): XFormParser {
-        xFormParser.addProcessor(DynamicPreloadParseProcessor())
-
-        return xFormParser
+    override fun apply(xFormParser: XFormParser): XFormParser {
+        return xFormParser.also {
+            it.addProcessor(DynamicPreloadParseProcessor())
+        }
     }
 }
 
