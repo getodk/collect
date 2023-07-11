@@ -32,7 +32,7 @@ class PermissionsDialogCreatorTest {
 
     @Before
     fun setup() {
-        activity = createThemedActivity(FragmentActivity::class.java, com.google.android.material.R.style.Theme_MaterialComponents)
+        activity = createThemedActivity(FragmentActivity::class.java)
     }
 
     @Test

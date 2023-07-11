@@ -52,7 +52,7 @@ public class FormEntryMenuDelegateTest {
 
     @Before
     public void setup() {
-        activity = RobolectricHelpers.createThemedActivity(AppCompatActivity.class, com.google.android.material.R.style.Theme_MaterialComponents);
+        activity = RobolectricHelpers.createThemedActivity(AppCompatActivity.class);
         FormController formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
 

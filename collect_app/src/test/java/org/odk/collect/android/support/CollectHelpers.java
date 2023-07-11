@@ -68,7 +68,7 @@ public final class CollectHelpers {
     }
 
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
-        return RobolectricHelpers.createThemedActivity(clazz, com.google.android.material.R.style.Theme_MaterialComponents);
+        return RobolectricHelpers.createThemedActivity(clazz);
     }
 
     public static FragmentActivity createThemedActivity() {
