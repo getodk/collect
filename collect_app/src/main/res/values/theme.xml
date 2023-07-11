@@ -4,6 +4,42 @@
 
     <style name="Theme.Collect" parent="Theme.Material3.DayNight.NoActionBar">
 
+        <!-- Original AppCompat attributes. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorPrimary</item>
+        <item name="android:colorBackground">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+
+        <!-- MaterialComponents attributes (needed if parent="Theme.AppCompat"). -->
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondaryVariant">@color/colorPrimary</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnPrimary</item>
+        <item name="colorOnBackground">@color/colorSurface</item>
+        <item name="colorOnError">@color/colorOnError</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
+        <!-- Material3 attributes (needed if parent="Theme.MaterialComponents"). -->
+        <item name="colorPrimaryInverse">@color/colorPrimary</item>
+        <item name="colorPrimaryContainer">@color/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">@color/colorOnPrimary</item>
+        <item name="colorSecondaryContainer">@color/colorPrimary</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnPrimary</item>
+        <item name="colorTertiary">@color/colorPrimary</item>
+        <item name="colorOnTertiary">@color/colorOnPrimary</item>
+        <item name="colorTertiaryContainer">@color/colorPrimary</item>
+        <item name="colorOnTertiaryContainer">@color/colorOnPrimary</item>
+        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurface</item>
+        <item name="colorSurfaceInverse">@color/colorSurface</item>
+        <item name="colorOnSurfaceInverse">@color/colorSurface</item>
+        <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
+        <item name="colorErrorContainer">@color/colorError</item>
+        <item name="colorOnErrorContainer">@color/colorOnError</item>
+
+        <!-- Material3 polyfill attributes (needed in Material Components yet). -->
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
         <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
 
@@ -78,7 +114,7 @@
     </style>
 
     <!-- Need to duplicate these values as they reset due to the parent. Only needed for AlertDialog.Builder. -->
-    <style name="Theme.Collect.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="Theme.Collect.Dialog.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="dialogCornerRadius">8dp</item>
     </style>
 
