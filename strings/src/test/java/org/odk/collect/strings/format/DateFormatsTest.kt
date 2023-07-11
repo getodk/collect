@@ -16,7 +16,7 @@ class DateFormatsTest {
     private val application = ApplicationProvider.getApplicationContext<Application>()
 
     @Test
-    fun checkAllDateFormatsParse() {
+    fun `all date formats parse in all available locales`() {
         formats.forEach { format ->
             application.resources.assets.locales.forEach { localeCode ->
                 val locale = Locale.forLanguageTag(localeCode)
