@@ -4,22 +4,10 @@
 
     <style name="Theme.Collect" parent="Theme.Material3.DayNight.NoActionBar">
 
-        <!--Material theme attributes from https://material.io/develop/android/theming -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorSecondary">?colorPrimary</item>
-        <item name="colorSecondaryVariant">?colorPrimaryVariant</item>
-        <item name="colorError">@color/colorError</item>
-        <item name="colorSurface">@color/colorSurface</item>
-
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorOnSecondary">?colorOnPrimary</item>
-        <item name="colorOnError">@color/colorOnError</item>
-        <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
         <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
-        <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
 
+        <!--Material theme attributes from https://material.io/develop/android/theming -->
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
         </item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2
@@ -53,11 +41,6 @@
 
         <!-- Material3 attributes (needed for Material3 styles/components because theme is
         Theme.MaterialComponents). These can be added on-demand for components that need them. -->
-        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
-        <item name="colorPrimaryContainer">?colorPrimary</item>
-
-        <item name="colorOnPrimaryContainer">?colorOnPrimary</item>
-
         <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
         <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>
         <item name="textAppearanceLabelLarge">@style/TextAppearance.Material3.LabelLarge</item>
