@@ -22,7 +22,11 @@ class DateFormatsTest {
                 val locale = Locale.forLanguageTag(localeCode)
                 val resources = application.getLocalizedResources(locale)
                 val string = resources.getString(format)
-                SimpleDateFormat(string, locale)
+                try {
+                    SimpleDateFormat(string, locale)
+                } catch (e: Throwable) {
+                    throw IllegalArgumentException("Illegal format translation: $string", e)
+                }
             }
         }
     }
