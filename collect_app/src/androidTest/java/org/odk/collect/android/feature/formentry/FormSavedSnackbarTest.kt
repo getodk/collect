@@ -44,9 +44,8 @@ class FormSavedSnackbarTest {
             .assertText(R.string.form_saved)
             .clickOnString(R.string.view_form)
             .assertText("25")
-            .assertTextDoesNotExist(R.string.jump_to_beginning)
-            .assertTextDoesNotExist(R.string.jump_to_end)
-            .assertText(R.string.exit)
+            .assertText(R.string.jump_to_beginning)
+            .assertText(R.string.jump_to_end)
     }
 
     @Test

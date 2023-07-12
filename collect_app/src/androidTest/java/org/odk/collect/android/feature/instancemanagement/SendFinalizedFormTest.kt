@@ -36,7 +36,7 @@ class SendFinalizedFormTest {
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
+            .clickOnFormToEdit("One Question")
             .assertText("52")
     }
 

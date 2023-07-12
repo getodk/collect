@@ -11,7 +11,7 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
-import org.odk.collect.android.instancemanagement.canBeEdited
+import org.odk.collect.android.instancemanagement.canBeEditedWithGracePeriod
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -206,7 +206,7 @@ class FormUriActivity : ComponentActivity() {
 
         val formEditingEnabled = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.canBeEdited(settingsProvider)
+            instance!!.canBeEditedWithGracePeriod(settingsProvider)
         } else {
             true
         }
