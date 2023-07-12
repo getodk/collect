@@ -33,7 +33,6 @@ import org.odk.collect.async.Scheduler;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
@@ -129,14 +128,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         try {
             formController.newRepeat();
         } catch (RuntimeException e) {
-            error.setValue(new NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+            error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
         }
 
         if (!formController.indexIsInFieldList()) {
             try {
                 formController.stepToNextScreenEvent();
             } catch (JavaRosaException e) {
-                error.setValue(new NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
             }
         }
 
@@ -155,7 +154,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             try {
                 this.formController.stepToNextScreenEvent();
             } catch (JavaRosaException exception) {
-                error.setValue(new NonFatal(exception.getCause().getMessage()));
+                error.setValue(new FormError.NonFatal(exception.getCause().getMessage()));
             }
         }
 
@@ -192,7 +191,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 try {
                     formController.stepToNextScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.setValue(new NonFatal(e.getCause().getMessage()));
+                    error.setValue(new FormError.NonFatal(e.getCause().getMessage()));
                 }
 
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
@@ -213,7 +212,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 try {
                     formController.stepToPreviousScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.setValue(new NonFatal(e.getCause().getMessage()));
+                    error.setValue(new FormError.NonFatal(e.getCause().getMessage()));
                     return;
                 }
 
@@ -242,7 +241,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 return false;
             }
         } catch (JavaRosaException e) {
-            error.postValue(new NonFatal(e.getMessage()));
+            error.postValue(new FormError.NonFatal(e.getMessage()));
             return false;
         }
 
@@ -299,7 +298,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     try {
                         result = formController.validateAnswers(true);
                     } catch (JavaRosaException e) {
-                        error.setValue(new NonFatal(e.getMessage()));
+                        error.setValue(new FormError.NonFatal(e.getMessage()));
                     }
 
                     return result;
@@ -312,42 +311,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     validationResult.setValue(result);
                 }
         );
-    }
-
-    public abstract static class FormError {
-
-    }
-
-    public static class NonFatal extends FormError {
-
-        private final String message;
-
-        public NonFatal(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            NonFatal nonFatal = (NonFatal) o;
-            return Objects.equals(message, nonFatal.message);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(message);
-        }
     }
 
     public interface AnswerListener {

@@ -103,6 +103,7 @@ import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEndViewModel;
 import org.odk.collect.android.formentry.FormEntryMenuDelegate;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.FormError;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
@@ -273,7 +274,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private SwipeHandler.View currentView;
 
     private AlertDialog alertDialog;
-    private String errorMessage;
+    private FormError formError;
     private boolean shownAlertDialogIsGroupRepeat;
 
     private FormLoaderTask formLoaderTask;
@@ -459,7 +460,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
         swipeHandler = new SwipeHandler(this, settingsProvider.getUnprotectedSettings());
 
-        errorMessage = null;
+        formError = null;
 
         questionHolder = findViewById(R.id.questionholder);
 
@@ -540,8 +541,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         formEntryViewModel.setAnswerListener(this::onAnswer);
 
         formEntryViewModel.getError().observe(this, error -> {
-            if (error instanceof FormEntryViewModel.NonFatal) {
-                createErrorDialog(((FormEntryViewModel.NonFatal) error).getMessage(), false);
+            if (error instanceof FormError.NonFatal) {
+                createErrorDialog(error);
                 formEntryViewModel.errorDisplayed();
             }
         });
@@ -555,7 +556,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                         getCurrentViewIfODKView().highlightWidget(failedValidationResult.getIndex());
                     }
                 } catch (RepeatsInFieldListException e) {
-                    createErrorDialog(e.getMessage(), false);
+                    createErrorDialog(new FormError.NonFatal(e.getMessage()));
                 }
 
                 swipeHandler.setBeenSwiped(false);
@@ -636,7 +637,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 newForm = savedInstanceState.getBoolean(NEWFORM, true);
             }
             if (savedInstanceState.containsKey(KEY_ERROR)) {
-                errorMessage = savedInstanceState.getString(KEY_ERROR);
+                formError = savedInstanceState.getParcelable(KEY_ERROR);
             }
             if (savedInstanceState.containsKey(KEY_AUTO_SAVED)) {
                 autoSaved = savedInstanceState.getBoolean(KEY_AUTO_SAVED);
@@ -653,8 +654,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         // If a parse error message is showing then nothing else is loaded
         // Dialogs mid form just disappear on rotation.
-        if (errorMessage != null) {
-            createErrorDialog(errorMessage, true);
+        if (formError instanceof FormError.Fatal) {
+            createErrorDialog(formError);
             return;
         }
 
@@ -836,7 +837,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             nonblockingCreateSavePointData();
         }
         outState.putBoolean(NEWFORM, false);
-        outState.putString(KEY_ERROR, errorMessage);
+        outState.putParcelable(KEY_ERROR, formError);
         outState.putBoolean(KEY_AUTO_SAVED, autoSaved);
         outState.putBoolean(KEY_LOCATION_PERMISSIONS_GRANTED, locationPermissionsPreviouslyGranted);
 
@@ -904,7 +905,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     }
                 } catch (JavaRosaException e) {
                     Timber.e(e);
-                    createErrorDialog(e.getCause().getMessage(), false);
+                    createErrorDialog(new FormError.NonFatal(e.getCause().getMessage()));
                 }
                 break;
             case RequestCodes.DRAW_IMAGE:
@@ -1179,11 +1180,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     // this is badness to avoid a crash.
                     try {
                         event = formController.stepToNextScreenEvent();
-                        createErrorDialog(e.getMessage(), false);
+                        createErrorDialog(new FormError.NonFatal(e.getMessage()));
                     } catch (JavaRosaException e1) {
                         Timber.d(e1);
-                        createErrorDialog(e.getMessage() + "\n\n" + e1.getCause().getMessage(),
-                                false);
+                        createErrorDialog(new FormError.NonFatal(e.getMessage() + "\n\n" + e1.getCause().getMessage()));
                     }
                     return createView(event, advancingPage);
                 }
@@ -1203,10 +1203,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 // this is badness to avoid a crash.
                 try {
                     event = formController.stepToNextScreenEvent();
-                    createErrorDialog(getString(org.odk.collect.strings.R.string.survey_internal_error), true);
+                    createErrorDialog(new FormError.Fatal(getString(org.odk.collect.strings.R.string.survey_internal_error)));
                 } catch (JavaRosaException e) {
                     Timber.d(e);
-                    createErrorDialog(e.getCause().getMessage(), true);
+                    createErrorDialog(new FormError.Fatal(e.getCause().getMessage()));
                 }
                 return createView(event, advancingPage);
         }
@@ -1254,9 +1254,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         } catch (JavaRosaException e) {
             Timber.d(e);
             if (e.getMessage().equals(e.getCause().getMessage())) {
-                createErrorDialog(e.getMessage(), false);
+                createErrorDialog(new FormError.NonFatal(e.getMessage()));
             } else {
-                createErrorDialog(e.getMessage() + "\n\n" + e.getCause().getMessage(), false);
+                createErrorDialog(new FormError.NonFatal(e.getMessage() + "\n\n" + e.getCause().getMessage()));
             }
         }
 
@@ -1525,7 +1525,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     }
                 }
             } catch (RepeatsInFieldListException e) {
-                createErrorDialog(e.getMessage(), false);
+                createErrorDialog(new FormError.NonFatal(e.getMessage()));
             }
         }
     }
@@ -1628,24 +1628,19 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     /**
      * Creates and displays dialog with the given errorMsg.
      */
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        if (alertDialog != null && alertDialog.isShowing()) {
-            errorMsg = errorMessage + "\n\n" + errorMsg;
-            errorMessage = errorMsg;
-        } else {
-            alertDialog = new MaterialAlertDialogBuilder(this).create();
-            errorMessage = errorMsg;
-        }
+    private void createErrorDialog(FormError error) {
+        formError = error;
 
+        alertDialog = new MaterialAlertDialogBuilder(this).create();
         alertDialog.setTitle(getString(org.odk.collect.strings.R.string.error_occured));
-        alertDialog.setMessage(errorMsg);
+        alertDialog.setMessage(formError.getMessage());
         DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
                 switch (i) {
                     case BUTTON_POSITIVE:
-                        if (shouldExit) {
-                            errorMessage = null;
+                        if (formError instanceof FormError.Fatal) {
+                            formError = null;
                             exit();
                         }
                         break;
@@ -1900,9 +1895,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             updateNavigationButtonVisibility();
         }
 
-        if (errorMessage != null) {
+        if (formError instanceof FormError.Fatal) {
             if (alertDialog != null && !alertDialog.isShowing()) {
-                createErrorDialog(errorMessage, true);
+                createErrorDialog(formError);
             } else {
                 return;
             }
@@ -2220,9 +2215,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         if (errorMsg != null) {
-            createErrorDialog(errorMsg, true);
+            createErrorDialog(new FormError.Fatal(errorMsg));
         } else {
-            createErrorDialog(getString(org.odk.collect.strings.R.string.parse_error), true);
+            createErrorDialog(new FormError.Fatal(getString(org.odk.collect.strings.R.string.parse_error)));
         }
     }
 
@@ -2471,10 +2466,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             }
                         });
                     } catch (RepeatsInFieldListException e) {
-                        createErrorDialog(e.getMessage(), false);
+                        createErrorDialog(new FormError.NonFatal(e.getMessage()));
                     } catch (Exception | Error e) {
                         Timber.e(e);
-                        createErrorDialog(getString(org.odk.collect.strings.R.string.update_widgets_error), true);
+                        createErrorDialog(new FormError.Fatal(getString(org.odk.collect.strings.R.string.update_widgets_error)));
                     }
                 }
             });
