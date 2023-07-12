@@ -123,7 +123,7 @@
   <string name="keep_changes">Wijzigingen opslaan</string>
   <string name="keep_editing">Doorgaan met invullen</string>
   <string name="quit_form_title">Bewaar formulier?</string>
-  <string name="save_explanation_with_last_saved">\'Dit formulier was voor het laatst bewaard op \' EEE dd MMM yyyy \'om\' HH:mm\'. Bewaar als concept om de wijzigingen te behouden.</string>
+  <string name="save_explanation_with_last_saved">\'Dit formulier was voor het laatst bewaard op \' EEE dd MMM yyyy \'om\' HH:mm\'. Bewaar als concept om de wijzigingen te behouden.\'</string>
   <string name="quit_form_continue_title">Doorgaan met wijzigen?</string>
   <string name="saving_form">Formulier opslaan</string>
   <string name="survey_saving_validating_message">Valideren antwoorden…</string>
