@@ -396,15 +396,19 @@ public class JavaRosaFormController implements FormController {
     }
 
     public ValidationResult validateAnswers(boolean markCompleted) throws JavaRosaException {
-        ValidateOutcome validateOutcome = getFormDef().validate(markCompleted);
-        if (validateOutcome != null) {
-            this.jumpToIndex(validateOutcome.failedPrompt);
-            if (indexIsInFieldList()) {
-                stepToPreviousScreenEvent();
+        try {
+            ValidateOutcome validateOutcome = getFormDef().validate(markCompleted);
+            if (validateOutcome != null) {
+                this.jumpToIndex(validateOutcome.failedPrompt);
+                if (indexIsInFieldList()) {
+                    stepToPreviousScreenEvent();
+                }
+                return new FailedValidationResult(validateOutcome.failedPrompt, validateOutcome.outcome);
             }
-            return new FailedValidationResult(validateOutcome.failedPrompt, validateOutcome.outcome);
+            return SuccessValidationResult.INSTANCE;
+        } catch (RuntimeException e) {
+            throw new JavaRosaException(e);
         }
-        return SuccessValidationResult.INSTANCE;
     }
 
     public boolean saveAnswer(FormIndex index, IAnswerData data) throws JavaRosaException {
