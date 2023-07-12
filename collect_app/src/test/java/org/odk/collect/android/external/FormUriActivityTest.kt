@@ -56,6 +56,7 @@ import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.UUIDGenerator
 import java.io.File
+import java.util.function.Supplier
 
 @RunWith(AndroidJUnit4::class)
 class FormUriActivityTest {
@@ -99,8 +100,9 @@ class FormUriActivityTest {
             }
 
             override fun providesInstancesRepositoryProvider(
-                context: Context,
-                storagePathProvider: StoragePathProvider
+                context: Context?,
+                storagePathProvider: StoragePathProvider?,
+                clock: Supplier<Long>?
             ): InstancesRepositoryProvider {
                 return mock<InstancesRepositoryProvider>().apply {
                     whenever(get()).thenReturn(instancesRepository)

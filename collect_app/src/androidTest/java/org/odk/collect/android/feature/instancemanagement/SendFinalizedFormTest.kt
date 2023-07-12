@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
+import org.odk.collect.android.instancemanagement.OCTOBER_1st_2023_UTC
 import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
@@ -17,11 +18,19 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.Project.New
+import java.util.function.Supplier
 
 @RunWith(AndroidJUnit4::class)
 class SendFinalizedFormTest {
 
-    private val testDependencies = TestDependencies()
+    private var currentTimeMillis: Long = System.currentTimeMillis()
+
+    private val testDependencies = object : TestDependencies() {
+        override fun providesClock(): Supplier<Long> {
+            return Supplier { currentTimeMillis }
+        }
+    }
+
     private val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
@@ -30,13 +39,28 @@ class SendFinalizedFormTest {
         .around(rule)
 
     @Test
-    fun canViewFormsBeforeSending() {
+    fun beforeOCTOBER_1st_2023_UTC_canEditFormsBeforeSending() {
+        currentTimeMillis = OCTOBER_1st_2023_UTC - 1
+
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
             .clickOnFormToEdit("One Question")
+            .assertText("52")
+    }
+
+    @Test
+    fun afterOCTOBER_1st_2023_UTC_canViewFormsBeforeSending() {
+        currentTimeMillis = OCTOBER_1st_2023_UTC + 1
+
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .clickSendFinalizedForm(1)
+            .clickOnForm("One Question")
             .assertText("52")
     }
 
