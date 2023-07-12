@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
 import org.odk.collect.android.R;
+import org.odk.collect.android.support.pages.ErrorDialog;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.EndOfFormPage;
@@ -116,5 +117,25 @@ public class AddRepeatTest {
                 .clickGoUpIcon()
                 .addGroup()
                 .assertText("Person > 3");
+    }
+
+    @Test // This test might be not needed anymore once we fix https://github.com/getodk/javarosa/issues/686
+    public void whenRepeatCountIsNotAnInteger_swipingForward_displaysErrorDialog() {
+        rule.startAtMainMenu()
+                .copyForm("RepeatCount.xml")
+                .startBlankForm("RepeatCount")
+                .answerQuestion("Number", "2.1")
+                .swipeToNextQuestionWithError();
+    }
+
+    @Test // This test might be not needed anymore once we fix https://github.com/getodk/javarosa/issues/686
+    public void whenRepeatCountIsNotAnInteger_checkingForErrors_displaysErrorDialog() {
+        rule.startAtMainMenu()
+                .copyForm("RepeatCount.xml")
+                .startBlankForm("RepeatCount")
+                .answerQuestion("Number", "2.1")
+                .clickOptionsIcon()
+                .clickOnString(R.string.validate)
+                .assertOnPage(new ErrorDialog());
     }
 }
