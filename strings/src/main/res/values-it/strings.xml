@@ -138,10 +138,8 @@
   <string name="keep_editing">Continua a modificare</string>
   <string name="quit_form_title">Salvare il Modulo?</string>
   <string name="save_explanation">Puoi salvare questo modulo e accedervi dalle tue bozze in qualsiasi momento.</string>
-  <string name="save_explanation_with_last_saved">\'Questo modulo è stato salvato l\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Salva come bozza per conservare le modifiche.\'</string>
   <string name="quit_form_continue_title">Continua con le modifiche?</string>
   <string name="discard_form_warning">Se elimini il modulo, perderai tutte le modifiche apportate fino a quel momento.</string>
-  <string name="discard_changes_warning">\'Questo modulo è stato salvato l\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Se scarti le modifiche, perderai tutte le modifiche apportate da allora.\'</string>
   <string name="saving_form">Salvataggio Modulo</string>
   <string name="survey_saving_validating_message">Convalida risposte…</string>
   <string name="survey_saving_collecting_message">Raccolta dati in corso…</string>

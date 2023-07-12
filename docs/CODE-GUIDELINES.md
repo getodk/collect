@@ -60,6 +60,8 @@ When creating or refactoring views, keep in mind our vision of an "ideal" view:
 ## Strings
 Always use [string resources](https://developer.android.com/guide/topics/resources/string-resource.html) instead of literal strings. This ensures wording consistency across the project and also enables full translation of the app. Only make changes to the base `res/values/strings.xml` English file (in the `strings` module) and not to the other language files. The translated files are generated from [Transifex](https://www.transifex.com/getodk/collect/) where translations can be submitted by the community. Names of software packages or other untranslatable strings should be placed in `res/values/untranslated.xml`.
 
+If a new string is added that is used as a date format (with `SimpleDateFormat`), it should be added to `DateFormatsTest` to ensure that translations do not cause crashes.
+
 Strings that represent very rare failure cases or that are meant more for ODK developers to use for troubleshooting rather than directly for users may be written as literal strings. This reduces the burden on translators and makes it easier for developers to troubleshoot edge cases without having to look up translations.
 
 ## Dependency injection
