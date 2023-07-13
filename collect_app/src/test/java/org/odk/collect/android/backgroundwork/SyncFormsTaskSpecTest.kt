@@ -17,6 +17,7 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.support.CollectHelpers
+import java.util.function.Supplier
 
 @RunWith(AndroidJUnit4::class)
 class SyncFormsTaskSpecTest {
@@ -26,10 +27,11 @@ class SyncFormsTaskSpecTest {
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesFormsUpdater(
-                context: Context,
-                notifier: Notifier,
-                syncStatusAppState: SyncStatusAppState,
-                projectDependencyProviderFactory: ProjectDependencyProviderFactory
+                context: Context?,
+                notifier: Notifier?,
+                syncStatusAppState: SyncStatusAppState?,
+                projectDependencyProviderFactory: ProjectDependencyProviderFactory?,
+                clock: Supplier<Long>?
             ): FormsUpdater {
                 return formsUpdater
             }

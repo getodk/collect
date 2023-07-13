@@ -25,6 +25,11 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
         return new ViewFormPage(formLabel).assertOnPage();
     }
 
+    public FormHierarchyPage clickOnFormToEdit(String formLabel) {
+        clickOnText(formLabel);
+        return new FormHierarchyPage(formLabel).assertOnPage();
+    }
+
     public OkDialog clickSendSelected() {
         clickOnText(getTranslatedString(R.string.send_selected_data));
         return new OkDialog();

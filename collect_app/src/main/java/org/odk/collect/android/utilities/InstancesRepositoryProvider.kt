@@ -5,10 +5,12 @@ import org.odk.collect.android.database.instances.DatabaseInstancesRepository
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.forms.instances.InstancesRepository
+import java.util.function.Supplier
 
 class InstancesRepositoryProvider @JvmOverloads constructor(
     private val context: Context,
-    private val storagePathProvider: StoragePathProvider = StoragePathProvider()
+    private val storagePathProvider: StoragePathProvider = StoragePathProvider(),
+    private val clock: Supplier<Long> = Supplier { System.currentTimeMillis() }
 ) {
 
     @JvmOverloads
@@ -17,7 +19,7 @@ class InstancesRepositoryProvider @JvmOverloads constructor(
             context,
             storagePathProvider.getOdkDirPath(StorageSubdirectory.METADATA, projectId),
             storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId),
-            System::currentTimeMillis
+            clock
         )
     }
 }

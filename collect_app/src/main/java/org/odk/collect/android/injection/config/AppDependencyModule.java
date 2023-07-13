@@ -146,6 +146,7 @@ import org.odk.collect.shared.strings.UUIDGenerator;
 import org.odk.collect.utilities.UserAgentProvider;
 
 import java.io.File;
+import java.util.function.Supplier;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -195,8 +196,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormDownloader providesFormDownloader(FormSourceProvider formSourceProvider, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider) {
-        return new ServerFormDownloader(formSourceProvider.get(), formsRepositoryProvider.get(), new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(), System::currentTimeMillis);
+    public FormDownloader providesFormDownloader(FormSourceProvider formSourceProvider, FormsRepositoryProvider formsRepositoryProvider, StoragePathProvider storagePathProvider, Supplier<Long> clock) {
+        return new ServerFormDownloader(formSourceProvider.get(), formsRepositoryProvider.get(), new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)), storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS), new FormMetadataParser(), clock);
     }
 
     @Provides
@@ -483,8 +484,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesRepositoryProvider providesInstancesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
-        return new InstancesRepositoryProvider(context, storagePathProvider);
+    public InstancesRepositoryProvider providesInstancesRepositoryProvider(Context context, StoragePathProvider storagePathProvider, Supplier<Long> clock) {
+        return new InstancesRepositoryProvider(context, storagePathProvider, clock);
     }
 
     @Provides
@@ -513,8 +514,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public FormsUpdater providesFormsUpdater(Context context, Notifier notifier, SyncStatusAppState syncStatusAppState, ProjectDependencyProviderFactory projectDependencyProviderFactory) {
-        return new FormsUpdater(context, notifier, syncStatusAppState, projectDependencyProviderFactory, System::currentTimeMillis);
+    public FormsUpdater providesFormsUpdater(Context context, Notifier notifier, SyncStatusAppState syncStatusAppState, ProjectDependencyProviderFactory projectDependencyProviderFactory, Supplier<Long> clock) {
+        return new FormsUpdater(context, notifier, syncStatusAppState, projectDependencyProviderFactory, clock);
     }
 
     @Provides
@@ -647,5 +648,10 @@ public class AppDependencyModule {
     @Provides
     public SavedInstanceStateProvider providesSavedInstanceStateProvider() {
         return savedInstanceState -> savedInstanceState;
+    }
+
+    @Provides
+    public Supplier<Long> providesClock() {
+        return System::currentTimeMillis;
     }
 }

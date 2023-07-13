@@ -4,6 +4,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.odk.collect.android.instancemanagement.InstanceExtKt.OCTOBER_1st_2023_UTC;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 import android.Manifest;
@@ -40,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 @RunWith(AndroidJUnit4.class)
 public class BackgroundAudioRecordingTest {
@@ -48,6 +50,8 @@ public class BackgroundAudioRecordingTest {
 
     private final RevokeableRecordAudioPermissionsChecker permissionsChecker = new RevokeableRecordAudioPermissionsChecker(ApplicationProvider.getApplicationContext());
     private final ControllableRecordAudioPermissionsProvider permissionsProvider = new ControllableRecordAudioPermissionsProvider(permissionsChecker);
+    private Long currentTimeMillis = System.currentTimeMillis();
+
     private final TestDependencies testDependencies = new TestDependencies() {
 
         @Override
@@ -75,6 +79,11 @@ public class BackgroundAudioRecordingTest {
         @Override
         public PermissionsProvider providesPermissionsProvider(PermissionsChecker permissionsChecker) {
             return permissionsProvider;
+        }
+
+        @Override
+        public Supplier<Long> providesClock() {
+            return () -> currentTimeMillis;
         }
     };
 
@@ -176,6 +185,8 @@ public class BackgroundAudioRecordingTest {
 
     @Test
     public void viewForm_doesNotRecordAudio() {
+        currentTimeMillis = OCTOBER_1st_2023_UTC + 1;
+
         rule.startAtMainMenu()
                 .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
