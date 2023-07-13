@@ -55,10 +55,6 @@
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
         <item name="colorErrorContainer">@color/colorError</item>
         <item name="colorOnErrorContainer">@color/colorOnError</item>
-
-        <!-- Material3 polyfill attributes (needed in Material Components yet). -->
-        <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
-        <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium
         </item>
@@ -86,6 +82,10 @@
         </item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Material3.LargeComponent
         </item>
+
+        <!-- Material3 polyfill attributes (needed in Material Components yet). -->
+        <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
+        <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
 
         <!-- Needed to make scrollbars always visible -->
         <item name="android:scrollbars">vertical</item>
