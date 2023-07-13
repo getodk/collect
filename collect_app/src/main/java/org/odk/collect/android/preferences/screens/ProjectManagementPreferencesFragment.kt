@@ -86,7 +86,7 @@ class ProjectManagementPreferencesFragment :
     fun deleteProject() {
         Analytics.log(AnalyticsEvents.DELETE_PROJECT)
 
-        when (val deleteProjectResult = projectDeleter.deleteCurrentProject()) {
+        when (val deleteProjectResult = projectDeleter.deleteProject()) {
             is DeleteProjectResult.UnsentInstances -> {
                 MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(org.odk.collect.strings.R.string.cannot_delete_project_title)

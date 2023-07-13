@@ -68,8 +68,8 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        deleter.deleteCurrentProject()
-        assertThat(deleter.deleteCurrentProject(), instanceOf(DeleteProjectResult.UnsentInstances::class.java))
+        deleter.deleteProject()
+        assertThat(deleter.deleteProject(), instanceOf(DeleteProjectResult.UnsentInstances::class.java))
         assertThat(projectsRepository.projects.contains(project1), `is`(true))
     }
 
@@ -92,8 +92,8 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        deleter.deleteCurrentProject()
-        assertThat(deleter.deleteCurrentProject(), instanceOf(DeleteProjectResult.UnsentInstances::class.java))
+        deleter.deleteProject()
+        assertThat(deleter.deleteProject(), instanceOf(DeleteProjectResult.UnsentInstances::class.java))
         assertThat(projectsRepository.projects.contains(project1), `is`(true))
     }
 
@@ -116,8 +116,8 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        deleter.deleteCurrentProject()
-        assertThat(deleter.deleteCurrentProject(), instanceOf(DeleteProjectResult.UnsentInstances::class.java))
+        deleter.deleteProject()
+        assertThat(deleter.deleteProject(), instanceOf(DeleteProjectResult.UnsentInstances::class.java))
         assertThat(projectsRepository.projects.contains(project1), `is`(true))
     }
 
@@ -140,7 +140,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        val result = deleter.deleteCurrentProject()
+        val result = deleter.deleteProject()
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
         assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(nullValue()))
         assertThat(projectsRepository.projects.size, `is`(0))
@@ -164,7 +164,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        val result = deleter.deleteCurrentProject()
+        val result = deleter.deleteProject()
         assertThat(result, instanceOf(DeleteProjectResult.RunningBackgroundJobs::class.java))
         assertThat(projectsRepository.projects.contains(project1), `is`(true))
     }
@@ -187,7 +187,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        val result = deleter.deleteCurrentProject()
+        val result = deleter.deleteProject()
         assertThat(result, instanceOf(DeleteProjectResult.RunningBackgroundJobs::class.java))
         assertThat(projectsRepository.projects.contains(project1), `is`(true))
     }
@@ -205,7 +205,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        deleter.deleteCurrentProject()
+        deleter.deleteProject()
         verify(formUpdateManager).cancelUpdates(project1.uuid)
         verify(instanceSubmitScheduler).cancelSubmit(project1.uuid)
     }
@@ -231,7 +231,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        deleter.deleteCurrentProject()
+        deleter.deleteProject()
 
         assertThat(settingsProvider.getMetaSettings().getString(MetaKeys.KEY_INSTALL_ID), `is`("1234"))
 
@@ -260,7 +260,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        val result = deleter.deleteCurrentProject()
+        val result = deleter.deleteProject()
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
         assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(nullValue()))
     }
@@ -281,7 +281,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        val result = deleter.deleteCurrentProject()
+        val result = deleter.deleteProject()
         verify(currentProjectProvider).setCurrentProject(project2.uuid)
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfully::class.java))
         assertThat((result as DeleteProjectResult.DeletedSuccessfully).newCurrentProject, `is`(project2))
@@ -306,7 +306,7 @@ class ProjectDeleterTest {
             settingsProvider
         )
 
-        deleter.deleteCurrentProject()
+        deleter.deleteProject()
         assertThat(projectDir.exists(), `is`(false))
     }
 }
