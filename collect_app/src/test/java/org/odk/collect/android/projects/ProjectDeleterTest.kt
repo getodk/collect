@@ -14,7 +14,9 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.preferences.Defaults
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.projects.InMemProjectsRepository
@@ -32,12 +34,17 @@ class ProjectDeleterTest {
 
     private val projectsRepository = InMemProjectsRepository()
     private val instancesRepository = InMemInstancesRepository()
-
+    private val instancesRepositoryProvider = mock<InstancesRepositoryProvider>().apply {
+        whenever(get(project1.uuid)).thenReturn(instancesRepository)
+    }
     private val currentProjectProvider = mock<CurrentProjectProvider> {
         on { getCurrentProject() } doReturn project1
     }
     private val formUpdateManager = mock<FormUpdateScheduler>()
     private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
+    private val storagePathProvider = mock<StoragePathProvider>().apply {
+        whenever(getProjectRootDirPath(project1.uuid)).thenReturn("")
+    }
     private val changeLockProvider = mock<ChangeLockProvider> {
         on { getFormLock(any()) } doReturn BooleanChangeLock()
         on { getInstanceLock(any()) } doReturn BooleanChangeLock()
@@ -59,11 +66,11 @@ class ProjectDeleterTest {
 
         val deleter = ProjectDeleter(
             projectsRepository,
+            currentProjectProvider,
             mock(),
             mock(),
-            mock(),
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -83,11 +90,11 @@ class ProjectDeleterTest {
 
         val deleter = ProjectDeleter(
             projectsRepository,
+            currentProjectProvider,
             mock(),
             mock(),
-            mock(),
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -107,11 +114,11 @@ class ProjectDeleterTest {
 
         val deleter = ProjectDeleter(
             projectsRepository,
+            currentProjectProvider,
             mock(),
             mock(),
-            mock(),
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -134,8 +141,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             formUpdateManager,
             instanceSubmitScheduler,
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -158,8 +165,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             formUpdateManager,
             instanceSubmitScheduler,
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -181,8 +188,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             formUpdateManager,
             instanceSubmitScheduler,
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -199,8 +206,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             formUpdateManager,
             instanceSubmitScheduler,
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -225,8 +232,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             mock(),
             mock(),
-            mock(),
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -254,8 +261,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             mock(),
             mock(),
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -275,8 +282,8 @@ class ProjectDeleterTest {
             currentProjectProvider,
             mock(),
             mock(),
-            instancesRepository,
-            "",
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
@@ -295,13 +302,15 @@ class ProjectDeleterTest {
         assertThat(projectDir.exists(), `is`(true))
         assertThat(projectDir.listFiles().size, `is`(1))
 
+        whenever(storagePathProvider.getProjectRootDirPath(project1.uuid)).thenReturn(projectDir.absolutePath)
+
         val deleter = ProjectDeleter(
             projectsRepository,
             currentProjectProvider,
             mock(),
             mock(),
-            instancesRepository,
-            projectDir.absolutePath,
+            instancesRepositoryProvider,
+            storagePathProvider,
             changeLockProvider,
             settingsProvider
         )
