@@ -291,35 +291,11 @@ class MainMenuActivity : LocalizedActivity() {
         val unprotectedSettings = settingsProvider.getUnprotectedSettings()
         val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
         if (ProjectKeys.PROTOCOL_GOOGLE_SHEETS == protocol) {
-            val gdBannerAlreadyDismissed =
-                unprotectedSettings.getBoolean(ProjectKeys.GOOGLE_DRIVE_DEPRECATION_BANNER_DISMISSED)
-            if (!gdBannerAlreadyDismissed) {
-                binding.googleDriveDeprecationBanner.root.visibility =
-                    View.VISIBLE
-                val gdLearnMoreAlreadyClicked =
-                    unprotectedSettings.getBoolean(ProjectKeys.GOOGLE_DRIVE_DEPRECATION_LEARN_MORE_CLICKED)
-                if (gdLearnMoreAlreadyClicked) {
-                    binding.googleDriveDeprecationBanner.dismissButton.visibility = View.VISIBLE
-                } else {
-                    binding.googleDriveDeprecationBanner.dismissButton.visibility = View.GONE
-                }
-                binding.googleDriveDeprecationBanner.learnMoreButton.setOnClickListener {
-                    val intent = Intent(this, WebViewActivity::class.java)
-                    intent.putExtra("url", "https://forum.getodk.org/t/40097")
-                    startActivity(intent)
-                    unprotectedSettings.save(
-                        ProjectKeys.GOOGLE_DRIVE_DEPRECATION_LEARN_MORE_CLICKED,
-                        true
-                    )
-                }
-                binding.googleDriveDeprecationBanner.dismissButton.setOnClickListener {
-                    binding.googleDriveDeprecationBanner.root.visibility =
-                        View.GONE
-                    unprotectedSettings.save(
-                        ProjectKeys.GOOGLE_DRIVE_DEPRECATION_BANNER_DISMISSED,
-                        true
-                    )
-                }
+            binding.googleDriveDeprecationBanner.root.visibility = View.VISIBLE
+            binding.googleDriveDeprecationBanner.learnMoreButton.setOnClickListener {
+                val intent = Intent(this, WebViewActivity::class.java)
+                intent.putExtra("url", "https://forum.getodk.org/t/40097")
+                startActivity(intent)
             }
         } else {
             binding.googleDriveDeprecationBanner.root.visibility = View.GONE

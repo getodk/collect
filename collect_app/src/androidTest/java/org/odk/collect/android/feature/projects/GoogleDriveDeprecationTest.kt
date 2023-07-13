@@ -7,11 +7,9 @@ import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
@@ -70,51 +68,6 @@ class GoogleDriveDeprecationTest {
                 hasExtra("url", "https://forum.getodk.org/t/40097")
             )
         )
-    }
-
-    @Test
-    fun dismissButtonIsVisibleOnlyAfterClickingLearnMore() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
-
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.dismiss_button_text)
-            .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
-            .pressBack(MainMenuPage())
-            .assertText(org.odk.collect.strings.R.string.dismiss_button_text)
-    }
-
-    @Test
-    fun afterClickingDismissTheBannerDisappears() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
-
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
-            .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
-            .pressBack(MainMenuPage())
-            .clickOnString(org.odk.collect.strings.R.string.dismiss_button_text)
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
-            .rotateToLandscape(MainMenuPage())
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
-    }
-
-    @Test
-    fun dismissingTheBannerInOneProjectDoesNotAffectOtherProjects() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
-        CollectHelpers.addGDProject(gdProject2, "john@curry.basket", testDependencies)
-
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
-            .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
-            .pressBack(MainMenuPage())
-            .clickOnString(org.odk.collect.strings.R.string.dismiss_button_text)
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
-            .openProjectSettingsDialog()
-            .selectProject(gdProject2.name)
-            .assertText(org.odk.collect.strings.R.string.google_drive_deprecation_message)
     }
 
     @Test

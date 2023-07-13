@@ -966,7 +966,6 @@
     ##############################################-->
   <string name="google_drive_deprecation_message">Este proyecto utiliza Google Drive. Esta funcionalidad se eliminará en la próxima actualización de la aplicación.</string>
   <string name="learn_more_button_text">Aprende más</string>
-  <string name="dismiss_button_text">Descartar</string>
   <!--##############################################
     # Developer tools
     ##############################################-->
