@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3e9fcc</color>
-    <color name="colorPrimaryVariant">#00719b</color>
     <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorPrimaryContainer">#bfe9ff</color>
+    <color name="colorOnPrimaryContainer">#001f2a</color>
 
-    <color name="colorError">#D42C2C</color>
+    <color name="colorError">#ba1a1a</color>
     <color name="colorOnError">#ffffff</color>
+    <color name="colorErrorContainer">#ffdad6</color>
+    <color name="colorOnErrorContainer">#410002</color>
 
-    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorBackground">#fafcff</color>
+    <color name="colorOnBackground">#001f2a</color>
+
+    <color name="colorSurface">#fafcff</color>
     <color name="colorSurfaceVariant">#dce3e9</color>
-    <color name="colorOnSurface">#000000</color>
-    <color name="colorSurfaceContainerLow">#F7F7FA</color>
+    <color name="colorOnSurface">#001f2a</color>
+    <color name="colorOnSurfaceVariant">#40484c</color>
+    <color name="colorSurfaceContainerLow">#F0F0F5</color>
 
     <bool name="lightStatusBar">true</bool>
 

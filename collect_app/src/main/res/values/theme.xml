@@ -6,18 +6,18 @@
 
         <!-- Original AppCompat attributes. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorPrimary</item>
-        <item name="android:colorBackground">@color/colorSurface</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
         <item name="colorError">@color/colorError</item>
 
         <!-- MaterialComponents attributes (needed if parent="Theme.AppCompat"). -->
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorPrimaryVariant">@color/colorPrimary</item>
         <item name="colorSecondaryVariant">@color/colorPrimary</item>
         <item name="colorSurface">@color/colorSurface</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorOnSecondary">@color/colorOnPrimary</item>
-        <item name="colorOnBackground">@color/colorSurface</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
         <item name="colorOnError">@color/colorOnError</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
@@ -39,22 +39,22 @@
         <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
 
         <!-- Material3 attributes (needed if parent="Theme.MaterialComponents"). -->
-        <item name="colorPrimaryInverse">@color/colorPrimary</item>
-        <item name="colorPrimaryContainer">@color/colorPrimary</item>
-        <item name="colorOnPrimaryContainer">@color/colorOnPrimary</item>
-        <item name="colorSecondaryContainer">@color/colorPrimary</item>
-        <item name="colorOnSecondaryContainer">@color/colorOnPrimary</item>
+        <item name="colorPrimaryInverse">#6DD2FF</item>
+        <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
+        <item name="colorSecondaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/colorOnPrimaryContainer</item>
         <item name="colorTertiary">@color/colorPrimary</item>
         <item name="colorOnTertiary">@color/colorOnPrimary</item>
-        <item name="colorTertiaryContainer">@color/colorPrimary</item>
-        <item name="colorOnTertiaryContainer">@color/colorOnPrimary</item>
+        <item name="colorTertiaryContainer">@color/colorPrimaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/colorOnPrimaryContainer</item>
         <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/colorOnSurface</item>
-        <item name="colorSurfaceInverse">@color/colorSurface</item>
-        <item name="colorOnSurfaceInverse">@color/colorSurface</item>
+        <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
+        <item name="colorSurfaceInverse">#003547</item>
+        <item name="colorOnSurfaceInverse">#E1F4FF</item>
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
-        <item name="colorErrorContainer">@color/colorError</item>
-        <item name="colorOnErrorContainer">@color/colorOnError</item>
+        <item name="colorErrorContainer">@color/colorErrorContainer</item>
+        <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium
         </item>
