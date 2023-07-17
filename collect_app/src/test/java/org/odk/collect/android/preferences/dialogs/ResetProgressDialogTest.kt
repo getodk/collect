@@ -18,8 +18,7 @@ class ResetProgressDialogTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
     @get:Rule
-    val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
     fun `The dialog should not be dismissed after clicking out of its area or on device back button`() {

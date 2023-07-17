@@ -25,9 +25,7 @@ public class ServerAuthDialogFragmentTest {
     private final Settings generalSettings = TestSettingsProvider.getUnprotectedSettings();
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            com.google.android.material.R.style.Theme_MaterialComponents
-    );
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Test
     public void prefillsUsernameAndPassword() {

@@ -32,8 +32,7 @@ class FormsDownloadResultDialogTest {
     val listener = mock<FormsDownloadResultDialog.FormDownloadResultDialogListener>()
 
     @get:Rule
-    val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
     fun `The dialog should be dismissed after clicking out of it's area or on device back button`() {

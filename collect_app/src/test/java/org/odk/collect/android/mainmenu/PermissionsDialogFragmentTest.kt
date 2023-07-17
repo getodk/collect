@@ -36,10 +36,7 @@ class PermissionsDialogFragmentTest {
         .build()
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule(
-        defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents,
-        defaultFactory = fragmentFactory
-    )
+    val launcherRule = FragmentScenarioLauncherRule(fragmentFactory)
 
     @Test
     fun clickingOK_asksForPermissions() {

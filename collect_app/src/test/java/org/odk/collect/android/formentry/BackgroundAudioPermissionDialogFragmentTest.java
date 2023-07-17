@@ -47,7 +47,6 @@ public class BackgroundAudioPermissionDialogFragmentTest {
 
     @Rule
     public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            com.google.android.material.R.style.Theme_MaterialComponents,
             new FragmentFactoryBuilder()
                     .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
                     .build()

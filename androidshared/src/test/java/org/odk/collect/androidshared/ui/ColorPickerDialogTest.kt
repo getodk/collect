@@ -29,8 +29,7 @@ class ColorPickerDialogTest {
     }
 
     @get:Rule
-    val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
     fun `The dialog should be dismissed after clicking on a device back button`() {

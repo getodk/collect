@@ -48,8 +48,7 @@ class QrCodeProjectCreatorDialogTest {
     private val permissionsProvider = FakePermissionsProvider()
 
     @get:Rule
-    val launcherRule =
-        FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Before
     fun setup() {

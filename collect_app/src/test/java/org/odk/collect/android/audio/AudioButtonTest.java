@@ -22,7 +22,7 @@ public class AudioButtonTest {
 
     @Before
     public void setup() {
-        Activity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class, com.google.android.material.R.style.Theme_MaterialComponents);
+        Activity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
         button = new AudioButton(activity);
     }
 

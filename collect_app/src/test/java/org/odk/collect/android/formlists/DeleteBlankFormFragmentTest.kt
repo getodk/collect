@@ -73,8 +73,7 @@ class DeleteBlankFormFragmentTest {
 
     @get:Rule
     val fragmentScenarioLauncherRule = FragmentScenarioLauncherRule(
-        defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents,
-        defaultFactory = FragmentFactoryBuilder()
+        FragmentFactoryBuilder()
             .forClass(DeleteBlankFormFragment::class) {
                 DeleteBlankFormFragment(viewModelFactory, menuHost)
             }.build()

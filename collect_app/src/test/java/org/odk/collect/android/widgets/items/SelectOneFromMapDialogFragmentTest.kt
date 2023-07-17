@@ -91,7 +91,6 @@ class SelectOneFromMapDialogFragmentTest {
     @get:Rule
     val launcherRule =
         FragmentScenarioLauncherRule(
-            defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents,
             FragmentFactoryBuilder()
                 .forClass(SelectOneFromMapDialogFragment::class.java) {
                     SelectOneFromMapDialogFragment(viewModelFactory)

@@ -28,7 +28,11 @@ object RobolectricHelpers {
     var services: MutableMap<Class<*>, ServiceScenario<*>> = HashMap()
 
     @JvmStatic
-    fun <T : FragmentActivity> createThemedActivity(clazz: Class<T>, theme: Int): T {
+    @JvmOverloads
+    fun <T : FragmentActivity> createThemedActivity(
+        clazz: Class<T>,
+        theme: Int = com.google.android.material.R.style.Theme_MaterialComponents
+    ): T {
         val activity = Robolectric.buildActivity(clazz)
         activity.get()!!.setTheme(theme)
         return activity.setup().get()

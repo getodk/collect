@@ -39,7 +39,7 @@ public class GeoPolySettingsDialogFragmentTest {
 
     @Before
     public void setup() {
-        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class, com.google.android.material.R.style.Theme_MaterialComponents);
+        FragmentActivity activity = RobolectricHelpers.createThemedActivity(FragmentActivity.class);
         fragmentManager = activity.getSupportFragmentManager();
         dialogFragment = new GeoPolySettingsDialogFragment();
 

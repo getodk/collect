@@ -31,9 +31,7 @@ public class AudioRecordingFormErrorDialogFragmentTest {
     private StubAudioRecorder audioRecorder;
 
     @Rule
-    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule(
-            com.google.android.material.R.style.Theme_MaterialComponents
-    );
+    public FragmentScenarioLauncherRule launcherRule = new FragmentScenarioLauncherRule();
 
     @Before
     public void setup() throws Exception {

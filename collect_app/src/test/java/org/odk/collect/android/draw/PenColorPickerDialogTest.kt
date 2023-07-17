@@ -28,7 +28,7 @@ import org.odk.collect.shared.settings.Settings
 class PenColorPickerDialogTest {
 
     @get:Rule
-    val launcherRule = FragmentScenarioLauncherRule(defaultThemeResId = com.google.android.material.R.style.Theme_MaterialComponents)
+    val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
     fun `dialog should be cancelable`() {
