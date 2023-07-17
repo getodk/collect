@@ -27,6 +27,7 @@ public class SendFinalizedFormPage extends Page<SendFinalizedFormPage> {
 
     public FormHierarchyPage clickOnFormToEdit(String formLabel) {
         clickOnText(formLabel);
+        clickOKOnDialog();
         return new FormHierarchyPage(formLabel).assertOnPage();
     }
 
