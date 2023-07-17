@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,6 +15,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -41,10 +43,13 @@ import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.async.Scheduler
+import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.SettingsProvider
+import org.robolectric.Robolectric
+import org.robolectric.Shadows.shadowOf
 
 @RunWith(AndroidJUnit4::class)
 class MainMenuActivityTest {
@@ -67,6 +72,8 @@ class MainMenuActivityTest {
     }
 
     private val permissionsProvider = FakePermissionsProvider()
+
+    private val application = ApplicationProvider.getApplicationContext<Application>()
 
     @get:Rule
     val launcherRule = ActivityScenarioLauncherRule()
@@ -115,6 +122,13 @@ class MainMenuActivityTest {
                 return permissionsProvider
             }
         })
+
+        CrashHandler.install(application)
+    }
+
+    @After
+    fun teardown() {
+        CrashHandler.uninstall(application)
     }
 
     @Test
@@ -429,5 +443,14 @@ class MainMenuActivityTest {
                 it.supportFragmentManager.findFragmentByTag(PermissionsDialogFragment::class.java.name)
             assertThat(dialog, equalTo(null))
         }
+    }
+
+    @Test
+    fun `when there has been a crash, opens CrashHandlerActivity and finishes`() {
+        CrashHandler.getInstance(application)!!.registerCrash(application, IllegalStateException())
+
+        val activity = Robolectric.setupActivity(MainMenuActivity::class.java)
+        assertThat(shadowOf(activity).nextStartedActivity, notNullValue())
+        assertThat(activity.isFinishing, equalTo(true))
     }
 }
