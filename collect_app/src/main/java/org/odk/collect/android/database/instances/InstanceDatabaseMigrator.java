@@ -42,6 +42,7 @@ public class InstanceDatabaseMigrator implements DatabaseMigrator {
 
     @SuppressWarnings({"checkstyle:FallThrough"})
     public void onUpgrade(SQLiteDatabase db, int oldVersion) {
+        Timber.w("Instances db upgrade from version: %s", oldVersion);
         switch (oldVersion) {
             case 1:
                 upgradeToVersion2(db);

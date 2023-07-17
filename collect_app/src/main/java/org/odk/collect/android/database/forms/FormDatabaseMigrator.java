@@ -28,6 +28,8 @@ import static org.odk.collect.android.database.forms.DatabaseFormColumns.LAST_DE
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
 import static org.odk.collect.android.database.forms.DatabaseFormColumns.SUBMISSION_URI;
 
+import timber.log.Timber;
+
 public class FormDatabaseMigrator implements DatabaseMigrator {
 
     private static final String[] COLUMN_NAMES_V7 = {_ID, DISPLAY_NAME, DESCRIPTION,
@@ -45,6 +47,7 @@ public class FormDatabaseMigrator implements DatabaseMigrator {
 
     @SuppressWarnings({"checkstyle:FallThrough"})
     public void onUpgrade(SQLiteDatabase db, int oldVersion) throws SQLException {
+        Timber.w("Forms db upgrade from version: %s", oldVersion);
         switch (oldVersion) {
             case 1:
                 upgradeToVersion2(db);
