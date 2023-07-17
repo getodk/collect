@@ -18,6 +18,7 @@ import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.Form
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import java.io.File
@@ -63,7 +64,16 @@ class FormUriActivity : ComponentActivity() {
             !assertFormExists() -> Unit
             !assertFormNotEncrypted() -> Unit
             !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
-            else -> startForm()
+            else -> if (isFormFinalizedButEditable()) {
+                MaterialAlertDialogBuilder(this)
+                    .setMessage(R.string.edit_finalized_form_warning)
+                    .setPositiveButton(R.string.ok) { _, _ -> startForm() }
+                    .setCancelable(false)
+                    .create()
+                    .show()
+            } else {
+                startForm()
+            }
         }
     }
 
@@ -212,6 +222,18 @@ class FormUriActivity : ComponentActivity() {
         }
 
         return formEditingEnabled
+    }
+
+    private fun isFormFinalizedButEditable(): Boolean {
+        val uri = intent.data!!
+        val uriMimeType = contentResolver.getType(uri)
+
+        return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            instance!!.status == Instance.STATUS_COMPLETE && instance.canBeEditedWithGracePeriod(settingsProvider)
+        } else {
+            false
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
