@@ -101,7 +101,7 @@ class ProjectManagementPreferencesFragment :
                     .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                     .show()
             }
-            is DeleteProjectResult.DeletedSuccessfully -> {
+            is DeleteProjectResult.DeletedSuccessfullyCurrentProject -> {
                 val newCurrentProject = deleteProjectResult.newCurrentProject
                 if (newCurrentProject != null) {
                     ActivityUtils.startActivityAndCloseAllOthers(
@@ -121,6 +121,8 @@ class ProjectManagementPreferencesFragment :
                         FirstLaunchActivity::class.java
                     )
                 }
+            } else -> {
+                // ignore
             }
         }
     }

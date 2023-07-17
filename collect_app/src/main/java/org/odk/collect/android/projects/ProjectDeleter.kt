@@ -64,14 +64,14 @@ class ProjectDeleter(
 
         return try {
             currentProjectProvider.getCurrentProject()
-            DeleteProjectResult.DeletedSuccessfully(null)
+            DeleteProjectResult.DeletedSuccessfullyInactiveProject
         } catch (e: IllegalStateException) {
             if (projectsRepository.getAll().isEmpty()) {
-                DeleteProjectResult.DeletedSuccessfully(null)
+                DeleteProjectResult.DeletedSuccessfullyLastProject
             } else {
                 val newProject = projectsRepository.getAll()[0]
                 currentProjectProvider.setCurrentProject(newProject.uuid)
-                DeleteProjectResult.DeletedSuccessfully(newProject)
+                DeleteProjectResult.DeletedSuccessfullyCurrentProject(newProject)
             }
         }
     }
@@ -82,5 +82,9 @@ sealed class DeleteProjectResult {
 
     object RunningBackgroundJobs : DeleteProjectResult()
 
-    data class DeletedSuccessfully(val newCurrentProject: Project.Saved?) : DeleteProjectResult()
+    object DeletedSuccessfullyLastProject : DeleteProjectResult()
+
+    object DeletedSuccessfullyInactiveProject : DeleteProjectResult()
+
+    data class DeletedSuccessfullyCurrentProject(val newCurrentProject: Project.Saved?) : DeleteProjectResult()
 }
