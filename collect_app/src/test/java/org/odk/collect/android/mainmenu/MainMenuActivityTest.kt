@@ -24,6 +24,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.DeleteSavedFormActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
@@ -450,7 +451,8 @@ class MainMenuActivityTest {
         CrashHandler.getInstance(application)!!.registerCrash(application, IllegalStateException())
 
         val activity = Robolectric.setupActivity(MainMenuActivity::class.java)
-        assertThat(shadowOf(activity).nextStartedActivity, notNullValue())
+        val intent = shadowOf(activity).nextStartedActivity
+        assertThat(intent.component?.className, equalTo(CrashHandlerActivity::class.qualifiedName))
         assertThat(activity.isFinishing, equalTo(true))
     }
 }
