@@ -123,6 +123,10 @@ class MainMenuActivity : LocalizedActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (isFinishing) {
+            return // Guard against onResume calls after we've finished in onCreate
+        }
+
         currentProjectViewModel.refresh()
         mainMenuViewModel.refreshInstances()
         setButtonsVisibility()
