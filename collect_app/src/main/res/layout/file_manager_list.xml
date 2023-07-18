@@ -37,10 +37,10 @@ the License.
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="?colorSurface"
         android:elevation="4dp"
         android:paddingTop="@dimen/margin_small"
@@ -53,10 +53,11 @@ the License.
             android:id="@+id/toggle_button"
             style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_standard"
             android:layout_marginEnd="@dimen/margin_standard"
             android:text="@string/select_all"
+            android:layout_weight="1"
             app:layout_constraintEnd_toStartOf="@id/delete_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -65,13 +66,13 @@ the License.
             android:id="@+id/delete_button"
             style="@style/Widget.Material3.Button"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/margin_standard"
             android:text="@string/delete_file"
+            android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/toggle_button"
             app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
