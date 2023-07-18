@@ -62,7 +62,7 @@ the License.
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/surfaceButtonColor"
+        android:background="?colorSurfaceContainerLow"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
