@@ -495,11 +495,9 @@ class MapboxMapFragment :
 
     @SuppressWarnings("MissingPermission") // permission checks for location services are handled in widgets
     private fun enableLocationUpdates(enabled: Boolean) {
-        locationClient.setListener(this)
-
         if (enabled) {
             Timber.i("Starting LocationClient %s (for MapFragment %s)", locationClient, this)
-            locationClient.start()
+            locationClient.start(this)
         } else {
             Timber.i("Stopping LocationClient %s (for MapFragment %s)", locationClient, this)
             locationClient.stop()

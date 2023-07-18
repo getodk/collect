@@ -221,17 +221,15 @@ public class BackgroundLocationManager implements LocationClient.LocationClientL
                 && helper.isAndroidLocationPermissionGranted()) {
             AuditConfig auditConfig = helper.getCurrentFormAuditConfig();
 
-            locationClient.setListener(this);
             locationClient.setPriority(auditConfig.getLocationPriority());
             locationClient.setUpdateIntervals(auditConfig.getLocationMinInterval(), auditConfig.getLocationMinInterval());
-            locationClient.start();
+            locationClient.start(this);
 
             currentState = BackgroundLocationState.RECEIVING_LOCATIONS;
         }
     }
 
     private void stopLocationRequests() {
-        locationClient.setListener(null);
         locationClient.stop();
 
         currentState = BackgroundLocationState.STOPPED;

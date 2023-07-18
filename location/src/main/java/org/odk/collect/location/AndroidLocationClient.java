@@ -57,7 +57,8 @@ public class AndroidLocationClient
     // LocationClient:
 
     @Override
-    public void start() {
+    public void start(LocationClientListener listener) {
+        setListener(listener);
         if (getProvider() == null) {
             if (getListener() != null) {
                 getListener().onClientStartFailure();
@@ -81,6 +82,7 @@ public class AndroidLocationClient
         if (getListener() != null) {
             getListener().onClientStop();
         }
+        setListener(null);
     }
 
     @Override

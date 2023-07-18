@@ -12,6 +12,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.location.Location
 import org.odk.collect.location.LocationClient
+import org.odk.collect.location.LocationClient.LocationClientListener
 import org.odk.collect.location.LocationClientProvider
 import org.odk.collect.testshared.RobolectricHelpers
 
@@ -97,11 +98,12 @@ private class FakeLocationClient : LocationClient {
 
     private var started = false
     private var locationListener: LocationListener? = null
-    private var locationClientListener: LocationClient.LocationClientListener? = null
+    private var locationClientListener: LocationClientListener? = null
     private var retainMockAccuracy: Boolean = false
     private var updateIntervals: Pair<Long, Long>? = null
 
-    override fun start() {
+    override fun start(listener: LocationClientListener) {
+        setListener(listener)
         this.started = true
         locationClientListener?.onClientStart()
     }
@@ -109,6 +111,7 @@ private class FakeLocationClient : LocationClient {
     override fun stop() {
         this.started = false
         locationClientListener?.onClientStop()
+        setListener(null)
     }
 
     override fun requestLocationUpdates(locationListener: LocationListener) {

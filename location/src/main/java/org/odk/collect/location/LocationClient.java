@@ -20,7 +20,7 @@ public interface LocationClient {
      * to {@link LocationClient#requestLocationUpdates(LocationListener)}
      * or {@link LocationClient#getLastLocation()}.
      */
-    void start();
+    void start(LocationClientListener listener);
 
     /**
      * Stops the LocationClient, ending any current connections and allowing
@@ -46,8 +46,7 @@ public interface LocationClient {
 
     /**
      * Sets the {@link LocationClientListener} which will receive status updates
-     * for the LocationClient.  The LocationClient should hold only a WeakReference
-     * to the listener so that it does not cause a memory leak.
+     * for the LocationClient.
      *
      * @param locationClientListener The new {@link LocationClientListener}.
      */

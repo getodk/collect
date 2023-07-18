@@ -100,7 +100,8 @@ public class GoogleFusedLocationClient
 
     // LocationClient:
 
-    public void start() {
+    public void start(LocationClientListener listener) {
+        setListener(listener);
         googleApiClient.registerConnectionCallbacks(this);
         googleApiClient.registerConnectionFailedListener(this);
 
@@ -120,6 +121,7 @@ public class GoogleFusedLocationClient
         if (getListener() != null) {
             getListener().onClientStop();
         }
+        setListener(null);
     }
 
     public void requestLocationUpdates(@NonNull LocationListener locationListener) {
