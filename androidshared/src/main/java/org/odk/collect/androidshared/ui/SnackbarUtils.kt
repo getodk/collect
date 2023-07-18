@@ -19,12 +19,15 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
 /**
  * Convenience wrapper around Android's [Snackbar] API.
  */
 object SnackbarUtils {
+    private var lastSnackbar: Snackbar? = null
+
     @JvmStatic
     @JvmOverloads
     fun showShortSnackbar(
@@ -69,7 +72,8 @@ object SnackbarUtils {
             return
         }
 
-        Snackbar.make(parentView, message.trim(), duration).apply {
+        lastSnackbar?.dismiss()
+        lastSnackbar = Snackbar.make(parentView, message.trim(), duration).apply {
             val textView = view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
             textView.isSingleLine = false
 
@@ -103,7 +107,13 @@ object SnackbarUtils {
                     dismiss()
                 }
             }
-        }.show()
+        }.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                super.onDismissed(transientBottomBar, event)
+                lastSnackbar = null
+            }
+        })
+        lastSnackbar?.show()
     }
 
     data class Action(
