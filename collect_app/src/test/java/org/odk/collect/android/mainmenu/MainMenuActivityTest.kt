@@ -450,9 +450,12 @@ class MainMenuActivityTest {
     fun `when there has been a crash, opens CrashHandlerActivity and finishes`() {
         CrashHandler.getInstance(application)!!.registerCrash(application, IllegalStateException())
 
-        val activity = Robolectric.setupActivity(MainMenuActivity::class.java)
-        val intent = shadowOf(activity).nextStartedActivity
-        assertThat(intent.component?.className, equalTo(CrashHandlerActivity::class.qualifiedName))
-        assertThat(activity.isFinishing, equalTo(true))
+        Robolectric.buildActivity(MainMenuActivity::class.java).use {
+            it.setup()
+
+            val startedActivityName = shadowOf(it.get()).nextStartedActivity.component?.className
+            assertThat(startedActivityName, equalTo(CrashHandlerActivity::class.qualifiedName))
+            assertThat(it.get().isFinishing, equalTo(true))
+        }
     }
 }
