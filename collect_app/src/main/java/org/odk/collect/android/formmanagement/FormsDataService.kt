@@ -22,7 +22,7 @@ class FormsDataService(
     private val clock: Supplier<Long>
 ) {
 
-    fun getForms(projectId: String): LiveData<List<Form>?> {
+    fun getForms(projectId: String): LiveData<List<Form>> {
         return getFormsLiveData(projectId)
     }
 
@@ -165,8 +165,8 @@ class FormsDataService(
         getFormsLiveData(projectId).postValue(sandbox.formsRepository.all)
     }
 
-    private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>?> {
-        return appState.get("forms:$projectId", MutableLiveData())
+    private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>> {
+        return appState.get("forms:$projectId", MutableLiveData(emptyList()))
     }
 
     private fun getSyncingLiveData(projectId: String) =

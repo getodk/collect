@@ -31,7 +31,7 @@ class BlankFormListViewModel(
     private val _filterText = MutableLiveData("")
     private val _sortingOrder = MutableLiveData(generalSettings.getInt("formChooserListSortingOrder"))
     private val filteredForms = LiveDataUtils.zip3(formsDataService.getForms(projectId), _filterText, _sortingOrder)
-    val formsToDisplay: LiveData<List<BlankFormListItem>?> = filteredForms.map { (forms, filter, sort) ->
+    val formsToDisplay: LiveData<List<BlankFormListItem>> = filteredForms.map { (forms, filter, sort) ->
         filterAndSortForms(forms, sort, filter)
     }
 
@@ -108,14 +108,10 @@ class BlankFormListViewModel(
     }
 
     private fun filterAndSortForms(
-        forms: List<Form>?,
+        forms: List<Form>,
         sort: Int?,
         filter: String
     ): List<BlankFormListItem> {
-        if (forms == null) {
-            return emptyList()
-        }
-
         var newListOfForms = forms
             .filter {
                 !it.isDeleted

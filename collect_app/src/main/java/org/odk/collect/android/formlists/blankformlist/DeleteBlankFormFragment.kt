@@ -50,12 +50,10 @@ class DeleteBlankFormFragment(
 
         recyclerView.adapter = adapter
         blankFormListViewModel.formsToDisplay.observe(viewLifecycleOwner) {
-            if (it != null) {
-                adapter.formItems = it
+            adapter.formItems = it
 
-                binding.empty.isVisible = it.isEmpty()
-                binding.buttons.isVisible = it.isNotEmpty()
-            }
+            binding.empty.isVisible = it.isEmpty()
+            binding.buttons.isVisible = it.isNotEmpty()
 
             updateAllSelected(binding, adapter)
         }
