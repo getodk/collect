@@ -1,24 +1,52 @@
-package org.odk.collect.android.utilities
+package org.odk.collect.android.formmanagement
 
 import android.database.SQLException
 import org.javarosa.xform.parse.XFormParser
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
-import org.odk.collect.androidshared.utils.Validator.isUrlValid
+import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.androidshared.utils.Validator
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormsRepository
-import org.odk.collect.shared.strings.Md5.getMd5Hash
+import org.odk.collect.forms.instances.InstancesRepository
+import org.odk.collect.shared.strings.Md5
 import org.odk.collect.strings.localization.getLocalizedString
 import timber.log.Timber
 import java.io.File
 import java.util.Collections
 import java.util.LinkedList
 
-object FormsDirDiskFormsSynchronizer {
+object LocalFormUseCases {
 
     private var counter = 0
 
-    fun synchronizeAndReturnError(formsRepository: FormsRepository, formsDir: String?): String {
+    @JvmStatic
+    fun deleteForm(
+        formsRepository: FormsRepository,
+        instancesRepository: InstancesRepository,
+        id: Long
+    ) {
+        val form = formsRepository[id]
+        val instancesForVersion = instancesRepository.getAllNotDeletedByFormIdAndVersion(
+            form!!.formId,
+            form.version
+        )
+
+        // If there's more than one form with the same formid/version, trust the user that they want to truly delete this one
+        // because otherwise it may not ever be removed (instance deletion only deletes one corresponding form).
+        val formsWithSameFormIdVersion = formsRepository.getAllByFormIdAndVersion(
+            form.formId,
+            form.version
+        )
+
+        if (instancesForVersion.isEmpty() || formsWithSameFormIdVersion.size > 1) {
+            formsRepository.delete(id)
+        } else {
+            formsRepository.softDelete(form.dbId)
+        }
+    }
+
+    fun synchronizeWithDisk(formsRepository: FormsRepository, formsDir: String?): String {
         var statusMessage = ""
         val instance = ++counter
         Timber.i("[%d] doInBackground begins!", instance)
@@ -48,7 +76,7 @@ object FormsDirDiskFormsSynchronizer {
                         // remove it from the list of forms (we only want forms
                         // we haven't added at the end)
                         formsToAdd.remove(sqlFile)
-                        val md5Computed = getMd5Hash(sqlFile)
+                        val md5Computed = Md5.getMd5Hash(sqlFile)
                         if (md5Computed == null || md5 == null || md5Computed != md5) {
                             // Probably someone overwrite the file on the sdcard
                             // So re-parse it and update it's information
@@ -156,6 +184,7 @@ object FormsDirDiskFormsSynchronizer {
         }
     }
 
+    @JvmStatic
     fun filterFormsToAdd(formDefs: Array<File>?, backgroundInstanceId: Int): MutableList<File?> {
         val formsToAdd: MutableList<File?> = LinkedList()
         if (formDefs != null) {
@@ -170,6 +199,7 @@ object FormsDirDiskFormsSynchronizer {
         return formsToAdd
     }
 
+    @JvmStatic
     fun shouldAddFormFile(fileName: String): Boolean {
         // discard files beginning with "."
         // discard files not ending with ".xml" or ".xhtml"
@@ -228,7 +258,7 @@ object FormsDirDiskFormsSynchronizer {
         }
         val submission = fields[FileUtils.SUBMISSIONURI]
         if (submission != null) {
-            if (isUrlValid(submission)) {
+            if (Validator.isUrlValid(submission)) {
                 builder.submissionUri(submission)
             } else {
                 throw IllegalArgumentException(

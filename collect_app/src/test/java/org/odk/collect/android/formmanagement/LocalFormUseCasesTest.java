@@ -14,7 +14,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.odk.collect.formstest.InstanceUtils.buildInstance;
 
-public class FormDeleterTest {
+public class LocalFormUseCasesTest {
 
     private final InMemFormsRepository formsRepository = new InMemFormsRepository();
     private final InMemInstancesRepository instancesRepository = new InMemInstancesRepository();
@@ -33,7 +33,7 @@ public class FormDeleterTest {
                 .deletedDate(0L)
                 .build());
 
-        FormDeleter.delete(formsRepository, instancesRepository, formToDelete.getDbId());
+        LocalFormUseCases.deleteForm(formsRepository, instancesRepository, formToDelete.getDbId());
         assertThat(formsRepository.getAll().size(), is(0));
     }
 
@@ -56,7 +56,7 @@ public class FormDeleterTest {
                 .formVersion("old")
                 .build());
 
-        FormDeleter.delete(formsRepository, instancesRepository, formToDelete.getDbId());
+        LocalFormUseCases.deleteForm(formsRepository, instancesRepository, formToDelete.getDbId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getVersion(), is("old"));
@@ -81,7 +81,7 @@ public class FormDeleterTest {
                 .formVersion("version")
                 .build());
 
-        FormDeleter.delete(formsRepository, instancesRepository, formToDelete.getDbId());
+        LocalFormUseCases.deleteForm(formsRepository, instancesRepository, formToDelete.getDbId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getVersion(), is("version"));
@@ -97,7 +97,7 @@ public class FormDeleterTest {
 
         instancesRepository.save(buildInstance("1", null, TempFiles.createTempDir().getAbsolutePath()).build());
 
-        FormDeleter.delete(formsRepository, instancesRepository, formToDelete.getDbId());
+        LocalFormUseCases.deleteForm(formsRepository, instancesRepository, formToDelete.getDbId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).isDeleted(), is(true));
@@ -122,7 +122,7 @@ public class FormDeleterTest {
                 .formFilePath(FormUtils.createXFormFile("id", "version", "Form2").getAbsolutePath())
                 .build());
 
-        FormDeleter.delete(formsRepository, instancesRepository, formToDelete.getDbId());
+        LocalFormUseCases.deleteForm(formsRepository, instancesRepository, formToDelete.getDbId());
         List<Form> forms = formsRepository.getAll();
         assertThat(forms.size(), is(1));
         assertThat(forms.get(0).getDbId(), is(2L));

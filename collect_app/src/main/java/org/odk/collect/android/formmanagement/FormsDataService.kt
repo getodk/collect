@@ -6,7 +6,6 @@ import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchroniz
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.data.AppState
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
@@ -130,7 +129,7 @@ class FormsDataService(
 
     fun deleteForm(projectId: String, formId: Long) {
         val projectDependencies = projectDependencyProviderFactory.create(projectId)
-        FormDeleter.delete(
+        LocalFormUseCases.deleteForm(
             projectDependencies.formsRepository,
             projectDependencies.instancesRepository,
             formId
@@ -149,7 +148,7 @@ class FormsDataService(
         val projectDependencies = projectDependencyProviderFactory.create(projectId)
         projectDependencies.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             if (acquiredLock) {
-                val error = FormsDirDiskFormsSynchronizer.synchronizeAndReturnError(
+                val error = LocalFormUseCases.synchronizeWithDisk(
                     projectDependencies.formsRepository,
                     projectDependencies.formsDir
                 )

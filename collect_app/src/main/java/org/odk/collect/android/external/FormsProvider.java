@@ -48,7 +48,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
-import org.odk.collect.android.formmanagement.FormDeleter;
+import org.odk.collect.android.formmanagement.LocalFormUseCases;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -226,7 +226,7 @@ public class FormsProvider extends ContentProvider {
             case FORMS:
                 try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
                     while (cursor.moveToNext()) {
-                        FormDeleter.delete(formsRepository, instancesRepository, cursor.getLong(cursor.getColumnIndex(_ID)));
+                        LocalFormUseCases.deleteForm(formsRepository, instancesRepository, cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
 
                     count = cursor.getCount();
@@ -234,7 +234,7 @@ public class FormsProvider extends ContentProvider {
                 break;
 
             case FORM_ID:
-                FormDeleter.delete(formsRepository, instancesRepository, ContentUriHelper.getIdFromUri(uri));
+                LocalFormUseCases.deleteForm(formsRepository, instancesRepository, ContentUriHelper.getIdFromUri(uri));
                 count = 1;
                 break;
 
