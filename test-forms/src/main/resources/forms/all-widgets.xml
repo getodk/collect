@@ -457,7 +457,7 @@
   </h:head>
   <h:body>
     <input ref="/data/intro">
-      <label>Welcome to ODK Collect! This form showcases the different available question types (_widgets_).</label>
+      <label>Welcome to ODK Collect! This form showcases the different available question types (&lt;em&gt;widgets&lt;/em&gt;).</label>
       <hint>This is a sample for introductory and debugging purposes. It is updated periodically so check "Get Blank Form" to get the latest!
 
         Version 2019120201 adds:
