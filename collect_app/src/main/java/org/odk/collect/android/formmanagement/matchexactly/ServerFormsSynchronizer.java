@@ -29,11 +29,9 @@ public class ServerFormsSynchronizer {
     public void synchronize() throws FormSourceException {
         List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
         List<Form> formsOnDevice = formsRepository.getAll();
-        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
-
         formsOnDevice.stream().forEach(form -> {
             if (formList.stream().noneMatch(f -> form.getFormId().equals(f.getFormId()))) {
-                formDeleter.delete(form.getDbId());
+                FormDeleter.delete(formsRepository, instancesRepository, form.getDbId());
             }
         });
 

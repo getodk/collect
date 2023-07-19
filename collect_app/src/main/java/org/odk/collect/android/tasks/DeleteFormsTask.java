@@ -59,7 +59,7 @@ public class DeleteFormsTask extends AsyncTask<Long, Integer, Integer> {
                 break;
             }
             try {
-                new FormDeleter(formsRepository, instancesRepository).delete(param);
+                FormDeleter.delete(formsRepository, instancesRepository, param);
 
                 deleted++;
 

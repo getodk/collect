@@ -130,10 +130,11 @@ class FormsDataService(
 
     fun deleteForm(projectId: String, formId: Long) {
         val projectDependencies = projectDependencyProviderFactory.create(projectId)
-        FormDeleter(
+        FormDeleter.delete(
             projectDependencies.formsRepository,
-            projectDependencies.instancesRepository
-        ).delete(formId)
+            projectDependencies.instancesRepository,
+            formId
+        )
         syncWithDb(projectId)
     }
 

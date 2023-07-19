@@ -9,15 +9,10 @@ import java.util.List;
 
 public class FormDeleter {
 
-    private final FormsRepository formsRepository;
-    private final InstancesRepository instancesRepository;
-
-    public FormDeleter(FormsRepository formsRepository, InstancesRepository instancesRepository) {
-        this.formsRepository = formsRepository;
-        this.instancesRepository = instancesRepository;
+    private FormDeleter() {
     }
 
-    public void delete(Long id) {
+    public static void delete(FormsRepository formsRepository, InstancesRepository instancesRepository, Long id) {
         Form form = formsRepository.get(id);
 
         List<Instance> instancesForVersion = instancesRepository.getAllNotDeletedByFormIdAndVersion(form.getFormId(), form.getVersion());
