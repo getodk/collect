@@ -49,10 +49,10 @@ class FormsDataService(
     fun downloadUpdates(projectId: String) {
         syncWithStorage(projectId)
 
-        val sandbox = projectDependencyProviderFactory.create(projectId)
+        val projectDependencies = projectDependencyProviderFactory.create(projectId)
 
-        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox)
-        val formDownloader = formDownloader(sandbox, clock)
+        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
+        val formDownloader = formDownloader(projectDependencies, clock)
 
         try {
             val serverForms: List<ServerFormDetails> = serverFormsDetailsFetcher.fetchFormDetails()
@@ -60,11 +60,11 @@ class FormsDataService(
                 serverForms.stream().filter { obj: ServerFormDetails -> obj.isUpdated }
                     .collect(Collectors.toList())
             if (updatedForms.isNotEmpty()) {
-                if (sandbox.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
+                if (projectDependencies.generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE)) {
                     val formUpdateDownloader = FormUpdateDownloader()
                     val results = formUpdateDownloader.downloadUpdates(
                         updatedForms,
-                        sandbox.formsLock,
+                        projectDependencies.formsLock,
                         formDownloader
                     )
 
@@ -88,19 +88,19 @@ class FormsDataService(
     fun matchFormsWithServer(projectId: String, notify: Boolean = true): Boolean {
         syncWithStorage(projectId)
 
-        val sandbox = projectDependencyProviderFactory.create(projectId)
+        val projectDependencies = projectDependencyProviderFactory.create(projectId)
 
-        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(sandbox)
-        val formDownloader = formDownloader(sandbox, clock)
+        val serverFormsDetailsFetcher = serverFormsDetailsFetcher(projectDependencies)
+        val formDownloader = formDownloader(projectDependencies, clock)
 
         val serverFormsSynchronizer = ServerFormsSynchronizer(
             serverFormsDetailsFetcher,
-            sandbox.formsRepository,
-            sandbox.instancesRepository,
+            projectDependencies.formsRepository,
+            projectDependencies.instancesRepository,
             formDownloader
         )
 
-        return sandbox.formsLock.withLock { acquiredLock ->
+        return projectDependencies.formsLock.withLock { acquiredLock ->
             if (acquiredLock) {
                 startSync(projectId)
 
@@ -129,8 +129,11 @@ class FormsDataService(
     }
 
     fun deleteForm(projectId: String, formId: Long) {
-        val sandbox = projectDependencyProviderFactory.create(projectId)
-        FormDeleter(sandbox.formsRepository, sandbox.instancesRepository).delete(formId)
+        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        FormDeleter(
+            projectDependencies.formsRepository,
+            projectDependencies.instancesRepository
+        ).delete(formId)
         syncWithDb(projectId)
     }
 
@@ -142,10 +145,10 @@ class FormsDataService(
     }
 
     private fun syncWithStorage(projectId: String) {
-        val sandbox = projectDependencyProviderFactory.create(projectId)
-        sandbox.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
+        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        projectDependencies.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             if (acquiredLock) {
-                val error = diskFormsSynchronizer(sandbox).synchronizeAndReturnError()
+                val error = diskFormsSynchronizer(projectDependencies).synchronizeAndReturnError()
                 getDiskErrorLiveData(projectId).postValue(error)
             }
         }
@@ -161,8 +164,8 @@ class FormsDataService(
     }
 
     private fun syncWithDb(projectId: String) {
-        val sandbox = projectDependencyProviderFactory.create(projectId)
-        getFormsLiveData(projectId).postValue(sandbox.formsRepository.all)
+        val projectDependencies = projectDependencyProviderFactory.create(projectId)
+        getFormsLiveData(projectId).postValue(projectDependencies.formsRepository.all)
     }
 
     private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>> {
@@ -185,7 +188,10 @@ class FormsDataService(
     }
 }
 
-private fun formDownloader(projectDependencyProvider: ProjectDependencyProvider, clock: Supplier<Long>): ServerFormDownloader {
+private fun formDownloader(
+    projectDependencyProvider: ProjectDependencyProvider,
+    clock: Supplier<Long>
+): ServerFormDownloader {
     return ServerFormDownloader(
         projectDependencyProvider.formSource,
         projectDependencyProvider.formsRepository,
