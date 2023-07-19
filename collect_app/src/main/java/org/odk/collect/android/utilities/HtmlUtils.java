@@ -77,32 +77,32 @@ public final class HtmlUtils {
                 text, createSpan);
 
         //intermediary replacements keys for special characters, N/B: These symbols are not meant to be interpreted as markdown
-        text = text.replaceAll("(?s)\\\\#", "&#35;");
-        text = text.replaceAll("(?s)\\\\\\\\", "&#92;");
-        text = text.replaceAll("(?s)\\\\_", "&#95;");
-        text = text.replaceAll("(?s)\\\\\\*", "&#42;");
+        text = text.replaceAll("\\\\#", "&#35;");
+        text = text.replaceAll("\\\\\\\\", "&#92;");
+        text = text.replaceAll("\\\\_", "&#95;");
+        text = text.replaceAll("\\\\\\*", "&#42;");
 
         // strong
         text = text.replaceAll("(?s)__(.*?)__", "<strong>$1</strong>");
         text = text.replaceAll("(?s)\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
 
         // emphasis
-        text = text.replaceAll("(?s)_([^\\s][^_\n]*)_", "<em>$1</em>");
-        text = text.replaceAll("(?s)\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
+        text = text.replaceAll("_([^\\s][^_\n]*)_", "<em>$1</em>");
+        text = text.replaceAll("\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
 
         // links
-        text = text.replaceAll("(?s)\\[([^\\]]*)\\]\\(([^\\)]+)\\)",
+        text = text.replaceAll("\\[([^\\]]*)\\]\\(([^\\)]+)\\)",
                 "<a href=\"$2\" target=\"_blank\">$1</a>");
         // headers - requires ^ or breaks <font color="#f58a1f">color</font>
-        text = ReplaceCallback.replace("(?s)^(#+)([^\n]*)$", text, createHeader);
+        text = ReplaceCallback.replace("^(#+)([^\n]*)$", text, createHeader);
         // paragraphs
-        text = ReplaceCallback.replace("(?s)([^\n]+)\n", text, createParagraph);
+        text = ReplaceCallback.replace("([^\n]+)\n", text, createParagraph);
 
         // replacing intermediary keys with the proper markdown symbols
-        text = text.replaceAll("(?s)&#35;", "#");
-        text = text.replaceAll("(?s)&#42;", "*");
-        text = text.replaceAll("(?s)&#95;", "_");
-        text = text.replaceAll("(?s)&#92;", "\\\\");
+        text = text.replaceAll("&#35;", "#");
+        text = text.replaceAll("&#42;", "*");
+        text = text.replaceAll("&#95;", "_");
+        text = text.replaceAll("&#92;", "\\\\");
         return text;
     }
 
