@@ -149,7 +149,10 @@ class FormsDataService(
         val projectDependencies = projectDependencyProviderFactory.create(projectId)
         projectDependencies.changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             if (acquiredLock) {
-                val error = diskFormsSynchronizer(projectDependencies).synchronizeAndReturnError()
+                val error = FormsDirDiskFormsSynchronizer.synchronizeAndReturnError(
+                    projectDependencies.formsRepository,
+                    projectDependencies.formsDir
+                )
                 getDiskErrorLiveData(projectId).postValue(error)
             }
         }
@@ -209,12 +212,5 @@ private fun serverFormsDetailsFetcher(
     return ServerFormsDetailsFetcher(
         projectDependencyProvider.formsRepository,
         projectDependencyProvider.formSource
-    )
-}
-
-private fun diskFormsSynchronizer(projectDependencyProvider: ProjectDependencyProvider): FormsDirDiskFormsSynchronizer {
-    return FormsDirDiskFormsSynchronizer(
-        projectDependencyProvider.formsRepository,
-        projectDependencyProvider.formsDir
     )
 }

@@ -19,6 +19,8 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
+import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import java.io.File
 import java.io.FileReader
@@ -51,7 +53,10 @@ object StorageUtils {
         }
 
         if (copyToDatabase) {
-            FormsDirDiskFormsSynchronizer().synchronize()
+            val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext())
+            val formsRepository = component.formsRepositoryProvider().get()
+            val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+            FormsDirDiskFormsSynchronizer.synchronizeAndReturnError(formsRepository, formsDir)
         }
     }
 

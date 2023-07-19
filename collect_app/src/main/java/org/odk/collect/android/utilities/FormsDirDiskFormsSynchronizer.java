@@ -1,12 +1,11 @@
 package org.odk.collect.android.utilities;
 
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
+
 import android.database.SQLException;
 
 import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.DiskFormsSynchronizer;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.androidshared.utils.Validator;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
@@ -21,30 +20,14 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
-
-public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
+public class FormsDirDiskFormsSynchronizer {
 
     private static int counter;
 
-    private final FormsRepository formsRepository;
-    private final String formsDir;
-
-    public FormsDirDiskFormsSynchronizer() {
-        this(DaggerUtils.getComponent(Collect.getInstance()).formsRepositoryProvider().get(), DaggerUtils.getComponent(Collect.getInstance()).storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS));
+    private FormsDirDiskFormsSynchronizer() {
     }
 
-    public FormsDirDiskFormsSynchronizer(FormsRepository formsRepository, String formsDir) {
-        this.formsRepository = formsRepository;
-        this.formsDir = formsDir;
-    }
-
-    @Override
-    public void synchronize() {
-        synchronizeAndReturnError();
-    }
-
-    public String synchronizeAndReturnError() {
+    public static String synchronizeAndReturnError(FormsRepository formsRepository, String formsDir) {
         String statusMessage = "";
 
         int instance = ++counter;
@@ -201,7 +184,7 @@ public class FormsDirDiskFormsSynchronizer implements DiskFormsSynchronizer {
         return !ignoredFile && (xmlFile || xhtmlFile);
     }
 
-    private Form parseForm(File formDefFile) throws IllegalArgumentException {
+    private static Form parseForm(File formDefFile) throws IllegalArgumentException {
         // Probably someone overwrite the file on the sdcard
         // So re-parse it and update it's information
         Form.Builder builder = new Form.Builder();
