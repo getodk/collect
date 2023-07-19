@@ -86,8 +86,13 @@ public final class HtmlUtils {
         text = text.replaceAll("(?s)__(.*?)__", "<strong>$1</strong>");
         text = text.replaceAll("(?s)\\*\\*(.*?)\\*\\*", "<strong>$1</strong>");
 
-        // emphasis
-        text = text.replaceAll("_([^\\s][^_\n]*)_", "<em>$1</em>");
+        // emphasis using underscore
+        text = text.replaceAll("\\s_([^\\s][^_\n]*)_\\s", " <em>$1</em> ");
+        text = text.replaceAll("^_([^\\s][^_\n]*)_$", "<em>$1</em>");
+        text = text.replaceAll("^_([^\\s][^_\n]*)_\\s", "<em>$1</em> ");
+        text = text.replaceAll("\\s_([^\\s][^_\n]*)_$", " <em>$1</em>");
+
+        // emphasis using asterisk
         text = text.replaceAll("\\*([^\\s][^\\*\n]*)\\*", "<em>$1</em>");
 
         // links
