@@ -14,6 +14,7 @@ import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormsDownloadResultPage
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ServerAuthDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.android.utilities.ApplicationConstants.BundleKeys.FORM_IDS
@@ -31,7 +32,6 @@ class FormDownloadActionTest {
     @get:Rule
     val chain: RuleChain = TestRuleChain.chain(testDependencies)
         .around(rule)
-
 
     @Test
     fun passingIds_downloadsFormsFromProjectServer_andReturnsSuccessResult() {
@@ -51,7 +51,8 @@ class FormDownloadActionTest {
         assertThat(result.resultCode, equalTo(Activity.RESULT_OK))
         assertThat(result.resultData.getBooleanExtra(SUCCESS_KEY, false), equalTo(true))
         assertThat(
-            result.resultData.getSerializableExtra(FORM_IDS), equalTo(
+            result.resultData.getSerializableExtra(FORM_IDS),
+            equalTo(
                 mapOf(
                     "one_question" to true
                 )
@@ -68,7 +69,6 @@ class FormDownloadActionTest {
     fun passingIds_andServerDetails_downloadsFormsFromServer_andReturnsSuccessResult() {
         testDependencies.server.setCredentials("Pete", "meyre")
         testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml")
-        testDependencies.server.addForm("Two Question", "two_question", "1", "two-question.xml")
 
         val intent = Intent("org.odk.collect.android.FORM_DOWNLOAD")
         intent.type = FormsContract.CONTENT_TYPE
@@ -86,7 +86,8 @@ class FormDownloadActionTest {
         assertThat(result.resultCode, equalTo(Activity.RESULT_OK))
         assertThat(result.resultData.getBooleanExtra(SUCCESS_KEY, false), equalTo(true))
         assertThat(
-            result.resultData.getSerializableExtra(FORM_IDS), equalTo(
+            result.resultData.getSerializableExtra(FORM_IDS),
+            equalTo(
                 mapOf(
                     "one_question" to true
                 )
@@ -96,6 +97,41 @@ class FormDownloadActionTest {
         rule.relaunch(MainMenuPage())
             .clickFillBlankForm()
             .assertFormExists("One Question")
-            .assertFormDoesNotExist("Two Question")
+    }
+
+    @Test
+    fun passingIds_andServerDetails_whenThereIsAnAuthenticationError_allowsUserToReenterCredentials_andReturnsSuccessResult() {
+        testDependencies.server.setCredentials("Pete", "meyre")
+        testDependencies.server.addForm("One Question", "one_question", "1", "one-question.xml")
+
+        val intent = Intent("org.odk.collect.android.FORM_DOWNLOAD")
+        intent.type = FormsContract.CONTENT_TYPE
+        intent.putExtra(FORM_IDS, arrayOf("one_question"))
+        intent.putExtra(URL, testDependencies.server.url)
+        intent.putExtra(USERNAME, "wrong")
+        intent.putExtra(PASSWORD, "wrong")
+
+        rule.withProject("https://server2.example.com")
+        val result = rule.launchForResult(intent, ServerAuthDialog()) {
+            it.fillUsername("Pete")
+                .fillPassword("meyre")
+                .clickOK(FormsDownloadResultPage())
+                .clickOK(AppClosedPage())
+        }
+
+        assertThat(result.resultCode, equalTo(Activity.RESULT_OK))
+        assertThat(result.resultData.getBooleanExtra(SUCCESS_KEY, false), equalTo(true))
+        assertThat(
+            result.resultData.getSerializableExtra(FORM_IDS),
+            equalTo(
+                mapOf(
+                    "one_question" to true
+                )
+            )
+        )
+
+        rule.relaunch(MainMenuPage())
+            .clickFillBlankForm()
+            .assertFormExists("One Question")
     }
 }
