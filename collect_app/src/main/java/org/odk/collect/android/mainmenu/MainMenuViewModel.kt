@@ -111,7 +111,7 @@ class MainMenuViewModel(
         return if (instance != null) {
             val message = if (instance.status == Instance.STATUS_INCOMPLETE) {
                 R.string.form_saved_as_draft
-            } else if (instance.status == Instance.STATUS_COMPLETE) {
+            } else if (instance.status == Instance.STATUS_COMPLETE || instance.status == Instance.STATUS_SUBMISSION_FAILED) {
                 val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
                 if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
                     R.string.form_sending
