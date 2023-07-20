@@ -20,8 +20,18 @@ class FormsDownloadResultPage : Page<FormsDownloadResultPage>() {
         return this
     }
 
+    fun assertSuccess(): FormsDownloadResultPage {
+        assertText(R.string.all_downloads_succeeded)
+        return this
+    }
+
     fun showDetails(): ErrorPage {
         onView(withText(getTranslatedString(org.odk.collect.strings.R.string.show_details))).perform(click())
         return ErrorPage().assertOnPage()
+    }
+
+    fun <D : Page<D>> clickOK(destination: D): D {
+        clickOKOnDialog()
+        return destination.assertOnPage()
     }
 }
