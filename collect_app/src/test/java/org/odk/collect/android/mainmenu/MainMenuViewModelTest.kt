@@ -291,7 +291,7 @@ class MainMenuViewModelTest {
     }
 
     @Test
-    fun `getFormSavedSnackbarDetails should return null when the corresponding instance failed to sent`() {
+    fun `getFormSavedSnackbarDetails should return proper message and action when the corresponding instance failed to sent`() {
         val viewModel = createViewModelWithVersion("")
 
         formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
@@ -307,8 +307,9 @@ class MainMenuViewModelTest {
         whenever(autoSendSettingsProvider.isAutoSendEnabledInSettings()).thenReturn(true)
 
         val uri = InstancesContract.getUri(Project.DEMO_PROJECT_ID, instance.dbId)
-        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)
-        assertThat(formSavedSnackbarDetails, equalTo(null))
+        val formSavedSnackbarDetails = viewModel.getFormSavedSnackbarDetails(uri)!!
+        assertThat(formSavedSnackbarDetails.first, equalTo(R.string.form_sending))
+        assertThat(formSavedSnackbarDetails.second, equalTo(R.string.view_form))
     }
 
     private fun createViewModelWithVersion(version: String): MainMenuViewModel {
