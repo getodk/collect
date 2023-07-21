@@ -56,6 +56,7 @@ class FormSavedSnackbarTest {
             .clickFinalize()
             .assertText(R.string.form_saved)
             .clickOnString(R.string.view_form)
+            .clickOKOnDialog()
             .assertText("25")
             .assertText(R.string.jump_to_beginning)
             .assertText(R.string.jump_to_end)

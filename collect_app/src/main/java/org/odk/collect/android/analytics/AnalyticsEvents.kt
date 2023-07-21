@@ -163,4 +163,9 @@ object AnalyticsEvents {
      */
     const val PERMISSIONS_DIALOG_CANCEL = "PermissionsDialogCancel"
     const val PERMISSIONS_DIALOG_OK = "PermissionsDialogOK"
+
+    /**
+     * Tracks how often forms are validated
+     */
+    const val CHECK_FOR_ERRORS = "CheckForErrors"
 }

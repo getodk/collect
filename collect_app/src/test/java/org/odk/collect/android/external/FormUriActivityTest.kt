@@ -375,7 +375,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When attempting to edit a finalized form saved before October 1st 2023 UTC then start form filling`() {
+    fun `When attempting to edit a finalized form saved before October 1st 2023 UTC then display a warning and start form filling`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
@@ -393,6 +393,9 @@ class FormUriActivityTest {
         )
 
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+
+        onView(withText(R.string.edit_finalized_form_warning)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, true)
     }
