@@ -55,6 +55,7 @@
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
         <item name="colorErrorContainer">@color/colorErrorContainer</item>
         <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
+        <item name="elevationOverlayColor">@color/colorSurface</item>
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium
         </item>
