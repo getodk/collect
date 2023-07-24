@@ -88,12 +88,12 @@ public class RankingListAdapter extends Adapter<ItemViewHolder> {
         public void onItemSelected() {
             GradientDrawable border = new GradientDrawable();
             border.setStroke(10, themeUtils.getAccentColor());
-            border.setColor(textView.getContext().getResources().getColor(R.color.surfaceButtonColor));
+            border.setColor(textView.getContext().getResources().getColor(R.color.colorSurfaceContainerLow));
             itemView.setBackground(border);
         }
 
         public void onItemClear() {
-            itemView.setBackgroundColor(textView.getContext().getResources().getColor(R.color.surfaceButtonColor));
+            itemView.setBackgroundColor(textView.getContext().getResources().getColor(R.color.colorSurfaceContainerLow));
         }
     }
 }

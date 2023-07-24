@@ -20,11 +20,4 @@
     <color name="colorSurfaceContainerLow">#F0F0F5</color>
 
     <bool name="lightStatusBar">true</bool>
-
-    <!-- This color is used for buttons that should have a similar color to colorSurface (but still
-    stand out from the background).
-
-    {@deprecated These components should be replaced with material ones and this
-    color should be deleted} -->
-    <color name="surfaceButtonColor">#f7f7f7</color>
 </resources>
