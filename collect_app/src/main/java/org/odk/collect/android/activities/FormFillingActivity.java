@@ -65,6 +65,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -140,6 +142,7 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.javarosawrapper.SuccessValidationResult;
+import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.SavePointListener;
@@ -547,7 +550,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         });
 
-        formEntryViewModel.getValidationResult().observe(this, validationResult -> {
+        LiveData<ValidationResult> validation = formEntryViewModel.getValidationResult();
+        validation.observe(this, validationResult -> {
             if (validationResult instanceof FailedValidationResult) {
                 FailedValidationResult failedValidationResult = (FailedValidationResult) validationResult;
                 try {
@@ -562,6 +566,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 swipeHandler.setBeenSwiped(false);
             } else if (validationResult instanceof SuccessValidationResult) {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
+                ((MutableLiveData) validation).setValue(null);
             }
         });
 
