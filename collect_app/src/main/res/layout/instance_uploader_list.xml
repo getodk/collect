@@ -23,6 +23,14 @@ the License.
         android:layout_height="match_parent"
         android:layout_below="@id/appBarLayout">
 
+        <org.odk.collect.android.activities.ReadyToSendBanner
+            android:id="@+id/ready_to_send_banner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
@@ -33,7 +41,7 @@ the License.
             android:paddingBottom="8dp"
             android:scrollbarStyle="outsideOverlay"
             app:layout_constraintBottom_toTopOf="@id/buttonholder"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/ready_to_send_banner" />
 
         <TextView
             android:id="@android:id/empty"
