@@ -1207,6 +1207,17 @@
     <string name="view_form">View</string>
     <string name="close_snackbar">Close snackbar</string>
 
+    <!--
+    ##############################################
+    # Forms ready to send banner
+    ##############################################
+    -->
+    <string name="last_form_sent_seconds_ago">Last form sent: %d second(s) ago</string>
+    <string name="last_form_sent_minutes_ago">Last form sent: %d minute(s) ago</string>
+    <string name="last_form_sent_hours_ago">Last form sent: %d hour(s) ago</string>
+    <string name="last_form_sent_days_ago">Last form sent: %d day(s) ago</string>
+    <string name="forms_ready_to_send">%d form(s) ready to send</string>
+
     <!-- This warning will be shown when a user edits a form that is ready to send. The next version will also provide a link to learn more -->
     <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">In later releases, you will not be able to edit finalized forms. Save forms as draft to edit them later.\n\nYou can check for errors in a draft form by tapping the three dots (⋮) and then Check for errors.</string>
 </resources>
