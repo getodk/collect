@@ -28,7 +28,6 @@ import org.odk.collect.android.activities.CrashHandlerActivity
 import org.odk.collect.android.activities.DeleteSavedFormActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
-import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
@@ -36,6 +35,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.readytosend.InstanceUploaderListActivity
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider

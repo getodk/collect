@@ -1,4 +1,4 @@
-package org.odk.collect.android.activities
+package org.odk.collect.android.readytosend
 
 import android.content.Context
 import android.util.AttributeSet
@@ -21,7 +21,10 @@ class ReadyToSendBanner(context: Context, attrs: AttributeSet?) : ConstraintLayo
 
     fun init(instancesRepository: InstancesRepository) {
         val sentInstances: List<Instance> = instancesRepository.getAllByStatus(Instance.STATUS_SUBMITTED)
-        val numberOfInstancesReadyToSend = instancesRepository.getCountByStatus(Instance.STATUS_COMPLETE, Instance.STATUS_SUBMISSION_FAILED)
+        val numberOfInstancesReadyToSend = instancesRepository.getCountByStatus(
+            Instance.STATUS_COMPLETE,
+            Instance.STATUS_SUBMISSION_FAILED
+        )
 
         if (sentInstances.isNotEmpty() && numberOfInstancesReadyToSend > 0) {
             val lastSentInstance = sentInstances.maxBy { instance -> instance.lastStatusChangeDate }
