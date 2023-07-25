@@ -90,8 +90,8 @@ class FormsDataServiceTest {
     }
 
     @Test
-    fun getSyncError_isNullAtFirst() {
-        assertThat(formsDataService.getSyncError(project.uuid).value, equalTo(null))
+    fun getServerError_isNullAtFirst() {
+        assertThat(formsDataService.getServerError(project.uuid).value, equalTo(null))
     }
 
     @Test
@@ -164,8 +164,8 @@ class FormsDataServiceTest {
         whenever(formSource.fetchFormList()).thenThrow(error)
         formsDataService.matchFormsWithServer(project.uuid)
 
-        assertThat(formsDataService.getSyncError(project.uuid).getOrAwaitValue(), equalTo(error))
-        assertThat(formsDataService.getSyncError("other").getOrAwaitValue(), equalTo(null))
+        assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(error))
+        assertThat(formsDataService.getServerError("other").getOrAwaitValue(), equalTo(null))
     }
 
     @Test
@@ -199,7 +199,7 @@ class FormsDataServiceTest {
         formsDataService.matchFormsWithServer(project.uuid)
 
         formsDataService.clear(project.uuid)
-        assertThat(formsDataService.getSyncError(project.uuid).getOrAwaitValue(), equalTo(null))
+        assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(null))
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {

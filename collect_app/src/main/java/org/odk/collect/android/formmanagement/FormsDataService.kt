@@ -29,8 +29,8 @@ class FormsDataService(
         return getSyncingLiveData(projectId)
     }
 
-    fun getSyncError(projectId: String): LiveData<FormSourceException?> {
-        return getSyncErrorLiveData(projectId)
+    fun getServerError(projectId: String): LiveData<FormSourceException?> {
+        return getServerErrorLiveData(projectId)
     }
 
     fun getDiskError(projectId: String): LiveData<String?> {
@@ -38,7 +38,7 @@ class FormsDataService(
     }
 
     fun clear(projectId: String) {
-        getSyncErrorLiveData(projectId).value = null
+        getServerErrorLiveData(projectId).value = null
     }
 
     /**
@@ -162,7 +162,7 @@ class FormsDataService(
     }
 
     private fun finishSync(projectId: String, exception: FormSourceException? = null) {
-        getSyncErrorLiveData(projectId).postValue(exception)
+        getServerErrorLiveData(projectId).postValue(exception)
         getSyncingLiveData(projectId).postValue(false)
     }
 
@@ -178,7 +178,7 @@ class FormsDataService(
     private fun getSyncingLiveData(projectId: String) =
         appState.get("$KEY_PREFIX_SYNCING:$projectId", MutableLiveData(false))
 
-    private fun getSyncErrorLiveData(projectId: String) =
+    private fun getServerErrorLiveData(projectId: String) =
         appState.get("$KEY_PREFIX_ERROR:$projectId", MutableLiveData<FormSourceException>(null))
 
     private fun getDiskErrorLiveData(projectId: String): MutableLiveData<String?> =

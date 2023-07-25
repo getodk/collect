@@ -98,7 +98,7 @@ class BlankFormListViewModelTest {
         createViewModel()
 
         val liveData = MutableLiveData<FormSourceException?>(FormSourceException.FetchError())
-        whenever(formsDataService.getSyncError(projectId)).thenReturn(liveData)
+        whenever(formsDataService.getServerError(projectId)).thenReturn(liveData)
 
         val outOfSync = viewModel.isOutOfSyncWithServer()
         assertThat(outOfSync.getOrAwaitValue(), `is`(true))
@@ -111,7 +111,7 @@ class BlankFormListViewModelTest {
         createViewModel()
 
         val liveData = MutableLiveData<FormSourceException?>(FormSourceException.FetchError())
-        whenever(formsDataService.getSyncError(projectId)).thenReturn(liveData)
+        whenever(formsDataService.getServerError(projectId)).thenReturn(liveData)
 
         val authenticationRequired = viewModel.isAuthenticationRequired()
         assertThat(authenticationRequired.getOrAwaitValue(), `is`(false))

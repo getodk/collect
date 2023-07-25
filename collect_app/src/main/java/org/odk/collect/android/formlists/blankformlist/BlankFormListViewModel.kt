@@ -81,13 +81,13 @@ class BlankFormListViewModel(
     }
 
     fun isOutOfSyncWithServer(): LiveData<Boolean> {
-        return formsDataService.getSyncError(projectId).map { obj: FormSourceException? ->
+        return formsDataService.getServerError(projectId).map { obj: FormSourceException? ->
             obj != null
         }
     }
 
     fun isAuthenticationRequired(): LiveData<Boolean> {
-        return formsDataService.getSyncError(projectId).map { error: FormSourceException? ->
+        return formsDataService.getServerError(projectId).map { error: FormSourceException? ->
             if (error != null) {
                 error is AuthRequired
             } else {
