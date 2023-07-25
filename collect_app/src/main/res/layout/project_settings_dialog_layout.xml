@@ -96,15 +96,12 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/add_project_button"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_small"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:paddingVertical="@dimen/margin_small"
         android:text="@string/add_project"
-        android:textColor="?colorOnSurface"
         app:icon="@drawable/ic_baseline_qr_code_scanner_24"
-        app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/about_button"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -112,15 +109,12 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/about_button"
+        style="@style/Widget.Material3.Button.TextButton.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:paddingVertical="@dimen/margin_small"
         android:text="@string/about_preferences"
-        android:textColor="?colorOnSurface"
         app:icon="@drawable/ic_outline_info_24"
-        app:iconTintMode="multiply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/add_project_button" />

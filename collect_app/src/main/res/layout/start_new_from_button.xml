@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_standard"
         android:src="@drawable/ic_add_white_24"
+        app:tint="?colorOnPrimary"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintBottom_toBottomOf="@id/name"
         app:layout_constraintEnd_toStartOf="@id/name"
