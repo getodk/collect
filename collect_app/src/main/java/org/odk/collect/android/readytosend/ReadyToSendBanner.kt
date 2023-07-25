@@ -8,18 +8,19 @@ import org.odk.collect.android.databinding.ReadyToSendBannerBinding
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.strings.R
+import java.util.function.Supplier
 
-private const val ONE_SECOND = 1000
-private const val ONE_MINUTE = 60000
-private const val ONE_HOUR = 3600000
-private const val ONE_DAY = 86400000
+const val ONE_SECOND = 1000L
+const val ONE_MINUTE = 60000L
+const val ONE_HOUR = 3600000L
+const val ONE_DAY = 86400000L
 
 class ReadyToSendBanner(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
     constructor(context: Context) : this(context, null)
 
     private val binding = ReadyToSendBannerBinding.inflate(LayoutInflater.from(context), this, true)
 
-    fun init(instancesRepository: InstancesRepository) {
+    fun init(instancesRepository: InstancesRepository, clock: Supplier<Long>) {
         val sentInstances: List<Instance> = instancesRepository.getAllByStatus(Instance.STATUS_SUBMITTED)
         val numberOfInstancesReadyToSend = instancesRepository.getCountByStatus(
             Instance.STATUS_COMPLETE,
@@ -28,7 +29,7 @@ class ReadyToSendBanner(context: Context, attrs: AttributeSet?) : ConstraintLayo
 
         if (sentInstances.isNotEmpty() && numberOfInstancesReadyToSend > 0) {
             val lastSentInstance = sentInstances.maxBy { instance -> instance.lastStatusChangeDate }
-            val millisecondsAgo = System.currentTimeMillis() - lastSentInstance.lastStatusChangeDate
+            val millisecondsAgo = clock.get() - lastSentInstance.lastStatusChangeDate
             if (millisecondsAgo >= ONE_DAY) {
                 binding.title.text = context.getString(R.string.last_form_sent_days_ago, millisecondsAgo / ONE_DAY)
             } else if (millisecondsAgo >= ONE_HOUR) {

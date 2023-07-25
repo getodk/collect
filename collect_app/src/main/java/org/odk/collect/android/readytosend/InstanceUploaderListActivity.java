@@ -476,7 +476,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             findViewById(R.id.buttonholder).setVisibility(View.VISIBLE);
         }
 
-        binding.readyToSendBanner.init(instancesRepositoryProvider.get());
+        binding.readyToSendBanner.init(instancesRepositoryProvider.get(), System::currentTimeMillis);
     }
 
     @Override

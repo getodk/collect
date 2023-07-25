@@ -146,4 +146,20 @@ class SendFinalizedFormTest {
             .clickSendSelected()
             .assertText("One Question Google - Success")
     }
+
+    @Test
+    fun whenThereAreSentAndReadyToSendForms_displayTheBanner() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "123"))
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "124"))
+
+            .clickSendFinalizedForm(2)
+            .selectForm(0)
+            .clickSendSelected()
+            .clickOK(SendFinalizedFormPage())
+            .assertText("1 form(s) ready to send")
+    }
 }
