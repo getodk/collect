@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry.questions;
 
 import static android.view.View.GONE;
 import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
+import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -85,7 +86,10 @@ public final class WidgetViewUtils {
             button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             TableLayout.LayoutParams params = new TableLayout.LayoutParams();
-            params.setMargins(7, 5, 7, 5);
+
+            float marginExtraSmall = context.getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_extra_small);
+            int topMargin = pxFromDp(context, marginExtraSmall);
+            params.setMargins(7, topMargin, 7, 5);
 
             button.setLayoutParams(params);
 
