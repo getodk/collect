@@ -18,6 +18,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="added_on_date_at_time">\'Přidáno\' EEE, dd MMM, yyyy \'v\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\"Aktualizováno dne\" EEE, MMM dd, rrrr \"v\" HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="saved_on_date_at_time">\'Uloženo\' EEE, dd MMM, yyyy \'v\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -138,8 +139,10 @@
   <string name="keep_editing">Pokračujte v úpravách</string>
   <string name="quit_form_title">Uložit formulář?</string>
   <string name="save_explanation">Tento formulář můžete uložit a kdykoli k němu přistupovat z návrhů.</string>
+  <string name="save_explanation_with_last_saved">\"Tento formulář byl naposledy uložen dne\" EEE, MMM dd, rrrr \"v\" HH:mm\". Uložit jako návrh pro zachování změn.</string>
   <string name="quit_form_continue_title">Pokračovat v úpravách?</string>
   <string name="discard_form_warning">Pokud formulář zahodíte, ztratíte všechny dosud provedené změny.</string>
+  <string name="discard_changes_warning">\"Tento formulář byl naposledy uložen dne\" EEE, MMM dd, rrrr \"v\" HH:mm\". Pokud změny zahodíte, ztratíte všechny změny, které jste od té doby provedli.</string>
   <string name="saving_form">Ukládám dotazník</string>
   <string name="survey_saving_validating_message">Ověřuji odpovědi…</string>
   <string name="survey_saving_collecting_message">Sbírám data…</string>

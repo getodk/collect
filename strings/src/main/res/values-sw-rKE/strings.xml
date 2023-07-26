@@ -7,16 +7,16 @@
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="added_on_date_at_time">\'Imeongezwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="added_on_date_at_time">Imeongezwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Imehifadhiwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="saved_on_date_at_time">Imehifadhiwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Imekamilishwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="finalized_on_date_at_time">Imekamilishwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Imetumwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="sent_on_date_at_time">Imetumwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'ilishindwa kutumwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">ilishindwa kutumwa \'EEE, MMM dd, yyyy \'at\' HH:mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sort_by_name_asc">Jina, A-Z</string>

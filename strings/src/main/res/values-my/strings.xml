@@ -1,24 +1,39 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
+  <string name="enter_data">ဖောင်အသစ်ဖြည့်မည်</string>
   <!--Text for an action button on the main screen.-->
+  <string name="review_data">ဖောင်ကြမ်းများ</string>
   <!--Text for an action button on the main screen.-->
+  <string name="send_data">တင်ပို့ရန်အသင့်</string>
   <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">တင်ပို့ပြီးဖောင်</string>
   <!--Text for an action button on the main screen.-->
+  <string name="get_forms">ဒေါင်းလုပ်ရယူပြီးဖောင်</string>
   <!--Text for an action button on the main screen.-->
+  <string name="manage_files">ဖျက်ထားသောဖောင်</string>
+  <string name="saved_forms">သိမ်းထားပြီးဖောင်များ</string>
+  <string name="version_number">ဗားရှင်း ၁%s</string>
+  <string name="id_number">ID 1%s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="added_on_date_at_time">\'Added on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="added_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ကထပ်မံဖြည့်ထည့်ခဲ့သည်</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ကနောက်ဆုံးအခြေအနေကိုမွမ်းမံခဲ့သည်</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="saved_on_date_at_time">\'Saved on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="saved_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ကသိမ်းဆည်းခဲ့သည်</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="finalized_on_date_at_time">\'Finalized on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="finalized_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ကအပြီးသတ်ပြင်ဆင်ခဲ့သည်</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'Sent on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="sent_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ကပေးပို့ခဲ့သည်</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sending_failed_on_date_at_time">\'Sending failed on\' EEE, MMM dd, yyyy \'at\' HH:mm</string>
+  <string name="sending_failed_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ပေးပို့စဉ်မအောင်မြင်ခဲ့ပါ </string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ကဖျက်ထားသည်</string>
+  <string name="submission_deleted">ပေးပို့ပြီးဖောင်ကိုဖျက်လိုက်ပြီ</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">EEE, MMM dd, yyyy \'at\' HH:mm ကထပ်မံမွမ်းမံခဲ့သည်</string>
+  <string name="encrypted_form">လုံခြုံအောင်ကုတ်ဖြင့်သိမ်းထားသည့်ဖောင်</string>
+  <string name="deleted_form">ဖျက်သိမ်းပြီးဖောင်</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="no_items_display">ပံုစံအားေဖာ္ျပျခင္းမျပဳနိုင္ပါ</string>
