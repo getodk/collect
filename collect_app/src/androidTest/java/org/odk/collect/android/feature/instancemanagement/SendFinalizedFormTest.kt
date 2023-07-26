@@ -5,8 +5,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
-import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -16,7 +14,6 @@ import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
-import org.odk.collect.projects.Project.New
 
 @RunWith(AndroidJUnit4::class)
 class SendFinalizedFormTest {
@@ -120,32 +117,5 @@ class SendFinalizedFormTest {
             .clickViewSentForm(1)
             .clickOnText("One Question")
             .assertOnPage()
-    }
-
-    @Test
-    fun whenGoogleUsedAsServer_sendsSubmissionToSheet() {
-        addGDProject(
-            New(
-                "GD Project",
-                "G",
-                "#3e9fcc"
-            ),
-            "dani@davey.com",
-            testDependencies
-        )
-
-        rule.startAtFirstLaunch()
-            .clickTryCollect()
-            .openProjectSettingsDialog()
-            .selectProject("GD Project")
-            .copyForm("one-question-google.xml", null, false, "GD Project")
-            .startBlankForm("One Question Google")
-            .answerQuestion("what is your age", "47")
-            .swipeToEndScreen()
-            .clickFinalize()
-            .clickSendFinalizedForm(1)
-            .clickSelectAll()
-            .clickSendSelected()
-            .assertText("One Question Google - Success")
     }
 }
