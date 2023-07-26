@@ -15,7 +15,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'इ.ई.ई., एमएमएम डीडी, य्यय\' एचएच: एमएम वर अंतिम रूप दिले</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
-  <string name="sent_on_date_at_time">\'सेंड ऑन\' ईईई, एमएमएम डीडी, य्य्य \'एचएच: एमएम</string>
+  <string name="sent_on_date_at_time">\'सेंड ऑन\' EEE, MMM DD, yyyy HH: mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'ईईई, एमएमएम डीडी, येय एचएच: एमएम \'वर पाठविणे अयशस्वी झाले</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
