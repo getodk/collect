@@ -39,7 +39,7 @@
         <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
 
         <!-- Material3 attributes (needed if parent="Theme.MaterialComponents"). -->
-        <item name="colorPrimaryInverse">#6DD2FF</item>
+        <item name="colorPrimaryInverse">@color/colorPrimaryInverse</item>
         <item name="colorPrimaryContainer">@color/colorPrimaryContainer</item>
         <item name="colorOnPrimaryContainer">@color/colorOnPrimaryContainer</item>
         <item name="colorSecondaryContainer">@color/colorPrimaryContainer</item>
@@ -50,8 +50,8 @@
         <item name="colorOnTertiaryContainer">@color/colorOnPrimaryContainer</item>
         <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/colorOnSurfaceVariant</item>
-        <item name="colorSurfaceInverse">#003547</item>
-        <item name="colorOnSurfaceInverse">#E1F4FF</item>
+        <item name="colorSurfaceInverse">@color/colorSurfaceInverse</item>
+        <item name="colorOnSurfaceInverse">@color/colorOnSurfaceInverse</item>
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
         <item name="colorErrorContainer">@color/colorErrorContainer</item>
         <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>

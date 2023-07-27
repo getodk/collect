@@ -4,6 +4,7 @@
     <color name="colorOnPrimary">#ffffff</color>
     <color name="colorPrimaryContainer">#bfe9ff</color>
     <color name="colorOnPrimaryContainer">#001f2a</color>
+    <color name="colorPrimaryInverse">#6dd2ff</color>
 
     <color name="colorError">#ba1a1a</color>
     <color name="colorOnError">#ffffff</color>
@@ -19,6 +20,8 @@
     <color name="colorOnSurfaceVariant">#40484c</color>
     <color name="colorSurfaceContainerLow">#f7f7f7</color>
     <color name="elevationOverlayColor">#fafcff</color>
+    <color name="colorSurfaceInverse">#003547</color>
+    <color name="colorOnSurfaceInverse">#E1F4FF</color>
 
     <bool name="lightStatusBar">true</bool>
 </resources>
