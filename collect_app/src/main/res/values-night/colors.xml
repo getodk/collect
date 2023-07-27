@@ -18,6 +18,7 @@
     <color name="colorOnSurface">#bfe9ff</color>
     <color name="colorOnSurfaceVariant">#c0c8cd</color>
     <color name="colorSurfaceContainerLow">#00141E</color>
+    <color name="elevationOverlayColor">#6dd2ff</color>
 
     <bool name="lightStatusBar">false</bool>
 </resources>
