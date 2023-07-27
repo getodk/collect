@@ -990,4 +990,6 @@
   <string name="edit_form">Editar</string>
   <string name="view_form">Mirar</string>
   <string name="close_snackbar">Cerrar notificación</string>
+
+  <string name="edit_finalized_form_warning">Después del 30 de septiembre, no podrá editar los formularios finalizados. Guarde los formularios como borrador para editarlos más tarde.\n\nPuede verificar si hay errores en un formulario de borrador tocando los tres puntos (⋮) y luego Check for errors.</string>
 </resources>

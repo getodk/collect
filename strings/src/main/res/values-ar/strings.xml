@@ -1,11 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
-  <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen.-->
-  <!--Text for an action button on the main screen.-->
+  <!-- Text for the topmost button on the main screen. It should be short and action-oriented. -->
+  <string name="enter_data">ابدأ بشكل جديد</string>
+  <!-- Text for an action button on the main screen. -->
+  <string name="review_data">المسودات</string>
+  <!-- Text for an action button on the main screen. -->
+  <string name="send_data">جاهز للإرسال</string>
+  <!-- Text for an action button on the main screen. -->
+  <string name="view_sent_forms">النماذج المرسلة</string>
+  <!-- Text for an action button on the main screen. -->
+  <string name="get_forms">تحميل النموذج</string>
+  <!-- Text for an action button on the main screen. -->
+  <string name="manage_files">حذف النموذج</string>
   <string name="version_number">الإصدار: %s</string>
   <string name="id_number">المعرف : %s</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->

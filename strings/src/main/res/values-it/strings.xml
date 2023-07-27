@@ -987,4 +987,6 @@
   <string name="edit_form">Modifica</string>
   <string name="view_form">Guarda</string>
   <string name="close_snackbar">Chiudere la notifica</string>
+
+  <string name="edit_finalized_form_warning">Dopo il 30 settembre, non potrai modificare i moduli finalizzati. Salva i moduli come bozza per modificarli in seguito.\n\nPuoi verificare la presenza di errori in una bozza del modulo toccando i tre puntini (⋮) e quindi Controlla errori.</string>
 </resources>

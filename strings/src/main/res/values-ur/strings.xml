@@ -45,19 +45,19 @@
   <string name="filter_the_list">فہرست فلٹر کریں</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">سرچ </string>
-  <string name="no_items_display">دکھانے کیلے کچھ بھی نہیں ہے</string>
+  <string name="no_items_display">دکھانے کیلے کچھ نہیں ہے</string>
   <string name="no_items_display_forms">دکھانے کیلئےکچھ نہیں ہے خالی فارم حاصل کریں اور پر کریں</string>
   <string name="no_items_display_sent_forms">دکھانے کے لئے کچھ بھی نہیں دستیاب. \ n \ دیکھنے سے پہلے فارم حتمی شکل میں بھیجیں</string>
   <string name="no_items_display_instances">دکھانے کیلئےکچھ نہیں ہے. ڈرافٹ فارم کو بھیجنےسے پہلےمکمل کریں</string>
   <string name="not_granted_permission">آپ کو یہ کام کرنے کی اجازت نہیں ہے</string>
   <string name="storage_runtime_permission_denied_title">سٹوریج پرمیشن</string>
   <string name="storage_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ آپ کے فارم تک رسائی حاصل نہیں کرسکتایا جواب محفوظ نہیں کر سکتا جب آپ پرمیشن دینے کے لئے تیار ہو تو ایپلکیشن دوبارہ کھولیں.</string>
-  <string name="location_runtime_permissions_denied_title">لوکیشن پرمیشن</string>
+  <string name="location_runtime_permissions_denied_title">لوکیشن کی اجازت</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <string name="location_runtime_permissions_denied_desc">اس <b>مخصوص</b> اجازت کے بغیر کولیکٹ آپ کی لوکیشن ریکارڈ نہیں کرسکتا۔ برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو </string>
-  <string name="camera_runtime_permission_denied_title">کمیرہ پرمیشن </string>
+  <string name="camera_runtime_permission_denied_title">کمیرہ کی اجازت</string>
   <string name="camera_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو کیمرے تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ  پرمیشن دینے کے لئے تیار ہو</string>
-  <string name="record_audio_runtime_permission_denied_title">ریکارڈ آڈیو پرمیشن</string>
+  <string name="record_audio_runtime_permission_denied_title"> آواز ریکارڈ کرنے کی اجازت</string>
   <string name="record_audio_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو مائیکروفون تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
   <string name="get_accounts_runtime_permission_denied_title">گیٹ اکاؤنٹس پرمیشن</string>
   <string name="get_accounts_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو اکاؤنٹس تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
@@ -110,7 +110,7 @@
   <string name="discard_answer">جواب کو ہٹا دیں</string>
   <string name="discard_group">گروپ کو ہٹا دیں</string>
   <string name="delete_repeat">گروپ کو ہٹا دیں</string>
-  <string name="delete_repeat_ask">اس گروپ کو ہٹادیں</string>
+  <string name="delete_repeat_ask">کیا اس گروپ کو ہٹا دیا جائے؟</string>
   <string name="delete_repeat_confirm">\"‎%s‏\" گروپ اور اس کے تمام ذیلی گروپوں کو ہٹا دیں</string>
   <string name="delete_repeat_no">منسوخ</string>
   <string name="invalid_answer_error">معذرت، یہ جواب غلط ہے</string>
@@ -512,13 +512,13 @@
     # SEND FINALIZED FORM
     ##############################################-->
   <string name="uploading_data">فارم بھیجا جا رہا ہے</string>
-  <string name="noselect_error">معذرت، آپنے کسی فارم کا انتخاب نہیں کیا!</string>
+  <string name="noselect_error">معذرت، آپ نے کسی فارم کا انتخاب نہیں کیا!</string>
   <string name="no_connection">کوئی نیٹ ورک کنکشن دستیاب نہیں ہے</string>
   <string name="sending_items">فارم(ز)%1$s آف %2$s کو بھیجا جا رہا ہے‏ </string>
   <string name="send_selected_data">منتخب شدہ کو بھیجیں</string>
   <string name="server_auth_credentials">سرور کے لئے غلط صارف کا نام یا پاس ورڈ:%s</string>
   <string name="server_requires_auth">سرور کو تصدیق چاہیے</string>
-  <string name="no_forms_uploaded">معافی، کوئی فارم اپ لوڈ نہیں کیا گیا</string>
+  <string name="no_forms_uploaded">معذرت، کوئی فارم اپ لوڈ نہیں کیا گیا</string>
   <string name="upload_results">نتیجہ اپ لوڈ کریں</string>
   <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
   <string name="change_view">نظارہ بدلیں</string>
@@ -758,7 +758,7 @@
   <string name="admin_password_disabled">ایڈمن کا پاس ورڈ غیر فعال کر دیاگیا۔</string>
   <string name="admin_password_incorrect">معافی، پاس ورڈ ٹھیک نہیں ہے</string>
   <string name="enter_admin_password">ایڈمن کا پاس ورڈ درج کریں</string>
-  <string name="change_admin_password">ایڈمن پاسورڈ تبدیل کریں</string>
+  <string name="change_admin_password">ایڈمن پاس ورڈ تبدیل کریں</string>
   <string name="show_password">پاس ورڈ دکھائیں</string>
   <string name="found_in_main">نشان ہٹا کرکے مرکزی فہرست سے ہٹا دیں</string>
   <string name="found_in_settings">Unprotected settings سے چھپانے کے لئے چیک مارک ہٹا دیں</string>
@@ -1008,4 +1008,5 @@ Constraint processing</string>
   <string name="edit_form">ترمیم کریں</string>
   <string name="view_form">دیکھیں</string>
   <string name="close_snackbar">snackbar کو بند کر دیں</string>
+  <string name="edit_finalized_form_warning">30 ستمبر کے بعد، آپ حتمی شکل میں ترمیم نہیں کر سکیں گے۔ فارمز کو بعد میں ترمیم کرنے کے لیے ڈرافٹ کے طور پر محفوظ کریں۔\n\nآپ تین نقطوں (⋮) کو تھپتھپا کر ڈرافٹ فارم میں غلطیوں کی جانچ کر سکتے ہیں اور پھر غلطیوں کی جانچ کر سکتے ہیں۔</string>
 </resources>
