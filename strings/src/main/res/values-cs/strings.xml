@@ -994,4 +994,6 @@
   <string name="edit_form">Upravit</string>
   <string name="view_form">Zobrazit</string>
   <string name="close_snackbar">Zavřít snackbar</string>
+
+  <string name="edit_finalized_form_warning">Po 30. září již nebudete moci upravovat dokončené formuláře. Uložte formuláře jako koncept, abyste je mohli později upravit.\n\nChyby ve formuláři konceptu můžete zkontrolovat klepnutím na tři tečky (⋮) a poté na možnost Zkontrolovat chyby.</string>
 </resources>

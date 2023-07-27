@@ -988,4 +988,6 @@
   <string name="edit_form">Bearbeiten</string>
   <string name="view_form">Ansicht</string>
   <string name="close_snackbar">Snackbar schließen</string>
+
+  <string name="edit_finalized_form_warning">Nach dem 30. September können Sie abgeschlossene Formulare nicht mehr bearbeiten. Speichern Sie Formulare als Entwurf, um sie später zu bearbeiten.\n\nSie können einen Formularentwurf auf Fehler überprüfen, indem Sie auf die drei Punkte (⋮) und dann auf „Auf Fehler prüfen“ tippen.</string>
 </resources>

@@ -985,4 +985,6 @@
   <string name="edit_form">Ubah</string>
   <string name="view_form">Lihat</string>
   <string name="close_snackbar">Tutup snackbar</string>
+
+  <string name="edit_finalized_form_warning">Setelah tanggal 30 September, Anda tidak akan dapat mengedit formulir yang telah diselesaikan. Simpan formulir sebagai draf untuk diedit nanti.\n\nAnda dapat memeriksa kesalahan dalam formulir draf dengan mengetuk tiga titik (⋮) lalu Periksa kesalahan.</string>
 </resources>

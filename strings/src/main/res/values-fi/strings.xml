@@ -986,4 +986,6 @@
   <string name="edit_form">Muokkaa</string>
   <string name="view_form">Tarkastele</string>
   <string name="close_snackbar">Sulje ilmoitus</string>
+
+  <string name="edit_finalized_form_warning">Syyskuun 30. päivän jälkeen et voi muokata valmiita lomakkeita. Tallenna lomakkeet luonnoksina, jotta voit muokata niitä myöhemmin.\n\nVoit tarkistaa luonnoslomakkeen virheet napauttamalla kolmea pistettä (⋮) ja sitten Tarkista virheet.</string>
 </resources>

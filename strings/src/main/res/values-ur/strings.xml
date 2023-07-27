@@ -1008,4 +1008,5 @@ Constraint processing</string>
   <string name="edit_form">ترمیم کریں</string>
   <string name="view_form">دیکھیں</string>
   <string name="close_snackbar">snackbar کو بند کر دیں</string>
+  <string name="edit_finalized_form_warning">30 ستمبر کے بعد، آپ حتمی شکل میں ترمیم نہیں کر سکیں گے۔ فارمز کو بعد میں ترمیم کرنے کے لیے ڈرافٹ کے طور پر محفوظ کریں۔\n\nآپ تین نقطوں (⋮) کو تھپتھپا کر ڈرافٹ فارم میں غلطیوں کی جانچ کر سکتے ہیں اور پھر غلطیوں کی جانچ کر سکتے ہیں۔</string>
 </resources>
