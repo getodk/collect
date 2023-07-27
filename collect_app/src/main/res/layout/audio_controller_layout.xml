@@ -74,14 +74,11 @@ limitations under the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/remove"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete_answer_file"
-            android:textColor="?colorError"
-            app:icon="@drawable/ic_baseline_delete_outline_24"
-            app:iconTint="?colorError"
-            app:strokeColor="?colorError" />
+            app:icon="@drawable/ic_baseline_delete_outline_24" />
 
     </LinearLayout>
 </LinearLayout>
