@@ -42,6 +42,7 @@ import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.LocalizedActivity
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainMenuActivity : LocalizedActivity() {
@@ -69,6 +70,8 @@ class MainMenuActivity : LocalizedActivity() {
 
         CrashHandler.getInstance(this)?.also {
             if (it.hasCrashed(this)) {
+                Timber.w("Showing previous crash report")
+
                 super.onCreate(null)
                 ActivityUtils.startActivityAndCloseAllOthers(this, CrashHandlerActivity::class.java)
                 return
