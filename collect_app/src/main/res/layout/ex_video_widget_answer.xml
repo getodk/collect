@@ -8,11 +8,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/capture_video_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/launch_app" />
+        style="@style/ThemeOverlay.Material3.Button"
+        android:text="@string/launch_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/play_video_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/play_video" />
+        style="@style/ThemeOverlay.Material3.Button"
+        android:text="@string/play_video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

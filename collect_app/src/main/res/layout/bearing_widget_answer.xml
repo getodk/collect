@@ -7,8 +7,10 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/bearing_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/get_bearing" />
+        style="@style/ThemeOverlay.Material3.Button"
+        android:text="@string/get_bearing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/answer_text"

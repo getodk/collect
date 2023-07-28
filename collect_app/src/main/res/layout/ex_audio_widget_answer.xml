@@ -8,8 +8,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/launch_external_app_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/launch_app" />
+        style="@style/ThemeOverlay.Material3.Button"
+        android:text="@string/launch_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <include
         android:id="@+id/audio_player"

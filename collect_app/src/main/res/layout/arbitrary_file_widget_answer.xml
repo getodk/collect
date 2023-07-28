@@ -8,8 +8,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/arbitrary_file_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/choose_file" />
+        style="@style/ThemeOverlay.Material3.Button"
+        android:text="@string/choose_file"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
