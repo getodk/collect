@@ -229,8 +229,7 @@
     ##############################################-->
   <string name="refresh">განახლება</string>
   <string name="download">არჩეულის ჩამოტვირთვა</string>
-  <string name="download_forms_result">ჩამოტვირთვის შედეგები</string>
-  <string name="downloading_data">სერვერთან დაკავშირება</string>
+    <string name="downloading_data">სერვერთან დაკავშირება</string>
   <string name="fetching_file">%1$s.\n\nForm %2$sდან of %3$s ფორმ(ებ)ის მიღება</string>
   <string name="form_download_progress">%1$s. მედია-ფაილების მიღება: %2$s of %3$s</string>
   <string name="version">ვერსია:</string>
@@ -354,7 +353,6 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">ჩემი Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->

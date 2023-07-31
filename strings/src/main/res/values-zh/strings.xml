@@ -502,8 +502,7 @@
     ##############################################-->
   <string name="refresh">刷新</string>
   <string name="download">下载选中项</string>
-  <string name="download_forms_result">下载结果</string>
-  <string name="downloading_data">连接到服务器</string>
+    <string name="downloading_data">连接到服务器</string>
   <string name="fetching_file">获取 %1$s.\n\n表单 %2$s / %3$s 表单.</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
   <string name="version">版本:</string>
@@ -766,18 +765,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">我的驱动器</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">与我共享</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">下载所选内容</string>
-  <string name="go_back">返回</string>
   <string name="google_auth_io_exception_msg">无法进行API调用。如果您正在运行本地生成，请查看项目自述文件。</string>
-  <string name="reading_files">正在读取文件</string>
-  <string name="drive_get_file">获取 %1$s和媒体文件.</string>
   <string name="no_google_account">无选中的谷歌账号！</string>
   <string name="google_set_account">您已选择Google Sheets作为服务器，请在“设置”中选择相应的Google帐户，然后继续</string>
-  <string name="google_search_browse">搜索表单。或选择下面的“我的驱动器”进行浏览。</string>
   <string name="invalid_sheet_id">工作表id无效: %1$s</string>
   <string name="missing_submission_url">缺失提交URL</string>
   <string name="google_sheets_access_denied">访问被拒绝。请确保电子表格所有者已授予您编辑权限。</string>
@@ -788,7 +780,6 @@
   <string name="instance_upload_cancelled">实例上载已取消</string>
   <string name="no_columns_to_upload">在表单中找不到要上载的列</string>
   <string name="missing_google_account_dialog_title">未设置Google帐户</string>
-  <string name="multiple_media_folders_detected_notification">检测到多个媒体文件夹，请删除一个并重试</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

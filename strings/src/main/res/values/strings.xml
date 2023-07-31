@@ -658,7 +658,6 @@
     <string name="refresh">Refresh</string>
     <string name="download">Get Selected</string>
 
-    <string name="download_forms_result">Download Results</string>
     <string name="downloading_data">Connecting to Server</string>
 
     <string name="fetching_file">Getting %1$s.\n\nForm %2$s of %3$s form(s).</string>
@@ -981,18 +980,11 @@
      ##############################################
      -->
     <!-- Title of the screen that lists forms in user's Google Drive -->
-    <string name="go_drive">My Drive</string>
     <!-- Title of the screen that lists forms shared with Google Drive user -->
-    <string name="go_shared">Shared with Me</string>
     <!-- Button for navigating across Google Drive folders -->
-    <string name="download_selected">Download Selected</string>
-    <string name="go_back">Go back</string>
     <string name="google_auth_io_exception_msg">Unable to make API calls. If you are running a local build, please review the project readme.</string>
-    <string name="reading_files">Reading files</string>
-    <string name="drive_get_file">Getting %1$s and media files.</string>
     <string name="no_google_account">No Google Account Selected!</string>
     <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in Settings before continuing</string>
-    <string name="google_search_browse">Search for forms. Or select \'My Drive\' below to browse.</string>
     <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
     <string name="missing_submission_url">Missing submission URL</string>
     <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you edit permission.</string>
@@ -1003,7 +995,6 @@
     <string name="instance_upload_cancelled">Instance upload canceled</string>
     <string name="no_columns_to_upload">No columns found in the form to upload.</string>
     <string name="missing_google_account_dialog_title">Google account not set</string>
-    <string name="multiple_media_folders_detected_notification">More than one media folder detected, please remove one and try again</string>
 
     <!--
      ##############################################

@@ -378,8 +378,7 @@
     ##############################################-->
   <string name="refresh">دوبارہ شروع کریں</string>
   <string name="download">منتخب کریں</string>
-  <string name="download_forms_result">ڈاؤنلوڈ نتایج </string>
-  <string name="downloading_data">سرور کے ساتھ رابطہ ہو رہا ہے</string>
+    <string name="downloading_data">سرور کے ساتھ رابطہ ہو رہا ہے</string>
   <string name="fetching_file">‎‎‏‏فارم %1$sکو حاصل کیا جا رہا ہے %2$s آف %3$sفارم (ز) ‎‏ </string>
   <string name="form_download_progress"> ‎‏ %1$s۔میڈیا فائل حاصل کی جا رہی ہے :‎‏  %2$s آف%3$s</string>
   <string name="version">ورژن</string>
@@ -591,16 +590,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">مائی ڈرائیو</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">میرے ساتھ شیئر کیا ہوا</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">منتخب کردہ ڈاؤنلوڈ کریں</string>
-  <string name="go_back">واپس جاؤ</string>
   <string name="google_auth_io_exception_msg">اے پی آئ کالز بنانے میں ناکام اگر آپ لوکل بلڈ چلا رہے ہیں تو، براہ کرم پراجیکٹ ریڈمی پڑھ لیں.</string>
-  <string name="drive_get_file">%1$sاور میڈیا فائلز کو حاصل کیا جا رہا ہے</string>
   <string name="no_google_account">کوئی گوگل اکاؤنٹ منتخب نہیں ہوا!</string>
-  <string name="google_search_browse">فارم تلاش کریں. یا  \'مائی ڈرائیو\' کو منتخب کریں.</string>
   <string name="invalid_sheet_id">غلط شیٹ ID:%1$s</string>
   <string name="google_sheets_access_denied">رسائی مسترد کر دی . براہ کرم یقینی بنائیں کہ اسپریڈ شیٹ مالک نے آپ کو ترمیم کی  اجازت دی ہے</string>
   <string name="google_sheets_missing_columns">اسپریڈ شیٹ میں مندرجہ بالا کالم غائب ہیں:%1$s</string>
@@ -609,7 +602,6 @@
   <string name="instance_upload_cancelled">انسٹنس اپ لوڈ منسوخ</string>
   <string name="no_columns_to_upload">اپ لوڈ کرنے کیلئے فارم میں کوئی کالم نہیں مل سکا.</string>
   <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
-  <string name="multiple_media_folders_detected_notification">ایک سے زائد میڈیا فولڈر پایاگیا ہے، براہ مہربانی ایک کو ہٹا دیں اور دوبارہ کوشش کریں</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

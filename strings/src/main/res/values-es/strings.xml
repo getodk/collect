@@ -536,8 +536,7 @@
     ##############################################-->
   <string name="refresh">Actualizar</string>
   <string name="download">Obtener los Seleccionados</string>
-  <string name="download_forms_result">Descargar Resultados</string>
-  <string name="downloading_data">Conectandose al Servidor</string>
+    <string name="downloading_data">Conectandose al Servidor</string>
   <string name="fetching_file">Obteniendo %1$s.\n\nFormulario %2$s de %3$s formulario(s).</string>
   <string name="form_download_progress">%1$s. Obteniendo los archivos: %2$s de %3$s</string>
   <string name="version">Version:</string>
@@ -805,18 +804,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Mi Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Compartido conmigo</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Descarga Seleccionada</string>
-  <string name="go_back">Regresa</string>
   <string name="google_auth_io_exception_msg">No es posible hacer  llamado al API. Si usted esta ejecutando en un ambiente local, por favor revise readme del proyecto</string>
-  <string name="reading_files">Leyendo archivos</string>
-  <string name="drive_get_file">Obteniendo %1$s y archivos multimedia.</string>
   <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
   <string name="google_set_account">Ha seleccionado Hojas de cálculo de Google como su servidor, seleccione una cuenta de Google correspondiente en Configuración antes de continuar</string>
-  <string name="google_search_browse">Busca en formularios. O selecciona  \'My Drive\' debajo para visualizar.</string>
   <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
   <string name="missing_submission_url">Falta URL para envío </string>
   <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>
@@ -827,7 +819,6 @@
   <string name="instance_upload_cancelled">Cargue de Instancia cancelada</string>
   <string name="no_columns_to_upload">No se encontraron columnas en el formulario para cargar.</string>
   <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
-  <string name="multiple_media_folders_detected_notification">Se ha detectado más de una carpeta de medios, por favor remueva una e intente de nuevo</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

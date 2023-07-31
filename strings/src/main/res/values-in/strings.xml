@@ -476,8 +476,7 @@
     ##############################################-->
   <string name="refresh">Memuat Ulang</string>
   <string name="download">Unduh Terpilih</string>
-  <string name="download_forms_result">Hasil Unduhan</string>
-  <string name="downloading_data">Menghubungkan ke Server</string>
+    <string name="downloading_data">Menghubungkan ke Server</string>
   <string name="fetching_file">Mengunduh %1$s.\n\nFormulir %2$s dari %3$s formulir.</string>
   <string name="form_download_progress">%1$s. Sedang mengunduh berkas media: %2$s dari %3$s</string>
   <string name="version">Versi:</string>
@@ -737,17 +736,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Drive saya</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Berbagi dengan saya</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Unduh Pilihan</string>
-  <string name="go_back">Kembali</string>
   <string name="google_auth_io_exception_msg">Tidak dapat memanggil API. Jika Anda menjalankan kompilasi lokal, mohon baca project readme.</string>
-  <string name="reading_files">Membaca berkas</string>
-  <string name="drive_get_file">Mendapatkan %1$s dan berkas media.</string>
   <string name="no_google_account">Tidak ada Akun Google yang dipilih.</string>
-  <string name="google_search_browse">Mencari formulir. Atau memilih \'My Drive\' di bawah ini untuk browse.</string>
   <string name="invalid_sheet_id">Id sheet tidak valid: %1$s</string>
   <string name="missing_submission_url">URL pengiriman tidak ditemukan.</string>
   <string name="google_sheets_access_denied">Akses ditolak. Pastikan pemilik spreadsheet memberikan Anda akses untuk mengubah.</string>
@@ -758,7 +750,6 @@
   <string name="instance_upload_cancelled">Permintaan unggah dibatalkan</string>
   <string name="no_columns_to_upload">Tidak ada kolom yang ditemukan di dalam formulir untuk diunggah.</string>
   <string name="missing_google_account_dialog_title">Akun Google belum diatur</string>
-  <string name="multiple_media_folders_detected_notification">Lebih dari satu folder media terdeteksi, mohon hapus salah satu dan coba lagi.</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

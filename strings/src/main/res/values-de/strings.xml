@@ -533,8 +533,7 @@
     ##############################################-->
   <string name="refresh">Aktualisieren</string>
   <string name="download">Auswahl herunterladen</string>
-  <string name="download_forms_result">Download-Ergebnisse</string>
-  <string name="downloading_data">Verbindung mit dem Server wird aufgebaut</string>
+    <string name="downloading_data">Verbindung mit dem Server wird aufgebaut</string>
   <string name="fetching_file">Lade %1$s.\n\nFormular %2$s von %3$s Formular(en).</string>
   <string name="form_download_progress">%1$s. Media-Dateien werden geladen: %2$s von %3$s</string>
   <string name="version">Version:</string>
@@ -802,18 +801,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Shared with Me</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Auswahl herunterladen</string>
-  <string name="go_back">Zurück</string>
   <string name="google_auth_io_exception_msg">API-Aufrufe nicht möglich. Wenn Sie einen lokalen Build laufen lassen, beachten Sie die Readme des Projekts.</string>
-  <string name="reading_files">Lese Dateien</string>
-  <string name="drive_get_file">Lade %1$s und Mediendateien.</string>
   <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
   <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
-  <string name="google_search_browse">Nach Formularen suchen. Oder \'My Drive\' wählen um zu browsen.</string>
   <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
   <string name="missing_submission_url">Fehlende Übermittlungs-URL</string>
   <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
@@ -824,7 +816,6 @@
   <string name="instance_upload_cancelled">Instanz Upload abgebrochen</string>
   <string name="no_columns_to_upload">Keine Spalten zum Hochladen im Formular gefunden.</string>
   <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
-  <string name="multiple_media_folders_detected_notification">Mehr als ein media-Ordner erkannt. Bitte einen Ordner löschen und erneut versuchen.</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

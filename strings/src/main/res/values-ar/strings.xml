@@ -486,8 +486,7 @@
     ##############################################-->
   <string name="refresh">تحديث</string>
   <string name="download">الحصول على الاستمارات المحددة</string>
-  <string name="download_forms_result">تحميل النتائج</string>
-  <string name="downloading_data">الإتصال بالخادم</string>
+    <string name="downloading_data">الإتصال بالخادم</string>
   <string name="fetching_file">الحصول على %1$s.\n\nالنموذج %2$s من %3$s نماذج</string>
   <string name="form_download_progress">%1$s. الحصول على ملفات الوسائط المتعددة:  %2$s  من %3$s</string>
   <string name="version">رقم الاصدار:</string>
@@ -716,17 +715,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">المحرك الخاص بي</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">مشاركة معي</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">تحميل المحدد</string>
-  <string name="go_back">السابق</string>
   <string name="google_auth_io_exception_msg">غير قادر على تنفيذ استدعاء API. إن كنت تشغل نسخة خاصة، الرجاء مراجعة الوثائق الخاصة بالمشروع.</string>
-  <string name="reading_files">قراءة الملفات</string>
-  <string name="drive_get_file">الحصول على %1$s وملفات الوسائط.</string>
   <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
-  <string name="google_search_browse">ابحث عن الاستمارات. أو اختار  \'My Drive\' من الاسفل لكي تتصفح</string>
   <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
   <string name="missing_submission_url">رابط الإرسال مفقود</string>
   <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن التعديل لك.</string>
@@ -737,7 +729,6 @@
   <string name="instance_upload_cancelled">تم إلغاء تحميل النموذج</string>
   <string name="no_columns_to_upload">لا توجد أعمدة في الاستمارة للتحميل.</string>
   <string name="missing_google_account_dialog_title">حساب Google لم يحدد</string>
-  <string name="multiple_media_folders_detected_notification">تم اكتشاف أكثر من مجلد وسائط، يرجى إزالة واحد وحاول مرة أخرى</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

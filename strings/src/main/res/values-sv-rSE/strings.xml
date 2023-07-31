@@ -389,8 +389,7 @@
     ##############################################-->
   <string name="refresh">Uppdatera</string>
   <string name="download">Hämta valda</string>
-  <string name="download_forms_result">Nedladdningsresultat</string>
-  <string name="downloading_data">Ansluter till server</string>
+    <string name="downloading_data">Ansluter till server</string>
   <string name="fetching_file">Hämtar %1$s.\n\nFormulär %2$s av %3$s formulär.</string>
   <string name="form_download_progress">%1$s. Hämtar mediafil: %2$s av %3$s</string>
   <string name="version">Version:</string>
@@ -601,17 +600,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Delat med mig</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Nedladdning vald</string>
-  <string name="go_back">Gå tillbaka</string>
   <string name="google_auth_io_exception_msg">API-anrop misslyckades. Om du kör programmet lokalt, vänligen gå igenom projektets \'readme\'.</string>
-  <string name="reading_files">Läser filer</string>
-  <string name="drive_get_file">Hämtar %1$s och mediafiler.</string>
   <string name="no_google_account">Inget Google-konto valt!</string>
-  <string name="google_search_browse">Sök efter formulär eller välj \'My Drive\' nedan för att bläddra.</string>
   <string name="invalid_sheet_id">Ogiltigt ID för ark: %1$s</string>
   <string name="missing_submission_url">URL för inskickning saknas</string>
   <string name="google_sheets_access_denied">Åtkomst nekad. Vänligen se till att kalkylarkets ägare har gett dig åtkomsträttigheter.</string>
@@ -619,7 +611,6 @@
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <string name="no_columns_to_upload">Inga kolumner hittades i formuläret som ska laddas upp</string>
   <string name="missing_google_account_dialog_title">Google-konto är inte inställt</string>
-  <string name="multiple_media_folders_detected_notification">Mer än en media-mapp upptäcktes. Ta bort en och försök igen.</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

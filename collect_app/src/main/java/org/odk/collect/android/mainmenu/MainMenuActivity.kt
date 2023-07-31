@@ -25,12 +25,10 @@ import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAv
 import org.odk.collect.android.databinding.MainMenuBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
-import org.odk.collect.android.gdrive.GoogleDriveActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ApplicationConstants
-import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -236,24 +234,14 @@ class MainMenuActivity : LocalizedActivity() {
             View.OnClickListener {
                 val protocol =
                     settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL)
-                val intent =
-                    if (protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS, ignoreCase = true)) {
-                        if (PlayServicesChecker().isGooglePlayServicesAvailable(this@MainMenuActivity)) {
-                            Intent(
-                                applicationContext,
-                                GoogleDriveActivity::class.java
-                            )
-                        } else {
-                            PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(this@MainMenuActivity)
-                            return@OnClickListener
-                        }
-                    } else {
-                        Intent(
-                            applicationContext,
-                            FormDownloadListActivity::class.java
-                        )
-                    }
-                startActivity(intent)
+                if (!protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS, ignoreCase = true)) {
+                    val intent = Intent(
+                        applicationContext,
+                        FormDownloadListActivity::class.java
+                    )
+
+                    startActivity(intent)
+                }
             }
         )
 

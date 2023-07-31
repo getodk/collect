@@ -297,8 +297,7 @@
     ##############################################-->
   <string name="refresh">रिफ्रेश </string>
   <string name="download">चयनित प्राप्त करें</string>
-  <string name="download_forms_result">परिणाम डाउनलोड करें</string>
-  <string name="downloading_data">सर्वर से कनेक्ट हो रहा है</string>
+    <string name="downloading_data">सर्वर से कनेक्ट हो रहा है</string>
   <string name="fetching_file">%3$sफॉर्म(s) का%1$s.\n\nफॉर्म %2$sमिल रहा है.</string>
   <string name="form_download_progress">%1$s. %3$sकी %2$sमीडिया फाइलें मिल रही हैं: </string>
   <string name="version">संस्करण:</string>
@@ -477,16 +476,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">माई ड्राइव</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">मेरे साथ साझा किया हुआ </string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">डाउनलोड चयनित</string>
-  <string name="go_back">वापस जायें</string>
   <string name="google_auth_io_exception_msg">API कॉल करने में असमर्थ यदि आप स्थानीय बिल्ड चला रहे हैं, तो कृपया  परियोजना readme की समीक्षा करें।</string>
-  <string name="drive_get_file"> %1$sऔर मीडिया फाइलों को प्राप्त कर रहा है.</string>
   <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
-  <string name="google_search_browse">फ़ॉर्म के लिए खोजें. या ब्राउज़ करने के लिए नीचे \'माय ड्राइव\' चुनें।</string>
   <string name="invalid_sheet_id">अमान्य शीट आईडी: %1$s</string>
   <string name="google_sheets_access_denied">पहुंच अस्वीकृत। कृपया सुनिश्चित करें कि स्प्रैडशीट ओनर ने आपको संपादन अधिकार दिए हैं।</string>
   <string name="google_sheets_missing_columns">स्प्रेडशीट में निम्न कॉलम लापता हैं: %1$s</string>

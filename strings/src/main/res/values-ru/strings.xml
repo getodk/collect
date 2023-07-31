@@ -494,8 +494,7 @@
     ##############################################-->
   <string name="refresh">Обновить</string>
   <string name="download">Загрузить выбранные</string>
-  <string name="download_forms_result">Результаты загрузки</string>
-  <string name="downloading_data">Подключение к серверу…</string>
+    <string name="downloading_data">Подключение к серверу…</string>
   <string name="fetching_file">Загружаю %1$s.\n\nБланк опросника %2$s из %3$s.</string>
   <string name="form_download_progress">%1$s. Загрузка медиа-файлов: %2$s из %3$s</string>
   <string name="version">Версия:</string>
@@ -728,17 +727,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Мой диск</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Доступные мне</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Загрузить выбранные</string>
-  <string name="go_back">Назад</string>
   <string name="google_auth_io_exception_msg">Не удалось вызвать API. Если была запущена локальная сборка, пожалуйста, обратитесь к документации проекта.</string>
-  <string name="reading_files">Чтение файлов</string>
-  <string name="drive_get_file">Получение %1$s и медиа-файлов.</string>
   <string name="no_google_account">Учётная запись Google не выбрана!</string>
-  <string name="google_search_browse">Поиск опросников. Или выберите \'Мой диск\' ниже для просмотра.</string>
   <string name="invalid_sheet_id">Неверный идентификатор листа: %1$s</string>
   <string name="missing_submission_url">Отсутствует URL для выгрузки</string>
   <string name="google_sheets_access_denied">Доступ запрещен. Пожалуйста, удостоверьтесь, что владелец таблицы выдал вам разрешение на редактирование.</string>
@@ -748,7 +740,6 @@
   <string name="instance_upload_cancelled">Загрузка отменена</string>
   <string name="no_columns_to_upload">В опросе для загрузки нет ни одного столбца.</string>
   <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
-  <string name="multiple_media_folders_detected_notification">Обнаружено несколько медиа-директорий, пожалуйста, удалите одну и попробуйте ещё раз</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

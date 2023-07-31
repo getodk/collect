@@ -126,10 +126,6 @@ the specific language governing permissions and limitations under the License.
         <activity
             android:name=".draw.DrawActivity"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".gdrive.GoogleDriveActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.InstanceChooserList" />
         <activity
             android:name=".formlists.blankformlist.BlankFormListActivity"

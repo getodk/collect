@@ -477,8 +477,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
     ##############################################-->
   <string name="refresh">Rifureshinga </string>
   <string name="download">Byatoranijwe</string>
-  <string name="download_forms_result">Bika ibisubizo kuri Tabuleti</string>
-  <string name="downloading_data">Kwihuza na Server </string>
+    <string name="downloading_data">Kwihuza na Server </string>
   <string name="fetching_file">Akira %1$s.\n\n y\'inyandiko shingiro %2$s ya %3$s inyandiko shingiro (zose).</string>
   <string name="form_download_progress">%1$s. Akira ububiko bw\'amajwi: %2$s ya %3$s</string>
   <string name="version">Urutonde rw\'ibibazo/form(ariko biteganywa kugenda z\'ihabwa nimero bitewe n\' impinduka ikozwe ho nyuma y\'uko yahawe aba atanga amakuru)</string>
@@ -713,17 +712,10 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Ibyo nasangijwe</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Bika kuri tabuleti ibyo wahisemo</string>
-  <string name="go_back">Subira inyuma </string>
   <string name="google_auth_io_exception_msg">Ntabwo ushobora guhamaraga API. Niba ukurikize uko ahantu hateye, usabwa gusubira kumushinga wa readme cg somiwanjye</string>
-  <string name="reading_files">Usobanukirwe n\'ububiko</string>
-  <string name="drive_get_file">Akira %1$s n\'ububiko bw\'amajwi.</string>
   <string name="no_google_account">Ntago wahisemo email</string>
-  <string name="google_search_browse">Shakisha ama fomu. Cyangwa uhitemo \'My Drive\' hepfo kugirango ubashe urebe.</string>
   <string name="invalid_sheet_id">Indangarupapurombare itemejwe: %1$s</string>
   <string name="missing_submission_url">Haraburamo kohereza URL</string>
   <string name="google_sheets_access_denied">Ntibikunda kuyinjiramo.Wareba niba nyiri form yaguhaye uburenganzira bwo kuyinjiramo no kuba haricyo wahindura.</string>
@@ -734,7 +726,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="instance_upload_cancelled">Inzego ngenderwaho zitakunze mwiyoherezwa.</string>
   <string name="no_columns_to_upload">Nta tuyira twabonetse mu iyoherezwa ryinyandiko shingiro.</string>
   <string name="missing_google_account_dialog_title">Konti ya google ntiyahinduwe</string>
-  <string name="multiple_media_folders_detected_notification">Hejuru y\'imbumbe y\'ububiko bumwe bw\'amajwi bwagaragaye, usabwa gusiba bumwe noneho ugasubiramo.</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

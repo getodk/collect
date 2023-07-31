@@ -418,8 +418,7 @@
     ##############################################-->
   <string name="refresh">ធ្វើឲ្យថ្មីឡើងវិញ</string>
   <string name="download">ទទួលការជ្រើសរើស</string>
-  <string name="download_forms_result">លទ្ធផលនៃការទាញយក</string>
-  <string name="downloading_data">កំពុង​ភ្ជាប់​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
+    <string name="downloading_data">កំពុង​ភ្ជាប់​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
   <string name="fetching_file">កំពុង​​ទទួល​យក %1$s ។ \n\n ​សំណុំបែបបទ​ទី %2$s នៃ %3$s ។</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
   <string name="version">ជំនាន់ ៖</string>
@@ -631,16 +630,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">ថាសរបស់ខ្ញុំ</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">ចែក​រំលែក​ជាមួយ​ខ្ញុំ</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">ទាញយកនូវជំរើស</string>
-  <string name="go_back">ត្រឡប់ក្រោយ</string>
   <string name="google_auth_io_exception_msg">មិន​អាច​ប្រើប្រាស់​ API បាន​។ ប្រសិន​ជា​អ្នក​កំពុង​ដំណើរការ​កសាង​ក្នុង​ម៉ាស៊ីន (local), សូម​អាន​អំពី​គម្រោង​នេះ​សារ​ឡើង​វិញ​។</string>
-  <string name="drive_get_file">កំពុង​ទទួល​ %1$s និង ឯកសារមេឌៀ</string>
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
-  <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
@@ -648,7 +641,6 @@
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
   <string name="no_columns_to_upload">មិនមានជួរឈរក្នុងសំណុំបែបបទដើម្បីផ្ទុកឡើង។</string>
   <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
-  <string name="multiple_media_folders_detected_notification">ថតមេឌៀច្រើនជាងមួយត្រូវបានរកឃើញ សូមដកមួយហើយព្យាយាមម្តងទៀត</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

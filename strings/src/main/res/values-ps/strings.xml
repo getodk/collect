@@ -172,8 +172,7 @@
     ##############################################-->
   <string name="refresh">تازه یی کړی</string>
   <string name="download">انتخاب شوي راښکته کړي</string>
-  <string name="download_forms_result">د ډانلوډ پایله</string>
-  <string name="downloading_data">سرور ته د نښلیدو په حال کښی</string>
+    <string name="downloading_data">سرور ته د نښلیدو په حال کښی</string>
   <string name="form_updates_available">نوي تصحیح شوی فورمي شتون لري</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
   <!--##############################################
@@ -279,10 +278,9 @@
   <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="multiple_media_folders_detected_notification">له یوې څخه زیات د رسنیو پوښه اوموندل شو، مهرباني وکړئ یو لیرې کړئ او بیا هڅه وکړئ</string>
-  <!--##############################################
-     # ABOUT
-     ##############################################-->
+    <!--##############################################
+       # ABOUT
+       ##############################################-->
   <!--##############################################
      # SETTINGS IMPORT
      ##############################################-->

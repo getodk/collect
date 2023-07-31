@@ -341,11 +341,8 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">ຊ້ອງຂອງຂ້ອຍ</string>
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">ແບ່ງກັບຂ້ອຍ</string>
+    <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
-  <string name="drive_get_file">ໄດ້ %1$s ຂອງເອກະສານ.</string>
   <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################

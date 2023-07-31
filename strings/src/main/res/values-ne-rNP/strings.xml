@@ -275,8 +275,7 @@
     ##############################################-->
   <string name="refresh">रिफ्रेश/n/गर्नुहोस् </string>
   <string name="download">छानिएका/nपाउनुहोस्</string>
-  <string name="download_forms_result">परिणामहरू डाउनलोड गर्नुहोस्।</string>
-  <string name="downloading_data">सर्भरसँग कनेक्ट हुँदैछ</string>
+    <string name="downloading_data">सर्भरसँग कनेक्ट हुँदैछ</string>
   <string name="fetching_file">%1$s.\n\nफारम प्राप्त गरिदै | %3$s फारम(हरू) मध्येको %2$s </string>
   <string name="form_download_progress">%1$s. मिडिया फाइलहरु प्राप्त गरिदैछ: %3$s मध्येको %2$s</string>
   <string name="version">संस्करण:</string>
@@ -432,15 +431,9 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">मेरो ड्राइभ</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">म संग साझा गरिएको </string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">चुनिएका डाउनलोड गर्नुहोस्</string>
-  <string name="go_back">पछाडि जानुहोस्</string>
-  <string name="drive_get_file">%1$s र मिडिया फाइलहरु प्राप्त गरिदैछ |</string>
   <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
-  <string name="google_search_browse">फारम सर्च गर्नुहोस् वा ब्राउज गर्न तल \'My Drive\' मा सेलेक्ट गर्नुहोस्</string>
   <string name="invalid_sheet_id">अमान्य शीट नम्बर 1 %1$s</string>
   <string name="google_sheets_access_denied">अस्वीकृत । स्प्रेडशीट धनीबाट तपाईंले सम्पादन गर्ने अनुमति प्राप्त गर्नुपर्दछ । </string>
   <string name="google_sheets_missing_columns">स्प्रेडशीटमा निम्न पंक्ती (column) हरु छैनन् : %1$s</string>

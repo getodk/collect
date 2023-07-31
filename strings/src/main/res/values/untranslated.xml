@@ -31,8 +31,6 @@ the specific language governing permissions and limitations under the License. -
     <string name="basemap_source_stamen" translatable="false">Stamen</string>
     <string name="basemap_source_carto" translatable="false">Carto</string>
 
-    <string name="google_drive" translatable="false">Google Drive</string>
-
     <string name="hash" translatable="false">#</string>
     <string name="hex" translatable="false">Hex</string>
 

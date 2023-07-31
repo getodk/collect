@@ -331,8 +331,7 @@
     ##############################################-->
   <string name="refresh">Ververs</string>
   <string name="download">Download selectie</string>
-  <string name="download_forms_result">Download resultaten</string>
-  <string name="downloading_data">Verbinden met server</string>
+    <string name="downloading_data">Verbinden met server</string>
   <string name="form_download_progress">%1$s. Getting media files: %2$s of %3$s</string>
   <string name="version">Versie:</string>
   <string name="form_updates_available">Formulier updates beschikbaar</string>
@@ -509,9 +508,7 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Mijn Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Gedeeld met mij</string>
   <!--Button for navigating across Google Drive folders-->
   <string name="google_auth_io_exception_msg">Niet instaat om API te bereiken. Als dit gebeurt in een local build, meer informatie in de readme van het project.</string>
   <string name="no_google_account">Geen Google account geselecteerd!</string>
