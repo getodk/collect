@@ -15,6 +15,7 @@ the License.
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include layout="@layout/app_bar_with_progress_bar_layout" />
@@ -48,34 +49,49 @@ the License.
 
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/buttonholder"
+            style="@style/Widget.Collect.ButtonBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:layout_alignParentBottom="true">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggle_button"
-                style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_marginLeft="@dimen/margin_extra_small"
-                android:layout_marginRight="@dimen/margin_extra_small"
-                android:text="@string/select_all" />
+                style="@style/Widget.Material3.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:text="@string/select_all"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/refresh_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/refresh_button"
-                style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_marginLeft="@dimen/margin_extra_small"
-                android:layout_marginRight="@dimen/margin_extra_small"
-                android:text="@string/refresh" />
+                style="@style/Widget.Material3.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:text="@string/refresh"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_button"
+                app:layout_constraintStart_toEndOf="@id/toggle_button"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_button"
-                style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_marginLeft="@dimen/margin_extra_small"
-                android:layout_marginRight="@dimen/margin_extra_small"
-                android:text="@string/download" />
+                style="@style/Widget.Material3.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginEnd="@dimen/margin_standard"
+                android:text="@string/download"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/refresh_button"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </RelativeLayout>
