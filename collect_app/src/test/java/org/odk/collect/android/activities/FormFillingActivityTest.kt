@@ -34,6 +34,7 @@ import org.odk.collect.testshared.ActivityControllerRule
 import org.odk.collect.testshared.AssertIntentsHelper
 import org.odk.collect.testshared.EspressoHelpers.assertText
 import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
+import org.odk.collect.testshared.EspressoHelpers.clickOnText
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Shadows.shadowOf
@@ -85,7 +86,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnContentDescription(R.string.form_forward)
+        clickOnText(R.string.form_forward)
         scheduler.flush()
         assertText("What is your age?")
 
@@ -123,7 +124,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnContentDescription(R.string.form_forward)
+        clickOnText(R.string.form_forward)
         scheduler.flush()
         assertText("What is your age?")
 
@@ -164,7 +165,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnContentDescription(R.string.form_forward)
+        clickOnText(R.string.form_forward)
         scheduler.flush()
         assertText("What is your age?")
 
@@ -209,7 +210,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOnContentDescription(R.string.form_forward)
+        clickOnText(R.string.form_forward)
         scheduler.flush()
         assertText("What is your age?")
 
