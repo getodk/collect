@@ -107,6 +107,8 @@
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
 
+        <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+
         <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->
         <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
         <item name="android:alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
@@ -118,9 +120,13 @@
         <item name="postSplashScreenTheme">@style/Theme.Collect</item>
     </style>
 
-    <!-- Need to duplicate these values as they reset due to the parent. Only needed for AlertDialog.Builder. -->
     <style name="Theme.Collect.Dialog.Alert" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="dialogCornerRadius">8dp</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.Collect.Dialog.PositiveButton</item>
+    </style>
+
+    <style name="Widget.Collect.Dialog.PositiveButton" parent="Widget.Material3.Button">
+        <item name="android:layout_marginStart">@dimen/margin_standard</item>
     </style>
 
     <style name="Widget.Collect.SearchView.NoIcon" parent="Widget.AppCompat.SearchView">
