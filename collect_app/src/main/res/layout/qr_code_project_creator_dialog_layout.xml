@@ -74,14 +74,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/configure_manually_button"
-                style="@style/Widget.Collect.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_standard"
                 android:text="@string/configure_manually"
-                android:textAppearance="?attr/textAppearanceBody1"
                 app:icon="@drawable/ic_outline_edit_24"
-                app:iconTint="?colorOnSurface"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/or" />

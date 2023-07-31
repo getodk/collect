@@ -48,16 +48,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/configure_via_qr_button"
-                style="@style/Widget.Collect.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.Icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?colorPrimary"
                 android:text="@string/configure_with_qr_code"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@android:color/white"
                 android:layout_marginTop="@dimen/margin_standard"
                 app:icon="@drawable/ic_baseline_qr_code_scanner_24"
-                app:iconTint="@android:color/white"
                 app:layout_constraintTop_toBottomOf="@id/tagline"
                 app:layout_constraintBottom_toTopOf="@+id/configure_manually_button"
                 app:layout_constraintEnd_toEndOf="@+id/barrierEnd"
@@ -66,14 +62,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/configure_manually_button"
-                style="@style/Widget.Collect.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:text="@string/configure_manually"
-                android:textAppearance="?attr/textAppearanceBody1"
                 app:icon="@drawable/ic_outline_edit_24"
-                app:iconTint="?colorOnSurface"
                 app:layout_constraintEnd_toEndOf="@+id/barrierEnd"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/configure_via_qr_button"
