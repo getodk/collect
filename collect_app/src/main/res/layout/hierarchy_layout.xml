@@ -29,13 +29,10 @@ the License.
         seem to work properly in RelativeLayout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonholder"
+        style="@style/Widget.Collect.ButtonBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="?colorSurface"
-        android:elevation="4dp"
-        android:paddingTop="@dimen/margin_small"
-        android:paddingBottom="@dimen/margin_small">
+        android:layout_alignParentBottom="true">
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
             android:id="@+id/jumpBeginningButton"

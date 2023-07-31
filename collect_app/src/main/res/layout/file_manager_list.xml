@@ -39,12 +39,9 @@ the License.
 
     <LinearLayout
         android:id="@+id/buttons"
+        style="@style/Widget.Collect.ButtonBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="?colorSurface"
-        android:elevation="4dp"
-        android:paddingTop="@dimen/margin_small"
-        android:paddingBottom="@dimen/margin_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
