@@ -10,10 +10,10 @@ import org.odk.collect.shared.TempFiles
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class ExternalDataCreatorTest {
+class ExternalDataUseCasesTest {
 
     @Test
-    fun `does nothing if the form doesn't use dynamic preload`() {
+    fun `create() does nothing if the form doesn't use dynamic preload`() {
         val form = FormDef().also {
             it.extras.put(DynamicPreloadExtra(false))
         }
@@ -22,7 +22,7 @@ class ExternalDataCreatorTest {
             File(it, "items.csv").writeText("name_key,name\nmango,Mango")
         }
 
-        ExternalDataCreator().create(form, mediaDir, { false }, {})
+        ExternalDataUseCases.create(form, mediaDir, { false }, {})
         assertThat(mediaDir.listFiles().size, equalTo(1))
     }
 }
