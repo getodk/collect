@@ -6,6 +6,8 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_METADATA_PHONENUMBER
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.Selection;
 import android.text.TextUtils;
 import android.view.inputmethod.EditorInfo;
 
@@ -64,7 +66,12 @@ public class FormMetadataPreferencesFragment extends BaseProjectPreferencesFragm
             return true;
         });
 
-        phonePreference.setOnBindEditTextListener(editText -> editText.setInputType(EditorInfo.TYPE_CLASS_PHONE));
+        phonePreference.setOnBindEditTextListener(editText -> {
+            editText.setInputType(EditorInfo.TYPE_CLASS_PHONE);
+            Editable text = editText.getText();
+            Selection.setSelection(text, text.length());
+        });
+
         deviceIDPreference.setSummaryProvider(new PropertyManagerPropertySummaryProvider(propertyManager, PROPMGR_DEVICE_ID));
     }
 
