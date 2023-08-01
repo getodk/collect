@@ -48,7 +48,7 @@ the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/toggle_button"
-            style="@style/Widget.Material3.Button"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_standard"
