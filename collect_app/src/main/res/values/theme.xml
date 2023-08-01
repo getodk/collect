@@ -69,8 +69,6 @@
         <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
         <item name="textAppearanceTitleMedium">@style/TextAppearance.Material3.TitleMedium</item>
         <item name="textAppearanceTitleSmall">@style/TextAppearance.Material3.TitleSmall</item>
-        <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge
-        </item>
         <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>
         <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
         <item name="textAppearanceBodySmall">@style/TextAppearance.Material3.BodySmall</item>
@@ -87,6 +85,10 @@
         <!-- Material3 polyfill attributes (needed in Material Components yet). -->
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
         <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
+
+        <!-- Custom theme text appearance for larger buttons -->
+        <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge
+        </item>
 
         <!-- Needed to make scrollbars always visible -->
         <item name="android:scrollbars">vertical</item>
