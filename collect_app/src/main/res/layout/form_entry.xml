@@ -85,6 +85,8 @@ the License.
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
             android:layout_marginEnd="@dimen/margin_standard"
+            android:paddingStart="@dimen/m3_btn_icon_btn_padding_right"
+            android:paddingEnd="@dimen/m3_btn_icon_btn_padding_left"
             android:text="@string/form_forward"
             app:icon="@drawable/ic_navigate_forward"
             app:iconGravity="textEnd"
