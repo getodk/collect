@@ -18,7 +18,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
@@ -35,7 +34,7 @@ class FormsDownloadResultDialogTest {
     val launcherRule = FragmentScenarioLauncherRule()
 
     @Test
-    fun `The dialog should be dismissed after clicking out of it's area or on device back button`() {
+    fun `The dialog should not be dismissed after clicking out of its area or on device back button`() {
         val args = Bundle()
         args.putSerializable(
             FormsDownloadResultDialog.ARG_RESULT,
@@ -45,7 +44,7 @@ class FormsDownloadResultDialogTest {
         val scenario =
             launcherRule.launch(FormsDownloadResultDialog::class.java, args)
         scenario.onFragment {
-            assertThat(it.isCancelable, `is`(true))
+            assertThat(it.isCancelable, `is`(false))
         }
     }
 
