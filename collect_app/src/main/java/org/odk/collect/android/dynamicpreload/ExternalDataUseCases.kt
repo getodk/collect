@@ -1,9 +1,10 @@
 package org.odk.collect.android.dynamicpreload
 
+import android.content.res.Resources
 import org.javarosa.core.model.FormDef
-import org.odk.collect.android.application.Collect
 import java.io.File
 import java.util.function.Consumer
+import java.util.function.Function
 import java.util.function.Supplier
 
 object ExternalDataUseCases {
@@ -13,7 +14,7 @@ object ExternalDataUseCases {
         form: FormDef,
         mediaDir: File,
         isCancelled: Supplier<Boolean>,
-        progressReporter: Consumer<String>
+        progressReporter: Consumer<Function<Resources, String>>
     ) {
         if (!form.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload) {
             return
@@ -37,10 +38,10 @@ object ExternalDataUseCases {
                 )
                 externalDataMap[dataSetName] = csvFile
             }
-            if (!externalDataMap.isEmpty()) {
-                progressReporter.accept(
-                    Collect.getInstance().getString(org.odk.collect.strings.R.string.survey_loading_reading_csv_message)
-                )
+            if (externalDataMap.isNotEmpty()) {
+                progressReporter.accept { resources ->
+                    resources.getString(org.odk.collect.strings.R.string.survey_loading_reading_csv_message)
+                }
                 val externalDataReader: ExternalDataReader =
                     ExternalDataReaderImpl(isCancelled, progressReporter)
                 externalDataReader.doImport(externalDataMap)

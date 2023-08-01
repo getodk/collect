@@ -18,6 +18,7 @@
 
 package org.odk.collect.android.dynamicpreload;
 
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.apache.commons.io.FileUtils;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import timber.log.Timber;
@@ -38,9 +40,9 @@ import timber.log.Timber;
 public class ExternalDataReaderImpl implements ExternalDataReader {
 
     private final Supplier<Boolean> isCancelled;
-    private final Consumer<String> progressReporter;
+    private final Consumer<Function<Resources, String>> progressReporter;
 
-    public ExternalDataReaderImpl(Supplier<Boolean> isCancelled, Consumer<String> progressReporter) {
+    public ExternalDataReaderImpl(Supplier<Boolean> isCancelled, Consumer<Function<Resources, String>> progressReporter) {
         this.isCancelled = isCancelled;
         this.progressReporter = progressReporter;
     }

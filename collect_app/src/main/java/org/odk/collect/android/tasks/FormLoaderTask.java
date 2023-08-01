@@ -161,7 +161,9 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         externalDataManager = Collect.getInstance().getExternalDataManager();
 
         try {
-            ExternalDataUseCases.create(formDef, formMediaDir, this::isCancelled, this::publishProgress);
+            ExternalDataUseCases.create(formDef, formMediaDir, this::isCancelled, progress -> {
+                publishProgress(progress.apply(Collect.getInstance().getResources()));
+            });
         } catch (Exception e) {
             Timber.e(e, "Exception thrown while loading external data");
             errorMsg = e.getMessage();

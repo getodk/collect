@@ -21,6 +21,7 @@ package org.odk.collect.android.dynamicpreload;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import android.content.ContentValues;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -45,6 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import timber.log.Timber;
@@ -64,14 +66,14 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     private File dataSetFile;
     private ExternalDataReader externalDataReader;
     private Supplier<Boolean> isCancelled;
-    private Consumer<String> progressReporter;
+    private Consumer<Function<Resources, String>> progressReporter;
 
     ExternalSQLiteOpenHelper(File dbFile) {
         super(new AltDatabasePathContext(dbFile.getParentFile().getAbsolutePath(), Collect.getInstance()), dbFile.getName(), null, VERSION);
     }
 
     void importFromCSV(File dataSetFile, ExternalDataReader externalDataReader,
-                       Supplier<Boolean> isCancelled, Consumer<String> progressReporter) {
+                       Supplier<Boolean> isCancelled, Consumer<Function<Resources, String>> progressReporter) {
         this.dataSetFile = dataSetFile;
         this.externalDataReader = externalDataReader;
         this.isCancelled = isCancelled;
@@ -337,7 +339,7 @@ public class ExternalSQLiteOpenHelper extends SQLiteOpenHelper {
     }
 
     private void onProgress(String message) {
-        progressReporter.accept(message);
+        progressReporter.accept(resources -> message);
     }
 
     /**
