@@ -56,6 +56,8 @@
         <item name="colorErrorContainer">@color/colorErrorContainer</item>
         <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
         <item name="elevationOverlayColor">@color/elevationOverlayColor</item>
+        <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
+        <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.Material3.DisplayMedium
         </item>
@@ -85,8 +87,6 @@
         <!-- Material3 polyfill attributes (needed in Material Components yet). -->
         <item name="materialButtonIconStyle">@style/Widget.Material3.Button.Icon</item>
         <item name="materialButtonOutlinedIconStyle">@style/Widget.Material3.Button.OutlinedButton.Icon</item>
-        <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
-        <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
 
         <!-- Custom theme text appearance for larger buttons -->
         <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge
