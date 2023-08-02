@@ -7,7 +7,7 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/url_button"
-        style="@style/ThemeOverlay.Material3.Button"
+        style="?materialButtonStyle"
         android:text="@string/open_url"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

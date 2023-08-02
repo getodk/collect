@@ -8,7 +8,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/ex_arbitrary_file_button"
-        style="@style/ThemeOverlay.Material3.Button"
+        style="?materialButtonStyle"
         android:text="@string/launch_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
