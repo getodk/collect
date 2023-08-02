@@ -15,12 +15,6 @@
         <attr name="highlightable" format="boolean" />
     </declare-styleable>
 
-    <!--  Should be removed when these attributes are added to Material Components  -->
-    <declare-styleable name="Material3PolyFill">
-        <attr name="colorSurfaceContainerLow" format="color" />
-        <attr name="colorSurfaceContainerHighest" format="color" />
-    </declare-styleable>
-
     <!--  These attributes are extensions to Material 3  -->
     <declare-styleable name="Material3Custom">
         <attr name="textAppearanceLabelExtraLarge" format="reference" />
