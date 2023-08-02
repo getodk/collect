@@ -11,4 +11,10 @@
 
     <style name="Widget.Collect.Button.OutlinedButton.Icon" parent="Widget.Material3.Button.OutlinedButton.Icon">
     </style>
+
+    <style name="Widget.Collect.Button.TextButton" parent="Widget.Material3.Button.TextButton">
+    </style>
+
+    <style name="Widget.Collect.Button.TextButton.Icon" parent="Widget.Material3.Button.TextButton.Icon">
+    </style>
 </resources>
