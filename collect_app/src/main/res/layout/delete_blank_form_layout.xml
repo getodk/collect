@@ -33,7 +33,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/select_all"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_standard"
@@ -46,7 +46,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/delete_selected"
-            style="@style/Widget.Material3.Button"
+            style="?materialButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/margin_standard"

@@ -74,7 +74,7 @@ limitations under the License.
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/remove"
-            style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+            style="?materialButtonOutlinedIconStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/delete_answer_file"

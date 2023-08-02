@@ -48,7 +48,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/configure_via_qr_button"
-                style="@style/Widget.Material3.Button.Icon"
+                style="?materialButtonIconStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/configure_with_qr_code"
@@ -62,7 +62,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/configure_manually_button"
-                style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                style="?materialButtonOutlinedIconStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"

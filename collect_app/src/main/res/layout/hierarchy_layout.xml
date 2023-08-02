@@ -36,7 +36,7 @@ the License.
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
             android:id="@+id/jumpBeginningButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_standard"
@@ -47,7 +47,7 @@ the License.
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
             android:id="@+id/jumpEndButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_standard"
@@ -59,7 +59,7 @@ the License.
 
         <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
             android:id="@+id/exitButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_standard"

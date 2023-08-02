@@ -50,7 +50,7 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/general_settings_button"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+        style="?materialButtonOutlinedStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="38dp"

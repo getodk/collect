@@ -2,6 +2,9 @@
 <resources>
     <!--  Should be removed when these attributes are added to Material Components  -->
     <declare-styleable name="Material3PolyFill">
+        <attr name="materialButtonOutlinedIconStyle" format="reference"/>
+        <attr name="materialButtonIconStyle" format="reference"/>
+
         <attr name="colorSurfaceContainerLow" format="color" />
         <attr name="colorSurfaceContainerHighest" format="color" />
     </declare-styleable>

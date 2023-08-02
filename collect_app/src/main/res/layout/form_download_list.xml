@@ -58,7 +58,7 @@ the License.
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggle_button"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="?materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_standard"
@@ -70,7 +70,7 @@ the License.
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/refresh_button"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="?materialButtonOutlinedStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_standard"
@@ -82,7 +82,7 @@ the License.
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/add_button"
-                style="@style/Widget.Material3.Button"
+                style="?materialButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_standard"

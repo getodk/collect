@@ -83,6 +83,8 @@
         </item>
 
         <!-- Material3 polyfill attributes (needed in Material Components yet). -->
+        <item name="materialButtonIconStyle">@style/Widget.Material3.Button.Icon</item>
+        <item name="materialButtonOutlinedIconStyle">@style/Widget.Material3.Button.OutlinedButton.Icon</item>
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
         <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
 
