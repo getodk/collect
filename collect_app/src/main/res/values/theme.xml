@@ -85,8 +85,8 @@
         </item>
 
         <!-- Material3 polyfill attributes (needed in Material Components yet). -->
-        <item name="materialButtonIconStyle">@style/Widget.Material3.Button.Icon</item>
-        <item name="materialButtonOutlinedIconStyle">@style/Widget.Material3.Button.OutlinedButton.Icon</item>
+        <item name="materialButtonIconStyle">@style/Widget.Collect.Button.Icon</item>
+        <item name="materialButtonOutlinedIconStyle">@style/Widget.Collect.Button.OutlinedButton.Icon</item>
 
         <!-- Custom theme text appearance for larger buttons -->
         <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge
@@ -111,6 +111,9 @@
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
 
+
+        <item name="materialButtonStyle">@style/Widget.Collect.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Collect.Button.OutlinedButton</item>
         <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
 
         <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->

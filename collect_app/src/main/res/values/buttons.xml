@@ -1,3 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Widget.Collect.Button" parent="Widget.Material3.Button">
+    </style>
+
+    <style name="Widget.Collect.Button.Icon" parent="Widget.Material3.Button.Icon">
+    </style>
+
+    <style name="Widget.Collect.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+    </style>
+
+    <style name="Widget.Collect.Button.OutlinedButton.Icon" parent="Widget.Material3.Button.OutlinedButton.Icon">
+    </style>
 </resources>
