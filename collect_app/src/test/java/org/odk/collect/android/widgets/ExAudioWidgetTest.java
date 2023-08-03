@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
 
 import android.view.View;
@@ -28,6 +27,8 @@ import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.robolectric.shadows.ShadowToast;
 
@@ -84,15 +85,10 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     }
 
     @Test
-    public void whenFontSizeNotChanged_defaultFontSizeShouldBeUsed() {
-        assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(DEFAULT_FONT_SIZE - 1));
-    }
-
-    @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
         settingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
 
-        assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(29));
+        assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.LABEL_LARGE)));
     }
 
     @Test

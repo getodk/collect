@@ -40,7 +40,7 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
     ): View {
         binding = SelectOneFromMapWidgetAnswerBinding.inflate(LayoutInflater.from(context))
 
-        binding.button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize.toFloat())
+        binding.button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize.toFloat())
         binding.button.setOnClickListener {
             permissionsProvider.requestEnabledLocationPermissions(
                 context as Activity,
