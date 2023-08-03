@@ -76,11 +76,11 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
-        annotateButton = createSimpleButton(getContext(), R.id.markup_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        annotateButton = createSimpleButton(getContext(), R.id.markup_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
         annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
 

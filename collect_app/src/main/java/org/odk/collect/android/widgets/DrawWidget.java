@@ -53,7 +53,7 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        drawButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.draw_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        drawButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.draw_image), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);

@@ -79,11 +79,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
-        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(org.odk.collect.strings.R.string.play_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(org.odk.collect.strings.R.string.play_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
