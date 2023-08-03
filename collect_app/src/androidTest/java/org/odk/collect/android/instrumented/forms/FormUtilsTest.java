@@ -1,5 +1,7 @@
 package org.odk.collect.android.instrumented.forms;
 
+import static org.odk.collect.android.support.StorageUtils.copyFormToStorage;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.reference.RootTranslator;
 import org.javarosa.form.api.FormEntryController;
@@ -8,21 +10,20 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.RuleChain;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.TestRuleChain;
+import org.odk.collect.android.support.CollectHelpers;
+import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class FormUtilsTest {
     private static final String BASIC_FORM = "basic.xml";
-    private final CollectTestRule rule = new CollectTestRule();
 
     private final FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory = new FormLoaderTask.FormEntryControllerFactory() {
         @Override
@@ -32,13 +33,12 @@ public class FormUtilsTest {
     };
 
     @Rule
-    public RuleChain copyFormChain = TestRuleChain.chain()
-            .around(rule);
+    public ResetStateRule resetStateRule = new ResetStateRule();
 
     @Before
-    public void setUp() {
-        rule.copyForm(BASIC_FORM)
-                .startAtFirstLaunch();
+    public void setUp() throws IOException {
+        CollectHelpers.addDemoProject();
+        copyFormToStorage(BASIC_FORM);
     }
 
     /* Verify that each host string matches only a single root translator, allowing for them to
