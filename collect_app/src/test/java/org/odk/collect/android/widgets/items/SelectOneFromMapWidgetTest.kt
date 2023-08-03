@@ -25,12 +25,12 @@ import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
-import org.odk.collect.android.utilities.QuestionFontSizeUtils
-import org.odk.collect.android.utilities.QuestionFontSizeUtils.FontSize
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory

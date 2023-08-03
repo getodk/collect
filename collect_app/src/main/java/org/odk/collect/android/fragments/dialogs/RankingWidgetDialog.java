@@ -42,7 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.fragments.viewmodels.RankingViewModel;
-import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
 
 import java.util.ArrayList;

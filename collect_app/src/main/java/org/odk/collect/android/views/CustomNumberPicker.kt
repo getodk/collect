@@ -21,7 +21,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.NumberPicker
-import org.odk.collect.android.utilities.QuestionFontSizeUtils
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 
 class CustomNumberPicker(context: Context, attrs: AttributeSet) : NumberPicker(context, attrs) {
     override fun addView(view: View) {

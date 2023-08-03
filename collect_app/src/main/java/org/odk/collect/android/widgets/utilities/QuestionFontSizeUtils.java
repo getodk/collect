@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.android.widgets.utilities;
 
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
 
