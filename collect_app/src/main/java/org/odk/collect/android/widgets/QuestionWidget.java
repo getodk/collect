@@ -39,13 +39,14 @@ import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
 import org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.utilities.ViewUtils;
@@ -56,6 +57,7 @@ import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -74,12 +76,11 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
+    protected final Settings settings;
     private AtomicBoolean expanded;
     protected final ThemeUtils themeUtils;
     protected AudioHelper audioHelper;
     private final ViewGroup containerView;
-    private final QuestionTextSizeHelper questionTextSizeHelper;
-
     private WidgetValueChangedListener valueChangedListener;
 
     @Inject
@@ -111,7 +112,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         super(context);
         getComponent(context).inject(this);
         setId(View.generateViewId());
-        questionTextSizeHelper = new QuestionTextSizeHelper(settingsProvider.getUnprotectedSettings());
+        settings = settingsProvider.getUnprotectedSettings();
         this.audioHelper = audioHelperFactory.create(context);
 
         themeUtils = new ThemeUtils(context);
@@ -139,7 +140,12 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     }
 
     public void render() {
-        View answerView = onCreateAnswerView(getContext(), questionDetails.getPrompt(), getAnswerFontSize(), (int) questionTextSizeHelper.getLabelLarge());
+        View answerView = onCreateAnswerView(getContext(),
+                questionDetails.getPrompt(),
+                QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6),
+                QuestionFontSizeUtils.getFontSize(settings, FontSize.LABEL_LARGE)
+        );
+
         if (answerView != null) {
             addAnswerView(answerView);
         }
@@ -169,7 +175,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private void setupQuestionLabel() {
         audioVideoImageTextLabel.setTag(getClipID(formEntryPrompt));
-        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), questionTextSizeHelper.getHeadline6());
+        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6));
         audioVideoImageTextLabel.setMediaUtils(mediaUtils);
 
         String imageURI = this instanceof SelectImageMapWidget ? null : formEntryPrompt.getImageText();
@@ -247,7 +253,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     }
 
     private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
-        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionTextSizeHelper.getSubtitle1());
+        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, FontSize.SUBTITLE_1));
         guidanceTextView.setHorizontallyScrolling(false);
 
         guidanceTextView.setText(HtmlUtils.textToHtml(guidance));
@@ -299,7 +305,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, questionTextSizeHelper.getSubtitle1());
+            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6));
             // wrap to the widget of vi
             helpText.setHorizontallyScrolling(false);
             if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
@@ -375,10 +381,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public void showWarning(String warningBody) {
         warningText.setVisibility(View.VISIBLE);
         warningText.setText(warningBody);
-    }
-
-    public int getAnswerFontSize() {
-        return (int) questionTextSizeHelper.getHeadline6();
     }
 
     public View getHelpTextLayout() {

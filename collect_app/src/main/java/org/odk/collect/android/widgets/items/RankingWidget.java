@@ -34,6 +34,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
@@ -141,8 +142,8 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     }
 
     private void setUpLayout(List<SelectChoice> items) {
-        showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.rank_items), getAnswerFontSize(), this);
-        answerTextView = createAnswerTextView(getContext(), getAnswerText(), getAnswerFontSize());
+        showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.rank_items), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6), this);
+        answerTextView = createAnswerTextView(getContext(), getAnswerText(), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6));
 
         LinearLayout widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);

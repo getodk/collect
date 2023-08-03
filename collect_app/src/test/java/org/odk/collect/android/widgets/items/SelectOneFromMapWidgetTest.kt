@@ -20,12 +20,13 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
-import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.MockFormEntryPromptBuilder
 import org.odk.collect.android.support.WidgetTestActivity
+import org.odk.collect.android.utilities.QuestionFontSizeUtils
+import org.odk.collect.android.utilities.QuestionFontSizeUtils.FontSize
 import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
@@ -85,7 +86,7 @@ class SelectOneFromMapWidgetTest {
 
         assertThat(
             widget.binding.button.textSize,
-            equalTo(QuestionTextSizeHelper(settings).headline6)
+            equalTo(QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6))
         )
     }
 
@@ -162,7 +163,7 @@ class SelectOneFromMapWidgetTest {
 
         assertThat(
             widget.binding.answer.textSize,
-            equalTo(QuestionTextSizeHelper(settings).headline6)
+            equalTo(QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6))
         )
     }
 
