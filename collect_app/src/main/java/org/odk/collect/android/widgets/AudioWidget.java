@@ -101,11 +101,11 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = AudioWidgetAnswerBinding.inflate(LayoutInflater.from(context));
 
-        binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
+        binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
 
         binding.captureButton.setOnClickListener(v -> {
             binding.audioPlayer.waveform.clear();

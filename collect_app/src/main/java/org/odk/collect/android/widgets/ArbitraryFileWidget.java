@@ -45,11 +45,11 @@ public class ArbitraryFileWidget extends BaseArbitraryFileWidget implements File
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = ArbitraryFileWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         setupAnswerFile(prompt.getAnswerText());
 
-        binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.arbitraryFileButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.arbitraryFileAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         binding.arbitraryFileButton.setVisibility(questionDetails.isReadOnly() ? GONE : VISIBLE);

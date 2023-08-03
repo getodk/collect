@@ -35,7 +35,8 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
     override fun onCreateAnswerView(
         context: Context,
         prompt: FormEntryPrompt,
-        answerFontSize: Int
+        answerFontSize: Int,
+        controlFontSize: Int
     ): View {
         binding = SelectOneFromMapWidgetAnswerBinding.inflate(LayoutInflater.from(context))
 

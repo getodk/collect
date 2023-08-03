@@ -20,6 +20,10 @@ public class QuestionTextSizeHelper {
         return getBaseFontSize() - 5; // 16sp by default
     }
 
+    public float getLabelLarge() {
+        return getBaseFontSize() - 7; // 14sp by default
+    }
+
     private int getBaseFontSize() {
         return Integer.parseInt(String.valueOf(generalSettings.getString(KEY_FONT_SIZE)));
     }

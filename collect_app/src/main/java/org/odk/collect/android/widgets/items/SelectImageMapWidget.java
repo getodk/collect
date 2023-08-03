@@ -120,7 +120,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = SelectImageMapWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         binding.selectedElements.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         return binding.getRoot();

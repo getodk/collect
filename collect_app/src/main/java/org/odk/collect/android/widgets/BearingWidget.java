@@ -55,13 +55,13 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = BearingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         if (prompt.isReadOnly()) {
             binding.bearingButton.setVisibility(GONE);
         } else {
-            binding.bearingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.bearingButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
             binding.bearingButton.setOnClickListener(v -> onButtonClick());
         }
         binding.answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);

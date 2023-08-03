@@ -43,10 +43,10 @@ public class UrlWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = UrlWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.urlButton.setOnClickListener(v -> onButtonClick());
 
         return binding.getRoot();

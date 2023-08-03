@@ -139,7 +139,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     }
 
     public void render() {
-        View answerView = onCreateAnswerView(getContext(), questionDetails.getPrompt(), getAnswerFontSize());
+        View answerView = onCreateAnswerView(getContext(), questionDetails.getPrompt(), getAnswerFontSize(), (int) questionTextSizeHelper.getLabelLarge());
         if (answerView != null) {
             addAnswerView(answerView);
         }
@@ -152,7 +152,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
      * rendering the widget. It is also passed the size to be used for question text.
      */
     @SuppressWarnings("PMD.EmptyMethodInAbstractClassShouldBeAbstract")
-    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         return null;
     }
 
