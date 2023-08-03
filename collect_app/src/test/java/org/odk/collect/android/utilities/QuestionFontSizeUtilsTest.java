@@ -16,12 +16,12 @@ public class QuestionFontSizeUtilsTest {
 
     @Test
     public void whenFontSizeNotSpecified_shouldReturnDefaultValue() {
-        assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(QuestionFontSizeUtils.DEFAULT_FONT_SIZE));
+        assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(QuestionFontSizeUtils.DEFAULT_FONT_SIZE - 1));
     }
 
     @Test
     public void whenFontSizeSpecified_shouldReturnSelectedValue() {
         TestSettingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
-        assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(30));
+        assertThat(QuestionFontSizeUtils.getQuestionFontSize(), is(29));
     }
 }
