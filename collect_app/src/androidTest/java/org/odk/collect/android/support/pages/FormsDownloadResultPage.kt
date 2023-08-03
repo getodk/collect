@@ -6,7 +6,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import org.odk.collect.android.R
 
 class FormsDownloadResultPage : Page<FormsDownloadResultPage>() {
 
@@ -21,7 +20,7 @@ class FormsDownloadResultPage : Page<FormsDownloadResultPage>() {
     }
 
     fun assertSuccess(): FormsDownloadResultPage {
-        assertText(R.string.all_downloads_succeeded)
+        assertText(org.odk.collect.strings.R.string.all_downloads_succeeded)
         return this
     }
 

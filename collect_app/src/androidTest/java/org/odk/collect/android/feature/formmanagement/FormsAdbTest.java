@@ -1,22 +1,21 @@
 package org.odk.collect.android.feature.formmanagement;
 
+import static org.junit.Assert.assertTrue;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
 import org.odk.collect.android.storage.StorageSubdirectory;
-import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.TestDependencies;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 import java.io.File;
-
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class FormsAdbTest {
@@ -53,7 +52,7 @@ public class FormsAdbTest {
         rule.startAtMainMenu()
                 .setServer(testDependencies.server.getURL())
                 .clickGetBlankForm()
-                .assertText(R.string.newer_version_of_a_form_info)
+                .assertText(org.odk.collect.strings.R.string.newer_version_of_a_form_info)
 
                 .clickGetSelected()
                 .clickOKOnDialog(new MainMenuPage())
