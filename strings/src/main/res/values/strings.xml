@@ -546,6 +546,7 @@
     <string name="gps_enable_message">GPS is disabled on your device. Would you like to enable it?</string>
     <string name="geo_clear_warning">Feature already created. Would you like to clear the feature?</string>
     <string name="geo_exit_warning">Discard changes and return to ODK?</string>
+    <string name="geo_exit_warning_single">Discard change and return to ODK?</string>
     <string name="polygon_validator">Must have at least 3 points to create Polygon</string>
     <string name="polyline_validator">Must have at least 2 points to create Polyline</string>
     <string name="clear">Clear</string>

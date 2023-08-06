@@ -32,6 +32,8 @@ import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.externalapp.ExternalAppUtils;
@@ -93,6 +95,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
     private TextView locationInfo;
 
     private MapPoint location;
+    private MapPoint savedLocation;
     private ImageButton placeMarkerButton;
 
     private boolean isDragged;
@@ -189,6 +192,7 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
     public void returnLocation() {
         String result = null;
+        savedLocation = location;
 
         if (setClear || (intentReadOnly && featureId == -1)) {
             result = "";
@@ -323,6 +327,22 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         locationInfo.setVisibility(state.getInt(LOCATION_INFO_VISIBILITY_KEY, View.GONE));
         locationStatus.setVisibility(state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE));
+    }
+
+    // https://github.com/getodk/collect/issues/5293
+    @Override
+    public void onBackPressed() {
+        if (location != null
+                && !location.equals(savedLocation)) {
+            new MaterialAlertDialogBuilder(this)
+                    .setMessage(getString(org.odk.collect.strings.R.string.geo_exit_warning_single))
+                    .setPositiveButton(org.odk.collect.strings.R.string.discard, (dialog, id) -> finish())
+                    .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
+                    .show();
+
+        } else {
+            finish();
+        }
     }
 
     public void onLocationChanged(MapPoint point) {
