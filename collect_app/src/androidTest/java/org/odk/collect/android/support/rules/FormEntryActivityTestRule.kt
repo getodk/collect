@@ -12,10 +12,10 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
@@ -36,7 +36,7 @@ class FormEntryActivityTestRule : ExternalResource() {
     override fun before() {
         super.before()
 
-        CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
+        CollectHelpers.overrideAppDependencyModule(object : TestDependencies() {
             override fun providesSavedInstanceStateProvider(): SavedInstanceStateProvider {
                 return savedInstanceStateProvider
             }
@@ -90,9 +90,20 @@ class FormEntryActivityTestRule : ExternalResource() {
         return this
     }
 
-    fun restoreActivity() {
+    fun restoreActivity(): FormEntryActivityTestRule {
         savedInstanceStateProvider.setState(outState)
         scenario = ActivityScenario.launch(intent)
+        return this
+    }
+
+    fun simulateProcessRestart(): FormEntryActivityTestRule {
+        CollectHelpers.simulateProcessRestart(object : TestDependencies() {
+            override fun providesSavedInstanceStateProvider(): SavedInstanceStateProvider {
+                return savedInstanceStateProvider
+            }
+        })
+
+        return this
     }
 
     private fun createNewFormIntent(formFilename: String): Intent {

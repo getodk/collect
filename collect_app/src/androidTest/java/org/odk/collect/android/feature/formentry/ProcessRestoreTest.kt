@@ -5,8 +5,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
@@ -54,10 +52,9 @@ class ProcessRestoreTest {
      */
     private fun <T : Page<T>> simulateProcessRestore(destination: Page<T>): Page<T> {
         rule.navigateAwayFromActivity()
-        rule.destroyActivity()
-
-        CollectHelpers.simulateProcessRestart()
-        rule.restoreActivity()
+            .destroyActivity()
+            .simulateProcessRestart()
+            .restoreActivity()
 
         return destination.assertOnPage()
     }
