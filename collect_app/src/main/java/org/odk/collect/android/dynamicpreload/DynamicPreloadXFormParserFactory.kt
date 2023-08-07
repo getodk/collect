@@ -30,7 +30,12 @@ class DynamicPreloadParseProcessor :
     private var containsSearchOrPullData = false
 
     override fun getBindAttributes(): Set<Pair<String, String>> {
-        return setOf(Pair("", "calculate"), Pair("", "readonly"), Pair("", "required"))
+        return setOf(
+            Pair("", "calculate"),
+            Pair("", "readonly"),
+            Pair("", "required"),
+            Pair("", "relevant")
+        )
     }
 
     override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
@@ -41,6 +46,10 @@ class DynamicPreloadParseProcessor :
 
             "required" -> {
                 binding.requiredCondition
+            }
+
+            "relevant" -> {
+                binding.relevancyCondition
             }
 
             else -> {
