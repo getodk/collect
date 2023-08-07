@@ -22,7 +22,7 @@ class DynamicPreloadXFormParserFactory(base: IXFormParserFactory) :
     }
 }
 
-private class DynamicPreloadParseProcessor :
+class DynamicPreloadParseProcessor :
     XFormParser.BindAttributeProcessor,
     XFormParser.QuestionProcessor,
     XFormParser.FormDefProcessor {
