@@ -445,6 +445,14 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         savedInstanceState = savedInstanceStateProvider.getState(savedInstanceState);
 
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
+            if (savedInstanceState.containsKey(KEY_XPATH)) {
+                startingXPath = savedInstanceState.getString(KEY_XPATH);
+            }
+
+            if (savedInstanceState.containsKey(KEY_XPATH_WAITING_FOR_DATA)) {
+                waitingXPath = savedInstanceState.getString(KEY_XPATH_WAITING_FOR_DATA);
+            }
+
             savedInstanceState = null;
         }
 
@@ -721,7 +729,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             instancePath = loadSavePoint();
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, null, null, formEntryControllerFactory);
+        formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory);
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);
@@ -2096,17 +2104,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
             }
 
-            boolean pendingActivityResult = task.hasPendingActivityResult();
-
-            if (pendingActivityResult) {
-                Timber.w("Calling onActivityResult from loadingComplete");
-
-                formControllerAvailable(formController);
-                formEntryViewModel.refresh();
-                onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
-                return;
-            }
-
             // it can be a normal flow for a pending activity result to restore from a savepoint
             // (the call flow handled by the above if statement). For all other use cases, the
             // user should be notified, as it means they wandered off doing other things then
@@ -2182,12 +2179,19 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 }
                             }
 
-                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                            formControllerAvailable(formController);
-                            Intent intent = new Intent(this, FormHierarchyActivity.class);
-                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
-                            startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
+                            boolean pendingActivityResult = task.hasPendingActivityResult();
+                            if (pendingActivityResult) {
+                                formControllerAvailable(formController);
+                                formEntryViewModel.refresh();
+                                onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
+                            } else {
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                formControllerAvailable(formController);
+                                Intent intent = new Intent(this, FormHierarchyActivity.class);
+                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                                startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
+                            }
                         }
                     });
                 } else {

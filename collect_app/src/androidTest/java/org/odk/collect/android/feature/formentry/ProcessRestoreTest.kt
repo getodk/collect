@@ -42,7 +42,7 @@ class ProcessRestoreTest {
             .let { simulateProcessRestore(FormHierarchyPage("All widgets")) }
 
             .pressBack(FormEntryPage("All widgets"))
-            .assertQuestion("Welcome to ODK Collect! This form showcases the different available question types (widgets).")
+            .assertQuestion("Select one from map widget")
     }
 
     /**
