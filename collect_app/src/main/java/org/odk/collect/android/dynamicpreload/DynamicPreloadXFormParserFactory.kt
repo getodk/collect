@@ -34,32 +34,24 @@ class DynamicPreloadParseProcessor :
             Pair("", "calculate"),
             Pair("", "readonly"),
             Pair("", "required"),
-            Pair("", "relevant")
+            Pair("", "relevant"),
+            Pair("", "constraint")
         )
     }
 
     override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
-        val triggerable = when (name) {
-            "calculate" -> {
-                binding.calculate
-            }
-
-            "required" -> {
-                binding.requiredCondition
-            }
-
-            "relevant" -> {
-                binding.relevancyCondition
-            }
-
-            else -> {
-                binding.readonlyCondition
-            }
+        val condition = when (name) {
+            "calculate" -> binding.calculate.expr
+            "required" -> binding.requiredCondition.expr
+            "relevant" -> binding.relevancyCondition.expr
+            "readonly" -> binding.readonlyCondition.expr
+            "constraint" -> binding.constraint
+            else -> null
         }
 
         if (
-            triggerable != null &&
-            triggerable.expr.expr.containsFunc(ExternalDataHandlerPull.HANDLER_NAME)
+            condition != null &&
+            condition.expr.containsFunc(ExternalDataHandlerPull.HANDLER_NAME)
         ) {
             containsSearchOrPullData = true
         }

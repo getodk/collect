@@ -17,14 +17,15 @@ class DynamicPreloadParseProcessorTest {
     private val processor = DynamicPreloadParseProcessor()
 
     @Test
-    fun `getBindAttributes returns calculate, readonly, relevant and required`() {
+    fun `getBindAttributes returns calculate, readonly, relevant, constraint and required`() {
         assertThat(
             processor.bindAttributes,
             contains(
                 Pair("", "calculate"),
                 Pair("", "readonly"),
                 Pair("", "required"),
-                Pair("", "relevant")
+                Pair("", "relevant"),
+                Pair("", "constraint")
             )
         )
     }
@@ -149,6 +150,36 @@ class DynamicPreloadParseProcessorTest {
         )
     }
 
+    @Test
+    fun `usesDynamicPreload is false when constraint does not contain pulldata`() {
+        val formDef = FormDef()
+
+        val bindingWithoutPullData = DataBinding()
+        bindingWithoutPullData.constraint = createCondition(createNonPullDataExpression())
+
+        processor.processBindAttribute("constraint", "", bindingWithoutPullData)
+        processor.processFormDef(formDef)
+        assertThat(
+            formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
+            equalTo(false)
+        )
+    }
+
+    @Test
+    fun `usesDynamicPreload is true when constraint does contain pulldata`() {
+        val formDef = FormDef()
+
+        val bindingWithPullData = DataBinding()
+        bindingWithPullData.constraint = createCondition(createPullDataExpression())
+
+        processor.processBindAttribute("constraint", "", bindingWithPullData)
+        processor.processFormDef(formDef)
+        assertThat(
+            formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
+            equalTo(true)
+        )
+    }
+
     private fun createPullDataExpression() = mock<XPathExpression> {
         on { containsFunc("pulldata") } doReturn true
     }
@@ -158,12 +189,17 @@ class DynamicPreloadParseProcessorTest {
     }
 
     private fun createTriggerable(expression: XPathExpression): Triggerable {
-        val condition = mock<IConditionExpr> {
-            on { expr } doReturn expression
-        }
+        val condition = createCondition(expression)
 
         return mock {
             on { expr } doReturn condition
         }
+    }
+
+    private fun createCondition(expression: XPathExpression): IConditionExpr {
+        val condition = mock<IConditionExpr> {
+            on { expr } doReturn expression
+        }
+        return condition
     }
 }
