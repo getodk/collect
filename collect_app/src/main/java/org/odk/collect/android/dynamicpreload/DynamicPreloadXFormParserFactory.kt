@@ -30,14 +30,22 @@ class DynamicPreloadParseProcessor :
     private var containsSearchOrPullData = false
 
     override fun getBindAttributes(): Set<Pair<String, String>> {
-        return setOf(Pair("", "calculate"), Pair("", "readonly"))
+        return setOf(Pair("", "calculate"), Pair("", "readonly"), Pair("", "required"))
     }
 
     override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
-        val triggerable = if (name == "calculate") {
-            binding.calculate
-        } else {
-            binding.readonlyCondition
+        val triggerable = when (name) {
+            "calculate" -> {
+                binding.calculate
+            }
+
+            "required" -> {
+                binding.requiredCondition
+            }
+
+            else -> {
+                binding.readonlyCondition
+            }
         }
 
         if (

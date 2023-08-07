@@ -17,12 +17,13 @@ class DynamicPreloadParseProcessorTest {
     private val processor = DynamicPreloadParseProcessor()
 
     @Test
-    fun `getBindAttributes returns calculate and readonly`() {
+    fun `getBindAttributes returns calculate, readonly and required`() {
         assertThat(
             processor.bindAttributes,
             contains(
                 Pair("", "calculate"),
-                Pair("", "readonly")
+                Pair("", "readonly"),
+                Pair("", "required")
             )
         )
     }
@@ -80,6 +81,36 @@ class DynamicPreloadParseProcessorTest {
         bindingWithPullData.readonlyCondition = createTriggerable(createPullDataExpression())
 
         processor.processBindAttribute("readonly", "", bindingWithPullData)
+        processor.processFormDef(formDef)
+        assertThat(
+            formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
+            equalTo(true)
+        )
+    }
+
+    @Test
+    fun `usesDynamicPreload is false when required does not contain pulldata`() {
+        val formDef = FormDef()
+
+        val bindingWithoutPullData = DataBinding()
+        bindingWithoutPullData.requiredCondition = createTriggerable(createNonPullDataExpression())
+
+        processor.processBindAttribute("required", "", bindingWithoutPullData)
+        processor.processFormDef(formDef)
+        assertThat(
+            formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
+            equalTo(false)
+        )
+    }
+
+    @Test
+    fun `usesDynamicPreload is true when required does contain pulldata`() {
+        val formDef = FormDef()
+
+        val bindingWithPullData = DataBinding()
+        bindingWithPullData.requiredCondition = createTriggerable(createPullDataExpression())
+
+        processor.processBindAttribute("required", "", bindingWithPullData)
         processor.processFormDef(formDef)
         assertThat(
             formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
