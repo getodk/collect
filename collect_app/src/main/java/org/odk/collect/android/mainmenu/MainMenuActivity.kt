@@ -31,6 +31,7 @@ import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ThemeUtils
+import org.odk.collect.androidshared.system.PlayServicesChecker
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils

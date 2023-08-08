@@ -261,6 +261,7 @@ dependencies {
     implementation project(':selfie-camera')
     implementation project(':qr-code')
     implementation project(':metadata')
+    implementation project(':google-maps')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')

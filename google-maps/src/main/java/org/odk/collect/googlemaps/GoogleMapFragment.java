@@ -12,11 +12,10 @@
  * the License.
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.googlemaps;
 
 import static org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY;
 import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -48,10 +47,9 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
-import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
-import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.androidshared.system.ContextUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
+import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.MapFragment;
@@ -62,6 +60,7 @@ import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.maps.markers.MarkerDescription;
 import org.odk.collect.maps.markers.MarkerIconDescription;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProjectKeys;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -168,7 +167,8 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     @Override public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        DaggerUtils.getComponent(context).inject(this);
+        GoogleMapsDependencyComponent component = ((GoogleMapsDependencyComponentProvider) context.getApplicationContext()).getGoogleMapsDependencyComponent();
+        component.inject(this);
     }
 
     @Override public void onStart() {
@@ -705,7 +705,7 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     private MapConfigurator createConfigurator() {
         return new GoogleMapConfigurator(
-                KEY_GOOGLE_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_google,
+                ProjectKeys.KEY_GOOGLE_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_google,
                 new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, org.odk.collect.strings.R.string.streets),
                 new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, org.odk.collect.strings.R.string.terrain),
                 new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),

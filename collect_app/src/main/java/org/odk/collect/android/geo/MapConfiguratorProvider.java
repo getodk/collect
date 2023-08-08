@@ -18,7 +18,8 @@ import com.google.android.gms.maps.GoogleMap;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
-import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
+import org.odk.collect.googlemaps.GoogleMapConfigurator;
+import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.osmdroid.OsmDroidMapConfigurator;

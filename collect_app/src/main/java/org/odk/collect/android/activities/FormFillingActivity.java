@@ -161,7 +161,7 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;

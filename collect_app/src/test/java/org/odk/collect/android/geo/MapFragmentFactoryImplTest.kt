@@ -3,6 +3,7 @@ package org.odk.collect.android.geo
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
+import org.odk.collect.googlemaps.GoogleMapFragment
 import org.odk.collect.osmdroid.OsmDroidMapFragment
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys

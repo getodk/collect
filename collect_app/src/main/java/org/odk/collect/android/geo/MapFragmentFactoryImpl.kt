@@ -1,6 +1,7 @@
 package org.odk.collect.android.geo
 
 import org.odk.collect.android.application.MapboxClassInstanceCreator
+import org.odk.collect.googlemaps.GoogleMapFragment
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.osmdroid.OsmDroidMapFragment
