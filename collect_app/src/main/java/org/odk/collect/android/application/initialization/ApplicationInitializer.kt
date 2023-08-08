@@ -19,11 +19,13 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer
+import org.odk.collect.android.geo.MapConfiguratorProvider
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.osmdroid.OsmDroidInitializer
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.utilities.UserAgentProvider
 import timber.log.Timber
 import java.util.Locale
@@ -40,8 +42,8 @@ class ApplicationInitializer(
 ) {
     fun initialize() {
         runInitializers()
-        initializeFrameworks()
         initializeLocale()
+        initializeFrameworks()
     }
 
     private fun runInitializers() {
@@ -97,6 +99,18 @@ class ApplicationInitializer(
     }
 
     private fun initializeMapFrameworks() {
+        // Reset basemap setting if the currently selected is not available
+        MapConfiguratorProvider.initOptions(context)
+        val availableBaseMaps = MapConfiguratorProvider.getIds()
+        val baseMapSetting =
+            settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_BASEMAP_SOURCE)
+        if (!availableBaseMaps.contains(baseMapSetting)) {
+            settingsProvider.getUnprotectedSettings().save(
+                ProjectKeys.KEY_BASEMAP_SOURCE,
+                availableBaseMaps[0]
+            )
+        }
+
         try {
             MapsInitializer.initialize(
                 context,

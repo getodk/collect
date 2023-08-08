@@ -18,7 +18,10 @@ import static org.odk.collect.maps.MapConsts.POLYGON_FILL_COLOR_OPACITY;
 import static org.odk.collect.maps.MapConsts.POLYLINE_STROKE_WIDTH;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,6 +51,7 @@ import com.google.android.gms.maps.model.TileOverlay;
 import com.google.android.gms.maps.model.TileOverlayOptions;
 
 import org.odk.collect.androidshared.system.ContextUtils;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.location.LocationClient;
@@ -82,6 +86,28 @@ public class GoogleMapFragment extends SupportMapFragment implements
 
     // Bundle keys understood by applyConfig().
     static final String KEY_MAP_TYPE = "MAP_TYPE";
+
+    public static boolean isAvailable(Context context) {
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            String apiKey = applicationInfo.metaData.getString("com.google.android.geo.API_KEY");
+
+            return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context) && !apiKey.equals("");
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean isGoogleMapsSdkAvailable(Context context) {
+        // The Google Maps SDK for Android requires OpenGL ES version 2.
+        // See https://developers.google.com/maps/documentation/android-sdk/config
+        return ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
+                .getDeviceConfigurationInfo().reqGlEsVersion >= 0x20000;
+    }
+
+    private static boolean isGooglePlayServicesAvailable(Context context) {
+        return new PlayServicesChecker().isGooglePlayServicesAvailable(context);
+    }
 
     @Inject
     ReferenceLayerRepository referenceLayerRepository;

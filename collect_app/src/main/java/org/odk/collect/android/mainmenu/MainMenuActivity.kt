@@ -194,7 +194,7 @@ class MainMenuActivity : LocalizedActivity() {
         if (isMapboxAvailable()) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.map_box_initialization_fragment, createMapBoxInitializationFragment()!!)
+                .add(R.id.map_box_initialization_fragment, createMapBoxInitializationFragment())
                 .commit()
         }
     }
