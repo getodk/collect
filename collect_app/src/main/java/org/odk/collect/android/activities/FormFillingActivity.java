@@ -860,6 +860,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        // If we're coming back from the hierarchy view, the user has either tapped the back
+        // button or another question to jump to so we need to rebuild the view.
+        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
+            formEntryViewModel.refresh();
+            return;
+        }
+
         FormController formController = getFormController();
         if (formController == null) {
             // we must be in the midst of a reload of the FormController.
@@ -870,13 +877,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             } else {
                 Timber.e(new Error("Got an activityResult without any pending form loader"));
             }
-            return;
-        }
-
-        // If we're coming back from the hierarchy view, the user has either tapped the back
-        // button or another question to jump to so we need to rebuild the view.
-        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
-            formEntryViewModel.refresh();
             return;
         }
 
