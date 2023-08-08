@@ -394,9 +394,19 @@ abstract class Page<T : Page<T>> {
         assertToolbarTitle(getTranslatedString(title))
     }
 
-    fun copyInstance(instanceFileName: String): T {
+    @JvmOverloads
+    fun copyForm(formFilename: String, mediaFileNames: List<String>? = null, copyToDatabase: Boolean = false, projectName: String = "Demo project"): T {
         try {
-            StorageUtils.copyInstanceToDemoProject(instanceFileName)
+            StorageUtils.copyFormToStorage(formFilename, mediaFileNames, copyToDatabase, formFilename, projectName)
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
+        return this as T
+    }
+
+    fun copyInstance(instanceFileName: String, projectName: String = "Demo project"): T {
+        try {
+            StorageUtils.copyInstance(instanceFileName, projectName)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }
