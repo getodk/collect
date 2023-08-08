@@ -106,8 +106,12 @@ public class MainMenuPage extends Page<MainMenuPage> {
     }
 
     public GetBlankFormPage clickGetBlankForm() {
+        return clickGetBlankForm(new GetBlankFormPage());
+    }
+
+    public <D extends Page<D>> D clickGetBlankForm(D destination) {
         onView(withText(getTranslatedString(org.odk.collect.strings.R.string.get_forms))).perform(scrollTo(), click());
-        return new GetBlankFormPage().assertOnPage();
+        return destination.assertOnPage();
     }
 
     public SendFinalizedFormPage clickSendFinalizedForm(int number) {

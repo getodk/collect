@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
@@ -230,20 +231,24 @@ class MainMenuActivity : LocalizedActivity() {
             )
         }
 
-        binding.getForms.setOnClickListener(
-            View.OnClickListener {
-                val protocol =
-                    settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL)
-                if (!protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS, ignoreCase = true)) {
-                    val intent = Intent(
-                        applicationContext,
-                        FormDownloadListActivity::class.java
-                    )
+        binding.getForms.setOnClickListener {
+            val protocol =
+                settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL)
+            if (!protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS, ignoreCase = true)) {
+                val intent = Intent(
+                    applicationContext,
+                    FormDownloadListActivity::class.java
+                )
 
-                    startActivity(intent)
-                }
+                startActivity(intent)
+            } else {
+                MaterialAlertDialogBuilder(this)
+                    .setMessage(org.odk.collect.strings.R.string.cannot_start_new_forms_in_google_drive_projects)
+                    .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
+                    .create()
+                    .show()
             }
-        )
+        }
 
         binding.manageForms.setOnClickListener {
             startActivity(Intent(this, DeleteSavedFormActivity::class.java))
