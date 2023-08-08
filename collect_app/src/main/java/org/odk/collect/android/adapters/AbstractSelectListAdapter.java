@@ -47,7 +47,6 @@ import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.audioclips.Clip;
 import org.odk.collect.imageloader.GlideImageLoader;
-import org.odk.collect.strings.localization.LocalizedApplicationKt;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -137,8 +136,6 @@ public abstract class AbstractSelectListAdapter extends RecyclerView.Adapter<Abs
         button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getQuestionFontSize());
         button.setText(HtmlUtils.textToHtml(prompt.getSelectChoiceText(filteredItems.get(index))));
         button.setTag(items.indexOf(filteredItems.get(index)));
-        button.setGravity(LocalizedApplicationKt.isLTR(context) ? Gravity.START : Gravity.END);
-        button.setTextAlignment(LocalizedApplicationKt.isLTR(context) ? View.TEXT_ALIGNMENT_TEXT_START : View.TEXT_ALIGNMENT_TEXT_END);
     }
 
     boolean isItemSelected(List<Selection> selectedItems, @NonNull Selection item) {
