@@ -200,15 +200,6 @@ android {
         }
     }
 
-
-    sourceSets {
-        androidTest {
-            java.srcDirs += "src/commonTest/java"
-        }
-        test {
-            java.srcDirs += "src/commonTest/java"
-        }
-    }
     lint {
         abortOnError true
         checkDependencies true
