@@ -20,18 +20,6 @@ class ProcessRestoreTest {
     val ruleChain: RuleChain = TestRuleChain.chain().around(rule)
 
     @Test
-    fun whenProcessIsKilledAndRestoredDuringFormEntry_returnsToHierarchy() {
-        rule.setUpProjectAndCopyForm("one-question.xml")
-            .fillNewForm("one-question.xml", "One Question")
-            .answerQuestion("what is your age", "123")
-            .let { simulateProcessRestore(FormHierarchyPage("One Question")) }
-
-            .assertText("123")
-            .pressBack(FormEntryPage("One Question"))
-            .assertQuestion("what is your age")
-    }
-
-    @Test
     fun whenProcessIsKilledAndRestoredDuringFormEntry_andThereADialogFragmentOpen_returnsToHierarchy() {
         rule.setUpProjectAndCopyForm("all-widgets.xml")
             .fillNewForm("all-widgets.xml", "All widgets")

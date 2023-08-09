@@ -17,11 +17,16 @@ object FormUtils {
                             <model>
                                 <instance>
                                     <data id="$formId" orx:version="$version">
+                                        <question/>
                                     </data>
                                 </instance>
+                                <bind nodeset="/data/question" type="string"/>
                             </model>
                         </h:head>
                         <h:body>
+                            <input ref="/data/question">
+                                <label>question label</label>
+                            </input>
                         </h:body>
                     </h:html>"""
     }
