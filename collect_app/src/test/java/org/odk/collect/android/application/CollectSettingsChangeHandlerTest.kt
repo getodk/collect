@@ -51,7 +51,7 @@ class CollectSettingsChangeHandlerTest {
     }
 
     @Test
-    fun `when changed key is SERVER_URL clears sync status`() {
+    fun `when changed key is SERVER_URL clears forms data`() {
         handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_SERVER_URL)
         verify(formsDataService).clear("projectId")
     }
