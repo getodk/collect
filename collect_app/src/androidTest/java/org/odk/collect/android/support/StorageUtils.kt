@@ -89,7 +89,7 @@ object StorageUtils {
     @Throws(IOException::class)
     private fun copyForm(formFilename: String, copyTo: String, projectName: String): String {
         val pathname = getFormsDirPath(projectName) + copyTo
-        FileUtils.copyFileFromAssets("forms/$formFilename", pathname)
+        FileUtils.copyFileFromResources("forms/$formFilename", pathname)
         return pathname
     }
 

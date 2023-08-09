@@ -1,7 +1,7 @@
 package org.odk.collect.android.support;
 
-import android.content.res.AssetManager;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.apache.commons.io.IOUtils;
@@ -17,8 +17,25 @@ public final class FileUtils {
     }
 
     public static void copyFileFromAssets(String fileSourcePath, String fileDestPath) throws IOException {
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        try (InputStream input = assetManager.open(fileSourcePath);
+        copyStreamToPath(getAssetAsStream(fileSourcePath), fileDestPath);
+    }
+
+    public static void copyFileFromResources(String fileSourcePath, String fileDestPath) throws IOException {
+        copyStreamToPath(getResourceAsStream(fileSourcePath), fileDestPath);
+    }
+
+    @NonNull
+    public static InputStream getAssetAsStream(String fileSourcePath) throws IOException {
+        return InstrumentationRegistry.getInstrumentation().getContext().getAssets().open(fileSourcePath);
+    }
+
+    @Nullable
+    public static InputStream getResourceAsStream(String fileSourcePath) {
+        return FileUtils.class.getResourceAsStream("/" + fileSourcePath);
+    }
+
+    private static void copyStreamToPath(InputStream inputStream, String fileDestPath) throws IOException {
+        try (InputStream input = inputStream;
              OutputStream output = new FileOutputStream(fileDestPath)) {
             IOUtils.copy(input, output);
         }

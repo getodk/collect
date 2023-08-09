@@ -1,5 +1,6 @@
 package org.odk.collect.android.support;
 
+import static org.odk.collect.android.support.FileUtils.getResourceAsStream;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
@@ -270,9 +271,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NotNull
     private InputStream getFormXML(String formID) throws IOException {
         String xmlPath = forms.get(Integer.parseInt(formID)).getFormXML();
-
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        return assetManager.open("forms/" + xmlPath);
+        return getResourceAsStream("forms/" + xmlPath);
     }
 
     @NotNull
