@@ -31,16 +31,20 @@ class ReadyToSendBanner(context: Context, attrs: AttributeSet?) : ConstraintLayo
             val lastSentInstance = sentInstances.maxBy { instance -> instance.lastStatusChangeDate }
             val millisecondsAgo = clock.get() - lastSentInstance.lastStatusChangeDate
             if (millisecondsAgo >= ONE_DAY) {
-                binding.title.text = context.getString(R.string.last_form_sent_days_ago, millisecondsAgo / ONE_DAY)
+                val days: Int = (millisecondsAgo / ONE_DAY).toInt()
+                binding.title.text = context.resources.getQuantityString(R.plurals.last_form_sent_days_ago, days, days)
             } else if (millisecondsAgo >= ONE_HOUR) {
-                binding.title.text = context.getString(R.string.last_form_sent_hours_ago, millisecondsAgo / ONE_HOUR)
+                val hours: Int = (millisecondsAgo / ONE_HOUR).toInt()
+                binding.title.text = context.resources.getQuantityString(R.plurals.last_form_sent_hours_ago, hours, hours)
             } else if (millisecondsAgo >= ONE_MINUTE) {
-                binding.title.text = context.getString(R.string.last_form_sent_minutes_ago, millisecondsAgo / ONE_MINUTE)
+                val minutes: Int = (millisecondsAgo / ONE_MINUTE).toInt()
+                binding.title.text = context.resources.getQuantityString(R.plurals.last_form_sent_minutes_ago, minutes, minutes)
             } else {
-                binding.title.text = context.getString(R.string.last_form_sent_seconds_ago, millisecondsAgo / ONE_SECOND)
+                val seconds: Int = (millisecondsAgo / ONE_SECOND).toInt()
+                binding.title.text = context.resources.getQuantityString(R.plurals.last_form_sent_seconds_ago, seconds, seconds)
             }
 
-            binding.subtext.text = context.getString(R.string.forms_ready_to_send, numberOfInstancesReadyToSend)
+            binding.subtext.text = context.resources.getQuantityString(R.plurals.forms_ready_to_send, numberOfInstancesReadyToSend, numberOfInstancesReadyToSend)
             binding.banner.visibility = VISIBLE
         }
     }

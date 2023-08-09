@@ -145,7 +145,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 5 second(s) ago")
+            equalTo("Last form sent: 5 seconds ago")
         )
     }
 
@@ -167,12 +167,12 @@ class ReadyToSendBannerTest {
         )
 
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { ONE_MINUTE * 10 }
+            it.init(instancesRepository) { ONE_MINUTE }
         }
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 10 minute(s) ago")
+            equalTo("Last form sent: 1 minute ago")
         )
     }
 
@@ -199,7 +199,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 2 hour(s) ago")
+            equalTo("Last form sent: 2 hours ago")
         )
     }
 
@@ -226,7 +226,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 34 day(s) ago")
+            equalTo("Last form sent: 34 days ago")
         )
     }
 
@@ -269,7 +269,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 5 second(s) ago")
+            equalTo("Last form sent: 5 seconds ago")
         )
     }
 
@@ -309,7 +309,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.subtext).text,
-            equalTo("3 form(s) ready to send")
+            equalTo("3 forms ready to send")
         )
     }
 }
