@@ -394,6 +394,8 @@ dependencies {
     androidTestImplementation Dependencies.androidx_work_testing
     androidTestImplementation Dependencies.uiautomator
 
+    androidTestImplementation project(':test-forms')
+
     debugImplementation project(':fragmentstest')
     debugImplementation(project(':testshared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
