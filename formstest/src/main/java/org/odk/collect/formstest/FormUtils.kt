@@ -9,7 +9,7 @@ import java.nio.charset.Charset
 object FormUtils {
     @JvmStatic
     @JvmOverloads
-    fun createXFormBody(formId: String, version: String?, title: String = "Form"): String {
+    fun createXFormBody(formId: String, version: String?, title: String = "Test Form"): String {
         return """<?xml version="1.0"?>
                     <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
                         <h:head>
