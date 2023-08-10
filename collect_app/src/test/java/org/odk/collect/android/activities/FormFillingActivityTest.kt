@@ -76,7 +76,8 @@ class FormFillingActivityTest {
         newComponent.applicationInitializer().initialize()
 
         // Recreate and assert we start FormHierarchyActivity
-        val recreated = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
+        val recreated =
+            Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup(outState)
         assertThat(
             shadowOf(initial.get()).nextStartedActivity.component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
