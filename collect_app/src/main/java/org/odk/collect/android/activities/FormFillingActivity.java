@@ -685,7 +685,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     formEntryViewModel.refresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory);
+                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
                 }
@@ -729,7 +729,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             instancePath = loadSavePoint();
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory);
+        formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);
@@ -1929,7 +1929,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     FormLoaderTask t = formLoaderTask;
                     formLoaderTask = null;
-                    t.cancel(true);
+                    t.cancel();
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
                     Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask not null");
@@ -2005,7 +2005,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (formLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
                 FormLoaderTask t = formLoaderTask;
                 formLoaderTask = null;
-                t.cancel(true);
+                t.cancel();
                 t.destroy();
             }
         }
@@ -2080,7 +2080,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             formLoaderTask.setFormLoaderListener(null);
             FormLoaderTask t = formLoaderTask;
             formLoaderTask = null;
-            t.cancel(true);
+            t.cancel();
             t.destroy();
 
             Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2349,7 +2349,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             formLoaderTask.setFormLoaderListener(null);
             FormLoaderTask t = formLoaderTask;
             formLoaderTask = null;
-            t.cancel(true);
+            t.cancel();
             t.destroy();
         }
         exit();

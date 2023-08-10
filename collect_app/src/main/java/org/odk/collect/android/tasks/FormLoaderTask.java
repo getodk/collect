@@ -20,7 +20,6 @@ import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLoc
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 
@@ -53,6 +52,8 @@ import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ZipUtils;
+import org.odk.collect.async.Scheduler;
+import org.odk.collect.async.SchedulerAsyncTaskMimic;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -71,7 +72,7 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FECWrapper> {
+public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, FormLoaderTask.FECWrapper> {
     private static final String ITEMSETS_CSV = "itemsets.csv";
 
     private FormLoaderListener stateListener;
@@ -87,6 +88,11 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
     private Intent intent;
     private ExternalDataManager externalDataManager;
     private FormDef formDef;
+
+    @Override
+    protected void onPreExecute() {
+
+    }
 
     public static class FECWrapper {
         FormController controller;
@@ -112,7 +118,8 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory) {
+    public FormLoaderTask(String instancePath, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler) {
+        super(scheduler);
         this.instancePath = instancePath;
         this.xpath = xpath;
         this.waitingXPath = waitingXPath;
@@ -455,8 +462,6 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
 
     @Override
     protected void onCancelled() {
-        super.onCancelled();
-
         if (externalDataManager != null) {
             externalDataManager.close();
         }
