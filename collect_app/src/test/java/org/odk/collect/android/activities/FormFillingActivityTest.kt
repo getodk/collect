@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.os.Bundle
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -88,5 +90,61 @@ class FormFillingActivityTest {
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         onView(withText("One Question")).check(matches(isDisplayed()))
         onView(withText(containsString("what is your age"))).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun whenProcessIsKilledAndRestoredDuringFormEntry_andThereADialogFragmentOpen_returnsToHierarchy() {
+        val projectId = CollectHelpers.setupDemoProject()
+
+        val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+        val formFile = FileUtils.copyFileFromResources(
+            "forms/all-widgets.xml",
+            File(formsDir, "all-widgets.xml")
+        )
+
+        val formsRepository = component.formsRepositoryProvider().get()
+        val form = formsRepository.save(form(formFile = formFile))
+
+        val intent = FormFillingIntentFactory.newInstanceIntent(
+            application,
+            FormsContract.getUri(projectId, form!!.dbId),
+            FormFillingActivity::class
+        )
+
+        // Start activity
+        val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
+        onView(withText("All widgets")).check(matches(isDisplayed()))
+        while (true) {
+            try {
+                onView(withText("Select one from map widget")).check(matches(isDisplayed()))
+                onView(withText("Select place")).perform(click())
+                break
+            } catch (e: NoMatchingViewException) {
+                onView(withText("Next")).perform(click())
+            }
+        }
+
+        // Destroy activity with saved instance state
+        val outState = Bundle()
+        initial.saveInstanceState(outState).pause().stop().destroy()
+
+        // Reset process
+        ApplicationProvider.getApplicationContext<Collect>().getState().clear()
+        val newComponent = CollectHelpers.overrideAppDependencyModule(dependencies)
+        newComponent.applicationInitializer().initialize()
+
+        // Recreate and assert we start FormHierarchyActivity
+        val recreated =
+            Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup(outState)
+        assertThat(
+            shadowOf(initial.get()).nextStartedActivity.component,
+            equalTo(ComponentName(application, FormHierarchyActivity::class.java))
+        )
+
+        // Return to FormFillingActivity from FormHierarchyActivity
+        recreated.recreate().get()
+            .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
+        onView(withText("All widgets")).check(matches(isDisplayed()))
+        onView(withText(containsString("Select one from map widget"))).check(matches(isDisplayed()))
     }
 }
