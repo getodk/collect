@@ -1,10 +1,11 @@
 package org.odk.collect.android.feature.formentry;
 
-import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.utilities.FileUtils.copyFileFromAssets;
 
 import android.app.Application;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class AudioRecordingTest {
                     File stubRecording = File.createTempFile("test", ".m4a");
                     stubRecording.deleteOnExit();
 
-                    copyFileFromAssets("media/test.m4a", stubRecording.getAbsolutePath());
+                    copyFileFromAssets(InstrumentationRegistry.getInstrumentation().getContext(), stubRecording.getAbsolutePath(), "media/test.m4a");
                     stubAudioRecorderViewModel = new StubAudioRecorder(stubRecording.getAbsolutePath());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

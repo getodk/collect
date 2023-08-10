@@ -22,6 +22,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.common.base.CharMatcher;
 
 import org.apache.commons.io.IOUtils;
@@ -561,6 +564,31 @@ public final class FileUtils {
             String msg = Collect.getInstance().getString(org.odk.collect.strings.R.string.fs_file_copy_error,
                     tempFile.getAbsolutePath(), destinationFile.getAbsolutePath(), errorMessage);
             throw new RuntimeException(msg);
+        }
+    }
+
+    public static void copyFileFromAssets(Context context, String fileDestPath, String fileSourcePath) throws IOException {
+        copyStreamToPath(getAssetAsStream(context, fileSourcePath), fileDestPath);
+    }
+
+    public static void copyFileFromResources(String fileSourcePath, String fileDestPath) throws IOException {
+        copyStreamToPath(getResourceAsStream(fileSourcePath), fileDestPath);
+    }
+
+    @NonNull
+    public static InputStream getAssetAsStream(Context context, String fileSourcePath) throws IOException {
+        return context.getAssets().open(fileSourcePath);
+    }
+
+    @Nullable
+    public static InputStream getResourceAsStream(String fileSourcePath) {
+        return FileUtils.class.getResourceAsStream("/" + fileSourcePath);
+    }
+
+    private static void copyStreamToPath(InputStream inputStream, String fileDestPath) throws IOException {
+        try (InputStream input = inputStream;
+             OutputStream output = new FileOutputStream(fileDestPath)) {
+            IOUtils.copy(input, output);
         }
     }
 }
