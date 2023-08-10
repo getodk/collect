@@ -2,6 +2,7 @@ package org.odk.collect.strings.localization
 
 import android.content.Context
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
 import android.view.View
 import java.util.Locale
@@ -20,13 +21,15 @@ fun Context.getLocalizedString(stringId: Int, vararg formatArgs: Any): String {
         else -> if (Build.VERSION.SDK_INT >= 24) resources.configuration.locales[0] else resources.configuration.locale
     }
 
+    return getLocalizedResources(locale).getString(stringId, *formatArgs)
+}
+
+fun Context.getLocalizedResources(locale: Locale): Resources {
     val newConfig = Configuration(resources.configuration).apply {
         setLocale(locale)
     }
 
-    return createConfigurationContext(newConfig)
-        .resources
-        .getString(stringId, *formatArgs)
+    return createConfigurationContext(newConfig).resources
 }
 
 fun Context.isLTR(): Boolean {
