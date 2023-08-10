@@ -1,6 +1,6 @@
 package org.odk.collect.android.support;
 
-import static org.odk.collect.android.support.FileUtils.getResourceAsStream;
+import static org.odk.collect.android.utilities.FileUtils.getResourceAsStream;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
