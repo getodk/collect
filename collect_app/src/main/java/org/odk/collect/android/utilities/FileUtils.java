@@ -571,6 +571,11 @@ public final class FileUtils {
         copyStreamToPath(getAssetAsStream(context, fileSourcePath), fileDestPath);
     }
 
+    public static File copyFileFromResources(String fileSourcePath, File fileDest) throws IOException {
+        copyStreamToPath(getResourceAsStream(fileSourcePath), fileDest.getAbsolutePath());
+        return fileDest;
+    }
+
     public static void copyFileFromResources(String fileSourcePath, String fileDestPath) throws IOException {
         copyStreamToPath(getResourceAsStream(fileSourcePath), fileDestPath);
     }

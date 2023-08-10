@@ -364,6 +364,7 @@ dependencies {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
     testImplementation(project(":shadows"))
+    testImplementation(project(":test-forms"))
 
     testImplementation Dependencies.robolectric
 
@@ -380,6 +381,7 @@ dependencies {
     testImplementation Dependencies.androidx_test_core_ktx
 
     androidTestImplementation project(':androidtest')
+    androidTestImplementation project(':test-forms')
 
     androidTestImplementation Dependencies.mockito_android
     androidTestImplementation Dependencies.androidx_test_ext_junit
@@ -393,8 +395,6 @@ dependencies {
     androidTestImplementation Dependencies.okhttp3_mockwebserver
     androidTestImplementation Dependencies.androidx_work_testing
     androidTestImplementation Dependencies.uiautomator
-
-    androidTestImplementation project(':test-forms')
 
     debugImplementation project(':fragmentstest')
     debugImplementation(project(':testshared')) {

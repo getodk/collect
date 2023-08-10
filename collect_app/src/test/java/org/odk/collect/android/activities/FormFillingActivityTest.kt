@@ -11,6 +11,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Test
@@ -23,14 +24,17 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
-import org.odk.collect.formstest.FormUtils.buildForm
+import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.formstest.FormFixtures.form
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class FormFillingActivityTest {
 
     private val application = ApplicationProvider.getApplicationContext<Application>()
+    private val component = DaggerUtils.getComponent(application)
     private val dependencies = object : AppDependencyModule() {}
 
     @Before
@@ -42,12 +46,14 @@ class FormFillingActivityTest {
     fun whenProcessIsKilledAndRestoredDuringFormEntry_returnsToHierarchy() {
         val projectId = CollectHelpers.setupDemoProject()
 
-        val formsRepository = DaggerUtils.getComponent(application).formsRepositoryProvider().get()
-        val storagePathProvider = DaggerUtils.getComponent(application).storagePathProvider()
-        val formsDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS)
-        val newForm =
-            buildForm(formId = "id", version = "version", formFilesPath = formsDir).build()
-        val form = formsRepository.save(newForm)
+        val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+        val formFile = FileUtils.copyFileFromResources(
+            "forms/one-question.xml",
+            File(formsDir, "one-question.xml")
+        )
+
+        val formsRepository = component.formsRepositoryProvider().get()
+        val form = formsRepository.save(form(formFile = formFile))
 
         val intent = FormFillingIntentFactory.newInstanceIntent(
             application,
@@ -57,8 +63,8 @@ class FormFillingActivityTest {
 
         // Start activity
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
-        onView(withText("Test Form")).check(matches(isDisplayed()))
-        onView(withText("question label")).check(matches(isDisplayed()))
+        onView(withText("One Question")).check(matches(isDisplayed()))
+        onView(withText(containsString("what is your age"))).check(matches(isDisplayed()))
 
         // Destroy activity with saved instance state
         val outState = Bundle()
@@ -79,7 +85,7 @@ class FormFillingActivityTest {
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.recreate().get()
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
-        onView(withText("Test Form")).check(matches(isDisplayed()))
-        onView(withText("question label")).check(matches(isDisplayed()))
+        onView(withText("One Question")).check(matches(isDisplayed()))
+        onView(withText(containsString("what is your age"))).check(matches(isDisplayed()))
     }
 }
