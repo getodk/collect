@@ -9,6 +9,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -31,13 +32,13 @@ import org.odk.collect.android.support.CollectHelpers.resetProcess
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
+import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
 import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric
-import org.robolectric.Shadows.shadowOf
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -45,6 +46,9 @@ class FormFillingActivityTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val recordedIntentsRule = RecordedIntentsRule()
 
     private val scheduler = FakeScheduler()
     private val dependencies = object : AppDependencyModule() {
@@ -86,7 +90,7 @@ class FormFillingActivityTest {
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
         assertThat(
-            shadowOf(initial.get()).nextStartedActivity.component,
+            Intents.getIntents()[0].component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
         )
 
@@ -122,7 +126,7 @@ class FormFillingActivityTest {
 
         clickOn(R.string.view_hierarchy)
         assertThat(
-            shadowOf(initial.get()).nextStartedActivity.component,
+            Intents.getIntents()[0].component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
         )
 
@@ -130,7 +134,7 @@ class FormFillingActivityTest {
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
         assertThat(
-            shadowOf(initial.get()).nextStartedActivity.component,
+            Intents.getIntents()[0].component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
         )
 
@@ -175,7 +179,7 @@ class FormFillingActivityTest {
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
         assertThat(
-            shadowOf(initial.get()).nextStartedActivity.component,
+            Intents.getIntents()[0].component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
         )
 
