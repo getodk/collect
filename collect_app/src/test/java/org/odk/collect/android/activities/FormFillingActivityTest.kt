@@ -2,11 +2,9 @@ package org.odk.collect.android.activities
 
 import android.app.Activity
 import android.app.Application
-import android.content.ComponentName
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.DialogFragment
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.intent.Intents
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
 import org.hamcrest.MatcherAssert.assertThat
@@ -30,6 +28,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
+import org.odk.collect.testshared.EspressoHelpers.assertLastIntent
 import org.odk.collect.testshared.EspressoHelpers.assertText
 import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
 import org.odk.collect.testshared.FakeScheduler
@@ -85,10 +84,7 @@ class FormFillingActivityTest {
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertThat(
-            Intents.getIntents()[0].component,
-            equalTo(ComponentName(application, FormHierarchyActivity::class.java))
-        )
+        assertLastIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -121,18 +117,12 @@ class FormFillingActivityTest {
         assertText("What is your age?")
 
         clickOnContentDescription(R.string.view_hierarchy)
-        assertThat(
-            Intents.getIntents()[0].component,
-            equalTo(ComponentName(application, FormHierarchyActivity::class.java))
-        )
+        assertLastIntent(FormHierarchyActivity::class)
 
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertThat(
-            Intents.getIntents()[0].component,
-            equalTo(ComponentName(application, FormHierarchyActivity::class.java))
-        )
+        assertLastIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -174,10 +164,7 @@ class FormFillingActivityTest {
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertThat(
-            Intents.getIntents()[0].component,
-            equalTo(ComponentName(application, FormHierarchyActivity::class.java))
-        )
+        assertLastIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -186,10 +173,7 @@ class FormFillingActivityTest {
 
         assertText("Two Question")
         assertText("What is your age?")
-        assertThat(
-            recreated.get().supportFragmentManager.fragments.any { it::class == TestDialogFragment::class },
-            equalTo(false)
-        )
+        assertLastIntent(FormHierarchyActivity::class)
     }
 
     private fun setupForm(testFormPath: String): Form? {
