@@ -6,13 +6,7 @@ import android.content.ComponentName
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.DialogFragment
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,6 +30,8 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
+import org.odk.collect.testshared.EspressoHelpers.assertText
+import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Robolectric
@@ -82,7 +78,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOn(R.string.form_forward)
+        clickOnContentDescription(R.string.form_forward)
         scheduler.flush()
         assertText("What is your age?")
 
@@ -120,11 +116,11 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOn(R.string.form_forward)
+        clickOnContentDescription(R.string.form_forward)
         scheduler.flush()
         assertText("What is your age?")
 
-        clickOn(R.string.view_hierarchy)
+        clickOnContentDescription(R.string.view_hierarchy)
         assertThat(
             Intents.getIntents()[0].component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
@@ -164,7 +160,7 @@ class FormFillingActivityTest {
         assertText("Two Question")
         assertText("What is your name?")
 
-        clickOn(R.string.form_forward)
+        clickOnContentDescription(R.string.form_forward)
         scheduler.flush()
         assertText("What is your age?")
 
@@ -194,14 +190,6 @@ class FormFillingActivityTest {
             recreated.get().supportFragmentManager.fragments.any { it::class == TestDialogFragment::class },
             equalTo(false)
         )
-    }
-
-    private fun assertText(text: String) {
-        onView(withText(text)).check(matches(isDisplayed()))
-    }
-
-    private fun clickOn(string: Int) {
-        onView(withContentDescription(string)).perform(click())
     }
 
     private fun setupForm(testFormPath: String): Form? {
