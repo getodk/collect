@@ -112,16 +112,39 @@ class FormsDataServiceTest {
     }
 
     @Test
-    fun `matchFormsWithServer() does nothing when change lock is locked`() {
+    fun `downloadUpdates() does nothing when change lock is locked`() {
+        val isSyncing = formsDataService.isSyncing(project.uuid)
+
         val changeLock = BooleanChangeLock()
         whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
         changeLock.lock()
 
-        formsDataService.matchFormsWithServer(project.uuid)
-        assertThat(formsDataService.isSyncing(project.uuid).getOrAwaitValue(), equalTo(false))
-        verifyNoInteractions(formSource)
-        verifyNoInteractions(notifier)
-        verifyNoInteractions(analytics)
+        isSyncing.recordValues { projectValues ->
+            formsDataService.downloadUpdates(project.uuid)
+            verifyNoInteractions(formSource)
+            verifyNoInteractions(notifier)
+            verifyNoInteractions(analytics)
+
+            assertThat(projectValues, equalTo(listOf(false)))
+        }
+    }
+
+    @Test
+    fun `matchFormsWithServer() does nothing when change lock is locked`() {
+        val isSyncing = formsDataService.isSyncing(project.uuid)
+
+        val changeLock = BooleanChangeLock()
+        whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
+        changeLock.lock()
+
+        isSyncing.recordValues { projectValues ->
+            formsDataService.matchFormsWithServer(project.uuid)
+            verifyNoInteractions(formSource)
+            verifyNoInteractions(notifier)
+            verifyNoInteractions(analytics)
+
+            assertThat(projectValues, equalTo(listOf(false)))
+        }
     }
 
     /**
@@ -200,6 +223,20 @@ class FormsDataServiceTest {
 
         formsDataService.clear(project.uuid)
         assertThat(formsDataService.getServerError(project.uuid).getOrAwaitValue(), equalTo(null))
+    }
+
+    @Test
+    fun `update() does nothing when change lock is locked`() {
+        val isSyncing = formsDataService.isSyncing(project.uuid)
+
+        val changeLock = BooleanChangeLock()
+        whenever(changeLockProvider.getFormLock(project.uuid)).thenReturn(changeLock)
+        changeLock.lock()
+
+        isSyncing.recordValues { projectValues ->
+            formsDataService.update(project.uuid)
+            assertThat(projectValues, equalTo(listOf(false)))
+        }
     }
 
     private fun addFormToServer(updatedXForm: String, formId: String, formVersion: String) {
