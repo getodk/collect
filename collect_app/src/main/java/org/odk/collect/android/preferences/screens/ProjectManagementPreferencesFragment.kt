@@ -83,7 +83,7 @@ class ProjectManagementPreferencesFragment :
         return false
     }
 
-    fun deleteProject() {
+    private fun deleteProject() {
         Analytics.log(AnalyticsEvents.DELETE_PROJECT)
 
         when (val deleteProjectResult = projectDeleter.deleteProject()) {
@@ -103,26 +103,26 @@ class ProjectManagementPreferencesFragment :
             }
             is DeleteProjectResult.DeletedSuccessfullyCurrentProject -> {
                 val newCurrentProject = deleteProjectResult.newCurrentProject
-                if (newCurrentProject != null) {
-                    ActivityUtils.startActivityAndCloseAllOthers(
-                        requireActivity(),
-                        MainMenuActivity::class.java
+                ActivityUtils.startActivityAndCloseAllOthers(
+                    requireActivity(),
+                    MainMenuActivity::class.java
+                )
+                ToastUtils.showLongToast(
+                    requireContext(),
+                    getString(
+                        org.odk.collect.strings.R.string.switched_project,
+                        newCurrentProject.name
                     )
-                    ToastUtils.showLongToast(
-                        requireContext(),
-                        getString(
-                            org.odk.collect.strings.R.string.switched_project,
-                            newCurrentProject.name
-                        )
-                    )
-                } else {
-                    ActivityUtils.startActivityAndCloseAllOthers(
-                        requireActivity(),
-                        FirstLaunchActivity::class.java
-                    )
-                }
-            } else -> {
-                // ignore
+                )
+            }
+            is DeleteProjectResult.DeletedSuccessfullyLastProject -> {
+                ActivityUtils.startActivityAndCloseAllOthers(
+                    requireActivity(),
+                    FirstLaunchActivity::class.java
+                )
+            }
+            is DeleteProjectResult.DeletedSuccessfullyInactiveProject -> {
+                // not possible here
             }
         }
     }

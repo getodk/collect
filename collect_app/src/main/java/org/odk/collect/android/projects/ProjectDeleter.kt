@@ -86,5 +86,5 @@ sealed class DeleteProjectResult {
 
     object DeletedSuccessfullyInactiveProject : DeleteProjectResult()
 
-    data class DeletedSuccessfullyCurrentProject(val newCurrentProject: Project.Saved?) : DeleteProjectResult()
+    data class DeletedSuccessfullyCurrentProject(val newCurrentProject: Project.Saved) : DeleteProjectResult()
 }
