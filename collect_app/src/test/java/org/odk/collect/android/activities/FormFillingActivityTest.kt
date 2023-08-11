@@ -34,6 +34,7 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
+import org.odk.collect.strings.R
 import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
@@ -74,12 +75,12 @@ class FormFillingActivityTest {
         // Start activity
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
-        onView(withText("Two Question")).check(matches(isDisplayed()))
-        onView(withText("What is your name?")).check(matches(isDisplayed()))
+        assertText("Two Question")
+        assertText("What is your name?")
 
-        onView(withText(org.odk.collect.strings.R.string.form_forward)).perform(click())
+        clickOn(R.string.form_forward)
         scheduler.flush()
-        onView(withText("What is your age?")).check(matches(isDisplayed()))
+        assertText("What is your age?")
 
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
@@ -94,8 +95,8 @@ class FormFillingActivityTest {
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
-        onView(withText("Two Question")).check(matches(isDisplayed()))
-        onView(withText("What is your age?")).check(matches(isDisplayed()))
+        assertText("Two Question")
+        assertText("What is your age?")
     }
 
     @Test
@@ -112,15 +113,14 @@ class FormFillingActivityTest {
         // Start activity
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
-        onView(withText("Two Question")).check(matches(isDisplayed()))
-        onView(withText("What is your name?")).check(matches(isDisplayed()))
+        assertText("Two Question")
+        assertText("What is your name?")
 
-        onView(withText(org.odk.collect.strings.R.string.form_forward)).perform(click())
+        clickOn(R.string.form_forward)
         scheduler.flush()
-        onView(withText("What is your age?")).check(matches(isDisplayed()))
+        assertText("What is your age?")
 
-        onView(withContentDescription(org.odk.collect.strings.R.string.view_hierarchy))
-            .perform(click())
+        clickOn(R.string.view_hierarchy)
         assertThat(
             shadowOf(initial.get()).nextStartedActivity.component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
@@ -139,8 +139,8 @@ class FormFillingActivityTest {
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
-        onView(withText("Two Question")).check(matches(isDisplayed()))
-        onView(withText("What is your age?")).check(matches(isDisplayed()))
+        assertText("Two Question")
+        assertText("What is your age?")
     }
 
     @Test
@@ -157,12 +157,12 @@ class FormFillingActivityTest {
         // Start activity
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
-        onView(withText("Two Question")).check(matches(isDisplayed()))
-        onView(withText("What is your name?")).check(matches(isDisplayed()))
+        assertText("Two Question")
+        assertText("What is your name?")
 
-        onView(withText(org.odk.collect.strings.R.string.form_forward)).perform(click())
+        clickOn(R.string.form_forward)
         scheduler.flush()
-        onView(withText("What is your age?")).check(matches(isDisplayed()))
+        assertText("What is your age?")
 
         val initialFragmentManager = initial.get().supportFragmentManager
         DialogFragmentUtils.showIfNotShowing(TestDialogFragment::class.java, initialFragmentManager)
@@ -184,12 +184,20 @@ class FormFillingActivityTest {
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
-        onView(withText("Two Question")).check(matches(isDisplayed()))
-        onView(withText("What is your age?")).check(matches(isDisplayed()))
+        assertText("Two Question")
+        assertText("What is your age?")
         assertThat(
             recreated.get().supportFragmentManager.fragments.any { it::class == TestDialogFragment::class },
             equalTo(false)
         )
+    }
+
+    private fun assertText(text: String) {
+        onView(withText(text)).check(matches(isDisplayed()))
+    }
+
+    private fun clickOn(string: Int) {
+        onView(withContentDescription(string)).perform(click())
     }
 
     private fun setupForm(testFormPath: String): Form? {
