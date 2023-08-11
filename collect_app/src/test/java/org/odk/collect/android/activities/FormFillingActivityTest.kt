@@ -10,6 +10,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
@@ -79,6 +80,51 @@ class FormFillingActivityTest {
         onView(withText(org.odk.collect.strings.R.string.form_forward)).perform(click())
         scheduler.flush()
         onView(withText("What is your age?")).check(matches(isDisplayed()))
+
+        // Recreate and assert we start FormHierarchyActivity
+        val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        scheduler.flush()
+        assertThat(
+            shadowOf(initial.get()).nextStartedActivity.component,
+            equalTo(ComponentName(application, FormHierarchyActivity::class.java))
+        )
+
+        // Return to FormFillingActivity from FormHierarchyActivity
+        recreated.get()
+            .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
+        scheduler.flush()
+
+        onView(withText("Two Question")).check(matches(isDisplayed()))
+        onView(withText("What is your age?")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun whenProcessIsKilledAndRestored_andHierarchyIsOpen_returnsToHierarchyAtQuestion() {
+        val projectId = CollectHelpers.setupDemoProject()
+
+        val form = setupForm("forms/two-question.xml")
+        val intent = FormFillingIntentFactory.newInstanceIntent(
+            application,
+            FormsContract.getUri(projectId, form!!.dbId),
+            FormFillingActivity::class
+        )
+
+        // Start activity
+        val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
+        scheduler.flush()
+        onView(withText("Two Question")).check(matches(isDisplayed()))
+        onView(withText("What is your name?")).check(matches(isDisplayed()))
+
+        onView(withText(org.odk.collect.strings.R.string.form_forward)).perform(click())
+        scheduler.flush()
+        onView(withText("What is your age?")).check(matches(isDisplayed()))
+
+        onView(withContentDescription(org.odk.collect.strings.R.string.view_hierarchy))
+            .perform(click())
+        assertThat(
+            shadowOf(initial.get()).nextStartedActivity.component,
+            equalTo(ComponentName(application, FormHierarchyActivity::class.java))
+        )
 
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
