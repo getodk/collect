@@ -28,7 +28,7 @@ import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
-import org.odk.collect.testshared.EspressoHelpers.assertLastIntent
+import org.odk.collect.testshared.EspressoHelpers.assertIntents
 import org.odk.collect.testshared.EspressoHelpers.assertText
 import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
 import org.odk.collect.testshared.FakeScheduler
@@ -84,7 +84,7 @@ class FormFillingActivityTest {
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertLastIntent(FormHierarchyActivity::class)
+        assertIntents(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -117,12 +117,12 @@ class FormFillingActivityTest {
         assertText("What is your age?")
 
         clickOnContentDescription(R.string.view_hierarchy)
-        assertLastIntent(FormHierarchyActivity::class)
+        assertIntents(FormHierarchyActivity::class)
 
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertLastIntent(FormHierarchyActivity::class)
+        assertIntents(FormHierarchyActivity::class, FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -164,7 +164,7 @@ class FormFillingActivityTest {
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertLastIntent(FormHierarchyActivity::class)
+        assertIntents(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()

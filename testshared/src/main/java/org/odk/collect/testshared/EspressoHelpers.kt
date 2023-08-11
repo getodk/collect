@@ -13,6 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.equalTo
 import kotlin.reflect.KClass
 
 object EspressoHelpers {
@@ -26,7 +27,12 @@ object EspressoHelpers {
         onView(withContentDescription(string)).perform(click())
     }
 
-    fun assertLastIntent(activityClass: KClass<*>) {
-        assertThat(Intents.getIntents()[0], hasComponent(activityClass.java.name))
+    fun assertIntents(vararg activityClasses: KClass<*>) {
+        val intents = Intents.getIntents()
+        assertThat(activityClasses.size, equalTo(intents.size))
+
+        activityClasses.forEachIndexed { index, kClass: KClass<*> ->
+            assertThat(intents[index], hasComponent(kClass.java.name))
+        }
     }
 }
