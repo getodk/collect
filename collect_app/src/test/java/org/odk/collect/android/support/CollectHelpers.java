@@ -67,6 +67,15 @@ public final class CollectHelpers {
         return testComponent;
     }
 
+    public static void resetProcess(AppDependencyModule dependencies) {
+        Collect application = ApplicationProvider.getApplicationContext();
+
+        application.getState().clear();
+
+        AppDependencyComponent newComponent = CollectHelpers.overrideAppDependencyModule(dependencies);
+        newComponent.applicationInitializer().initialize();
+    }
+
     public static <T extends FragmentActivity> T createThemedActivity(Class<T> clazz) {
         return RobolectricHelpers.createThemedActivity(clazz);
     }

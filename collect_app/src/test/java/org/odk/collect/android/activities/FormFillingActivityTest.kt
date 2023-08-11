@@ -3,7 +3,6 @@ package org.odk.collect.android.activities
 import android.app.Activity
 import android.app.Application
 import android.content.ComponentName
-import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.DialogFragment
 import androidx.test.core.app.ApplicationProvider
@@ -20,17 +19,19 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.odk.collect.android.application.Collect
 import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.support.ActivityControllerExtensions.recreateWithProcessRestore
 import org.odk.collect.android.support.CollectHelpers
+import org.odk.collect.android.support.CollectHelpers.resetProcess
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.testshared.FakeScheduler
 import org.robolectric.Robolectric
@@ -62,15 +63,7 @@ class FormFillingActivityTest {
     fun whenProcessIsKilledAndRestored_returnsToHierarchyAtQuestion() {
         val projectId = CollectHelpers.setupDemoProject()
 
-        val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
-        val formFile = FileUtils.copyFileFromResources(
-            "forms/two-question.xml",
-            File(formsDir, "two-question.xml")
-        )
-
-        val formsRepository = component.formsRepositoryProvider().get()
-        val form = formsRepository.save(form(formFile = formFile))
-
+        val form = setupForm("forms/two-question.xml")
         val intent = FormFillingIntentFactory.newInstanceIntent(
             application,
             FormsContract.getUri(projectId, form!!.dbId),
@@ -80,7 +73,6 @@ class FormFillingActivityTest {
         // Start activity
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
-
         onView(withText("Two Question")).check(matches(isDisplayed()))
         onView(withText("What is your name?")).check(matches(isDisplayed()))
 
@@ -88,27 +80,16 @@ class FormFillingActivityTest {
         scheduler.flush()
         onView(withText("What is your age?")).check(matches(isDisplayed()))
 
-        // Destroy activity with saved instance state
-        val outState = Bundle()
-        initial.saveInstanceState(outState).pause().stop().destroy()
-
-        // Reset process
-        ApplicationProvider.getApplicationContext<Collect>().getState().clear()
-        val newComponent = CollectHelpers.overrideAppDependencyModule(dependencies)
-        newComponent.applicationInitializer().initialize()
-
         // Recreate and assert we start FormHierarchyActivity
-        val recreated =
-            Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup(outState)
+        val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-
         assertThat(
             shadowOf(initial.get()).nextStartedActivity.component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
         )
 
         // Return to FormFillingActivity from FormHierarchyActivity
-        recreated.recreate().get()
+        recreated.get()
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
@@ -120,15 +101,7 @@ class FormFillingActivityTest {
     fun whenProcessIsKilledAndRestored_andThereADialogFragmentOpen_doesNotRestoreDialogFragment() {
         val projectId = CollectHelpers.setupDemoProject()
 
-        val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
-        val formFile = FileUtils.copyFileFromResources(
-            "forms/two-question.xml",
-            File(formsDir, "two-question.xml")
-        )
-
-        val formsRepository = component.formsRepositoryProvider().get()
-        val form = formsRepository.save(form(formFile = formFile))
-
+        val form = setupForm("forms/two-question.xml")
         val intent = FormFillingIntentFactory.newInstanceIntent(
             application,
             FormsContract.getUri(projectId, form!!.dbId),
@@ -138,7 +111,6 @@ class FormFillingActivityTest {
         // Start activity
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
-
         onView(withText("Two Question")).check(matches(isDisplayed()))
         onView(withText("What is your name?")).check(matches(isDisplayed()))
 
@@ -153,38 +125,38 @@ class FormFillingActivityTest {
             equalTo(true)
         )
 
-        // Destroy activity with saved instance state
-        val outState = Bundle()
-        initial.saveInstanceState(outState).pause().stop().destroy()
-
-        // Reset process
-        ApplicationProvider.getApplicationContext<Collect>().getState().clear()
-        val newComponent = CollectHelpers.overrideAppDependencyModule(dependencies)
-        newComponent.applicationInitializer().initialize()
-
         // Recreate and assert we start FormHierarchyActivity
-        val recreated =
-            Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup(outState)
+        val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-
         assertThat(
             shadowOf(initial.get()).nextStartedActivity.component,
             equalTo(ComponentName(application, FormHierarchyActivity::class.java))
         )
 
         // Return to FormFillingActivity from FormHierarchyActivity
-        recreated.recreate().get()
+        recreated.get()
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
+        onView(withText("Two Question")).check(matches(isDisplayed()))
+        onView(withText("What is your age?")).check(matches(isDisplayed()))
         assertThat(
             recreated.get().supportFragmentManager.fragments.any { it::class == TestDialogFragment::class },
             equalTo(false)
         )
-
-        onView(withText("Two Question")).check(matches(isDisplayed()))
-        onView(withText("What is your age?")).check(matches(isDisplayed()))
     }
-}
 
-class TestDialogFragment : DialogFragment()
+    private fun setupForm(testFormPath: String): Form? {
+        val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+        val formFile = FileUtils.copyFileFromResources(
+            testFormPath,
+            File(formsDir, "two-question.xml")
+        )
+
+        val formsRepository = component.formsRepositoryProvider().get()
+        val form = formsRepository.save(form(formFile = formFile))
+        return form
+    }
+
+    class TestDialogFragment : DialogFragment()
+}
