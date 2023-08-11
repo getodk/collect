@@ -5,9 +5,9 @@ import android.app.Application
 import android.content.ComponentName
 import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.fragment.app.DialogFragment
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -15,7 +15,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.WorkManager
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Rule
@@ -30,6 +29,7 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.testshared.FakeScheduler
@@ -59,13 +59,13 @@ class FormFillingActivityTest {
     }
 
     @Test
-    fun whenProcessIsKilledAndRestoredDuringFormEntry_returnsToHierarchy() {
+    fun whenProcessIsKilledAndRestored_returnsToHierarchyAtQuestion() {
         val projectId = CollectHelpers.setupDemoProject()
 
         val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
         val formFile = FileUtils.copyFileFromResources(
-            "forms/one-question.xml",
-            File(formsDir, "one-question.xml")
+            "forms/two-question.xml",
+            File(formsDir, "two-question.xml")
         )
 
         val formsRepository = component.formsRepositoryProvider().get()
@@ -81,8 +81,12 @@ class FormFillingActivityTest {
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
 
-        onView(withText("One Question")).check(matches(isDisplayed()))
-        onView(withText(containsString("what is your age"))).check(matches(isDisplayed()))
+        onView(withText("Two Question")).check(matches(isDisplayed()))
+        onView(withText("What is your name?")).check(matches(isDisplayed()))
+
+        onView(withText(org.odk.collect.strings.R.string.form_forward)).perform(click())
+        scheduler.flush()
+        onView(withText("What is your age?")).check(matches(isDisplayed()))
 
         // Destroy activity with saved instance state
         val outState = Bundle()
@@ -108,18 +112,18 @@ class FormFillingActivityTest {
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
-        onView(withText("One Question")).check(matches(isDisplayed()))
-        onView(withText(containsString("what is your age"))).check(matches(isDisplayed()))
+        onView(withText("Two Question")).check(matches(isDisplayed()))
+        onView(withText("What is your age?")).check(matches(isDisplayed()))
     }
 
     @Test
-    fun whenProcessIsKilledAndRestoredDuringFormEntry_andThereADialogFragmentOpen_returnsToHierarchy() {
+    fun whenProcessIsKilledAndRestored_andThereADialogFragmentOpen_doesNotRestoreDialogFragment() {
         val projectId = CollectHelpers.setupDemoProject()
 
         val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
         val formFile = FileUtils.copyFileFromResources(
-            "forms/all-widgets.xml",
-            File(formsDir, "all-widgets.xml")
+            "forms/two-question.xml",
+            File(formsDir, "two-question.xml")
         )
 
         val formsRepository = component.formsRepositoryProvider().get()
@@ -135,19 +139,19 @@ class FormFillingActivityTest {
         val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
 
-        onView(withText("All widgets")).check(matches(isDisplayed()))
-        while (true) {
-            try {
-                scheduler.flush()
-                onView(withText("Select one from map widget")).check(matches(isDisplayed()))
-                onView(withText("Select place")).perform(click())
-                break
-            } catch (e: NoMatchingViewException) {
-                onView(withText("Next")).perform(click())
-            }
-        }
+        onView(withText("Two Question")).check(matches(isDisplayed()))
+        onView(withText("What is your name?")).check(matches(isDisplayed()))
 
+        onView(withText(org.odk.collect.strings.R.string.form_forward)).perform(click())
         scheduler.flush()
+        onView(withText("What is your age?")).check(matches(isDisplayed()))
+
+        val initialFragmentManager = initial.get().supportFragmentManager
+        DialogFragmentUtils.showIfNotShowing(TestDialogFragment::class.java, initialFragmentManager)
+        assertThat(
+            initialFragmentManager.fragments.any { it::class == TestDialogFragment::class },
+            equalTo(true)
+        )
 
         // Destroy activity with saved instance state
         val outState = Bundle()
@@ -173,7 +177,14 @@ class FormFillingActivityTest {
             .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
-        onView(withText("All widgets")).check(matches(isDisplayed()))
-        onView(withText(containsString("Select one from map widget"))).check(matches(isDisplayed()))
+        assertThat(
+            recreated.get().supportFragmentManager.fragments.any { it::class == TestDialogFragment::class },
+            equalTo(false)
+        )
+
+        onView(withText("Two Question")).check(matches(isDisplayed()))
+        onView(withText("What is your age?")).check(matches(isDisplayed()))
     }
 }
+
+class TestDialogFragment : DialogFragment()
