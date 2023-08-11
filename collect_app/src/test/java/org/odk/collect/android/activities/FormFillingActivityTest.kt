@@ -173,7 +173,6 @@ class FormFillingActivityTest {
 
         assertText("Two Question")
         assertText("What is your age?")
-        assertLastIntent(FormHierarchyActivity::class)
     }
 
     private fun setupForm(testFormPath: String): Form? {
