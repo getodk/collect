@@ -26,7 +26,6 @@ import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.support.ActivityControllerExtensions.recreateWithProcessRestore
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.CollectHelpers.resetProcess
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
@@ -38,6 +37,7 @@ import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
 import org.odk.collect.testshared.FakeScheduler
+import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Robolectric
 import java.io.File
 

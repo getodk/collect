@@ -1,9 +1,11 @@
 package org.odk.collect.testshared
 
+import android.app.Activity
 import android.app.Application
 import android.app.Service
 import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
+import android.os.Bundle
 import android.os.Environment
 import android.os.Looper
 import android.view.ViewGroup
@@ -17,6 +19,7 @@ import org.odk.collect.servicetest.ServiceScenario
 import org.odk.collect.servicetest.ServiceScenario.Companion.launch
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
+import org.robolectric.android.controller.ActivityController
 import org.robolectric.shadows.ShadowEnvironment
 import org.robolectric.shadows.ShadowMediaMetadataRetriever
 import org.robolectric.shadows.ShadowMediaPlayer
@@ -131,5 +134,19 @@ object RobolectricHelpers {
                 }
             }
         }
+    }
+
+    inline fun <reified A : Activity> ActivityController<A>.recreateWithProcessRestore(
+        resetProcess: () -> Unit
+    ): ActivityController<A> {
+        // Destroy activity with saved instance state
+        val outState = Bundle()
+        this.saveInstanceState(outState).pause().stop().destroy()
+
+        // Reset process
+        resetProcess()
+
+        // Recreate with saved instance state
+        return Robolectric.buildActivity(A::class.java, this.intent).setup(outState)
     }
 }
