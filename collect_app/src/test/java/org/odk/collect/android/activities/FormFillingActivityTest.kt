@@ -1,8 +1,8 @@
 package org.odk.collect.android.activities
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.Application
-import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.DialogFragment
 import androidx.test.core.app.ApplicationProvider
@@ -205,27 +205,9 @@ class FormFillingActivityTest {
         clickOnContentDescription(R.string.launch_app)
         assertIntentsHelper.assertNewIntent(hasAction("com.example.EXAMPLE"))
 
-        // Destroy activity with saved instance state
-        val outState = Bundle()
-        initial.saveInstanceState(outState).pause().stop().destroy()
-
-        resetProcess(dependencies)
-
-        // Recreate with saved instance state
-        val recreated = Robolectric.buildActivity(FormFillingActivity::class.java, initial.intent).create(outState)
-            .start()
-            .restoreInstanceState(outState)
-            .postCreate(outState)
-
-        // Return result (this happens before resume when restoring from an external app)
+        // Recreate with result
         val returnData = ExternalAppUtils.getReturnIntent("159")
-        recreated.get()
-            .onActivityResult(RequestCodes.EX_STRING_CAPTURE, Activity.RESULT_OK, returnData)
-
-        // Resume activity
-        recreated.resume()
-            .visible()
-            .topActivityResumed(true)
+        initial.recreateWithProcessRestore(RESULT_OK, returnData) { resetProcess(dependencies) }
         scheduler.flush()
 
         assertIntentsHelper.assertNoNewIntent()
