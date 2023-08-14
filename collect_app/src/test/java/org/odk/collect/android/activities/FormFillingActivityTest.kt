@@ -2,6 +2,7 @@ package org.odk.collect.android.activities
 
 import android.app.Activity
 import android.app.Application
+import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.DialogFragment
 import androidx.test.core.app.ApplicationProvider
@@ -202,14 +203,30 @@ class FormFillingActivityTest {
         clickOnContentDescription(R.string.launch_app)
         assertIntents(hasAction("com.example.EXAMPLE"))
 
-        // Recreate with returned result and assert we don't start any other Activity
-        val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        // Destroy activity with saved instance state
+        val outState = Bundle()
+        initial.saveInstanceState(outState).pause().stop().destroy()
+
+        resetProcess(dependencies)
+
+        // Recreate with saved instance state
+        val recreated = Robolectric.buildActivity(FormFillingActivity::class.java, initial.intent).create(outState)
+                .start()
+                .restoreInstanceState(outState)
+                .postCreate(outState)
+
+        // Return result (this happens before resume when restoring from an external app)
         val returnData = ExternalAppUtils.getReturnIntent("159")
         recreated.get()
             .onActivityResult(RequestCodes.EX_STRING_CAPTURE, Activity.RESULT_OK, returnData)
-        scheduler.flush()
-        assertIntents(hasAction("com.example.EXAMPLE"))
 
+        // Resume activity
+        recreated.resume()
+            .visible()
+            .topActivityResumed(true)
+        scheduler.flush()
+
+        assertIntents(hasAction("com.example.EXAMPLE"))
         assertText("Two Question")
         assertText("What is your age?")
         assertText("159")
