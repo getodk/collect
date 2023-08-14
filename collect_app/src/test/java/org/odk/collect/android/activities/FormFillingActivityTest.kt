@@ -22,7 +22,6 @@ import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.CollectHelpers.resetProcess
-import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidtest.RecordedIntentsRule
@@ -37,6 +36,7 @@ import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
 import org.robolectric.Robolectric
+import org.robolectric.Shadows.shadowOf
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
@@ -92,8 +92,8 @@ class FormFillingActivityTest {
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
-        recreated.get()
-            .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
+        val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
+        shadowOf(recreated.get()).receiveResult(hierarchyIntent, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
         assertText("Two Question")
@@ -130,8 +130,8 @@ class FormFillingActivityTest {
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
-        recreated.get()
-            .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
+        val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
+        shadowOf(recreated.get()).receiveResult(hierarchyIntent, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
         assertText("Two Question")
@@ -172,8 +172,8 @@ class FormFillingActivityTest {
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
-        recreated.get()
-            .onActivityResult(RequestCodes.HIERARCHY_ACTIVITY, Activity.RESULT_CANCELED, null)
+        val hierarchyIntent = shadowOf(recreated.get()).nextStartedActivityForResult.intent
+        shadowOf(recreated.get()).receiveResult(hierarchyIntent, Activity.RESULT_CANCELED, null)
         scheduler.flush()
 
         assertText("Two Question")
