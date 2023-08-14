@@ -31,7 +31,7 @@ import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
-import org.odk.collect.testshared.EspressoHelpers.assertIntents
+import org.odk.collect.testshared.AssertIntentsHelper
 import org.odk.collect.testshared.EspressoHelpers.assertText
 import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
 import org.odk.collect.testshared.FakeScheduler
@@ -47,6 +47,8 @@ class FormFillingActivityTest {
 
     @get:Rule
     val recordedIntentsRule = RecordedIntentsRule()
+
+    private val assertIntentsHelper = AssertIntentsHelper()
 
     private val scheduler = FakeScheduler()
     private val dependencies = object : AppDependencyModule() {
@@ -87,7 +89,7 @@ class FormFillingActivityTest {
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertIntents(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -120,12 +122,12 @@ class FormFillingActivityTest {
         assertText("What is your age?")
 
         clickOnContentDescription(R.string.view_hierarchy)
-        assertIntents(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertIntents(FormHierarchyActivity::class, FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -167,7 +169,7 @@ class FormFillingActivityTest {
         // Recreate and assert we start FormHierarchyActivity
         val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
         scheduler.flush()
-        assertIntents(FormHierarchyActivity::class)
+        assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Return to FormFillingActivity from FormHierarchyActivity
         recreated.get()
@@ -201,7 +203,7 @@ class FormFillingActivityTest {
 
         // Open external app
         clickOnContentDescription(R.string.launch_app)
-        assertIntents(hasAction("com.example.EXAMPLE"))
+        assertIntentsHelper.assertNewIntent(hasAction("com.example.EXAMPLE"))
 
         // Destroy activity with saved instance state
         val outState = Bundle()
@@ -211,9 +213,9 @@ class FormFillingActivityTest {
 
         // Recreate with saved instance state
         val recreated = Robolectric.buildActivity(FormFillingActivity::class.java, initial.intent).create(outState)
-                .start()
-                .restoreInstanceState(outState)
-                .postCreate(outState)
+            .start()
+            .restoreInstanceState(outState)
+            .postCreate(outState)
 
         // Return result (this happens before resume when restoring from an external app)
         val returnData = ExternalAppUtils.getReturnIntent("159")
@@ -226,7 +228,7 @@ class FormFillingActivityTest {
             .topActivityResumed(true)
         scheduler.flush()
 
-        assertIntents(hasAction("com.example.EXAMPLE"))
+        assertIntentsHelper.assertNoNewIntent()
         assertText("Two Question")
         assertText("What is your age?")
         assertText("159")
