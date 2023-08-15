@@ -35,6 +35,7 @@ import org.odk.collect.android.formentry.support.InMemFormSessionRepository;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.IOException;
@@ -227,8 +228,9 @@ public class FormEntryViewModelTest {
 
     @Test
     public void moveForward_whenThereIsAFailedConstraint_setsFailedConstraint() throws Exception {
-        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0);
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult);
+        Consumable<FailedValidationResult> failedValidationResult =
+                new Consumable<>(new FailedValidationResult(startingIndex, 0));
+        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult.getValue());
 
         viewModel.moveForward(new HashMap<>());
         scheduler.runBackground();
