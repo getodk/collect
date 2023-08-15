@@ -65,8 +65,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -550,10 +548,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         });
 
-        LiveData<ValidationResult> validation = formEntryViewModel.getValidationResult();
-        validation.observe(this, validationResult -> {
-            if (validationResult instanceof FailedValidationResult) {
-                FailedValidationResult failedValidationResult = (FailedValidationResult) validationResult;
+        formEntryViewModel.getValidationResult().observe(this, consumable -> {
+            if (consumable.isConsumed()) {
+                return;
+            }
+            ValidationResult validationResult = consumable.getValue();
+            if (validationResult instanceof FailedValidationResult failedValidationResult) {
                 try {
                     createConstraintToast(failedValidationResult.getIndex(), failedValidationResult.getStatus());
                     if (getFormController().indexIsInFieldList() && getFormController().getQuestionPrompts().length > 1) {
@@ -566,8 +566,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 swipeHandler.setBeenSwiped(false);
             } else if (validationResult instanceof SuccessValidationResult) {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
-                ((MutableLiveData) validation).setValue(null);
             }
+            consumable.consume();
         });
 
         formSaveViewModel = viewModelProvider.get(FormSaveViewModel.class);
