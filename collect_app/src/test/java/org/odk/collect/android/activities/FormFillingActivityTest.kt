@@ -30,12 +30,12 @@ import org.odk.collect.externalapp.ExternalAppUtils
 import org.odk.collect.forms.Form
 import org.odk.collect.formstest.FormFixtures.form
 import org.odk.collect.strings.R
+import org.odk.collect.testshared.ActivityControllerRule
 import org.odk.collect.testshared.AssertIntentsHelper
 import org.odk.collect.testshared.EspressoHelpers.assertText
 import org.odk.collect.testshared.EspressoHelpers.clickOnContentDescription
 import org.odk.collect.testshared.FakeScheduler
 import org.odk.collect.testshared.RobolectricHelpers.recreateWithProcessRestore
-import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
 import java.io.File
 
@@ -47,6 +47,9 @@ class FormFillingActivityTest {
 
     @get:Rule
     val recordedIntentsRule = RecordedIntentsRule()
+
+    @get:Rule
+    val activityControllerRule = ActivityControllerRule()
 
     private val assertIntentsHelper = AssertIntentsHelper()
 
@@ -77,7 +80,7 @@ class FormFillingActivityTest {
         )
 
         // Start activity
-        val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
+        val initial = activityControllerRule.build(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
         assertText("Two Question")
         assertText("What is your name?")
@@ -87,7 +90,10 @@ class FormFillingActivityTest {
         assertText("What is your age?")
 
         // Recreate and assert we start FormHierarchyActivity
-        val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        val recreated = activityControllerRule.add {
+            initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        }
+
         scheduler.flush()
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
@@ -112,7 +118,7 @@ class FormFillingActivityTest {
         )
 
         // Start activity
-        val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
+        val initial = activityControllerRule.build(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
         assertText("Two Question")
         assertText("What is your name?")
@@ -125,7 +131,10 @@ class FormFillingActivityTest {
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
         // Recreate and assert we start FormHierarchyActivity
-        val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        val recreated = activityControllerRule.add {
+            initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        }
+
         scheduler.flush()
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
@@ -150,7 +159,7 @@ class FormFillingActivityTest {
         )
 
         // Start activity
-        val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
+        val initial = activityControllerRule.build(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
         assertText("Two Question")
         assertText("What is your name?")
@@ -167,7 +176,10 @@ class FormFillingActivityTest {
         )
 
         // Recreate and assert we start FormHierarchyActivity
-        val recreated = initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        val recreated = activityControllerRule.add {
+            initial.recreateWithProcessRestore { resetProcess(dependencies) }
+        }
+
         scheduler.flush()
         assertIntentsHelper.assertNewIntent(FormHierarchyActivity::class)
 
@@ -192,7 +204,7 @@ class FormFillingActivityTest {
         )
 
         // Start activity
-        val initial = Robolectric.buildActivity(FormFillingActivity::class.java, intent).setup()
+        val initial = activityControllerRule.build(FormFillingActivity::class.java, intent).setup()
         scheduler.flush()
         assertText("Two Question")
         assertText("What is your name?")
@@ -207,7 +219,10 @@ class FormFillingActivityTest {
 
         // Recreate with result
         val returnData = ExternalAppUtils.getReturnIntent("159")
-        initial.recreateWithProcessRestore(RESULT_OK, returnData) { resetProcess(dependencies) }
+        activityControllerRule.add {
+            initial.recreateWithProcessRestore(RESULT_OK, returnData) { resetProcess(dependencies) }
+        }
+
         scheduler.flush()
 
         assertIntentsHelper.assertNoNewIntent()
