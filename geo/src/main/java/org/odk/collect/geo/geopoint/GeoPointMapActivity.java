@@ -27,6 +27,7 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.fragment.app.Fragment;
@@ -156,6 +157,26 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
         mapFragment.init(this::initMap, this::finish);
+
+        // https://github.com/getodk/collect/issues/5293
+        getOnBackPressedDispatcher().addCallback(
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        if (location != null
+                                && !location.equals(savedLocation)) {
+                            new MaterialAlertDialogBuilder(GeoPointMapActivity.this)
+                                    .setMessage(getString(org.odk.collect.strings.R.string.geo_exit_warning_single))
+                                    .setPositiveButton(org.odk.collect.strings.R.string.discard, (dialog, id) -> finish())
+                                    .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
+                                    .show();
+
+                        } else {
+                            finish();
+                        }
+                    }
+                }
+        );
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -327,22 +348,6 @@ public class GeoPointMapActivity extends LocalizedActivity {
 
         locationInfo.setVisibility(state.getInt(LOCATION_INFO_VISIBILITY_KEY, View.GONE));
         locationStatus.setVisibility(state.getInt(LOCATION_STATUS_VISIBILITY_KEY, View.GONE));
-    }
-
-    // https://github.com/getodk/collect/issues/5293
-    @Override
-    public void onBackPressed() {
-        if (location != null
-                && !location.equals(savedLocation)) {
-            new MaterialAlertDialogBuilder(this)
-                    .setMessage(getString(org.odk.collect.strings.R.string.geo_exit_warning_single))
-                    .setPositiveButton(org.odk.collect.strings.R.string.discard, (dialog, id) -> finish())
-                    .setNegativeButton(org.odk.collect.strings.R.string.cancel, null)
-                    .show();
-
-        } else {
-            finish();
-        }
     }
 
     public void onLocationChanged(MapPoint point) {
