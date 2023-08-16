@@ -1,13 +1,18 @@
 package org.odk.collect.androidshared.livedata;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
+import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import kotlin.Triple;
 
@@ -31,92 +36,90 @@ public class LiveDataUtils {
         };
     }
 
+    public static <T> void observeUntilNotNull(LiveData<T> liveData, Consumer<@NotNull T> consumer) {
+        Observer<T> observer = new Observer<T>() {
+            @Override
+            public void onChanged(T value) {
+                if (value != null) {
+                    consumer.accept(value);
+                    liveData.removeObserver(this);
+                }
+            }
+        };
+
+        liveData.observeForever(observer);
+    }
+
     public static <T> LiveData<T> liveDataOf(T value) {
         return new MutableLiveData<>(value);
     }
 
     public static <T, U, V> LiveData<Triple<T, U, V>> zip3(LiveData<T> one, LiveData<U> two, LiveData<V> three) {
-        return new Zipped3LiveData<>(one, two, three);
+        return new ZippedLiveData<>(
+                new LiveData[]{one, two, three},
+                values -> new Triple<>((T) values[0], (U) values[1], (V) values[2])
+        );
     }
 
     public static <T, U, V, W> LiveData<Quad<T, U, V, W>> zip4(LiveData<T> one, LiveData<U> two, LiveData<V> three, LiveData<W> four) {
-        return new Zipped4LiveData<>(one, two, three, four);
+        return new ZippedLiveData<>(
+                new LiveData[]{one, two, three, four},
+                values -> new Quad<>((T) values[0], (U) values[1], (V) values[2], (W) values[3])
+        );
     }
 
-    private static class Zipped3LiveData<T, U, V> extends MediatorLiveData<Triple<T, U, V>> {
+    private abstract static class DeferrableUpdateMediatorLiveData<T> extends MediatorLiveData<T> {
 
-        private T lastOne;
-        private U lastTwo;
-        private V lastThree;
+        private final int sources;
+        private final Set<Integer> registeredSources = new HashSet<>();
+        private int sourceCounter;
 
-        private Zipped3LiveData(LiveData<T> one, LiveData<U> two, LiveData<V> three) {
-            addSource(one, t -> {
-                lastOne = t;
-                update();
-            });
-
-            addSource(two, u -> {
-                lastTwo = u;
-                update();
-            });
-
-            addSource(three, v -> {
-                lastThree = v;
-                update();
-            });
-
-            lastOne = one.getValue();
-            lastTwo = two.getValue();
-            lastThree = three.getValue();
-            setValue(new Triple<>(lastOne, lastTwo, lastThree));
+        DeferrableUpdateMediatorLiveData(int sources) {
+            this.sources = sources;
         }
 
-        private void update() {
-            if (getValue() != null) {
-                setValue(new Triple<>(lastOne, lastTwo, lastThree));
+        public <S> void addDeferredSource(@NonNull LiveData<S> source, @NonNull Observer<? super S> onChanged) {
+            addSource(source, s -> {
+                registeredSources.add(sourceCounter++);
+                onChanged.onChanged(s);
+            });
+        }
+
+        /**
+         * The value of the this {@link LiveData} will only be set once the `onChanged` for each
+         * source (other than the last) added via
+         * {@link DeferrableUpdateMediatorLiveData#addDeferredSource(LiveData, Observer)} has been
+         * called once. This prevents unneeded early  calls to {@link LiveData#setValue(Object)}
+         * when building up the initial state of a {@link MediatorLiveData} with many sources.
+         */
+        public void deferredSetValue(T value) {
+            if (registeredSources.size() >= sources) {
+                super.setValue(value);
             }
         }
     }
 
-    private static class Zipped4LiveData<T, U, V, W> extends MediatorLiveData<Quad<T, U, V, W>> {
+    private static class ZippedLiveData<T> extends DeferrableUpdateMediatorLiveData<T> {
 
-        private T lastOne;
-        private U lastTwo;
-        private V lastThree;
-        private W lastFour;
+        private final Object[] values;
+        private final Function<Object[], T> map;
 
-        private Zipped4LiveData(LiveData<T> one, LiveData<U> two, LiveData<V> three, LiveData<W> four) {
-            addSource(one, t -> {
-                lastOne = t;
-                update();
-            });
+        ZippedLiveData(LiveData<?>[] sources, Function<Object[], T> map) {
+            super(sources.length);
+            this.map = map;
+            values = new Object[sources.length];
 
-            addSource(two, u -> {
-                lastTwo = u;
-                update();
-            });
-
-            addSource(three, v -> {
-                lastThree = v;
-                update();
-            });
-
-            addSource(four, w -> {
-                lastFour = w;
-                update();
-            });
-
-            lastOne = one.getValue();
-            lastTwo = two.getValue();
-            lastThree = three.getValue();
-            lastFour = four.getValue();
-            setValue(new Quad<>(lastOne, lastTwo, lastThree, lastFour));
+            for (int i = 0; i < sources.length; i++) {
+                int index = i;
+                addDeferredSource(sources[i], value -> {
+                    values[index] = value;
+                    update();
+                });
+            }
         }
 
         private void update() {
-            if (getValue() != null) {
-                setValue(new Quad<>(lastOne, lastTwo, lastThree, lastFour));
-            }
+            deferredSetValue(map.apply(values));
         }
     }
 

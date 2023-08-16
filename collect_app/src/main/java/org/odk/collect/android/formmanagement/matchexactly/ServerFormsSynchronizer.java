@@ -1,6 +1,6 @@
 package org.odk.collect.android.formmanagement.matchexactly;
 
-import org.odk.collect.android.formmanagement.FormDeleter;
+import org.odk.collect.android.formmanagement.LocalFormUseCases;
 import org.odk.collect.android.formmanagement.FormDownloadException;
 import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormDetails;
@@ -29,11 +29,9 @@ public class ServerFormsSynchronizer {
     public void synchronize() throws FormSourceException {
         List<ServerFormDetails> formList = serverFormsDetailsFetcher.fetchFormDetails();
         List<Form> formsOnDevice = formsRepository.getAll();
-        FormDeleter formDeleter = new FormDeleter(formsRepository, instancesRepository);
-
         formsOnDevice.stream().forEach(form -> {
             if (formList.stream().noneMatch(f -> form.getFormId().equals(f.getFormId()))) {
-                formDeleter.delete(form.getDbId());
+                LocalFormUseCases.deleteForm(formsRepository, instancesRepository, form.getDbId());
             }
         });
 

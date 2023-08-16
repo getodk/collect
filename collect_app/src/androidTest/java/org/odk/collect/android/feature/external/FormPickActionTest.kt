@@ -26,7 +26,7 @@ class FormPickActionTest {
     @Test
     fun pickForm_andTheSelectingForm_returnsFormUri() {
         rule.startAtMainMenu()
-            .copyAndSyncForm("one-question.xml")
+            .copyForm("one-question.xml")
 
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = FormsContract.CONTENT_TYPE

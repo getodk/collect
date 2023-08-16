@@ -40,8 +40,8 @@ import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragmen
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
+import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.InstancesAppState;
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState;
 import org.odk.collect.android.fragments.AppListFragment;
 import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
@@ -76,6 +76,7 @@ import org.odk.collect.android.projects.ManualProjectCreatorDialog;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.InstanceServerUploaderTask;
 import org.odk.collect.android.tasks.MediaLoadingTask;
 import org.odk.collect.android.upload.InstanceUploader;
@@ -283,6 +284,8 @@ public interface AppDependencyComponent {
 
     void inject(AppListActivity appListActivity);
 
+    void inject(DownloadFormListTask downloadFormListTask);
+
     OpenRosaHttpInterface openRosaHttpInterface();
 
     ReferenceManager referenceManager();
@@ -305,8 +308,6 @@ public interface AppDependencyComponent {
 
     InstancesRepositoryProvider instancesRepositoryProvider();
 
-    SyncStatusAppState syncStatusAppState();
-
     FormSourceProvider formSourceProvider();
 
     ExistingProjectMigrator existingProjectMigrator();
@@ -328,4 +329,6 @@ public interface AppDependencyComponent {
     NetworkStateProvider networkStateProvider();
 
     EntitiesRepositoryProvider entitiesRepositoryProvider();
+
+    FormsDataService formsDataService();
 }

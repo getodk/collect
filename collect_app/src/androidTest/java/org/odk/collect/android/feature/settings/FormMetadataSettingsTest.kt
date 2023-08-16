@@ -138,7 +138,7 @@ class FormMetadataSettingsTest {
             .pressBack(MainMenuPage())
 
             .addAndSwitchToProject("https://second-project.com")
-            .copyForm("metadata.xml", projectName = "second-project.com")
+            .copyForm("metadata.xml", "second-project.com")
             .openProjectSettingsDialog()
             .clickSettings()
             .clickUserAndDeviceIdentity()

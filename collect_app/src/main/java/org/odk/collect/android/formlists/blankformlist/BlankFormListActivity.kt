@@ -91,21 +91,19 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
         }
 
         viewModel.syncResult.observe(this) { result ->
-            if (!result.isConsumed()) {
-                SnackbarUtils.showShortSnackbar(findViewById(R.id.form_list), result.value)
+            if (result != null) {
+                SnackbarUtils.showShortSnackbar(findViewById(R.id.form_list), result)
             }
         }
 
         viewModel.formsToDisplay.observe(this) { forms ->
-            forms?.let {
-                findViewById<RecyclerView>(R.id.form_list).visibility =
-                    if (forms.isEmpty()) View.GONE else View.VISIBLE
+            findViewById<RecyclerView>(R.id.form_list).visibility =
+                if (forms.isEmpty()) View.GONE else View.VISIBLE
 
-                findViewById<TextView>(R.id.empty_list_message).visibility =
-                    if (forms.isEmpty()) View.VISIBLE else View.GONE
+            findViewById<TextView>(R.id.empty_list_message).visibility =
+                if (forms.isEmpty()) View.VISIBLE else View.GONE
 
-                adapter.setData(forms)
-            }
+            adapter.setData(forms)
         }
 
         viewModel.isAuthenticationRequired().observe(this) { authenticationRequired ->

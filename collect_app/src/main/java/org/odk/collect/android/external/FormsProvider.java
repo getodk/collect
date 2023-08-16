@@ -48,7 +48,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.forms.DatabaseFormsRepository;
-import org.odk.collect.android.formmanagement.FormDeleter;
+import org.odk.collect.android.formmanagement.LocalFormUseCases;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.itemsets.FastExternalItemsetsRepository;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -58,6 +58,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
 
@@ -218,13 +219,14 @@ public class FormsProvider extends ContentProvider {
         String projectId = getProjectId(uri);
         logServerEvent(projectId, AnalyticsEvents.FORMS_PROVIDER_DELETE);
 
-        FormDeleter formDeleter = new FormDeleter(getFormsRepository(projectId), instancesRepositoryProvider.get(projectId));
+        FormsRepository formsRepository = getFormsRepository(projectId);
+        InstancesRepository instancesRepository = instancesRepositoryProvider.get(projectId);
 
         switch (URI_MATCHER.match(uri)) {
             case FORMS:
                 try (Cursor cursor = databaseQuery(projectId, null, where, whereArgs, null, null, null)) {
                     while (cursor.moveToNext()) {
-                        formDeleter.delete(cursor.getLong(cursor.getColumnIndex(_ID)));
+                        LocalFormUseCases.deleteForm(formsRepository, instancesRepository, cursor.getLong(cursor.getColumnIndex(_ID)));
                     }
 
                     count = cursor.getCount();
@@ -232,7 +234,7 @@ public class FormsProvider extends ContentProvider {
                 break;
 
             case FORM_ID:
-                formDeleter.delete(ContentUriHelper.getIdFromUri(uri));
+                LocalFormUseCases.deleteForm(formsRepository, instancesRepository, ContentUriHelper.getIdFromUri(uri));
                 count = 1;
                 break;
 

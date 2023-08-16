@@ -21,7 +21,6 @@ import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
 import org.odk.collect.androidshared.system.SavedInstanceStateProvider
 import org.odk.collect.androidtest.ActivityScenarioExtensions.saveInstanceState
-import org.odk.collect.projects.Project
 import timber.log.Timber
 import java.io.IOException
 
@@ -55,10 +54,7 @@ class FormEntryActivityTestRule : ExternalResource() {
     fun setUpProjectAndCopyForm(formFilename: String): FormEntryActivityTestRule {
         try {
             // Set up demo project
-            val component =
-                DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-            component.projectsRepository().save(Project.DEMO_PROJECT)
-            component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID)
+            CollectHelpers.addDemoProject()
             StorageUtils.copyFormToDemoProject(formFilename, null, true)
         } catch (e: IOException) {
             throw RuntimeException(e)

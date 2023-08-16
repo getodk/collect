@@ -26,6 +26,7 @@ import org.odk.collect.android.analytics.AnalyticsUtils
 import org.odk.collect.android.formlists.blankformlist.BlankFormListItem
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.settings.SettingsProvider
 import javax.inject.Inject
 
@@ -45,7 +46,9 @@ class AndroidShortcutsActivity : AppCompatActivity() {
         super.onCreate(bundle)
         DaggerUtils.getComponent(this).inject(this)
 
-        showFormListDialog(viewModel.getAllForms())
+        LiveDataUtils.observeUntilNotNull(viewModel.formsToDisplay) { forms ->
+            showFormListDialog(forms)
+        }
     }
 
     private fun showFormListDialog(blankFormListItems: List<BlankFormListItem>) {

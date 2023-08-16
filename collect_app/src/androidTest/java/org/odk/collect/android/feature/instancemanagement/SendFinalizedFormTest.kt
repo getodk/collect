@@ -32,7 +32,7 @@ class SendFinalizedFormTest {
     @Test
     fun canViewFormsBeforeSending() {
         rule.withProject(testDependencies.server.url)
-            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
@@ -44,7 +44,7 @@ class SendFinalizedFormTest {
     fun whenThereIsAnAuthenticationError_allowsUserToReenterCredentials() {
         testDependencies.server.setCredentials("Draymond", "Green")
         rule.withProject(testDependencies.server.url)
-            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
@@ -61,7 +61,7 @@ class SendFinalizedFormTest {
     @Test
     fun canViewSentForms() {
         rule.withProject(testDependencies.server.url)
-            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()
@@ -80,7 +80,7 @@ class SendFinalizedFormTest {
     @Test
     fun canSendIndividualForms() {
         rule.withProject(testDependencies.server.url)
-            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "123"))
             .startBlankForm("One Question")
@@ -107,7 +107,7 @@ class SendFinalizedFormTest {
             .scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.delete_after_send)
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
-            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .answerQuestion("what is your age", "123")
             .swipeToEndScreen()

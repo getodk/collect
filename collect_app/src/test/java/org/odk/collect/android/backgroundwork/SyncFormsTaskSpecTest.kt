@@ -1,6 +1,6 @@
 package org.odk.collect.android.backgroundwork
 
-import android.content.Context
+import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
@@ -11,8 +11,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.formmanagement.FormsUpdater
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
@@ -20,18 +19,17 @@ import org.odk.collect.android.support.CollectHelpers
 
 @RunWith(AndroidJUnit4::class)
 class SyncFormsTaskSpecTest {
-    private val formsUpdater = mock<FormsUpdater>()
+    private val formsDataService = mock<FormsDataService>()
 
     @Before
     fun setup() {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesFormsUpdater(
-                context: Context,
+                application: Application,
                 notifier: Notifier,
-                syncStatusAppState: SyncStatusAppState,
                 projectDependencyProviderFactory: ProjectDependencyProviderFactory
-            ): FormsUpdater {
-                return formsUpdater
+            ): FormsDataService {
+                return formsDataService
             }
         })
     }
@@ -41,7 +39,7 @@ class SyncFormsTaskSpecTest {
         val inputData = HashMap<String, String>()
         inputData[TaskData.DATA_PROJECT_ID] = "projectId"
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
-        verify(formsUpdater).matchFormsWithServer("projectId", true)
+        verify(formsDataService).matchFormsWithServer("projectId", true)
     }
 
     @Test
@@ -49,7 +47,7 @@ class SyncFormsTaskSpecTest {
         val inputData = HashMap<String, String>()
         inputData[TaskData.DATA_PROJECT_ID] = "projectId"
         SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false).get()
-        verify(formsUpdater).matchFormsWithServer("projectId", false)
+        verify(formsDataService).matchFormsWithServer("projectId", false)
     }
 
     @Test
@@ -57,11 +55,11 @@ class SyncFormsTaskSpecTest {
         val inputData = HashMap<String, String>()
         inputData[TaskData.DATA_PROJECT_ID] = "projectId"
 
-        whenever(formsUpdater.matchFormsWithServer("projectId", true)).thenReturn(true)
+        whenever(formsDataService.matchFormsWithServer("projectId", true)).thenReturn(true)
         var result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, true).get()
         assertThat(result, `is`(true))
 
-        whenever(formsUpdater.matchFormsWithServer("projectId")).thenReturn(false)
+        whenever(formsDataService.matchFormsWithServer("projectId")).thenReturn(false)
         result = SyncFormsTaskSpec().getTask(ApplicationProvider.getApplicationContext(), inputData, false).get()
         assertThat(result, `is`(false))
     }

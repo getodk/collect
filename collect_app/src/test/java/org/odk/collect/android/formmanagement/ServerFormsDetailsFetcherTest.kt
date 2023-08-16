@@ -26,7 +26,6 @@ import java.io.FileWriter
 class ServerFormsDetailsFetcherTest {
 
     private val formsRepository: FormsRepository = InMemFormsRepository()
-    private val diskFormsSynchronizer = mock<DiskFormsSynchronizer>()
     private val formSource = mock<FormSource> {
         on { fetchManifest(MANIFEST_URL) } doReturn ManifestFile(
             "manifest-hash",
@@ -37,7 +36,7 @@ class ServerFormsDetailsFetcherTest {
     }
 
     private val fetcher =
-        ServerFormsDetailsFetcher(formsRepository, formSource, diskFormsSynchronizer)
+        ServerFormsDetailsFetcher(formsRepository, formSource)
 
     @Test
     fun whenFormHasManifestUrl_returnsMediaFilesInDetails() {

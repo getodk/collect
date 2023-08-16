@@ -25,18 +25,14 @@ import org.odk.collect.android.adapters.DeleteFormsTabsAdapter
 import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
-import org.odk.collect.android.formmanagement.FormsUpdater
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
-import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler
-import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -50,10 +46,7 @@ class DeleteSavedFormActivity : LocalizedActivity() {
     lateinit var currentProjectProvider: CurrentProjectProvider
 
     @Inject
-    lateinit var syncStatusAppState: SyncStatusAppState
-
-    @Inject
-    lateinit var formsUpdater: FormsUpdater
+    lateinit var formsDataService: FormsDataService
 
     @Inject
     lateinit var scheduler: Scheduler
@@ -67,18 +60,11 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
 
         val viewModelFactory = ViewModelFactory(
-            projectDependencyProvider.formsRepository,
             projectDependencyProvider.instancesRepository,
             this.application,
-            syncStatusAppState,
-            formsUpdater,
+            formsDataService,
             scheduler,
             projectDependencyProvider.generalSettings,
-            projectDependencyProvider.changeLockProvider,
-            FormsDirDiskFormsSynchronizer(
-                projectDependencyProvider.formsRepository,
-                projectDependencyProvider.formsDir
-            ),
             projectId
         )
 
@@ -116,15 +102,11 @@ class DeleteSavedFormActivity : LocalizedActivity() {
     }
 
     private class ViewModelFactory(
-        private val formsRepository: FormsRepository,
         private val instancesRepository: InstancesRepository,
         private val application: Application,
-        private val syncRepository: SyncStatusAppState,
-        private val formsUpdater: FormsUpdater,
+        private val formsDataService: FormsDataService,
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
-        private val changeLockProvider: ChangeLockProvider,
-        private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer,
         private val projectId: String
     ) :
         ViewModelProvider.Factory {
@@ -132,15 +114,11 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
             return when (modelClass) {
                 BlankFormListViewModel::class.java -> BlankFormListViewModel(
-                    formsRepository,
                     instancesRepository,
                     application,
-                    syncRepository,
-                    formsUpdater,
+                    formsDataService,
                     scheduler,
                     generalSettings,
-                    changeLockProvider,
-                    formsDirDiskFormsSynchronizer,
                     projectId,
                     showAllVersions = true
                 )

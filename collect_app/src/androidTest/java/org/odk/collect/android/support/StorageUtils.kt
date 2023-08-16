@@ -19,7 +19,9 @@ import android.app.Application
 import androidx.test.core.app.ApplicationProvider
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
+import org.odk.collect.android.formmanagement.LocalFormUseCases
+import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.storage.StorageSubdirectory
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
@@ -35,14 +37,26 @@ object StorageUtils {
      * @param copyToDatabase if true the forms will be loaded into the database as if a form list
      * had been opened.
      */
+    @JvmStatic
+    @JvmOverloads
     @Throws(IOException::class)
-    fun copyFormToStorage(formFilename: String, mediaFilePaths: List<String>?, copyToDatabase: Boolean, copyTo: String, projectName: String) {
+    fun copyFormToStorage(
+        formFilename: String,
+        mediaFilePaths: List<String>? = null,
+        copyToDatabase: Boolean = false,
+        copyTo: String = formFilename,
+        projectName: String = "Demo project"
+    ) {
         copyForm(formFilename, copyTo, projectName)
         if (mediaFilePaths != null) {
             copyFormMediaFiles(formFilename, mediaFilePaths, projectName)
         }
+
         if (copyToDatabase) {
-            FormsDirDiskFormsSynchronizer().synchronize()
+            val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
+            val formsRepository = component.formsRepositoryProvider().get()
+            val formsDir = component.storagePathProvider().getOdkDirPath(StorageSubdirectory.FORMS)
+            LocalFormUseCases.synchronizeWithDisk(formsRepository, formsDir)
         }
     }
 

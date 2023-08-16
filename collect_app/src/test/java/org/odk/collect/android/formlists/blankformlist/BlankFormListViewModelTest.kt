@@ -1,31 +1,28 @@
 package org.odk.collect.android.formlists.blankformlist
 
 import android.app.Application
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.formmanagement.FormsUpdater
-import org.odk.collect.android.formmanagement.matchexactly.SyncStatusAppState
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.utilities.ChangeLockProvider
-import org.odk.collect.android.utilities.FormsDirDiskFormsSynchronizer
 import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
-import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.shared.settings.InMemSettings
@@ -34,46 +31,35 @@ import org.odk.collect.testshared.FakeScheduler
 
 @RunWith(AndroidJUnit4::class)
 class BlankFormListViewModelTest {
-    private val formsRepository = InMemFormsRepository()
+
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
+
     private val instancesRepository = InMemInstancesRepository()
     private val context = ApplicationProvider.getApplicationContext<Application>()
-    private val syncRepository: SyncStatusAppState = mock()
-    private val formsUpdater: FormsUpdater = mock()
+    private val formsDataService: FormsDataService = mock {
+        on { getForms(any()) } doReturn MutableLiveData()
+    }
+
     private val scheduler = FakeScheduler()
     private val generalSettings = InMemSettings()
     private val changeLockProvider: ChangeLockProvider = mock()
-    private val formsDirDiskFormsSynchronizer: FormsDirDiskFormsSynchronizer = mock()
     private val projectId = "projectId"
 
     private val changeLock = BooleanChangeLock()
     private lateinit var viewModel: BlankFormListViewModel
 
     @Test
-    fun `syncWithStorage should be triggered when viewModel is initialized`() {
+    fun `updates forms when created`() {
         createViewModel()
-        verify(formsDirDiskFormsSynchronizer).synchronizeAndReturnError()
-    }
-
-    @Test
-    fun `syncWithStorage return correct result`() {
-        whenever(formsDirDiskFormsSynchronizer.synchronizeAndReturnError()).thenReturn("Result text")
-        createViewModel()
-        assertThat(viewModel.syncResult.value?.value, `is`("Result text"))
-    }
-
-    @Test
-    fun `syncWithStorage should not be triggered when viewModel is initialized if forms lock is locked`() {
-        changeLock.lock()
-        createViewModel()
-
-        verifyNoInteractions(formsDirDiskFormsSynchronizer)
+        verify(formsDataService).update(projectId)
     }
 
     @Test
     fun `syncWithServer when task finishes sets result to true`() {
         createViewModel()
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
-        doReturn(true).whenever(formsUpdater).matchFormsWithServer(projectId)
+        doReturn(true).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
         scheduler.runBackground()
         scheduler.runBackground()
@@ -84,7 +70,7 @@ class BlankFormListViewModelTest {
     fun `syncWithServer when there is an error sets result to false`() {
         createViewModel()
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
-        doReturn(false).whenever(formsUpdater).matchFormsWithServer(projectId)
+        doReturn(false).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
         scheduler.runBackground()
         scheduler.runBackground()
@@ -112,7 +98,7 @@ class BlankFormListViewModelTest {
         createViewModel()
 
         val liveData = MutableLiveData<FormSourceException?>(FormSourceException.FetchError())
-        whenever(syncRepository.getSyncError(projectId)).thenReturn(liveData)
+        whenever(formsDataService.getServerError(projectId)).thenReturn(liveData)
 
         val outOfSync = viewModel.isOutOfSyncWithServer()
         assertThat(outOfSync.getOrAwaitValue(), `is`(true))
@@ -125,7 +111,7 @@ class BlankFormListViewModelTest {
         createViewModel()
 
         val liveData = MutableLiveData<FormSourceException?>(FormSourceException.FetchError())
-        whenever(syncRepository.getSyncError(projectId)).thenReturn(liveData)
+        whenever(formsDataService.getServerError(projectId)).thenReturn(liveData)
 
         val authenticationRequired = viewModel.isAuthenticationRequired()
         assertThat(authenticationRequired.getOrAwaitValue(), `is`(false))
@@ -133,33 +119,6 @@ class BlankFormListViewModelTest {
         assertThat(authenticationRequired.getOrAwaitValue(), `is`(true))
         liveData.value = null
         assertThat(authenticationRequired.getOrAwaitValue(), `is`(false))
-    }
-
-    @Test
-    fun `first forms should be loaded from database and then synced with storage`() {
-        saveForms(
-            form(dbId = 1, formId = "1"),
-            form(dbId = 2, formId = "2")
-        )
-
-        createViewModel(false)
-        scheduler.runBackground()
-
-        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(2))
-
-        doAnswer {
-            saveForms(
-                form(dbId = 1, formId = "1"),
-                form(dbId = 2, formId = "2"),
-                form(dbId = 3, formId = "3")
-            )
-            "Result text"
-        }.whenever(formsDirDiskFormsSynchronizer).synchronizeAndReturnError()
-
-        scheduler.runBackground()
-        scheduler.runBackground()
-
-        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(3))
     }
 
     @Test
@@ -171,30 +130,8 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
-    }
-
-    @Test
-    fun `after finished syncing with server forms should be loaded from database`() {
-        createViewModel(false)
-        val liveData = MutableLiveData(true)
-        whenever(syncRepository.isSyncing(projectId)).thenReturn(liveData)
-
-        scheduler.runBackground() // load from database
-        scheduler.runBackground() // sync with storage
-
-        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(0))
-
-        saveForms(
-            form(dbId = 1, formId = "1")
-        )
-
-        liveData.value = false
-
-        scheduler.runBackground() // load from database after syncing with server
-
-        assertThat(viewModel.formsToDisplay.value!!.size, equalTo(1))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 2, formId = "2"))
     }
 
     @Test
@@ -206,8 +143,8 @@ class BlankFormListViewModelTest {
 
         createViewModel()
 
-        assertThat(viewModel.formsToDisplay.value!!.size, `is`(1))
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(1))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 1, formId = "1"))
     }
 
     @Test
@@ -217,10 +154,10 @@ class BlankFormListViewModelTest {
             form(dbId = 2, formId = "1", version = "1")
         )
 
-        createViewModel()
+        createViewModel(showAllVersions = false)
 
-        assertThat(viewModel.formsToDisplay.value!!.size, `is`(1))
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "1", version = "1"))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(1))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 2, formId = "1", version = "1"))
     }
 
     @Test
@@ -232,9 +169,9 @@ class BlankFormListViewModelTest {
 
         createViewModel(showAllVersions = true)
 
-        assertThat(viewModel.formsToDisplay.value!!.size, `is`(2))
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", version = "2"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "1", version = "1"))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(2))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 1, formId = "1", version = "2"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 2, formId = "1", version = "1"))
     }
 
     @Test
@@ -251,11 +188,11 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 0
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", formName = "1Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 5, formId = "5", formName = "2Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 2, formId = "2", formName = "BForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 1, formId = "1", formName = "1Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 3, formId = "3", formName = "aForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[3], form(dbId = 4, formId = "4", formName = "AForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[4], form(dbId = 2, formId = "2", formName = "BForm"))
     }
 
     @Test
@@ -272,11 +209,11 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 1
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2", formName = "BForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 3, formId = "3", formName = "aForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 4, formId = "4", formName = "AForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 5, formId = "5", formName = "2Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 1, formId = "1", formName = "1Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 2, formId = "2", formName = "BForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 3, formId = "3", formName = "aForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 4, formId = "4", formName = "AForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[3], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[4], form(dbId = 1, formId = "1", formName = "1Form"))
     }
 
     @Test
@@ -293,11 +230,11 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 2
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 5, formId = "5", formName = "2Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 3, formId = "3", formName = "aForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 1, formId = "1", formName = "1Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[3], form(dbId = 3, formId = "3", formName = "aForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[4], form(dbId = 1, formId = "1", formName = "1Form"))
     }
 
     @Test
@@ -314,11 +251,11 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 3
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", formName = "1Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 3, formId = "3", formName = "aForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 5, formId = "5", formName = "2Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6))
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 1, formId = "1", formName = "1Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 3, formId = "3", formName = "aForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[3], form(dbId = 2, formId = "2", formName = "BForm", lastDetectedAttachmentsUpdateDate = 6))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[4], form(dbId = 4, formId = "4", formName = "AForm", lastDetectedAttachmentsUpdateDate = 7))
     }
 
     @Test
@@ -343,11 +280,11 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 4
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2", formName = "BForm"), 5L)
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 4, formId = "4", formName = "AForm"), 4L)
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 5, formId = "5", formName = "2Form"), 3L)
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 3, formId = "3", formName = "aForm"), 2L)
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 1, formId = "1", formName = "1Form"), 1L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 2, formId = "2", formName = "BForm"), 5L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 4, formId = "4", formName = "AForm"), 4L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 5, formId = "5", formName = "2Form"), 3L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[3], form(dbId = 3, formId = "3", formName = "aForm"), 2L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[4], form(dbId = 1, formId = "1", formName = "1Form"), 1L)
     }
 
     @Test
@@ -364,11 +301,11 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 4
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1", formName = "1Form"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2", formName = "BForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 3, formId = "3", formName = "aForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 1, formId = "1", formName = "1Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 2, formId = "2", formName = "BForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 3, formId = "3", formName = "aForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[3], form(dbId = 4, formId = "4", formName = "AForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[4], form(dbId = 5, formId = "5", formName = "2Form"))
     }
 
     @Test
@@ -390,11 +327,11 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 4
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 3, formId = "3", formName = "aForm"), 2L)
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 1, formId = "1", formName = "1Form"), 1L)
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 2, formId = "2", formName = "BForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![3], form(dbId = 4, formId = "4", formName = "AForm"))
-        assertFormItem(viewModel.formsToDisplay.value!![4], form(dbId = 5, formId = "5", formName = "2Form"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 3, formId = "3", formName = "aForm"), 2L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 1, formId = "1", formName = "1Form"), 1L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 2, formId = "2", formName = "BForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[3], form(dbId = 4, formId = "4", formName = "AForm"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[4], form(dbId = 5, formId = "5", formName = "2Form"))
     }
 
     @Test
@@ -415,9 +352,9 @@ class BlankFormListViewModelTest {
 
         viewModel.sortingOrder = 4
 
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "1", formName = "AForm v2", version = "2"), 3L)
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 3, formId = "2", formName = "BForm"), 2L)
-        assertFormItem(viewModel.formsToDisplay.value!![2], form(dbId = 1, formId = "1", formName = "AForm v1", version = "1"), 1L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 2, formId = "1", formName = "AForm v2", version = "2"), 3L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 3, formId = "2", formName = "BForm"), 2L)
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[2], form(dbId = 1, formId = "1", formName = "AForm v1", version = "1"), 1L)
     }
 
     @Test
@@ -432,28 +369,28 @@ class BlankFormListViewModelTest {
 
         viewModel.filterText = "2"
 
-        assertThat(viewModel.formsToDisplay.value?.size, `is`(2))
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2"))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(2))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 2, formId = "2"))
         assertFormItem(
-            viewModel.formsToDisplay.value!![1],
+            viewModel.formsToDisplay.getOrAwaitValue()[1],
             form(dbId = 3, formId = "3", formName = "Form 2x")
         )
 
         viewModel.filterText = "2x"
 
-        assertThat(viewModel.formsToDisplay.value?.size, `is`(1))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(1))
         assertFormItem(
-            viewModel.formsToDisplay.value!![0],
+            viewModel.formsToDisplay.getOrAwaitValue()[0],
             form(dbId = 3, formId = "3", formName = "Form 2x")
         )
 
         viewModel.filterText = ""
 
-        assertThat(viewModel.formsToDisplay.value?.size, `is`(3))
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 1, formId = "1"))
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(3))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 1, formId = "1"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 2, formId = "2"))
         assertFormItem(
-            viewModel.formsToDisplay.value!![2],
+            viewModel.formsToDisplay.getOrAwaitValue()[2],
             form(dbId = 3, formId = "3", formName = "Form 2x")
         )
     }
@@ -469,29 +406,25 @@ class BlankFormListViewModelTest {
 
         viewModel.filterText = "2"
 
-        assertThat(viewModel.formsToDisplay.value?.size, `is`(2))
-        assertFormItem(viewModel.formsToDisplay.value!![0], form(dbId = 2, formId = "2"))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(2))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[0], form(dbId = 2, formId = "2"))
         assertFormItem(
-            viewModel.formsToDisplay.value!![1],
+            viewModel.formsToDisplay.getOrAwaitValue()[1],
             form(dbId = 3, formId = "3", formName = "Form 2x")
         )
 
         viewModel.sortingOrder = 1
 
-        assertThat(viewModel.formsToDisplay.value?.size, `is`(2))
+        assertThat(viewModel.formsToDisplay.getOrAwaitValue().size, `is`(2))
         assertFormItem(
-            viewModel.formsToDisplay.value!![0],
+            viewModel.formsToDisplay.getOrAwaitValue()[0],
             form(dbId = 3, formId = "3", formName = "Form 2x")
         )
-        assertFormItem(viewModel.formsToDisplay.value!![1], form(dbId = 2, formId = "2"))
+        assertFormItem(viewModel.formsToDisplay.getOrAwaitValue()[1], form(dbId = 2, formId = "2"))
     }
 
     private fun saveForms(vararg forms: Form) {
-        formsRepository.deleteAll()
-
-        forms.forEach {
-            formsRepository.save(it)
-        }
+        whenever(formsDataService.getForms(any())).thenReturn(MutableLiveData(forms.toList()))
     }
 
     private fun saveInstances(vararg instances: Instance) {
@@ -506,19 +439,15 @@ class BlankFormListViewModelTest {
         runAllBackgroundTasks: Boolean = true,
         showAllVersions: Boolean = false
     ) {
-        whenever(syncRepository.isSyncing(projectId)).thenReturn(MutableLiveData(false))
+        whenever(formsDataService.isSyncing(projectId)).thenReturn(MutableLiveData(false))
         whenever(changeLockProvider.getFormLock(projectId)).thenReturn(changeLock)
 
         viewModel = BlankFormListViewModel(
-            formsRepository,
             instancesRepository,
             context,
-            syncRepository,
-            formsUpdater,
+            formsDataService,
             scheduler,
             generalSettings,
-            changeLockProvider,
-            formsDirDiskFormsSynchronizer,
             projectId,
             showAllVersions
         )

@@ -3,7 +3,7 @@ package org.odk.collect.android.backgroundwork
 import android.content.Context
 import androidx.work.BackoffPolicy
 import androidx.work.WorkerParameters
-import org.odk.collect.android.formmanagement.FormsUpdater
+import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.async.TaskSpec
 import org.odk.collect.async.WorkerAdapter
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class SyncFormsTaskSpec : TaskSpec {
     @Inject
-    lateinit var formsUpdater: FormsUpdater
+    lateinit var formsDataService: FormsDataService
 
     override val maxRetries = 3
     override val backoffPolicy = BackoffPolicy.EXPONENTIAL
@@ -23,7 +23,7 @@ class SyncFormsTaskSpec : TaskSpec {
         return Supplier {
             val projectId = inputData[TaskData.DATA_PROJECT_ID]
             if (projectId != null) {
-                formsUpdater.matchFormsWithServer(projectId, isLastUniqueExecution)
+                formsDataService.matchFormsWithServer(projectId, isLastUniqueExecution)
             } else {
                 throw IllegalArgumentException("No project ID provided!")
             }

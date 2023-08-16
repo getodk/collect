@@ -11,10 +11,9 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.FormEntryPage
-import org.odk.collect.projects.Project
-import org.odk.collect.projects.Project.Companion.DEMO_PROJECT
 import timber.log.Timber
 import java.io.IOException
 
@@ -45,11 +44,7 @@ class BlankFormTestRule @JvmOverloads constructor(
 
     private fun setUpProjectAndCopyForm() {
         try {
-            // Set up demo project
-            val component =
-                DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-            component.projectsRepository().save(DEMO_PROJECT)
-            component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID)
+            CollectHelpers.addDemoProject()
             StorageUtils.copyFormToDemoProject(formFilename, mediaFilePaths, true)
         } catch (e: IOException) {
             throw RuntimeException(e)

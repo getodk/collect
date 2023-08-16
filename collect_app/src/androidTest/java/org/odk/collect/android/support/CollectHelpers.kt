@@ -32,6 +32,14 @@ object CollectHelpers {
     }
 
     @JvmStatic
+    fun addDemoProject() {
+        val component =
+            DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
+        component.projectsRepository().save(Project.DEMO_PROJECT)
+        component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID)
+    }
+
+    @JvmStatic
     fun addGDProject(gdProject: Project.New, accountName: String, testDependencies: TestDependencies) {
         testDependencies.googleAccountPicker.setDeviceAccount(accountName)
         testDependencies.googleApi.setAccount(accountName)

@@ -26,7 +26,7 @@ class InstancePickActionTest {
     @Test
     fun pickInstance_andTheSelectingInstance_returnsInstanceUri() {
         rule.startAtMainMenu()
-            .copyAndSyncForm("one-question.xml")
+            .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .swipeToEndScreen()
             .clickSaveAsDraft()

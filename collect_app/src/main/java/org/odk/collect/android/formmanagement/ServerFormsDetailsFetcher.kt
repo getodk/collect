@@ -33,8 +33,7 @@ import java.io.File
  */
 open class ServerFormsDetailsFetcher(
     private val formsRepository: FormsRepository,
-    private val formSource: FormSource,
-    private val diskFormsSynchronizer: DiskFormsSynchronizer
+    private val formSource: FormSource
 ) {
     open fun updateUrl(url: String) {
         (formSource as OpenRosaFormSource).updateUrl(url)
@@ -46,8 +45,6 @@ open class ServerFormsDetailsFetcher(
 
     @Throws(FormSourceException::class)
     open fun fetchFormDetails(): List<ServerFormDetails> {
-        diskFormsSynchronizer.synchronize()
-
         val formList = formSource.fetchFormList()
         return formList.map { listItem ->
             val manifestFile = listItem.manifestURL?.let {
