@@ -25,6 +25,7 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
+import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.androidshared.livedata.NonNullLiveData;
 import org.odk.collect.async.Cancellable;
@@ -44,7 +45,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
-    private final MutableLiveData<ValidationResult> validationResult = new MutableLiveData<>(null);
+    private final MutableLiveData<Consumable<ValidationResult>>
+            validationResult = new MutableLiveData<>(new Consumable<>(null));
     @NonNull
     private final FormSessionRepository formSessionRepository;
     private final String sessionId;
@@ -95,7 +97,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         return error;
     }
 
-    public LiveData<ValidationResult> getValidationResult() {
+    public LiveData<Consumable<ValidationResult>> getValidationResult() {
         return validationResult;
     }
 
@@ -237,7 +239,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         try {
             ValidationResult result = formController.saveAllScreenAnswers(answers, evaluateConstraints);
             if (result instanceof FailedValidationResult) {
-                validationResult.postValue(result);
+                validationResult.postValue(new Consumable<>(result));
                 return false;
             }
         } catch (JavaRosaException e) {
@@ -308,7 +310,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     if (result instanceof FailedValidationResult) {
                         refresh();
                     }
-                    validationResult.setValue(result);
+                    validationResult.setValue(new Consumable<>(result));
                 }
         );
     }

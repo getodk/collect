@@ -140,6 +140,7 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.javarosawrapper.SuccessValidationResult;
+import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.listeners.FormLoaderListener;
 import org.odk.collect.android.listeners.SavePointListener;
@@ -547,9 +548,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         });
 
-        formEntryViewModel.getValidationResult().observe(this, validationResult -> {
-            if (validationResult instanceof FailedValidationResult) {
-                FailedValidationResult failedValidationResult = (FailedValidationResult) validationResult;
+        formEntryViewModel.getValidationResult().observe(this, consumable -> {
+            if (consumable.isConsumed()) {
+                return;
+            }
+            ValidationResult validationResult = consumable.getValue();
+            if (validationResult instanceof FailedValidationResult failedValidationResult) {
                 try {
                     createConstraintToast(failedValidationResult.getIndex(), failedValidationResult.getStatus());
                     if (getFormController().indexIsInFieldList() && getFormController().getQuestionPrompts().length > 1) {
@@ -563,6 +567,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             } else if (validationResult instanceof SuccessValidationResult) {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
             }
+            consumable.consume();
         });
 
         formSaveViewModel = viewModelProvider.get(FormSaveViewModel.class);
