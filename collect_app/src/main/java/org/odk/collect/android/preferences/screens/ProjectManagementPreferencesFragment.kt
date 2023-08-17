@@ -39,6 +39,12 @@ class ProjectManagementPreferencesFragment :
         super.onCreatePreferences(savedInstanceState, rootKey)
         setPreferencesFromResource(R.xml.project_management_preferences, rootKey)
 
+        val unprotectedSettings = settingsProvider.getUnprotectedSettings()
+        val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
+        if (protocol == ProjectKeys.PROTOCOL_GOOGLE_SHEETS) {
+            findPreference<Preference>(IMPORT_SETTINGS_KEY)!!.isVisible = false
+        }
+
         findPreference<Preference>(IMPORT_SETTINGS_KEY)!!.onPreferenceClickListener = this
         findPreference<Preference>(DELETE_PROJECT_KEY)!!.onPreferenceClickListener = this
     }
