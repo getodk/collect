@@ -27,8 +27,8 @@ class InstancesAdbTest {
     fun canAddInstanceOnDisk() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
-            .clickFillBlankForm() // Add form via disk sync
             .copyInstance("One Question_2021-06-22_15-55-50.xml")
+            .clickFillBlankForm() // Add form via disk sync
             .pressBack(MainMenuPage()) // Return to main menu to trigger instance disk sync
             .clickSendFinalizedForm(1)
             .assertText("One Question")

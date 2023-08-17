@@ -3,9 +3,10 @@ package org.odk.collect.android.projects
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.database.DatabaseConnection
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.ChangeLockProvider
+import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.forms.instances.InstancesRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -16,59 +17,62 @@ class ProjectDeleter(
     private val currentProjectProvider: CurrentProjectProvider,
     private val formUpdateScheduler: FormUpdateScheduler,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
-    private val instancesRepository: InstancesRepository,
-    private val projectDirPath: String,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val storagePathProvider: StoragePathProvider,
     private val changeLockProvider: ChangeLockProvider,
     private val settingsProvider: SettingsProvider
 ) {
-    fun deleteCurrentProject(): DeleteProjectResult {
+    fun deleteProject(projectId: String = currentProjectProvider.getCurrentProject().uuid): DeleteProjectResult {
         return when {
-            unsentInstancesDetected() -> DeleteProjectResult.UnsentInstances
-            runningBackgroundJobsDetected() -> DeleteProjectResult.RunningBackgroundJobs
-            else -> performProjectDeletion()
+            unsentInstancesDetected(projectId) -> DeleteProjectResult.UnsentInstances
+            runningBackgroundJobsDetected(projectId) -> DeleteProjectResult.RunningBackgroundJobs
+            else -> performProjectDeletion(projectId)
         }
     }
 
-    private fun unsentInstancesDetected(): Boolean {
-        return instancesRepository.getAllByStatus(
+    private fun unsentInstancesDetected(projectId: String): Boolean {
+        return instancesRepositoryProvider.get(projectId).getAllByStatus(
             Instance.STATUS_INCOMPLETE,
             Instance.STATUS_COMPLETE,
             Instance.STATUS_SUBMISSION_FAILED
         ).isNotEmpty()
     }
 
-    private fun runningBackgroundJobsDetected(): Boolean {
-        val acquiredFormLock = changeLockProvider.getFormLock(currentProjectProvider.getCurrentProject().uuid).withLock { acquiredLock ->
+    private fun runningBackgroundJobsDetected(projectId: String): Boolean {
+        val acquiredFormLock = changeLockProvider.getFormLock(projectId).withLock { acquiredLock ->
             acquiredLock
         }
-        val acquiredInstanceLock = changeLockProvider.getInstanceLock(currentProjectProvider.getCurrentProject().uuid).withLock { acquiredLock ->
+        val acquiredInstanceLock = changeLockProvider.getInstanceLock(projectId).withLock { acquiredLock ->
             acquiredLock
         }
 
         return !acquiredFormLock || !acquiredInstanceLock
     }
 
-    private fun performProjectDeletion(): DeleteProjectResult {
-        val currentProject = currentProjectProvider.getCurrentProject()
+    private fun performProjectDeletion(projectId: String): DeleteProjectResult {
+        formUpdateScheduler.cancelUpdates(projectId)
+        instanceSubmitScheduler.cancelSubmit(projectId)
 
-        formUpdateScheduler.cancelUpdates(currentProject.uuid)
-        instanceSubmitScheduler.cancelSubmit(currentProject.uuid)
+        settingsProvider.getUnprotectedSettings(projectId).clear()
+        settingsProvider.getProtectedSettings(projectId).clear()
 
-        settingsProvider.getUnprotectedSettings(currentProject.uuid).clear()
-        settingsProvider.getProtectedSettings(currentProject.uuid).clear()
+        projectsRepository.delete(projectId)
 
-        projectsRepository.delete(currentProject.uuid)
-
-        File(projectDirPath).deleteRecursively()
+        File(storagePathProvider.getProjectRootDirPath(projectId)).deleteRecursively()
 
         DatabaseConnection.cleanUp()
 
-        return if (projectsRepository.getAll().isNotEmpty()) {
-            val newProject = projectsRepository.getAll()[0]
-            currentProjectProvider.setCurrentProject(newProject.uuid)
-            DeleteProjectResult.DeletedSuccessfully(newProject)
-        } else {
-            DeleteProjectResult.DeletedSuccessfully(null)
+        return try {
+            currentProjectProvider.getCurrentProject()
+            DeleteProjectResult.DeletedSuccessfullyInactiveProject
+        } catch (e: IllegalStateException) {
+            if (projectsRepository.getAll().isEmpty()) {
+                DeleteProjectResult.DeletedSuccessfullyLastProject
+            } else {
+                val newProject = projectsRepository.getAll()[0]
+                currentProjectProvider.setCurrentProject(newProject.uuid)
+                DeleteProjectResult.DeletedSuccessfullyCurrentProject(newProject)
+            }
         }
     }
 }
@@ -78,5 +82,9 @@ sealed class DeleteProjectResult {
 
     object RunningBackgroundJobs : DeleteProjectResult()
 
-    data class DeletedSuccessfully(val newCurrentProject: Project.Saved?) : DeleteProjectResult()
+    object DeletedSuccessfullyLastProject : DeleteProjectResult()
+
+    object DeletedSuccessfullyInactiveProject : DeleteProjectResult()
+
+    data class DeletedSuccessfullyCurrentProject(val newCurrentProject: Project.Saved) : DeleteProjectResult()
 }

@@ -965,7 +965,6 @@
     ##############################################-->
   <string name="google_drive_deprecation_message">Tento projekt používá Disk Google. Tato funkce bude v příští aktualizaci aplikace odstraněna.</string>
   <string name="learn_more_button_text">Více informací</string>
-  <string name="dismiss_button_text">Zavrhnout</string>
   <!--##############################################
     # Developer tools
     ##############################################-->

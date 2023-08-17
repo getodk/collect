@@ -9,6 +9,7 @@
 -dontwarn android.content.res.**
 -dontwarn org.kxml2.io.**
 
+-keep class com.google.api.**
 -keep class org.javarosa.**
 -keep class org.odk.collect.android.logic.actions.**
 -keep class android.support.v7.widget.** { *; }

@@ -83,10 +83,10 @@ class ProjectManagementPreferencesFragment :
         return false
     }
 
-    fun deleteProject() {
+    private fun deleteProject() {
         Analytics.log(AnalyticsEvents.DELETE_PROJECT)
 
-        when (val deleteProjectResult = projectDeleter.deleteCurrentProject()) {
+        when (val deleteProjectResult = projectDeleter.deleteProject()) {
             is DeleteProjectResult.UnsentInstances -> {
                 MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(org.odk.collect.strings.R.string.cannot_delete_project_title)
@@ -101,26 +101,28 @@ class ProjectManagementPreferencesFragment :
                     .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
                     .show()
             }
-            is DeleteProjectResult.DeletedSuccessfully -> {
+            is DeleteProjectResult.DeletedSuccessfullyCurrentProject -> {
                 val newCurrentProject = deleteProjectResult.newCurrentProject
-                if (newCurrentProject != null) {
-                    ActivityUtils.startActivityAndCloseAllOthers(
-                        requireActivity(),
-                        MainMenuActivity::class.java
+                ActivityUtils.startActivityAndCloseAllOthers(
+                    requireActivity(),
+                    MainMenuActivity::class.java
+                )
+                ToastUtils.showLongToast(
+                    requireContext(),
+                    getString(
+                        org.odk.collect.strings.R.string.switched_project,
+                        newCurrentProject.name
                     )
-                    ToastUtils.showLongToast(
-                        requireContext(),
-                        getString(
-                            org.odk.collect.strings.R.string.switched_project,
-                            newCurrentProject.name
-                        )
-                    )
-                } else {
-                    ActivityUtils.startActivityAndCloseAllOthers(
-                        requireActivity(),
-                        FirstLaunchActivity::class.java
-                    )
-                }
+                )
+            }
+            is DeleteProjectResult.DeletedSuccessfullyLastProject -> {
+                ActivityUtils.startActivityAndCloseAllOthers(
+                    requireActivity(),
+                    FirstLaunchActivity::class.java
+                )
+            }
+            is DeleteProjectResult.DeletedSuccessfullyInactiveProject -> {
+                // not possible here
             }
         }
     }

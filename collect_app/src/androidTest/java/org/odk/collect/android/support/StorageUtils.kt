@@ -77,9 +77,11 @@ object StorageUtils {
         copyFormToDemoProject(formFilename, null, copyTo = copyTo)
     }
 
+    @JvmStatic
+    @JvmOverloads
     @Throws(IOException::class)
-    fun copyInstanceToDemoProject(instanceFileName: String) {
-        val instanceDirPath = getInstancesDirPath("Demo project") + instanceFileName.split("\\.".toRegex()).toTypedArray()[0]
+    fun copyInstance(instanceFileName: String, projectName: String) {
+        val instanceDirPath = getInstancesDirPath(projectName) + instanceFileName.split("\\.".toRegex()).toTypedArray()[0]
         File(instanceDirPath).mkdir()
         FileUtils.copyFileFromAssets("instances/$instanceFileName", "$instanceDirPath/$instanceFileName")
     }

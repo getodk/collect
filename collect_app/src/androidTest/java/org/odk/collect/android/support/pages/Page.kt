@@ -38,7 +38,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers
-import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
@@ -48,7 +47,6 @@ import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.RecyclerViewMatcher
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
@@ -392,15 +390,6 @@ abstract class Page<T : Page<T>> {
 
     protected fun assertToolbarTitle(title: Int) {
         assertToolbarTitle(getTranslatedString(title))
-    }
-
-    fun copyInstance(instanceFileName: String): T {
-        try {
-            StorageUtils.copyInstanceToDemoProject(instanceFileName)
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        }
-        return this as T
     }
 
     fun assertContentDescriptionDisplayed(string: Int): T {

@@ -5,7 +5,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
@@ -139,10 +138,9 @@ class SendFinalizedFormTest {
             .openProjectSettingsDialog()
             .selectProject("GD Project")
             .copyForm("one-question-google.xml", null, false, "GD Project")
-            .startBlankForm("One Question Google")
-            .answerQuestion("what is your age", "47")
-            .swipeToEndScreen()
-            .clickFinalize()
+            .copyInstance("one-question-google_2023-08-08_14-51-00.xml", "GD Project")
+            .clickFillBlankForm()
+            .pressBack(MainMenuPage())
             .clickSendFinalizedForm(1)
             .clickSelectAll()
             .clickSendSelected()
