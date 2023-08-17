@@ -238,6 +238,21 @@ public class MainMenuPage extends Page<MainMenuPage> {
         return this;
     }
 
+    public MainMenuPage copyInstance(String instanceFileName) {
+        copyInstance(instanceFileName, "Demo project");
+        return this;
+    }
+
+    public MainMenuPage copyInstance(String instanceFileName, String projectName) {
+        try {
+            StorageUtils.copyInstance(instanceFileName, projectName);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return this;
+    }
+
     public EntitiesPage openEntityBrowser() {
         openProjectSettingsDialog()
                 .clickSettings()
