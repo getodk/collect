@@ -55,4 +55,20 @@ class AuditTest {
         assertThat(auditLog[10].get("event"), equalTo("form exit"))
         assertThat(auditLog[11].get("event"), equalTo("form finalize"))
     }
+
+    @Test // https://github.com/getodk/collect/issues/5551
+    fun navigatingToSettings_savesAnswersFormCurrentScreenToAuditLog() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-audit-track-changes.xml")
+            .startBlankForm("One Question Audit Track Changes")
+            .fillOut(
+                FormEntryPage.QuestionAndAnswer("What is your age", "31")
+            )
+            .clickOptionsIcon()
+            .clickGeneralSettings()
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog[1].get("event"), equalTo("question"))
+        assertThat(auditLog[1].get("new-value"), equalTo("31"))
+    }
 }

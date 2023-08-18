@@ -4,7 +4,7 @@
     xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns="http://www.w3.org/2002/xforms">
     <h:head>
-        <h:title>One Question Audit Constraint</h:title>
+        <h:title>One Question Audit Track Changes</h:title>
         <model>
             <instance>
                 <data id="one_question_audit" orx:version="1">
@@ -14,7 +14,6 @@
                     </meta>
                 </data>
             </instance>
-            <bind constraint=". &lt; 120" nodeset="age" type="int" jr:constraintMsg="Too old!" />
             <bind nodeset="/data/meta/audit" type="binary" odk:track-changes="true" />
         </model>
     </h:head>
