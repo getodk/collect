@@ -111,6 +111,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
             if (audioRecorder.isRecording()) {
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());
             } else {
+                formEntryViewModel.updateAnswersForScreen(answersProvider.getAnswers(), false);
                 Intent pref = new Intent(activity, ProjectPreferencesActivity.class);
                 activity.startActivityForResult(pref, ApplicationConstants.RequestCodes.CHANGE_SETTINGS);
             }
