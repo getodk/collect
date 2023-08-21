@@ -50,13 +50,12 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/zoom"
-        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/show_my_location"
-        app:fabSize="mini"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/location_status"
@@ -64,14 +63,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/layers"
-        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/layer_data_file"
-        app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zoom"
         app:srcCompat="@drawable/ic_layers" />
