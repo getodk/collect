@@ -65,7 +65,7 @@ the License.
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/form_back_button"
             style="?materialButtonOutlinedIconStyle"
             android:layout_width="0dp"
@@ -78,7 +78,7 @@ the License.
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/form_forward_button"
             style="?materialButtonOutlinedIconStyle"
             android:layout_width="0dp"
