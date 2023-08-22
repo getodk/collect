@@ -42,9 +42,9 @@ class DynamicPreloadParseProcessor :
     override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
         val condition = when (name) {
             "calculate" -> binding.calculate.expr
-            "required" -> binding.requiredCondition.expr
-            "relevant" -> binding.relevancyCondition.expr
-            "readonly" -> binding.readonlyCondition.expr
+            "required" -> binding.requiredCondition?.expr
+            "relevant" -> binding.relevancyCondition?.expr
+            "readonly" -> binding.readonlyCondition?.expr
             "constraint" -> binding.constraint
             else -> null
         }

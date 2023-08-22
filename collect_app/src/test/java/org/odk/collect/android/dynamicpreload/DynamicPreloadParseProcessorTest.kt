@@ -76,6 +76,21 @@ class DynamicPreloadParseProcessorTest {
     }
 
     @Test
+    fun `usesDynamicPreload is false when readonly is absolute`() {
+        val formDef = FormDef()
+
+        val bindingWithoutPullData = DataBinding()
+        bindingWithoutPullData.readonlyAbsolute = false
+
+        processor.processBindAttribute("readonly", "", bindingWithoutPullData)
+        processor.processFormDef(formDef)
+        assertThat(
+            formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
+            equalTo(false)
+        )
+    }
+
+    @Test
     fun `usesDynamicPreload is true when readonly does contain pulldata`() {
         val formDef = FormDef()
 
@@ -106,6 +121,21 @@ class DynamicPreloadParseProcessorTest {
     }
 
     @Test
+    fun `usesDynamicPreload is false when required is absolute`() {
+        val formDef = FormDef()
+
+        val bindingWithoutPullData = DataBinding()
+        bindingWithoutPullData.requiredAbsolute = false
+
+        processor.processBindAttribute("required", "", bindingWithoutPullData)
+        processor.processFormDef(formDef)
+        assertThat(
+            formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
+            equalTo(false)
+        )
+    }
+
+    @Test
     fun `usesDynamicPreload is true when required does contain pulldata`() {
         val formDef = FormDef()
 
@@ -126,6 +156,21 @@ class DynamicPreloadParseProcessorTest {
 
         val bindingWithoutPullData = DataBinding()
         bindingWithoutPullData.relevancyCondition = createTriggerable(createNonPullDataExpression())
+
+        processor.processBindAttribute("relevant", "", bindingWithoutPullData)
+        processor.processFormDef(formDef)
+        assertThat(
+            formDef.extras.get(DynamicPreloadExtra::class.java).usesDynamicPreload,
+            equalTo(false)
+        )
+    }
+
+    @Test
+    fun `usesDynamicPreload is false when relevant is absolute`() {
+        val formDef = FormDef()
+
+        val bindingWithoutPullData = DataBinding()
+        bindingWithoutPullData.relevantAbsolute = false
 
         processor.processBindAttribute("relevant", "", bindingWithoutPullData)
         processor.processFormDef(formDef)
