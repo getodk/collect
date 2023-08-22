@@ -24,13 +24,13 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.support.SynchronousImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
+import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,6 +53,7 @@ import static org.robolectric.Shadows.shadowOf;
 public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
     private File currentFile;
+    private FakeQuestionMediaManager questionMediaManager;
 
     @Mock
     File file;
@@ -60,7 +61,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @NonNull
     @Override
     public AnnotateWidget createWidget() {
-        QuestionMediaManager fakeQuestionMediaManager = new FakeQuestionMediaManager() {
+        questionMediaManager = new FakeQuestionMediaManager() {
             @Override
             public File getAnswerFile(String fileName) {
                 File result;
@@ -74,7 +75,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         };
         return new AnnotateWidget(activity,
                 new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                fakeQuestionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
+                questionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
     }
 
     @NonNull
@@ -140,6 +141,20 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         assertThat(widget.getImageView().getDrawable(), nullValue());
 
         assertThat(widget.getErrorTextView().getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenGifFileSelected_doNotAttachItAndDisplayAMessage() {
+        AnnotateWidget widget = createWidget();
+
+        File file = TempFiles.createTempFile("sample", ".gif");
+        questionMediaManager.addAnswerFile(file);
+        widget.setData(file);
+
+        assertThat(widget.getImageView().getVisibility(), is(View.GONE));
+        assertThat(widget.getImageView().getDrawable(), nullValue());
+
+        assertThat(ShadowToast.getTextOfLatestToast(), is("Gif files are not supported"));
     }
 
     @Test
