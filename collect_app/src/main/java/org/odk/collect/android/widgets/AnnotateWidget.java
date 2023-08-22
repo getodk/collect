@@ -35,6 +35,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
+import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 import java.util.Locale;
@@ -187,8 +188,14 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
 
     @Override
     public void setData(Object newImageObj) {
-        super.setData(newImageObj);
-
-        annotateButton.setEnabled(binaryName != null);
+        if (newImageObj instanceof File) {
+            String mimeType = FileUtils.getMimeType((File) newImageObj);
+            if ("image/gif".equals(mimeType)) {
+                ToastUtils.showLongToast(getContext(), org.odk.collect.strings.R.string.gif_not_supported);
+            } else {
+                super.setData(newImageObj);
+                annotateButton.setEnabled(binaryName != null);
+            }
+        }
     }
 }

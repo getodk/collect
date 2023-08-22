@@ -257,6 +257,7 @@
     <string name="camera_error">There was an error taking picture</string>
     <string name="camera_failed_to_initialize">Couldn\'t initialize camera!</string>
     <string name="annotate_image">Annotate Image</string>
+    <string name="gif_not_supported">Gif files are not supported</string>
     <string name="invalid_file_type">Application returned an invalid file type</string>
     <!-- Dialog heading for saving annotated image -->
     <string name="save_and_close">Save and Close</string>

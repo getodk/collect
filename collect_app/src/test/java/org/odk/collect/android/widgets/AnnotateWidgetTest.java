@@ -11,13 +11,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
-import net.bytebuddy.utility.RandomString;
-
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.ReferenceManager;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -55,8 +52,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     private File currentFile;
     private FakeQuestionMediaManager questionMediaManager;
 
-    @Mock
-    File file;
+    private final File file = TempFiles.createTempFile("sample", ".jpg");
 
     @NonNull
     @Override
@@ -81,14 +77,11 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData(RandomString.make());
+        return new StringData(file.getName());
     }
 
     @Override
     public Object createBinaryData(@NotNull StringData answerData) {
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(answerData.getDisplayText());
-
         return file;
     }
 
