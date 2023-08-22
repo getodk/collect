@@ -25,4 +25,15 @@ class ExternalDataUseCasesTest {
         ExternalDataUseCases.create(form, mediaDir, { false }, {})
         assertThat(mediaDir.listFiles().size, equalTo(1))
     }
+
+    @Test
+    fun `create() works if the FormDef does not have a DynamicPreloadExtra()`() {
+        val form = FormDef()
+        val mediaDir = TempFiles.createTempDir().also {
+            File(it, "items.csv").writeText("name_key,name\nmango,Mango")
+        }
+
+        ExternalDataUseCases.create(form, mediaDir, { false }, {})
+        assertThat(mediaDir.listFiles().size, equalTo(2))
+    }
 }
