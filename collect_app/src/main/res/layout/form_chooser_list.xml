@@ -39,9 +39,13 @@ the License.
                 android:divider="@drawable/list_item_divider"/>
 
         <TextView
-                android:id="@android:id/empty"
-                style="@style/Widget.Collect.TextView.Empty"
-                android:text="@string/no_items_display_forms"/>
+            android:id="@android:id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_items_display_forms"
+            android:textAlignment="center"
+            android:textAppearance="?textAppearanceTitleMedium" />
 
     </LinearLayout>
 
