@@ -28,10 +28,10 @@ the License.
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@android:id/empty"
+        style="@style/Widget.Collect.EmptyView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_items_display"
-        android:textAppearance="?textAppearanceTitleMedium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
