@@ -464,6 +464,12 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         hideProgressBarAndAllow();
         listAdapter.changeCursor(cursor);
         toggleButtonLabel(findViewById(R.id.toggle_button), listView);
+
+        if (listAdapter.isEmpty()) {
+            findViewById(R.id.buttonholder).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.buttonholder).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
