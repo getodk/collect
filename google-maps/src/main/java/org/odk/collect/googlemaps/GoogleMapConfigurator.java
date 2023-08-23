@@ -3,7 +3,10 @@ package org.odk.collect.googlemaps;
 import static org.odk.collect.androidshared.ui.PrefUtils.createListPref;
 import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
@@ -37,11 +40,29 @@ public class GoogleMapConfigurator implements MapConfigurator {
     }
 
     @Override public boolean isAvailable(Context context) {
-        return GoogleMapFragment.isAvailable(context);
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            String apiKey = applicationInfo.metaData.getString("com.google.android.geo.API_KEY");
+
+            return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context) && !apiKey.equals("");
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static boolean isGooglePlayServicesAvailable(Context context) {
+        return new PlayServicesChecker().isGooglePlayServicesAvailable(context);
+    }
+
+    private static boolean isGoogleMapsSdkAvailable(Context context) {
+        // The Google Maps SDK for Android requires OpenGL ES version 2.
+        // See https://developers.google.com/maps/documentation/android-sdk/config
+        return ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
+                .getDeviceConfigurationInfo().reqGlEsVersion >= 0x20000;
     }
 
     @Override public void showUnavailableMessage(Context context) {
-        if (!GoogleMapFragment.isGoogleMapsSdkAvailable(context)) {
+        if (!isGoogleMapsSdkAvailable(context)) {
             ToastUtils.showLongToast(context, context.getString(
                 org.odk.collect.strings.R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
         }
