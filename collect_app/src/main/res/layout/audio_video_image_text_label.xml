@@ -78,21 +78,19 @@
 
         <org.odk.collect.android.audio.AudioButton
             android:id="@+id/audioButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            style="?materialIconButtonOutlinedStyle"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
             android:visibility="gone"
-            app:iconTint="?colorOnSurface"
             tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/videoButton"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+            style="?materialIconButtonOutlinedStyle"
             android:layout_width="@dimen/touch_target_size"
             android:layout_height="@dimen/touch_target_size"
             android:visibility="gone"
             app:icon="@drawable/ic_ondemand_video_black_24dp"
-            app:iconTint="?colorOnSurface"
             tools:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>
