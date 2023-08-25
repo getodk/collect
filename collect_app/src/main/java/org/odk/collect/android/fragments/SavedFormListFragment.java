@@ -106,6 +106,8 @@ public class SavedFormListFragment extends FileManagerFragment implements Delete
 
     @Override
     public void onResume() {
+        listAdapter.notifyDataSetChanged();
+
         // hook up to receive completion events
         if (deleteInstancesTask != null) {
             deleteInstancesTask.setDeleteListener(this);
