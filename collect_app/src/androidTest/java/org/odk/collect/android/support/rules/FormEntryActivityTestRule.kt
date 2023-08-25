@@ -90,12 +90,6 @@ class FormEntryActivityTestRule : ExternalResource() {
         return this
     }
 
-    fun restoreActivity(): FormEntryActivityTestRule {
-        savedInstanceStateProvider.setState(outState)
-        scenario = ActivityScenario.launch(intent)
-        return this
-    }
-
     fun simulateProcessRestart(): FormEntryActivityTestRule {
         CollectHelpers.simulateProcessRestart(object : TestDependencies() {
             override fun providesSavedInstanceStateProvider(): SavedInstanceStateProvider {
