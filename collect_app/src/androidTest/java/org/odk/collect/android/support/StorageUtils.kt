@@ -107,10 +107,9 @@ object StorageUtils {
         val mediaPathName = getFormsDirPath(projectName) + formFilename.replace(".xml", "") + org.odk.collect.android.utilities.FileUtils.MEDIA_SUFFIX + "/"
         org.odk.collect.android.utilities.FileUtils.checkMediaPath(File(mediaPathName))
         for (mediaFilePath in mediaFilePaths) {
-            FileUtils.copyFileFromAssets(
-                InstrumentationRegistry.getInstrumentation().getContext(),
-                mediaPathName + getMediaFileName(mediaFilePath),
-                "media/$mediaFilePath"
+            FileUtils.copyFileFromResources(
+                "media/$mediaFilePath",
+                mediaPathName + getMediaFileName(mediaFilePath)
             )
         }
     }

@@ -1,22 +1,21 @@
 package org.odk.collect.android.feature.formentry;
 
-import static org.odk.collect.android.utilities.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.utilities.FileUtils.copyFileFromResources;
 
 import android.app.Application;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.TestDependencies;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.OkDialog;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.audiorecorder.testsupport.StubAudioRecorder;
 
@@ -36,7 +35,7 @@ public class AudioRecordingTest {
                     File stubRecording = File.createTempFile("test", ".m4a");
                     stubRecording.deleteOnExit();
 
-                    copyFileFromAssets(InstrumentationRegistry.getInstrumentation().getContext(), stubRecording.getAbsolutePath(), "media/test.m4a");
+                    copyFileFromResources("media/test.m4a", stubRecording.getAbsolutePath());
                     stubAudioRecorderViewModel = new StubAudioRecorder(stubRecording.getAbsolutePath());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

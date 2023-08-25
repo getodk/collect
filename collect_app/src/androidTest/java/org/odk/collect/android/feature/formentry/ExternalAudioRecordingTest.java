@@ -2,7 +2,7 @@ package org.odk.collect.android.feature.formentry;
 
 import static androidx.test.espresso.intent.Intents.intending;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
-import static org.odk.collect.android.utilities.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.utilities.FileUtils.copyFileFromResources;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -40,7 +39,7 @@ public class ExternalAudioRecordingTest {
                 try {
                     File stubRecording = File.createTempFile("test", ".m4a");
                     stubRecording.deleteOnExit();
-                    copyFileFromAssets(InstrumentationRegistry.getInstrumentation().getContext(), stubRecording.getAbsolutePath(), "media/test.m4a");
+                    copyFileFromResources("media/test.m4a", stubRecording.getAbsolutePath());
 
                     Intent intent = new Intent();
                     intent.setData(Uri.fromFile(stubRecording));
