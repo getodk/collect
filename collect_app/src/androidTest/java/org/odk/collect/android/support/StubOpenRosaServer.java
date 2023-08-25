@@ -4,11 +4,8 @@ import static org.odk.collect.android.utilities.FileUtils.getResourceAsStream;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 
-import android.content.res.AssetManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.openrosa.CaseInsensitiveEmptyHeaders;
@@ -239,13 +236,12 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
                     .append("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">\n");
 
             for (String mediaFile : xformItem.getMediaFiles()) {
-                AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
                 String mediaFileHash;
 
                 if (randomHash) {
                     mediaFileHash = RandomString.randomString(8);
                 } else {
-                    mediaFileHash = Md5.getMd5Hash(assetManager.open("media/" + mediaFile));
+                    mediaFileHash = Md5.getMd5Hash(getResourceAsStream("media/" + mediaFile));
                 }
 
                 stringBuilder
@@ -277,9 +273,7 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     @NotNull
     private InputStream getMediaFile(URI uri) throws IOException {
         String mediaFileName = uri.getQuery().split("=")[1];
-
-        AssetManager assetManager = InstrumentationRegistry.getInstrumentation().getContext().getAssets();
-        return assetManager.open("media/" + mediaFileName);
+        return getResourceAsStream("media/" + mediaFileName);
     }
 
     private static class XFormItem {
