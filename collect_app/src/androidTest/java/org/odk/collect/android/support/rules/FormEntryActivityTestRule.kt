@@ -3,7 +3,6 @@ package org.odk.collect.android.support.rules
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
-import android.os.Bundle
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -15,11 +14,9 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
-import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.Page
-import org.odk.collect.androidshared.system.SavedInstanceStateProvider
 import org.odk.collect.androidtest.ActivityScenarioExtensions.saveInstanceState
 import timber.log.Timber
 import java.io.IOException
@@ -28,20 +25,6 @@ class FormEntryActivityTestRule : ExternalResource() {
 
     private lateinit var intent: Intent
     private lateinit var scenario: ActivityScenario<Activity>
-
-    private var outState: Bundle? = null
-
-    private val savedInstanceStateProvider = InMemSavedInstanceStateProvider()
-
-    override fun before() {
-        super.before()
-
-        CollectHelpers.overrideAppDependencyModule(object : TestDependencies() {
-            override fun providesSavedInstanceStateProvider(): SavedInstanceStateProvider {
-                return savedInstanceStateProvider
-            }
-        })
-    }
 
     override fun after() {
         try {
@@ -81,7 +64,7 @@ class FormEntryActivityTestRule : ExternalResource() {
 
     fun navigateAwayFromActivity(): FormEntryActivityTestRule {
         scenario.moveToState(Lifecycle.State.STARTED)
-        outState = scenario.saveInstanceState()
+        scenario.saveInstanceState()
         return this
     }
 
@@ -91,12 +74,7 @@ class FormEntryActivityTestRule : ExternalResource() {
     }
 
     fun simulateProcessRestart(): FormEntryActivityTestRule {
-        CollectHelpers.simulateProcessRestart(object : TestDependencies() {
-            override fun providesSavedInstanceStateProvider(): SavedInstanceStateProvider {
-                return savedInstanceStateProvider
-            }
-        })
-
+        CollectHelpers.simulateProcessRestart()
         return this
     }
 
@@ -133,24 +111,5 @@ class FormEntryActivityTestRule : ExternalResource() {
             instance.dbId,
             FormFillingActivity::class
         )
-    }
-}
-
-private class InMemSavedInstanceStateProvider : SavedInstanceStateProvider {
-
-    private var bundle: Bundle? = null
-
-    fun setState(savedInstanceState: Bundle?) {
-        bundle = savedInstanceState
-    }
-
-    override fun getState(savedInstanceState: Bundle?): Bundle? {
-        return if (bundle != null) {
-            bundle.also {
-                bundle = null
-            }
-        } else {
-            savedInstanceState
-        }
     }
 }

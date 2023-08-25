@@ -107,7 +107,6 @@ import org.odk.collect.androidshared.network.ConnectivityProvider;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
-import org.odk.collect.androidshared.system.SavedInstanceStateProvider;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler;
 import org.odk.collect.async.Scheduler;
@@ -642,10 +641,5 @@ public class AppDependencyModule {
     @Provides
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(SettingsProvider settingsProvider) {
         return new CollectFormEntryControllerFactory(settingsProvider.getUnprotectedSettings());
-    }
-
-    @Provides
-    public SavedInstanceStateProvider providesSavedInstanceStateProvider() {
-        return savedInstanceState -> savedInstanceState;
     }
 }

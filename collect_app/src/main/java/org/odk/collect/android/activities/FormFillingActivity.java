@@ -176,7 +176,6 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.ProcessRestoreDetector;
-import org.odk.collect.androidshared.system.SavedInstanceStateProvider;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
@@ -371,9 +370,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
 
-    @Inject
-    public SavedInstanceStateProvider savedInstanceStateProvider;
-
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -441,8 +437,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .forClass(BackgroundAudioPermissionDialogFragment.class, () -> new BackgroundAudioPermissionDialogFragment(viewModelFactory))
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
-
-        savedInstanceState = savedInstanceStateProvider.getState(savedInstanceState);
 
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
             if (savedInstanceState.containsKey(KEY_XPATH)) {
