@@ -149,14 +149,10 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
             if (packageName != null) {
                 intent.setPackage(packageName);
             }
-            // We give the camera an absolute filename/path where to put the
-            // picture because of bug:
-            // http://code.google.com/p/android/issues/detail?id=1480
-            // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-            // 2010, G1 phones only run 1.6. Without specifying the path the
-            // images returned by the camera in 1.6 (and earlier) are ~1/4
-            // the size. boo.
 
+            // The Android Camera application saves a full-size photo if you give it a file to save into.
+            // You must provide a fully qualified file name where the camera app should save the photo.
+            // https://developer.android.com/training/camera-deprecated/photobasics
             try {
                 Uri uri = new ContentUriProvider().getUriForFile(getContext(),
                         BuildConfig.APPLICATION_ID + ".provider",
