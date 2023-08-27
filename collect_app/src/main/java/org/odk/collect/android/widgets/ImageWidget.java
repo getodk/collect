@@ -21,30 +21,23 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.ContentUriProvider;
-import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.selfiecamera.CaptureSelfieActivity;
 
-import java.io.File;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 /**
  * Widget that allows user to take pictures, sounds or video and add them to the form.
@@ -144,27 +137,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
             intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
             imageCaptureHandler.captureImage(intent, RequestCodes.MEDIA_FILE_PATH, org.odk.collect.strings.R.string.capture_image);
         } else {
-            Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            String packageName = FormEntryPromptUtils.getBindAttribute(getFormEntryPrompt(), "intent");
-            if (packageName != null) {
-                intent.setPackage(packageName);
-            }
-
-            // The Android Camera application saves a full-size photo if you give it a file to save into.
-            // You must provide a fully qualified file name where the camera app should save the photo.
-            // https://developer.android.com/training/camera-deprecated/photobasics
-            try {
-                Uri uri = new ContentUriProvider().getUriForFile(getContext(),
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        new File(tmpImageFilePath));
-                // if this gets modified, the onActivityResult in
-                // FormEntyActivity will also need to be updated.
-                intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-                FileUtils.grantFilePermissions(intent, uri, getContext());
-            } catch (IllegalArgumentException e) {
-                Timber.e(e);
-            }
-
+            Intent intent = ImageCaptureIntentCreator.INSTANCE.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
             imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.capture_image);
         }
     }
