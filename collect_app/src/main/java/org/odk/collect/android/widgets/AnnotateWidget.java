@@ -37,6 +37,7 @@ import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -163,6 +164,10 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
 
     private void captureImage() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        String packageName = FormEntryPromptUtils.getBindAttribute(getFormEntryPrompt(), "intent");
+        if (packageName != null) {
+            intent.setPackage(packageName);
+        }
         // We give the camera an absolute filename/path where to put the
         // picture because of bug:
         // http://code.google.com/p/android/issues/detail?id=1480
