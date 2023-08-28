@@ -6,7 +6,6 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.instancemanagement.OCTOBER_1st_2023_UTC
 import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
@@ -39,28 +38,13 @@ class SendFinalizedFormTest {
         .around(rule)
 
     @Test
-    fun beforeOCTOBER_1st_2023_UTC_canEditFormsBeforeSending() {
-        currentTimeMillis = OCTOBER_1st_2023_UTC - 1
-
+    fun canEditFormsBeforeSending() {
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
             .clickOnFormToEdit("One Question")
-            .assertText("52")
-    }
-
-    @Test
-    fun afterOCTOBER_1st_2023_UTC_canViewFormsBeforeSending() {
-        currentTimeMillis = OCTOBER_1st_2023_UTC + 1
-
-        rule.withProject(testDependencies.server.url)
-            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
-            .startBlankForm("One Question")
-            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
-            .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
             .assertText("52")
     }
 
