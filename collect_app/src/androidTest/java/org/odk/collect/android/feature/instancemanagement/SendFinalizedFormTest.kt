@@ -29,13 +29,13 @@ class SendFinalizedFormTest {
         .around(rule)
 
     @Test
-    fun canViewFormsBeforeSending() {
+    fun canEditFormsBeforeSending() {
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
             .clickSendFinalizedForm(1)
-            .clickOnForm("One Question")
+            .clickOnFormToEdit("One Question")
             .assertText("52")
     }
 

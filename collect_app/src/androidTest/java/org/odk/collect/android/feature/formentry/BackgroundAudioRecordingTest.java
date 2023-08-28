@@ -26,6 +26,7 @@ import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
+import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -176,10 +177,16 @@ public class BackgroundAudioRecordingTest {
     @Test
     public void viewForm_doesNotRecordAudio() {
         rule.startAtMainMenu()
+                .setServer(testDependencies.server.getURL())
                 .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .fillOutAndFinalize(new FormEntryPage.QuestionAndAnswer("what is your age", "17"))
                 .clickSendFinalizedForm(1)
+                .clickSelectAll()
+                .clickSendSelected()
+                .clickOK(new SendFinalizedFormPage())
+                .pressBack(new MainMenuPage())
+                .clickViewSentForm(1)
                 .clickOnForm("One Question");
 
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));

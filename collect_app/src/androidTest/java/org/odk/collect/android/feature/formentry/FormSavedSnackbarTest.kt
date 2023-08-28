@@ -3,7 +3,6 @@ package org.odk.collect.android.feature.formentry
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.R
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -30,7 +29,7 @@ class FormSavedSnackbarTest {
     }
 
     @Test
-    fun whenDraftFinalized_displaySnackbarWithViewAction() {
+    fun whenDraftFinalized_displaySnackbarWithViewActionThatOpensFormForEdit() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
@@ -43,10 +42,10 @@ class FormSavedSnackbarTest {
             .clickFinalize()
             .assertText(org.odk.collect.strings.R.string.form_saved)
             .clickOnString(org.odk.collect.strings.R.string.view_form)
+            .clickOKOnDialog()
             .assertText("25")
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_beginning)
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.jump_to_end)
-            .assertText(org.odk.collect.strings.R.string.exit)
+            .assertText(org.odk.collect.strings.R.string.jump_to_beginning)
+            .assertText(org.odk.collect.strings.R.string.jump_to_end)
     }
 
     @Test

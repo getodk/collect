@@ -2,7 +2,6 @@ package org.odk.collect.android.external
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
@@ -10,16 +9,18 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
-import org.odk.collect.android.instancemanagement.canBeEdited
+import org.odk.collect.android.instancemanagement.canBeEditedWithGracePeriod
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.Form
+import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.strings.localization.LocalizedActivity
 import java.io.File
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ import javax.inject.Inject
  * This class serves as a firewall for starting form filling. It should be used to do that
  * rather than [FormFillingActivity] directly as it ensures that the required data is valid.
  */
-class FormUriActivity : ComponentActivity() {
+class FormUriActivity : LocalizedActivity() {
 
     @Inject
     lateinit var currentProjectProvider: CurrentProjectProvider
@@ -64,7 +65,16 @@ class FormUriActivity : ComponentActivity() {
             !assertNotNewFormInGoogleDriveProject() -> Unit
             !assertFormNotEncrypted() -> Unit
             !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
-            else -> startForm()
+            else -> if (isFormFinalizedButEditable()) {
+                MaterialAlertDialogBuilder(this)
+                    .setMessage(org.odk.collect.strings.R.string.edit_finalized_form_warning)
+                    .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ -> startForm() }
+                    .setCancelable(false)
+                    .create()
+                    .show()
+            } else {
+                startForm()
+            }
         }
     }
 
@@ -72,20 +82,6 @@ class FormUriActivity : ComponentActivity() {
         val projects = projectsRepository.getAll()
         return if (projects.isEmpty()) {
             displayErrorDialog(getString(org.odk.collect.strings.R.string.app_not_configured))
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun assertCurrentProjectUsed(): Boolean {
-        val projects = projectsRepository.getAll()
-        val firstProject = projects.first()
-        val uriProjectId = intent.data?.getQueryParameter("projectId")
-        val projectId = uriProjectId ?: firstProject.uuid
-
-        return if (projectId != currentProjectProvider.getCurrentProject().uuid) {
-            displayErrorDialog(getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
             false
         } else {
             true
@@ -106,6 +102,20 @@ class FormUriActivity : ComponentActivity() {
             } else {
                 true
             }
+        }
+    }
+
+    private fun assertCurrentProjectUsed(): Boolean {
+        val projects = projectsRepository.getAll()
+        val firstProject = projects.first()
+        val uriProjectId = intent.data?.getQueryParameter("projectId")
+        val projectId = uriProjectId ?: firstProject.uuid
+
+        return if (projectId != currentProjectProvider.getCurrentProject().uuid) {
+            displayErrorDialog(getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
+            false
+        } else {
+            true
         }
     }
 
@@ -224,12 +234,24 @@ class FormUriActivity : ComponentActivity() {
 
         val formEditingEnabled = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.canBeEdited(settingsProvider)
+            instance!!.canBeEditedWithGracePeriod(settingsProvider)
         } else {
             true
         }
 
         return formEditingEnabled
+    }
+
+    private fun isFormFinalizedButEditable(): Boolean {
+        val uri = intent.data!!
+        val uriMimeType = contentResolver.getType(uri)
+
+        return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            instance!!.status == Instance.STATUS_COMPLETE && instance.canBeEditedWithGracePeriod(settingsProvider)
+        } else {
+            false
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
