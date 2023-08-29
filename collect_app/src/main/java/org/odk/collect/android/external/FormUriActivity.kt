@@ -9,7 +9,6 @@ import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
-import org.odk.collect.android.instancemanagement.canBeEditedWithGracePeriod
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -20,6 +19,7 @@ import org.odk.collect.forms.instances.Instance
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.strings.localization.LocalizedActivity
 import java.io.File
 import javax.inject.Inject
@@ -234,7 +234,7 @@ class FormUriActivity : LocalizedActivity() {
 
         val formEditingEnabled = if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.canBeEditedWithGracePeriod(settingsProvider)
+            instance!!.canBeEdited(settingsProvider)
         } else {
             true
         }
@@ -248,7 +248,7 @@ class FormUriActivity : LocalizedActivity() {
 
         return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            instance!!.status == Instance.STATUS_COMPLETE && instance.canBeEditedWithGracePeriod(settingsProvider)
+            instance!!.status == Instance.STATUS_COMPLETE && instance.canBeEdited(settingsProvider)
         } else {
             false
         }
@@ -262,4 +262,9 @@ class FormUriActivity : LocalizedActivity() {
     companion object {
         private const val FORM_FILLING_ALREADY_STARTED = "FORM_FILLING_ALREADY_STARTED"
     }
+}
+
+private fun Instance.canBeEdited(settingsProvider: SettingsProvider): Boolean {
+    return (this.status == Instance.STATUS_INCOMPLETE || this.status == Instance.STATUS_COMPLETE) &&
+        settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 }
