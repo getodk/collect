@@ -65,7 +65,6 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.PlayServicesChecker;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.MultiSelectViewModel;
@@ -122,7 +121,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     SettingsProvider settingsProvider;
 
     @Inject
-    InstancesRepositoryProvider instancesRepositoryProvider;
+    ReadyToSendViewModel.Factory factory;
 
     private ListView listView;
     private InstanceUploaderAdapter listAdapter;
@@ -132,6 +131,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private String filterText;
 
     private MultiSelectViewModel multiSelectViewModel;
+    private ReadyToSendViewModel readyToSendViewModel;
     private boolean allSelected;
 
     private boolean isSearchBoxShown;
@@ -158,6 +158,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
             listAdapter.setSelected(ids);
         });
+        readyToSendViewModel = new ViewModelProvider(this, factory).get(ReadyToSendViewModel.class);
 
         // set title
         setTitle(getString(org.odk.collect.strings.R.string.send_data));
@@ -476,7 +477,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             findViewById(R.id.buttonholder).setVisibility(View.VISIBLE);
         }
 
-        binding.readyToSendBanner.init(instancesRepositoryProvider.get(), System::currentTimeMillis);
+        binding.readyToSendBanner.init(readyToSendViewModel, this);
     }
 
     @Override

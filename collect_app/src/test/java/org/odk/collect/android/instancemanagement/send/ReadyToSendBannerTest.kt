@@ -10,9 +10,14 @@ import com.google.android.material.textview.MaterialTextView
 import org.hamcrest.Matchers.equalTo
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
+import org.odk.collect.androidtest.FakeLifecycleOwner
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
+import org.odk.collect.testshared.FakeScheduler
+import java.util.function.Supplier
 
 @RunWith(AndroidJUnit4::class)
 class ReadyToSendBannerTest {
@@ -30,10 +35,18 @@ class ReadyToSendBannerTest {
         )
     }
 
+    private val scheduler = FakeScheduler()
+    private val clock = mock<Supplier<Long>>().apply {
+        whenever(this.get()).thenReturn(0)
+    }
+    private val viewModel = ReadyToSendViewModel(instancesRepository, scheduler, clock)
+    private val lifecycleOwner = FakeLifecycleOwner()
+
     @Test
     fun `if there are no sent instances do not display the banner`() {
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { 0 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
@@ -42,7 +55,8 @@ class ReadyToSendBannerTest {
     @Test
     fun `if there are no instances ready to send do not display the banner`() {
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { 0 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
@@ -58,7 +72,8 @@ class ReadyToSendBannerTest {
         )
 
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { 0 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
@@ -74,7 +89,8 @@ class ReadyToSendBannerTest {
         )
 
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { 0 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
@@ -90,7 +106,8 @@ class ReadyToSendBannerTest {
         )
 
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { 0 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
@@ -113,7 +130,8 @@ class ReadyToSendBannerTest {
         )
 
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { 0 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(
@@ -139,8 +157,10 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
+        whenever(clock.get()).thenReturn(ONE_SECOND * 5)
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { ONE_SECOND * 5 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(
@@ -166,8 +186,10 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
+        whenever(clock.get()).thenReturn(ONE_MINUTE)
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { ONE_MINUTE }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(
@@ -193,8 +215,10 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
+        whenever(clock.get()).thenReturn(ONE_HOUR * 2)
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { ONE_HOUR * 2 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(
@@ -220,8 +244,10 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
+        whenever(clock.get()).thenReturn(ONE_DAY * 34)
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { ONE_DAY * 34 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(
@@ -263,8 +289,10 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
+        whenever(clock.get()).thenReturn(ONE_SECOND * 10)
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { ONE_SECOND * 10 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(
@@ -304,7 +332,8 @@ class ReadyToSendBannerTest {
         )
 
         val view = ReadyToSendBanner(context).also {
-            it.init(instancesRepository) { 0 }
+            it.init(viewModel, lifecycleOwner)
+            scheduler.runBackground()
         }
 
         assertThat(

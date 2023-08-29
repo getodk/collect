@@ -150,7 +150,7 @@ class SendFinalizedFormTest {
     @Test
     fun whenThereAreSentAndReadyToSendForms_displayTheBanner() {
         rule.withProject(testDependencies.server.url)
-            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "123"))
             .startBlankForm("One Question")
