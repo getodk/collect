@@ -65,8 +65,6 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
             try {
                 if (fw != null) {
                     fw.close();
-                } else {
-                    Timber.e(new Error("Attempt to close null FileWriter for AuditEventLogger."));
                 }
             } catch (Exception e) {
                 Timber.e(e);
@@ -98,13 +96,9 @@ public class AuditEventSaveTask extends AsyncTask<AuditEvent, Void, Void> {
             try {
                 if (tfw != null) {
                     tfw.close();
-                } else {
-                    Timber.e(new Error("Attempt to close null FileWriter for AuditEventLogger."));
                 }
                 if (br != null) {
                     br.close();
-                } else {
-                    Timber.e(new Error("Attempt to close null BufferedReader for AuditEventLogger."));
                 }
             } catch (Exception e) {
                 Timber.e(e);
