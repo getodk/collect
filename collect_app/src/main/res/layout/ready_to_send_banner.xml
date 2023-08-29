@@ -37,6 +37,7 @@
         android:id="@+id/subtext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceBodyMedium"
         app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"
