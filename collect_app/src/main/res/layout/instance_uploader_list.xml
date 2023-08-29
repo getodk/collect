@@ -23,7 +23,7 @@ the License.
         android:layout_height="match_parent"
         android:layout_below="@id/appBarLayout">
 
-        <org.odk.collect.android.readytosend.ReadyToSendBanner
+        <org.odk.collect.android.instancemanagement.send.ReadyToSendBanner
             android:id="@+id/ready_to_send_banner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

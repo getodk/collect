@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.readytosend;
+package org.odk.collect.android.instancemanagement.send;
 
 import static org.odk.collect.android.activities.AppListActivity.LOADER_ID;
 import static org.odk.collect.android.activities.AppListActivity.toggleButtonLabel;

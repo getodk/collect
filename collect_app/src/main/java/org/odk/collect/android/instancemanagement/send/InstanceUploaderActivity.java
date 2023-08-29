@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.readytosend;
+package org.odk.collect.android.instancemanagement.send;
 
 import static java.util.Arrays.stream;
 

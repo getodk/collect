@@ -1,4 +1,4 @@
-package org.odk.collect.android.readytosend
+package org.odk.collect.android.instancemanagement.send
 
 import android.app.Application
 import android.view.View
