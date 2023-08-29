@@ -160,6 +160,6 @@ class SendFinalizedFormTest {
             .selectForm(0)
             .clickSendSelected()
             .clickOK(SendFinalizedFormPage())
-            .assertText("1 form(s) ready to send")
+            .assertQuantityText(org.odk.collect.strings.R.plurals.forms_ready_to_send, 1, 1)
     }
 }
