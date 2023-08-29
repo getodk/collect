@@ -78,6 +78,11 @@ class FakeScheduler : Scheduler {
         }
     }
 
+    fun flush() {
+        runBackground()
+        runForeground()
+    }
+
     fun isRepeatRunning(): Boolean {
         return repeatTasks.isNotEmpty()
     }

@@ -4,7 +4,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.utilities.FileUtils.copyFileFromResources;
 
 import android.Manifest;
 import android.app.Activity;
@@ -56,7 +56,7 @@ public class BackgroundAudioRecordingTest {
                     File stubRecording = File.createTempFile("test", ".m4a");
                     stubRecording.deleteOnExit();
 
-                    copyFileFromAssets("media/test.m4a", stubRecording.getAbsolutePath());
+                    copyFileFromResources("media/test.m4a", stubRecording.getAbsolutePath());
                     stubAudioRecorderViewModel = new StubAudioRecorder(stubRecording.getAbsolutePath());
                 } catch (IOException e) {
                     throw new RuntimeException(e);

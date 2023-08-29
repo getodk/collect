@@ -44,6 +44,7 @@ import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
 import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.RecyclerViewMatcher
 import timber.log.Timber
 import java.io.File
@@ -86,7 +87,7 @@ abstract class Page<T : Page<T>> {
         return destination.assertOnPage()
     }
 
-    fun assertTexts(vararg texts: String?): T {
+    fun assertTexts(vararg texts: String): T {
         closeSoftKeyboard()
         for (text in texts) {
             assertText(text)
@@ -99,8 +100,8 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun assertText(text: String?): T {
-        onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(matches(not(doesNotExist())))
+    fun assertText(text: String): T {
+        EspressoHelpers.assertText(text)
         return this as T
     }
 
@@ -380,7 +381,7 @@ abstract class Page<T : Page<T>> {
         wait250ms() // https://github.com/android/android-test/issues/444
     }
 
-    protected fun waitForText(text: String?) {
+    protected fun waitForText(text: String) {
         waitFor { assertText(text) }
     }
 
@@ -403,7 +404,7 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOnContentDescription(string: Int): T {
-        onView(withContentDescription(string)).perform(click())
+        EspressoHelpers.clickOnContentDescription(string)
         return this as T
     }
 

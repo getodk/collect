@@ -1,5 +1,6 @@
 package org.odk.collect.android.instrumented.forms;
 
+import static org.mockito.Mockito.mock;
 import static org.odk.collect.android.support.StorageUtils.copyFormToStorage;
 
 import org.javarosa.core.model.FormDef;
@@ -48,8 +49,8 @@ public class FormUtilsTest {
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
         final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
         // Load the form in order to populate the ReferenceManager
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
-        formLoaderTask.execute(formPath).get();
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
+        formLoaderTask.executeSynchronously(formPath);
 
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);

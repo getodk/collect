@@ -37,7 +37,7 @@ import static org.hamcrest.core.StringEndsWith.endsWith;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
-import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
+import static org.odk.collect.android.utilities.FileUtils.copyFileFromResources;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -251,7 +251,7 @@ public class IntentGroupTest {
                 .getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
 
         File file = File.createTempFile(name, extension, downloadsDir);
-        copyFileFromAssets("media" + File.separator + name + "." + extension, file.getPath());
+        copyFileFromResources("media" + File.separator + name + "." + extension, file.getPath());
         return getUriForFile(file);
     }
 

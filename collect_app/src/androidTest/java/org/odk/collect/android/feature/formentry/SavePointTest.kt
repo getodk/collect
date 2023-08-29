@@ -7,7 +7,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
@@ -223,18 +222,15 @@ class SavePointTest {
      * being battery dying).
      */
     private fun simulateBatteryDeath(): FormEntryActivityTestRule {
-        CollectHelpers.simulateProcessRestart()
-        return rule
+        return rule.simulateProcessRestart()
     }
 
     /**
      * Simulate a "process death" case where an app in the background is killed
      */
     private fun simulateProcessDeath(): FormEntryActivityTestRule {
-        rule.navigateAwayFromActivity()
+        return rule.navigateAwayFromActivity()
             .destroyActivity()
-
-        CollectHelpers.simulateProcessRestart()
-        return rule
+            .simulateProcessRestart()
     }
 }

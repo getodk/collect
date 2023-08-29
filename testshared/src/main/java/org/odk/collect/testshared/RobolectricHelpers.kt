@@ -1,9 +1,12 @@
 package org.odk.collect.testshared
 
+import android.app.Activity
 import android.app.Application
 import android.app.Service
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
+import android.os.Bundle
 import android.os.Environment
 import android.os.Looper
 import android.view.ViewGroup
@@ -17,6 +20,8 @@ import org.odk.collect.servicetest.ServiceScenario
 import org.odk.collect.servicetest.ServiceScenario.Companion.launch
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.android.controller.ActivityController
 import org.robolectric.shadows.ShadowEnvironment
 import org.robolectric.shadows.ShadowMediaMetadataRetriever
 import org.robolectric.shadows.ShadowMediaPlayer
@@ -47,7 +52,11 @@ object RobolectricHelpers {
     @JvmOverloads
     fun setupMediaPlayerDataSource(testFile: String, duration: Int = 322450): DataSource {
         val dataSource = DataSource.toDataSource(testFile)
-        ShadowMediaMetadataRetriever.addMetadata(dataSource, MediaMetadataRetriever.METADATA_KEY_DURATION, duration.toString())
+        ShadowMediaMetadataRetriever.addMetadata(
+            dataSource,
+            MediaMetadataRetriever.METADATA_KEY_DURATION,
+            duration.toString()
+        )
         ShadowMediaPlayer.addMediaInfo(dataSource, MediaInfo(duration, 0))
         return dataSource
     }
@@ -73,7 +82,10 @@ object RobolectricHelpers {
 
     @JvmStatic
     @Suppress("UNCHECKED_CAST")
-    fun <F : Fragment?> getFragmentByClass(fragmentManager: FragmentManager, fragmentClass: Class<F>): F? {
+    fun <F : Fragment?> getFragmentByClass(
+        fragmentManager: FragmentManager,
+        fragmentClass: Class<F>
+    ): F? {
         val fragments = fragmentManager.fragments
         for (fragment in fragments) {
             if (fragment.javaClass.isAssignableFrom(fragmentClass)) {
@@ -108,7 +120,8 @@ object RobolectricHelpers {
                 if (services.containsKey(serviceClass)) {
                     services[serviceClass]!!.startWithNewIntent(intent)
                 } else {
-                    val serviceController: ServiceScenario<*> = launch(serviceClass as Class<Service>, intent)
+                    val serviceController: ServiceScenario<*> =
+                        launch(serviceClass as Class<Service>, intent)
                     services[serviceClass] = serviceController
                 }
             } else {
@@ -131,5 +144,39 @@ object RobolectricHelpers {
                 }
             }
         }
+    }
+
+    inline fun <reified A : Activity> ActivityController<A>.recreateWithProcessRestore(
+        resultCode: Int? = null,
+        result: Intent? = null,
+        resetProcess: () -> Unit
+    ): ActivityController<A> {
+        // Destroy activity with saved instance state
+        val outState = Bundle()
+        this.saveInstanceState(outState).pause().stop().destroy()
+
+        // Reset process
+        resetProcess()
+
+        // Recreate with saved instance state
+        val recreated = Robolectric.buildActivity(A::class.java, this.intent).create(outState)
+            .start()
+            .restoreInstanceState(outState)
+            .postCreate(outState)
+
+        // Return result
+        if (resultCode != null) {
+            val startedActivityForResult = shadowOf(this.get()).nextStartedActivityForResult
+            shadowOf(recreated.get()).receiveResult(
+                startedActivityForResult.intent,
+                resultCode,
+                result
+            )
+        }
+
+        // Resume activity
+        return recreated.resume()
+            .visible()
+            .topActivityResumed(true)
     }
 }

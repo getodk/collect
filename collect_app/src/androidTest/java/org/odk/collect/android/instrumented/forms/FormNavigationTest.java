@@ -18,6 +18,8 @@ package org.odk.collect.android.instrumented.forms;
 
 import static junit.framework.Assert.assertEquals;
 
+import static org.mockito.Mockito.mock;
+
 import android.app.Application;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -129,7 +131,7 @@ public class FormNavigationTest {
             Timber.i(e);
         }
 
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null, formEntryControllerFactory);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null, formEntryControllerFactory, mock());
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
             public void loadingComplete(FormLoaderTask task, FormDef fd, String warningMsg) {
@@ -162,7 +164,7 @@ public class FormNavigationTest {
 
             }
         });
-        formLoaderTask.execute(formPath(formName)).get();
+        formLoaderTask.executeSynchronously(formPath(formName));
     }
 
     /**

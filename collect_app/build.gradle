@@ -200,15 +200,6 @@ android {
         }
     }
 
-
-    sourceSets {
-        androidTest {
-            java.srcDirs += "src/commonTest/java"
-        }
-        test {
-            java.srcDirs += "src/commonTest/java"
-        }
-    }
     lint {
         abortOnError true
         checkDependencies true
@@ -373,6 +364,7 @@ dependencies {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
     testImplementation(project(":shadows"))
+    testImplementation(project(":test-forms"))
 
     testImplementation Dependencies.robolectric
 
@@ -389,6 +381,7 @@ dependencies {
     testImplementation Dependencies.androidx_test_core_ktx
 
     androidTestImplementation project(':androidtest')
+    androidTestImplementation project(':test-forms')
 
     androidTestImplementation Dependencies.mockito_android
     androidTestImplementation Dependencies.androidx_test_ext_junit

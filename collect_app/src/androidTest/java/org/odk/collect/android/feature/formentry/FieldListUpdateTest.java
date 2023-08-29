@@ -43,6 +43,7 @@ import static org.hamcrest.core.StringStartsWith.startsWith;
 import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,7 +61,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.support.pages.FormEntryPage;
@@ -323,7 +324,11 @@ public class FieldListUpdateTest {
 
     @Test
     public void changeInValueUsedInGuidanceHint_ShouldChangeGuidanceHintText() {
-        TestSettingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString());
+        DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext())
+                .settingsProvider()
+                .getUnprotectedSettings()
+                .save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString());
+
         jumpToGroupWithText("Guidance hint");
         onView(withText(startsWith("Source11"))).perform(click());
 

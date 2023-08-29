@@ -176,7 +176,6 @@ import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.system.ProcessRestoreDetector;
-import org.odk.collect.androidshared.system.SavedInstanceStateProvider;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
@@ -371,9 +370,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
 
-    @Inject
-    public SavedInstanceStateProvider savedInstanceStateProvider;
-
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -442,9 +438,15 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 .forClass(SelectOneFromMapDialogFragment.class, () -> new SelectOneFromMapDialogFragment(viewModelFactory))
                 .build());
 
-        savedInstanceState = savedInstanceStateProvider.getState(savedInstanceState);
-
         if (ProcessRestoreDetector.isProcessRestoring(this, savedInstanceState)) {
+            if (savedInstanceState.containsKey(KEY_XPATH)) {
+                startingXPath = savedInstanceState.getString(KEY_XPATH);
+            }
+
+            if (savedInstanceState.containsKey(KEY_XPATH_WAITING_FOR_DATA)) {
+                waitingXPath = savedInstanceState.getString(KEY_XPATH_WAITING_FOR_DATA);
+            }
+
             savedInstanceState = null;
         }
 
@@ -677,7 +679,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     formEntryViewModel.refresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory);
+                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     formLoaderTask.execute(formPath);
                 }
@@ -721,7 +723,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             instancePath = loadSavePoint();
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, null, null, formEntryControllerFactory);
+        formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute(formPath);
@@ -852,6 +854,13 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+        // If we're coming back from the hierarchy view, the user has either tapped the back
+        // button or another question to jump to so we need to rebuild the view.
+        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
+            formEntryViewModel.refresh();
+            return;
+        }
+
         FormController formController = getFormController();
         if (formController == null) {
             // we must be in the midst of a reload of the FormController.
@@ -862,13 +871,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             } else {
                 Timber.e(new Error("Got an activityResult without any pending form loader"));
             }
-            return;
-        }
-
-        // If we're coming back from the hierarchy view, the user has either tapped the back
-        // button or another question to jump to so we need to rebuild the view.
-        if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
-            formEntryViewModel.refresh();
             return;
         }
 
@@ -1921,7 +1923,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
                     FormLoaderTask t = formLoaderTask;
                     formLoaderTask = null;
-                    t.cancel(true);
+                    t.cancel();
                     t.destroy();
                     // there is no formController -- fire MainMenu activity?
                     Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask not null");
@@ -1997,7 +1999,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (formLoaderTask.getStatus() == AsyncTask.Status.FINISHED) {
                 FormLoaderTask t = formLoaderTask;
                 formLoaderTask = null;
-                t.cancel(true);
+                t.cancel();
                 t.destroy();
             }
         }
@@ -2072,7 +2074,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             formLoaderTask.setFormLoaderListener(null);
             FormLoaderTask t = formLoaderTask;
             formLoaderTask = null;
-            t.cancel(true);
+            t.cancel();
             t.destroy();
 
             Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
@@ -2094,17 +2096,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                         formController.setLanguage(defaultLanguage);
                     }
                 }
-            }
-
-            boolean pendingActivityResult = task.hasPendingActivityResult();
-
-            if (pendingActivityResult) {
-                Timber.w("Calling onActivityResult from loadingComplete");
-
-                formControllerAvailable(formController);
-                formEntryViewModel.refresh();
-                onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
-                return;
             }
 
             // it can be a normal flow for a pending activity result to restore from a savepoint
@@ -2182,12 +2173,19 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 }
                             }
 
-                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
-                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
-                            formControllerAvailable(formController);
-                            Intent intent = new Intent(this, FormHierarchyActivity.class);
-                            intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
-                            startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
+                            boolean pendingActivityResult = task.hasPendingActivityResult();
+                            if (pendingActivityResult) {
+                                formControllerAvailable(formController);
+                                formEntryViewModel.refresh();
+                                onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
+                            } else {
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
+                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
+                                formControllerAvailable(formController);
+                                Intent intent = new Intent(this, FormHierarchyActivity.class);
+                                intent.putExtra(FormHierarchyActivity.EXTRA_SESSION_ID, sessionId);
+                                startActivityForResult(intent, RequestCodes.HIERARCHY_ACTIVITY);
+                            }
                         }
                     });
                 } else {
@@ -2345,7 +2343,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             formLoaderTask.setFormLoaderListener(null);
             FormLoaderTask t = formLoaderTask;
             formLoaderTask = null;
-            t.cancel(true);
+            t.cancel();
             t.destroy();
         }
         exit();

@@ -38,3 +38,4 @@ apply from: 'secrets.gradle'
 if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
     include ':mapbox'
 }
+include ':test-forms'

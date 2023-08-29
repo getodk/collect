@@ -2,6 +2,7 @@ package org.odk.collect.android.instrumented.tasks;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.mockito.Mockito.mock;
 
 import android.app.Application;
 
@@ -66,8 +67,8 @@ public class FormLoaderTaskTest {
     @Test
     public void loadFormWithSecondaryCSV() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SECONDARY_INSTANCE_EXTERNAL_CSV_FORM;
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
-        FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
+        FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously(formPath);
         Assert.assertNotNull(wrapper);
     }
 
@@ -75,16 +76,16 @@ public class FormLoaderTaskTest {
     @Test
     public void loadSearchFromExternalCSV() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
-        FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
+        FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously(formPath);
         assertThat(wrapper, notNullValue());
     }
 
     @Test
     public void loadSearchFromexternalCsvLeavesFileUnchanged() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
-        FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
+        FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously(formPath);
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
 
@@ -98,8 +99,8 @@ public class FormLoaderTaskTest {
     public void loadSearchFromExternalCSVmultipleTimes() throws Exception {
         final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
         // initial load with side effects
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
-        FormLoaderTask.FECWrapper wrapper = formLoaderTask.execute(formPath).get();
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
+        FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously(formPath);
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
 
@@ -109,8 +110,8 @@ public class FormLoaderTaskTest {
         long dbLastModified = dbFile.lastModified();
 
         // subsequent load should succeed despite side effects from import
-        formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory);
-        wrapper = formLoaderTask.execute(formPath).get();
+        formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
+        wrapper = formLoaderTask.executeSynchronously(formPath);
         Assert.assertNotNull(wrapper);
         Assert.assertNotNull(wrapper.getController());
         Assert.assertEquals("expected file modification timestamp to be unchanged", dbLastModified, dbFile.lastModified());

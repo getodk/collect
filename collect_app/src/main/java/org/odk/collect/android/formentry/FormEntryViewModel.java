@@ -285,7 +285,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void refresh() {
-        currentIndex.setValue(formController.getFormIndex());
+        if (formController != null) {
+            currentIndex.setValue(formController.getFormIndex());
+        }
     }
 
     public void exit() {

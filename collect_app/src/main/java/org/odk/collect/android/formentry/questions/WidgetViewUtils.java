@@ -81,6 +81,7 @@ public final class WidgetViewUtils {
         } else {
             button.setId(withId);
             button.setText(text);
+            button.setContentDescription(text);
             button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             TableLayout.LayoutParams params = new TableLayout.LayoutParams();

@@ -8,13 +8,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.not;
 
+import android.app.Application;
+
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.matcher.ViewMatchers;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.odk.collect.android.R;
-import org.odk.collect.android.TestSettingsProvider;
+import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.preferences.GuidanceHint;
 import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
@@ -36,7 +39,11 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceHint_ShouldBeDisplayedWhenSettingSetToYes() {
-        TestSettingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString());
+        DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext())
+                .settingsProvider()
+                .getUnprotectedSettings()
+                .save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES.toString());
+
         // jump to force recreation of the view after the settings change
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());
@@ -46,7 +53,11 @@ public class GuidanceHintFormTest {
 
     @Test
     public void guidanceHint_ShouldBeDisplayedAfterClickWhenSettingSetToYesCollapsed() {
-        TestSettingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES_COLLAPSED.toString());
+        DaggerUtils.getComponent(ApplicationProvider.<Application>getApplicationContext())
+                .settingsProvider()
+                .getUnprotectedSettings()
+                .save(ProjectKeys.KEY_GUIDANCE_HINT, GuidanceHint.YES_COLLAPSED.toString());
+
         // jump to force recreation of the view after the settings change
         onView(withId(R.id.menu_goto)).perform(click());
         onView(withId(R.id.jumpBeginningButton)).perform(click());
