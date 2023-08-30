@@ -17,7 +17,7 @@ public class TriggerWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerTextSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerTextSize, int controlTextSize) {
         ViewGroup answerView = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.trigger_widget_answer, null);
 
         triggerButton = answerView.findViewById(R.id.check_box);
@@ -55,7 +55,7 @@ public class TriggerWidget extends QuestionWidget {
 
 To create your own widget your class needs to override several methods:
 
-* `onCreateAnswerView` - Returns the `View` object that represents the interface for answering the question. This will be rendered underneath the question's `label`, `hint` and `guidance_hint`. This method is passed the question itself (as a `FormEntryPrompt`) which will often be needed in rendering the widget. It is also passed the size to be used for question text.
+* `onCreateAnswerView` - Returns the `View` object that represents the interface for answering the question. This will be rendered underneath the question's `label`, `hint` and `guidance_hint`. This method is passed the question itself (as a `FormEntryPrompt`) which will often be needed in rendering the widget. It is also passed the size to be used for question text and controls (like buttons).
 * `getAnswer` - Returns the current answer for the question. Can be `null` if the question has not been answered yet.
 * `clearAnswer` - Called when the answer for this question needs to be cleared for some reason. The implementation of this method should reset the UI of the widget.
 * `setOnLongClickListener` - Used to make sure clickable views in the widget work with the long click feature (shows the "Edit Prompt" menu). The passed listener should be set as the long click listener on clickable views in the widget.

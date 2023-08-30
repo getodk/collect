@@ -57,13 +57,13 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = BarcodeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         if (prompt.isReadOnly()) {
             binding.barcodeButton.setVisibility(GONE);
         } else {
-            binding.barcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.barcodeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
             binding.barcodeButton.setOnClickListener(v -> onButtonClick());
         }
         binding.barcodeAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);

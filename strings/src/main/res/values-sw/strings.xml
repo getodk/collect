@@ -411,8 +411,7 @@
     ##############################################-->
   <string name="refresh">Onyesha upya</string>
   <string name="download">Chukuwa kilicho chaguliwa</string>
-  <string name="download_forms_result">Pakua matokeo</string>
-  <string name="downloading_data">Inaunganisha kwenye seva</string>
+    <string name="downloading_data">Inaunganisha kwenye seva</string>
   <string name="fetching_file">Kupata%1$s. \ fomu %2$s\ kati ya%3$s fomu (s).</string>
   <string name="form_download_progress">%1$s. inapata kabrasha za media: %2$s kati ya %3$s</string>
   <string name="version">Toleo:</string>
@@ -627,16 +626,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Hifadhi yangu</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Imeshirikishwa na mimi</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Pakua zilizochaguliwa</string>
-  <string name="go_back">Rudi  nyuma</string>
   <string name="google_auth_io_exception_msg">Haiwezi kutengeneza API za kuita. Kama umejitengenezea ODK, tafadhali pitia mradi upya.</string>
-  <string name="drive_get_file">Inachukuwa %1$s na mafaili ya midia.</string>
   <string name="no_google_account">Hakuna akaunti ya Google Iliyochaguliwa!</string>
-  <string name="google_search_browse">Tafuta fomu. Au chagua \'Hifadhi yangu\' hapa chini kuzipekua.</string>
   <string name="invalid_sheet_id">KItambulisho cha karatasi ni batilii%1$s</string>
   <string name="missing_submission_url">Wasilisho lililokosekana URL</string>
   <string name="google_sheets_access_denied">Ruhusa imekatazwa. Tafadhali hakikisha mwenye programu ya lahajedwali \"spreadsheet\" amekuruhusu kufanya mabadiliko.</string>
@@ -646,7 +639,6 @@
   <string name="instance_upload_cancelled">Mfano wa kupakia umesitishwa</string>
   <string name="no_columns_to_upload">Hakuna safuwima zilizopatikana katika fomu za kupakia.</string>
   <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
-  <string name="multiple_media_folders_detected_notification">Kabrasha ya media zaidi ya moja imegundulika, tafadhali ondoa moja na jaribu tena</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

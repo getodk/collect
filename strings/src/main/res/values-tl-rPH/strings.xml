@@ -29,8 +29,7 @@
   <string name="discard_answer">Tanggalin ang tugon</string>
   <string name="discard_group">Tanggalin ang pangkat</string>
   <string name="download">I-karga ang Pinili</string>
-  <string name="download_forms_result">Resulta ng Kinarga</string>
-  <string name="downloading_data">Kumakabit sa Server</string>
+    <string name="downloading_data">Kumakabit sa Server</string>
   <string name="do_not_change">Urong</string>
   <string name="do_not_exit">Urong</string>
   <string name="do_not_save">Balewalain ang mga binago</string>

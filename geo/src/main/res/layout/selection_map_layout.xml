@@ -63,38 +63,35 @@
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_location"
-                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/show_my_location"
                     android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-                    app:fabSize="mini"
                     app:srcCompat="@drawable/ic_my_location" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/zoom_to_bounds"
-                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/zoom_to_fit_all"
                     android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-                    app:fabSize="mini"
                     app:srcCompat="@drawable/ic_crop_frame" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/layer_menu"
-                    style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
+                    style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/margin_standard"
                     android:layout_marginTop="@dimen/margin_standard"
                     android:contentDescription="@string/layer_data_file"
                     android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
-                    app:fabSize="mini"
                     app:srcCompat="@drawable/ic_layers" />
             </LinearLayout>
         </ScrollView>

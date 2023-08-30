@@ -446,8 +446,7 @@
     ##############################################-->
   <string name="refresh">రిఫ్రెష్</string>
   <string name="download">ఎంపిక చేసుకున్నవి పొందండి </string>
-  <string name="download_forms_result">ఫలితాలను డౌన్‌లోడ్ చేయండి</string>
-  <string name="downloading_data">సర్వర్‌కు కనెక్ట్ అవుతోంది</string>
+    <string name="downloading_data">సర్వర్‌కు కనెక్ట్ అవుతోంది</string>
   <string name="fetching_file">ఫారం%3$s(ల )నుండి .\n\nఫారం%1$s ,%2$s పొందుతున్నాం </string>
   <string name="form_download_progress">%1$s. మీడియా ఫైళ్ళను పొందుతున్నాము:  %3$s లో %2$s</string>
   <string name="version">వెర్షన్:</string>
@@ -667,17 +666,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">నా డ్రైవ్</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">నాతో పంచుకున్నవి </string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">ఎంచుకున్న వాటిని డౌన్ లోడ్ చెయ్యి</string>
-  <string name="go_back">వెనక్కి వెల్లండి</string>
   <string name="google_auth_io_exception_msg">API కాల్స్  చేయడం సాధ్యం కాలేదు. మీరు లోకల్ బిల్డ్ నడుపుతున్నట్లయితే దయచేసి ప్రాజెక్ట్ readme ని సమీక్షించండి.</string>
-  <string name="reading_files">ఫైళ్ళను చదవడం జరుగుతున్నది</string>
-  <string name="drive_get_file">గెట్టింగ్ %1$sమరియు మీడియా ఫైల్స్.</string>
   <string name="no_google_account"> గూగుల్ ఖాతా ఎంచుకోబడలేదు</string>
-  <string name="google_search_browse">ఫారమ్‌ల కోసం శోధించండి. లేదా బ్రౌజ్ చేయడానికి దిగువ \'మై డ్రైవ్\' ఎంచుకోండి.</string>
   <string name="invalid_sheet_id">చెల్లని షీట్ ఐడి:%1$s</string>
   <string name="missing_submission_url">URL సబ్మిషన్  మర్చిపొయారు</string>
   <string name="google_sheets_access_denied">అనుమతి లేదు. దయచేసి స్ప్రెడ్‌షీట్ యజమాని మీకు సవరణ అనుమతి ఇచ్చారని నిర్ధారించుకోండి.</string>
@@ -688,7 +680,6 @@
   <string name="instance_upload_cancelled">instance అప్‌లోడ్ రద్దు చేయబడింది</string>
   <string name="no_columns_to_upload">అప్‌లోడ్ చేయడానికి ఫారమ్‌లో కాలమ్ లు ఏవీ కనుగొనబడలేదు</string>
   <string name="missing_google_account_dialog_title">గూగుల్ ఖాతా సెట్ చేయబడలేదు</string>
-  <string name="multiple_media_folders_detected_notification">ఒకటి కంటే ఎక్కువ మీడియా ఫోల్డర్ కనుగొనబడింది, దయచేసి ఒకటి తీసివేసి మళ్ళీ ప్రయత్నించండి</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

@@ -61,14 +61,14 @@ import org.odk.collect.android.exception.ExternalParamsException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.media.PromptAutoplayer;
-import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
-import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -340,8 +340,8 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
 
-            QuestionTextSizeHelper textSizeHelper = new QuestionTextSizeHelper(settingsProvider.getUnprotectedSettings());
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, textSizeHelper.getSubtitle1());
+            int fontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.SUBTITLE_1);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
 
             tv.setVisibility(VISIBLE);
         }

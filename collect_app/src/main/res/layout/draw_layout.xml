@@ -18,16 +18,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="192dp"
-        android:layout_marginEnd="72dp"
         android:layout_marginStart="72dp"
-        android:layout_marginRight="72dp"
         android:layout_marginLeft="72dp"
+        android:layout_marginEnd="72dp"
+        android:layout_marginRight="72dp"
+        android:layout_marginBottom="192dp"
         android:visibility="invisible"
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        tools:visibility="visible">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,8 +51,9 @@
         android:layout_marginLeft="24dp"
         android:visibility="invisible"
         app:elevation="6dp"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_clear_white" />
+        style="?attr/floatingActionButtonSmallStyle"
+        app:srcCompat="@drawable/ic_clear_white"
+        tools:visibility="visible"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_save_and_close"
@@ -66,7 +69,8 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        tools:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -89,8 +93,9 @@
         android:layout_marginLeft="24dp"
         android:visibility="invisible"
         app:elevation="6dp"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_save_white" />
+        style="?attr/floatingActionButtonSmallStyle"
+        app:srcCompat="@drawable/ic_save_white"
+        tools:visibility="visible"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_set_color"
@@ -106,7 +111,8 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="6dp"
         app:cardPreventCornerOverlap="true"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        tools:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -129,8 +135,9 @@
         android:layout_marginLeft="24dp"
         android:visibility="invisible"
         app:elevation="6dp"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_color_lens_white" />
+        style="?attr/floatingActionButtonSmallStyle"
+        app:srcCompat="@drawable/ic_color_lens_white"
+        tools:visibility="visible"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_actions"
@@ -143,7 +150,6 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:tag="0"
-        app:fabSize="normal"
         app:srcCompat="@drawable/ic_add_white_24"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

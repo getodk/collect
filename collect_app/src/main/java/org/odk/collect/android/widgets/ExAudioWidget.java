@@ -57,12 +57,12 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         setupAnswerFile(prompt.getAnswerText());
 
         binding = ExAudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        binding.launchExternalAppButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.launchExternalAppButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.launchExternalAppButton.setOnClickListener(view -> launchExternalApp());
 
         return binding.getRoot();

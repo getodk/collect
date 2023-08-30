@@ -1,8 +1,10 @@
 package org.odk.collect.android.preferences.dialogs;
 
+import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
+import static org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFERENCES;
+
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -26,9 +28,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import timber.log.Timber;
-
-import static org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.RESET_SETTINGS_RESULT_DIALOG_TAG;
-import static org.odk.collect.android.utilities.ProjectResetter.ResetAction.RESET_PREFERENCES;
 
 public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmentCompat implements CompoundButton.OnCheckedChangeListener {
 
@@ -220,16 +219,8 @@ public class ResetDialogPreferenceFragmentCompat extends PreferenceDialogFragmen
         if (preferences.isChecked() || instances.isChecked() || forms.isChecked()
                 || layers.isChecked() || cache.isChecked()) {
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
-                    .setTextColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor());
         } else {
             ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-            ((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_POSITIVE)
-                    .setTextColor(getPartiallyTransparentColor(((AlertDialog) getDialog()).getButton(AlertDialog.BUTTON_NEGATIVE).getCurrentTextColor()));
         }
-    }
-
-    private int getPartiallyTransparentColor(int color) {
-        return Color.argb(150, Color.red(color), Color.green(color), Color.blue(color));
     }
 }

@@ -46,13 +46,13 @@ public class ExVideoWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         setupAnswerFile(prompt.getAnswerText());
 
         binding = ExVideoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        binding.captureVideoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.playVideoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.captureVideoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
+        binding.playVideoButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.captureVideoButton.setVisibility(questionDetails.isReadOnly() ? GONE : VISIBLE);
         binding.captureVideoButton.setOnClickListener(view -> launchExternalApp());
         binding.playVideoButton.setOnClickListener(view -> mediaUtils.openFile(getContext(), answerFile, "video/*"));

@@ -1,9 +1,8 @@
 package org.odk.collect.android.preferences
 
 import com.google.android.gms.maps.GoogleMap
-import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
-import org.odk.collect.android.utilities.QuestionFontSizeUtils
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 

@@ -459,8 +459,7 @@
     ##############################################-->
   <string name="refresh">تازه</string>
   <string name="download">انتخاب کنید</string>
-  <string name="download_forms_result">در حال داونلود نتایج </string>
-  <string name="downloading_data">در حال اتصال به سرور</string>
+    <string name="downloading_data">در حال اتصال به سرور</string>
   <string name="fetching_file">در حال دریافت %1$s. \n\n فورم %2$s از فورم (های) %3$s.</string>
   <string name="form_download_progress">%1$s. دریافت فایل‌های رسانه: %2$s از %3$s</string>
   <string name="version">نسخه:</string>
@@ -720,18 +719,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">درایو من</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">با من در اشتراک گذاشته شده است</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">دانلود انتخاب شد</string>
-  <string name="go_back">قبلی</string>
   <string name="google_auth_io_exception_msg">امکان برقراری تماس های API وجود ندارد. اگر در حال اجرای یک ساخت محلی هستید، لطفاً پروژه readme را بررسی کنید.</string>
-  <string name="reading_files">خواندن فایل ها</string>
-  <string name="drive_get_file">دریافت %1$s و فایل‌های رسانه.</string>
   <string name="no_google_account">هیچ حساب Google انتخاب نشده است!</string>
   <string name="google_set_account">شما برگه‌های Google را به عنوان سرور خود انتخاب کرده‌اید، لطفاً قبل از ادامه، یک حساب Google مربوطه را در تنظیمات انتخاب کنید</string>
-  <string name="google_search_browse">فورم ها را جستجو کنید یا «My Drive» را در زیر برای مرور انتخاب کنید.</string>
   <string name="invalid_sheet_id">ورق با نمبر شناسایی نامعتبر: %1$s</string>
   <string name="missing_submission_url">نشانی اینترنتی ارسال وجود ندارد</string>
   <string name="google_sheets_access_denied">دسترسی رد شد. لطفاً مطمئن شوید که مالک صفحه‌گسترده به شما اجازه ویرایش داده است.</string>
@@ -742,7 +734,6 @@
   <string name="instance_upload_cancelled">بارگذاری نمونه لغو شد</string>
   <string name="no_columns_to_upload">هیچ ستونی در فورم برای آپلود یافت نشد.</string>
   <string name="missing_google_account_dialog_title">حساب Google تنظیم نشده است</string>
-  <string name="multiple_media_folders_detected_notification">بیش از یک folder رسانه شناسایی شد، لطفاً یکی را حذف کرده و دوباره امتحان کنید</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

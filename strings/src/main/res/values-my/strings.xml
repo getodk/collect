@@ -195,8 +195,7 @@
     ##############################################-->
   <string name="refresh">ပိုမီုေကာင္းမြန္လာရန္ လုပ္ေဆာင္ျခင္း</string>
   <string name="download">ရွေးချယ်ရန်</string>
-  <string name="download_forms_result">ရလဒ်ကို ဒေါင်းလုတ်လုပ်ရန်</string>
-  <string name="downloading_data">ဆာဗာကို ချိတ်ဆက်နေစဉ်</string>
+    <string name="downloading_data">ဆာဗာကို ချိတ်ဆက်နေစဉ်</string>
   <string name="form_download_progress">%1$s. မီဒီယာဖိုင္ရယူေနပါသည္: %2$s of %3$s</string>
   <string name="version">လုပ္ေဆာင္မွုအဆင့္:</string>
   <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->

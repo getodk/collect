@@ -326,8 +326,7 @@
     ##############################################-->
   <string name="refresh">Opdatér</string>
   <string name="download">Hent valgte</string>
-  <string name="download_forms_result">Hent resultater</string>
-  <string name="downloading_data">Forbinder til server</string>
+    <string name="downloading_data">Forbinder til server</string>
   <string name="fetching_file">Henter 1 %1$s. Formular 2%2$s af 3%3$s formularer. </string>
   <string name="form_download_progress">1%1$s. Henter mediefiler: 2%2$s af 3%3$s</string>
   <string name="version">Version:</string>
@@ -482,17 +481,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Mit Drev (Google Drive)</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Delt med mig</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Download valgte</string>
-  <string name="go_back">Gå tilbage</string>
   <string name="google_auth_io_exception_msg">Ikke muligt at foretage API-kald. Hvis du kører med en lokal deployment, læs da projekt \"readme\".</string>
-  <string name="reading_files">Læser filer</string>
-  <string name="drive_get_file">Henter%1$s og mediefiler.</string>
   <string name="no_google_account">Ingen Google-konto valgt.</string>
-  <string name="google_search_browse">Søg efter formularer. Eller vælg \"My Drive/Mit Drev\" herunder for at gennemse.</string>
   <string name="invalid_sheet_id">Invalid sheet id: %1$s</string>
   <string name="missing_submission_url">Mangler indberetningsadresse</string>
   <string name="google_sheets_access_denied">Adgang ikke tilladt. Tjek om ejeren af regnearket/spreadsheet har givet dig editerings-rettigheder.</string>

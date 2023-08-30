@@ -27,6 +27,10 @@ object EspressoHelpers {
         onView(withContentDescription(string)).perform(click())
     }
 
+    fun clickOnText(string: Int) {
+        onView(withText(string)).perform(click())
+    }
+
     fun assertIntents(vararg matchers: Matcher<Intent>) {
         val intents = Intents.getIntents()
         assertThat(matchers.size, equalTo(intents.size))

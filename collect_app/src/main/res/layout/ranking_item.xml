@@ -18,7 +18,7 @@ limitations under the License.
     android:layout_height="wrap_content"
     android:padding="10dp"
     android:layout_marginTop="5dp"
-    android:background="@color/surfaceButtonColor">
+    android:background="@color/colorSurfaceContainerLow">
 
     <TextView
         android:id="@+id/rank_item_text"

@@ -533,8 +533,7 @@
     ##############################################-->
   <string name="refresh">Päivitä</string>
   <string name="download">Hae valittu</string>
-  <string name="download_forms_result">Hae tulokset</string>
-  <string name="downloading_data">Yhdistetään palvelimeen</string>
+    <string name="downloading_data">Yhdistetään palvelimeen</string>
   <string name="fetching_file">Haetaan %1$s.\n\nLomake %2$s / %3$s.</string>
   <string name="form_download_progress">%1$s. Haetaan mediatiedostoja: %2$s / %3$s</string>
   <string name="version">Versio:</string>
@@ -802,18 +801,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Oma Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Minun kanssani jaetut</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Lataaminen valittu</string>
-  <string name="go_back">Palaa</string>
   <string name="google_auth_io_exception_msg">API-kutsuja ei pystytä tekemään. Jos käytät paikallista ohjelmaversiota, katso projektin readme.</string>
-  <string name="reading_files">Luetaan tiedostoja</string>
-  <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Olet valinnut Google Sheets palvelimenasi, ole hyvä ja valitse vastaava Google-tili Asetuksissa ennen jatkamista</string>
-  <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="missing_submission_url">Lähetykseen tarvittava URL puuttuu</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että taulukon omistaja on myöntänyt muokkausoikeudet.</string>
@@ -824,7 +816,6 @@
   <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
   <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
-  <string name="multiple_media_folders_detected_notification">Enemmän kuin yksi mediakansio löytyi; poista yksi ja yritä uudestaan</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

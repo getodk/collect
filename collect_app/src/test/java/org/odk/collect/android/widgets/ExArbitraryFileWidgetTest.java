@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.odk.collect.android.utilities.QuestionFontSizeUtils.DEFAULT_FONT_SIZE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_FONT_SIZE;
 
 import android.view.View;
@@ -27,6 +26,8 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.androidshared.system.IntentLauncher;
 
 public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWidget> {
@@ -66,17 +67,11 @@ public class ExArbitraryFileWidgetTest extends FileWidgetTest<ExArbitraryFileWid
     }
 
     @Test
-    public void whenFontSizeNotChanged_defaultFontSizeShouldBeUsed() {
-        assertThat((int) getWidget().binding.exArbitraryFileButton.getTextSize(), is(DEFAULT_FONT_SIZE - 1));
-        assertThat((int) getWidget().binding.exArbitraryFileAnswerText.getTextSize(), is(DEFAULT_FONT_SIZE - 1));
-    }
-
-    @Test
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
         settingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
 
-        assertThat((int) getWidget().binding.exArbitraryFileButton.getTextSize(), is(29));
-        assertThat((int) getWidget().binding.exArbitraryFileAnswerText.getTextSize(), is(29));
+        assertThat((int) getWidget().binding.exArbitraryFileButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.LABEL_LARGE)));
+        assertThat((int) getWidget().binding.exArbitraryFileAnswerText.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.HEADLINE_6)));
     }
 
     @Test

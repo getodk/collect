@@ -20,7 +20,6 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.questions.QuestionDetails
-import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.preferences.GuidanceHint
 import org.odk.collect.android.support.CollectHelpers
@@ -30,6 +29,8 @@ import org.odk.collect.android.widgets.support.FormElementFixtures.selectChoice
 import org.odk.collect.android.widgets.support.NoOpMapFragment
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.maps.MapFragment
 import org.odk.collect.maps.MapFragmentFactory
@@ -84,8 +85,8 @@ class SelectOneFromMapWidgetTest {
         )
 
         assertThat(
-            widget.binding.button.textSize,
-            equalTo(QuestionTextSizeHelper(settings).headline6)
+            widget.binding.button.textSize.toInt(),
+            equalTo(QuestionFontSizeUtils.getFontSize(settings, FontSize.LABEL_LARGE))
         )
     }
 
@@ -161,8 +162,8 @@ class SelectOneFromMapWidgetTest {
         )
 
         assertThat(
-            widget.binding.answer.textSize,
-            equalTo(QuestionTextSizeHelper(settings).headline6)
+            widget.binding.answer.textSize.toInt(),
+            equalTo(QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6))
         )
     }
 

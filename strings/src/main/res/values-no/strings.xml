@@ -347,13 +347,9 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Min Drive</string>
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Delt med meg</string>
+    <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
-  <string name="drive_get_file">Henter %1$s og mediafiler.</string>
   <string name="no_google_account">Ingen Goggle-konto er valgt!</string>
-  <string name="google_search_browse">Søk etter skjemaer.  Eller velg \'Min disk\' nedenfor for å bla igjennom.</string>
   <string name="invalid_sheet_id">Ugyldig ark id: %1$s</string>
   <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->

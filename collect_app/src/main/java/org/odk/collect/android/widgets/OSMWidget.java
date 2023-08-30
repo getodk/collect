@@ -84,13 +84,13 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = OsmWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         if (prompt.isReadOnly()) {
             binding.launchOpenMapKitButton.setVisibility(GONE);
         } else {
-            binding.launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
             binding.launchOpenMapKitButton.setOnClickListener(v -> onButtonClick());
         }
 

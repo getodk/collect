@@ -420,14 +420,9 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Drive</string>
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">แบ่งปันกับฉัน</string>
+    <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
-  <string name="go_back">ย้อนกลับ</string>
-  <string name="drive_get_file">ได้รับ %1$s และไฟล์ภาพและเสียง</string>
   <string name="no_google_account">ไม่ได้เลือกบัญชีผู้ใช้งาน Google</string>
-  <string name="google_search_browse">ค้นหาแบบฟอร์ม หรือเลือก \'My Drive\' ด้านล่างเพื่อค้นหา</string>
   <string name="invalid_sheet_id">หมายเลขชีทไม่ถุกต้อง: %1$s</string>
   <string name="google_sheets_missing_columns">ไม่มี Spreadsheet ของคอลัมภ์: %1$s</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->

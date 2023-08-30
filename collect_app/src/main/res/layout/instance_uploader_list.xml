@@ -10,56 +10,71 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <include layout="@layout/app_bar_with_progress_bar_layout" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/llParent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appBarLayout"
-        android:orientation="vertical">
+        android:layout_below="@id/appBarLayout">
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:clipToPadding="false"
             android:divider="@drawable/list_item_divider"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:scrollbarStyle="outsideOverlay" />
+            android:scrollbarStyle="outsideOverlay"
+            app:layout_constraintBottom_toTopOf="@id/buttonholder"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@android:id/empty"
-            style="@style/Widget.Collect.TextView.Empty"
-            android:text="@string/no_items_display_instances" />
+            style="@style/Widget.Collect.EmptyView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_items_display_instances"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/buttonholder"
+            style="@style/Widget.Collect.ButtonBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggle_button"
-                style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_marginLeft="@dimen/margin_extra_small"
-                android:layout_marginRight="@dimen/margin_extra_small"
+                style="?materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_weight="1"
                 android:text="@string/select_all" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/upload_button"
-                style="@style/Widget.Collect.Button.BottomOption"
-                android:layout_marginLeft="@dimen/margin_extra_small"
-                android:layout_marginRight="@dimen/margin_extra_small"
+                style="?materialButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_standard"
+                android:layout_marginEnd="@dimen/margin_standard"
+                android:layout_weight="1"
                 android:text="@string/send_selected_data" />
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

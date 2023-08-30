@@ -534,8 +534,7 @@
     ##############################################-->
   <string name="refresh">Aggiorna</string>
   <string name="download">Scarica Selezionato</string>
-  <string name="download_forms_result">Scarica Risultati</string>
-  <string name="downloading_data">Si sta connettendo al server</string>
+    <string name="downloading_data">Si sta connettendo al server</string>
   <string name="fetching_file">Caricamento %1$s.\n\nModulo %2$s di %3$s modulo(i).</string>
   <string name="form_download_progress">%1$s. Caricamento file multimediali: %2$s di %3$s</string>
   <string name="version">Versione:</string>
@@ -803,18 +802,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Condiviso con Me</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Selezionato il download</string>
-  <string name="go_back">Torna indietro</string>
   <string name="google_auth_io_exception_msg">Impossibile effettuare la chiamata API. Se stai eseguendo una build locale, per cortesia controllare il readme del progetto.</string>
-  <string name="reading_files">Leggendo i files</string>
-  <string name="drive_get_file">Caricamento %1$s e media files.</string>
   <string name="no_google_account">Nessun Account Google selezionato!</string>
   <string name="google_set_account">Hai selezionato Google sheets come server, per favore seleziona un account Google corrispondente in Impostazioni prima di continuare</string>
-  <string name="google_search_browse">Ricerca per form o seleziona \'My Drive\' in basso.</string>
   <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
   <string name="missing_submission_url">Sottomissione URL mancante</string>
   <string name="google_sheets_access_denied">Accesso negato. Per favore, verifica che il proprietario del documento ti abbia dato i permessi di modifica.</string>
@@ -825,7 +817,6 @@
   <string name="instance_upload_cancelled">Caricamento dell\'istanza annullato</string>
   <string name="no_columns_to_upload">Nessuna colonna nel file caricato</string>
   <string name="missing_google_account_dialog_title">Account Google non specificato</string>
-  <string name="multiple_media_folders_detected_notification">Più di una cartella media rilevata, si prega di rimuovere una e riprovare</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

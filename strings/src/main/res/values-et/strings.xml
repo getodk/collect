@@ -423,15 +423,9 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Minu Drive</string>
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Minuga jagatud</string>
+    <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Allalaadimine valitud</string>
-  <string name="go_back">Liikuge tagasi</string>
-  <string name="drive_get_file">Laen %1$s ja meediafailid.</string>
   <string name="no_google_account">Google kontot ei ole valitud!</string>
-  <string name="google_search_browse">Otsi vorme. Või vali sirvimiseks \"Minu Drive\".</string>
   <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
   <string name="google_sheets_missing_columns">Arvutustabelist on puudu järgmised tulbad: %1$s</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->

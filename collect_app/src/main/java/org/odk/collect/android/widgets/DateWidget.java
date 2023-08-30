@@ -51,14 +51,14 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = DateWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         datePickerDetails = DateTimeWidgetUtils.getDatePickerDetails(prompt.getQuestion().getAppearanceAttr());
 
         if (prompt.isReadOnly()) {
             binding.dateButton.setVisibility(GONE);
         } else {
-            binding.dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+            binding.dateButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
 
             binding.dateButton.setOnClickListener(v -> {
                 waitingForDataRegistry.waitForData(prompt.getIndex());

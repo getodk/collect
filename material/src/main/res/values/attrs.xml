@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  Should be removed when these attributes are added to Material Components  -->
+    <declare-styleable name="Material3PolyFill">
+        <!-- https://github.com/material-components/material-components-android/issues/3506 -->
+        <attr name="materialButtonOutlinedIconStyle" format="reference" />
+        <attr name="materialButtonIconStyle" format="reference" />
+        <attr name="borderlessButtonIconStyle" format="reference" />
+    </declare-styleable>
 </resources>

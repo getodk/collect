@@ -7,8 +7,10 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/simple_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/get_location" />
+        style="?materialButtonStyle"
+        android:text="@string/get_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/geo_answer_text"

@@ -7,8 +7,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/barcode_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/get_barcode" />
+        style="?materialButtonStyle"
+        android:text="@string/get_barcode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/barcode_answer_text"

@@ -17,6 +17,7 @@ import org.odk.collect.android.databinding.SelectListWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
@@ -47,7 +48,7 @@ public abstract class BaseSelectListWidget extends QuestionWidget implements Mul
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = SelectListWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         return binding.getRoot();
     }
@@ -75,7 +76,7 @@ public abstract class BaseSelectListWidget extends QuestionWidget implements Mul
         SearchQueryViewModel searchQueryViewModel = new ViewModelProvider(activity).get(SearchQueryViewModel.class);
 
         binding.choicesSearchBox.setVisibility(View.VISIBLE);
-        binding.choicesSearchBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        binding.choicesSearchBox.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6));
         binding.choicesSearchBox.addTextChangedListener(new TextWatcher() {
             private String oldText = "";
 

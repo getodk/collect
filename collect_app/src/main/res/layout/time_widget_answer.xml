@@ -7,8 +7,10 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/time_button"
-        style="@style/Widget.Collect.Button.WidgetAnswer"
-        android:text="@string/select_time" />
+        style="?materialButtonStyle"
+        android:text="@string/select_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/time_answer_text"

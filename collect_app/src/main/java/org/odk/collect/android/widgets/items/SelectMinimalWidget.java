@@ -8,7 +8,7 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.SelectMinimalWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.utilities.QuestionFontSizeUtils;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
@@ -31,7 +31,7 @@ public abstract class SelectMinimalWidget extends QuestionWidget implements Widg
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = SelectMinimalWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         binding.answer.setTextSize(QuestionFontSizeUtils.getQuestionFontSize());
         if (prompt.isReadOnly()) {

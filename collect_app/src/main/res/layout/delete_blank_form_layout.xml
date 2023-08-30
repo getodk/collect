@@ -13,10 +13,10 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@android:id/empty"
+        style="@style/Widget.Collect.EmptyView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_items_display"
-        android:textAppearance="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,19 +24,16 @@
 
     <LinearLayout
         android:id="@+id/buttons"
+        style="@style/Widget.Collect.ButtonBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="?colorSurface"
-        android:elevation="4dp"
-        android:paddingTop="@dimen/margin_small"
-        android:paddingBottom="@dimen/margin_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/select_all"
-            style="@style/Widget.Material3.Button"
+            style="?materialButtonOutlinedStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="@dimen/margin_standard"
@@ -49,7 +46,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/delete_selected"
-            style="@style/Widget.Material3.Button"
+            style="?materialButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/margin_standard"

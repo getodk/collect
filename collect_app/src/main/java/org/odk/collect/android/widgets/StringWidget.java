@@ -36,6 +36,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 
 import timber.log.Timber;
 
@@ -133,7 +134,7 @@ public class StringWidget extends QuestionWidget {
     private EditText getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
         EditText answerEditText = new EditText(getContext());
         answerEditText.setId(View.generateViewId());
-        answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, getAnswerFontSize());
+        answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6));
         answerEditText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
 
         // needed to make long read only text scroll

@@ -14,20 +14,19 @@ the License.
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/llParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
-        style="@style/Widget.MaterialComponents.AppBarLayout.Surface"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            style="@style/Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -58,54 +57,40 @@ the License.
     </FrameLayout>
 
 
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonholder"
+        style="@style/Widget.Collect.ButtonBar"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/surfaceButtonColor"
-        android:elevation="4dp"
-        android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/form_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="@string/form_backward"
-            android:drawableStart="@drawable/ic_navigate_back"
-            android:focusable="true"
-            android:padding="10dp"
-            android:text="@string/form_backward"
-            android:textAllCaps="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:textStyle="bold"
-            android:visibility="gone"
-            tools:visibility="visible"/>
-
-        <View
+            style="?materialButtonOutlinedIconStyle"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/form_forward_button"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:clickable="true"
-            android:contentDescription="@string/form_forward"
-            android:drawableEnd="@drawable/ic_navigate_forward"
-            android:focusable="true"
-            android:padding="10dp"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:text="@string/form_backward"
+            app:icon="@drawable/ic_navigate_back"
+            app:iconGravity="textStart"
+            app:layout_constraintEnd_toStartOf="@id/form_forward_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/form_forward_button"
+            style="?materialButtonOutlinedIconStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_standard"
+            android:layout_marginEnd="@dimen/margin_standard"
             android:text="@string/form_forward"
-            android:textAllCaps="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-            android:textStyle="bold"
-            android:visibility="gone"
-            tools:visibility="visible"/>
-    </LinearLayout>
+            android:theme="@style/ThemeOverlay.Material3.Button.Icon.End"
+            app:icon="@drawable/ic_navigate_forward"
+            app:iconGravity="textEnd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/form_back_button"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

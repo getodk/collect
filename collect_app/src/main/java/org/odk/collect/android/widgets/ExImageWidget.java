@@ -47,12 +47,12 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         setupAnswerFile(prompt.getAnswerText());
 
         binding = ExImageWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        binding.launchExternalAppButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.launchExternalAppButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.launchExternalAppButton.setVisibility(questionDetails.isReadOnly() ? GONE : VISIBLE);
         binding.launchExternalAppButton.setOnClickListener(view -> launchExternalApp());
         binding.imageView.setOnClickListener(view -> mediaUtils.openFile(getContext(), answerFile, "image/*"));

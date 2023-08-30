@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+        Reverse padding for icon at the end rather than the start. Work around for
+        https://github.com/material-components/material-components-android/issues/3502
+    -->
+    <style name="ThemeOverlay.Material3.Button.Icon.End" parent="">
+        <item name="android:paddingStart" tools:ignore="PrivateResource">
+            @dimen/m3_btn_icon_btn_padding_right
+        </item>
+        <item name="android:paddingEnd" tools:ignore="PrivateResource">
+            @dimen/m3_btn_icon_btn_padding_left
+        </item>
+        <item name="iconGravity">end</item>
+    </style>
+</resources>

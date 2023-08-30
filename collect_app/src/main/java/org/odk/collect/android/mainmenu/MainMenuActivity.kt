@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.activities.CrashHandlerActivity
@@ -25,12 +26,10 @@ import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAv
 import org.odk.collect.android.databinding.MainMenuBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
-import org.odk.collect.android.gdrive.GoogleDriveActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ApplicationConstants
-import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -232,30 +231,24 @@ class MainMenuActivity : LocalizedActivity() {
             )
         }
 
-        binding.getForms.setOnClickListener(
-            View.OnClickListener {
-                val protocol =
-                    settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL)
-                val intent =
-                    if (protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS, ignoreCase = true)) {
-                        if (PlayServicesChecker().isGooglePlayServicesAvailable(this@MainMenuActivity)) {
-                            Intent(
-                                applicationContext,
-                                GoogleDriveActivity::class.java
-                            )
-                        } else {
-                            PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(this@MainMenuActivity)
-                            return@OnClickListener
-                        }
-                    } else {
-                        Intent(
-                            applicationContext,
-                            FormDownloadListActivity::class.java
-                        )
-                    }
+        binding.getForms.setOnClickListener {
+            val protocol =
+                settingsProvider.getUnprotectedSettings().getString(ProjectKeys.KEY_PROTOCOL)
+            if (!protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS, ignoreCase = true)) {
+                val intent = Intent(
+                    applicationContext,
+                    FormDownloadListActivity::class.java
+                )
+
                 startActivity(intent)
+            } else {
+                MaterialAlertDialogBuilder(this)
+                    .setMessage(org.odk.collect.strings.R.string.cannot_start_new_forms_in_google_drive_projects)
+                    .setPositiveButton(org.odk.collect.strings.R.string.ok, null)
+                    .create()
+                    .show()
             }
-        )
+        }
 
         binding.manageForms.setOnClickListener {
             startActivity(Intent(this, DeleteSavedFormActivity::class.java))

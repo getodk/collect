@@ -33,11 +33,11 @@ public class RangePickerIntegerWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
         binding = RangePickerWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.widgetAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.widgetButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
 
         setUpWidgetParameters();
         displayedValuesForNumberPicker = RangePickerWidgetUtils.getNumbersFromRangeAsc(

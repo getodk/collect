@@ -536,8 +536,7 @@
     ##############################################-->
   <string name="refresh">Atualizar</string>
   <string name="download">Pegar Selecionados</string>
-  <string name="download_forms_result">Baixar Resultados</string>
-  <string name="downloading_data">Conectando com o Servidor</string>
+    <string name="downloading_data">Conectando com o Servidor</string>
   <string name="fetching_file">Baixando %1$s.\n\nFormulário %2$s de %3$s.</string>
   <string name="form_download_progress">%1$s. Acessando arquivos de mídia: %2$s de %3$s</string>
   <string name="version">Versão:</string>
@@ -805,18 +804,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Meu Disco</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Compartilhado comigo</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Baixar selecionados</string>
-  <string name="go_back">Voltar</string>
   <string name="google_auth_io_exception_msg">Não foi capaz de chamar API. Se você está rodando em uma build local, por favor, revise o projeto</string>
-  <string name="reading_files">Lendo arquivos</string>
-  <string name="drive_get_file">Obtendo %1$s e arquivos de mídia.</string>
   <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
   <string name="google_set_account">Você selecionou o Google Sheets como seu servidor, por favor, selecione uma conta Google em Configurações Gerais antes de continuar.</string>
-  <string name="google_search_browse">Procure pelos formulários. Ou selecione \'My Drive\' para procurar.</string>
   <string name="invalid_sheet_id">Nome do id: %1$s da guia incorreto</string>
   <string name="missing_submission_url">Falta a URL de submissão</string>
   <string name="google_sheets_access_denied">Acesso negado. Por favor, certifique-se de que o proprietário da planilha possui a permissão de edição.</string>
@@ -827,7 +819,6 @@
   <string name="instance_upload_cancelled">Envio da instância cancelado</string>
   <string name="no_columns_to_upload">Não encontrei colunas no formulário para enviar.</string>
   <string name="missing_google_account_dialog_title">Não há conta Google definida.</string>
-  <string name="multiple_media_folders_detected_notification">Mais de uma pasta de mídia foi detectada. Por favor, remova uma delas e tente novamente</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

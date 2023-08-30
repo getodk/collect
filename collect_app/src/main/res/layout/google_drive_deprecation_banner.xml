@@ -37,7 +37,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/learn_more_button"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="?borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/learn_more_button_text"

@@ -343,11 +343,8 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Skyf</string>
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Met my gedeel</string>
+    <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
-  <string name="drive_get_file">Besig om %1$s en media leêrs te haal.</string>
   <string name="no_google_account">Geen Google rekening geselekteer nie!</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################

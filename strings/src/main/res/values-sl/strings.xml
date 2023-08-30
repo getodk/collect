@@ -261,8 +261,7 @@
     ##############################################-->
   <string name="refresh">Obnovi</string>
   <string name="download">Prevzami izbrane</string>
-  <string name="download_forms_result">Rezultati nalaganja</string>
-  <string name="downloading_data">Povezujem se s strežnikom</string>
+    <string name="downloading_data">Povezujem se s strežnikom</string>
   <string name="fetching_file">Pridobivam %1$s.\n\nObrazec %2$s od %3$sobrazcev.</string>
   <string name="form_download_progress">%1$s. Pridobivam medijske datoteke: %2$s od %3$s</string>
   <string name="version">Verzija:</string>
@@ -414,16 +413,12 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Deljeno z menoj</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="drive_get_file">Pridobivam %1$s in medijske datoteke.</string>
   <string name="no_google_account">Google račun ni izbran!</string>
   <string name="google_sheets_access_denied">Dostop zavrnjen. Prosim, prepričajte se, da je lastnik preglednice odobril urejanje.</string>
   <string name="google_sheets_missing_columns">Preglednici manjkajo naslednji stolpci: %1$s</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="multiple_media_folders_detected_notification">Več kot ena medijska mapa je najdena. Odstranite eno in poskusite znova</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

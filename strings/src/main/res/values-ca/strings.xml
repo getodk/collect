@@ -411,15 +411,9 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">El meu disc</string>
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Comparteix amb mi</string>
+    <!--Title of the screen that lists forms shared with Google Drive user-->
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Descarrega seleccionat</string>
-  <string name="go_back">Enrera</string>
-  <string name="drive_get_file">Capturant %1$s i arxius multimedia.</string>
   <string name="no_google_account">Compte Google no seleccionada!</string>
-  <string name="google_search_browse">Cerca de formularis. O selecciona \'Meu Drive\' a sota per visualitzar.</string>
   <string name="invalid_sheet_id">id de fulla invàlid: %1$s</string>
   <string name="google_sheets_missing_columns">Falten de la fulla de càlcul les columnes: %1$s</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->

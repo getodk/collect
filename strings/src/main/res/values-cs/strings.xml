@@ -536,8 +536,7 @@
     ##############################################-->
   <string name="refresh">Obnovit</string>
   <string name="download">Stáhnout vybrané</string>
-  <string name="download_forms_result">Stáhnout výsledky</string>
-  <string name="downloading_data">Připojuji se k serveru</string>
+    <string name="downloading_data">Připojuji se k serveru</string>
   <string name="fetching_file">Stahuji %1$s.\n\nForm %2$s z %3$s dotazníků.</string>
   <string name="form_download_progress">%1$s. Stahuji mediální soubory: %2$s z %3$s</string>
   <string name="version">Verze:</string>
@@ -805,18 +804,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Můj disk</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Sdíleno se mnou</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Stáhnout vybrané</string>
-  <string name="go_back">Zpět</string>
   <string name="google_auth_io_exception_msg">Nepodařilo se provést volání API. Pokud používáte místní sestavení, přečtěte si projektové readme.</string>
-  <string name="reading_files">Čtení souborů</string>
-  <string name="drive_get_file">Získávám %1$s a mediální soubory</string>
   <string name="no_google_account">Není vybrán žádný účet Google!</string>
   <string name="google_set_account">Jako server jste vybrali službu Tabulky Google, před pokračováním vyberte v Nastavení odpovídající účet Google.</string>
-  <string name="google_search_browse">Vyhledat formuláře. Nebo zvolit \"Můj disk\" pro procházení.</string>
   <string name="invalid_sheet_id">neplatné ID listu: %1$s</string>
   <string name="missing_submission_url">Chybí URL pro odeslání</string>
   <string name="google_sheets_access_denied">Přístup odepřen. Ujistěte se, že vám vlastník tabulky udělil oprávnění ke změnám.</string>
@@ -827,7 +819,6 @@
   <string name="instance_upload_cancelled">Nahrání instance zrušeno</string>
   <string name="no_columns_to_upload">V formuláře, který chcete nahrát, nebyly nalezeny žádné sloupce.</string>
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
-  <string name="multiple_media_folders_detected_notification">Zjištěn více než jeden adresář na media, odstraňte jeden a zkuste to znovu</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

@@ -37,6 +37,7 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.FileWidget;
@@ -78,11 +79,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), getAnswerFontSize(), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), getAnswerFontSize(), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
-        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(org.odk.collect.strings.R.string.play_video), getAnswerFontSize(), this);
+        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(org.odk.collect.strings.R.string.play_video), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui

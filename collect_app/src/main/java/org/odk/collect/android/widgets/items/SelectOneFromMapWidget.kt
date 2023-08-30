@@ -35,11 +35,12 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
     override fun onCreateAnswerView(
         context: Context,
         prompt: FormEntryPrompt,
-        answerFontSize: Int
+        answerFontSize: Int,
+        controlFontSize: Int
     ): View {
         binding = SelectOneFromMapWidgetAnswerBinding.inflate(LayoutInflater.from(context))
 
-        binding.button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize.toFloat())
+        binding.button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize.toFloat())
         binding.button.setOnClickListener {
             permissionsProvider.requestEnabledLocationPermissions(
                 context as Activity,

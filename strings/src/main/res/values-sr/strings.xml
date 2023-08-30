@@ -413,8 +413,7 @@
     ##############################################-->
   <string name="refresh">Osvježi</string>
   <string name="download">Preuzmi odabrano</string>
-  <string name="download_forms_result">Preuzmi rezultate</string>
-  <string name="downloading_data">Povezivanje sa serverom</string>
+    <string name="downloading_data">Povezivanje sa serverom</string>
   <string name="fetching_file">Dobijam %1$s.\n\nForm %2$s od %3$s formulara().</string>
   <string name="form_download_progress">%1$s. Preuzimam media fajlove: %2$s od %3$s</string>
   <string name="version">Verzija:</string>
@@ -625,17 +624,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Moj Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Podijeljeno sa mnom</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Preuzmi označeno</string>
-  <string name="go_back">Idi nazad</string>
   <string name="google_auth_io_exception_msg">Ne mogu da napravim API poziv. Ukoliko koristite lokalnu verziju aplikacije, molim pogledajte readme fajl.</string>
-  <string name="reading_files">Učitavanje fajlova</string>
-  <string name="drive_get_file">Preuzimam %1$s i medija sadržaje.</string>
   <string name="no_google_account">Google nalog nije odabran!</string>
-  <string name="google_search_browse">Traži formulare. Ili odaberi \"My Drive\" ispod za pretragu.</string>
   <string name="invalid_sheet_id">Pogrešan ID stranice:  %1$s</string>
   <string name="missing_submission_url">URL za otpremanje nedostaje</string>
   <string name="google_sheets_access_denied">Pristup odbijen. Uvjerite se da Vam je vlasnik formulara omogućio da unosite izmjene. </string>
@@ -646,7 +638,6 @@
   <string name="instance_upload_cancelled">Otpremanje prekinuto</string>
   <string name="no_columns_to_upload">Nisu pronađene kolone za otremanje.</string>
   <string name="missing_google_account_dialog_title">Google korisnički nalog nije napravljen</string>
-  <string name="multiple_media_folders_detected_notification">Više od jednog foldera je otkriveno, molim obrišite jedan i pokušajte ponovo</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

@@ -26,37 +26,28 @@
         app:layout_constraintBottom_toTopOf="@id/collection_status"
         app:layout_constraintTop_toBottomOf="@id/location_status" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/record_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:drawableEnd="@drawable/ic_distance"
-        android:padding="15dp"
-        android:paddingBottom="20dp"
         android:text="@string/record_geopoint"
-        android:textStyle="bold"
-        android:tint="@color/color_on_surface_tint_list"
-        android:tintMode="src_in"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/save"
+        app:icon="@drawable/ic_distance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/location_status"
         tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/zoom"
-        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/show_my_location"
-        app:fabSize="mini"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/location_status"
@@ -64,14 +55,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/layers"
-        style="@style/Widget.Geo.FloatingActionButton.Map.Surface"
+        style="@style/Widget.Geo.FloatingActionButton.Map.Small.Surface"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
         android:theme="@style/Theme.Geo.ForceLightSurface.Overlay"
         android:layout_marginEnd="@dimen/margin_standard"
         android:contentDescription="@string/layer_data_file"
-        app:fabSize="mini"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/zoom"
         app:srcCompat="@drawable/ic_layers" />
