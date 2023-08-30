@@ -14,7 +14,7 @@ import java.io.File
 object ImageCaptureIntentCreator {
     fun imageCaptureIntent(prompt: FormEntryPrompt, context: Context, tmpImageFilePath: String): Intent {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val packageName = FormEntryPromptUtils.getBindAttribute(prompt, "intent")
+        val packageName = FormEntryPromptUtils.getBodyAttribute(prompt, "intent")
         if (packageName != null) {
             intent.setPackage(packageName)
         }

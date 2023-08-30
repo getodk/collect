@@ -6,6 +6,7 @@ import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.audio.AudioHelper;
 import org.odk.collect.android.utilities.Appearances;
+import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.audioclips.Clip;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class PromptAutoplayer {
     }
 
     public Boolean autoplayIfNeeded(FormEntryPrompt prompt) {
-        String autoplayOption = prompt.getFormElement().getAdditionalAttribute(null, AUTOPLAY_ATTRIBUTE);
+        String autoplayOption = FormEntryPromptUtils.getBodyAttribute(prompt, AUTOPLAY_ATTRIBUTE);
 
         if (hasAudioAutoplay(autoplayOption)) {
             List<Clip> clipsToPlay = new ArrayList<>();

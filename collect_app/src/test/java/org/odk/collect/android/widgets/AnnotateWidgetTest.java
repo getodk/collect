@@ -104,7 +104,7 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     @Test
     public void buttonsShouldLaunchCorrectIntentsWhenCustomPackageIsSet() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withBindAttribute("odk", "intent", "com.customcameraapp")
+                .withAdditionalAttribute("intent", "com.customcameraapp")
                 .build();
 
         stubAllRuntimePermissionsGranted(true);

@@ -90,7 +90,7 @@ public class ImageWidgetTest extends FileWidgetTest<ImageWidget> {
     @Test
     public void buttonsShouldLaunchCorrectIntentsWhenCustomPackageIsSet() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
-                .withBindAttribute("odk", "intent", "com.customcameraapp")
+                .withAdditionalAttribute("intent", "com.customcameraapp")
                 .build();
 
         stubAllRuntimePermissionsGranted(true);

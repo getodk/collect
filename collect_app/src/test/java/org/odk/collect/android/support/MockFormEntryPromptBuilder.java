@@ -65,7 +65,7 @@ public class MockFormEntryPromptBuilder {
     }
 
     public MockFormEntryPromptBuilder withAdditionalAttribute(String name, String value) {
-        when(prompt.getFormElement().getAdditionalAttribute(null, name)).thenReturn(value);
+        when(prompt.getQuestion().getAdditionalAttribute(null, name)).thenReturn(value);
         return this;
     }
 
