@@ -86,11 +86,12 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
     }
 
     @Test
-    public void buttonsShouldLaunchCorrectIntents() {
+    public void buttonsShouldLaunchCorrectIntentsWhenThereIsNoCustomPackage() {
         stubAllRuntimePermissionsGranted(true);
 
         Intent intent = getIntentLaunchedByClick(R.id.capture_image);
         assertActionEquals(MediaStore.ACTION_IMAGE_CAPTURE, intent);
+        assertThat(intent.getPackage(), equalTo(null));
 
         intent = getIntentLaunchedByClick(R.id.choose_image);
         assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
@@ -98,6 +99,23 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         intent = getIntentLaunchedByClick(R.id.markup_image);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_ANNOTATE, intent);
+    }
+
+    @Test
+    public void buttonsShouldLaunchCorrectIntentsWhenCustomPackageIsSet() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withBindAttribute("odk", "intent", "com.customcameraapp")
+                .build();
+
+        stubAllRuntimePermissionsGranted(true);
+
+        Intent intent = getIntentLaunchedByClick(R.id.capture_image);
+        assertActionEquals(MediaStore.ACTION_IMAGE_CAPTURE, intent);
+        assertThat(intent.getPackage(), equalTo("com.customcameraapp"));
+
+        intent = getIntentLaunchedByClick(R.id.choose_image);
+        assertActionEquals(Intent.ACTION_GET_CONTENT, intent);
+        assertTypeEquals("image/*", intent);
     }
 
     @Test
