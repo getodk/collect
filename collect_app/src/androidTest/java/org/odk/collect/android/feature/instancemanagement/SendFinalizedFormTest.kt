@@ -34,9 +34,17 @@ class SendFinalizedFormTest {
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+
             .clickSendFinalizedForm(1)
             .clickOnFormToEdit("One Question")
-            .assertText("52")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .assertText("53")
     }
 
     @Test
