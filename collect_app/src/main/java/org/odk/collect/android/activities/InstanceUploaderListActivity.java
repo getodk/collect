@@ -420,14 +420,14 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (resultCode == RESULT_CANCELED) {
-            multiSelectViewModel.unselectAll();
-            return;
-        }
-
         switch (requestCode) {
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:
+                if (resultCode == RESULT_CANCELED) {
+                    multiSelectViewModel.unselectAll();
+                    return;
+                }
+
                 if (intent.getBooleanExtra(FormFillingActivity.KEY_SUCCESS, false)) {
                     listView.clearChoices();
                     if (listAdapter.isEmpty()) {
