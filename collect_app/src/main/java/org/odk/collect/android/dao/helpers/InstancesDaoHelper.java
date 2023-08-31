@@ -15,12 +15,9 @@
 package org.odk.collect.android.dao.helpers;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.forms.instances.InstancesRepository;
-
-import timber.log.Timber;
 
 /**
  * Provides abstractions over database calls for instances.
@@ -32,34 +29,6 @@ public final class InstancesDaoHelper {
 
     private InstancesDaoHelper() {
 
-    }
-
-    /**
-     * Checks the database to determine if the current instance being edited has
-     * already been 'marked completed'. A form can be 'unmarked' complete and
-     * then resaved.
-     *
-     * @return true if form has been marked completed, false otherwise.
-     * <p>
-     * TODO: replace with method in {@link InstancesRepository}
-     * that returns an {@link Instance} object from a path.
-     */
-    public static boolean isInstanceComplete(FormController formController) {
-        // default to false if we're mid form
-        boolean complete = false;
-
-        if (formController != null && formController.getInstanceFile() != null) {
-            // Then see if we've already marked this form as complete before
-            String path = formController.getInstanceFile().getAbsolutePath();
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().getOneByPath(path);
-            if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
-                complete = true;
-            }
-        } else {
-            Timber.w("FormController or its instanceFile field has a null value");
-        }
-
-        return complete;
     }
 
     // TODO: replace with method in {@link org.odk.collect.android.instances.InstancesRepository}
