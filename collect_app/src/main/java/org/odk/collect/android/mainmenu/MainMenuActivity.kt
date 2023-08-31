@@ -60,7 +60,7 @@ class MainMenuActivity : LocalizedActivity() {
     private lateinit var mainMenuViewModel: MainMenuViewModel
     private lateinit var currentProjectViewModel: CurrentProjectViewModel
 
-    private val formLauncher =
+    private val formEntryFlowLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             displayFormSavedSnackbar(it.data?.data)
         }
@@ -204,13 +204,13 @@ class MainMenuActivity : LocalizedActivity() {
 
     private fun initButtons() {
         binding.enterData.setOnClickListener {
-            formLauncher.launch(
+            formEntryFlowLauncher.launch(
                 Intent(this, BlankFormListActivity::class.java)
             )
         }
 
         binding.reviewData.setOnClickListener {
-            formLauncher.launch(
+            formEntryFlowLauncher.launch(
                 Intent(this, InstanceChooserList::class.java).apply {
                     putExtra(
                         ApplicationConstants.BundleKeys.FORM_MODE,
@@ -221,7 +221,7 @@ class MainMenuActivity : LocalizedActivity() {
         }
 
         binding.sendData.setOnClickListener {
-            startActivity(Intent(this, InstanceUploaderListActivity::class.java))
+            formEntryFlowLauncher.launch(Intent(this, InstanceUploaderListActivity::class.java))
         }
 
         binding.viewSentForms.setOnClickListener {
@@ -342,7 +342,7 @@ class MainMenuActivity : LocalizedActivity() {
                 getString(it.first),
                 action = it.second?.let { action ->
                     SnackbarUtils.Action(getString(action)) {
-                        formLauncher.launch(FormFillingIntentFactory.editInstanceIntent(this, uri))
+                        formEntryFlowLauncher.launch(FormFillingIntentFactory.editInstanceIntent(this, uri))
                     }
                 },
                 displayDismissButton = true

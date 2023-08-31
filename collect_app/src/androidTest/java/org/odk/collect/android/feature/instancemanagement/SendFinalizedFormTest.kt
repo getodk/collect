@@ -38,11 +38,12 @@ class SendFinalizedFormTest {
         .around(rule)
 
     @Test
-    fun canEditFormsBeforeSending() {
+    fun canEditAndFinalizeFormsBeforeSending() {
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .closeSnackbar() // Make sure we don't get a false positive from this later
 
             .clickSendFinalizedForm(1)
             .clickOnFormToEdit("One Question")
@@ -50,9 +51,31 @@ class SendFinalizedFormTest {
             .answerQuestion("what is your age", "53")
             .swipeToEndScreen()
             .clickFinalize()
+            .checkIsSnackbarWithMessageDisplayed(R.string.form_saved)
 
             .clickSendFinalizedForm(1)
             .clickOnFormToEdit("One Question")
+            .assertText("53")
+    }
+
+    @Test
+    fun canEditAndConvertToDraftFormsBeforeSending() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .closeSnackbar() // Make sure we don't get a false positive from this later
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+            .checkIsSnackbarWithMessageDisplayed(R.string.form_saved_as_draft)
+
+            .clickEditSavedForm(1)
+            .clickOnForm("One Question")
             .assertText("53")
     }
 
