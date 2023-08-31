@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginEnd="@dimen/margin_standard"
-        android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+        android:textAppearance="?textAppearanceTitleMedium"
         android:textColor="?colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"

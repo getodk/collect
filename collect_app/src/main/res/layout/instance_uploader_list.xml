@@ -41,7 +41,7 @@ the License.
             android:paddingBottom="8dp"
             android:scrollbarStyle="outsideOverlay"
             app:layout_constraintBottom_toTopOf="@id/buttonholder"
-            app:layout_constraintTop_toTopOf="@id/ready_to_send_banner" />
+            app:layout_constraintTop_toBottomOf="@id/ready_to_send_banner" />
 
         <TextView
             android:id="@android:id/empty"
