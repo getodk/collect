@@ -992,5 +992,7 @@
   <string name="view_form">Voir</string>
   <string name="close_snackbar">Fermer la barre de message</string>
 
-  <string name="edit_finalized_form_warning">Après le 30 septembre, vous ne pourrez plus modifier les formulaires finalisés. Enregistrez les formulaires en tant qu\'ébauches pour les modifier ultérieurement.\n\nVous pouvez valider une ébauche en appuyant sur les trois points (⋮), puis sur "Vérifier s\'il y a des erreurs".</string>
+  <!--This warning will be shown when a user edits a form that is ready to send. The next version will also provide a link to learn more-->
+  <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">Dans une version à venir, vous ne pourrez plus modifier les formulaires finalisés. Enregistrez vos formulaires comme ébauches pour pouvoir continuer à les modi
+fier.\n\nVous pouvez valider votre formulaire en appuyant sur les trois points en haut à droite (⋮) puis en appuyant sur \"Vérifier s\'il y a des erreurs.\" </string>
 </resources>

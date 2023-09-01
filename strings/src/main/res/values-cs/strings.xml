@@ -828,11 +828,11 @@
   <string name="google_sheets_missing_columns">V tabulce chybí následující sloupce: %1$s</string>
   <string name="google_sheets_encrypted_message">Šifrované formuláře nelze odeslat do služby Google Sheets.</string>
   <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
+  <string name="multiple_media_folders_detected_notification">Zjištěn více než jeden adresář na media, odstraňte jeden a zkuste to znovu</string>
   <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <string name="instance_upload_cancelled">Nahrání instance zrušeno</string>
   <string name="no_columns_to_upload">V formuláře, který chcete nahrát, nebyly nalezeny žádné sloupce.</string>
   <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
-  <string name="multiple_media_folders_detected_notification">Zjištěn více než jeden adresář na media, odstraňte jeden a zkuste to znovu</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -949,6 +949,7 @@
   <string name="wrong_project_selected_for_form">Chcete-li otevřít tento formulář, musíte nejprve otevřít ODK Collect a přepnout na projekt, který jej obsahuje.</string>
   <!--Error shown when a user tries to open a form when there are no projects-->
   <string name="app_not_configured">ODK Collect nebyl nakonfigurován. Zkuste otevřít ODK Collect a nakonfigurovat jej.\n\nPokud jste klepli na zástupce, možná jej budete muset po konfiguraci ODK Collect znovu vytvořit.</string>
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
   <!--##############################################
     # Errors
     ##############################################-->
@@ -994,6 +995,6 @@
   <string name="edit_form">Upravit</string>
   <string name="view_form">Zobrazit</string>
   <string name="close_snackbar">Zavřít snackbar</string>
-
-  <string name="edit_finalized_form_warning">Po 30. září již nebudete moci upravovat dokončené formuláře. Uložte formuláře jako koncept, abyste je mohli později upravit.\n\nChyby ve formuláři konceptu můžete zkontrolovat klepnutím na tři tečky (⋮) a poté na možnost Zkontrolovat chyby.</string>
+  <!--This warning will be shown when a user edits a form that is ready to send. The next version will also provide a link to learn more-->
+  <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">V pozdějším vydání již nebudete moci upravovat dokončené formuláře. Uložte formuláře jako koncept, abyste je mohli později upravit.\n\nChyby ve formuláři konceptu můžete zkontrolovat klepnutím na tři tečky (⋮) a poté na možnost Zkontrolovat chyby.</string>
 </resources>
