@@ -131,7 +131,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private String filterText;
 
     private MultiSelectViewModel multiSelectViewModel;
-    private ReadyToSendViewModel readyToSendViewModel;
     private boolean allSelected;
 
     private boolean isSearchBoxShown;
@@ -158,7 +157,8 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
             listAdapter.setSelected(ids);
         });
-        readyToSendViewModel = new ViewModelProvider(this, factory).get(ReadyToSendViewModel.class);
+        ReadyToSendViewModel readyToSendViewModel = new ViewModelProvider(this, factory).get(ReadyToSendViewModel.class);
+        readyToSendViewModel.getData().observe(this, data -> binding.readyToSendBanner.setData(data));
 
         // set title
         setTitle(getString(org.odk.collect.strings.R.string.send_data));
@@ -476,8 +476,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         } else {
             findViewById(R.id.buttonholder).setVisibility(View.VISIBLE);
         }
-
-        binding.readyToSendBanner.init(readyToSendViewModel, this);
     }
 
     @Override
