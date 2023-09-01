@@ -35,6 +35,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
@@ -133,6 +135,11 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     private SearchView searchView;
     private String savedFilterText;
+
+    private final ActivityResultLauncher<Intent> formLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        setResult(RESULT_OK, result.getData());
+        finish();
+    });
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -394,7 +401,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         } else {
             long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
             Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
-            startActivity(intent);
+            formLauncher.launch(intent);
         }
     }
 
@@ -414,14 +421,14 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (resultCode == RESULT_CANCELED) {
-            multiSelectViewModel.unselectAll();
-            return;
-        }
-
         switch (requestCode) {
             // returns with a form path, start entry
             case INSTANCE_UPLOADER:
+                if (resultCode == RESULT_CANCELED) {
+                    multiSelectViewModel.unselectAll();
+                    return;
+                }
+
                 if (intent.getBooleanExtra(FormFillingActivity.KEY_SUCCESS, false)) {
                     listView.clearChoices();
                     if (listAdapter.isEmpty()) {

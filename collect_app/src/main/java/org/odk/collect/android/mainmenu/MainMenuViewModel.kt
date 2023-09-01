@@ -9,7 +9,6 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
-import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -122,7 +121,11 @@ class MainMenuViewModel(
                 return null
             }
 
-            val action = if (instance.canBeEdited(settingsProvider)) {
+            val action = if (
+                instance.status == Instance.STATUS_INCOMPLETE &&
+                settingsProvider.getProtectedSettings()
+                    .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+            ) {
                 R.string.edit_form
             } else {
                 if (instance.status == Instance.STATUS_INCOMPLETE || instance.canEditWhenComplete()) {

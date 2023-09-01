@@ -4,7 +4,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.odk.collect.android.instancemanagement.InstanceExtKt.OCTOBER_1st_2023_UTC;
 import static org.odk.collect.android.support.FileUtils.copyFileFromAssets;
 
 import android.Manifest;
@@ -28,6 +27,7 @@ import org.odk.collect.android.support.pages.FormEndPage;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.MainMenuPage;
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog;
+import org.odk.collect.android.support.pages.SendFinalizedFormPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -185,13 +185,17 @@ public class BackgroundAudioRecordingTest {
 
     @Test
     public void viewForm_doesNotRecordAudio() {
-        currentTimeMillis = OCTOBER_1st_2023_UTC + 1;
-
         rule.startAtMainMenu()
+                .setServer(testDependencies.server.getURL())
                 .copyForm("one-question-background-audio.xml")
                 .startBlankForm("One Question")
                 .fillOutAndFinalize(new FormEntryPage.QuestionAndAnswer("what is your age", "17"))
                 .clickSendFinalizedForm(1)
+                .clickSelectAll()
+                .clickSendSelected()
+                .clickOK(new SendFinalizedFormPage())
+                .pressBack(new MainMenuPage())
+                .clickViewSentForm(1)
                 .clickOnForm("One Question");
 
         assertThat(stubAudioRecorderViewModel.isRecording(), is(false));

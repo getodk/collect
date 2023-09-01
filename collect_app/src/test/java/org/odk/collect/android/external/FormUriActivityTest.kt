@@ -34,7 +34,6 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.instancemanagement.OCTOBER_1st_2023_UTC
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.CollectHelpers
@@ -375,7 +374,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When attempting to edit a finalized form saved before October 1st 2023 UTC then display a warning and start form filling`() {
+    fun `When attempting to edit a finalized form display a warning and start form filling`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
@@ -386,7 +385,6 @@ class FormUriActivityTest {
             Instance.Builder()
                 .formId("1")
                 .formVersion("1")
-                .lastStatusChangeDate(OCTOBER_1st_2023_UTC - 1)
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_COMPLETE)
                 .build()
@@ -398,31 +396,6 @@ class FormUriActivityTest {
         onView(withId(android.R.id.button1)).perform(click())
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, true)
-    }
-
-    @Test
-    fun `When attempting to edit a finalized form saved after October 1st 2023 UTC then start form for view only`() {
-        val project = Project.Saved("123", "First project", "A", "#cccccc")
-        projectsRepository.save(project)
-        whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
-
-        formsRepository.save(
-            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
-        )
-
-        val instance = instancesRepository.save(
-            Instance.Builder()
-                .formId("1")
-                .formVersion("1")
-                .lastStatusChangeDate(OCTOBER_1st_2023_UTC + 1)
-                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
-                .status(Instance.STATUS_COMPLETE)
-                .build()
-        )
-
-        launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
-
-        assertStartSavedFormIntent(project.uuid, instance.dbId, false)
     }
 
     @Test

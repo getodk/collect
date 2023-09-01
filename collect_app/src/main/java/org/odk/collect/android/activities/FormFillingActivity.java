@@ -90,7 +90,6 @@ import org.odk.collect.android.audio.AudioControllerView;
 import org.odk.collect.android.audio.AudioRecordingControllerFragment;
 import org.odk.collect.android.audio.M4AAppender;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.external.FormsContract;
@@ -1035,7 +1034,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
             case R.id.menu_save:
                 // don't exit
-                saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
+                saveForm(false, false, null, true);
                 return true;
         }
 
@@ -1968,7 +1967,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
 
                 QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, () -> {
-                    saveForm(true, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
+                    saveForm(true, false, null, true);
                 });
                 return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:

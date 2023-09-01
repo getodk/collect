@@ -6,13 +6,13 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
-import org.odk.collect.android.instancemanagement.OCTOBER_1st_2023_UTC
 import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
@@ -39,28 +39,63 @@ class SendFinalizedFormTest {
         .around(rule)
 
     @Test
-    fun beforeOCTOBER_1st_2023_UTC_canEditFormsBeforeSending() {
-        currentTimeMillis = OCTOBER_1st_2023_UTC - 1
-
+    fun canEditAndFinalizeFormsBeforeSending() {
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .closeSnackbar() // Make sure we don't get a false positive from this later
+
             .clickSendFinalizedForm(1)
             .clickOnFormToEdit("One Question")
-            .assertText("52")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .swipeToEndScreen()
+            .clickFinalize()
+            .checkIsSnackbarWithMessageDisplayed(R.string.form_saved)
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .assertText("53")
     }
 
     @Test
-    fun afterOCTOBER_1st_2023_UTC_canViewFormsBeforeSending() {
-        currentTimeMillis = OCTOBER_1st_2023_UTC + 1
-
+    fun canEditAndConvertToDraftFormsBeforeSending() {
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .closeSnackbar() // Make sure we don't get a false positive from this later
+
             .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+            .checkIsSnackbarWithMessageDisplayed(R.string.form_saved_as_draft)
+
+            .clickEditSavedForm(1)
             .clickOnForm("One Question")
+            .assertText("53")
+    }
+
+    @Test
+    fun canEditAFormAndLeaveFinalizedBeforeSending() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", projectName = testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
+            .clickDiscardChanges()
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
             .assertText("52")
     }
 
