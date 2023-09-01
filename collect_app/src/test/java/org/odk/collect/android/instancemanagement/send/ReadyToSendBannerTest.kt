@@ -16,6 +16,7 @@ import org.odk.collect.android.R
 import org.odk.collect.androidtest.FakeLifecycleOwner
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
+import org.odk.collect.shared.TimeInMs
 import org.odk.collect.testshared.FakeScheduler
 import java.util.function.Supplier
 
@@ -157,7 +158,7 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
-        whenever(clock.get()).thenReturn(ONE_SECOND * 5)
+        whenever(clock.get()).thenReturn(TimeInMs.ONE_SECOND * 5)
         val view = ReadyToSendBanner(context).also {
             it.init(viewModel, lifecycleOwner)
             scheduler.runBackground()
@@ -186,7 +187,7 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
-        whenever(clock.get()).thenReturn(ONE_MINUTE)
+        whenever(clock.get()).thenReturn(TimeInMs.ONE_MINUTE)
         val view = ReadyToSendBanner(context).also {
             it.init(viewModel, lifecycleOwner)
             scheduler.runBackground()
@@ -215,7 +216,7 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
-        whenever(clock.get()).thenReturn(ONE_HOUR * 2)
+        whenever(clock.get()).thenReturn(TimeInMs.ONE_HOUR * 2)
         val view = ReadyToSendBanner(context).also {
             it.init(viewModel, lifecycleOwner)
             scheduler.runBackground()
@@ -244,7 +245,7 @@ class ReadyToSendBannerTest {
                 .build()
         )
 
-        whenever(clock.get()).thenReturn(ONE_DAY * 34)
+        whenever(clock.get()).thenReturn(TimeInMs.ONE_DAY * 34)
         val view = ReadyToSendBanner(context).also {
             it.init(viewModel, lifecycleOwner)
             scheduler.runBackground()
@@ -277,7 +278,7 @@ class ReadyToSendBannerTest {
             Instance.Builder()
                 .formId("4")
                 .status(Instance.STATUS_SUBMITTED)
-                .lastStatusChangeDate(ONE_SECOND * 5)
+                .lastStatusChangeDate(TimeInMs.ONE_SECOND * 5)
                 .build()
         )
 
@@ -285,11 +286,11 @@ class ReadyToSendBannerTest {
             Instance.Builder()
                 .formId("5")
                 .status(Instance.STATUS_SUBMITTED)
-                .lastStatusChangeDate(ONE_SECOND * 4)
+                .lastStatusChangeDate(TimeInMs.ONE_SECOND * 4)
                 .build()
         )
 
-        whenever(clock.get()).thenReturn(ONE_SECOND * 10)
+        whenever(clock.get()).thenReturn(TimeInMs.ONE_SECOND * 10)
         val view = ReadyToSendBanner(context).also {
             it.init(viewModel, lifecycleOwner)
             scheduler.runBackground()
