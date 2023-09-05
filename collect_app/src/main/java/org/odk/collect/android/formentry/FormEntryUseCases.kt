@@ -10,24 +10,33 @@ import org.javarosa.form.api.FormEntryController
 import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.util.XFormUtils
 import org.odk.collect.android.externaldata.ExternalAnswerResolver
+import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormDefCache
 import org.odk.collect.android.utilities.FormUtils
+import org.odk.collect.entities.EntitiesRepository
+import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.instances.InstancesRepository
 import java.io.File
 
 object FormEntryUseCases {
 
     @JvmStatic
-    fun loadXForm(xForm: File, formMediaDir: File): FormDef? {
+    fun loadFormDef(xForm: File, formMediaDir: File): FormDef? {
         FormUtils.setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir)
         return createFormDefFromCacheOrXml(xForm)
     }
 
     @JvmStatic
-    fun initializeInstance(formDef: FormDef, formMediaDir: File, formEntryControllerFactory: FormEntryControllerFactory, instance: File): FormController {
+    fun loadDraft(
+        formDef: FormDef,
+        formMediaDir: File,
+        formEntryControllerFactory: FormEntryControllerFactory,
+        instance: File
+    ): FormController {
         val formEntryController = formEntryControllerFactory.create(formDef)
         val instanceInit = InstanceInitializationFactory()
 
@@ -39,6 +48,54 @@ object FormEntryUseCases {
             formEntryController,
             instance
         )
+    }
+
+    @JvmStatic
+    fun finalizeDraft(
+        formController: FormController,
+        entitiesRepository: EntitiesRepository,
+        instancesRepository: InstancesRepository
+    ): Instance? {
+        val valid = finalizeInstance(formController, entitiesRepository)
+
+        return if (valid) {
+            saveFormToDisk(formController)
+            markInstanceAsComplete(formController, instancesRepository)
+        } else {
+            null
+        }
+    }
+
+    private fun markInstanceAsComplete(
+        formController: FormController,
+        instancesRepository: InstancesRepository
+    ): Instance {
+        val instancePath = formController.getInstanceFile()!!.absolutePath
+        val instance = instancesRepository.getOneByPath(instancePath)
+
+        return instancesRepository.save(
+            Instance.Builder(instance).also { it.status(Instance.STATUS_COMPLETE) }.build()
+        )
+    }
+
+    private fun saveFormToDisk(formController: FormController) {
+        val payload = formController.getFilledInFormXml()
+        FileUtils.write(formController.getInstanceFile(), payload!!.payloadBytes)
+    }
+
+    @JvmStatic
+    fun finalizeInstance(
+        formController: FormController,
+        entitiesRepository: EntitiesRepository
+    ): Boolean {
+        val validationResult = formController.validateAnswers(true)
+        if (validationResult is FailedValidationResult) {
+            return false
+        }
+
+        formController.finalizeForm()
+        formController.getEntities().forEach { entity -> entitiesRepository.save(entity) }
+        return true
     }
 
     private fun createFormDefFromCacheOrXml(xForm: File): FormDef? {
