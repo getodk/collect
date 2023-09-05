@@ -115,6 +115,7 @@
   <string name="delete_repeat_no">Annulla</string>
   <string name="invalid_answer_error">Spiacenti, questa risposta non è valida!</string>
   <string name="required_answer_error">Spiacenti, questa risposta è richiesta!</string>
+  <string name="success_form_validation">Successo! Nessun errore trovato nel tuo formulario.</string>
   <string name="invalid_space_in_answer_singular">Attenzione: ci sono degli spazi nel valore sottostante %s </string>
   <string name="invalid_space_in_answer_plural">Attenzione: ci sono degli spazi nei valori sottostanti %s </string>
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
@@ -138,8 +139,10 @@
   <string name="keep_editing">Continua a modificare</string>
   <string name="quit_form_title">Salvare il Modulo?</string>
   <string name="save_explanation">Puoi salvare questo modulo e accedervi dalle tue bozze in qualsiasi momento.</string>
+  <string name="save_explanation_with_last_saved">\'Questo modulo è stato salvato l\'\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Salva come bozza per conservare le modifiche.\'</string>
   <string name="quit_form_continue_title">Continua con le modifiche?</string>
   <string name="discard_form_warning">Se elimini il modulo, perderai tutte le modifiche apportate fino a quel momento.</string>
+  <string name="discard_changes_warning">\'Questo modulo è stato salvato l\'\'ultima volta il\' EEE, MMM dd, yyyy \'alle\' HH:mm\'. Se scarti le modifiche, perderai tutte le modifiche apportate da allora.\'</string>
   <string name="saving_form">Salvataggio Modulo</string>
   <string name="survey_saving_validating_message">Convalida risposte…</string>
   <string name="survey_saving_collecting_message">Raccolta dati in corso…</string>
@@ -408,6 +411,7 @@
   <string name="background_location_disabled">Questo modulo vuole tracciare la tua posizione ma il tracciamento è disabilitato. Abilita nel %1$s menu sopra.</string>
   <string name="background_location_enabled">Questo modulo tiene traccia della tua posizione. Puoi disabilitare il monitoraggio nel menu %1$s in alto.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">Controlla gli errori</string>
   <string name="get_point">Inizia Geo-punto</string>
   <string name="geopoint_view_read_only">Guarda Geo-punto</string>
   <string name="geoshape_view_read_only">Visualizza Geo-contorno</string>
@@ -988,5 +992,7 @@
   <string name="view_form">Guarda</string>
   <string name="close_snackbar">Chiudere la notifica</string>
 
-  <string name="edit_finalized_form_warning">Dopo il 30 settembre, non potrai modificare i moduli finalizzati. Salva i moduli come bozza per modificarli in seguito.\n\nPuoi verificare la presenza di errori in una bozza del modulo toccando i tre puntini (⋮) e quindi Controlla errori.</string>
+  <!--This warning will be shown when a user edits a form that is ready to send. The next version will also provide a link to learn more-->
+  <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">Nelle versioni successive, non sarà più possibile modificare i formulari finalizzati. È possibile verificare la presenza di errori in una bozza di formulario t
+occando i tre punti (⋮) e poi Controlla errori.</string>
 </resources>

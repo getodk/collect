@@ -115,6 +115,7 @@
   <string name="delete_repeat_no">Cancelar</string>
   <string name="invalid_answer_error">¡Respuesta invalida!</string>
   <string name="required_answer_error">¡Respuesta obligatoria!</string>
+  <string name="success_form_validation">¡Éxito! No se encontraron errores en su formulario.</string>
   <string name="invalid_space_in_answer_singular">Advertencia: valor subyacente %s contiene espacios</string>
   <string name="invalid_space_in_answer_plural">Advertencia: valores subyacentes %s contienen espacios</string>
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
@@ -410,6 +411,7 @@
   <string name="background_location_disabled">Este formulario requiere registrar su localización, pero el rastreo esta deshabilitado. Favor habilitar en el menú de arriba %1$s .</string>
   <string name="background_location_enabled">Este formulario registra su localización. Puede deshabilitar el rastreo en el menú de arriba %1$s.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">Comprobar si hay errores</string>
   <string name="get_point">Buscar Ubicación</string>
   <string name="geopoint_view_read_only">Ver Ubicación</string>
   <string name="geoshape_view_read_only">Ver GeoArea</string>
@@ -945,6 +947,7 @@
   <string name="wrong_project_selected_for_form">Para abrir este formulario, primero debe abrir la aplicación m´vil y cambiar al proyecto que lo contiene.</string>
   <!--Error shown when a user tries to open a form when there are no projects-->
   <string name="app_not_configured">No se ha configurado la aplicación móvil. Intente abrir la aplicación y configurarla.\n\nIfSi tocó un acceso directo, es posible que deba volver a crearlo después de configurarla.</string>
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
   <!--##############################################
     # Errors
     ##############################################-->
@@ -990,6 +993,6 @@
   <string name="edit_form">Editar</string>
   <string name="view_form">Mirar</string>
   <string name="close_snackbar">Cerrar notificación</string>
-
-  <string name="edit_finalized_form_warning">Después del 30 de septiembre, no podrá editar los formularios finalizados. Guarde los formularios como borrador para editarlos más tarde.\n\nPuede verificar si hay errores en un formulario de borrador tocando los tres puntos (⋮) y luego Check for errors.</string>
+  <!--This warning will be shown when a user edits a form that is ready to send. The next version will also provide a link to learn more-->
+  <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">En versiones posteriores, no podrá editar formularios finalizados. Guarde los formularios como borradores para editarlos más tarde.\n\nPuede comprobar si hay errores en un borrador de formulario tocando los tres puntos (⋮) y luego Comprobar si hay errores.</string>
 </resources>
