@@ -471,9 +471,15 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         return qw.getLocalVisibleRect(scrollBounds);
     }
 
-    public void scrollTo(@Nullable QuestionWidget qw) {
+    public void scrollToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
             findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
+        }
+    }
+
+    public void scrollToBottomOf(@Nullable QuestionWidget qw) {
+        if (qw != null && widgets.contains(qw)) {
+            findViewById(R.id.odk_view_container).scrollTo(0, qw.getBottom());
         }
     }
 
@@ -616,7 +622,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 // answers are validated during form finalization.
                 postDelayed(() -> {
                     questionWidget.setFocus(getContext());
-                    scrollTo(questionWidget);
+                    scrollToBottomOf(questionWidget);
                 }, 400);
             } else {
                 questionWidget.hideError();
