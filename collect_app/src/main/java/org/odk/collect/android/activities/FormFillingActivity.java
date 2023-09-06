@@ -574,7 +574,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
             ValidationResult validationResult = consumable.getValue();
             if (validationResult instanceof FailedValidationResult failedValidationResult) {
-                createConstraintToast(failedValidationResult.getIndex(), failedValidationResult.getStatus());
                 getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), formEntryViewModel.getErrorMessage(failedValidationResult, this));
                 swipeHandler.setBeenSwiped(false);
             } else if (validationResult instanceof SuccessValidationResult) {
@@ -1547,42 +1546,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 createErrorDialog(new FormError.NonFatal(e.getMessage()));
             }
         }
-    }
-
-    /**
-     * Creates and displays a dialog displaying the violated constraint.
-     */
-    private void createConstraintToast(FormIndex index, int saveStatus) {
-        FormController formController = getFormController();
-        String constraintText;
-        switch (saveStatus) {
-            case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
-                constraintText = formController
-                        .getQuestionPromptConstraintText(index);
-                if (constraintText == null) {
-                    constraintText = formController.getQuestionPrompt(index)
-                            .getSpecialFormQuestionText("constraintMsg");
-                    if (constraintText == null) {
-                        constraintText = getString(org.odk.collect.strings.R.string.invalid_answer_error);
-                    }
-                }
-                break;
-            case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                constraintText = formController
-                        .getQuestionPromptRequiredText(index);
-                if (constraintText == null) {
-                    constraintText = formController.getQuestionPrompt(index)
-                            .getSpecialFormQuestionText("requiredMsg");
-                    if (constraintText == null) {
-                        constraintText = getString(org.odk.collect.strings.R.string.required_answer_error);
-                    }
-                }
-                break;
-            default:
-                return;
-        }
-
-        ToastUtils.showShortToastInMiddle(this, constraintText);
     }
 
     /**
