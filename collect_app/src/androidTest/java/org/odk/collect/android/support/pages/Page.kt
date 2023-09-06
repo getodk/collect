@@ -174,6 +174,11 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun checkIsSnackbarWithMessageDisplayed(message: String): T {
+        onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        return this as T
+    }
+
     fun assertToastNotDisplayed(message: String): T {
         Espresso.onIdle()
         if (popRecordedToasts().stream().anyMatch { s: String -> s == message }) {
@@ -425,6 +430,10 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOptionsIcon(@StringRes expectedOptionString: Int): T {
+        return clickOptionsIcon(getTranslatedString(expectedOptionString))
+    }
+
+    fun clickOptionsIcon(expectedOptionString: String): T {
         tryAgainOnFail({
             Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity())
             assertText(expectedOptionString)
