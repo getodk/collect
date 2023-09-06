@@ -13,7 +13,6 @@ import org.odk.collect.android.externaldata.ExternalAnswerResolver
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController
-import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormDefCache
 import org.odk.collect.android.utilities.FormUtils
@@ -32,16 +31,14 @@ object FormEntryUseCases {
 
     @JvmStatic
     fun loadDraft(
-        formDef: FormDef,
+        formEntryController: FormEntryController,
         formMediaDir: File,
-        formEntryControllerFactory: FormEntryControllerFactory,
         instance: File
     ): FormController {
-        val formEntryController = formEntryControllerFactory.create(formDef)
         val instanceInit = InstanceInitializationFactory()
 
         importInstance(instance, formEntryController)
-        formDef.initialize(false, instanceInit)
+        formEntryController.model.form.initialize(false, instanceInit)
 
         return JavaRosaFormController(
             formMediaDir,
@@ -84,7 +81,7 @@ object FormEntryUseCases {
     }
 
     @JvmStatic
-    fun finalizeInstance(
+    private fun finalizeInstance(
         formController: FormController,
         entitiesRepository: EntitiesRepository
     ): Boolean {
