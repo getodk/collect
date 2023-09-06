@@ -111,6 +111,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
     public void clearAnswer() {
         selections.clear();
         binding.imageMap.loadUrl("javascript:clearAreas()");
+        binding.selectedElements.setVisibility(GONE);
         widgetValueChanged();
     }
 
@@ -123,6 +124,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
     protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SelectImageMapWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         binding.selectedElements.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.selectedElements.setVisibility(binding.selectedElements.getText().toString().isBlank() ? GONE : VISIBLE);
         return binding.getRoot();
     }
 
@@ -266,8 +268,10 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
             }
         }
 
-        ((Activity) getContext()).runOnUiThread(() ->
-                binding.selectedElements.setText(HtmlUtils.textToHtml(stringBuilder.toString())));
+        ((Activity) getContext()).runOnUiThread(() -> {
+            binding.selectedElements.setText(HtmlUtils.textToHtml(stringBuilder.toString()));
+            binding.selectedElements.setVisibility(binding.selectedElements.getText().toString().isBlank() ? GONE : VISIBLE);
+        });
     }
 
     protected abstract void highlightSelections(WebView view);

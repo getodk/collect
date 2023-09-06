@@ -72,6 +72,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
             binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_barcode));
             binding.barcodeAnswerText.setText(answer);
         }
+        binding.barcodeAnswerText.setVisibility(binding.barcodeAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
 
         return binding.getRoot();
     }
@@ -79,6 +80,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     @Override
     public void clearAnswer() {
         binding.barcodeAnswerText.setText(null);
+        binding.barcodeAnswerText.setVisibility(GONE);
         binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.get_barcode));
         widgetValueChanged();
     }
@@ -93,6 +95,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     public void setData(Object answer) {
         String response = (String) answer;
         binding.barcodeAnswerText.setText(stripInvalidCharacters(response));
+        binding.barcodeAnswerText.setVisibility(binding.barcodeAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
         binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_barcode));
         widgetValueChanged();
     }
