@@ -3,6 +3,8 @@ package org.odk.collect.android.formentry;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.observe;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -15,6 +17,7 @@ import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.exception.ExternalDataException;
@@ -315,6 +318,32 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     validationResult.setValue(new Consumable<>(result));
                 }
         );
+    }
+
+    public String getErrorMessage(FailedValidationResult failedValidationResult, Context context) {
+        String errorMessage = "";
+        if (failedValidationResult.getStatus() == FormEntryController.ANSWER_CONSTRAINT_VIOLATED) {
+            errorMessage = formController
+                    .getQuestionPromptConstraintText(failedValidationResult.getIndex());
+            if (errorMessage == null) {
+                errorMessage = formController.getQuestionPrompt(failedValidationResult.getIndex())
+                        .getSpecialFormQuestionText("constraintMsg");
+                if (errorMessage == null) {
+                    errorMessage = context.getString(org.odk.collect.strings.R.string.invalid_answer_error);
+                }
+            }
+        } else if (failedValidationResult.getStatus() == FormEntryController.ANSWER_REQUIRED_BUT_EMPTY) {
+            errorMessage = formController
+                    .getQuestionPromptRequiredText(failedValidationResult.getIndex());
+            if (errorMessage == null) {
+                errorMessage = formController.getQuestionPrompt(failedValidationResult.getIndex())
+                        .getSpecialFormQuestionText("requiredMsg");
+                if (errorMessage == null) {
+                    errorMessage = context.getString(org.odk.collect.strings.R.string.required_answer_error);
+                }
+            }
+        }
+        return errorMessage;
     }
 
     public interface AnswerListener {

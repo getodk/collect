@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
@@ -76,6 +77,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
+    private final View errorLayout;
     protected final Settings settings;
     private AtomicBoolean expanded;
     protected final ThemeUtils themeUtils;
@@ -130,6 +132,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
         warningText = helpTextLayout.findViewById(R.id.warning_text);
         helpTextView = setupHelpText(helpTextLayout.findViewById(R.id.help_text_view), formEntryPrompt);
+        errorLayout = findViewById(R.id.error_message_container);
         setupGuidanceTextAndLayout(helpTextLayout.findViewById(R.id.guidance_text_view), formEntryPrompt);
 
         if (context instanceof Activity && !questionDetails.isReadOnly()) {
@@ -415,5 +418,16 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         if (valueChangedListener != null) {
             valueChangedListener.widgetValueChanged(this);
         }
+    }
+
+    public void hideError() {
+        errorLayout.setVisibility(GONE);
+        setBackground(null);
+    }
+
+    public void displayError(String errorMessage) {
+        ((TextView) errorLayout.findViewById(R.id.error_message)).setText(errorMessage);
+        errorLayout.setVisibility(VISIBLE);
+        setBackground(ContextCompat.getDrawable(getContext(), R.drawable.question_with_error_border));
     }
 }
