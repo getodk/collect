@@ -95,10 +95,11 @@ public abstract class GeneralStringWidgetTest<W extends StringWidget, A extends 
         StringWidget widget = createWidget();
         List<View> viewsRegisterForContextMenu = ((WidgetTestActivity) activity).viewsRegisterForContextMenu;
 
-        assertThat(viewsRegisterForContextMenu.size(), is(2));
+        assertThat(viewsRegisterForContextMenu.size(), is(3));
 
         assertTrue(viewsRegisterForContextMenu.contains(widget.findViewWithTag(R.id.question_label)));
         assertTrue(viewsRegisterForContextMenu.contains(widget.findViewWithTag(R.id.help_text)));
+        assertTrue(viewsRegisterForContextMenu.contains(widget.findViewWithTag(R.id.error_message_container)));
 
         assertThat(viewsRegisterForContextMenu.get(0).getId(), is(widget.getId()));
         assertThat(viewsRegisterForContextMenu.get(1).getId(), is(widget.getId()));
