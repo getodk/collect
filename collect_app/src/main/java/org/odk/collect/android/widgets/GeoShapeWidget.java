@@ -58,6 +58,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
 
         String stringAnswer = GeoWidgetUtils.getGeoPolyAnswerToDisplay(prompt.getAnswerText());
         binding.geoAnswerText.setText(stringAnswer);
+        binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
 
         boolean dataAvailable = stringAnswer != null && !stringAnswer.isEmpty();
 
@@ -86,6 +87,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void clearAnswer() {
         binding.geoAnswerText.setText(null);
+        binding.geoAnswerText.setVisibility(GONE);
         binding.simpleButton.setText(org.odk.collect.strings.R.string.get_shape);
         widgetValueChanged();
     }
@@ -106,6 +108,7 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     @Override
     public void setData(Object answer) {
         binding.geoAnswerText.setText(answer.toString());
+        binding.geoAnswerText.setVisibility(binding.geoAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
         binding.simpleButton.setText(answer.toString().isEmpty() ? org.odk.collect.strings.R.string.get_shape : org.odk.collect.strings.R.string.geoshape_view_change_location);
         widgetValueChanged();
     }

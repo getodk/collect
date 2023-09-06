@@ -64,6 +64,7 @@ public class ExIntegerWidget extends ExStringWidget {
     public void setData(Object answer) {
         IntegerData integerData = ExternalAppsUtils.asIntegerData(answer);
         answerText.setText(integerData == null ? null : integerData.getValue().toString());
+        answerText.setVisibility(answerText.getText().toString().isBlank() ? GONE : VISIBLE);
         widgetValueChanged();
     }
 }

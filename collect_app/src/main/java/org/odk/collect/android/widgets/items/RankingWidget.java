@@ -80,6 +80,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     public void clearAnswer() {
         savedItems = null;
         answerTextView.setText(getAnswerText());
+        answerTextView.setVisibility(GONE);
         widgetValueChanged();
     }
 
@@ -102,6 +103,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     public void setData(Object values) {
         savedItems = (List<SelectChoice>) values;
         answerTextView.setText(getAnswerText());
+        answerTextView.setVisibility(answerTextView.getText().toString().isBlank() ? GONE : VISIBLE);
     }
 
     @Override
@@ -144,6 +146,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     private void setUpLayout(List<SelectChoice> items) {
         showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.rank_items), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
         answerTextView = createAnswerTextView(getContext(), getAnswerText(), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6));
+        answerTextView.setVisibility(answerTextView.getText().toString().isBlank() ? GONE : VISIBLE);
 
         LinearLayout widgetLayout = new LinearLayout(getContext());
         widgetLayout.setOrientation(LinearLayout.VERTICAL);

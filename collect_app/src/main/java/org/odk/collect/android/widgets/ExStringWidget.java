@@ -102,6 +102,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     protected void setUpLayout(Context context) {
         answerText.setText(getFormEntryPrompt().getAnswerText());
+        answerText.setVisibility(answerText.getText().toString().isBlank() ? GONE : VISIBLE);
         launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
         LinearLayout answerLayout = new LinearLayout(getContext());
@@ -128,6 +129,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public void setData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         answerText.setText(stringData == null ? null : stringData.getValue().toString());
+        answerText.setVisibility(answerText.getText().toString().isBlank() ? GONE : VISIBLE);
         widgetValueChanged();
     }
 
@@ -154,6 +156,12 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
                 softKeyboardController.hideSoftKeyboard(answerText);
             }
         }
+    }
+
+    @Override
+    public void clearAnswer() {
+        super.clearAnswer();
+        answerText.setVisibility(GONE);
     }
 
     @Override
@@ -185,6 +193,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     private void onException(String toastText) {
         hasExApp = false;
         if (!getFormEntryPrompt().isReadOnly()) {
+            answerText.setVisibility(VISIBLE);
             answerText.setBackground((new EditText(getContext())).getBackground());
             answerText.setFocusable(true);
             answerText.setFocusableInTouchMode(true);

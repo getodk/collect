@@ -81,6 +81,7 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
         } else {
             binding.osmFileHeaderText.setVisibility(View.GONE);
         }
+        binding.osmFileText.setVisibility(binding.osmFileText.getText().toString().isBlank() ? GONE : VISIBLE);
     }
 
     @Override
@@ -147,6 +148,7 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     public void setData(Object answer) {
         // show file name of saved osm data
         binding.osmFileText.setText((String) answer);
+        binding.osmFileText.setVisibility(binding.osmFileText.getText().toString().isBlank() ? GONE : VISIBLE);
         binding.osmFileHeaderText.setVisibility(View.VISIBLE);
         binding.launchOpenMapKitButton.setText(getContext().getString(org.odk.collect.strings.R.string.recapture_osm));
         widgetValueChanged();
@@ -161,6 +163,7 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     @Override
     public void clearAnswer() {
         binding.osmFileText.setText(null);
+        binding.osmFileText.setVisibility(GONE);
         binding.osmFileHeaderText.setVisibility(View.GONE);
         binding.launchOpenMapKitButton.setText(getContext().getString(org.odk.collect.strings.R.string.capture_osm));
         widgetValueChanged();

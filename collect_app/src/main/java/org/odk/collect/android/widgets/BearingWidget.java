@@ -72,6 +72,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
             binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
             binding.answerText.setText(answerText);
         }
+        binding.answerText.setVisibility(binding.answerText.getText().toString().isBlank() ? GONE : VISIBLE);
 
         return binding.getRoot();
     }
@@ -80,6 +81,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     public void clearAnswer() {
         binding.answerText.setText(null);
         binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.get_bearing));
+        binding.answerText.setVisibility(GONE);
         widgetValueChanged();
     }
 
@@ -92,6 +94,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     @Override
     public void setData(Object answer) {
         binding.answerText.setText((String) answer);
+        binding.answerText.setVisibility(binding.answerText.getText().toString().isBlank() ? GONE : VISIBLE);
         binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
         widgetValueChanged();
     }
@@ -125,6 +128,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
             binding.bearingButton.setEnabled(false);
 
+            binding.answerText.setVisibility(VISIBLE);
             binding.answerText.setBackground(new EditText(getContext()).getBackground());
             binding.answerText.setFocusable(true);
             binding.answerText.setFocusableInTouchMode(true);
