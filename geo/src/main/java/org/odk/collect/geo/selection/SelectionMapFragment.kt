@@ -22,7 +22,6 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
 import org.odk.collect.geo.GeoDependencyComponentProvider
-import org.odk.collect.geo.R
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.MapFragment
@@ -327,8 +326,12 @@ class SelectionMapFragment(
 
         updateFeatures(items)
 
-        val previouslySelectedItem =
+        // https://github.com/getodk/collect/issues/5540
+        val previouslySelectedItem = if (!skipSummary) {
             itemsByFeatureId.filter { it.value.selected }.map { it.key }.firstOrNull()
+        } else {
+            null
+        }
         val selectedItem = selectedItemViewModel.getSelectedItem()
 
         if (selectedItem != null) {
