@@ -456,8 +456,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider) {
-        return new InstancesDataService(application, instancesRepositoryProvider, currentProjectProvider);
+    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory) {
+        return new InstancesDataService(application, formsRepositoryProvider, instancesRepositoryProvider, entitiesRepositoryProvider, formEntryControllerFactory, currentProjectProvider);
     }
 
     @Provides

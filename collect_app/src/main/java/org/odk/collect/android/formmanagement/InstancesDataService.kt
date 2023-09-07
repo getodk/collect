@@ -2,15 +2,24 @@ package org.odk.collect.android.formmanagement
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.external.InstancesContract
+import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.tasks.FormLoaderTask
+import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.data.getState
 import org.odk.collect.forms.instances.Instance
+import java.io.File
 
 class InstancesDataService(
     private val context: Context,
+    private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
+    private val formEntryControllerFactory: FormLoaderTask.FormEntryControllerFactory,
     private val currentProjectProvider: CurrentProjectProvider
 ) {
     private val appState = context.getState()
@@ -41,6 +50,31 @@ class InstancesDataService(
             InstancesContract.getUri(currentProjectProvider.getCurrentProject().uuid),
             null
         )
+    }
+
+    fun finalizeAllDrafts(projectId: String): Int {
+        val instancesRepository = instancesRepositoryProvider.get()
+        val formsRepository = formsRepositoryProvider.get()
+        val entitiesRepository = entitiesRepositoryProvider.get(projectId)
+
+        val instances = instancesRepository.all
+
+        instances.forEach {
+            val form = formsRepository.getAllByFormId(it.formId)[0]
+            val xForm = File(form.formFilePath)
+            val formMediaDir = FileUtils.getFormMediaDir(xForm)
+            val formDef = FormEntryUseCases.loadFormDef(xForm, formMediaDir)!!
+
+            val formEntryController = formEntryControllerFactory.create(formDef)
+            val instanceFile = File(it.instanceFilePath)
+            val formController =
+                FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
+
+            FormEntryUseCases.finalizeDraft(formController, entitiesRepository, instancesRepository)
+        }
+
+        update()
+        return instances.size
     }
 
     companion object {

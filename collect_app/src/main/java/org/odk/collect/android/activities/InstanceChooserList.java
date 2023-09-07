@@ -48,7 +48,6 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
-import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory;
 import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
@@ -146,11 +145,8 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         BulkFinalizationViewModel bulkFinalizationViewModel = new BulkFinalizationViewModel(
                 scheduler,
-                instancesRepositoryProvider.get(),
-                formsRepositoryProvider.get(),
-                entitiesRepositoryProvider.get(currentProjectProvider.getCurrentProject().getUuid()),
-                new CollectFormEntryControllerFactory(settingsProvider.getUnprotectedSettings()),
-                instancesDataService
+                instancesDataService,
+                currentProjectProvider
         );
 
         DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(bulkFinalizationViewModel);
