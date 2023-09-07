@@ -25,12 +25,15 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
+import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
@@ -100,6 +103,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     @Override
     protected void setUpLayout(Context context) {
+        textInputLayout.setPadding(7, 7, 7, 0);
         answerText.setText(getFormEntryPrompt().getAnswerText());
         answerText.setVisibility(answerText.getText().toString().isBlank() ? GONE : VISIBLE);
         launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), this);
@@ -107,7 +111,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
-        answerLayout.addView(answerText);
+        answerLayout.addView(textInputLayout);
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
@@ -193,7 +197,6 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         hasExApp = false;
         if (!getFormEntryPrompt().isReadOnly()) {
             answerText.setVisibility(VISIBLE);
-            answerText.setBackground((new EditText(getContext())).getBackground());
             answerText.setFocusable(true);
             answerText.setFocusableInTouchMode(true);
             answerText.setEnabled(true);
@@ -222,5 +225,25 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         Timber.d(toastText);
         focusAnswer();
         Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+    }
+
+    @Override
+    public void hideError() {
+        super.hideError();
+        errorLayout.setVisibility(GONE);
+        setBackground(null);
+    }
+
+    @Override
+    public void displayError(String errorMessage) {
+        hideError();
+
+        if (answerText.isEnabled()) {
+            super.displayError(errorMessage);
+        } else {
+            ((TextView) errorLayout.findViewById(R.id.error_message)).setText(errorMessage);
+            errorLayout.setVisibility(VISIBLE);
+            setBackground(ContextCompat.getDrawable(getContext(), R.drawable.question_with_error_border));
+        }
     }
 }

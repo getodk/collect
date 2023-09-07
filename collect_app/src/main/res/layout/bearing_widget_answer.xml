@@ -12,12 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/answer_text"
-        style="@style/Widget.Collect.TextView.WidgetAnswer"
-        android:gravity="start"
-        android:inputType="numberDecimal"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/answer_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="numberDecimal" />
+    </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

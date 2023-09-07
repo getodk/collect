@@ -24,7 +24,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.EditText;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
@@ -64,7 +63,9 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
             binding.bearingButton.setOnClickListener(v -> onButtonClick());
         }
         binding.answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.answerText.setBackground(null);
+        binding.answerText.setEnabled(false);
+        binding.answerText.setTextColor(themeUtils.getColorOnSurface());
+        binding.answerText.setFocusable(false);
 
         String answerText = prompt.getAnswerText();
         if (answerText != null && !answerText.isEmpty()) {
@@ -127,11 +128,28 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
             binding.bearingButton.setEnabled(false);
 
+            binding.answerText.setEnabled(true);
             binding.answerText.setVisibility(VISIBLE);
-            binding.answerText.setBackground(new EditText(getContext()).getBackground());
             binding.answerText.setFocusable(true);
             binding.answerText.setFocusableInTouchMode(true);
             binding.answerText.requestFocus();
+        }
+    }
+
+    @Override
+    public void hideError() {
+        super.hideError();
+        binding.textInputLayout.setError(null);
+    }
+
+    @Override
+    public void displayError(String errorMessage) {
+        hideError();
+
+        if (binding.answerText.getVisibility() == VISIBLE) {
+            binding.textInputLayout.setError(errorMessage);
+        } else {
+            super.displayError(errorMessage);
         }
     }
 }
