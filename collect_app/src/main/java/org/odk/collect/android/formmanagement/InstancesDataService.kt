@@ -6,7 +6,6 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.projects.CurrentProjectProvider
-import org.odk.collect.android.tasks.FormLoaderTask
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -19,7 +18,6 @@ class InstancesDataService(
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
-    private val formEntryControllerFactory: FormLoaderTask.FormEntryControllerFactory,
     private val currentProjectProvider: CurrentProjectProvider
 ) {
     private val appState = context.getState()
@@ -65,7 +63,7 @@ class InstancesDataService(
             val formMediaDir = FileUtils.getFormMediaDir(xForm)
             val formDef = FormEntryUseCases.loadFormDef(xForm, formMediaDir)!!
 
-            val formEntryController = formEntryControllerFactory.create(formDef)
+            val formEntryController = CollectFormEntryControllerFactory().create(formDef)
             val instanceFile = File(it.instanceFilePath)
             val formController =
                 FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
