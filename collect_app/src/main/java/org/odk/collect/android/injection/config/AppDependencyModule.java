@@ -456,7 +456,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
     public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider) {
         return new InstancesDataService(application, instancesRepositoryProvider, currentProjectProvider);
     }
