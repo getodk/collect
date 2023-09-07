@@ -49,6 +49,7 @@ import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory;
+import org.odk.collect.android.formmanagement.InstancesAppState;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
 import org.odk.collect.android.injection.DaggerUtils;
@@ -99,6 +100,9 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
     @Inject
     SettingsProvider settingsProvider;
 
+    @Inject
+    InstancesAppState instancesAppState;
+
     private final ActivityResultLauncher<Intent> formLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         setResult(RESULT_OK, result.getData());
         finish();
@@ -145,7 +149,8 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                 instancesRepositoryProvider.get(),
                 formsRepositoryProvider.get(),
                 entitiesRepositoryProvider.get(currentProjectProvider.getCurrentProject().getUuid()),
-                new CollectFormEntryControllerFactory(settingsProvider.getUnprotectedSettings())
+                new CollectFormEntryControllerFactory(settingsProvider.getUnprotectedSettings()),
+                instancesAppState
         );
 
         DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(bulkFinalizationViewModel);
@@ -153,7 +158,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         bulkFinalizationViewModel.getFinalizedForms().observe(this, finalizedForms -> {
             if (!finalizedForms.isConsumed()) {
-                updateAdapter();
                 SnackbarUtils.showLongSnackbar(
                         this.findViewById(android.R.id.content),
                         "Success! " + finalizedForms.getValue() + " forms finalized."

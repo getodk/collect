@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.formentry.FormEntryUseCases.finalizeDraft
 import org.odk.collect.android.formentry.FormEntryUseCases.loadDraft
 import org.odk.collect.android.formentry.FormEntryUseCases.loadFormDef
+import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.data.Consumable
@@ -19,7 +20,8 @@ class BulkFinalizationViewModel(
     private val instancesRepository: InstancesRepository,
     private val formsRepository: FormsRepository,
     private val entitiesRepository: EntitiesRepository,
-    private val formEntryControllerFactory: FormEntryControllerFactory
+    private val formEntryControllerFactory: FormEntryControllerFactory,
+    private val instancesAppState: InstancesAppState
 ) {
     private val _finalizedForms = MutableLiveData<Consumable<Int>>()
     val finalizedForms: LiveData<Consumable<Int>> = _finalizedForms
@@ -42,6 +44,7 @@ class BulkFinalizationViewModel(
                     finalizeDraft(formController, entitiesRepository, instancesRepository)
                 }
 
+                instancesAppState.update()
                 instances.size
             },
             foreground = {
