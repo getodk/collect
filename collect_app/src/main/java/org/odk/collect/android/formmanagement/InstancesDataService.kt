@@ -7,15 +7,10 @@ import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
-import org.odk.collect.forms.instances.InstancesRepository
 import javax.inject.Singleton
 
-/**
- * Stores reactive state of instances. This (as a singleton) can be read or updated by
- * different parts of the app without needing reactive data in the [InstancesRepository].
- */
 @Singleton
-class InstancesAppState(
+class InstancesDataService(
     private val context: Context,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val currentProjectProvider: CurrentProjectProvider

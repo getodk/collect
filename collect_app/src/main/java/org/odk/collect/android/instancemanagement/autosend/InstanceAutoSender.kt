@@ -1,8 +1,7 @@
 package org.odk.collect.android.instancemanagement.autosend
 
 import android.content.Context
-import org.odk.collect.android.R
-import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.instancemanagement.InstanceSubmitter
@@ -21,7 +20,7 @@ class InstanceAutoSender(
     private val googleAccountsManager: GoogleAccountsManager,
     private val googleApiProvider: GoogleApiProvider,
     private val permissionsProvider: PermissionsProvider,
-    private val instancesAppState: InstancesAppState,
+    private val instancesDataService: InstancesDataService,
     private val propertyManager: PropertyManager
 ) {
     fun autoSendInstances(projectDependencyProvider: ProjectDependencyProvider): Boolean {
@@ -63,7 +62,7 @@ class InstanceAutoSender(
                         }
                     }
                 }
-                instancesAppState.update()
+                instancesDataService.update()
                 true
             } else {
                 false

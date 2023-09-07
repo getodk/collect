@@ -54,7 +54,7 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
-import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
@@ -457,8 +457,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public InstancesAppState providesInstancesAppState(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider) {
-        return new InstancesAppState(application, instancesRepositoryProvider, currentProjectProvider);
+    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider) {
+        return new InstancesDataService(application, instancesRepositoryProvider, currentProjectProvider);
     }
 
     @Provides
@@ -488,12 +488,12 @@ public class AppDependencyModule {
 
     @Provides
     public MainMenuViewModelFactory providesMainMenuViewModelFactory(VersionInformation versionInformation, Application application,
-                                                                     SettingsProvider settingsProvider, InstancesAppState instancesAppState,
+                                                                     SettingsProvider settingsProvider, InstancesDataService instancesDataService,
                                                                      Scheduler scheduler, CurrentProjectProvider currentProjectProvider,
                                                                      AnalyticsInitializer analyticsInitializer, PermissionsChecker permissionChecker,
                                                                      FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider,
                                                                      AutoSendSettingsProvider autoSendSettingsProvider) {
-        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesAppState, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider);
+        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesDataService, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider);
     }
 
     @Provides
@@ -512,9 +512,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState, PropertyManager propertyManager) {
+    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesDataService instancesDataService, PropertyManager propertyManager) {
         InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(autoSendSettingsProvider);
-        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState, propertyManager);
+        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, googleAccountsManager, googleApiProvider, permissionsProvider, instancesDataService, propertyManager);
     }
 
     @Provides

@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.forms.instances.Instance;
@@ -34,7 +34,7 @@ public abstract class InstanceUploader {
     InstancesRepositoryProvider instancesRepositoryProvider;
 
     @Inject
-    InstancesAppState instancesAppState;
+    InstancesDataService instancesDataService;
 
     public InstanceUploader() {
         DaggerUtils.getComponent(Collect.getInstance()).inject(this);
@@ -75,7 +75,7 @@ public abstract class InstanceUploader {
                         .build()
                 );
 
-        instancesAppState.update();
+        instancesDataService.update();
     }
 
     public void markSubmissionComplete(Instance instance) {
@@ -86,6 +86,6 @@ public abstract class InstanceUploader {
                         .build()
                 );
 
-        instancesAppState.update();
+        instancesDataService.update();
     }
 }
