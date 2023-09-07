@@ -971,7 +971,6 @@
   <string name="crash_app">App abstürzen lassen</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Unbehandelte Ausnahme erzwingen um die App abstürzen zu lassen</string>
-  <string name="predicate_caching">Prädikat-Caching</string>
   <string name="permission_dialog_title">Über Berechtigungen</string>
   <string name="permission_dialog_text">Du wirst aufgefordert, ODK Collect den Zugriff auf die unten aufgeführten Funktionen zu erlauben. Wähle \"Zulassen\", wenn du sie nutzen möchten.</string>
   <string name="notifications">Benachrichtigungen</string>

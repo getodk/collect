@@ -2,10 +2,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:title="@string/experimental">
 
-    <SwitchPreferenceCompat
-        android:title="@string/predicate_caching"
-        android:key="predicate_caching" />
-
     <Preference
         android:icon="@drawable/ic_person_24dp"
         android:title="@string/entities_title"

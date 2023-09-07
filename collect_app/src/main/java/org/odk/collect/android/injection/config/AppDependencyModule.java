@@ -640,7 +640,7 @@ public class AppDependencyModule {
 
     @Provides
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(SettingsProvider settingsProvider) {
-        return new CollectFormEntryControllerFactory(settingsProvider.getUnprotectedSettings());
+        return new CollectFormEntryControllerFactory();
     }
 
     @Provides
