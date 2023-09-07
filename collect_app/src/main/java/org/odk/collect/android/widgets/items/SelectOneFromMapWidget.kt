@@ -14,6 +14,7 @@ import org.javarosa.core.model.data.helper.Selection
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.databinding.SelectOneFromMapWidgetAnswerBinding
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.listeners.AdvanceToNextListener
 import org.odk.collect.android.widgets.QuestionWidget
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment.Companion.ARG_FORM_INDEX
@@ -22,10 +23,20 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.permissions.PermissionListener
 
 @SuppressLint("ViewConstructor")
-class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails) :
+class SelectOneFromMapWidget(
+    context: Context,
+    questionDetails: QuestionDetails,
+    private val autoAdvance: Boolean = false
+) :
     QuestionWidget(context, questionDetails), WidgetDataReceiver {
 
+    // Allows setting in test
+    lateinit var autoAdvanceListener: AdvanceToNextListener
+
     init {
+        if (context is AdvanceToNextListener) {
+            autoAdvanceListener = context
+        }
         render()
     }
 
@@ -79,7 +90,17 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
     override fun setOnLongClickListener(l: OnLongClickListener?) {}
 
     override fun setData(answer: Any?) {
+        // https://github.com/getodk/collect/issues/5540
+        val previousAnswer = getAnswer()
+
         updateAnswer(answer as SelectOneData)
+
+        val index = (answer.value as Selection).index
+        val previousIndex = (previousAnswer?.value as? Selection)?.index ?: -1
+        if (autoAdvance && index != previousIndex) {
+            autoAdvanceListener.advance()
+        }
+
         widgetValueChanged()
     }
 

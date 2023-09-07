@@ -315,8 +315,9 @@ public class WidgetFactory {
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.MAP)) {
-            questionWidget = new SelectOneFromMapWidget(activity, questionDetails);
+            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, isQuick);
         } else {
+            // https://github.com/getodk/collect/issues/5540
             questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController, formEntryViewModel);
         }
         return questionWidget;
