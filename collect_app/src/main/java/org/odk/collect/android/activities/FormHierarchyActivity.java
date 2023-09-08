@@ -822,10 +822,6 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
         finish();
     }
 
-    protected void onBackPressedWithoutLogger() {
-        super.onBackPressed();
-    }
-
     private void navigateToTheLastRelevantIndex(FormController formController) {
         FormEntryController fec = new FormEntryController(new FormEntryModel(formController.getFormDef()));
         formController.jumpToIndex(startIndex);
