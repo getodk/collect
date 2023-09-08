@@ -110,6 +110,7 @@ public class DateWidget extends QuestionWidget implements WidgetDataReceiver {
             selectedDate = DateTimeUtils.getSelectedDate((LocalDateTime) answer, LocalDateTime.now());
             binding.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDate.toDate(), datePickerDetails, false, getContext()));
+            widgetValueChanged();
         }
     }
 }

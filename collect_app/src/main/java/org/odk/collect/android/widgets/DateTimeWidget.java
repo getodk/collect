@@ -139,10 +139,12 @@ public class DateTimeWidget extends QuestionWidget implements WidgetDataReceiver
             selectedDateTime = DateTimeUtils.getSelectedDate((LocalDateTime) answer, selectedDateTime);
             binding.dateWidget.dateAnswerText.setText(DateTimeWidgetUtils.getDateTimeLabel(
                     selectedDateTime.toDate(), datePickerDetails, false, getContext()));
+            widgetValueChanged();
         }
         if (answer instanceof DateTime) {
             selectedDateTime = DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), selectedDateTime);
             binding.timeWidget.timeAnswerText.setText(new TimeData(selectedDateTime.toDate()).getDisplayText());
+            widgetValueChanged();
         }
     }
 

@@ -104,6 +104,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
         savedItems = (List<SelectChoice>) values;
         answerTextView.setText(getAnswerText());
         answerTextView.setVisibility(answerTextView.getText().toString().isBlank() ? GONE : VISIBLE);
+        widgetValueChanged();
     }
 
     @Override

@@ -168,7 +168,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
         if (selectChoice != null) {
             selections.add(new Selection(selectChoice));
         }
-        widgetValueChanged();
+        ((Activity) getContext()).runOnUiThread(this::widgetValueChanged);
     }
 
     private void unselectArea(String areaId) {
@@ -181,7 +181,7 @@ public abstract class SelectImageMapWidget extends QuestionWidget {
         }
 
         selections.remove(selectionToRemove);
-        widgetValueChanged();
+        ((Activity) getContext()).runOnUiThread(this::widgetValueChanged);
     }
 
     private void notifyChanges() {
