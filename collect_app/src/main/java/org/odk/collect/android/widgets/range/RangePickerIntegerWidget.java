@@ -88,5 +88,6 @@ public class RangePickerIntegerWidget extends QuestionWidget {
 
         binding.widgetAnswerText.setText(displayedValuesForNumberPicker[value]);
         binding.widgetButton.setText(org.odk.collect.strings.R.string.edit_value);
+        widgetValueChanged();
     }
 }

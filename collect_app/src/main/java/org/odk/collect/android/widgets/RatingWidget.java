@@ -101,6 +101,7 @@ public class RatingWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         binding.ratingBar1.setRating(0.0F);
+        widgetValueChanged();
     }
 
     @SuppressLint("ClickableViewAccessibility")
