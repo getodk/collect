@@ -33,6 +33,7 @@ public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        onBackPressedCallback.remove();
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

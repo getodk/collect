@@ -178,7 +178,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
 
-    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+    protected final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
             FormController formController = formEntryViewModel.getFormController();
