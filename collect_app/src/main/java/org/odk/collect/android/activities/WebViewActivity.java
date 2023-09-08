@@ -16,6 +16,8 @@ package org.odk.collect.android.activities;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebResourceError;
@@ -32,6 +34,17 @@ public class WebViewActivity extends LocalizedActivity {
 
     private WebView webView;
     private ProgressBar progressBar;
+
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (webView.canGoBack()) {
+                webView.goBack();
+            } else {
+                finish();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,20 +94,13 @@ public class WebViewActivity extends LocalizedActivity {
         webView.getSettings().setDisplayZoomControls(false);
         webView.setHorizontalScrollBarEnabled(false);
         webView.loadUrl(url);
+
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (webView.canGoBack()) {
-            webView.goBack();
-        } else {
-            finish();
-        }
     }
 }
