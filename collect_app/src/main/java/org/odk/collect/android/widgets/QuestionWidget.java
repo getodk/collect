@@ -417,6 +417,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     }
 
     public void widgetValueChanged() {
+        hideError();
         if (valueChangedListener != null) {
             valueChangedListener.widgetValueChanged(this);
         }
