@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -177,6 +178,18 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
 
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            FormController formController = formEntryViewModel.getFormController();
+            if (formController != null) {
+                formController.getAuditEventLogger().flush();
+                navigateToTheLastRelevantIndex(formController);
+            }
+            finish();
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         DaggerUtils.getComponent(this).inject(this);
@@ -257,6 +270,8 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(position, 0);
             });
         }
+
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
     @Override
@@ -805,21 +820,6 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
         }
         setResult(RESULT_OK);
         finish();
-    }
-
-    /**
-     * When the device back button is pressed, go back to the previous activity, NOT the previous
-     * level in the hierarchy as the "Go Up" button does.
-     */
-    @Override
-    public void onBackPressed() {
-        FormController formController = formEntryViewModel.getFormController();
-        if (formController != null) {
-            formController.getAuditEventLogger().flush();
-            navigateToTheLastRelevantIndex(formController);
-        }
-
-        onBackPressedWithoutLogger();
     }
 
     protected void onBackPressedWithoutLogger() {
