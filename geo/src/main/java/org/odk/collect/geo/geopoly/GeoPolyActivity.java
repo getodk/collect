@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
@@ -121,6 +122,17 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
     // restored from savedInstanceState
     private List<MapPoint> restoredPoints;
 
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (map != null && !originalPoly.equals(map.getPolyLinePoints(featureId))) {
+                showBackDialog();
+            } else {
+                finish();
+            }
+        }
+    };
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -155,6 +167,8 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
 
         MapFragment mapFragment = ((FragmentContainerView) findViewById(R.id.map_container)).getFragment();
         mapFragment.init(this::initMap, this::finish);
+
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
     @Override protected void onSaveInstanceState(Bundle state) {
@@ -309,14 +323,6 @@ public class GeoPolyActivity extends LocalizedActivity implements GeoPolySetting
         List<MapPoint> points = map.getPolyLinePoints(featureId);
         String result = GeoUtils.formatPointsResultString(points, outputMode.equals(OutputMode.GEOSHAPE));
         ExternalAppUtils.returnSingleValue(this, result);
-    }
-
-    @Override public void onBackPressed() {
-        if (map != null && !originalPoly.equals(map.getPolyLinePoints(featureId))) {
-            showBackDialog();
-        } else {
-            finish();
-        }
     }
 
     @Override
