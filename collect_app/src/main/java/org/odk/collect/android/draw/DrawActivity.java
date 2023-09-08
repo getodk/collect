@@ -25,6 +25,8 @@ import android.os.Bundle;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
@@ -90,6 +92,13 @@ public class DrawActivity extends LocalizedActivity {
 
     @Inject
     PenColorPickerViewModel.Factory factory;
+
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            createQuitDrawDialog();
+        }
+    };
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -238,6 +247,8 @@ public class DrawActivity extends LocalizedActivity {
                 drawView.setColor(penColor);
             }
         });
+
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
     private void saveAndClose() {
@@ -291,9 +302,6 @@ public class DrawActivity extends LocalizedActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                createQuitDrawDialog();
-                return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
             case KeyEvent.KEYCODE_DPAD_LEFT:
                 if (event.isAltPressed()) {
