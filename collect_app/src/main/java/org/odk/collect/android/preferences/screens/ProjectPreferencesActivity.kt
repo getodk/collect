@@ -21,7 +21,6 @@ import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.fragments.dialogs.MovingBackwardsDialog.MovingBackwardsDialogListener
 import org.odk.collect.android.fragments.dialogs.ResetSettingsResultDialog.ResetSettingsResultDialogListener
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.listeners.OnBackPressedListener
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.strings.localization.LocalizedActivity
@@ -31,8 +30,6 @@ class ProjectPreferencesActivity :
     LocalizedActivity(),
     ResetSettingsResultDialogListener,
     MovingBackwardsDialogListener {
-
-    private var onBackPressedListener: OnBackPressedListener? = null
 
     private var isInstanceStateSaved = false
 
@@ -60,15 +57,6 @@ class ProjectPreferencesActivity :
         super.onSaveInstanceState(outState)
     }
 
-    // If the onBackPressedListener is set then onBackPressed is delegated to it.
-    override fun onBackPressed() {
-        if (onBackPressedListener != null) {
-            onBackPressedListener!!.doBack()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
     override fun onDialogClosed() {
         ActivityUtils.startActivityAndCloseAllOthers(this, MainMenuActivity::class.java)
     }
@@ -76,10 +64,6 @@ class ProjectPreferencesActivity :
     override fun preventOtherWaysOfEditingForm() {
         val fragment = supportFragmentManager.findFragmentById(R.id.preferences_fragment_container) as FormEntryAccessPreferencesFragment
         fragment.preventOtherWaysOfEditingForm()
-    }
-
-    fun setOnBackPressedListener(onBackPressedListener: OnBackPressedListener?) {
-        this.onBackPressedListener = onBackPressedListener
     }
 
     fun isInstanceStateSaved() = isInstanceStateSaved
