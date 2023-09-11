@@ -61,6 +61,7 @@ import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
 
 import java.util.Arrays;
@@ -150,6 +151,12 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(bulkFinalizationViewModel);
         addMenuProvider(draftsMenuProvider);
+
+        MaterialProgressDialogFragment.showOn(this, bulkFinalizationViewModel.isFinalizing(), getSupportFragmentManager(), () -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage("Finalizing drafts...");
+            return dialog;
+        });
 
         bulkFinalizationViewModel.getFinalizedForms().observe(this, finalizedForms -> {
             if (!finalizedForms.isConsumed()) {
