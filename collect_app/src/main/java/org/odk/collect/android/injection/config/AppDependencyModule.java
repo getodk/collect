@@ -469,7 +469,7 @@ public class AppDependencyModule {
             return null;
         };
 
-        return new InstancesDataService(application, formsRepositoryProvider, instancesRepositoryProvider, entitiesRepositoryProvider, onUpdate);
+        return new InstancesDataService(getState(application), formsRepositoryProvider, instancesRepositoryProvider, entitiesRepositoryProvider, onUpdate);
     }
 
     @Provides
