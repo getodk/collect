@@ -32,8 +32,10 @@ class InstancesDataService(
             Instance.STATUS_SUBMITTED,
             Instance.STATUS_SUBMISSION_FAILED
         )
-
-        val editableInstances = instancesRepository.getCountByStatus(Instance.STATUS_INCOMPLETE)
+        val editableInstances = instancesRepository.getCountByStatus(
+            Instance.STATUS_INCOMPLETE,
+            Instance.STATUS_INVALID
+        )
 
         appState.setLive(EDITABLE_COUNT_KEY, editableInstances)
         appState.setLive(SENDABLE_COUNT_KEY, sendableInstances)
@@ -62,8 +64,8 @@ class InstancesDataService(
 
             val instance = FormEntryUseCases.finalizeDraft(
                 formController,
-                entitiesRepository,
-                instancesRepository
+                instancesRepository,
+                entitiesRepository
             )
 
             if (instance == null) {

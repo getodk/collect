@@ -50,8 +50,8 @@ object FormEntryUseCases {
     @JvmStatic
     fun finalizeDraft(
         formController: FormController,
-        entitiesRepository: EntitiesRepository,
-        instancesRepository: InstancesRepository
+        instancesRepository: InstancesRepository,
+        entitiesRepository: EntitiesRepository
     ): Instance? {
         val valid = finalizeInstance(formController, entitiesRepository)
 
@@ -59,8 +59,18 @@ object FormEntryUseCases {
             saveFormToDisk(formController)
             markInstanceAsComplete(formController, instancesRepository)
         } else {
+            markInstanceAsInvalid(formController, instancesRepository)
             null
         }
+    }
+
+    private fun markInstanceAsInvalid(formController: FormController, instancesRepository: InstancesRepository) {
+        val instancePath = formController.getInstanceFile()!!.absolutePath
+        val instance = instancesRepository.getOneByPath(instancePath)
+
+        instancesRepository.save(
+            Instance.Builder(instance).also { it.status(Instance.STATUS_INVALID) }.build()
+        )
     }
 
     private fun markInstanceAsComplete(

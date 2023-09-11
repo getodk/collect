@@ -25,11 +25,11 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.instancemanagement.InstanceExtKt;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
-import org.odk.collect.android.external.InstanceProvider;
-import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
-import org.odk.collect.android.utilities.FormsRepositoryProvider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -137,7 +137,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     private void setUpSubtext(View view) {
         long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE));
         String status = getCursor().getString(getCursor().getColumnIndex(DatabaseInstanceColumns.STATUS));
-        String subtext = InstanceProvider.getDisplaySubtext(context, status, new Date(lastStatusChangeDate));
+        String subtext = InstanceExtKt.getStatusDescription(context, status, new Date(lastStatusChangeDate));
 
         final TextView formSubtitle = view.findViewById(R.id.form_subtitle);
         formSubtitle.setText(subtext);
@@ -154,6 +154,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     public static int getFormStateImageResourceIdForStatus(String formStatus) {
         switch (formStatus) {
             case Instance.STATUS_INCOMPLETE:
+            case Instance.STATUS_INVALID:
                 return R.drawable.ic_form_state_saved;
             case Instance.STATUS_COMPLETE:
                 return R.drawable.ic_form_state_finalized;
@@ -163,6 +164,6 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
                 return R.drawable.ic_form_state_submission_failed;
         }
 
-        return -1;
+        throw new IllegalArgumentException();
     }
 }

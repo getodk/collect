@@ -57,8 +57,10 @@ class BulkFinalizationTest {
             .clickOptionsIcon("Finalize all forms")
             .clickOnText("Finalize all forms")
             .checkIsSnackbarWithMessageDisplayed("1 forms finalized. 1 forms have errors. Address issues before finalizing all forms.")
+            .assertText("Two Question Required")
             .pressBack(MainMenuPage())
 
+            .assertNumberOfEditableForms(1)
             .assertNumberOfFinalizedForms(1)
     }
 

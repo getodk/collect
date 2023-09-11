@@ -1,5 +1,8 @@
 package org.odk.collect.android.adapters;
 
+import static org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED;
+import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -13,16 +16,13 @@ import android.widget.TextView;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.external.InstanceProvider;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.instancemanagement.InstanceExtKt;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import static org.odk.collect.forms.instances.Instance.STATUS_SUBMISSION_FAILED;
-import static org.odk.collect.forms.instances.Instance.STATUS_SUBMITTED;
 
 public class InstanceUploaderAdapter extends CursorAdapter {
     private final Consumer<Long> onItemCheckboxClickListener;
@@ -49,7 +49,7 @@ public class InstanceUploaderAdapter extends CursorAdapter {
         String status = cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.STATUS));
 
         viewHolder.formTitle.setText(cursor.getString(cursor.getColumnIndex(DatabaseInstanceColumns.DISPLAY_NAME)));
-        viewHolder.formSubtitle.setText(InstanceProvider.getDisplaySubtext(context, status, new Date(lastStatusChangeDate)));
+        viewHolder.formSubtitle.setText(InstanceExtKt.getStatusDescription(context, status, new Date(lastStatusChangeDate)));
 
         switch (status) {
             case STATUS_SUBMISSION_FAILED:
