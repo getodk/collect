@@ -168,6 +168,11 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                             this.findViewById(android.R.id.content),
                             "Success! " + pair.getFirst() + " forms finalized."
                     );
+                } else if (pair.getFirst().equals(pair.getSecond())) {
+                    SnackbarUtils.showLongSnackbar(
+                            this.findViewById(android.R.id.content),
+                            pair.getSecond() + " forms have errors. Address issues before finalizing all forms."
+                    );
                 } else {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),

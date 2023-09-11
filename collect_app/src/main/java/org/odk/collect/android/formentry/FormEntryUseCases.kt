@@ -53,35 +53,39 @@ object FormEntryUseCases {
         instancesRepository: InstancesRepository,
         entitiesRepository: EntitiesRepository
     ): Instance? {
-        val valid = finalizeInstance(formController, entitiesRepository)
+        val instance =
+            getInstanceFromFormController(formController, instancesRepository)
 
-        return if (valid) {
-            saveFormToDisk(formController)
-            markInstanceAsComplete(formController, instancesRepository)
+        return if (instance!!.status != Instance.STATUS_INVALID) {
+            val valid = finalizeInstance(formController, entitiesRepository)
+
+            if (valid) {
+                saveFormToDisk(formController)
+                updateInstanceStatus(instancesRepository, instance, Instance.STATUS_COMPLETE)
+            } else {
+                updateInstanceStatus(instancesRepository, instance, Instance.STATUS_INVALID)
+                null
+            }
         } else {
-            markInstanceAsInvalid(formController, instancesRepository)
             null
         }
     }
 
-    private fun markInstanceAsInvalid(formController: FormController, instancesRepository: InstancesRepository) {
-        val instancePath = formController.getInstanceFile()!!.absolutePath
-        val instance = instancesRepository.getOneByPath(instancePath)
-
-        instancesRepository.save(
-            Instance.Builder(instance).also { it.status(Instance.STATUS_INVALID) }.build()
-        )
-    }
-
-    private fun markInstanceAsComplete(
+    private fun getInstanceFromFormController(
         formController: FormController,
         instancesRepository: InstancesRepository
-    ): Instance {
+    ): Instance? {
         val instancePath = formController.getInstanceFile()!!.absolutePath
-        val instance = instancesRepository.getOneByPath(instancePath)
+        return instancesRepository.getOneByPath(instancePath)
+    }
 
+    private fun updateInstanceStatus(
+        instancesRepository: InstancesRepository,
+        instance: Instance,
+        status: String
+    ): Instance {
         return instancesRepository.save(
-            Instance.Builder(instance).also { it.status(Instance.STATUS_COMPLETE) }.build()
+            Instance.Builder(instance).also { it.status(status) }.build()
         )
     }
 

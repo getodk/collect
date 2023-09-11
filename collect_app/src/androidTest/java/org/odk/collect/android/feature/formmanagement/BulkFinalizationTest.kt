@@ -65,6 +65,25 @@ class BulkFinalizationTest {
     }
 
     @Test
+    fun whenADraftPreviouslyHadConstraintViolations_marksFormsAsHavingErrors() {
+        rule.startAtMainMenu()
+            .copyForm("two-question-required.xml")
+            .startBlankForm("Two Question Required")
+            .fillOut(QuestionAndAnswer("What is your name?", "Dan"))
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
+            .clickSaveChanges()
+
+            .clickEditSavedForm(1)
+            .clickOptionsIcon("Finalize all forms")
+            .clickOnText("Finalize all forms")
+            .checkIsSnackbarWithMessageDisplayed("1 forms have errors. Address issues before finalizing all forms.")
+
+            .clickOptionsIcon("Finalize all forms")
+            .clickOnText("Finalize all forms")
+            .checkIsSnackbarWithMessageDisplayed("1 forms have errors. Address issues before finalizing all forms.")
+    }
+
+    @Test
     fun doesNotFinalizeOtherTypesOfInstance() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")

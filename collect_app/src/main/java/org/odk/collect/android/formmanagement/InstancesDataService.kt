@@ -49,7 +49,8 @@ class InstancesDataService(
         val formsRepository = formsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
 
-        val instances = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE)
+        val instances =
+            instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID)
 
         val totalFailed = instances.fold(0) { failCount, instance ->
             val form = formsRepository.getAllByFormId(instance.formId)[0]
