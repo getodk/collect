@@ -36,4 +36,23 @@ class BulkFinalizationTest {
 
             .assertNumberOfFinalizedForms(2)
     }
+
+    @Test
+    fun doesNotFinalizeOtherTypesOfInstance() {
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "98"))
+
+            .clickEditSavedForm(1)
+            .clickOptionsIcon("Finalize all forms")
+            .clickOnText("Finalize all forms")
+            .checkIsSnackbarWithMessageDisplayed("Success! 1 forms finalized.")
+            .assertTextDoesNotExist("One Question")
+            .pressBack(MainMenuPage())
+
+            .assertNumberOfFinalizedForms(2)
+    }
 }

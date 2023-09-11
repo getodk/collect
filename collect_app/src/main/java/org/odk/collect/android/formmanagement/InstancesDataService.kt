@@ -47,7 +47,7 @@ class InstancesDataService(
         val formsRepository = formsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
 
-        val instances = instancesRepository.all
+        val instances = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE)
 
         instances.forEach {
             val form = formsRepository.getAllByFormId(it.formId)[0]
