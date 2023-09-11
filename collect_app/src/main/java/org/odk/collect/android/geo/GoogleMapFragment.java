@@ -263,7 +263,10 @@ public class GoogleMapFragment extends SupportMapFragment implements
                 new Handler().postDelayed(() -> {
                     try {
                         moveOrAnimateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 0), animate);
-                    } catch (IllegalArgumentException e) { // https://github.com/getodk/collect/issues/5379
+                    } catch (IllegalArgumentException
+                             //https://github.com/getodk/collect/issues/5379
+                             |
+                             IllegalStateException e) { // https://github.com/getodk/collect/issues/5634
                         LatLng boxCenter = bounds.getCenter();
                         zoomToPoint(new MapPoint(boxCenter.latitude, boxCenter.longitude), map.getMinZoomLevel(), false);
                     }
