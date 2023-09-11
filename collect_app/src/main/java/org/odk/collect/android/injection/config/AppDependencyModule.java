@@ -384,8 +384,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Application application) {
-        return new EntitiesRepositoryProvider(application);
+    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Application application, CurrentProjectProvider currentProjectProvider) {
+        return new EntitiesRepositoryProvider(application, currentProjectProvider);
     }
 
     @Provides

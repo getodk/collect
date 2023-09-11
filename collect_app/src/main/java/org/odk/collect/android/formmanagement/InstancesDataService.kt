@@ -50,10 +50,10 @@ class InstancesDataService(
         )
     }
 
-    fun finalizeAllDrafts(projectId: String): Int {
+    fun finalizeAllDrafts(): Int {
         val instancesRepository = instancesRepositoryProvider.get()
         val formsRepository = formsRepositoryProvider.get()
-        val entitiesRepository = entitiesRepositoryProvider.get(projectId)
+        val entitiesRepository = entitiesRepositoryProvider.get()
 
         val instances = instancesRepository.all
 

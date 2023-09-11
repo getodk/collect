@@ -145,8 +145,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         BulkFinalizationViewModel bulkFinalizationViewModel = new BulkFinalizationViewModel(
                 scheduler,
-                instancesDataService,
-                currentProjectProvider
+                instancesDataService
         );
 
         DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(bulkFinalizationViewModel);
