@@ -3,9 +3,7 @@ package org.odk.collect.android.formmanagement
 import android.content.Context
 import androidx.lifecycle.LiveData
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
-import org.odk.collect.android.external.InstancesContract
 import org.odk.collect.android.formentry.FormEntryUseCases
-import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -14,11 +12,11 @@ import org.odk.collect.forms.instances.Instance
 import java.io.File
 
 class InstancesDataService(
-    private val context: Context,
+    context: Context,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
-    private val currentProjectProvider: CurrentProjectProvider
+    private val onUpdate: () -> Unit
 ) {
     private val appState = context.getState()
 
@@ -44,10 +42,7 @@ class InstancesDataService(
         appState.setLive(SENDABLE_COUNT_KEY, sendableInstances)
         appState.setLive(SENT_COUNT_KEY, sentInstances)
 
-        context.contentResolver.notifyChange(
-            InstancesContract.getUri(currentProjectProvider.getCurrentProject().uuid),
-            null
-        )
+        onUpdate()
     }
 
     fun finalizeAllDrafts(): Int {

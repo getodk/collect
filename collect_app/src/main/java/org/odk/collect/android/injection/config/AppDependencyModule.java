@@ -44,6 +44,7 @@ import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.draw.PenColorPickerViewModel;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.AppStateFormSessionRepository;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
@@ -151,6 +152,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import okhttp3.OkHttpClient;
 
 /**
@@ -456,8 +459,17 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory) {
-        return new InstancesDataService(application, formsRepositoryProvider, instancesRepositoryProvider, entitiesRepositoryProvider, currentProjectProvider);
+    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider) {
+        Function0<Unit> onUpdate = () -> {
+            application.getContentResolver().notifyChange(
+                    InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid()),
+                    null
+            );
+
+            return null;
+        };
+
+        return new InstancesDataService(application, formsRepositoryProvider, instancesRepositoryProvider, entitiesRepositoryProvider, onUpdate);
     }
 
     @Provides
