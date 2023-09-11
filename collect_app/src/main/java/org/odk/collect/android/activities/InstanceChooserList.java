@@ -68,6 +68,8 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
+import kotlin.Pair;
+
 /**
  * Responsible for displaying all the valid instances in the instance directory.
  *
@@ -160,10 +162,18 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         bulkFinalizationViewModel.getFinalizedForms().observe(this, finalizedForms -> {
             if (!finalizedForms.isConsumed()) {
-                SnackbarUtils.showLongSnackbar(
-                        this.findViewById(android.R.id.content),
-                        "Success! " + finalizedForms.getValue() + " forms finalized."
-                );
+                Pair<Integer, Integer> pair = finalizedForms.getValue();
+                if (pair.getSecond().equals(0)) {
+                    SnackbarUtils.showLongSnackbar(
+                            this.findViewById(android.R.id.content),
+                            "Success! " + pair.getFirst() + " forms finalized."
+                    );
+                } else {
+                    SnackbarUtils.showLongSnackbar(
+                            this.findViewById(android.R.id.content),
+                            (pair.getFirst() - pair.getSecond()) + " forms finalized. " + pair.getSecond() + " forms have errors. Address issues before finalizing all forms."
+                    );
+                }
 
                 finalizedForms.consume();
             }

@@ -12,8 +12,8 @@ class BulkFinalizationViewModel(
     private val scheduler: Scheduler,
     private val instancesDataService: InstancesDataService
 ) {
-    private val _finalizedForms = MutableLiveData<Consumable<Int>>()
-    val finalizedForms: LiveData<Consumable<Int>> = _finalizedForms
+    private val _finalizedForms = MutableLiveData<Consumable<Pair<Int, Int>>>()
+    val finalizedForms: LiveData<Consumable<Pair<Int, Int>>> = _finalizedForms
 
     private val _isFinalizing = MutableNonNullLiveData(false)
     val isFinalizing: NonNullLiveData<Boolean> = _isFinalizing

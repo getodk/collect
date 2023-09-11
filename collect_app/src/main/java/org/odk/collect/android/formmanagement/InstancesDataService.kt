@@ -42,29 +42,39 @@ class InstancesDataService(
         onUpdate()
     }
 
-    fun finalizeAllDrafts(): Int {
+    fun finalizeAllDrafts(): Pair<Int, Int> {
         val instancesRepository = instancesRepositoryProvider.get()
         val formsRepository = formsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
 
         val instances = instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE)
 
-        instances.forEach {
-            val form = formsRepository.getAllByFormId(it.formId)[0]
+        val totalFailed = instances.fold(0) { failCount, instance ->
+            val form = formsRepository.getAllByFormId(instance.formId)[0]
             val xForm = File(form.formFilePath)
             val formMediaDir = FileUtils.getFormMediaDir(xForm)
             val formDef = FormEntryUseCases.loadFormDef(xForm, formMediaDir)!!
 
             val formEntryController = CollectFormEntryControllerFactory().create(formDef)
-            val instanceFile = File(it.instanceFilePath)
+            val instanceFile = File(instance.instanceFilePath)
             val formController =
                 FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
 
-            FormEntryUseCases.finalizeDraft(formController, entitiesRepository, instancesRepository)
+            val instance = FormEntryUseCases.finalizeDraft(
+                formController,
+                entitiesRepository,
+                instancesRepository
+            )
+
+            if (instance == null) {
+                failCount + 1
+            } else {
+                failCount
+            }
         }
 
         update()
-        return instances.size
+        return Pair(instances.size, totalFailed)
     }
 
     companion object {

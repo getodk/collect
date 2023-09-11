@@ -7,6 +7,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
@@ -35,6 +36,30 @@ class BulkFinalizationTest {
             .pressBack(MainMenuPage())
 
             .assertNumberOfFinalizedForms(2)
+    }
+
+    @Test
+    fun whenThereAreDraftsWithConstraintViolations_marksFormsAsHavingErrors() {
+        rule.startAtMainMenu()
+            .copyForm("two-question-required.xml")
+            .startBlankForm("Two Question Required")
+            .fillOut(QuestionAndAnswer("What is your name?", "Dan"))
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
+            .clickSaveChanges()
+
+            .startBlankForm("Two Question Required")
+            .fillOutAndSave(
+                QuestionAndAnswer("What is your name?", "Tim"),
+                QuestionAndAnswer("What is your age?", "45", true)
+            )
+
+            .clickEditSavedForm(2)
+            .clickOptionsIcon("Finalize all forms")
+            .clickOnText("Finalize all forms")
+            .checkIsSnackbarWithMessageDisplayed("1 forms finalized. 1 forms have errors. Address issues before finalizing all forms.")
+            .pressBack(MainMenuPage())
+
+            .assertNumberOfFinalizedForms(1)
     }
 
     @Test
