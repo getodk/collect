@@ -11,26 +11,23 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
-import net.bytebuddy.utility.RandomString;
-
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.ReferenceManager;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
-import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.support.SynchronousImageLoader;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.shared.TempFiles;
+import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,14 +50,14 @@ import static org.robolectric.Shadows.shadowOf;
 public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
 
     private File currentFile;
+    private FakeQuestionMediaManager questionMediaManager;
 
-    @Mock
-    File file;
+    private final File file = TempFiles.createTempFile("sample", ".jpg");
 
     @NonNull
     @Override
     public AnnotateWidget createWidget() {
-        QuestionMediaManager fakeQuestionMediaManager = new FakeQuestionMediaManager() {
+        questionMediaManager = new FakeQuestionMediaManager() {
             @Override
             public File getAnswerFile(String fileName) {
                 File result;
@@ -74,20 +71,17 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         };
         return new AnnotateWidget(activity,
                 new QuestionDetails(formEntryPrompt, readOnlyOverride),
-                fakeQuestionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
+                questionMediaManager, new FakeWaitingForDataRegistry(), TempFiles.getPathInTempDir());
     }
 
     @NonNull
     @Override
     public StringData getNextAnswer() {
-        return new StringData(RandomString.make());
+        return new StringData(file.getName());
     }
 
     @Override
     public Object createBinaryData(@NotNull StringData answerData) {
-        when(file.exists()).thenReturn(true);
-        when(file.getName()).thenReturn(answerData.getDisplayText());
-
         return file;
     }
 
@@ -140,6 +134,20 @@ public class AnnotateWidgetTest extends FileWidgetTest<AnnotateWidget> {
         assertThat(widget.getImageView().getDrawable(), nullValue());
 
         assertThat(widget.getErrorTextView().getVisibility(), is(View.GONE));
+    }
+
+    @Test
+    public void whenGifFileSelected_doNotAttachItAndDisplayAMessage() {
+        AnnotateWidget widget = createWidget();
+
+        File file = TempFiles.createTempFile("sample", ".gif");
+        questionMediaManager.addAnswerFile(file);
+        widget.setData(file);
+
+        assertThat(widget.getImageView().getVisibility(), is(View.GONE));
+        assertThat(widget.getImageView().getDrawable(), nullValue());
+
+        assertThat(ShadowToast.getTextOfLatestToast(), is("Gif files are not supported"));
     }
 
     @Test
