@@ -16,6 +16,8 @@ import org.odk.collect.android.openrosa.HttpHeadResult;
 import org.odk.collect.android.openrosa.HttpPostResult;
 import org.odk.collect.android.openrosa.OpenRosaConstants;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
+import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.shared.TempFiles;
 import org.odk.collect.shared.strings.Md5;
 import org.odk.collect.shared.strings.RandomString;
 
@@ -43,6 +45,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
     private boolean noHashInFormList;
     private boolean noHashPrefixInMediaFiles;
     private boolean randomHash;
+
+    private final File submittedFormsDir = TempFiles.createTempDir();
 
     @NonNull
     @Override
@@ -111,6 +115,8 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
         } else if (credentialsIncorrect(credentials)) {
             return new HttpPostResult("", 401, "");
         } else if (uri.getPath().equals(OpenRosaConstants.SUBMISSION)) {
+            File destFile = new File(submittedFormsDir, String.valueOf(submittedFormsDir.listFiles().length));
+            FileUtils.copyFile(submissionFile, destFile);
             return new HttpPostResult("", 201, "");
         } else {
             return new HttpPostResult("", 404, "");
@@ -160,6 +166,10 @@ public class StubOpenRosaServer implements OpenRosaHttpInterface {
 
     public String getHostName() {
         return HOST;
+    }
+
+    public List<File> getSubmissions() {
+        return asList(submittedFormsDir.listFiles());
     }
 
     private boolean credentialsIncorrect(HttpCredentialsInterface credentials) {
