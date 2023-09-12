@@ -555,14 +555,12 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When attempting to edit a finalized form then start form for view only`() {
+    fun `When attempting to edit a finalized form display a warning and start form filling`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
 
-        formsRepository.save(
-            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
-        )
+        formsRepository.save(FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build())
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -575,7 +573,10 @@ class FormUriActivityTest {
 
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
 
-        assertStartSavedFormIntent(project.uuid, instance.dbId, false)
+        onView(withText(org.odk.collect.strings.R.string.edit_finalized_form_warning)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withId(android.R.id.button1)).perform(click())
+
+        assertStartSavedFormIntent(project.uuid, instance.dbId, true)
     }
 
     @Test

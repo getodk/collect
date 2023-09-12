@@ -1215,4 +1215,6 @@
     <string name="edit_form">Edit</string>
     <string name="view_form">View</string>
     <string name="close_snackbar">Close snackbar</string>
+
+    <string name="edit_finalized_form_warning">In later releases, you will not be able to edit finalized forms. Save forms as draft to edit them later.\n\nYou can check for errors in a draft form by tapping the three dots (⋮) and then Check for errors.</string>
 </resources>

@@ -11,6 +11,7 @@ import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.pages.ProjectSettingsPage
+import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
@@ -29,13 +30,63 @@ class SendFinalizedFormTest {
         .around(rule)
 
     @Test
-    fun canViewFormsBeforeSending() {
+    fun canEditAndFinalizeFormsBeforeSending() {
         rule.withProject(testDependencies.server.url)
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .closeSnackbar() // Make sure we don't get a false positive from this later
+
             .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .swipeToEndScreen()
+            .clickFinalize()
+            .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved)
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .assertText("53")
+    }
+
+    @Test
+    fun canEditAndConvertToDraftFormsBeforeSending() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+            .closeSnackbar() // Make sure we don't get a false positive from this later
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+            .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved_as_draft)
+
+            .clickEditSavedForm(1)
             .clickOnForm("One Question")
+            .assertText("53")
+    }
+
+    @Test
+    fun canEditAFormAndLeaveFinalizedBeforeSending() {
+        rule.withProject(testDependencies.server.url)
+            .copyForm("one-question.xml", testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndFinalize(QuestionAndAnswer("what is your age", "52"))
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
+            .clickGoToStart()
+            .answerQuestion("what is your age", "53")
+            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
+            .clickDiscardChanges()
+
+            .clickSendFinalizedForm(1)
+            .clickOnFormToEdit("One Question")
             .assertText("52")
     }
 
