@@ -163,4 +163,9 @@ object AnalyticsEvents {
      */
     const val PERMISSIONS_DIALOG_CANCEL = "PermissionsDialogCancel"
     const val PERMISSIONS_DIALOG_OK = "PermissionsDialogOK"
+
+    /**
+     * Tracks how often a form is finalized using a `ref` attribute on the `submission` element
+     */
+    const val PARTIAL_FORM_FINALIZED = "PartialFormFinalized"
 }
