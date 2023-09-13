@@ -35,7 +35,7 @@ class FormEntryUseCasesTest {
     fun finalizeDraft_whenValidationFails_marksInstanceAsHavingErrors() {
         val xForm = copyTestForm("forms/two-question-required.xml")
         val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
-        val instance = createNewInstance(formDef, formMediaDir, instancesRepository)
+        val instance = createDraft(formDef, formMediaDir, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
             FormEntryController(FormEntryModel(formDef)),
@@ -59,7 +59,7 @@ class FormEntryUseCasesTest {
     fun finalizeDraft_canCreatePartialSubmissions() {
         val xForm = copyTestForm("forms/one-question-partial.xml")
         val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
-        val instance = createNewInstance(formDef, formMediaDir, instancesRepository) {
+        val instance = createDraft(formDef, formMediaDir, instancesRepository) {
             it.stepToNextScreenEvent()
             it.answerQuestion(it.getFormIndex(), IntegerData(64))
         }
@@ -85,7 +85,7 @@ class FormEntryUseCasesTest {
         assertThat(root.getChild(0), equalTo("64"))
     }
 
-    private fun createNewInstance(
+    private fun createDraft(
         formDef: FormDef,
         formMediaDir: File,
         instancesRepository: InMemInstancesRepository,
