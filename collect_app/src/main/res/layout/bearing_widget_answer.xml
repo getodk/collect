@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/margin_small"
     android:paddingHorizontal="@dimen/margin_standard">
@@ -17,7 +19,8 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small">
+        android:layout_marginTop="@dimen/margin_small"
+        app:boxBackgroundColor="?colorSurfaceContainerLow">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/answer_text"
