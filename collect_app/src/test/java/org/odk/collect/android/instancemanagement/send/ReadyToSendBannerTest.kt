@@ -31,6 +31,36 @@ class ReadyToSendBannerTest {
     }
 
     @Test
+    fun `if initially the banner is gone it should become visible when its data changes and there are both sent and ready to send instances`() {
+        var data = ReadyToSendViewModel.Data(0, 0, 0)
+        val view = ReadyToSendBanner(context).also {
+            it.setData(data)
+        }
+
+        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
+
+        data = ReadyToSendViewModel.Data(1, 1, 0)
+        view.setData(data)
+
+        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.VISIBLE))
+    }
+
+    @Test
+    fun `if initially the banner is visible it should become gone when its data changes and there are no both sent and ready to send instances`() {
+        var data = ReadyToSendViewModel.Data(1, 1, 0)
+        val view = ReadyToSendBanner(context).also {
+            it.setData(data)
+        }
+
+        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.VISIBLE))
+
+        data = ReadyToSendViewModel.Data(0, 0, 0)
+        view.setData(data)
+
+        assertThat(view.findViewById<ConstraintLayout>(R.id.banner).visibility, equalTo(View.GONE))
+    }
+
+    @Test
     fun `if there are sent instances but no instances ready to send do not display the banner`() {
         val data = ReadyToSendViewModel.Data(0, 1, 0)
         val view = ReadyToSendBanner(context).also {
