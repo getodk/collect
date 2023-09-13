@@ -131,6 +131,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private String filterText;
 
     private MultiSelectViewModel multiSelectViewModel;
+    private ReadyToSendViewModel readyToSendViewModel;
     private boolean allSelected;
 
     private boolean isSearchBoxShown;
@@ -157,7 +158,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
             listAdapter.setSelected(ids);
         });
-        ReadyToSendViewModel readyToSendViewModel = new ViewModelProvider(this, factory).get(ReadyToSendViewModel.class);
+        readyToSendViewModel = new ViewModelProvider(this, factory).get(ReadyToSendViewModel.class);
         readyToSendViewModel.getData().observe(this, data -> binding.readyToSendBanner.setData(data));
 
         // set title
@@ -419,6 +420,8 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        readyToSendViewModel.update();
+
         if (resultCode == RESULT_CANCELED) {
             multiSelectViewModel.unselectAll();
             return;

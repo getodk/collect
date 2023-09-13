@@ -31,6 +31,8 @@ class ReadyToSendBanner(context: Context, attrs: AttributeSet?) : ConstraintLayo
 
             binding.subtext.text = context.resources.getQuantityString(R.plurals.forms_ready_to_send, data.numberOfInstancesReadyToSend, data.numberOfInstancesReadyToSend)
             binding.banner.visibility = VISIBLE
+        } else {
+            binding.banner.visibility = GONE
         }
     }
 }

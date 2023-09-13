@@ -11,13 +11,17 @@ import java.util.function.Supplier
 
 class ReadyToSendViewModel(
     private val instancesRepository: InstancesRepository,
-    scheduler: Scheduler,
+    private val scheduler: Scheduler,
     private val clock: Supplier<Long>
 ) : ViewModel() {
     private val _data = MutableLiveData<Data>()
     val data: LiveData<Data> = _data
 
     init {
+        update()
+    }
+
+    fun update() {
         scheduler.immediate(
             background = {
                 val sentInstances = instancesRepository.getAllByStatus(Instance.STATUS_SUBMITTED)
