@@ -89,9 +89,19 @@ object FormEntryUseCases {
 
         return if (valid) {
             saveFormToDisk(formController)
-            updateInstanceStatus(instancesRepository, instance, Instance.STATUS_COMPLETE)
+            instancesRepository.save(
+                Instance.Builder(instance)
+                    .status(Instance.STATUS_COMPLETE)
+                    .canEditWhenComplete(formController.isSubmissionEntireForm())
+                    .build()
+            )
         } else {
-            updateInstanceStatus(instancesRepository, instance, Instance.STATUS_INVALID)
+            instancesRepository.save(
+                Instance.Builder(instance)
+                    .status(Instance.STATUS_INVALID)
+                    .build()
+            )
+
             null
         }
     }
@@ -104,18 +114,8 @@ object FormEntryUseCases {
         return instancesRepository.getOneByPath(instancePath)
     }
 
-    private fun updateInstanceStatus(
-        instancesRepository: InstancesRepository,
-        instance: Instance,
-        status: String
-    ): Instance {
-        return instancesRepository.save(
-            Instance.Builder(instance).also { it.status(status) }.build()
-        )
-    }
-
     private fun saveFormToDisk(formController: FormController) {
-        val payload = formController.getFilledInFormXml()
+        val payload = formController.getSubmissionXml()
         FileUtils.write(formController.getInstanceFile(), payload!!.payloadBytes)
     }
 
