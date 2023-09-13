@@ -2,34 +2,41 @@ package org.odk.collect.android.formentry
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.javarosa.core.model.FormDef
+import org.javarosa.core.model.instance.InstanceInitializationFactory
+import org.javarosa.form.api.FormEntryController
+import org.javarosa.form.api.FormEntryModel
+import org.javarosa.xform.util.XFormUtils
 import org.junit.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.verify
 import org.odk.collect.android.entities.InMemEntitiesRepository
-import org.odk.collect.android.javarosawrapper.FailedValidationResult
-import org.odk.collect.android.javarosawrapper.FormController
+import org.odk.collect.android.javarosawrapper.JavaRosaFormController
+import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
-import org.odk.collect.formstest.InstanceFixtures
+import org.odk.collect.shared.TempFiles
 import java.io.File
 
 class FormEntryUseCasesTest {
 
     @Test
     fun finalizeDraft_whenValidationFails_marksInstanceAsHavingErrors() {
+        val formMediaDir = TempFiles.createTempDir()
+        val instanceFile = TempFiles.createTempFile("instance", ".xml")
         val instancesRepository = InMemInstancesRepository()
-        val instance = instancesRepository.save(InstanceFixtures.instance())
 
-        val formController = mock<FormController> {
-            on { validateAnswers(true) } doReturn FailedValidationResult(mock(), 0)
-            on { getInstanceFile() } doReturn File(instance.instanceFilePath)
-        }
+        val xForm = copyTestForm("forms/two-question-required.xml")
+        val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
+        val newFormController = loadBlankForm(formDef, formMediaDir, instanceFile)
+        val instance = saveNewDraft(newFormController, instancesRepository, instanceFile)
+
+        val draftController = FormEntryUseCases.loadDraft(
+            FormEntryController(FormEntryModel(formDef)),
+            formMediaDir,
+            instanceFile
+        )
 
         FormEntryUseCases.finalizeDraft(
-            formController,
+            draftController,
             instancesRepository,
             InMemEntitiesRepository()
         )
@@ -40,24 +47,40 @@ class FormEntryUseCasesTest {
         )
     }
 
-    @Test
-    fun finalizeDraft_whenInsteadIsAlreadyInvalid_doesNotValidateAgain() {
-        val instancesRepository = InMemInstancesRepository()
-        val instance =
-            instancesRepository.save(InstanceFixtures.instance(status = Instance.STATUS_INVALID))
-
-        val formController = mock<FormController> {
-            on { validateAnswers(true) } doReturn FailedValidationResult(mock(), 0)
-            on { getInstanceFile() } doReturn File(instance.instanceFilePath)
-        }
-
-        val result = FormEntryUseCases.finalizeDraft(
-            formController,
-            instancesRepository,
-            InMemEntitiesRepository()
+    private fun saveNewDraft(
+        newFormController: JavaRosaFormController,
+        instancesRepository: InMemInstancesRepository,
+        instanceFile: File
+    ): Instance {
+        FormEntryUseCases.saveFormToDisk(newFormController)
+        return instancesRepository.save(
+            Instance.Builder()
+                .instanceFilePath(instanceFile.absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
         )
+    }
 
-        assertThat(result, equalTo(null))
-        verify(formController, never()).validateAnswers(any())
+    private fun loadBlankForm(
+        formDef: FormDef?,
+        formMediaDir: File,
+        instanceFile: File
+    ): JavaRosaFormController {
+        val instanceInit = InstanceInitializationFactory()
+        val formEntryController = FormEntryController(FormEntryModel(formDef))
+        formEntryController.model.form.initialize(true, instanceInit)
+
+        val newFormController = JavaRosaFormController(
+            formMediaDir,
+            formEntryController,
+            instanceFile
+        )
+        return newFormController
+    }
+
+    private fun copyTestForm(testForm: String): File {
+        return TempFiles.createTempFile().also {
+            FileUtils.copyFileFromResources(testForm, it.absolutePath)
+        }
     }
 }
