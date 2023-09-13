@@ -4,6 +4,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.data.IntegerData
+import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.javarosa.model.xform.XFormsModule
@@ -15,6 +16,7 @@ import org.kxml2.kdom.Document
 import org.odk.collect.android.entities.InMemEntitiesRepository
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.shared.TempFiles
@@ -23,6 +25,7 @@ import java.io.StringReader
 
 class FormEntryUseCasesTest {
 
+    private val projectRootDir = TempFiles.createTempDir()
     private val instancesRepository = InMemInstancesRepository()
 
     @Before
@@ -34,7 +37,7 @@ class FormEntryUseCasesTest {
     fun finalizeDraft_whenValidationFails_marksInstanceAsHavingErrors() {
         val formMediaDir = TempFiles.createTempDir()
         val xForm = copyTestForm("forms/two-question-required.xml")
-        val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
+        val formDef = parseForm(xForm, projectRootDir, formMediaDir)
         val instance = createDraft(formDef, formMediaDir, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
@@ -59,7 +62,7 @@ class FormEntryUseCasesTest {
     fun finalizeDraft_canCreatePartialSubmissions() {
         val formMediaDir = TempFiles.createTempDir()
         val xForm = copyTestForm("forms/one-question-partial.xml")
-        val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
+        val formDef = parseForm(xForm, projectRootDir, formMediaDir)
         val instance = createDraft(formDef, formMediaDir, instancesRepository) {
             it.stepToNextScreenEvent()
             it.answerQuestion(it.getFormIndex(), IntegerData(64))
@@ -84,6 +87,11 @@ class FormEntryUseCasesTest {
         assertThat(root.name, equalTo("age"))
         assertThat(root.childCount, equalTo(1))
         assertThat(root.getChild(0), equalTo("64"))
+    }
+
+    private fun parseForm(xForm: File, projectRootDir: File, formMediaDir: File): FormDef {
+        FormUtils.setupReferenceManagerForForm(ReferenceManager.instance(), projectRootDir, formMediaDir)
+        return XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
     }
 
     private fun createDraft(

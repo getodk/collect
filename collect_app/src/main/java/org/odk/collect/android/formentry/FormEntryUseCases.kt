@@ -24,8 +24,8 @@ import java.io.File
 object FormEntryUseCases {
 
     @JvmStatic
-    fun loadFormDef(xForm: File, formMediaDir: File): FormDef? {
-        FormUtils.setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir)
+    fun loadFormDef(xForm: File, projectRootDir: File, formMediaDir: File): FormDef? {
+        FormUtils.setupReferenceManagerForForm(ReferenceManager.instance(), projectRootDir, formMediaDir)
         return createFormDefFromCacheOrXml(xForm)
     }
 

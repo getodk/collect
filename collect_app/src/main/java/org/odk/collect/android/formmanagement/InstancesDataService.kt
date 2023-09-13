@@ -3,6 +3,7 @@ package org.odk.collect.android.formmanagement
 import androidx.lifecycle.LiveData
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
+import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -15,6 +16,7 @@ class InstancesDataService(
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
+    private val storagePathProvider: StoragePathProvider,
     private val onUpdate: () -> Unit
 ) {
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
@@ -48,6 +50,7 @@ class InstancesDataService(
         val instancesRepository = instancesRepositoryProvider.get()
         val formsRepository = formsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
+        val projectRootDir = File(storagePathProvider.getProjectRootDirPath())
 
         val instances =
             instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID)
@@ -56,7 +59,7 @@ class InstancesDataService(
             val form = formsRepository.getAllByFormId(instance.formId)[0]
             val xForm = File(form.formFilePath)
             val formMediaDir = FileUtils.getFormMediaDir(xForm)
-            val formDef = FormEntryUseCases.loadFormDef(xForm, formMediaDir)!!
+            val formDef = FormEntryUseCases.loadFormDef(xForm, projectRootDir, formMediaDir)!!
 
             val formEntryController = CollectFormEntryControllerFactory().create(formDef)
             val instanceFile = File(instance.instanceFilePath)
