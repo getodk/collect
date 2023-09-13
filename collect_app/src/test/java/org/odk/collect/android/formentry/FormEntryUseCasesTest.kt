@@ -26,8 +26,13 @@ class FormEntryUseCasesTest {
 
         val xForm = copyTestForm("forms/two-question-required.xml")
         val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
-        val newFormController = loadBlankForm(formDef, formMediaDir, instanceFile)
-        val instance = saveNewDraft(newFormController, instancesRepository, instanceFile)
+        val newFormController = FormEntryUseCases.loadBlankForm(
+            FormEntryController(FormEntryModel(formDef)),
+            formMediaDir,
+            instanceFile
+        )
+        val instance =
+            FormEntryUseCases.saveDraft(newFormController, instancesRepository, instanceFile)
 
         val draftController = FormEntryUseCases.loadDraft(
             FormEntryController(FormEntryModel(formDef)),
@@ -45,37 +50,6 @@ class FormEntryUseCasesTest {
             instancesRepository.get(instance.dbId)!!.status,
             equalTo(Instance.STATUS_INVALID)
         )
-    }
-
-    private fun saveNewDraft(
-        newFormController: JavaRosaFormController,
-        instancesRepository: InMemInstancesRepository,
-        instanceFile: File
-    ): Instance {
-        FormEntryUseCases.saveFormToDisk(newFormController)
-        return instancesRepository.save(
-            Instance.Builder()
-                .instanceFilePath(instanceFile.absolutePath)
-                .status(Instance.STATUS_INCOMPLETE)
-                .build()
-        )
-    }
-
-    private fun loadBlankForm(
-        formDef: FormDef?,
-        formMediaDir: File,
-        instanceFile: File
-    ): JavaRosaFormController {
-        val instanceInit = InstanceInitializationFactory()
-        val formEntryController = FormEntryController(FormEntryModel(formDef))
-        formEntryController.model.form.initialize(true, instanceInit)
-
-        val newFormController = JavaRosaFormController(
-            formMediaDir,
-            formEntryController,
-            instanceFile
-        )
-        return newFormController
     }
 
     private fun copyTestForm(testForm: String): File {

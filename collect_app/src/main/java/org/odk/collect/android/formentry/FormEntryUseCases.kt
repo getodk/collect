@@ -29,6 +29,21 @@ object FormEntryUseCases {
         return createFormDefFromCacheOrXml(xForm)
     }
 
+    fun loadBlankForm(
+        formEntryController: FormEntryController,
+        formMediaDir: File,
+        instanceFile: File
+    ): JavaRosaFormController {
+        val instanceInit = InstanceInitializationFactory()
+        formEntryController.model.form.initialize(true, instanceInit)
+
+        return JavaRosaFormController(
+            formMediaDir,
+            formEntryController,
+            instanceFile
+        )
+    }
+
     @JvmStatic
     fun loadDraft(
         formEntryController: FormEntryController,
@@ -44,6 +59,20 @@ object FormEntryUseCases {
             formMediaDir,
             formEntryController,
             instance
+        )
+    }
+
+    fun saveDraft(
+        formController: JavaRosaFormController,
+        instancesRepository: InstancesRepository,
+        instanceFile: File
+    ): Instance {
+        saveFormToDisk(formController)
+        return instancesRepository.save(
+            Instance.Builder()
+                .instanceFilePath(instanceFile.absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
         )
     }
 
@@ -75,7 +104,7 @@ object FormEntryUseCases {
         return instancesRepository.getOneByPath(instancePath)
     }
 
-    fun updateInstanceStatus(
+    private fun updateInstanceStatus(
         instancesRepository: InstancesRepository,
         instance: Instance,
         status: String
@@ -85,7 +114,7 @@ object FormEntryUseCases {
         )
     }
 
-    fun saveFormToDisk(formController: FormController) {
+    private fun saveFormToDisk(formController: FormController) {
         val payload = formController.getFilledInFormXml()
         FileUtils.write(formController.getInstanceFile(), payload!!.payloadBytes)
     }
