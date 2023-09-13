@@ -14,7 +14,7 @@ class ReadyToSendViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val instancesRepository = InMemInstancesRepository().also {
+    private var instancesRepository = InMemInstancesRepository().also {
         it.save(
             Instance.Builder()
                 .formId("1")
@@ -88,8 +88,15 @@ class ReadyToSendViewModelTest {
     }
 
     @Test
-    fun `lastInstanceSentTimeMillis should correctly calculate when the last instance has been sent`() {
+    fun `lastInstanceSentTimeMillis should be correctly calculate when the last instance has been sent`() {
         scheduler.runBackground()
         assertThat(viewModel.data.value!!.lastInstanceSentTimeMillis, equalTo(4000L))
+    }
+
+    @Test
+    fun `lastInstanceSentTimeMillis should be 0 if there are no sent instances`() {
+        instancesRepository.deleteAll()
+        scheduler.runBackground()
+        assertThat(viewModel.data.value!!.lastInstanceSentTimeMillis, equalTo(0L))
     }
 }
