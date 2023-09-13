@@ -143,7 +143,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
 
     public FormEntryPage swipeToNextQuestionWithConstraintViolation(String constraintText) {
         flingLeft();
-        assertConstraintDisplayed(constraintText);
+        assertText(constraintText);
 
         return this;
     }
@@ -365,30 +365,6 @@ public class FormEntryPage extends Page<FormEntryPage> {
     public CancelRecordingDialog clickRecordAudio() {
         clickOnString(org.odk.collect.strings.R.string.record_audio);
         return new CancelRecordingDialog(formName);
-    }
-
-    public FormEntryPage assertConstraintDisplayed(String constraintText) {
-        // Constraints warnings show as dialogs in Android 11+
-        if (Build.VERSION.SDK_INT < 30) {
-            checkIsToastWithMessageDisplayed(constraintText);
-        } else {
-            new OkDialog().assertOnPage()
-                    .assertText(constraintText)
-                    .clickOK(this);
-        }
-
-        return this;
-    }
-
-    public FormEntryPage assertConstraintNotDisplayed(String constraintText) {
-        // Constraints warnings show as dialogs in Android 11+
-        if (Build.VERSION.SDK_INT < 30) {
-            assertToastNotDisplayed(constraintText);
-        } else {
-            assertOnPage();
-        }
-
-        return this;
     }
 
     public MainMenuPage pressBackAndDiscardChanges() {

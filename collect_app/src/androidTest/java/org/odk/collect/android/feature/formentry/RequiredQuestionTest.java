@@ -45,7 +45,7 @@ public class RequiredQuestionTest {
                 .clickOptionsIcon()
                 .clickOnString(org.odk.collect.strings.R.string.validate)
                 .assertText(org.odk.collect.strings.R.string.success_form_validation)
-                .assertConstraintNotDisplayed("Custom required message");
+                .assertTextDoesNotExist("Custom required message");
     }
 
     @Test
@@ -108,7 +108,7 @@ public class RequiredQuestionTest {
                 .swipeToNextQuestionWithConstraintViolation("Custom required message2")
                 .clickOptionsIcon()
                 .clickOnString(org.odk.collect.strings.R.string.validate)
-                .assertConstraintDisplayed("Custom required message2")
+                .assertText("Custom required message2")
                 .clickGoToArrow()
                 .clickGoToEnd()
                 .clickSaveAndExitWithError("Custom required message2");
