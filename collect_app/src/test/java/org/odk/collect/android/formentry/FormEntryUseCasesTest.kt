@@ -24,7 +24,6 @@ import java.io.StringReader
 class FormEntryUseCasesTest {
 
     private val instancesRepository = InMemInstancesRepository()
-    private val formMediaDir = TempFiles.createTempDir()
 
     @Before
     fun setup() {
@@ -33,6 +32,7 @@ class FormEntryUseCasesTest {
 
     @Test
     fun finalizeDraft_whenValidationFails_marksInstanceAsHavingErrors() {
+        val formMediaDir = TempFiles.createTempDir()
         val xForm = copyTestForm("forms/two-question-required.xml")
         val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
         val instance = createDraft(formDef, formMediaDir, instancesRepository)
@@ -57,6 +57,7 @@ class FormEntryUseCasesTest {
 
     @Test
     fun finalizeDraft_canCreatePartialSubmissions() {
+        val formMediaDir = TempFiles.createTempDir()
         val xForm = copyTestForm("forms/one-question-partial.xml")
         val formDef = XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
         val instance = createDraft(formDef, formMediaDir, instancesRepository) {
