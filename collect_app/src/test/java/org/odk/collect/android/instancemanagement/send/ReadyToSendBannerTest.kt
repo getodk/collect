@@ -72,7 +72,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 5 seconds ago")
+            equalTo(context.resources.getQuantityString(org.odk.collect.strings.R.plurals.last_form_sent_seconds_ago, 5, 5))
         )
     }
 
@@ -85,7 +85,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 1 minute ago")
+            equalTo(context.resources.getQuantityString(org.odk.collect.strings.R.plurals.last_form_sent_minutes_ago, 1, 1))
         )
     }
 
@@ -98,7 +98,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 2 hours ago")
+            equalTo(context.resources.getQuantityString(org.odk.collect.strings.R.plurals.last_form_sent_hours_ago, 2, 2))
         )
     }
 
@@ -111,7 +111,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.title).text,
-            equalTo("Last form sent: 34 days ago")
+            equalTo(context.resources.getQuantityString(org.odk.collect.strings.R.plurals.last_form_sent_days_ago, 34, 34))
         )
     }
 
@@ -124,7 +124,7 @@ class ReadyToSendBannerTest {
 
         assertThat(
             view.findViewById<MaterialTextView>(R.id.subtext).text,
-            equalTo("3 forms ready to send")
+            equalTo(context.resources.getQuantityString(org.odk.collect.strings.R.plurals.forms_ready_to_send, 3, 3))
         )
     }
 }
