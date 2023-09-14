@@ -3,6 +3,6 @@
     <item
         android:id="@+id/bulk_finalize"
         android:showAsAction="never"
-        android:title="Finalize all forms">
+        android:title="@string/finalize_all_forms">
     </item>
 </menu>
