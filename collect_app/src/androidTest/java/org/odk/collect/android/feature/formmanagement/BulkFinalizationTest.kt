@@ -10,6 +10,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
 class BulkFinalizationTest {
@@ -29,9 +30,9 @@ class BulkFinalizationTest {
             .fillOutAndSave(QuestionAndAnswer("what is your age", "98"))
 
             .clickEditSavedForm(2)
-            .clickOptionsIcon("Finalize all forms")
-            .clickOnText("Finalize all forms")
-            .checkIsSnackbarWithMessageDisplayed("Success! 2 forms finalized.")
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_success, 2)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
 
@@ -54,9 +55,9 @@ class BulkFinalizationTest {
             )
 
             .clickEditSavedForm(2)
-            .clickOptionsIcon("Finalize all forms")
-            .clickOnText("Finalize all forms")
-            .checkIsSnackbarWithMessageDisplayed("1 forms finalized. 1 forms have errors. Address issues before finalizing all forms.")
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_partial_success, 1, 1)
             .assertText("Two Question Required")
             .pressBack(MainMenuPage())
 
@@ -74,13 +75,13 @@ class BulkFinalizationTest {
             .clickSaveChanges()
 
             .clickEditSavedForm(1)
-            .clickOptionsIcon("Finalize all forms")
-            .clickOnText("Finalize all forms")
-            .checkIsSnackbarWithMessageDisplayed("1 forms have errors. Address issues before finalizing all forms.")
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_failure, 1)
 
-            .clickOptionsIcon("Finalize all forms")
-            .clickOnText("Finalize all forms")
-            .checkIsSnackbarWithMessageDisplayed("1 forms have errors. Address issues before finalizing all forms.")
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_failure, 1)
     }
 
     @Test
@@ -93,9 +94,9 @@ class BulkFinalizationTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "98"))
 
             .clickEditSavedForm(1)
-            .clickOptionsIcon("Finalize all forms")
-            .clickOnText("Finalize all forms")
-            .checkIsSnackbarWithMessageDisplayed("Success! 1 forms finalized.")
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_success, 1)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
 

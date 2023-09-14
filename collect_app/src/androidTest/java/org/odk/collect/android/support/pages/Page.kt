@@ -169,8 +169,8 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun checkIsSnackbarWithMessageDisplayed(message: Int): T {
-        onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    fun checkIsSnackbarWithMessageDisplayed(message: Int, vararg formatArgs: Any): T {
+        onView(withText(getTranslatedString(message, *formatArgs))).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         return this as T
     }
 
