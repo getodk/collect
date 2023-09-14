@@ -1221,4 +1221,13 @@
 
     <!-- Label for option that finalizes all the forms the user is currently looking at -->
     <string name="finalize_all_forms">Finalize all forms</string>
+
+    <!-- Message shown when finalizing all forms has succeeded and how many totally have been finalized -->
+    <string name="bulk_finalize_success">Success! %d forms finalized.</string>
+
+    <!-- Message shown when no forms finalized successfully -->
+    <string name="bulk_finalize_failure">%d forms have errors. Address issues before finalizing all forms.</string>
+
+    <!-- Message shown when some forms finalize successfully and others fail -->
+    <string name="bulk_finalize_partial_success">%d forms finalized. %d forms have errors. Address issues before finalizing all forms.</string>
 </resources>

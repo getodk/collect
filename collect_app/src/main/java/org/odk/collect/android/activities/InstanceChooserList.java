@@ -63,6 +63,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.strings.R.string;
 
 import java.util.Arrays;
 
@@ -166,17 +167,17 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                 if (pair.getSecond().equals(0)) {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
-                            "Success! " + pair.getFirst() + " forms finalized."
+                            getString(string.bulk_finalize_success, pair.getFirst())
                     );
                 } else if (pair.getFirst().equals(pair.getSecond())) {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
-                            pair.getSecond() + " forms have errors. Address issues before finalizing all forms."
+                            getString(string.bulk_finalize_failure, pair.getSecond())
                     );
                 } else {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
-                            (pair.getFirst() - pair.getSecond()) + " forms finalized. " + pair.getSecond() + " forms have errors. Address issues before finalizing all forms."
+                            getString(string.bulk_finalize_partial_success, pair.getFirst() - pair.getSecond(), pair.getSecond())
                     );
                 }
 
