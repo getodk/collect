@@ -89,8 +89,38 @@ class FormEntryUseCasesTest {
         assertThat(root.getChild(0), equalTo("64"))
     }
 
+    @Test
+    fun finalizeDraft_updatesInstanceNameInRepository() {
+        val formMediaDir = TempFiles.createTempDir()
+        val xForm = copyTestForm("forms/one-question-uuid-instance-name.xml")
+        val formDef = parseForm(xForm, projectRootDir, formMediaDir)
+        val instance = createDraft(formDef, formMediaDir, instancesRepository)
+
+        val draftController = FormEntryUseCases.loadDraft(
+            FormEntryController(FormEntryModel(formDef)),
+            formMediaDir,
+            File(instance.instanceFilePath)
+        )
+
+        FormEntryUseCases.finalizeDraft(
+            draftController,
+            instancesRepository,
+            InMemEntitiesRepository()
+        )
+
+        val updatedInstance = instancesRepository.get(instance.dbId)!!
+        assertThat(
+            updatedInstance.displayName,
+            equalTo(draftController.getSubmissionMetadata()!!.instanceName)
+        )
+    }
+
     private fun parseForm(xForm: File, projectRootDir: File, formMediaDir: File): FormDef {
-        FormUtils.setupReferenceManagerForForm(ReferenceManager.instance(), projectRootDir, formMediaDir)
+        FormUtils.setupReferenceManagerForForm(
+            ReferenceManager.instance(),
+            projectRootDir,
+            formMediaDir
+        )
         return XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
     }
 

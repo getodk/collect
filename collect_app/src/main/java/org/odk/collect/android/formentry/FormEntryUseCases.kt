@@ -89,10 +89,13 @@ object FormEntryUseCases {
 
         return if (valid) {
             saveFormToDisk(formController)
+            val instanceName = formController.getSubmissionMetadata()?.instanceName
+
             instancesRepository.save(
                 Instance.Builder(instance)
                     .status(Instance.STATUS_COMPLETE)
                     .canEditWhenComplete(formController.isSubmissionEntireForm())
+                    .displayName(instanceName ?: instance.displayName)
                     .build()
             )
         } else {
