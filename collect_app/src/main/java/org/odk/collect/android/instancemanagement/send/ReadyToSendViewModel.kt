@@ -17,10 +17,6 @@ class ReadyToSendViewModel(
     private val _data = MutableLiveData<Data>()
     val data: LiveData<Data> = _data
 
-    init {
-        update()
-    }
-
     fun update() {
         scheduler.immediate(
             background = {

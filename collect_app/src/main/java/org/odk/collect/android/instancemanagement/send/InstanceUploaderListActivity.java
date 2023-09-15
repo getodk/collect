@@ -420,8 +420,6 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        readyToSendViewModel.update();
-
         if (resultCode == RESULT_CANCELED) {
             multiSelectViewModel.unselectAll();
             return;
@@ -479,6 +477,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         } else {
             findViewById(R.id.buttonholder).setVisibility(View.VISIBLE);
         }
+        readyToSendViewModel.update();
     }
 
     @Override

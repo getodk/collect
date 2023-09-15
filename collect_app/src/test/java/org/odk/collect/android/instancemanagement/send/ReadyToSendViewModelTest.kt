@@ -73,7 +73,9 @@ class ReadyToSendViewModelTest {
     }
     private val scheduler = FakeScheduler()
 
-    private val viewModel = ReadyToSendViewModel(instancesRepository, scheduler) { TimeInMs.ONE_SECOND * 10 }
+    private val viewModel = ReadyToSendViewModel(instancesRepository, scheduler) { TimeInMs.ONE_SECOND * 10 }.apply {
+        update()
+    }
 
     @Test
     fun `numberOfSentInstances should represent the real number of instances with STATUS_SUBMITTED in the database`() {
