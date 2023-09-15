@@ -52,6 +52,7 @@ import org.odk.collect.testshared.RecyclerViewMatcher
 import timber.log.Timber
 import java.io.File
 import org.odk.collect.android.BuildConfig
+import org.odk.collect.android.support.CollectHelpers
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
@@ -445,7 +446,9 @@ abstract class Page<T : Page<T>> {
         device.pressRecentApps()
         device
             .findObject(UiSelector().descriptionContains("Collect"))
-            .swipeUp(10)
+            .swipeUp(10).also {
+                CollectHelpers.simulateProcessRestart() // the process is not restarted automatically (probably to keep the test running) so we have simulate it
+            }
 
         // reopen
         InstrumentationRegistry.getInstrumentation().targetContext.apply {
