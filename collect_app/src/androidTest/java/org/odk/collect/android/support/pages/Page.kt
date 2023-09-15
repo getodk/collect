@@ -51,6 +51,7 @@ import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.RecyclerViewMatcher
 import timber.log.Timber
 import java.io.File
+import org.odk.collect.android.BuildConfig
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
@@ -448,7 +449,7 @@ abstract class Page<T : Page<T>> {
 
         // reopen
         InstrumentationRegistry.getInstrumentation().targetContext.apply {
-            val intent = packageManager.getLaunchIntentForPackage("org.odk.collect.android")!!
+            val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)!!
             startActivity(intent)
         }
         return destination!!.assertOnPage()
