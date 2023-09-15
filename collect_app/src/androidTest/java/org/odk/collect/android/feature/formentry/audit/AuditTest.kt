@@ -7,7 +7,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage

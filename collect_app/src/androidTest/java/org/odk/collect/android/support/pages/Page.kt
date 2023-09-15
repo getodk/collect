@@ -37,10 +37,12 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.StringContains.containsString
 import org.hamcrest.core.StringEndsWith.endsWith
 import org.junit.Assert
+import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.support.ActivityHelpers
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
@@ -51,8 +53,6 @@ import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.RecyclerViewMatcher
 import timber.log.Timber
 import java.io.File
-import org.odk.collect.android.BuildConfig
-import org.odk.collect.android.support.CollectHelpers
 
 /**
  * Base class for Page Objects used in Espresso tests. Provides shared helpers/setup.
