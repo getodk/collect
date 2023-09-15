@@ -2,9 +2,6 @@ package org.odk.collect.android.support
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiDevice
-import androidx.test.uiautomator.UiSelector
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.injection.config.AppDependencyComponent
@@ -59,21 +56,5 @@ object CollectHelpers {
                 it.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
                 it.save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName)
             }
-    }
-
-    fun killAndReopenApp() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
-        // kill
-        device.pressRecentApps()
-        device
-            .findObject(UiSelector().descriptionContains("Collect"))
-            .swipeUp(10)
-
-        // reopen
-        InstrumentationRegistry.getInstrumentation().targetContext.apply {
-            val intent = packageManager.getLaunchIntentForPackage("org.odk.collect.android")!!
-            startActivity(intent)
-        }
     }
 }

@@ -29,6 +29,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.UiSelector
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.StringContains.containsString
@@ -432,6 +435,23 @@ abstract class Page<T : Page<T>> {
         })
 
         return this as T
+    }
+
+    fun <D : Page<D>?> killAndReopenApp(destination: D): D {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        // kill
+        device.pressRecentApps()
+        device
+            .findObject(UiSelector().descriptionContains("Collect"))
+            .swipeUp(10)
+
+        // reopen
+        InstrumentationRegistry.getInstrumentation().targetContext.apply {
+            val intent = packageManager.getLaunchIntentForPackage("org.odk.collect.android")!!
+            startActivity(intent)
+        }
+        return destination!!.assertOnPage()
     }
 
     companion object {

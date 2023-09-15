@@ -65,9 +65,7 @@ class AuditTest {
         rule.startAtMainMenu()
             .copyForm("one-question-audit-track-changes.xml")
             .startBlankForm("One Question Audit Track Changes")
-            .fillOut(
-                FormEntryPage.QuestionAndAnswer("What is your age", "31")
-            )
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age", "31"))
             .clickOptionsIcon()
             .clickGeneralSettings()
 
@@ -90,14 +88,9 @@ class AuditTest {
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .startBlankForm("One Question Audit")
-            .fillOut(
-                FormEntryPage.QuestionAndAnswer("what is your age", "31")
-            )
-            .let {
-                CollectHelpers.killAndReopenApp()
-            }
-
-        MainMenuPage().startBlankForm("One Question Audit")
+            .fillOut(FormEntryPage.QuestionAndAnswer("what is your age", "31"))
+            .killAndReopenApp(MainMenuPage())
+            .startBlankForm("One Question Audit")
 
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog[1].get("event"), equalTo("form resume"))
