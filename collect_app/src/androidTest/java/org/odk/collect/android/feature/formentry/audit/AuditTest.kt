@@ -90,6 +90,8 @@ class AuditTest {
             .fillOut(FormEntryPage.QuestionAndAnswer("what is your age", "31"))
             .killAndReopenApp(MainMenuPage())
             .startBlankForm("One Question Audit")
+            .swipeToEndScreen()
+            .clickFinalize()
 
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog[1].get("event"), equalTo("form resume"))
