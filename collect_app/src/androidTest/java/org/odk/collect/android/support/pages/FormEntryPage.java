@@ -397,6 +397,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
                 .clickDiscardChanges();
     }
 
+    public MainMenuPage pressBackAndSaveAsDraft() {
+        return closeSoftKeyboard()
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
+                .clickSaveChanges();
+    }
+
     public MainMenuPage pressBackAndDiscardForm() {
         return closeSoftKeyboard()
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
