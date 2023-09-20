@@ -6,10 +6,12 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/margin_standard"
     android:paddingTop="@dimen/margin_standard"
-    app:boxBackgroundColor="?colorSurfaceContainerLow">
+    app:boxBackgroundColor="?colorSurfaceContainerLow"
+    app:errorTextAppearance="@style/TextAppearance.Collect.Subtitle1">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingVertical="@dimen/margin_standard"/>
 </com.google.android.material.textfield.TextInputLayout>
