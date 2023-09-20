@@ -20,12 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        app:boxBackgroundColor="?colorSurfaceContainerLow">
+        app:boxBackgroundColor="?colorSurfaceContainerLow"
+        app:errorTextAppearance="@style/TextAppearance.Collect.Subtitle1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/answer_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:paddingVertical="@dimen/margin_standard"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>
