@@ -15,5 +15,5 @@
 
     <include
         android:id="@+id/answer_text"
-        layout="@layout/widget_answer_text_view" />
+        layout="@layout/widget_answer_text_field" />
 </LinearLayout>
