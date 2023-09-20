@@ -1,33 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/margin_small"
-    android:paddingHorizontal="@dimen/margin_standard">
+    android:paddingTop="@dimen/margin_small">
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/bearing_button"
         style="?materialButtonStyle"
         android:text="@string/get_bearing"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        app:boxBackgroundColor="?colorSurfaceContainerLow"
-        app:errorTextAppearance="@style/TextAppearance.Collect.Subtitle1">
+        android:layout_marginHorizontal="@dimen/margin_standard" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/answer_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="numberDecimal"
-            android:paddingVertical="@dimen/margin_standard"/>
-    </com.google.android.material.textfield.TextInputLayout>
+    <include
+        android:id="@+id/answer_text"
+        layout="@layout/widget_answer_text_view" />
 </LinearLayout>

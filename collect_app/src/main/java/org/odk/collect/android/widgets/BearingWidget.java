@@ -31,6 +31,7 @@ import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.databinding.BearingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -62,39 +63,39 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
         } else {
             binding.bearingButton.setOnClickListener(v -> onButtonClick());
         }
-        binding.answerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
-        binding.answerText.setEnabled(false);
-        binding.answerText.setTextColor(themeUtils.getColorOnSurface());
-        binding.answerText.setFocusable(false);
+        StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(binding.answerText.editText, questionDetails.getPrompt());
+        binding.answerText.editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
+        binding.answerText.editText.setEnabled(false);
+        binding.answerText.editText.setFocusable(false);
 
         String answerText = prompt.getAnswerText();
         if (answerText != null && !answerText.isEmpty()) {
             binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
-            binding.answerText.setText(answerText);
+            binding.answerText.editText.setText(answerText);
         }
-        binding.answerText.setVisibility(binding.answerText.getText().toString().isBlank() ? GONE : VISIBLE);
+        binding.answerText.editText.setVisibility(binding.answerText.editText.getText().toString().isBlank() ? GONE : VISIBLE);
 
         return binding.getRoot();
     }
 
     @Override
     public void clearAnswer() {
-        binding.answerText.setText(null);
+        binding.answerText.editText.setText(null);
         binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.get_bearing));
-        binding.answerText.setVisibility(GONE);
+        binding.answerText.editText.setVisibility(GONE);
         widgetValueChanged();
     }
 
     @Override
     public IAnswerData getAnswer() {
-        String answerText = binding.answerText.getText().toString();
+        String answerText = binding.answerText.editText.getText().toString();
         return answerText.isEmpty() ? null : new StringData(answerText);
     }
 
     @Override
     public void setData(Object answer) {
-        binding.answerText.setText((String) answer);
-        binding.answerText.setVisibility(binding.answerText.getText().toString().isBlank() ? GONE : VISIBLE);
+        binding.answerText.editText.setText((String) answer);
+        binding.answerText.editText.setVisibility(binding.answerText.editText.getText().toString().isBlank() ? GONE : VISIBLE);
         binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
         widgetValueChanged();
     }
@@ -102,14 +103,14 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         binding.bearingButton.setOnLongClickListener(l);
-        binding.answerText.setOnLongClickListener(l);
+        binding.answerText.editText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
         binding.bearingButton.cancelLongPress();
-        binding.answerText.cancelLongPress();
+        binding.answerText.editText.cancelLongPress();
     }
 
     private boolean areSensorsAvailable() {
@@ -128,26 +129,26 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
             binding.bearingButton.setEnabled(false);
 
-            binding.answerText.setEnabled(true);
-            binding.answerText.setVisibility(VISIBLE);
-            binding.answerText.setFocusable(true);
-            binding.answerText.setFocusableInTouchMode(true);
-            binding.answerText.requestFocus();
+            binding.answerText.editText.setEnabled(true);
+            binding.answerText.editText.setVisibility(VISIBLE);
+            binding.answerText.editText.setFocusable(true);
+            binding.answerText.editText.setFocusableInTouchMode(true);
+            binding.answerText.editText.requestFocus();
         }
     }
 
     @Override
     public void hideError() {
         super.hideError();
-        binding.textInputLayout.setError(null);
+        binding.answerText.textInputLayout.setError(null);
     }
 
     @Override
     public void displayError(String errorMessage) {
         hideError();
 
-        if (binding.answerText.getVisibility() == VISIBLE) {
-            binding.textInputLayout.setError(errorMessage);
+        if (binding.answerText.editText.getVisibility() == VISIBLE) {
+            binding.answerText.textInputLayout.setError(errorMessage);
         } else {
             super.displayError(errorMessage);
         }
