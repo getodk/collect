@@ -78,7 +78,7 @@ public class BearingWidgetTest {
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
-        assertThat(createWidget(promptWithAnswer(new StringData("blah"))).binding.answerText.getText().toString(), is("blah"));
+        assertThat(createWidget(promptWithAnswer(new StringData("blah"))).binding.answerText.editText.getText().toString(), is("blah"));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class BearingWidgetTest {
     public void clearAnswer_clearsWidgetAnswer() {
         BearingWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.clearAnswer();
-        assertThat(widget.binding.answerText.getText().toString(), is(""));
+        assertThat(widget.binding.answerText.editText.getText().toString(), is(""));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class BearingWidgetTest {
     public void setData_updatesWidgetAnswer() {
         BearingWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("blah");
-        assertThat(widget.binding.answerText.getText().toString(), is("blah"));
+        assertThat(widget.binding.answerText.editText.getText().toString(), is("blah"));
     }
 
     @Test
@@ -142,8 +142,8 @@ public class BearingWidgetTest {
         BearingWidget widget = createWidget(promptWithAnswer(null));
         widget.setOnLongClickListener(listener);
 
-        widget.binding.answerText.performLongClick();
-        verify(listener).onLongClick(widget.binding.answerText);
+        widget.binding.answerText.editText.performLongClick();
+        verify(listener).onLongClick(widget.binding.answerText.editText);
     }
 
     @Test
@@ -232,8 +232,8 @@ public class BearingWidgetTest {
         BearingWidget widget = createWidget(promptWithAnswer(null));
         widget.binding.bearingButton.performClick();
 
-        assertThat(widget.binding.answerText.didTouchFocusSelect(), is(true));
-        assertThat(widget.binding.answerText.hasFocusable(), is(true));
+        assertThat(widget.binding.answerText.editText.didTouchFocusSelect(), is(true));
+        assertThat(widget.binding.answerText.editText.hasFocusable(), is(true));
     }
 
     private void assertBearingButtonIsDisabledWhenSensorIsUnavailable(int sensorType) {
