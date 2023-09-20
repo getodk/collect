@@ -138,7 +138,7 @@ public class StringWidget extends QuestionWidget {
     private TextInputLayout getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
         TextInputLayout textInputLayout = (TextInputLayout) LayoutInflater
                 .from(getContext())
-                .inflate(R.layout.widget_answer_text_view, null, false);
+                .inflate(R.layout.widget_answer_text_field, null, false);
 
         TextInputEditText answerEditText = textInputLayout.findViewById(R.id.edit_text);
         answerEditText.setId(View.generateViewId());
