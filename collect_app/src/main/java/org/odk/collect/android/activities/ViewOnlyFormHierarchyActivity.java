@@ -18,8 +18,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.OnBackPressedCallback;
-
 import org.javarosa.core.model.FormIndex;
 import org.odk.collect.android.R;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -34,12 +32,6 @@ public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
         super.onCreate(savedInstanceState);
 
         onBackPressedCallback.remove();
-        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                finish();
-            }
-        });
     }
 
     /**
