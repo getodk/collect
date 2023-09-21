@@ -25,6 +25,8 @@ import android.hardware.SensorManager;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
@@ -63,10 +65,13 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
         } else {
             binding.bearingButton.setOnClickListener(v -> onButtonClick());
         }
+        binding.answerText.textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
         StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(binding.answerText.editText, questionDetails.getPrompt());
         binding.answerText.editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         binding.answerText.editText.setEnabled(false);
         binding.answerText.editText.setFocusable(false);
+        binding.answerText.editText.setBackground(null);
+        binding.answerText.editText.setTextColor(themeUtils.getColorOnSurface());
 
         String answerText = prompt.getAnswerText();
         if (answerText != null && !answerText.isEmpty()) {
@@ -129,6 +134,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
             binding.bearingButton.setEnabled(false);
 
+            binding.answerText.textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_FILLED);
             binding.answerText.editText.setEnabled(true);
             binding.answerText.editText.setVisibility(VISIBLE);
             binding.answerText.editText.setFocusable(true);

@@ -123,6 +123,11 @@ public final class ThemeUtils {
     }
 
     @ColorInt
+    public int getColorSurface() {
+        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorSurface);
+    }
+
+    @ColorInt
     public int getColorOnSurfaceLowEmphasis() {
         return context.getResources().getColor(org.odk.collect.androidshared.R.color.color_on_surface_low_emphasis);
     }

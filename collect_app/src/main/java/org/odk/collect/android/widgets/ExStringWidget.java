@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.R;
@@ -200,6 +202,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
             answerText.setFocusable(true);
             answerText.setFocusableInTouchMode(true);
             answerText.setEnabled(true);
+            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_FILLED);
             answerText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
