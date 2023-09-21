@@ -18,7 +18,11 @@
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorOnSecondary">@color/colorOnPrimary</item>
         <item name="colorOnBackground">@color/colorOnBackground</item>
-        <item name="colorOnError">@color/colorOnError</item>
+        <!--
+            colorOnError should refer to @color/colorOnError
+            This is a temporary fix and we can get rid of it when setting cursor error color is possible https://github.com/material-components/material-components-android/issues/3345
+        -->
+        <item name="colorOnError">@color/colorPrimary</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
         </item>
