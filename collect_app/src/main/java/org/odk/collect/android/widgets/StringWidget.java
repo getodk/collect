@@ -150,6 +150,7 @@ public class StringWidget extends QuestionWidget {
         answerEditText.setSingleLine(false);
 
         if (readOnly) {
+            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
             answerEditText.setBackground(null);
             answerEditText.setEnabled(false);
             answerEditText.setTextColor(themeUtils.getColorOnSurface());
