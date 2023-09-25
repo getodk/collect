@@ -477,12 +477,6 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         }
     }
 
-    public void scrollToBottomOf(@Nullable QuestionWidget qw) {
-        if (qw != null && widgets.contains(qw)) {
-            findViewById(R.id.odk_view_container).scrollTo(0, qw.getBottom());
-        }
-    }
-
     /**
      * Saves answers for the widgets in this view. Called when the widgets are in an intent group.
      */
@@ -622,7 +616,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 // answers are validated during form finalization.
                 postDelayed(() -> {
                     questionWidget.setFocus(getContext());
-                    scrollToBottomOf(questionWidget);
+                    scrollToTopOf(questionWidget);
                 }, 400);
             } else {
                 questionWidget.hideError();
