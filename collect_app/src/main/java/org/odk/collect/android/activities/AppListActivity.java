@@ -53,7 +53,7 @@ import timber.log.Timber;
 
 public abstract class AppListActivity extends LocalizedActivity {
 
-    protected static final int LOADER_ID = 0x01;
+    public static final int LOADER_ID = 0x01;
     private static final String SELECTED_INSTANCES = "selectedInstances";
     private static final String IS_SEARCH_BOX_SHOWN = "isSearchBoxShown";
     private static final String SEARCH_TEXT = "searchText";

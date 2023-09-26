@@ -1208,6 +1208,32 @@
     <string name="view_form">View</string>
     <string name="close_snackbar">Close snackbar</string>
 
+    <!--
+    ##############################################
+    # Forms ready to send banner
+    ##############################################
+    -->
+    <plurals name="last_form_sent_seconds_ago">
+        <item quantity="one">Last form sent: %d second ago</item>
+        <item quantity="other">Last form sent: %d seconds ago</item>
+    </plurals>
+    <plurals name="last_form_sent_minutes_ago">
+        <item quantity="one">Last form sent: %d minute ago</item>
+        <item quantity="other">Last form sent: %d minutes ago</item>
+    </plurals>
+    <plurals name="last_form_sent_hours_ago">
+        <item quantity="one">Last form sent: %d hour ago</item>
+        <item quantity="other">Last form sent: %d hours ago</item>
+    </plurals>
+    <plurals name="last_form_sent_days_ago">
+        <item quantity="one">Last form sent: %d day ago</item>
+        <item quantity="other">Last form sent: %d days ago</item>
+    </plurals>
+    <plurals name="forms_ready_to_send">
+        <item quantity="one">%d form ready to send</item>
+        <item quantity="other">%d forms ready to send</item>
+    </plurals>
+
     <!-- This warning will be shown when a user edits a form that is ready to send. The next version will also provide a link to learn more -->
     <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">In later releases, you will not be able to edit finalized forms. Save forms as draft to edit them later.\n\nYou can check for errors in a draft form by tapping the three dots (⋮) and then Check for errors.</string>
 </resources>

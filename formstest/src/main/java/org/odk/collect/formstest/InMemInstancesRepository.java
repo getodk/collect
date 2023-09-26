@@ -191,6 +191,8 @@ public final class InMemInstancesRepository implements InstancesRepository {
     }
 
     private void deleteInstanceFiles(Instance instance) {
-        DirectoryUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
+        if (instance.getInstanceFilePath() != null) {
+            DirectoryUtils.deleteDirectory(new File(instance.getInstanceFilePath()).getParentFile());
+        }
     }
 }

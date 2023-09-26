@@ -136,9 +136,9 @@ the specific language governing permissions and limitations under the License.
             android:name=".gdrive.GoogleSheetsUploaderActivity"
             android:configChanges="orientation|screenSize" />
         <activity
-            android:name=".activities.InstanceUploaderListActivity"
+            android:name=".instancemanagement.send.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize" />
-        <activity android:name=".activities.InstanceUploaderActivity" />
+        <activity android:name=".instancemanagement.send.InstanceUploaderActivity" />
         <activity android:name=".activities.AboutActivity" />
         <activity android:name=".configure.qr.QRCodeTabsActivity" />
         <activity
@@ -278,7 +278,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.InstanceUploaderList"
-            android:targetActivity=".activities.InstanceUploaderListActivity"
+            android:targetActivity=".instancemanagement.send.InstanceUploaderListActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -290,7 +290,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity-alias
             android:name=".activities.InstanceUploaderActivity"
-            android:targetActivity=".activities.InstanceUploaderActivity"
+            android:targetActivity=".instancemanagement.send.InstanceUploaderActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="org.odk.collect.android.INSTANCE_UPLOAD" />

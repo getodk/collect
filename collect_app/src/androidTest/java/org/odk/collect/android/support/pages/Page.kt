@@ -43,6 +43,7 @@ import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
+import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.EspressoHelpers
 import org.odk.collect.testshared.RecyclerViewMatcher
@@ -97,6 +98,11 @@ abstract class Page<T : Page<T>> {
 
     fun assertText(stringID: Int, vararg formatArgs: Any): T {
         assertText(getTranslatedString(stringID, *formatArgs))
+        return this as T
+    }
+
+    fun assertQuantityText(stringID: Int, quantity: Int, vararg formatArgs: Any): T {
+        assertText(getTranslatedQuantityString(stringID, quantity, *formatArgs))
         return this as T
     }
 
@@ -244,6 +250,10 @@ abstract class Page<T : Page<T>> {
 
     fun getTranslatedString(id: Int?, vararg formatArgs: Any): String {
         return ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(id!!, *formatArgs)
+    }
+
+    fun getTranslatedQuantityString(id: Int?, quantity: Int, vararg formatArgs: Any): String {
+        return ApplicationProvider.getApplicationContext<Collect>().getLocalizedQuantityString(id!!, quantity, *formatArgs)
     }
 
     fun clickOnAreaWithIndex(clazz: String?, index: Int): T {

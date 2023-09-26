@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.instancemanagement.send;
 
 import static org.odk.collect.android.activities.AppListActivity.LOADER_ID;
 import static org.odk.collect.android.activities.AppListActivity.toggleButtonLabel;
@@ -50,6 +50,7 @@ import androidx.work.WorkManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
@@ -119,6 +120,9 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     @Inject
     SettingsProvider settingsProvider;
 
+    @Inject
+    ReadyToSendViewModel.Factory factory;
+
     private ListView listView;
     private InstanceUploaderAdapter listAdapter;
     private Integer selectedSortingOrder;
@@ -127,6 +131,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private String filterText;
 
     private MultiSelectViewModel multiSelectViewModel;
+    private ReadyToSendViewModel readyToSendViewModel;
     private boolean allSelected;
 
     private boolean isSearchBoxShown;
@@ -153,6 +158,8 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
 
             listAdapter.setSelected(ids);
         });
+        readyToSendViewModel = new ViewModelProvider(this, factory).get(ReadyToSendViewModel.class);
+        readyToSendViewModel.getData().observe(this, data -> binding.readyToSendBanner.setData(data));
 
         // set title
         setTitle(getString(org.odk.collect.strings.R.string.send_data));
@@ -470,6 +477,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         } else {
             findViewById(R.id.buttonholder).setVisibility(View.VISIBLE);
         }
+        readyToSendViewModel.update();
     }
 
     @Override

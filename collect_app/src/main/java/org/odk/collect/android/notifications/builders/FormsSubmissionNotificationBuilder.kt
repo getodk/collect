@@ -6,7 +6,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.InstanceUploaderListActivity
+import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.upload.FormUploadException

@@ -19,7 +19,6 @@ import org.odk.collect.android.activities.DeleteSavedFormActivity
 import org.odk.collect.android.activities.FirstLaunchActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
-import org.odk.collect.android.activities.InstanceUploaderListActivity
 import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.application.MapboxClassInstanceCreator.createMapBoxInitializationFragment
 import org.odk.collect.android.application.MapboxClassInstanceCreator.isMapboxAvailable
@@ -27,6 +26,7 @@ import org.odk.collect.android.databinding.MainMenuBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
 import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ApplicationConstants
