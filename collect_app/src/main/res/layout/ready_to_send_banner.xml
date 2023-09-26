@@ -28,8 +28,8 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:textAppearance="?textAppearanceTitleMedium"
         android:textColor="?colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/icon"
         tools:text="Last sent: 2 days ago"/>
 
@@ -38,9 +38,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textAppearance="?textAppearanceBodyMedium"
-        app:layout_constraintEnd_toEndOf="@id/title"
-        app:layout_constraintStart_toEndOf="@id/title"
         app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintEnd_toEndOf="@id/title"
         app:layout_constraintTop_toBottomOf="@id/title"
         tools:text="4 forms ready to send"/>
 
