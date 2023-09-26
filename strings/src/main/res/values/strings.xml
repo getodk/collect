@@ -1223,10 +1223,16 @@
     <string name="finalize_all_forms">Finalize all forms</string>
 
     <!-- Message shown when finalizing all forms has succeeded and how many totally have been finalized -->
-    <string name="bulk_finalize_success">Success! %d forms finalized.</string>
+    <plurals name="bulk_finalize_success">
+        <item quantity="one">Success! %d form finalized.</item>
+        <item quantity="other">Success! %d forms finalized.</item>
+    </plurals>
 
     <!-- Message shown when no forms finalized successfully -->
-    <string name="bulk_finalize_failure">%d forms have errors. Address issues before finalizing all forms.</string>
+    <plurals name="bulk_finalize_failure">
+        <item quantity="one">%d form has an error. Address issues before finalizing all forms.</item>
+        <item quantity="other">%d forms have errors. Address issues before finalizing all forms.</item>
+    </plurals>
 
     <!-- Message shown when some forms finalize successfully and others fail -->
     <string name="bulk_finalize_partial_success">%d forms finalized. %d forms have errors. Address issues before finalizing all forms.</string>

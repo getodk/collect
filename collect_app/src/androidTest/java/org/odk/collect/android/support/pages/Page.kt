@@ -1,5 +1,6 @@
 package org.odk.collect.android.support.pages
 
+import android.app.Application
 import android.content.pm.ActivityInfo
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +44,7 @@ import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
+import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.RecyclerViewMatcher
 import timber.log.Timber
@@ -167,6 +169,13 @@ abstract class Page<T : Page<T>> {
     fun assertTextDoesNotExist(text: String?): T {
         onView(allOf(withText(text), withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE))).check(doesNotExist())
         return this as T
+    }
+
+    fun checkIsSnackbarWithQuantityDisplayed(message: Int, quantity: Int): T {
+        return checkIsSnackbarWithMessageDisplayed(
+            ApplicationProvider.getApplicationContext<Application>()
+                .getLocalizedQuantityString(message, quantity)
+        )
     }
 
     fun checkIsSnackbarWithMessageDisplayed(message: Int, vararg formatArgs: Any): T {

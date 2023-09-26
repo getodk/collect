@@ -10,6 +10,7 @@ import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
+import org.odk.collect.strings.R.plurals
 import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
@@ -32,7 +33,7 @@ class BulkFinalizationTest {
             .clickEditSavedForm(2)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
-            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_success, 2)
+            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 2)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
 
@@ -77,11 +78,11 @@ class BulkFinalizationTest {
             .clickEditSavedForm(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
-            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_failure, 1)
+            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
 
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
-            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_failure, 1)
+            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
     }
 
     @Test
@@ -96,7 +97,7 @@ class BulkFinalizationTest {
             .clickEditSavedForm(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
-            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_success, 1)
+            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 1)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
 

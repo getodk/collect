@@ -64,6 +64,7 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.R.string;
+import org.odk.collect.strings.R.plurals;
 
 import java.util.Arrays;
 
@@ -167,12 +168,18 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                 if (pair.getSecond().equals(0)) {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
-                            getString(string.bulk_finalize_success, pair.getFirst())
+                            getResources().getQuantityString(
+                                    plurals.bulk_finalize_success,
+                                    pair.getFirst()
+                            )
                     );
                 } else if (pair.getFirst().equals(pair.getSecond())) {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
-                            getString(string.bulk_finalize_failure, pair.getSecond())
+                            getResources().getQuantityString(
+                                    plurals.bulk_finalize_failure,
+                                    pair.getFirst()
+                            )
                     );
                 } else {
                     SnackbarUtils.showLongSnackbar(
