@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
-class InstanceExtTest {
+class InstanceExtKtTest {
 
     private val resources = ApplicationProvider.getApplicationContext<Context>().resources
 
