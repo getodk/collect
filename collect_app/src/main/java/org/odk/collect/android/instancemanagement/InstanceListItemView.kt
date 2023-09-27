@@ -25,7 +25,7 @@ object InstanceListItemView {
 
         val chip = view.findViewById<TextView>(R.id.chip)
         if (chip != null) {
-            if (instance.status == Instance.STATUS_INVALID) {
+            if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
                 chip.visibility = View.VISIBLE
             }
         }

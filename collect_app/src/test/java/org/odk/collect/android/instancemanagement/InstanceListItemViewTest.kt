@@ -37,9 +37,19 @@ class InstanceListItemViewTest {
     }
 
     @Test
-    fun whenInstanceIsIncomplete_doesNotShowIncompleteChip() {
+    fun whenInstanceIsIncomplete_showsIncompleteChip() {
         val binding = FormChooserListItemBinding.inflate(layoutInflater)
         val instance = InstanceFixtures.instance(status = Instance.STATUS_INCOMPLETE)
+
+        InstanceListItemView.setInstance(binding.root, instance, false)
+
+        assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
+    }
+
+    @Test
+    fun whenInstanceIsComplete_doesNotShowIncompleteChip() {
+        val binding = FormChooserListItemBinding.inflate(layoutInflater)
+        val instance = InstanceFixtures.instance(status = Instance.STATUS_COMPLETE)
 
         InstanceListItemView.setInstance(binding.root, instance, false)
 
