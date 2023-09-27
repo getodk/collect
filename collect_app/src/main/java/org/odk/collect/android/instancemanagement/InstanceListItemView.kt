@@ -43,8 +43,8 @@ object InstanceListItemView {
         }
 
         val date = instance.deletedDate
-        if (date != 0L || !formExists || isFormEncrypted) {
-            val disabledMessage = if (date != 0L) {
+        if (date != null || !formExists || isFormEncrypted) {
+            val disabledMessage = if (date != null) {
                 try {
                     val deletedTime: String = context.getString(string.deleted_on_date_at_time)
                     SimpleDateFormat(deletedTime, Locale.getDefault()).format(Date(date))

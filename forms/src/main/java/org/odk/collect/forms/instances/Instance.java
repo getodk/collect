@@ -16,6 +16,8 @@
 
 package org.odk.collect.forms.instances;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * A filled form stored on the device.
  * <p>
@@ -192,6 +194,7 @@ public final class Instance {
         return lastStatusChangeDate;
     }
 
+    @Nullable
     public Long getDeletedDate() {
         return deletedDate;
     }
