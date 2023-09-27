@@ -25,8 +25,10 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import org.odk.collect.android.R;
-import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.database.DatabaseObjectMapper;
 import org.odk.collect.android.instancemanagement.InstanceExtKt;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
@@ -50,11 +52,15 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = super.getView(position, convertView, parent);
+        Instance instance = DatabaseObjectMapper.getInstanceFromCurrentCursorPosition(
+                getCursor(),
+                new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES)
+        );
 
         ImageView imageView = view.findViewById(R.id.image);
-        setImageFromStatus(imageView);
+        setImageFromStatus(imageView, instance);
 
-        setUpSubtext(view);
+        setUpSubtext(view, instance);
 
         // Some form lists never contain disabled items; if so, we're done.
         // Update: This only seems to be the case in Edit Saved Forms and it's not clear why...
@@ -65,8 +71,8 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         boolean formExists = false;
         boolean isFormEncrypted = false;
 
-        String formId = getCursor().getString(getCursor().getColumnIndex(DatabaseInstanceColumns.JR_FORM_ID));
-        String formVersion = getCursor().getString(getCursor().getColumnIndex(DatabaseInstanceColumns.JR_VERSION));
+        String formId = instance.getFormId();
+        String formVersion = instance.getFormVersion();
         Form form = new FormsRepositoryProvider(context.getApplicationContext()).get().getLatestByFormIdAndVersion(formId, formVersion);
 
         if (form != null) {
@@ -75,7 +81,7 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
             isFormEncrypted = base64RSAPublicKey != null;
         }
 
-        long date = getCursor().getLong(getCursor().getColumnIndex(DatabaseInstanceColumns.DELETED_DATE));
+        long date = instance.getDeletedDate();
 
         if (date != 0 || !formExists || isFormEncrypted) {
             String disabledMessage;
@@ -134,17 +140,15 @@ public class InstanceListCursorAdapter extends SimpleCursorAdapter {
         imageView.setAlpha(0.38f);
     }
 
-    private void setUpSubtext(View view) {
-        long lastStatusChangeDate = getCursor().getLong(getCursor().getColumnIndex(DatabaseInstanceColumns.LAST_STATUS_CHANGE_DATE));
-        String status = getCursor().getString(getCursor().getColumnIndex(DatabaseInstanceColumns.STATUS));
-        String subtext = InstanceExtKt.getStatusDescription(context, status, new Date(lastStatusChangeDate));
+    private void setUpSubtext(View view, Instance instance) {
+        String subtext = InstanceExtKt.getStatusDescription(instance, context.getResources());
 
         final TextView formSubtitle = view.findViewById(R.id.form_subtitle);
         formSubtitle.setText(subtext);
     }
 
-    private void setImageFromStatus(ImageView imageView) {
-        String formStatus = getCursor().getString(getCursor().getColumnIndex(DatabaseInstanceColumns.STATUS));
+    private void setImageFromStatus(ImageView imageView, Instance instance) {
+        String formStatus = instance.getStatus();
 
         int imageResourceId = getFormStateImageResourceIdForStatus(formStatus);
         imageView.setImageResource(imageResourceId);
