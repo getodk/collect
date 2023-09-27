@@ -58,6 +58,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -390,6 +391,21 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private static final String KEY_SESSION_ID = "sessionId";
     private String sessionId;
 
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
+                // We want the user to stop recording before changing screens
+                DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
+            } else {
+                QuitFormDialog.show(getActivity(), formSaveViewModel, formEntryViewModel, settingsProvider, () -> {
+                    saveForm(true, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
+                });
+            }
+        }
+    };
+
+
     /**
      * Called when the activity is first created.
      */
@@ -501,6 +517,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         setupFields(savedInstanceState);
         loadForm();
+
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
     private void setupViewModels(FormEntryViewModelFactory formEntryViewModelFactory) {
@@ -1960,17 +1978,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
-            case KeyEvent.KEYCODE_BACK:
-                if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
-                    // We want the user to stop recording before changing screens
-                    DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, getSupportFragmentManager());
-                    return true;
-                }
-
-                QuitFormDialog.show(this, formSaveViewModel, formEntryViewModel, settingsProvider, () -> {
-                    saveForm(true, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
-                });
-                return true;
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 if (event.isAltPressed() && !swipeHandler.beenSwiped()) {
                     swipeHandler.setBeenSwiped(true);

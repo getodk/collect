@@ -14,6 +14,7 @@
 
 package org.odk.collect.android.activities;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
@@ -26,6 +27,13 @@ import org.odk.collect.android.javarosawrapper.FormController;
  * features that allow the user to edit the form instance.
  */
 public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        onBackPressedCallback.remove();
+    }
+
     /**
      * Hides buttons to jump to the beginning and to the end of the form instance to edit it. Adds
      * an extra exit button that exits this activity.
@@ -60,13 +68,5 @@ public class ViewOnlyFormHierarchyActivity extends FormHierarchyActivity {
     @Override
     void onQuestionClicked(FormIndex index) {
         // Do nothing
-    }
-
-    /**
-     * Prevents logging an audit event when the user exits the activity.
-     */
-    @Override
-    public void onBackPressed() {
-        onBackPressedWithoutLogger();
     }
 }

@@ -17,7 +17,6 @@
 package org.odk.collect.android.preferences.screens;
 
 import static android.app.Activity.RESULT_OK;
-import static org.odk.collect.android.utilities.DialogUtils.showDialog;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT;
 
@@ -26,21 +25,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.text.TextUtils;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.R;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.gdrive.GoogleAccountsManager;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.listeners.OnBackPressedListener;
 import org.odk.collect.android.preferences.ServerPreferencesAdder;
 import org.odk.collect.android.preferences.filters.ControlCharacterFilter;
 import org.odk.collect.android.preferences.filters.WhitespaceFilter;
@@ -53,7 +47,7 @@ import org.odk.collect.settings.keys.ProjectKeys;
 
 import javax.inject.Inject;
 
-public class ServerPreferencesFragment extends BaseProjectPreferencesFragment implements OnBackPressedListener {
+public class ServerPreferencesFragment extends BaseProjectPreferencesFragment {
 
     private static final int REQUEST_ACCOUNT_PICKER = 1000;
 
@@ -75,8 +69,6 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         DaggerUtils.getComponent(context).inject(this);
-
-        ((ProjectPreferencesActivity) context).setOnBackPressedListener(this);
     }
 
     @Override
@@ -259,33 +251,5 @@ public class ServerPreferencesFragment extends BaseProjectPreferencesFragment im
                 allowClickSelectedGoogleAccountPreference = true;
                 break;
         }
-    }
-
-    private void runGoogleAccountValidation() {
-        String account = settingsProvider.getUnprotectedSettings().getString(KEY_SELECTED_GOOGLE_ACCOUNT);
-        String protocol = settingsProvider.getUnprotectedSettings().getString(KEY_PROTOCOL);
-
-        if (TextUtils.isEmpty(account) && protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
-
-            AlertDialog alertDialog = new MaterialAlertDialogBuilder(getActivity())
-                    .setTitle(org.odk.collect.strings.R.string.missing_google_account_dialog_title)
-                    .setMessage(org.odk.collect.strings.R.string.missing_google_account_dialog_desc)
-                    .setPositiveButton(getString(org.odk.collect.strings.R.string.ok), (dialog, which) -> dialog.dismiss())
-                    .create();
-
-            showDialog(alertDialog, getActivity());
-        } else {
-            continueOnBackPressed();
-        }
-    }
-
-    private void continueOnBackPressed() {
-        ((ProjectPreferencesActivity) getActivity()).setOnBackPressedListener(null);
-        getActivity().onBackPressed();
-    }
-
-    @Override
-    public void doBack() {
-        runGoogleAccountValidation();
     }
 }

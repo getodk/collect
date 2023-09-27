@@ -6,13 +6,13 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
+import androidx.activity.ComponentDialog
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.androidshared.ui.OnBackPressedKeyListener
 import org.odk.collect.geo.GeoDependencyComponentProvider
 import org.odk.collect.geo.GeoUtils.formatAccuracy
-import org.odk.collect.geo.R
 import org.odk.collect.geo.databinding.GeopointDialogBinding
 import javax.inject.Inject
 
@@ -25,6 +25,13 @@ class GeoPointDialogFragment : DialogFragment() {
 
     lateinit var binding: GeopointDialogBinding
     private lateinit var viewModel: GeoPointViewModel
+
+    private val onBackPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                listener?.onCancel()
+            }
+        }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -66,7 +73,6 @@ class GeoPointDialogFragment : DialogFragment() {
             .setView(binding.root)
             .setPositiveButton(org.odk.collect.strings.R.string.save) { _, _ -> viewModel.forceLocation() }
             .setNegativeButton(org.odk.collect.strings.R.string.cancel) { _, _ -> listener?.onCancel() }
-            .setOnKeyListener(OnBackPressedKeyListener { listener?.onCancel() })
             .create()
 
         dialog.setOnShowListener {
@@ -76,6 +82,8 @@ class GeoPointDialogFragment : DialogFragment() {
         }
 
         isCancelable = false
+
+        (dialog as ComponentDialog).onBackPressedDispatcher.addCallback(onBackPressedCallback)
         return dialog
     }
 
