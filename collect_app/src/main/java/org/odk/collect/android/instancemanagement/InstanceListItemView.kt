@@ -23,44 +23,47 @@ object InstanceListItemView {
         setImageFromStatus(imageView, instance)
         setUpSubtext(view, instance, context)
 
-        // Some form lists never contain disabled items; if so, we're done.
-        // Update: This only seems to be the case in Edit Saved Forms and it's not clear why...
-        if (!shouldCheckDisabled) {
-            return
+        val chip = view.findViewById<TextView>(R.id.chip)
+        if (chip != null) {
+            if (instance.status == Instance.STATUS_INVALID) {
+                chip.visibility = View.VISIBLE
+            }
         }
 
-        var formExists = false
-        var isFormEncrypted = false
-        val formId = instance.formId
-        val formVersion = instance.formVersion
-        val form = FormsRepositoryProvider(context.applicationContext).get()
-            .getLatestByFormIdAndVersion(formId, formVersion)
+        if (shouldCheckDisabled) {
+            var formExists = false
+            var isFormEncrypted = false
+            val formId = instance.formId
+            val formVersion = instance.formVersion
+            val form = FormsRepositoryProvider(context.applicationContext).get()
+                .getLatestByFormIdAndVersion(formId, formVersion)
 
-        if (form != null) {
-            val base64RSAPublicKey = form.basE64RSAPublicKey
-            formExists = true
-            isFormEncrypted = base64RSAPublicKey != null
-        }
-
-        val date = instance.deletedDate
-        if (date != null || !formExists || isFormEncrypted) {
-            val disabledMessage = if (date != null) {
-                try {
-                    val deletedTime: String = context.getString(string.deleted_on_date_at_time)
-                    SimpleDateFormat(deletedTime, Locale.getDefault()).format(Date(date))
-                } catch (e: IllegalArgumentException) {
-                    Timber.e(e)
-                    context.getString(string.submission_deleted)
-                }
-            } else if (!formExists) {
-                context.getString(string.deleted_form)
-            } else {
-                context.getString(string.encrypted_form)
+            if (form != null) {
+                val base64RSAPublicKey = form.basE64RSAPublicKey
+                formExists = true
+                isFormEncrypted = base64RSAPublicKey != null
             }
 
-            setDisabled(view, disabledMessage)
-        } else {
-            setEnabled(view)
+            val date = instance.deletedDate
+            if (date != null || !formExists || isFormEncrypted) {
+                val disabledMessage = if (date != null) {
+                    try {
+                        val deletedTime: String = context.getString(string.deleted_on_date_at_time)
+                        SimpleDateFormat(deletedTime, Locale.getDefault()).format(Date(date))
+                    } catch (e: IllegalArgumentException) {
+                        Timber.e(e)
+                        context.getString(string.submission_deleted)
+                    }
+                } else if (!formExists) {
+                    context.getString(string.deleted_form)
+                } else {
+                    context.getString(string.encrypted_form)
+                }
+
+                setDisabled(view, disabledMessage)
+            } else {
+                setEnabled(view)
+            }
         }
     }
 
