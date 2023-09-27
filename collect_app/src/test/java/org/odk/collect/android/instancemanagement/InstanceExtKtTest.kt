@@ -29,7 +29,7 @@ class InstanceExtKtTest {
         val invalid = InstanceFixtures.instance(status = Instance.STATUS_INVALID)
         assertDateFormat(
             invalid.getStatusDescription(resources),
-            R.string.validated_on_date_at_time
+            R.string.saved_on_date_at_time
         )
 
         val complete = InstanceFixtures.instance(status = Instance.STATUS_COMPLETE)

@@ -46,7 +46,7 @@ private fun getStatusDescription(resources: Resources, state: String?, date: Dat
             ).format(date)
         } else if (Instance.STATUS_INVALID.equals(state, ignoreCase = true)) {
             SimpleDateFormat(
-                resources.getString(R.string.validated_on_date_at_time),
+                resources.getString(R.string.saved_on_date_at_time),
                 Locale.getDefault()
             ).format(date)
         } else {
