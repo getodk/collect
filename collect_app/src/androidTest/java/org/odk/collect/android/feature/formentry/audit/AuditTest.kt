@@ -8,7 +8,10 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.StorageUtils
+import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 
@@ -61,14 +64,36 @@ class AuditTest {
         rule.startAtMainMenu()
             .copyForm("one-question-audit-track-changes.xml")
             .startBlankForm("One Question Audit Track Changes")
-            .fillOut(
-                FormEntryPage.QuestionAndAnswer("What is your age", "31")
-            )
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age", "31"))
             .clickOptionsIcon()
             .clickGeneralSettings()
 
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog[1].get("event"), equalTo("question"))
         assertThat(auditLog[1].get("new-value"), equalTo("31"))
+    }
+
+    @Test // https://github.com/getodk/collect/issues/5253
+    fun navigatingBackToTheFormAfterKillingTheAppWhenMovingBackwardsIsDisabled_savesFormResumeEventToAuditLog() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-audit.xml")
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickAccessControl()
+            .clickFormEntrySettings()
+            .clickMovingBackwards()
+            .clickOnString(org.odk.collect.strings.R.string.yes)
+            .pressBack(AccessControlPage())
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+            .startBlankForm("One Question Audit")
+            .fillOut(FormEntryPage.QuestionAndAnswer("what is your age", "31"))
+            .killAndReopenApp(MainMenuPage())
+            .startBlankForm("One Question Audit")
+            .swipeToEndScreen()
+            .clickFinalize()
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog[1].get("event"), equalTo("form resume"))
     }
 }

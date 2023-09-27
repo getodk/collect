@@ -2165,6 +2165,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     identityPromptViewModel.formLoaded(formController);
                     identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                         if (!requiresIdentity) {
+                            formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                             if (!allowMovingBackwards) {
                                 // we aren't allowed to jump around the form so attempt to
                                 // go directly to the question we were on last time the
@@ -2186,7 +2187,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 formEntryViewModel.refresh();
                                 onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                             } else {
-                                formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_RESUME, true, System.currentTimeMillis());
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
                                 formControllerAvailable(formController);
                                 Intent intent = new Intent(this, FormHierarchyActivity.class);
