@@ -18,7 +18,7 @@
         android:background="?colorSurfaceContainerLow"
         android:gravity="center"
         android:padding="@dimen/margin_small"
-        android:text="Incomplete"
+        android:text="@string/incomplete"
         android:textAppearance="?textAppearanceLabelLarge"
         android:visibility="gone"
         app:drawableStartCompat="@drawable/baseline_error_24"
