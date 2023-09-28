@@ -34,6 +34,7 @@ import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.permissions.PermissionsProvider
@@ -161,7 +162,7 @@ class MainMenuActivity : LocalizedActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (!allowClick(javaClass.name)) {
+        if (!allowClick(MultiClickGuard.ScreenName.MAIN_MENU.name)) {
             return true
         }
         if (item.itemId == R.id.projects) {

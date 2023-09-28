@@ -19,6 +19,6 @@ class StartNewFormButton(context: Context, attrs: AttributeSet?) : FrameLayout(c
         get() = findViewById<TextView>(R.id.name).text.toString()
 
     override fun performClick(): Boolean {
-        return MultiClickGuard.allowClick() && super.performClick()
+        return MultiClickGuard.allowClick(MultiClickGuard.ScreenName.MAIN_MENU.name) && super.performClick()
     }
 }

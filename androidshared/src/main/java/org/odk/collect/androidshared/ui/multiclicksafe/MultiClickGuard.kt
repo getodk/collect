@@ -35,4 +35,8 @@ object MultiClickGuard {
         }
         return allowClick
     }
+
+    enum class ScreenName {
+        MAIN_MENU
+    }
 }
