@@ -36,6 +36,12 @@ object MultiClickGuard {
         return allowClick
     }
 
+    /*
+    Utilizing screen names instead of class names offers a more robust approach, as elements placed
+    on the same user interface screen may potentially belong to distinct classes (such as fragments or custom views).
+    Consequently, employing screen names for identification ensures that these elements are recognized
+    as components of the same screen, disabling rapid clicking.
+     */
     enum class ScreenName {
         MAIN_MENU
     }
