@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences.screens
 
+import android.content.Context
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.test.core.app.ApplicationProvider
@@ -13,8 +14,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.support.CollectHelpers
@@ -43,7 +45,13 @@ class ProjectDisplayPreferencesFragmentTest {
             .thenReturn(Project.Saved("123", "Project X", "X", "#cccccc"))
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesCurrentProjectProvider(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository): CurrentProjectProvider {
+            override fun providesCurrentProjectProvider(
+                settingsProvider: SettingsProvider,
+                projectsRepository: ProjectsRepository,
+                analyticsInitializer: AnalyticsInitializer,
+                context: Context,
+                mapsInitializer: MapsInitializer
+            ): CurrentProjectProvider {
                 return currentProjectProvider
             }
 

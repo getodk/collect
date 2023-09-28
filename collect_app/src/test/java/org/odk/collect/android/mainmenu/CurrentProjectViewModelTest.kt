@@ -24,8 +24,7 @@ class CurrentProjectViewModelTest {
 
     private val analyticsInitializer = mock<AnalyticsInitializer>()
     private val currentProjectViewModel = CurrentProjectViewModel(
-        currentProjectProvider,
-        analyticsInitializer
+        currentProjectProvider
     )
 
     @Test
@@ -46,19 +45,10 @@ class CurrentProjectViewModelTest {
     }
 
     @Test
-    fun `setCurrentProject() re-initializes analytics`() {
-        val project = Project.Saved("456", "Project Y", "Y", "#ffffff")
-
-        currentProjectViewModel.setCurrentProject(project)
-        verify(analyticsInitializer).initialize()
-    }
-
-    @Test
     fun `hasCurrentProject returns false when there is no current project`() {
         whenever(currentProjectProvider.getCurrentProject()).thenThrow(IllegalStateException())
         val currentProjectViewModel = CurrentProjectViewModel(
-            currentProjectProvider,
-            analyticsInitializer
+            currentProjectProvider
         )
 
         assertThat(currentProjectViewModel.hasCurrentProject(), equalTo(false))

@@ -37,7 +37,7 @@ class ProjectDeleterTest {
         whenever(get(project1.uuid)).thenReturn(instancesRepository)
     }
     private val settingsProvider = InMemSettingsProvider()
-    private val currentProjectProvider = CurrentProjectProvider(settingsProvider, projectsRepository)
+    private val currentProjectProvider = CurrentProjectProvider(settingsProvider, projectsRepository, mock(), mock())
     private val formUpdateScheduler = mock<FormUpdateScheduler>()
     private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
     private val storagePathProvider = mock<StoragePathProvider>().apply {

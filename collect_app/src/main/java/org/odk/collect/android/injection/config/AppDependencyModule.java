@@ -34,6 +34,7 @@ import org.odk.collect.android.application.initialization.ExistingProjectMigrato
 import org.odk.collect.android.application.initialization.ExistingSettingsMigrator;
 import org.odk.collect.android.application.initialization.FormUpdatesUpgrade;
 import org.odk.collect.android.application.initialization.GoogleDriveProjectsDeleter;
+import org.odk.collect.android.application.initialization.MapsInitializer;
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer;
 import org.odk.collect.android.backgroundwork.FormUpdateAndInstanceSubmitScheduler;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
@@ -467,8 +468,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public CurrentProjectProvider providesCurrentProjectProvider(SettingsProvider settingsProvider, ProjectsRepository projectsRepository) {
-        return new CurrentProjectProvider(settingsProvider, projectsRepository);
+    public CurrentProjectProvider providesCurrentProjectProvider(SettingsProvider settingsProvider, ProjectsRepository projectsRepository, AnalyticsInitializer analyticsInitializer, Context context, MapsInitializer mapsInitializer) {
+        return new CurrentProjectProvider(settingsProvider, projectsRepository, analyticsInitializer, mapsInitializer);
     }
 
     @Provides
@@ -565,8 +566,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, UpgradeInitializer upgradeInitializer, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider) {
-        return new ApplicationInitializer(context, userAgentProvider, propertyManager, analytics, upgradeInitializer, analyticsInitializer, projectsRepository, settingsProvider);
+    public ApplicationInitializer providesApplicationInitializer(Application context, UserAgentProvider userAgentProvider, PropertyManager propertyManager, Analytics analytics, UpgradeInitializer upgradeInitializer, AnalyticsInitializer analyticsInitializer, ProjectsRepository projectsRepository, SettingsProvider settingsProvider, MapsInitializer mapsInitializer) {
+        return new ApplicationInitializer(context, propertyManager, analytics, upgradeInitializer, analyticsInitializer, mapsInitializer, projectsRepository, settingsProvider);
     }
 
     @Provides

@@ -32,6 +32,8 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.activities.FormFillingActivity
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
@@ -86,7 +88,10 @@ class FormUriActivityTest {
 
             override fun providesCurrentProjectProvider(
                 settingsProvider: SettingsProvider,
-                projectsRepository: ProjectsRepository
+                projectsRepository: ProjectsRepository,
+                analyticsInitializer: AnalyticsInitializer,
+                context: Context,
+                mapsInitializer: MapsInitializer
             ): CurrentProjectProvider {
                 return currentProjectProvider
             }

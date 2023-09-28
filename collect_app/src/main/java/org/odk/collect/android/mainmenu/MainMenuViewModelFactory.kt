@@ -41,8 +41,7 @@ open class MainMenuViewModelFactory(
             )
 
             CurrentProjectViewModel::class.java -> CurrentProjectViewModel(
-                currentProjectProvider,
-                analyticsInitializer
+                currentProjectProvider
             )
 
             RequestPermissionsViewModel::class.java -> RequestPermissionsViewModel(

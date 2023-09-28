@@ -1,5 +1,7 @@
 package org.odk.collect.android.projects
 
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -7,7 +9,9 @@ import org.odk.collect.settings.keys.MetaKeys
 
 class CurrentProjectProvider(
     private val settingsProvider: SettingsProvider,
-    private val projectsRepository: ProjectsRepository
+    private val projectsRepository: ProjectsRepository,
+    private val analyticsInitializer: AnalyticsInitializer,
+    private val mapsInitializer: MapsInitializer
 ) {
 
     fun getCurrentProject(): Project.Saved {
@@ -34,6 +38,9 @@ class CurrentProjectProvider(
 
     fun setCurrentProject(projectId: String) {
         settingsProvider.getMetaSettings().save(MetaKeys.CURRENT_PROJECT_ID, projectId)
+
+        analyticsInitializer.initialize()
+        mapsInitializer.initialize()
     }
 
     private fun getCurrentProjectId(): String? {

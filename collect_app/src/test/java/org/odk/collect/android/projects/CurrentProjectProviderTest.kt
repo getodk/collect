@@ -4,6 +4,9 @@ import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.`is`
 import org.junit.Test
+import org.mockito.Mockito.verify
+import org.mockito.kotlin.mock
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
@@ -14,8 +17,9 @@ class CurrentProjectProviderTest {
     private val projectsRepository = InMemProjectsRepository()
     private val settingsProvider = InMemSettingsProvider()
     private val metaSettings = settingsProvider.getMetaSettings()
+    private val analyticsInitializer = mock<AnalyticsInitializer>()
     private val currentProjectProvider =
-        CurrentProjectProvider(settingsProvider, projectsRepository)
+        CurrentProjectProvider(settingsProvider, projectsRepository, analyticsInitializer, mock())
 
     @Test
     fun `A project should be returned after calling getCurrentProject() if there is a project for given id`() {
@@ -47,5 +51,12 @@ class CurrentProjectProviderTest {
     fun `getCurrentProject throws IllegalStateException when current project does not exist`() {
         currentProjectProvider.setCurrentProject("123e4567")
         currentProjectProvider.getCurrentProject()
+    }
+
+    @Test
+    fun `setCurrentProject() re-initializes analytics`() {
+        projectsRepository.save(Project.Saved("456", "Project Y", "Y", "#ffffff"))
+        currentProjectProvider.setCurrentProject("456")
+        verify(analyticsInitializer).initialize()
     }
 }
