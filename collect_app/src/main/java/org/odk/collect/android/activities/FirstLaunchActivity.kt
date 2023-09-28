@@ -6,8 +6,8 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
-import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
