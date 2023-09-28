@@ -19,7 +19,7 @@ import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationVi
 import org.odk.collect.android.formentry.saving.DiskFormSaver
 import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
@@ -39,7 +39,7 @@ class FormEntryViewModelFactory(
     private val formSessionRepository: FormSessionRepository,
     private val mediaUtils: MediaUtils,
     private val audioRecorder: AudioRecorder,
-    private val currentProjectProvider: CurrentProjectProvider,
+    private val projectsDataService: ProjectsDataService,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
     private val settingsProvider: SettingsProvider,
     private val permissionsChecker: PermissionsChecker,
@@ -54,7 +54,7 @@ class FormEntryViewModelFactory(
         modelClass: Class<T>,
         handle: SavedStateHandle
     ): T {
-        val projectId = currentProjectProvider.getCurrentProject().uuid
+        val projectId = projectsDataService.getCurrentProject().uuid
 
         return when (modelClass) {
             FormEntryViewModel::class.java -> FormEntryViewModel(
@@ -72,7 +72,7 @@ class FormEntryViewModelFactory(
                     mediaUtils,
                     scheduler,
                     audioRecorder,
-                    currentProjectProvider,
+                    projectsDataService,
                     formSessionRepository.get(sessionId),
                     entitiesRepositoryProvider.get(projectId),
                     instancesRepositoryProvider.get(projectId)

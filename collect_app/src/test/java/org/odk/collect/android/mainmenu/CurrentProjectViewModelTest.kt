@@ -10,7 +10,7 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.projects.Project
 
 class CurrentProjectViewModelTest {
@@ -18,13 +18,13 @@ class CurrentProjectViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private val currentProjectProvider = mock<CurrentProjectProvider> {
+    private val projectsDataService = mock<ProjectsDataService> {
         on { getCurrentProject() } doReturn Project.Saved("123", "Project X", "X", "#cccccc")
     }
 
     private val analyticsInitializer = mock<AnalyticsInitializer>()
     private val currentProjectViewModel = CurrentProjectViewModel(
-        currentProjectProvider
+        projectsDataService
     )
 
     @Test
@@ -41,14 +41,14 @@ class CurrentProjectViewModelTest {
         val project = Project.Saved("456", "Project Y", "Y", "#ffffff")
 
         currentProjectViewModel.setCurrentProject(project)
-        verify(currentProjectProvider).setCurrentProject("456")
+        verify(projectsDataService).setCurrentProject("456")
     }
 
     @Test
     fun `hasCurrentProject returns false when there is no current project`() {
-        whenever(currentProjectProvider.getCurrentProject()).thenThrow(IllegalStateException())
+        whenever(projectsDataService.getCurrentProject()).thenThrow(IllegalStateException())
         val currentProjectViewModel = CurrentProjectViewModel(
-            currentProjectProvider
+            projectsDataService
         )
 
         assertThat(currentProjectViewModel.hasCurrentProject(), equalTo(false))

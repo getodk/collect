@@ -2,7 +2,7 @@ package org.odk.collect.android.storage
 
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.shared.PathUtils
@@ -10,14 +10,14 @@ import timber.log.Timber
 import java.io.File
 
 class StoragePathProvider(
-    private val currentProjectProvider: CurrentProjectProvider = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider(),
+    private val projectsDataService: ProjectsDataService = DaggerUtils.getComponent(Collect.getInstance()).currentProjectProvider(),
     private val projectsRepository: ProjectsRepository = DaggerUtils.getComponent(Collect.getInstance()).projectsRepository(),
     val odkRootDirPath: String = Collect.getInstance().getExternalFilesDir(null)!!.absolutePath
 ) {
 
     @JvmOverloads
     fun getProjectRootDirPath(projectId: String? = null): String {
-        val uuid = projectId ?: currentProjectProvider.getCurrentProject().uuid
+        val uuid = projectId ?: projectsDataService.getCurrentProject().uuid
         val path = getOdkDirPath(StorageSubdirectory.PROJECTS) + File.separator + uuid
 
         if (!File(path).exists()) {

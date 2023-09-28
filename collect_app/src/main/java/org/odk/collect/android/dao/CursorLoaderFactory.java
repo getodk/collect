@@ -7,17 +7,17 @@ import androidx.loader.content.CursorLoader;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.external.InstancesContract;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.forms.instances.Instance;
 
 @Deprecated
 public class CursorLoaderFactory {
 
     public static final String INTERNAL_QUERY_PARAM = "internal";
-    private final CurrentProjectProvider currentProjectProvider;
+    private final ProjectsDataService projectsDataService;
 
-    public CursorLoaderFactory(CurrentProjectProvider currentProjectProvider) {
-        this.currentProjectProvider = currentProjectProvider;
+    public CursorLoaderFactory(ProjectsDataService projectsDataService) {
+        this.projectsDataService = projectsDataService;
     }
 
     public CursorLoader createSentInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
@@ -135,7 +135,7 @@ public class CursorLoaderFactory {
     }
 
     private CursorLoader getInstancesCursorLoader(String selection, String[] selectionArgs, String sortOrder) {
-        Uri uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid());
+        Uri uri = InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid());
 
         return new CursorLoader(
                 Collect.getInstance(),

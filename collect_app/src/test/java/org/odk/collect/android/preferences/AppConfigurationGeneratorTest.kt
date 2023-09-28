@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.keys.AppConfigurationKeys
@@ -22,7 +22,7 @@ class AppConfigurationGeneratorTest {
 
     private val settingsProvider = InMemSettingsProvider()
 
-    private val currentProjectProvider: CurrentProjectProvider = mock {
+    private val projectsDataService: ProjectsDataService = mock {
         on { getCurrentProject() } doReturn Project.Saved("1", "Project X", "X", "#cccccc")
     }
 
@@ -37,7 +37,7 @@ class AppConfigurationGeneratorTest {
     @Before
     fun setup() {
         appConfigurationGenerator =
-            AppConfigurationGenerator(settingsProvider, currentProjectProvider)
+            AppConfigurationGenerator(settingsProvider, projectsDataService)
     }
 
     @Test

@@ -35,7 +35,7 @@ import org.odk.collect.android.formmanagement.InstancesAppState
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -88,7 +88,7 @@ class MainMenuActivityTest {
                 settingsProvider: SettingsProvider,
                 instancesAppState: InstancesAppState,
                 scheduler: Scheduler,
-                currentProjectProvider: CurrentProjectProvider,
+                projectsDataService: ProjectsDataService,
                 analyticsInitializer: AnalyticsInitializer,
                 permissionChecker: PermissionsChecker,
                 formsRepositoryProvider: FormsRepositoryProvider,
@@ -101,7 +101,7 @@ class MainMenuActivityTest {
                     settingsProvider,
                     instancesAppState,
                     scheduler,
-                    currentProjectProvider,
+                    projectsDataService,
                     analyticsInitializer,
                     permissionChecker,
                     formsRepositoryProvider,

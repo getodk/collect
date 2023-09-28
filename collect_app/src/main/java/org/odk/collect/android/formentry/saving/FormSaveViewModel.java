@@ -23,7 +23,7 @@ import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
@@ -80,19 +80,19 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
     private final Scheduler scheduler;
     private final AudioRecorder audioRecorder;
-    private final CurrentProjectProvider currentProjectProvider;
+    private final ProjectsDataService projectsDataService;
     private final EntitiesRepository entitiesRepository;
     private final InstancesRepository instancesRepository;
     private Instance instance;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, ProjectsDataService projectsDataService, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
         this.mediaUtils = mediaUtils;
         this.scheduler = scheduler;
         this.audioRecorder = audioRecorder;
-        this.currentProjectProvider = currentProjectProvider;
+        this.projectsDataService = projectsDataService;
         this.entitiesRepository = entitiesRepository;
         this.instancesRepository = instancesRepository;
 
@@ -226,7 +226,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                 handleTaskResult(saveToDiskResult, saveRequest);
                 clearMediaFiles();
             }
-        }, new ArrayList<>(originalFiles.values()), currentProjectProvider.getCurrentProject().getUuid(), entitiesRepository, instancesRepository).execute();
+        }, new ArrayList<>(originalFiles.values()), projectsDataService.getCurrentProject().getUuid(), entitiesRepository, instancesRepository).execute();
     }
 
     private void handleTaskResult(SaveToDiskResult taskResult, SaveRequest saveRequest) {

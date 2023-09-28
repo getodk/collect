@@ -7,7 +7,7 @@ import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.MetaKeys
 
-class CurrentProjectProvider(
+class ProjectsDataService(
     private val settingsProvider: SettingsProvider,
     private val projectsRepository: ProjectsRepository,
     private val analyticsInitializer: AnalyticsInitializer,

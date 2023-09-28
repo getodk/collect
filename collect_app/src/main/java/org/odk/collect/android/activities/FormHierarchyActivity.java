@@ -57,7 +57,7 @@ import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvi
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.logic.HierarchyElement;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -155,7 +155,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     AudioRecorder audioRecorder;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
+    ProjectsDataService projectsDataService;
 
     @Inject
     EntitiesRepositoryProvider entitiesRepositoryProvider;
@@ -202,7 +202,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 formSessionRepository,
                 mediaUtils,
                 audioRecorder,
-                currentProjectProvider,
+                projectsDataService,
                 entitiesRepositoryProvider,
                 settingsProvider,
                 permissionsChecker,

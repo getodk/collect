@@ -70,7 +70,7 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesFragment;
 import org.odk.collect.android.preferences.screens.ServerPreferencesFragment;
 import org.odk.collect.android.preferences.screens.UserInterfacePreferencesFragment;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.projects.ManualProjectCreatorDialog;
 import org.odk.collect.android.projects.ProjectSettingsDialog;
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog;
@@ -295,7 +295,7 @@ public interface AppDependencyComponent {
 
     ProjectsRepository projectsRepository();
 
-    CurrentProjectProvider currentProjectProvider();
+    ProjectsDataService currentProjectProvider();
 
     InstancesAppState instancesAppState();
 

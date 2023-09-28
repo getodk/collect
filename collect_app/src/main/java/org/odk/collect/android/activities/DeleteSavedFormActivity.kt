@@ -20,14 +20,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.odk.collect.android.R
 import org.odk.collect.android.adapters.DeleteFormsTabsAdapter
 import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
@@ -43,7 +42,7 @@ class DeleteSavedFormActivity : LocalizedActivity() {
     lateinit var projectDependencyProviderFactory: ProjectDependencyProviderFactory
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var formsDataService: FormsDataService
@@ -56,7 +55,7 @@ class DeleteSavedFormActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         DaggerUtils.getComponent(this).inject(this)
 
-        val projectId = currentProjectProvider.getCurrentProject().uuid
+        val projectId = projectsDataService.getCurrentProject().uuid
         val projectDependencyProvider = projectDependencyProviderFactory.create(projectId)
 
         val viewModelFactory = ViewModelFactory(

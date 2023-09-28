@@ -14,7 +14,7 @@ import java.io.File
 
 class ProjectDeleter(
     private val projectsRepository: ProjectsRepository,
-    private val currentProjectProvider: CurrentProjectProvider,
+    private val projectsDataService: ProjectsDataService,
     private val formUpdateScheduler: FormUpdateScheduler,
     private val instanceSubmitScheduler: InstanceSubmitScheduler,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
@@ -22,7 +22,7 @@ class ProjectDeleter(
     private val changeLockProvider: ChangeLockProvider,
     private val settingsProvider: SettingsProvider
 ) {
-    fun deleteProject(projectId: String = currentProjectProvider.getCurrentProject().uuid): DeleteProjectResult {
+    fun deleteProject(projectId: String = projectsDataService.getCurrentProject().uuid): DeleteProjectResult {
         return when {
             unsentInstancesDetected(projectId) -> DeleteProjectResult.UnsentInstances
             runningBackgroundJobsDetected(projectId) -> DeleteProjectResult.RunningBackgroundJobs
@@ -63,14 +63,14 @@ class ProjectDeleter(
         DatabaseConnection.cleanUp()
 
         return try {
-            currentProjectProvider.getCurrentProject()
+            projectsDataService.getCurrentProject()
             DeleteProjectResult.DeletedSuccessfullyInactiveProject
         } catch (e: IllegalStateException) {
             if (projectsRepository.getAll().isEmpty()) {
                 DeleteProjectResult.DeletedSuccessfullyLastProject
             } else {
                 val newProject = projectsRepository.getAll()[0]
-                currentProjectProvider.setCurrentProject(newProject.uuid)
+                projectsDataService.setCurrentProject(newProject.uuid)
                 DeleteProjectResult.DeletedSuccessfullyCurrentProject(newProject)
             }
         }

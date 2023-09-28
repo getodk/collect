@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import org.odk.collect.android.external.InstancesContract
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 class InstancesAppState(
     private val context: Context,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val currentProjectProvider: CurrentProjectProvider
+    private val projectsDataService: ProjectsDataService
 ) {
 
     private val _editable = MutableLiveData(0)
@@ -45,7 +45,7 @@ class InstancesAppState(
         _editable.postValue(editableInstances)
 
         context.contentResolver.notifyChange(
-            InstancesContract.getUri(currentProjectProvider.getCurrentProject().uuid),
+            InstancesContract.getUri(projectsDataService.getCurrentProject().uuid),
             null
         )
     }

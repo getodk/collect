@@ -14,7 +14,7 @@ import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.ColorPickerDialog
@@ -49,12 +49,12 @@ class ProjectDisplayPreferencesFragment :
             { color: String ->
                 Analytics.log(AnalyticsEvents.CHANGE_PROJECT_COLOR)
 
-                val (uuid, name, icon) = currentProjectProvider.getCurrentProject()
+                val (uuid, name, icon) = projectsDataService.getCurrentProject()
                 projectsRepository.save(Project.Saved(uuid, name, icon, color))
                 findPreference<Preference>(PROJECT_COLOR_KEY)!!.summaryProvider =
                     ProjectDetailsSummaryProvider(
                         PROJECT_COLOR_KEY,
-                        currentProjectProvider
+                        projectsDataService
                     )
             }
         )
@@ -68,24 +68,24 @@ class ProjectDisplayPreferencesFragment :
         findPreference<Preference>(PROJECT_NAME_KEY)!!.summaryProvider =
             ProjectDetailsSummaryProvider(
                 PROJECT_NAME_KEY,
-                currentProjectProvider
+                projectsDataService
             )
         findPreference<Preference>(PROJECT_ICON_KEY)!!.summaryProvider =
             ProjectDetailsSummaryProvider(
                 PROJECT_ICON_KEY,
-                currentProjectProvider
+                projectsDataService
             )
         findPreference<Preference>(PROJECT_COLOR_KEY)!!.summaryProvider =
             ProjectDetailsSummaryProvider(
                 PROJECT_COLOR_KEY,
-                currentProjectProvider
+                projectsDataService
             )
         findPreference<Preference>(PROJECT_NAME_KEY)!!.onPreferenceChangeListener = this
         findPreference<Preference>(PROJECT_ICON_KEY)!!.onPreferenceChangeListener = this
         (findPreference<Preference>(PROJECT_NAME_KEY) as EditTextPreference).text =
-            currentProjectProvider.getCurrentProject().name
+            projectsDataService.getCurrentProject().name
         (findPreference<Preference>(PROJECT_ICON_KEY) as EditTextPreference).text =
-            currentProjectProvider.getCurrentProject().icon
+            projectsDataService.getCurrentProject().icon
         (findPreference<Preference>(PROJECT_ICON_KEY) as EditTextPreference).setOnBindEditTextListener { editText: EditText ->
             editText.addTextChangedListener(
                 OneSignTextWatcher(editText)
@@ -95,18 +95,18 @@ class ProjectDisplayPreferencesFragment :
 
     private class ProjectDetailsSummaryProvider(
         private val key: String,
-        private val currentProjectProvider: CurrentProjectProvider
+        private val projectsDataService: ProjectsDataService
     ) : Preference.SummaryProvider<Preference> {
         override fun provideSummary(preference: Preference): CharSequence {
             return when (key) {
-                PROJECT_NAME_KEY -> currentProjectProvider.getCurrentProject().name
-                PROJECT_ICON_KEY -> currentProjectProvider.getCurrentProject().icon
+                PROJECT_NAME_KEY -> projectsDataService.getCurrentProject().name
+                PROJECT_ICON_KEY -> projectsDataService.getCurrentProject().icon
                 PROJECT_COLOR_KEY -> {
                     val summary: Spannable = SpannableString("■")
                     summary.setSpan(
                         ForegroundColorSpan(
                             Color.parseColor(
-                                currentProjectProvider.getCurrentProject().color
+                                projectsDataService.getCurrentProject().color
                             )
                         ),
                         0,
@@ -124,7 +124,7 @@ class ProjectDisplayPreferencesFragment :
         if (MultiClickGuard.allowClick(javaClass.name)) {
             when (preference.key) {
                 PROJECT_COLOR_KEY -> {
-                    val (_, _, icon, color) = currentProjectProvider.getCurrentProject()
+                    val (_, _, icon, color) = projectsDataService.getCurrentProject()
                     val bundle = Bundle()
                     bundle.putString(ColorPickerDialog.CURRENT_COLOR, color)
                     bundle.putString(ColorPickerDialog.CURRENT_ICON, icon)
@@ -141,7 +141,7 @@ class ProjectDisplayPreferencesFragment :
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
-        val (uuid, name, icon, color) = currentProjectProvider.getCurrentProject()
+        val (uuid, name, icon, color) = projectsDataService.getCurrentProject()
         when (preference.key) {
             PROJECT_NAME_KEY -> {
                 Analytics.log(AnalyticsEvents.CHANGE_PROJECT_NAME)

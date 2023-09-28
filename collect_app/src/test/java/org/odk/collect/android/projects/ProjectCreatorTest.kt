@@ -25,7 +25,7 @@ class ProjectCreatorTest {
         on { save(Project.New("", "", "")) } doReturn savedProject
     }
 
-    private var currentProjectProvider = mock<CurrentProjectProvider> {
+    private var projectsDataService = mock<ProjectsDataService> {
         on { getCurrentProject() } doReturn savedProject
     }
     private var settingsImporter = mock<ODKAppSettingsImporter> {}
@@ -43,7 +43,7 @@ class ProjectCreatorTest {
     fun setup() {
         projectCreator = ProjectCreator(
             projectsRepository,
-            currentProjectProvider,
+            projectsDataService,
             settingsImporter,
             settingsProvider
         )
@@ -110,6 +110,6 @@ class ProjectCreatorTest {
         whenever(settingsImporter.fromJSON(json, savedProject)).thenReturn(SettingsImportingResult.SUCCESS)
 
         projectCreator.createNewProject(json)
-        verify(currentProjectProvider).setCurrentProject("1")
+        verify(projectsDataService).setCurrentProject("1")
     }
 }

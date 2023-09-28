@@ -56,7 +56,7 @@ class QrCodeProjectCreatorDialog :
     lateinit var projectCreator: ProjectCreator
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
@@ -290,7 +290,7 @@ class QrCodeProjectCreatorDialog :
                     requireContext(),
                     getString(
                         org.odk.collect.strings.R.string.switched_project,
-                        currentProjectProvider.getCurrentProject().name
+                        projectsDataService.getCurrentProject().name
                     )
                 )
             }
@@ -312,13 +312,13 @@ class QrCodeProjectCreatorDialog :
     }
 
     override fun switchToProject(uuid: String) {
-        currentProjectProvider.setCurrentProject(uuid)
+        projectsDataService.setCurrentProject(uuid)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(
             requireContext(),
             getString(
                 org.odk.collect.strings.R.string.switched_project,
-                currentProjectProvider.getCurrentProject().name
+                projectsDataService.getCurrentProject().name
             )
         )
     }

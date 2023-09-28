@@ -2,12 +2,11 @@ package org.odk.collect.android.activities
 
 import android.os.Bundle
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.R
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
@@ -28,7 +27,7 @@ class FirstLaunchActivity : LocalizedActivity() {
     lateinit var versionInformation: VersionInformation
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
@@ -64,7 +63,7 @@ class FirstLaunchActivity : LocalizedActivity() {
                 Analytics.log(AnalyticsEvents.TRY_DEMO)
 
                 projectsRepository.save(Project.DEMO_PROJECT)
-                currentProjectProvider.setCurrentProject(Project.DEMO_PROJECT_ID)
+                projectsDataService.setCurrentProject(Project.DEMO_PROJECT_ID)
 
                 ActivityUtils.startActivityAndCloseAllOthers(
                     this@FirstLaunchActivity,

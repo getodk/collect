@@ -4,13 +4,12 @@ import android.content.Context
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.BarcodeResult
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.fragments.BarCodeScannerFragment
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.mainmenu.MainMenuActivity
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.androidshared.utils.CompressionUtils
@@ -27,7 +26,7 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
     lateinit var settingsImporter: ODKAppSettingsImporter
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var storagePathProvider: StoragePathProvider
@@ -39,18 +38,18 @@ class QRCodeScannerFragment : BarCodeScannerFragment() {
 
     @Throws(IOException::class, DataFormatException::class)
     override fun handleScanningResult(result: BarcodeResult) {
-        val oldProjectName = currentProjectProvider.getCurrentProject().name
+        val oldProjectName = projectsDataService.getCurrentProject().name
 
         val settingsImportingResult = settingsImporter.fromJSON(
             CompressionUtils.decompress(result.text),
-            currentProjectProvider.getCurrentProject()
+            projectsDataService.getCurrentProject()
         )
 
         when (settingsImportingResult) {
             SettingsImportingResult.SUCCESS -> {
                 Analytics.log(AnalyticsEvents.RECONFIGURE_PROJECT)
 
-                val newProjectName = currentProjectProvider.getCurrentProject().name
+                val newProjectName = projectsDataService.getCurrentProject().name
                 if (newProjectName != oldProjectName) {
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + oldProjectName).delete()
                     File(storagePathProvider.getProjectRootDirPath() + File.separator + newProjectName).createNewFile()

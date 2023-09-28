@@ -11,7 +11,7 @@ import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.instancemanagement.canBeEdited
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -30,7 +30,7 @@ import javax.inject.Inject
 class FormUriActivity : ComponentActivity() {
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
@@ -84,7 +84,7 @@ class FormUriActivity : ComponentActivity() {
         val uriProjectId = intent.data?.getQueryParameter("projectId")
         val projectId = uriProjectId ?: firstProject.uuid
 
-        return if (projectId != currentProjectProvider.getCurrentProject().uuid) {
+        return if (projectId != projectsDataService.getCurrentProject().uuid) {
             displayErrorDialog(getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
             false
         } else {
