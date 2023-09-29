@@ -62,7 +62,6 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void clearAnswer() {
         widgetAnswerText.clearAnswer();
-        widgetValueChanged();
     }
 
     @Override

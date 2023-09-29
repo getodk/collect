@@ -80,7 +80,6 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     public void clearAnswer() {
         binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.get_bearing));
         binding.widgetAnswerText.setAnswer(null);
-        widgetValueChanged();
     }
 
     @Override
@@ -93,7 +92,6 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
     public void setData(Object answer) {
         binding.widgetAnswerText.setAnswer((String) answer);
         binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
-        widgetValueChanged();
     }
 
     @Override
