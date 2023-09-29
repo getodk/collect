@@ -40,6 +40,8 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.views.WidgetAnswerText;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import timber.log.Timber;
 
 /**
@@ -57,6 +59,7 @@ public class StringWidget extends QuestionWidget {
         textInputLayout = getAnswerEditText(questionDetails.isReadOnly() || this instanceof ExStringWidget, getFormEntryPrompt());
         answerText = (TextInputEditText) textInputLayout.getEditText();
         widgetAnswerText = new WidgetAnswerText(context);
+        widgetAnswerText.addTextChangedListener(this::widgetValueChanged);
         widgetAnswerText.updateState(questionDetails.isReadOnly() || this instanceof ExStringWidget);
 
         setUpLayout(context);

@@ -1,10 +1,12 @@
 package org.odk.collect.android.views
 
 import android.content.Context
+import android.text.Editable
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
 import android.text.InputType
 import android.text.Selection
+import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -129,5 +131,15 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     fun isEditableState(): Boolean {
         return binding.textInputLayout.visibility == View.VISIBLE
+    }
+
+    fun addTextChangedListener(runnable: Runnable) {
+        binding.editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
+            override fun afterTextChanged(s: Editable) {
+                runnable.run()
+            }
+        })
     }
 }
