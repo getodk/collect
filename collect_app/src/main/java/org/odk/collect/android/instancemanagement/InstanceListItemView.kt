@@ -15,6 +15,8 @@ import java.util.Locale
 
 object InstanceListItemView {
 
+    private const val DISABLED_ALPHA = 0.38f
+
     @JvmStatic
     fun setInstance(view: View, instance: Instance, shouldCheckDisabled: Boolean) {
         val context = view.context
@@ -90,10 +92,10 @@ object InstanceListItemView {
         disabledCause.text = disabledMessage
 
         // Material design "disabled" opacity is 38%.
-        formTitle.alpha = 0.38f
-        formSubtitle.alpha = 0.38f
-        disabledCause.alpha = 0.38f
-        imageView.alpha = 0.38f
+        formTitle.alpha = DISABLED_ALPHA
+        formSubtitle.alpha = DISABLED_ALPHA
+        disabledCause.alpha = DISABLED_ALPHA
+        imageView.alpha = DISABLED_ALPHA
     }
 
     private fun setUpSubtext(view: View, instance: Instance, context: Context) {
