@@ -34,14 +34,14 @@ public class IntegerWidgetTest extends GeneralStringWidgetTest<IntegerWidget, In
 
     @Test
     public void digitsAboveLimitOfNineShouldBeTruncatedFromRight() {
-        getWidget().answerText.setText("123456789123");
+        getWidget().widgetAnswerText.setAnswer("123456789123");
         assertEquals("123456789", getWidget().getAnswerText());
     }
 
     @Test
     public void separatorsShouldBeAddedWhenEnabled() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
-        getWidget().answerText.setText("123456789");
-        assertEquals("123,456,789", getWidget().answerText.getText().toString());
+        getWidget().widgetAnswerText.setAnswer("123456789");
+        assertEquals("123,456,789", getWidget().widgetAnswerText.getAnswer());
     }
 }
