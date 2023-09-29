@@ -21,6 +21,11 @@ import org.odk.collect.android.utilities.SoftKeyboardController
 import java.text.NumberFormat
 import java.util.Locale
 
+/**
+ * Custom view for answer fields in text widgets with dual states: EDITABLE and READ_ONLY.
+ * In the EDITABLE state, a text field is presented for users to manually input answers.
+ * However, in the READ_ONLY state, only a text view is shown, preventing manual changes.
+ */
 class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
     constructor(context: Context) : this(context, null)
