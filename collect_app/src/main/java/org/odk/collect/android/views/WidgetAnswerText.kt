@@ -1,12 +1,19 @@
 package org.odk.collect.android.views
 
 import android.content.Context
+import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
+import android.text.InputType
 import android.text.Selection
+import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import org.odk.collect.android.databinding.WidgetAnswerTextBinding
+import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher
 import org.odk.collect.android.utilities.SoftKeyboardController
+import java.text.NumberFormat
+import java.util.Locale
 
 class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
@@ -21,6 +28,34 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         } else {
             binding.textInputLayout.visibility = VISIBLE
             binding.textView.visibility = GONE
+        }
+    }
+
+    fun setDecimalType(useThousandSeparator: Boolean, answer: Double?) {
+        if (useThousandSeparator) {
+            binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
+        }
+
+        binding.editText.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
+        binding.editText.keyListener = DigitsKeyListener(true, true) // only numbers are allowed
+
+        // only 15 characters allowed
+        val fa = arrayOfNulls<InputFilter>(1)
+        fa[0] = LengthFilter(15)
+        if (useThousandSeparator) {
+            fa[0] = LengthFilter(19)
+        }
+        binding.editText.filters = fa
+
+        if (answer != null) {
+            // truncate to 15 digits max in US locale use US locale because DigitsKeyListener can't be localized before API 26
+            val nf = NumberFormat.getNumberInstance(Locale.US)
+            nf.maximumFractionDigits = 15
+            nf.maximumIntegerDigits = 15
+            nf.isGroupingUsed = false
+            val formattedValue: String = nf.format(answer)
+            binding.editText.setText(formattedValue)
+            Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
         }
     }
 
