@@ -67,6 +67,5 @@ public class ExDecimalWidget extends ExStringWidget {
     public void setData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
         widgetAnswerText.setAnswer(decimalData == null ? null : decimalData.getValue().toString());
-        widgetValueChanged();
     }
 }

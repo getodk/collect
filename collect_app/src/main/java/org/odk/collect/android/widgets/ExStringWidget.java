@@ -128,7 +128,6 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public void setData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
         widgetAnswerText.setAnswer(stringData == null ? null : stringData.getValue().toString());
-        widgetValueChanged();
     }
 
     @Override
