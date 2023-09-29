@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_standard" />
 
-    <include
-        android:id="@+id/answer_text"
-        layout="@layout/widget_answer_text_field" />
+    <org.odk.collect.android.views.WidgetAnswerText
+        android:id="@+id/widget_answer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>
