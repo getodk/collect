@@ -76,7 +76,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         val fa = arrayOfNulls<InputFilter>(1)
         fa[0] = LengthFilter(9)
         if (useThousandSeparator) {
-            //11 since for a nine digit number , their will be 2 separators.
+            // 11 since for a nine digit number , their will be 2 separators.
             fa[0] = LengthFilter(11)
         }
         binding.editText.filters = fa
@@ -95,7 +95,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         binding.editText.keyListener = object : DigitsKeyListener() {
             override fun getAcceptedChars(): CharArray {
                 return charArrayOf(
-                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
+                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
                 )
             }
         }
