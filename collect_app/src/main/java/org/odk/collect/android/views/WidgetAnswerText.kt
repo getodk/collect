@@ -49,8 +49,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         binding.editText.filters = fa
 
         if (answer != null) {
-            binding.editText.setText(String.format(Locale.US, "%d", answer))
-            Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
+            setAnswer(String.format(Locale.US, "%d", answer))
         }
     }
 
@@ -69,8 +68,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         }
 
         if (answer != null) {
-            binding.editText.setText(answer)
-            Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
+            setAnswer(answer)
         }
     }
 
@@ -97,8 +95,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
             nf.maximumIntegerDigits = 15
             nf.isGroupingUsed = false
             val formattedValue: String = nf.format(answer)
-            binding.editText.setText(formattedValue)
-            Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
+            setAnswer(formattedValue)
         }
     }
 
