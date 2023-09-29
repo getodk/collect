@@ -166,32 +166,4 @@ public final class StringWidgetUtils {
             Selection.setSelection(answerText.getText(), answerText.getText().length());
         }
     }
-
-    public static void adjustEditTextAnswerToStringNumberWidget(EditText answerText, FormEntryPrompt prompt) {
-        answerText.setInputType(InputType.TYPE_NUMBER_FLAG_SIGNED);
-        boolean useThousandSeparator = Appearances.useThousandSeparator(prompt);
-        if (useThousandSeparator) {
-            answerText.addTextChangedListener(new ThousandsSeparatorTextWatcher(answerText));
-        }
-
-        answerText.setKeyListener(new DigitsKeyListener() {
-            @Override
-            protected char[] getAcceptedChars() {
-                return new char[]{
-                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
-                };
-            }
-        });
-
-        String s = null;
-        IAnswerData answerData = prompt.getAnswerValue();
-        if (answerData != null) {
-            s = (String) answerData.getValue();
-        }
-
-        if (s != null) {
-            answerText.setText(s);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
-        }
-    }
 }

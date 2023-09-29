@@ -54,6 +54,26 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         }
     }
 
+    fun setStringNumberType(useThousandSeparator: Boolean, answer: String?) {
+        if (useThousandSeparator) {
+            binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
+        }
+
+        binding.editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
+        binding.editText.keyListener = object : DigitsKeyListener() {
+            override fun getAcceptedChars(): CharArray {
+                return charArrayOf(
+                        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '-', '+', ' ', ','
+                )
+            }
+        }
+
+        if (answer != null) {
+            binding.editText.setText(answer)
+            Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
+        }
+    }
+
     fun setDecimalType(useThousandSeparator: Boolean, answer: Double?) {
         if (useThousandSeparator) {
             binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
