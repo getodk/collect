@@ -22,7 +22,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     constructor(context: Context) : this(context, null)
 
-    private val binding = WidgetAnswerTextBinding.inflate(LayoutInflater.from(context), this, true)
+    val binding = WidgetAnswerTextBinding.inflate(LayoutInflater.from(context), this, true)
 
     fun updateState(readOnly: Boolean) {
         if (readOnly) {

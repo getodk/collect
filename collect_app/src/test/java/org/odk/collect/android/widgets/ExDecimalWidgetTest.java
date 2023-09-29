@@ -82,7 +82,7 @@ public class ExDecimalWidgetTest extends GeneralExStringWidgetTest<ExDecimalWidg
     @Test
     public void separatorsShouldBeAddedWhenEnabled() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn(THOUSANDS_SEP);
-        getWidget().answerText.setText("123456789.54");
-        assertEquals("123,456,789.54", getWidget().answerText.getText().toString());
+        getWidget().widgetAnswerText.setAnswer("123456789.54");
+        assertEquals("123,456,789.54", getWidget().widgetAnswerText.getAnswer());
     }
 }

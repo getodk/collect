@@ -51,7 +51,7 @@ import timber.log.Timber;
 public class StringWidget extends QuestionWidget {
     public final TextInputLayout textInputLayout;
     public final TextInputEditText answerText;
-    protected final WidgetAnswerText widgetAnswerText;
+    public final WidgetAnswerText widgetAnswerText;
 
     protected StringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
