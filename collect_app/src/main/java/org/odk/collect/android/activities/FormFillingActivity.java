@@ -2275,6 +2275,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void exit() {
+        backgroundLocationViewModel.activityHidden();
         formEntryViewModel.exit();
         finish();
     }
