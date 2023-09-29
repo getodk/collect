@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.TextKeyListener;
 import android.util.TypedValue;
@@ -38,6 +37,7 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.views.WidgetAnswerText;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 
 import timber.log.Timber;
@@ -49,23 +49,27 @@ import timber.log.Timber;
 public class StringWidget extends QuestionWidget {
     public final TextInputLayout textInputLayout;
     public final TextInputEditText answerText;
+    private final WidgetAnswerText widgetAnswerText;
 
     protected StringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
         textInputLayout = getAnswerEditText(questionDetails.isReadOnly() || this instanceof ExStringWidget, getFormEntryPrompt());
         answerText = (TextInputEditText) textInputLayout.getEditText();
+        widgetAnswerText = new WidgetAnswerText(context);
+        widgetAnswerText.updateState(questionDetails.isReadOnly() || this instanceof ExStringWidget);
+
         setUpLayout(context);
     }
 
     protected void setUpLayout(Context context) {
         setDisplayValueFromModel();
-        addAnswerView(textInputLayout);
+        addAnswerView(widgetAnswerText);
     }
 
     @Override
     public void clearAnswer() {
-        answerText.setText(null);
+        widgetAnswerText.clearAnswer();
         widgetValueChanged();
     }
 
@@ -77,36 +81,23 @@ public class StringWidget extends QuestionWidget {
 
     @NonNull
     public String getAnswerText() {
-        return answerText.getText().toString();
+        return widgetAnswerText.getAnswer();
     }
 
     @Override
     public void setFocus(Context context) {
-        if (!questionDetails.isReadOnly()) {
-            softKeyboardController.showSoftKeyboard(answerText);
-            /*
-             * If you do a multi-question screen after a "add another group" dialog, this won't
-             * automatically pop up. It's an Android issue.
-             *
-             * That is, if I have an edit text in an activity, and pop a dialog, and in that
-             * dialog's button's OnClick() I call edittext.requestFocus() and
-             * showSoftInput(edittext, 0), showSoftinput() returns false. However, if the edittext
-             * is focused before the dialog pops up, everything works fine. great.
-             */
-        } else {
-            softKeyboardController.hideSoftKeyboard(answerText);
-        }
+        widgetAnswerText.setFocus(!questionDetails.isReadOnly());
     }
 
     @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        answerText.setOnLongClickListener(l);
+        widgetAnswerText.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        answerText.cancelLongPress();
+        widgetAnswerText.cancelLongPress();
     }
 
     /**
@@ -130,8 +121,7 @@ public class StringWidget extends QuestionWidget {
         String currentAnswer = getFormEntryPrompt().getAnswerText();
 
         if (currentAnswer != null) {
-            answerText.setText(currentAnswer);
-            Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
+            widgetAnswerText.setAnswer(currentAnswer);
         }
     }
 
@@ -204,11 +194,11 @@ public class StringWidget extends QuestionWidget {
 
     @Override
     public void hideError() {
-        textInputLayout.setError(null);
+        widgetAnswerText.setError(null);
     }
 
     @Override
     public void displayError(String errorMessage) {
-        textInputLayout.setError(errorMessage);
+        widgetAnswerText.setError(errorMessage);
     }
 }
