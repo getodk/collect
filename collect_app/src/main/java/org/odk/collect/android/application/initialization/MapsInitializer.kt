@@ -19,7 +19,10 @@ class MapsInitializer @Inject constructor(
 
     fun initialize() {
         resetToAvailableFramework()
-        initializeFrameworks()
+
+        if (!FRAMEWORKS_INITIALIZED) {
+            initializeFrameworks()
+        }
     }
 
     private fun resetToAvailableFramework() {
@@ -57,5 +60,9 @@ class MapsInitializer @Inject constructor(
         } catch (ignore: Error) {
             // ignored
         }
+    }
+
+    companion object {
+        private var FRAMEWORKS_INITIALIZED = false
     }
 }
