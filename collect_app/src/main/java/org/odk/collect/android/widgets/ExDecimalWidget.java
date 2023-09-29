@@ -21,6 +21,7 @@ import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.externaldata.ExternalAppsUtils;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -42,7 +43,9 @@ public class ExDecimalWidget extends ExStringWidget {
         super(context, questionDetails, waitingForDataRegistry, stringRequester);
         render();
 
-        StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
+        boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
+        Double answer = StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());
+        widgetAnswerText.setDecimalType(useThousandSeparator, answer);
     }
 
     @Override
@@ -57,14 +60,13 @@ public class ExDecimalWidget extends ExStringWidget {
 
     @Override
     public IAnswerData getAnswer() {
-        return StringWidgetUtils.getDecimalData(answerText.getText().toString(), getFormEntryPrompt());
+        return StringWidgetUtils.getDecimalData(widgetAnswerText.getAnswer(), getFormEntryPrompt());
     }
 
     @Override
     public void setData(Object answer) {
         DecimalData decimalData = ExternalAppsUtils.asDecimalData(answer);
-        answerText.setText(decimalData == null ? null : decimalData.getValue().toString());
-        answerText.setVisibility(answerText.getText().toString().isBlank() ? GONE : VISIBLE);
+        widgetAnswerText.setAnswer(decimalData == null ? null : decimalData.getValue().toString());
         widgetValueChanged();
     }
 }
