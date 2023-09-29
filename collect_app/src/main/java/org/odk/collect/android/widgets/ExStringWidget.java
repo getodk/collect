@@ -21,17 +21,12 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.text.Editable;
-import android.text.Selection;
-import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
@@ -106,15 +101,13 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     @Override
     protected void setUpLayout(Context context) {
-        textInputLayout.setPadding(7, 7, 7, 0);
-        answerText.setText(getFormEntryPrompt().getAnswerText());
-        answerText.setVisibility(answerText.getText().toString().isBlank() ? GONE : VISIBLE);
+        widgetAnswerText.setAnswer(getFormEntryPrompt().getAnswerText());
         launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
-        answerLayout.addView(textInputLayout);
+        answerLayout.addView(widgetAnswerText);
         addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
     }
 
@@ -134,20 +127,19 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     @Override
     public void setData(Object answer) {
         StringData stringData = ExternalAppsUtils.asStringData(answer);
-        answerText.setText(stringData == null ? null : stringData.getValue().toString());
-        answerText.setVisibility(answerText.getText().toString().isBlank() ? GONE : VISIBLE);
+        widgetAnswerText.setAnswer(stringData == null ? null : stringData.getValue().toString());
         widgetValueChanged();
     }
 
     @Override
     public void setFocus(Context context) {
         if (hasExApp) {
-            softKeyboardController.hideSoftKeyboard(answerText);
+            widgetAnswerText.setFocus(false);
             // focus on launch button
             launchIntentButton.requestFocus();
         } else {
             if (!getFormEntryPrompt().isReadOnly()) {
-                softKeyboardController.showSoftKeyboard(answerText);
+                widgetAnswerText.setFocus(true);
             /*
              * If you do a multi-question screen after a "add another group" dialog, this won't
              * automatically pop up. It's an Android issue.
@@ -159,27 +151,21 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
              * is focused before the dialog pops up, everything works fine. great.
              */
             } else {
-                softKeyboardController.hideSoftKeyboard(answerText);
+                widgetAnswerText.setFocus(false);
             }
         }
     }
 
     @Override
-    public void clearAnswer() {
-        super.clearAnswer();
-        answerText.setVisibility(GONE);
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
-        answerText.setOnLongClickListener(l);
+        widgetAnswerText.setOnLongClickListener(l);
         launchIntentButton.setOnLongClickListener(l);
     }
 
     @Override
     public void cancelLongPress() {
         super.cancelLongPress();
-        answerText.cancelLongPress();
+        widgetAnswerText.cancelLongPress();
         launchIntentButton.cancelLongPress();
     }
 
@@ -193,31 +179,13 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     }
 
     private void focusAnswer() {
-        softKeyboardController.showSoftKeyboard(answerText);
+        widgetAnswerText.setFocus(true);
     }
 
     private void onException(String toastText) {
         hasExApp = false;
         if (!getFormEntryPrompt().isReadOnly()) {
-            answerText.setVisibility(VISIBLE);
-            answerText.setFocusable(true);
-            answerText.setFocusableInTouchMode(true);
-            answerText.setEnabled(true);
-            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_FILLED);
-            answerText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    widgetValueChanged();
-                }
-            });
+            widgetAnswerText.updateState(false);
         }
         launchIntentButton.setEnabled(false);
         launchIntentButton.setFocusable(false);
@@ -228,7 +196,6 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
                 .show();
         Timber.d(toastText);
         focusAnswer();
-        Selection.setSelection(answerText.getText(), answerText.getText().toString().length());
     }
 
     @Override
@@ -242,8 +209,8 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public void displayError(String errorMessage) {
         hideError();
 
-        if (answerText.isEnabled()) {
-            super.displayError(errorMessage);
+        if (widgetAnswerText.isEditableState()) {
+            widgetAnswerText.setError(errorMessage);
         } else {
             ((TextView) errorLayout.findViewById(R.id.error_message)).setText(errorMessage);
             errorLayout.setVisibility(VISIBLE);

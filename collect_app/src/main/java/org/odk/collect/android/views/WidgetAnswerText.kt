@@ -8,6 +8,7 @@ import android.text.Selection
 import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import org.odk.collect.android.databinding.WidgetAnswerTextBinding
 import org.odk.collect.android.listeners.ThousandsSeparatorTextWatcher
@@ -124,5 +125,9 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         } else {
             SoftKeyboardController().hideSoftKeyboard(binding.editText)
         }
+    }
+
+    fun isEditableState(): Boolean {
+        return binding.textInputLayout.visibility == View.VISIBLE
     }
 }
