@@ -19,6 +19,7 @@ import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 
 /**
@@ -31,7 +32,11 @@ public class StringNumberWidget extends StringWidget {
         super(context, questionDetails);
         render();
 
-        StringWidgetUtils.adjustEditTextAnswerToStringNumberWidget(answerText, questionDetails.getPrompt());
+        boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
+        String answer = questionDetails.getPrompt().getAnswerValue() == null
+                ? null
+                : questionDetails.getPrompt().getAnswerValue().getValue().toString();
+        widgetAnswerText.setStringNumberType(useThousandSeparator, answer);
     }
 
     @Override
