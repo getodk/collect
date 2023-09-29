@@ -31,6 +31,29 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         }
     }
 
+    fun setIntegerType(useThousandSeparator: Boolean, answer: Int?) {
+        if (useThousandSeparator) {
+            binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
+        }
+
+        binding.editText.inputType = InputType.TYPE_NUMBER_FLAG_SIGNED
+        binding.editText.keyListener = DigitsKeyListener(true, false) // only allows numbers and no periods
+
+        // ints can only hold 2,147,483,648. we allow 999,999,999
+        val fa = arrayOfNulls<InputFilter>(1)
+        fa[0] = LengthFilter(9)
+        if (useThousandSeparator) {
+            //11 since for a nine digit number , their will be 2 separators.
+            fa[0] = LengthFilter(11)
+        }
+        binding.editText.filters = fa
+
+        if (answer != null) {
+            binding.editText.setText(String.format(Locale.US, "%d", answer))
+            Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
+        }
+    }
+
     fun setDecimalType(useThousandSeparator: Boolean, answer: Double?) {
         if (useThousandSeparator) {
             binding.editText.addTextChangedListener(ThousandsSeparatorTextWatcher(binding.editText))
