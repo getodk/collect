@@ -18,6 +18,7 @@ object InstanceListItemView {
     private const val DISABLED_ALPHA = 0.38f
 
     @JvmStatic
+    @Deprecated("This should eventually be replaced by a ViewHolder or View implementation")
     fun setInstance(view: View, instance: Instance, shouldCheckDisabled: Boolean) {
         val context = view.context
 
