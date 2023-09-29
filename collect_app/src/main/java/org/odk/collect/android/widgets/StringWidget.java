@@ -17,19 +17,10 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.method.TextKeyListener;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
@@ -40,8 +31,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.views.WidgetAnswerText;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function0;
 import timber.log.Timber;
 
 /**
@@ -49,18 +38,18 @@ import timber.log.Timber;
  */
 @SuppressLint("ViewConstructor")
 public class StringWidget extends QuestionWidget {
-    public final TextInputLayout textInputLayout;
-    public final TextInputEditText answerText;
     public final WidgetAnswerText widgetAnswerText;
 
     protected StringWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
 
-        textInputLayout = getAnswerEditText(questionDetails.isReadOnly() || this instanceof ExStringWidget, getFormEntryPrompt());
-        answerText = (TextInputEditText) textInputLayout.getEditText();
         widgetAnswerText = new WidgetAnswerText(context);
-        widgetAnswerText.addTextChangedListener(this::widgetValueChanged);
-        widgetAnswerText.updateState(questionDetails.isReadOnly() || this instanceof ExStringWidget);
+        widgetAnswerText.init(
+                QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6),
+                questionDetails.isReadOnly() || this instanceof ExStringWidget,
+                getNumberOfRows(questionDetails.getPrompt()),
+                this::widgetValueChanged
+        );
 
         setUpLayout(context);
     }
@@ -128,45 +117,7 @@ public class StringWidget extends QuestionWidget {
         }
     }
 
-    private TextInputLayout getAnswerEditText(boolean readOnly, FormEntryPrompt prompt) {
-        TextInputLayout textInputLayout = (TextInputLayout) LayoutInflater
-                .from(getContext())
-                .inflate(R.layout.widget_answer_text_field, null, false);
-
-        TextInputEditText answerEditText = textInputLayout.findViewById(R.id.edit_text);
-        answerEditText.setId(View.generateViewId());
-        answerEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6));
-        answerEditText.setKeyListener(new TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false));
-
-        // needed to make long read only text scroll
-        answerEditText.setHorizontallyScrolling(false);
-        answerEditText.setSingleLine(false);
-
-        if (readOnly) {
-            textInputLayout.setBoxBackgroundMode(TextInputLayout.BOX_BACKGROUND_NONE);
-            answerEditText.setBackground(null);
-            answerEditText.setEnabled(false);
-            answerEditText.setTextColor(themeUtils.getColorOnSurface());
-            answerEditText.setFocusable(false);
-        }
-
-        answerEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                widgetValueChanged();
-            }
-        });
-
+    private Integer getNumberOfRows(FormEntryPrompt prompt) {
         QuestionDef questionDef = prompt.getQuestion();
         if (questionDef != null) {
             /*
@@ -183,16 +134,13 @@ public class StringWidget extends QuestionWidget {
             String height = questionDef.getAdditionalAttribute(null, "rows");
             if (height != null && height.length() != 0) {
                 try {
-                    int rows = Integer.parseInt(height);
-                    answerEditText.setMinLines(rows);
-                    answerEditText.setGravity(Gravity.TOP); // to write test starting at the top of the edit area
+                    return Integer.parseInt(height);
                 } catch (Exception e) {
                     Timber.e(new Error("Unable to process the rows setting for the answerText field: " + e));
                 }
             }
         }
-
-        return textInputLayout;
+        return null;
     }
 
     @Override

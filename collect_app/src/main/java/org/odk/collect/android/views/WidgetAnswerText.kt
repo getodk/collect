@@ -8,7 +8,10 @@ import android.text.InputType
 import android.text.Selection
 import android.text.TextWatcher
 import android.text.method.DigitsKeyListener
+import android.text.method.TextKeyListener
 import android.util.AttributeSet
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -23,6 +26,33 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
     constructor(context: Context) : this(context, null)
 
     val binding = WidgetAnswerTextBinding.inflate(LayoutInflater.from(context), this, true)
+
+    fun init(fontSize: Float, readOnly: Boolean, numberOfRows: Int?, afterTextChanged: Runnable) {
+        binding.editText.id = generateViewId()
+        binding.textView.id = generateViewId()
+
+        binding.editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
+        binding.textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize)
+
+        binding.editText.keyListener = TextKeyListener(TextKeyListener.Capitalize.SENTENCES, false)
+        binding.editText.setHorizontallyScrolling(false)
+        binding.editText.isSingleLine = false
+
+        updateState(readOnly)
+
+        if (numberOfRows != null && numberOfRows > 0) {
+            binding.editText.minLines = numberOfRows
+            binding.editText.gravity = Gravity.TOP // to write test starting at the top of the edit area
+        }
+
+        binding.editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
+            override fun afterTextChanged(s: Editable) {
+                afterTextChanged.run()
+            }
+        })
+    }
 
     fun updateState(readOnly: Boolean) {
         if (readOnly) {
@@ -131,15 +161,5 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     fun isEditableState(): Boolean {
         return binding.textInputLayout.visibility == View.VISIBLE
-    }
-
-    fun addTextChangedListener(runnable: Runnable) {
-        binding.editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
-            override fun afterTextChanged(s: Editable) {
-                runnable.run()
-            }
-        })
     }
 }
