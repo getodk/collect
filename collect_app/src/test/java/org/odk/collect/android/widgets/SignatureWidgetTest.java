@@ -14,7 +14,6 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.ReferenceManager;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
