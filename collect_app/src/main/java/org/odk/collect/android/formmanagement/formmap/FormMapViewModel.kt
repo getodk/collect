@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
-import org.odk.collect.android.external.InstanceProvider
+import org.odk.collect.android.instancemanagement.getStatusDescription
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
@@ -21,7 +21,6 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class FormMapViewModel(
@@ -102,11 +101,7 @@ class FormMapViewModel(
         latitude: Double,
         longitude: Double
     ): MappableSelectItem {
-        val instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(
-            resources,
-            instance.status,
-            Date(instance.lastStatusChangeDate)
-        )
+        val instanceLastStatusChangeDate = instance.getStatusDescription(resources)
 
         return if (instance.deletedDate != null) {
             val deletedTime = resources.getString(org.odk.collect.strings.R.string.deleted_on_date_at_time)

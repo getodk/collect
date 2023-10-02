@@ -668,7 +668,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When there is project id specified in uri that represents a saved form and it matches current project id then start form filling`() {
+    fun `When there is project id specified in uri that represents an incomplete form and it matches current project id then start form filling`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
@@ -683,6 +683,30 @@ class FormUriActivityTest {
                 .formVersion("1")
                 .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
                 .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+
+        assertStartSavedFormIntent(project.uuid, instance.dbId, true)
+    }
+
+    @Test
+    fun `When there is project id specified in uri that represents an invalid form and it matches current project id then start form filling`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(currentProjectProvider.getCurrentProject()).thenReturn(project)
+
+        formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INVALID)
                 .build()
         )
 

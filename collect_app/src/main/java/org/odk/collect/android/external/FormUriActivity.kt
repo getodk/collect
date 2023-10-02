@@ -264,7 +264,13 @@ class FormUriActivity : LocalizedActivity() {
     }
 }
 
+private val editableStatuses = arrayOf(
+    Instance.STATUS_INCOMPLETE,
+    Instance.STATUS_INVALID,
+    Instance.STATUS_COMPLETE
+)
+
 private fun Instance.canBeEdited(settingsProvider: SettingsProvider): Boolean {
-    return (this.status == Instance.STATUS_INCOMPLETE || this.status == Instance.STATUS_COMPLETE) &&
-        settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+    return editableStatuses.contains(status) && settingsProvider.getProtectedSettings()
+        .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 }

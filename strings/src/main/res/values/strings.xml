@@ -1197,7 +1197,6 @@
     <string name="crash_app">Crash app</string>
     <!-- An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close -->
     <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
-    <string name="predicate_caching">Predicate caching</string>
 
     <string name="permission_dialog_title">About permissions</string>
     <string name="permission_dialog_text">You will be asked to allow ODK Collect access to the features below, select “allow” if you want to use them.</string>
@@ -1217,4 +1216,25 @@
     <string name="close_snackbar">Close snackbar</string>
 
     <string name="edit_finalized_form_warning">In later releases, you will not be able to edit finalized forms. Save forms as draft to edit them later.\n\nYou can check for errors in a draft form by tapping the three dots (⋮) and then Check for errors.</string>
+
+    <!-- Label for option that finalizes all the forms the user is currently looking at -->
+    <string name="finalize_all_forms">Finalize all forms</string>
+
+    <!-- Message shown when finalizing all forms has succeeded and how many totally have been finalized -->
+    <plurals name="bulk_finalize_success">
+        <item quantity="one">Success! %d form finalized.</item>
+        <item quantity="other">Success! %d forms finalized.</item>
+    </plurals>
+
+    <!-- Message shown when no forms finalized successfully -->
+    <plurals name="bulk_finalize_failure">
+        <item quantity="one">%d form has an error. Address issues before finalizing all forms.</item>
+        <item quantity="other">%d forms have errors. Address issues before finalizing all forms.</item>
+    </plurals>
+
+    <!-- Message shown when some forms finalize successfully and others fail -->
+    <string name="bulk_finalize_partial_success">%d forms finalized. %d forms have errors. Address issues before finalizing all forms.</string>
+
+    <!-- Message above a form draft that has not yet been completed -->
+    <string name="incomplete">Incomplete</string>
 </resources>

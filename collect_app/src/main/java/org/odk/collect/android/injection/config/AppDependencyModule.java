@@ -44,6 +44,7 @@ import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
 import org.odk.collect.android.draw.PenColorPickerViewModel;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.AppStateFormSessionRepository;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.media.AudioHelperFactory;
@@ -54,7 +55,7 @@ import org.odk.collect.android.formmanagement.FormDownloader;
 import org.odk.collect.android.formmanagement.FormMetadataParser;
 import org.odk.collect.android.formmanagement.FormSourceProvider;
 import org.odk.collect.android.formmanagement.FormsDataService;
-import org.odk.collect.android.formmanagement.InstancesAppState;
+import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
@@ -151,6 +152,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 import okhttp3.OkHttpClient;
 
 /**
@@ -384,8 +387,8 @@ public class AppDependencyModule {
 
     @Provides
     @Singleton
-    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Application application) {
-        return new EntitiesRepositoryProvider(application);
+    public EntitiesRepositoryProvider provideEntitiesRepositoryProvider(Application application, CurrentProjectProvider currentProjectProvider) {
+        return new EntitiesRepositoryProvider(application, currentProjectProvider);
     }
 
     @Provides
@@ -456,9 +459,17 @@ public class AppDependencyModule {
     }
 
     @Provides
-    @Singleton
-    public InstancesAppState providesInstancesAppState(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider) {
-        return new InstancesAppState(application, instancesRepositoryProvider, currentProjectProvider);
+    public InstancesDataService providesInstancesDataService(Application application, InstancesRepositoryProvider instancesRepositoryProvider, CurrentProjectProvider currentProjectProvider, FormsRepositoryProvider formsRepositoryProvider, EntitiesRepositoryProvider entitiesRepositoryProvider, StoragePathProvider storagePathProvider) {
+        Function0<Unit> onUpdate = () -> {
+            application.getContentResolver().notifyChange(
+                    InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid()),
+                    null
+            );
+
+            return null;
+        };
+
+        return new InstancesDataService(getState(application), formsRepositoryProvider, instancesRepositoryProvider, entitiesRepositoryProvider, storagePathProvider, onUpdate);
     }
 
     @Provides
@@ -488,12 +499,12 @@ public class AppDependencyModule {
 
     @Provides
     public MainMenuViewModelFactory providesMainMenuViewModelFactory(VersionInformation versionInformation, Application application,
-                                                                     SettingsProvider settingsProvider, InstancesAppState instancesAppState,
+                                                                     SettingsProvider settingsProvider, InstancesDataService instancesDataService,
                                                                      Scheduler scheduler, CurrentProjectProvider currentProjectProvider,
                                                                      AnalyticsInitializer analyticsInitializer, PermissionsChecker permissionChecker,
                                                                      FormsRepositoryProvider formsRepositoryProvider, InstancesRepositoryProvider instancesRepositoryProvider,
                                                                      AutoSendSettingsProvider autoSendSettingsProvider) {
-        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesAppState, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider);
+        return new MainMenuViewModelFactory(versionInformation, application, settingsProvider, instancesDataService, scheduler, currentProjectProvider, analyticsInitializer, permissionChecker, formsRepositoryProvider, instancesRepositoryProvider, autoSendSettingsProvider);
     }
 
     @Provides
@@ -512,9 +523,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesAppState instancesAppState, PropertyManager propertyManager) {
+    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesDataService instancesDataService, PropertyManager propertyManager) {
         InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(autoSendSettingsProvider);
-        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, googleAccountsManager, googleApiProvider, permissionsProvider, instancesAppState, propertyManager);
+        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, googleAccountsManager, googleApiProvider, permissionsProvider, instancesDataService, propertyManager);
     }
 
     @Provides
@@ -641,7 +652,7 @@ public class AppDependencyModule {
 
     @Provides
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(SettingsProvider settingsProvider) {
-        return new CollectFormEntryControllerFactory(settingsProvider.getUnprotectedSettings());
+        return new CollectFormEntryControllerFactory();
     }
 
     @Provides

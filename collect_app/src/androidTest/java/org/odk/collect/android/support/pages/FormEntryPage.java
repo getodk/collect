@@ -75,6 +75,12 @@ public class FormEntryPage extends Page<FormEntryPage> {
                 .clickSaveChanges();
     }
 
+    public MainMenuPage fillOutAndSave(QuestionAndAnswer... questionsAndAnswers) {
+        return fillOut(questionsAndAnswers)
+                .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
+                .clickSaveChanges();
+    }
+
     public MainMenuPage fillOutAndFinalize(QuestionAndAnswer... questionsAndAnswers) {
         return fillOut(questionsAndAnswers)
                 .swipeToEndScreen()

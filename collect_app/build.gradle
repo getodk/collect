@@ -216,6 +216,10 @@ android {
         htmlReport true
         lintConfig file("$rootDir/config/lint.xml")
         xmlReport true
+
+        if (!project.hasProperty("lintStrings")) {
+            disable += ["HardcodedText"]
+        }
     }
     namespace 'org.odk.collect.android'
 }
@@ -373,6 +377,7 @@ dependencies {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
     testImplementation(project(":shadows"))
+    testImplementation(project(":test-forms"))
 
     testImplementation Dependencies.robolectric
 

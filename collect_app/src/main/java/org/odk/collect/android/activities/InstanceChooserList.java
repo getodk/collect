@@ -44,20 +44,33 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
+import org.odk.collect.android.formmanagement.InstancesDataService;
+import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
+import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
+import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.strings.R.string;
+import org.odk.collect.strings.R.plurals;
 
 import java.util.Arrays;
 
 import javax.inject.Inject;
+
+import kotlin.Pair;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -78,6 +91,21 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
+
+    @Inject
+    Scheduler scheduler;
+
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    EntitiesRepositoryProvider entitiesRepositoryProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
+
+    @Inject
+    InstancesDataService instancesDataService;
 
     private final ActivityResultLauncher<Intent> formLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         setResult(RESULT_OK, result.getData());
@@ -119,6 +147,52 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         );
 
         init();
+
+        BulkFinalizationViewModel bulkFinalizationViewModel = new BulkFinalizationViewModel(
+                scheduler,
+                instancesDataService
+        );
+
+        DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(bulkFinalizationViewModel);
+        addMenuProvider(draftsMenuProvider);
+
+        MaterialProgressDialogFragment.showOn(this, bulkFinalizationViewModel.isFinalizing(), getSupportFragmentManager(), () -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage("Finalizing drafts...");
+            return dialog;
+        });
+
+        bulkFinalizationViewModel.getFinalizedForms().observe(this, finalizedForms -> {
+            if (!finalizedForms.isConsumed()) {
+                Pair<Integer, Integer> pair = finalizedForms.getValue();
+                if (pair.getSecond().equals(0)) {
+                    SnackbarUtils.showLongSnackbar(
+                            this.findViewById(android.R.id.content),
+                            getResources().getQuantityString(
+                                    plurals.bulk_finalize_success,
+                                    pair.getFirst(),
+                                    pair.getFirst()
+                            )
+                    );
+                } else if (pair.getFirst().equals(pair.getSecond())) {
+                    SnackbarUtils.showLongSnackbar(
+                            this.findViewById(android.R.id.content),
+                            getResources().getQuantityString(
+                                    plurals.bulk_finalize_failure,
+                                    pair.getFirst(),
+                                    pair.getFirst()
+                            )
+                    );
+                } else {
+                    SnackbarUtils.showLongSnackbar(
+                            this.findViewById(android.R.id.content),
+                            getString(string.bulk_finalize_partial_success, pair.getFirst() - pair.getSecond(), pair.getSecond())
+                    );
+                }
+
+                finalizedForms.consume();
+            }
+        });
     }
 
     private void init() {

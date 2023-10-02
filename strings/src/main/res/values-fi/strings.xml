@@ -971,8 +971,7 @@
   <string name="crash_app">Kaada sovellus</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Pakota havaitsematon poikkeus, joka aiheuttaa sovelluksen kaatumisen</string>
-  <string name="predicate_caching">Predikaattivälimuisti</string>
-  <string name="permission_dialog_title">Tietoa luvista</string>
+    <string name="permission_dialog_title">Tietoa luvista</string>
   <string name="permission_dialog_text">Sinulta tullaan pyytämään lupaa ODK Collectille pääsy toimintoihin alla, valitse \"Salli\" jos haluat käyttää niitä.</string>
   <string name="notifications">Ilmoitukset</string>
   <string name="required_for_notifications">Tarvitaan päivitysten näyttämiseen kun lomakkeita ladataan, päivitetään tai lähetetään.</string>
