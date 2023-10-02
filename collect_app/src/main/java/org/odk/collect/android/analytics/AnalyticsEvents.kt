@@ -173,4 +173,9 @@ object AnalyticsEvents {
      * Tracks how often form-level auto-send setting is used
      */
     const val FORM_LEVEL_AUTO_SEND = "FormLevelAutoSend"
+
+    /**
+     * Tracks how often a form is finalized using a `ref` attribute on the `submission` element
+     */
+    const val PARTIAL_FORM_FINALIZED = "PartialFormFinalized"
 }
