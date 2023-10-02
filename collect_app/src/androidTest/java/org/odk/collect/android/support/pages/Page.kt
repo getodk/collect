@@ -174,7 +174,7 @@ abstract class Page<T : Page<T>> {
     fun checkIsSnackbarWithQuantityDisplayed(message: Int, quantity: Int): T {
         return checkIsSnackbarWithMessageDisplayed(
             ApplicationProvider.getApplicationContext<Application>()
-                .getLocalizedQuantityString(message, quantity)
+                .getLocalizedQuantityString(message, quantity, quantity)
         )
     }
 

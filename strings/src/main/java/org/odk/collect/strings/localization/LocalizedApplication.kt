@@ -32,7 +32,7 @@ fun Context.getLocalizedResources(locale: Locale): Resources {
     return createConfigurationContext(newConfig).resources
 }
 
-fun Context.getLocalizedQuantityString(stringId: Int, quantity: Int): String {
+fun Context.getLocalizedQuantityString(stringId: Int, quantity: Int, vararg formatArgs: Any): String {
     val locale = when (applicationContext) {
         is LocalizedApplication -> (applicationContext as LocalizedApplication).locale
 
@@ -47,7 +47,7 @@ fun Context.getLocalizedQuantityString(stringId: Int, quantity: Int): String {
 
     return createConfigurationContext(newConfig)
         .resources
-        .getQuantityString(stringId, quantity)
+        .getQuantityString(stringId, quantity, *formatArgs)
 }
 
 fun Context.isLTR(): Boolean {

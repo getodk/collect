@@ -170,6 +170,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                             this.findViewById(android.R.id.content),
                             getResources().getQuantityString(
                                     plurals.bulk_finalize_success,
+                                    pair.getFirst(),
                                     pair.getFirst()
                             )
                     );
@@ -178,6 +179,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                             this.findViewById(android.R.id.content),
                             getResources().getQuantityString(
                                     plurals.bulk_finalize_failure,
+                                    pair.getFirst(),
                                     pair.getFirst()
                             )
                     );
