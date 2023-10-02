@@ -34,6 +34,7 @@ public class QuittingFormTest {
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
+                .assertNumberOfFinalizedForms(0)
                 .clickEditSavedForm(1)
                 .clickOnForm("Two Question")
                 .assertText("Reuben")

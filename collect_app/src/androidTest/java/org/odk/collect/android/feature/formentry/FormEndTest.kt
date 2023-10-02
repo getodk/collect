@@ -5,17 +5,15 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
-import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 
 @RunWith(AndroidJUnit4::class)
-class FormFinalizingTest {
+class FormEndTest {
     private val rule = CollectTestRule()
 
     @get:Rule
@@ -40,19 +38,6 @@ class FormFinalizingTest {
             .startBlankForm("One Question")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .assertNumberOfEditableForms(1)
-            .assertNumberOfFinalizedForms(0)
-    }
-
-    @Test
-    fun fillingForm_andPressingBack_andPressingSave_doesNotFinalizesForm() {
-        rule.startAtMainMenu()
-            .copyForm(FORM)
-            .assertNumberOfFinalizedForms(0)
-            .startBlankForm("One Question")
-            .closeSoftKeyboard()
-            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
-            .clickSaveChanges()
             .assertNumberOfEditableForms(1)
             .assertNumberOfFinalizedForms(0)
     }
