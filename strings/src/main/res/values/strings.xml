@@ -1237,4 +1237,7 @@
 
     <!-- Message above a form draft that has not yet been completed -->
     <string name="incomplete" oat:toReview="true">Incomplete</string>
+
+    <!-- Message above a form draft that has been completed -->
+    <string name="complete" oat:toReview="true">Complete</string>
 </resources>

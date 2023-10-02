@@ -33,7 +33,7 @@ class TrackChangesReasonTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
 
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("Track Changes Reason")
             .clickGoToEnd()
             .clickSaveAndExitWithChangesReasonPrompt()
@@ -56,7 +56,7 @@ class TrackChangesReasonTest {
             .inputText("Nothing much...")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .clickEditSavedForm()
+            .clickDrafts()
 
             .clickOnForm("Track Changes Reason")
             .clickGoToEnd()
@@ -74,7 +74,7 @@ class TrackChangesReasonTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
 
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("Track Changes Reason")
             .clickGoToEnd()
             .clickSaveAndExitWithChangesReasonPrompt()
@@ -91,7 +91,7 @@ class TrackChangesReasonTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
 
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("Track Changes Reason")
             .clickGoToEnd()
             .clickSaveAndExitWithChangesReasonPrompt()
@@ -111,7 +111,7 @@ class TrackChangesReasonTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
 
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
             .closeSoftKeyboard()
@@ -132,7 +132,7 @@ class TrackChangesReasonTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
 
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
             .closeSoftKeyboard()
@@ -149,7 +149,7 @@ class TrackChangesReasonTest {
             .swipeToEndScreen()
             .clickSaveAsDraft()
 
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("Track Changes Reason")
             .clickGoToStart()
             .clickSaveWithChangesReasonPrompt()

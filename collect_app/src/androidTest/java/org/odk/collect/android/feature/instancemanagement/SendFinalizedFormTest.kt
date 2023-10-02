@@ -66,7 +66,7 @@ class SendFinalizedFormTest {
             .clickSaveAsDraft()
             .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved_as_draft)
 
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOnForm("One Question")
             .assertText("53")
     }

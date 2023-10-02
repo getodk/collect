@@ -30,6 +30,9 @@ object InstanceListItemView {
         if (chip != null) {
             if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
                 chip.visibility = View.VISIBLE
+            } else if (instance.status == Instance.STATUS_VALID) {
+                chip.visibility = View.VISIBLE
+                chip.setText(string.complete)
             }
         }
 
@@ -114,7 +117,7 @@ object InstanceListItemView {
 
     private fun getFormStateImageResourceIdForStatus(formStatus: String?): Int {
         when (formStatus) {
-            Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID -> return R.drawable.ic_form_state_saved
+            Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID, Instance.STATUS_VALID -> return R.drawable.ic_form_state_saved
             Instance.STATUS_COMPLETE -> return R.drawable.ic_form_state_finalized
             Instance.STATUS_SUBMITTED -> return R.drawable.ic_form_state_submitted
             Instance.STATUS_SUBMISSION_FAILED -> return R.drawable.ic_form_state_submission_failed

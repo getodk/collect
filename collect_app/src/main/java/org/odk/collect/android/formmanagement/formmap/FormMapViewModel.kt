@@ -149,11 +149,12 @@ class FormMapViewModel(
                 info
             )
         } else {
-            val action = if (instance.status == Instance.STATUS_INCOMPLETE) {
-                createEditAction()
-            } else {
-                createViewAction()
-            }
+            val action =
+                if (instance.status == Instance.STATUS_INCOMPLETE || instance.status == Instance.STATUS_VALID) {
+                    createEditAction()
+                } else {
+                    createViewAction()
+                }
 
             MappableSelectItem.WithAction(
                 instance.dbId,

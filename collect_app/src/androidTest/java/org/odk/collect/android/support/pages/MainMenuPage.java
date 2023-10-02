@@ -66,14 +66,14 @@ public class MainMenuPage extends Page<MainMenuPage> {
         clickFillBlankForm().clickOnForm(formName);
     }
 
-    public EditSavedFormPage clickEditSavedForm() {
+    public EditSavedFormPage clickDrafts() {
         onView(withId(R.id.review_data)).perform(click());
         return new EditSavedFormPage().assertOnPage();
     }
 
-    public EditSavedFormPage clickEditSavedForm(int formCount) {
+    public EditSavedFormPage clickDrafts(int formCount) {
         assertNumberOfEditableForms(formCount);
-        return clickEditSavedForm();
+        return clickDrafts();
     }
 
     public MainMenuPage assertNumberOfFinalizedForms(int number) {

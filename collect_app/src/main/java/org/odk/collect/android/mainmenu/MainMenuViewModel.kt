@@ -107,7 +107,10 @@ class MainMenuViewModel(
     fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
-            val message = if (instance.status == Instance.STATUS_INCOMPLETE) {
+            val isDraft =
+                instance.status == Instance.STATUS_INCOMPLETE || instance.status == Instance.STATUS_VALID
+
+            val message = if (isDraft) {
                 org.odk.collect.strings.R.string.form_saved_as_draft
             } else if (instance.status == Instance.STATUS_COMPLETE) {
                 val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
@@ -121,13 +124,13 @@ class MainMenuViewModel(
             }
 
             val action = if (
-                instance.status == Instance.STATUS_INCOMPLETE &&
+                isDraft &&
                 settingsProvider.getProtectedSettings()
                     .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
             ) {
                 org.odk.collect.strings.R.string.edit_form
             } else {
-                if (instance.status == Instance.STATUS_INCOMPLETE || instance.canEditWhenComplete()) {
+                if (isDraft || instance.canEditWhenComplete()) {
                     org.odk.collect.strings.R.string.view_form
                 } else {
                     null

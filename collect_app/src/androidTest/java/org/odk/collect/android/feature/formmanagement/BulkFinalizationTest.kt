@@ -30,7 +30,7 @@ class BulkFinalizationTest {
             .startBlankForm("One Question")
             .fillOutAndSave(QuestionAndAnswer("what is your age", "98"))
 
-            .clickEditSavedForm(2)
+            .clickDrafts(2)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 2)
@@ -55,7 +55,7 @@ class BulkFinalizationTest {
                 QuestionAndAnswer("What is your age?", "45", true)
             )
 
-            .clickEditSavedForm(2)
+            .clickDrafts(2)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
             .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_partial_success, 1, 1)
@@ -75,7 +75,7 @@ class BulkFinalizationTest {
             .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
             .clickSaveChanges()
 
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
@@ -94,7 +94,7 @@ class BulkFinalizationTest {
             .startBlankForm("One Question")
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "98"))
 
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 1)

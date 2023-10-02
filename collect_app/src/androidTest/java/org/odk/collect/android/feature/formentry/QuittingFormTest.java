@@ -35,7 +35,7 @@ public class QuittingFormTest {
                 .clickSaveChanges()
 
                 .assertNumberOfFinalizedForms(0)
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question")
                 .assertText("Reuben")
                 .assertText("10");
@@ -64,7 +64,7 @@ public class QuittingFormTest {
                 .answerQuestion("What is your age?", "10")
                 .pressBackAndDiscardChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question")
                 .assertText("Reuben")
                 .assertTextDoesNotExist("10");
@@ -81,7 +81,7 @@ public class QuittingFormTest {
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question Required")
                 .assertText("Reuben");
     }
@@ -95,7 +95,7 @@ public class QuittingFormTest {
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question Required")
                 .clickGoToStart()
                 .answerQuestion("What is your name?", "Another Reuben")
@@ -104,7 +104,7 @@ public class QuittingFormTest {
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickSaveChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question Required")
                 .assertText("Another Reuben");
     }
