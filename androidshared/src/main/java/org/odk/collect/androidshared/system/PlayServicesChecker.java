@@ -1,4 +1,4 @@
-package org.odk.collect.android.utilities;
+package org.odk.collect.androidshared.system;
 
 import android.app.Activity;
 import android.content.Context;

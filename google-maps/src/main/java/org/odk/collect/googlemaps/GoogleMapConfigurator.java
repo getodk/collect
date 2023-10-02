@@ -1,12 +1,12 @@
-package org.odk.collect.android.geo;
+package org.odk.collect.googlemaps;
 
 import static org.odk.collect.androidshared.ui.PrefUtils.createListPref;
 import static org.odk.collect.androidshared.ui.PrefUtils.getInt;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_REFERENCE_LAYER;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.preference.Preference;
@@ -14,11 +14,12 @@ import androidx.preference.Preference;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.common.collect.ImmutableSet;
 
-import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.maps.layers.MbtilesFile;
 import org.odk.collect.maps.layers.MbtilesFile.LayerType;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
 import java.io.File;
@@ -26,20 +27,38 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-class GoogleMapConfigurator implements MapConfigurator {
+public class GoogleMapConfigurator implements MapConfigurator {
     private final String prefKey;
     private final int sourceLabelId;
     private final GoogleMapTypeOption[] options;
 
     /** Constructs a configurator with a few Google map type options to choose from. */
-    GoogleMapConfigurator(String prefKey, int sourceLabelId, GoogleMapTypeOption... options) {
+    public GoogleMapConfigurator(String prefKey, int sourceLabelId, GoogleMapTypeOption... options) {
         this.prefKey = prefKey;
         this.sourceLabelId = sourceLabelId;
         this.options = options;
     }
 
     @Override public boolean isAvailable(Context context) {
-        return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context);
+        try {
+            ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            String apiKey = applicationInfo.metaData.getString("com.google.android.geo.API_KEY");
+
+            return isGoogleMapsSdkAvailable(context) && isGooglePlayServicesAvailable(context) && !apiKey.equals("");
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static boolean isGooglePlayServicesAvailable(Context context) {
+        return new PlayServicesChecker().isGooglePlayServicesAvailable(context);
+    }
+
+    private static boolean isGoogleMapsSdkAvailable(Context context) {
+        // The Google Maps SDK for Android requires OpenGL ES version 2.
+        // See https://developers.google.com/maps/documentation/android-sdk/config
+        return ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
+                .getDeviceConfigurationInfo().reqGlEsVersion >= 0x20000;
     }
 
     @Override public void showUnavailableMessage(Context context) {
@@ -47,20 +66,11 @@ class GoogleMapConfigurator implements MapConfigurator {
             ToastUtils.showLongToast(context, context.getString(
                 org.odk.collect.strings.R.string.basemap_source_unavailable, context.getString(sourceLabelId)));
         }
-        if (!isGooglePlayServicesAvailable(context)) {
-            new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(context);
+
+        PlayServicesChecker playServicesChecker = new PlayServicesChecker();
+        if (!playServicesChecker.isGooglePlayServicesAvailable(context)) {
+            playServicesChecker.showGooglePlayServicesAvailabilityErrorDialog(context);
         }
-    }
-
-    private boolean isGoogleMapsSdkAvailable(Context context) {
-        // The Google Maps SDK for Android requires OpenGL ES version 2.
-        // See https://developers.google.com/maps/documentation/android-sdk/config
-        return ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE))
-            .getDeviceConfigurationInfo().reqGlEsVersion >= 0x20000;
-    }
-
-    private boolean isGooglePlayServicesAvailable(Context context) {
-        return new PlayServicesChecker().isGooglePlayServicesAvailable(context);
     }
 
     @Override public List<Preference> createPrefs(Context context, Settings settings) {
@@ -78,16 +88,16 @@ class GoogleMapConfigurator implements MapConfigurator {
     }
 
     @Override public Set<String> getPrefKeys() {
-        return prefKey.isEmpty() ? ImmutableSet.of(KEY_REFERENCE_LAYER) :
-            ImmutableSet.of(prefKey, KEY_REFERENCE_LAYER);
+        return prefKey.isEmpty() ? ImmutableSet.of(ProjectKeys.KEY_REFERENCE_LAYER) :
+            ImmutableSet.of(prefKey, ProjectKeys.KEY_REFERENCE_LAYER);
     }
 
     @Override public Bundle buildConfig(Settings prefs) {
         Bundle config = new Bundle();
         config.putInt(GoogleMapFragment.KEY_MAP_TYPE,
-            getInt(KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, prefs));
+            getInt(ProjectKeys.KEY_GOOGLE_MAP_STYLE, GoogleMap.MAP_TYPE_NORMAL, prefs));
         config.putString(GoogleMapFragment.KEY_REFERENCE_LAYER,
-            prefs.getString(KEY_REFERENCE_LAYER));
+            prefs.getString(ProjectKeys.KEY_REFERENCE_LAYER));
         return config;
     }
 
@@ -101,11 +111,11 @@ class GoogleMapConfigurator implements MapConfigurator {
         return name != null ? name : file.getName();
     }
 
-    static class GoogleMapTypeOption {
+    public static class GoogleMapTypeOption {
         final int mapType;
         final int labelId;
 
-        GoogleMapTypeOption(int mapType, int labelId) {
+        public GoogleMapTypeOption(int mapType, int labelId) {
             this.mapType = mapType;
             this.labelId = labelId;
         }

@@ -1,5 +1,6 @@
 package org.odk.collect.android.preferences.screens
 
+import android.content.Context
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.test.core.app.ApplicationProvider
@@ -13,10 +14,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.fragmentstest.FragmentScenarioLauncherRule
 import org.odk.collect.projects.Project
@@ -28,7 +30,7 @@ import org.odk.collect.strings.localization.getLocalizedString
 @RunWith(AndroidJUnit4::class)
 class ProjectDisplayPreferencesFragmentTest {
 
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
     lateinit var projectsRepository: ProjectsRepository
 
     @get:Rule
@@ -36,15 +38,21 @@ class ProjectDisplayPreferencesFragmentTest {
 
     @Before
     fun setup() {
-        currentProjectProvider = mock(CurrentProjectProvider::class.java)
+        projectsDataService = mock(ProjectsDataService::class.java)
         projectsRepository = mock(ProjectsRepository::class.java)
 
-        `when`(currentProjectProvider.getCurrentProject())
+        `when`(projectsDataService.getCurrentProject())
             .thenReturn(Project.Saved("123", "Project X", "X", "#cccccc"))
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
-            override fun providesCurrentProjectProvider(settingsProvider: SettingsProvider, projectsRepository: ProjectsRepository): CurrentProjectProvider {
-                return currentProjectProvider
+            override fun providesCurrentProjectProvider(
+                settingsProvider: SettingsProvider,
+                projectsRepository: ProjectsRepository,
+                analyticsInitializer: AnalyticsInitializer,
+                context: Context,
+                mapsInitializer: MapsInitializer
+            ): ProjectsDataService {
+                return projectsDataService
             }
 
             override fun providesProjectsRepository(uuidGenerator: UUIDGenerator, gson: Gson, settingsProvider: SettingsProvider): ProjectsRepository {

@@ -1,5 +1,6 @@
 package org.odk.collect.android.projects
 
+import android.content.Context
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressBack
@@ -21,7 +22,8 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R
+import org.odk.collect.android.application.initialization.AnalyticsInitializer
+import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.support.CollectHelpers
@@ -110,14 +112,14 @@ class ManualProjectCreatorDialogTest {
     @Test
     fun `Server project creation should be triggered after clicking on the 'Add' button`() {
         val projectCreator = mock<ProjectCreator> {}
-        val currentProjectProvider = mock<CurrentProjectProvider> {
+        val projectsDataService = mock<ProjectsDataService> {
             on { getCurrentProject() } doReturn Project.DEMO_PROJECT
         }
 
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesProjectCreator(
                 projectsRepository: ProjectsRepository,
-                currentProjectProvider: CurrentProjectProvider,
+                projectsDataService: ProjectsDataService,
                 settingsImporter: ODKAppSettingsImporter,
                 settingsProvider: SettingsProvider
             ): ProjectCreator {
@@ -126,9 +128,12 @@ class ManualProjectCreatorDialogTest {
 
             override fun providesCurrentProjectProvider(
                 settingsProvider: SettingsProvider,
-                projectsRepository: ProjectsRepository
-            ): CurrentProjectProvider {
-                return currentProjectProvider
+                projectsRepository: ProjectsRepository,
+                analyticsInitializer: AnalyticsInitializer,
+                context: Context,
+                mapsInitializer: MapsInitializer
+            ): ProjectsDataService {
+                return projectsDataService
             }
         })
 

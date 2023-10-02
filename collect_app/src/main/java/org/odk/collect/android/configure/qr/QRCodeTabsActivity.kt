@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.odk.collect.android.R
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileProvider
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
@@ -46,7 +46,7 @@ class QRCodeTabsActivity : LocalizedActivity() {
     lateinit var appConfigurationGenerator: AppConfigurationGenerator
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var permissionsProvider: PermissionsProvider
@@ -67,7 +67,7 @@ class QRCodeTabsActivity : LocalizedActivity() {
             this,
             settingsImporter,
             qrCodeDecoder,
-            currentProjectProvider.getCurrentProject()
+            projectsDataService.getCurrentProject()
         )
 
         menuDelegate = QRCodeMenuDelegate(

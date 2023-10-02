@@ -83,7 +83,7 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
         }
 
         if (key.equals(KEY_AUTOSEND) && !settingsProvider.getUnprotectedSettings().getString(KEY_AUTOSEND).equals("off")) {
-            instanceSubmitScheduler.scheduleSubmit(currentProjectProvider.getCurrentProject().getUuid());
+            instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid());
         }
     }
 

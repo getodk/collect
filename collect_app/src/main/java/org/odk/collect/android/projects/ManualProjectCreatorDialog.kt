@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.doOnTextChanged
 import org.odk.collect.analytics.Analytics
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.configure.qr.AppConfigurationGenerator
@@ -40,7 +39,7 @@ class ManualProjectCreatorDialog :
     lateinit var softKeyboardController: SoftKeyboardController
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var projectsRepository: ProjectsRepository
@@ -135,18 +134,18 @@ class ManualProjectCreatorDialog :
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(
             requireContext(),
-            getString(org.odk.collect.strings.R.string.switched_project, currentProjectProvider.getCurrentProject().name)
+            getString(org.odk.collect.strings.R.string.switched_project, projectsDataService.getCurrentProject().name)
         )
     }
 
     override fun switchToProject(uuid: String) {
-        currentProjectProvider.setCurrentProject(uuid)
+        projectsDataService.setCurrentProject(uuid)
         ActivityUtils.startActivityAndCloseAllOthers(activity, MainMenuActivity::class.java)
         ToastUtils.showLongToast(
             requireContext(),
             getString(
                 org.odk.collect.strings.R.string.switched_project,
-                currentProjectProvider.getCurrentProject().name
+                projectsDataService.getCurrentProject().name
             )
         )
     }

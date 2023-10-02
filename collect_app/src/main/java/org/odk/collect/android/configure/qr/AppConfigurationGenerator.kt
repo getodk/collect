@@ -2,7 +2,7 @@ package org.odk.collect.android.configure.qr
 
 import org.json.JSONObject
 import org.odk.collect.android.preferences.Defaults
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.AppConfigurationKeys
 import org.odk.collect.settings.keys.ProjectKeys
@@ -10,7 +10,7 @@ import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class AppConfigurationGenerator(
     private val settingsProvider: SettingsProvider,
-    private val currentProjectProvider: CurrentProjectProvider
+    private val projectsDataService: ProjectsDataService
 ) {
 
     fun getAppConfigurationAsJsonWithServerDetails(
@@ -95,7 +95,7 @@ class AppConfigurationGenerator(
     }
 
     private fun getProjectDetailsAsJson(): JSONObject {
-        val currentProject = currentProjectProvider.getCurrentProject()
+        val currentProject = projectsDataService.getCurrentProject()
 
         return JSONObject().apply {
             put(AppConfigurationKeys.PROJECT_NAME, currentProject.name)

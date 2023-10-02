@@ -19,7 +19,7 @@ import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.MenuDelegate;
-import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.settings.SettingsProvider;

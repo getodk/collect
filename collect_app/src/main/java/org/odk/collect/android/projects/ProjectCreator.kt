@@ -8,7 +8,7 @@ import org.odk.collect.settings.importing.SettingsImportingResult
 
 class ProjectCreator(
     private val projectsRepository: ProjectsRepository,
-    private val currentProjectProvider: CurrentProjectProvider,
+    private val projectsDataService: ProjectsDataService,
     private val settingsImporter: ODKAppSettingsImporter,
     private val settingsProvider: SettingsProvider
 ) {
@@ -18,7 +18,7 @@ class ProjectCreator(
         val settingsImportingResult = settingsImporter.fromJSON(settingsJson, savedProject)
 
         return if (settingsImportingResult == SettingsImportingResult.SUCCESS) {
-            currentProjectProvider.setCurrentProject(savedProject.uuid)
+            projectsDataService.setCurrentProject(savedProject.uuid)
             settingsImportingResult
         } else {
             settingsProvider.getUnprotectedSettings(savedProject.uuid).clear()

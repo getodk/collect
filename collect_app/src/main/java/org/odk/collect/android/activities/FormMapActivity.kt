@@ -22,7 +22,7 @@ import org.odk.collect.android.external.FormsContract
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.formmanagement.formmap.FormMapViewModel
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -47,7 +47,7 @@ class FormMapActivity : LocalizedActivity() {
     lateinit var settingsProvider: SettingsProvider
 
     @Inject
-    lateinit var currentProjectProvider: CurrentProjectProvider
+    lateinit var projectsDataService: ProjectsDataService
 
     @Inject
     lateinit var scheduler: Scheduler
@@ -88,9 +88,9 @@ class FormMapActivity : LocalizedActivity() {
         ) { _: String?, result: Bundle ->
             if (result.containsKey(SelectionMapFragment.RESULT_SELECTED_ITEM)) {
                 val instanceId = result.getLong(SelectionMapFragment.RESULT_SELECTED_ITEM)
-                startActivity(FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().uuid, instanceId))
+                startActivity(FormFillingIntentFactory.editInstanceIntent(this, projectsDataService.getCurrentProject().uuid, instanceId))
             } else if (result.containsKey(SelectionMapFragment.RESULT_CREATE_NEW_ITEM)) {
-                startActivity(FormFillingIntentFactory.newInstanceIntent(this, FormsContract.getUri(currentProjectProvider.getCurrentProject().uuid, formId)))
+                startActivity(FormFillingIntentFactory.newInstanceIntent(this, FormsContract.getUri(projectsDataService.getCurrentProject().uuid, formId)))
             }
         }
     }

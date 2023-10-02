@@ -107,6 +107,7 @@ class MapsPreferencesFragment : BaseProjectPreferencesFragment() {
             MapConfiguratorProvider.getIds(),
             settingsProvider.getUnprotectedSettings()
         )
+
         basemapSourcePref.setIconSpaceReserved(false)
         onBasemapSourceChanged(MapConfiguratorProvider.getConfigurator())
         basemapSourcePref.setOnPreferenceChangeListener { _: Preference?, value: Any ->

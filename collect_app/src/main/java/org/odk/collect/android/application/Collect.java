@@ -30,6 +30,7 @@ import org.odk.collect.android.externaldata.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
+import org.odk.collect.android.injection.config.CollectGoogleMapsDependencyModule;
 import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
 import org.odk.collect.android.injection.config.CollectProjectsDependencyModule;
 import org.odk.collect.android.injection.config.CollectSelfieCameraDependencyModule;
@@ -53,6 +54,9 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.geo.DaggerGeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponent;
 import org.odk.collect.geo.GeoDependencyComponentProvider;
+import org.odk.collect.googlemaps.DaggerGoogleMapsDependencyComponent;
+import org.odk.collect.googlemaps.GoogleMapsDependencyComponent;
+import org.odk.collect.googlemaps.GoogleMapsDependencyComponentProvider;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.maps.layers.ReferenceLayerRepository;
 import org.odk.collect.osmdroid.DaggerOsmDroidDependencyComponent;
@@ -87,7 +91,8 @@ public class Collect extends Application implements
         StateStore,
         ObjectProviderHost,
         EntitiesDependencyComponentProvider,
-        SelfieCameraDependencyComponentProvider {
+        SelfieCameraDependencyComponentProvider,
+        GoogleMapsDependencyComponentProvider {
 
     public static String defaultSysLanguage;
     private static Collect singleton;
@@ -104,6 +109,7 @@ public class Collect extends Application implements
     private OsmDroidDependencyComponent osmDroidDependencyComponent;
     private EntitiesDependencyComponent entitiesDependencyComponent;
     private SelfieCameraDependencyComponent selfieCameraDependencyComponent;
+    private GoogleMapsDependencyComponent googleMapsDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -336,5 +342,21 @@ public class Collect extends Application implements
     @Override
     public SelfieCameraDependencyComponent getSelfieCameraDependencyComponent() {
         return selfieCameraDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public GoogleMapsDependencyComponent getGoogleMapsDependencyComponent() {
+        if (googleMapsDependencyComponent == null) {
+            googleMapsDependencyComponent = DaggerGoogleMapsDependencyComponent.builder()
+                    .googleMapsDependencyModule(new CollectGoogleMapsDependencyModule(
+                            applicationComponent.referenceLayerRepository(),
+                            applicationComponent.locationClient(),
+                            applicationComponent.settingsProvider()
+                    ))
+                    .build();
+        }
+
+        return googleMapsDependencyComponent;
     }
 }

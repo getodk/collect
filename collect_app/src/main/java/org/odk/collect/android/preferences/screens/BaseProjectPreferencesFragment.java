@@ -67,6 +67,6 @@ public abstract class BaseProjectPreferencesFragment extends BasePreferencesFrag
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getUnprotectedSettings().getAll().get(key), key);
+        settingsChangeHandler.onSettingChanged(projectsDataService.getCurrentProject().getUuid(), settingsProvider.getUnprotectedSettings().getAll().get(key), key);
     }
 }

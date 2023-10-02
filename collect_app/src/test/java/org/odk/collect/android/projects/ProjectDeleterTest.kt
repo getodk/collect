@@ -37,7 +37,7 @@ class ProjectDeleterTest {
         whenever(get(project1.uuid)).thenReturn(instancesRepository)
     }
     private val settingsProvider = InMemSettingsProvider()
-    private val currentProjectProvider = CurrentProjectProvider(settingsProvider, projectsRepository)
+    private val projectsDataService = ProjectsDataService(settingsProvider, projectsRepository, mock(), mock())
     private val formUpdateScheduler = mock<FormUpdateScheduler>()
     private val instanceSubmitScheduler = mock<InstanceSubmitScheduler>()
     private val storagePathProvider = mock<StoragePathProvider>().apply {
@@ -49,7 +49,7 @@ class ProjectDeleterTest {
     }
     private val deleter = ProjectDeleter(
         projectsRepository,
-        currentProjectProvider,
+        projectsDataService,
         formUpdateScheduler,
         instanceSubmitScheduler,
         instancesRepositoryProvider,
@@ -189,11 +189,11 @@ class ProjectDeleterTest {
     fun `If the deleted project was the current one and not the last one set the current project and return the new current one`() {
         val project2 = Project.Saved("2", "2", "2", "#cccccc")
         projectsRepository.save(project2)
-        currentProjectProvider.setCurrentProject(project1.uuid)
+        projectsDataService.setCurrentProject(project1.uuid)
 
         val result = deleter.deleteProject(project1.uuid)
 
-        assertThat(currentProjectProvider.getCurrentProject().uuid, equalTo(project2.uuid))
+        assertThat(projectsDataService.getCurrentProject().uuid, equalTo(project2.uuid))
         assertThat((result as DeleteProjectResult.DeletedSuccessfullyCurrentProject).newCurrentProject, equalTo(project2))
     }
 
@@ -201,11 +201,11 @@ class ProjectDeleterTest {
     fun `If the deleted project was not the current one and not the last one do not set the current project and return DeletedSuccessfully with null parameter`() {
         val project2 = Project.Saved("2", "2", "2", "#cccccc")
         projectsRepository.save(project2)
-        currentProjectProvider.setCurrentProject(project2.uuid)
+        projectsDataService.setCurrentProject(project2.uuid)
 
         val result = deleter.deleteProject(project1.uuid)
 
-        assertThat(currentProjectProvider.getCurrentProject().uuid, equalTo(project2.uuid))
+        assertThat(projectsDataService.getCurrentProject().uuid, equalTo(project2.uuid))
         assertThat(result, instanceOf(DeleteProjectResult.DeletedSuccessfullyInactiveProject::class.java))
     }
 
@@ -228,7 +228,7 @@ class ProjectDeleterTest {
     fun `If there is no project id passed to ProjectDeleter#deleteProject() then delete the current project`() {
         val project2 = Project.Saved("2", "2", "2", "#cccccc")
         projectsRepository.save(project2)
-        currentProjectProvider.setCurrentProject(project2.uuid)
+        projectsDataService.setCurrentProject(project2.uuid)
         whenever(instancesRepositoryProvider.get(project2.uuid)).thenReturn(instancesRepository)
         whenever(storagePathProvider.getProjectRootDirPath(project2.uuid)).thenReturn("")
 

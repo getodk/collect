@@ -12,13 +12,16 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_GOOGLE_MAP_STYLE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_USGS_MAP_STYLE;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.application.MapboxClassInstanceCreator;
-import org.odk.collect.android.geo.GoogleMapConfigurator.GoogleMapTypeOption;
+import org.odk.collect.googlemaps.GoogleMapConfigurator;
+import org.odk.collect.googlemaps.GoogleMapConfigurator.GoogleMapTypeOption;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.maps.MapConfigurator;
 import org.odk.collect.osmdroid.OsmDroidMapConfigurator;
@@ -29,7 +32,7 @@ import java.util.ArrayList;
 
 public class MapConfiguratorProvider {
 
-    private static final SourceOption[] SOURCE_OPTIONS = initOptions();
+    private static SourceOption[] sourceOptions;
     private static final String USGS_URL_BASE =
         "https://basemap.nationalmap.gov/arcgis/rest/services";
     private static final String OSM_COPYRIGHT = "© OpenStreetMap contributors";
@@ -47,17 +50,26 @@ public class MapConfiguratorProvider {
      * to make them easier to find.  This defines the basemap sources and the
      * basemap options available under each one, in their order of appearance.
      */
-    private static SourceOption[] initOptions() {
+    public static void initOptions(Context context) {
+        if (sourceOptions != null) {
+            return;
+        }
+
         ArrayList<SourceOption> sourceOptions = new ArrayList<>();
-        sourceOptions.add(new SourceOption(BASEMAP_SOURCE_GOOGLE, org.odk.collect.strings.R.string.basemap_source_google,
-                new GoogleMapConfigurator(
-                        KEY_GOOGLE_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_google,
-                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, org.odk.collect.strings.R.string.streets),
-                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, org.odk.collect.strings.R.string.terrain),
-                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),
-                        new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, org.odk.collect.strings.R.string.satellite)
-                )
-        ));
+
+        GoogleMapConfigurator googleMapsConfigurator = new GoogleMapConfigurator(
+                KEY_GOOGLE_MAP_STYLE, org.odk.collect.strings.R.string.basemap_source_google,
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_NORMAL, org.odk.collect.strings.R.string.streets),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_TERRAIN, org.odk.collect.strings.R.string.terrain),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_HYBRID, org.odk.collect.strings.R.string.hybrid),
+                new GoogleMapTypeOption(GoogleMap.MAP_TYPE_SATELLITE, org.odk.collect.strings.R.string.satellite)
+        );
+
+        if (googleMapsConfigurator.isAvailable(context)) {
+            sourceOptions.add(new SourceOption(BASEMAP_SOURCE_GOOGLE, org.odk.collect.strings.R.string.basemap_source_google,
+                    googleMapsConfigurator
+            ));
+        }
 
         if (isMapboxSupported()) {
             sourceOptions.add(new SourceOption(BASEMAP_SOURCE_MAPBOX, org.odk.collect.strings.R.string.basemap_source_mapbox,
@@ -114,7 +126,7 @@ public class MapConfiguratorProvider {
                 )
         ));
 
-        return sourceOptions.toArray(new SourceOption[]{});
+        MapConfiguratorProvider.sourceOptions = sourceOptions.toArray(new SourceOption[]{});
     }
 
     /** Gets the currently selected MapConfigurator. */
@@ -133,18 +145,18 @@ public class MapConfiguratorProvider {
 
     /** Gets a list of the IDs of the basemap sources, in order. */
     public static String[] getIds() {
-        String[] ids = new String[SOURCE_OPTIONS.length];
+        String[] ids = new String[sourceOptions.length];
         for (int i = 0; i < ids.length; i++) {
-            ids[i] = SOURCE_OPTIONS[i].id;
+            ids[i] = sourceOptions[i].id;
         }
         return ids;
     }
 
     /** Gets a list of the label string IDs of the basemap sources, in order. */
     public static int[] getLabelIds() {
-        int[] labelIds = new int[SOURCE_OPTIONS.length];
+        int[] labelIds = new int[sourceOptions.length];
         for (int i = 0; i < labelIds.length; i++) {
-            labelIds[i] = SOURCE_OPTIONS[i].labelId;
+            labelIds[i] = sourceOptions[i].labelId;
         }
         return labelIds;
     }
@@ -161,12 +173,13 @@ public class MapConfiguratorProvider {
         if (id == null) {
             id = DaggerUtils.getComponent(getApplication()).settingsProvider().getUnprotectedSettings().getString(KEY_BASEMAP_SOURCE);
         }
-        for (SourceOption option : SOURCE_OPTIONS) {
+        for (SourceOption option : sourceOptions) {
             if (option.id.equals(id)) {
                 return option;
             }
         }
-        return SOURCE_OPTIONS[0];
+
+        return sourceOptions[0];
     }
 
     private static Collect getApplication() {

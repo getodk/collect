@@ -25,7 +25,7 @@ import org.odk.collect.android.formmanagement.ServerFormDetails;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.forms.FormSourceException;
 
@@ -59,7 +59,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
     FormsDataService formsDataService;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
+    ProjectsDataService projectsDataService;
 
     public DownloadFormListTask(ServerFormsDetailsFetcher serverFormsDetailsFetcher) {
         this.serverFormsDetailsFetcher = serverFormsDetailsFetcher;
@@ -68,7 +68,7 @@ public class DownloadFormListTask extends AsyncTask<Void, String, Pair<List<Serv
 
     @Override
     protected Pair<List<ServerFormDetails>, FormSourceException> doInBackground(Void... values) {
-        formsDataService.update(currentProjectProvider.getCurrentProject().getUuid());
+        formsDataService.update(projectsDataService.getCurrentProject().getUuid());
 
         if (webCredentialsUtils != null) {
             setTemporaryCredentials();

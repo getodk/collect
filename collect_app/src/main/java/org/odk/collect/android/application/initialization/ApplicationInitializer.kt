@@ -1,11 +1,8 @@
 package org.odk.collect.android.application.initialization
 
 import android.app.Application
-import android.os.Handler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.startup.AppInitializer
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.MapsInitializer
 import net.danlew.android.joda.JodaTimeInitializer
 import org.javarosa.core.model.CoreModelModule
 import org.javarosa.core.services.PrototypeManager
@@ -21,27 +18,25 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.application.initialization.upgrade.UpgradeInitializer
 import org.odk.collect.android.logic.actions.setgeopoint.CollectSetGeopointActionHandler
 import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.osmdroid.OsmDroidInitializer
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.utilities.UserAgentProvider
 import timber.log.Timber
 import java.util.Locale
 
 class ApplicationInitializer(
     private val context: Application,
-    private val userAgentProvider: UserAgentProvider,
     private val propertyManager: PropertyManager,
     private val analytics: Analytics,
     private val upgradeInitializer: UpgradeInitializer,
     private val analyticsInitializer: AnalyticsInitializer,
+    private val mapsInitializer: MapsInitializer,
     private val projectsRepository: ProjectsRepository,
     private val settingsProvider: SettingsProvider
 ) {
     fun initialize() {
+        initializeLocale()
         runInitializers()
         initializeFrameworks()
-        initializeLocale()
     }
 
     private fun runInitializers() {
@@ -53,13 +48,13 @@ class ApplicationInitializer(
             settingsProvider,
             context
         ).initialize()
+        mapsInitializer.initialize()
     }
 
     private fun initializeFrameworks() {
         initializeLogging()
         AppInitializer.getInstance(context).initializeComponent(JodaTimeInitializer::class.java)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-        initializeMapFrameworks()
         initializeJavaRosa()
     }
 
@@ -93,30 +88,6 @@ class ApplicationInitializer(
             Timber.plant(CrashReportingTree(analytics))
         } else {
             Timber.plant(Timber.DebugTree())
-        }
-    }
-
-    private fun initializeMapFrameworks() {
-        try {
-            MapsInitializer.initialize(
-                context,
-                MapsInitializer.Renderer.LATEST
-            ) { renderer: MapsInitializer.Renderer ->
-                when (renderer) {
-                    MapsInitializer.Renderer.LATEST -> Timber.d("The latest version of Google Maps renderer is used.")
-                    MapsInitializer.Renderer.LEGACY -> Timber.d("The legacy version of Google Maps renderer is used.")
-                }
-            }
-            val handler = Handler(context.mainLooper)
-            handler.post {
-                // This has to happen on the main thread but we might call `initialize` from tests
-                MapView(context).onCreate(null)
-            }
-            OsmDroidInitializer.initialize(userAgentProvider.userAgent)
-        } catch (ignore: Exception) {
-            // ignored
-        } catch (ignore: Error) {
-            // ignored
         }
     }
 }

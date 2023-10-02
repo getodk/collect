@@ -43,6 +43,6 @@ public abstract class BaseAdminPreferencesFragment extends BasePreferencesFragme
 
     @Override
     public void onSettingChanged(@NotNull String key) {
-        settingsChangeHandler.onSettingChanged(currentProjectProvider.getCurrentProject().getUuid(), settingsProvider.getProtectedSettings().getAll().get(key), key);
+        settingsChangeHandler.onSettingChanged(projectsDataService.getCurrentProject().getUuid(), settingsProvider.getProtectedSettings().getAll().get(key), key);
     }
 }

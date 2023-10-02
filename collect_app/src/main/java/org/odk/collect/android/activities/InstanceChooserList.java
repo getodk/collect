@@ -48,7 +48,7 @@ import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
@@ -74,7 +74,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
     private boolean editMode;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
+    ProjectsDataService projectsDataService;
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
@@ -135,7 +135,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
             if (view.isEnabled()) {
                 Cursor c = (Cursor) listView.getAdapter().getItem(position);
                 long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
-                Uri instanceUri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instanceId);
+                Uri instanceUri = InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid(), instanceId);
 
                 String action = getIntent().getAction();
                 if (Intent.ACTION_PICK.equals(action)) {
@@ -220,9 +220,9 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
         if (editMode) {
-            return new CursorLoaderFactory(currentProjectProvider).createEditableInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(projectsDataService).createEditableInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            return new CursorLoaderFactory(currentProjectProvider).createSentInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(projectsDataService).createSentInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
     }
 

@@ -47,7 +47,7 @@ import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DeleteInstancesListener;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.tasks.DeleteInstancesTask;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
@@ -79,7 +79,7 @@ public class SavedFormListFragment extends FileManagerFragment implements Delete
     FormsRepositoryProvider formsRepositoryProvider;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
+    ProjectsDataService projectsDataService;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -148,7 +148,7 @@ public class SavedFormListFragment extends FileManagerFragment implements Delete
 
     @Override
     protected CursorLoader getCursorLoader() {
-        return new CursorLoaderFactory(currentProjectProvider).createSavedInstancesCursorLoader(getFilterText(), getSortingOrder());
+        return new CursorLoaderFactory(projectsDataService).createSavedInstancesCursorLoader(getFilterText(), getSortingOrder());
     }
 
     /**

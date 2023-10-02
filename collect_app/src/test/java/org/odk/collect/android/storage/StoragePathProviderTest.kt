@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import org.odk.collect.android.projects.CurrentProjectProvider
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import java.io.File
@@ -19,8 +19,8 @@ class StoragePathProviderTest {
 
     @Before
     fun setup() {
-        val currentProjectProvider = mock(CurrentProjectProvider::class.java)
-        `when`(currentProjectProvider.getCurrentProject()).thenReturn(
+        val projectsDataService = mock(ProjectsDataService::class.java)
+        `when`(projectsDataService.getCurrentProject()).thenReturn(
             Project.Saved(
                 "123",
                 "Project",
@@ -36,7 +36,7 @@ class StoragePathProviderTest {
                 "#ffffff"
             )
         )
-        storagePathProvider = StoragePathProvider(currentProjectProvider, projectsRepository, root.absolutePath)
+        storagePathProvider = StoragePathProvider(projectsDataService, projectsRepository, root.absolutePath)
     }
 
     @After

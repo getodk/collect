@@ -14,6 +14,7 @@ import net.bytebuddy.utility.RandomString;
 
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.reference.ReferenceManager;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
@@ -213,6 +214,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     }
 
     @Test
+    @Ignore("https://github.com/getodk/collect/issues/5753")
     public void whenPromptHasDefaultAnswerThatDoesNotExist_doNotPassUriToDrawActivity() {
         formEntryPrompt = new MockFormEntryPromptBuilder()
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)

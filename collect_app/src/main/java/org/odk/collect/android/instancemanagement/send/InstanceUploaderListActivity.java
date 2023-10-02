@@ -64,8 +64,8 @@ import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
-import org.odk.collect.android.projects.CurrentProjectProvider;
-import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.android.projects.ProjectsDataService;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
@@ -103,7 +103,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     InstanceUploaderListBinding binding;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
+    ProjectsDataService projectsDataService;
 
     private boolean showAllMode;
 
@@ -260,7 +260,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private void updateAutoSendStatus() {
         // This shouldn't use WorkManager directly but it's likely this code will be removed when
         // we eventually move sending forms to a Foreground Service (rather than a blocking AsyncTask)
-        String tag = ((FormUpdateAndInstanceSubmitScheduler) instanceSubmitScheduler).getAutoSendTag(currentProjectProvider.getCurrentProject().getUuid());
+        String tag = ((FormUpdateAndInstanceSubmitScheduler) instanceSubmitScheduler).getAutoSendTag(projectsDataService.getCurrentProject().getUuid());
         LiveData<List<WorkInfo>> statuses = WorkManager.getInstance().getWorkInfosForUniqueWorkLiveData(tag);
         statuses.observe(this, workStatuses -> {
             if (workStatuses != null) {
@@ -399,7 +399,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
             ToastUtils.showLongToast(this, org.odk.collect.strings.R.string.encrypted_form);
         } else {
             long instanceId = c.getLong(c.getColumnIndex(DatabaseInstanceColumns._ID));
-            Intent intent = FormFillingIntentFactory.editInstanceIntent(this, currentProjectProvider.getCurrentProject().getUuid(), instanceId);
+            Intent intent = FormFillingIntentFactory.editInstanceIntent(this, projectsDataService.getCurrentProject().getUuid(), instanceId);
             startActivity(intent);
         }
     }
@@ -460,9 +460,9 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         showProgressBar();
         if (showAllMode) {
-            return new CursorLoaderFactory(currentProjectProvider).createCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(projectsDataService).createCompletedUndeletedInstancesCursorLoader(getFilterText(), getSortingOrder());
         } else {
-            return new CursorLoaderFactory(currentProjectProvider).createFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
+            return new CursorLoaderFactory(projectsDataService).createFinalizedInstancesCursorLoader(getFilterText(), getSortingOrder());
         }
     }
 

@@ -59,6 +59,7 @@ dependencies {
     implementation Dependencies.androidx_preference_ktx
     implementation Dependencies.timber
     implementation Dependencies.androidx_exinterface
+    implementation Dependencies.play_services_location
 
     testImplementation project(':testshared')
     testImplementation Dependencies.junit

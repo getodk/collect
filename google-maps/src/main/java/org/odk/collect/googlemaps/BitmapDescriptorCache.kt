@@ -1,4 +1,4 @@
-package org.odk.collect.android.geo
+package org.odk.collect.googlemaps
 
 import android.content.Context
 import android.util.LruCache

@@ -148,7 +148,7 @@ import org.odk.collect.android.listeners.SavePointListener;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
-import org.odk.collect.android.projects.CurrentProjectProvider;
+import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
@@ -161,7 +161,7 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.utilities.PlayServicesChecker;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -335,7 +335,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     ExternalAppIntentProvider externalAppIntentProvider;
 
     @Inject
-    CurrentProjectProvider currentProjectProvider;
+    ProjectsDataService projectsDataService;
 
     @Inject
     IntentLauncher intentLauncher;
@@ -436,7 +436,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 formSessionRepository,
                 mediaUtils,
                 audioRecorder,
-                currentProjectProvider,
+                projectsDataService,
                 entitiesRepositoryProvider,
                 settingsProvider,
                 permissionsChecker,
@@ -1720,7 +1720,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
                 if (result.getRequest().viewExiting()) {
                     if (result.getRequest().shouldFinalize()) {
-                        instanceSubmitScheduler.scheduleSubmit(currentProjectProvider.getCurrentProject().getUuid());
+                        instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().getUuid());
                     }
 
                     finishAndReturnInstance();
@@ -2262,7 +2262,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (path != null) {
                 Instance instance = new InstancesRepositoryProvider(this).get().getOneByPath(path);
                 if (instance != null) {
-                    uri = InstancesContract.getUri(currentProjectProvider.getCurrentProject().getUuid(), instance.getDbId());
+                    uri = InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid(), instance.getDbId());
                 }
             }
 

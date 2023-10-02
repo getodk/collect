@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.geo;
+package org.odk.collect.googlemaps;
 
 /**
  * Created by jnordling on 12/29/15.
