@@ -14,7 +14,7 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.formmanagement.FormSourceProvider
-import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.gdrive.GoogleAccountsManager
 import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -53,7 +53,7 @@ class AutoSendTaskSpecTest {
                 googleAccountsManager: GoogleAccountsManager?,
                 googleApiProvider: GoogleApiProvider?,
                 permissionsProvider: PermissionsProvider?,
-                instancesAppState: InstancesAppState?,
+                instancesDataService: InstancesDataService?,
                 propertyManager: PropertyManager?
             ): InstanceAutoSender {
                 return instanceAutoSender

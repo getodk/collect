@@ -1184,7 +1184,6 @@
     <string name="crash_app">Crash app</string>
     <!-- An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close -->
     <string name="crash_app_summary">Force an uncaught exception causing the app to crash</string>
-    <string name="predicate_caching">Predicate caching</string>
 
     <string name="permission_dialog_title">About permissions</string>
     <string name="permission_dialog_text">You will be asked to allow ODK Collect access to the features below, select “allow” if you want to use them.</string>

@@ -27,17 +27,25 @@ public final class FormUtils {
     }
 
     /**
+     * @deprecated Use {@link FormUtils#setupReferenceManagerForForm(ReferenceManager, File, File)} instead
+     */
+    @Deprecated
+    public static void setupReferenceManagerForForm(ReferenceManager referenceManager, File formMediaDir) {
+        setupReferenceManagerForForm(referenceManager, new File(new StoragePathProvider().getProjectRootDirPath()), formMediaDir);
+    }
+
+    /**
      * Configures the given reference manager to resolve jr:// URIs to a folder in the root ODK forms
      * directory with name matching the name of the directory represented by {@code formMediaDir}.
      * <p>
      * E.g. if /foo/bar/baz is passed in as {@code formMediaDir}, jr:// URIs will be resolved to
      * projectRoot/forms/baz.
      */
-    public static void setupReferenceManagerForForm(ReferenceManager referenceManager, File formMediaDir) {
+    public static void setupReferenceManagerForForm(ReferenceManager referenceManager, File projectRootDir, File formMediaDir) {
         referenceManager.reset();
 
         // Always build URIs against the project root, regardless of the absolute path of formMediaDir
-        referenceManager.addReferenceFactory(new FileReferenceFactory(new StoragePathProvider().getProjectRootDirPath()));
+        referenceManager.addReferenceFactory(new FileReferenceFactory(projectRootDir.getAbsolutePath()));
 
         addSessionRootTranslators(referenceManager,
                 buildSessionRootTranslators(formMediaDir.getName(), enumerateHostStrings()));

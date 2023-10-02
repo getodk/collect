@@ -962,8 +962,7 @@
   <string name="crash_app">Aplicación bloqueada</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Se forzó una excepción no detectada que hace que la aplicación se bloquee</string>
-  <string name="predicate_caching">Caché de predicados</string>
-  <string name="permission_dialog_title">Acerca de los permisos</string>
+    <string name="permission_dialog_title">Acerca de los permisos</string>
   <string name="permission_dialog_text">Se le pedirá que permita el acceso de ODK Collect a las siguientes funciones, seleccione \"permitir\" si desea usarlas.</string>
   <string name="notifications">Notificaciones</string>
   <string name="required_for_notifications">Requerido para mostrar actualizaciones cuando los formularios se descargan, actualizan y envían.</string>

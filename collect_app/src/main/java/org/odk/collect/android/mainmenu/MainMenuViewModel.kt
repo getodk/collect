@@ -5,7 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import org.odk.collect.android.R
-import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
@@ -25,7 +25,7 @@ class MainMenuViewModel(
     private val application: Application,
     private val versionInformation: VersionInformation,
     private val settingsProvider: SettingsProvider,
-    private val instancesAppState: InstancesAppState,
+    private val instancesDataService: InstancesDataService,
     private val scheduler: Scheduler,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
@@ -92,19 +92,19 @@ class MainMenuViewModel(
     fun refreshInstances() {
         scheduler.immediate<Any?>({
             InstanceDiskSynchronizer(settingsProvider).doInBackground()
-            instancesAppState.update()
+            instancesDataService.update()
             null
         }) { }
     }
 
     val editableInstancesCount: LiveData<Int>
-        get() = instancesAppState.editableCount
+        get() = instancesDataService.editableCount
 
     val sendableInstancesCount: LiveData<Int>
-        get() = instancesAppState.sendableCount
+        get() = instancesDataService.sendableCount
 
     val sentInstancesCount: LiveData<Int>
-        get() = instancesAppState.sentCount
+        get() = instancesDataService.sentCount
 
     fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))

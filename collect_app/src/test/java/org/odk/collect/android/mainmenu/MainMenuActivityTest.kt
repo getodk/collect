@@ -31,7 +31,7 @@ import org.odk.collect.android.activities.InstanceChooserList
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
 import org.odk.collect.android.fakes.FakePermissionsProvider
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
-import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity
@@ -86,7 +86,7 @@ class MainMenuActivityTest {
                 versionInformation: VersionInformation,
                 application: Application,
                 settingsProvider: SettingsProvider,
-                instancesAppState: InstancesAppState,
+                instancesDataService: InstancesDataService,
                 scheduler: Scheduler,
                 projectsDataService: ProjectsDataService,
                 analyticsInitializer: AnalyticsInitializer,
@@ -99,7 +99,7 @@ class MainMenuActivityTest {
                     versionInformation,
                     application,
                     settingsProvider,
-                    instancesAppState,
+                    instancesDataService,
                     scheduler,
                     projectsDataService,
                     analyticsInitializer,

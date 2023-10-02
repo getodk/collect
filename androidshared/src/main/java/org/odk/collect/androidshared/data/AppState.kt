@@ -5,6 +5,8 @@ import android.app.Application
 import android.app.Service
 import android.content.Context
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 /**
@@ -41,11 +43,19 @@ class AppState {
 
     @Suppress("UNCHECKED_CAST")
     fun <T> get(key: String): T? {
-        return map.get(key) as T?
+        return map[key] as T?
+    }
+
+    fun <T> getLive(key: String, default: T): LiveData<T> {
+        return get(key, MutableLiveData(default))
     }
 
     fun set(key: String, value: Any?) {
         map[key] = value
+    }
+
+    fun <T> setLive(key: String, value: T?) {
+        get(key, MutableLiveData<T>()).postValue(value)
     }
 
     fun clear() {

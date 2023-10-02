@@ -46,8 +46,8 @@ public class CursorLoaderFactory {
     public CursorLoader createEditableInstancesCursorLoader(CharSequence charSequence, String sortOrder) {
         CursorLoader cursorLoader;
         if (charSequence.length() == 0) {
-            String selection = DatabaseInstanceColumns.STATUS + " =? ";
-            String[] selectionArgs = {Instance.STATUS_INCOMPLETE};
+            String selection = DatabaseInstanceColumns.STATUS + "=? or " + DatabaseInstanceColumns.STATUS + "=?";
+            String[] selectionArgs = {Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID};
 
             cursorLoader = getInstancesCursorLoader(selection, selectionArgs, sortOrder);
         } else {

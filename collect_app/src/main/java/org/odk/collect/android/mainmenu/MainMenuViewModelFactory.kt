@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.application.initialization.AnalyticsInitializer
-import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -18,7 +18,7 @@ open class MainMenuViewModelFactory(
     private val versionInformation: VersionInformation,
     private val application: Application,
     private val settingsProvider: SettingsProvider,
-    private val instancesAppState: InstancesAppState,
+    private val instancesDataService: InstancesDataService,
     private val scheduler: Scheduler,
     private val projectsDataService: ProjectsDataService,
     private val analyticsInitializer: AnalyticsInitializer,
@@ -33,7 +33,7 @@ open class MainMenuViewModelFactory(
                 application,
                 versionInformation,
                 settingsProvider,
-                instancesAppState,
+                instancesDataService,
                 scheduler,
                 formsRepositoryProvider,
                 instancesRepositoryProvider,

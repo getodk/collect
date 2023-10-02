@@ -959,8 +959,7 @@
   <string name="crash_app">Arresto anomalo dell\'app</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forza un\'eccezione non rilevata che causa l\'arresto anomalo dell\'app</string>
-  <string name="predicate_caching">Cache dei predicati</string>
-  <string name="permission_dialog_title">In merito ai permessi</string>
+    <string name="permission_dialog_title">In merito ai permessi</string>
   <string name="permission_dialog_text">Ti verrà chiesto di consentire a ODK Collect di accedere alle funzionalità seguenti, seleziona \"consenti\" se desideri utilizzarle.</string>
   <string name="notifications">Notifiche</string>
   <string name="required_for_notifications">Richiesto per mostrare gli aggiornamenti quando i moduli vengono scaricati, aggiornati e inviati.</string>

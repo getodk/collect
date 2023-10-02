@@ -24,9 +24,7 @@ import static org.odk.collect.android.external.InstancesContract.getUri;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.UriMatcher;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -48,13 +46,7 @@ import org.odk.collect.forms.instances.InstancesRepository;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.settings.SettingsProvider;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 public class InstanceProvider extends ContentProvider {
 
@@ -146,38 +138,6 @@ public class InstanceProvider extends ContentProvider {
 
         Instance newInstance = instancesRepositoryProvider.get(projectId).save(getInstanceFromValues(initialValues));
         return getUri(projectId, newInstance.getDbId());
-    }
-
-    public static String getDisplaySubtext(Context context, String state, Date date) {
-        return getDisplaySubtext(context.getResources(), state, date);
-    }
-
-    public static String getDisplaySubtext(Resources resources, String state, Date date) {
-        try {
-            if (state == null) {
-                return new SimpleDateFormat(resources.getString(org.odk.collect.strings.R.string.added_on_date_at_time),
-                        Locale.getDefault()).format(date);
-            } else if (Instance.STATUS_INCOMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(resources.getString(org.odk.collect.strings.R.string.saved_on_date_at_time),
-                        Locale.getDefault()).format(date);
-            } else if (Instance.STATUS_COMPLETE.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(resources.getString(org.odk.collect.strings.R.string.finalized_on_date_at_time),
-                        Locale.getDefault()).format(date);
-            } else if (Instance.STATUS_SUBMITTED.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(resources.getString(org.odk.collect.strings.R.string.sent_on_date_at_time),
-                        Locale.getDefault()).format(date);
-            } else if (Instance.STATUS_SUBMISSION_FAILED.equalsIgnoreCase(state)) {
-                return new SimpleDateFormat(
-                        resources.getString(org.odk.collect.strings.R.string.sending_failed_on_date_at_time),
-                        Locale.getDefault()).format(date);
-            } else {
-                return new SimpleDateFormat(resources.getString(org.odk.collect.strings.R.string.added_on_date_at_time),
-                        Locale.getDefault()).format(date);
-            }
-        } catch (IllegalArgumentException e) {
-            Timber.e(e, "Current locale: %s", Locale.getDefault());
-            return "";
-        }
     }
 
     /**

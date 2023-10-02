@@ -1,5 +1,6 @@
 package org.odk.collect.android.support.pages
 
+import android.app.Application
 import android.content.pm.ActivityInfo
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
@@ -181,7 +182,18 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun checkIsSnackbarWithMessageDisplayed(message: Int): T {
+    fun checkIsSnackbarWithQuantityDisplayed(message: Int, quantity: Int): T {
+        return checkIsSnackbarWithMessageDisplayed(
+            ApplicationProvider.getApplicationContext<Application>()
+                .getLocalizedQuantityString(message, quantity, quantity)
+        )
+    }
+
+    fun checkIsSnackbarWithMessageDisplayed(message: Int, vararg formatArgs: Any): T {
+        return checkIsSnackbarWithMessageDisplayed(getTranslatedString(message, *formatArgs))
+    }
+
+    fun checkIsSnackbarWithMessageDisplayed(message: String): T {
         onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
         return this as T
     }
@@ -441,6 +453,10 @@ abstract class Page<T : Page<T>> {
     }
 
     fun clickOptionsIcon(@StringRes expectedOptionString: Int): T {
+        return clickOptionsIcon(getTranslatedString(expectedOptionString))
+    }
+
+    fun clickOptionsIcon(expectedOptionString: String): T {
         tryAgainOnFail({
             Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity())
             assertText(expectedOptionString)
