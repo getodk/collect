@@ -25,6 +25,7 @@ import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direct
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.android.utilities.DialogUtils.getDialog;
+import static org.odk.collect.androidshared.data.AppStateKt.getState;
 import static org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing;
 import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
@@ -430,7 +431,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 fusedLocatonClient,
                 permissionsProvider,
                 autoSendSettingsProvider,
-                instancesRepositoryProvider
+                instancesRepositoryProvider,
+                getState(getApplication())
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

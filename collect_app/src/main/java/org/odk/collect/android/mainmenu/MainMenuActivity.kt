@@ -32,6 +32,7 @@ import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
+import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -292,6 +293,8 @@ class MainMenuActivity : LocalizedActivity() {
         val unprotectedSettings = settingsProvider.getUnprotectedSettings()
         val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
         val usingGoogleDrive = ProjectKeys.PROTOCOL_GOOGLE_SHEETS == protocol
+        val editedFinalizedForm =
+            application.getState().get<Boolean>("editedFinalizedForm") ?: false
 
         if (usingGoogleDrive) {
             binding.deprecationBanner.root.visibility = View.VISIBLE
@@ -299,6 +302,14 @@ class MainMenuActivity : LocalizedActivity() {
             binding.deprecationBanner.learnMoreButton.setOnClickListener {
                 val intent = Intent(this, WebViewActivity::class.java)
                 intent.putExtra("url", "https://forum.getodk.org/t/40097")
+                startActivity(intent)
+            }
+        } else if (editedFinalizedForm) {
+            binding.deprecationBanner.root.visibility = View.VISIBLE
+            binding.deprecationBanner.message.setText(string.edit_finalized_form_warning)
+            binding.deprecationBanner.learnMoreButton.setOnClickListener {
+                val intent = Intent(this, WebViewActivity::class.java)
+                intent.putExtra("url", "https://forum.getodk.org/t/42007")
                 startActivity(intent)
             }
         } else {

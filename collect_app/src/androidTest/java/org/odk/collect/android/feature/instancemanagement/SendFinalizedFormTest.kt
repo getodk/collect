@@ -1,10 +1,15 @@
 package org.odk.collect.android.feature.instancemanagement
 
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.support.CollectHelpers.addGDProject
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
@@ -17,6 +22,7 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.Project.New
+import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
 class SendFinalizedFormTest {
@@ -43,7 +49,19 @@ class SendFinalizedFormTest {
             .answerQuestion("what is your age", "53")
             .swipeToEndScreen()
             .clickFinalize()
-            .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved)
+            .checkIsSnackbarWithMessageDisplayed(string.form_saved)
+
+            // Check deprecation banner is shown
+            .assertText(string.edit_finalized_form_warning)
+            .clickOnString(string.learn_more_button_text)
+            .also {
+                intended(
+                    allOf(
+                        hasComponent(WebViewActivity::class.java.name),
+                        hasExtra("url", "https://forum.getodk.org/t/42007")
+                    )
+                )
+            }.pressBack(MainMenuPage())
 
             .clickSendFinalizedForm(1)
             .clickOnFormToEdit("One Question")
@@ -64,7 +82,7 @@ class SendFinalizedFormTest {
             .answerQuestion("what is your age", "53")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .checkIsSnackbarWithMessageDisplayed(org.odk.collect.strings.R.string.form_saved_as_draft)
+            .checkIsSnackbarWithMessageDisplayed(string.form_saved_as_draft)
 
             .clickEditSavedForm(1)
             .clickOnForm("One Question")
@@ -124,7 +142,7 @@ class SendFinalizedFormTest {
             .clickViewSentForm(1)
             .clickOnForm("One Question")
             .assertText("123")
-            .assertText(org.odk.collect.strings.R.string.exit)
+            .assertText(string.exit)
     }
 
     @Test
@@ -154,7 +172,7 @@ class SendFinalizedFormTest {
             .openProjectSettingsDialog()
             .clickSettings()
             .clickFormManagement()
-            .scrollToRecyclerViewItemAndClickText(org.odk.collect.strings.R.string.delete_after_send)
+            .scrollToRecyclerViewItemAndClickText(string.delete_after_send)
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .copyForm("one-question.xml", testDependencies.server.hostName)
