@@ -29,9 +29,9 @@ To contribute code to ODK Collect, you will need to open a [pull request](https:
 
         git checkout -b NAME_OF_YOUR_BRANCH
 
-1. If there is an [issue](https://github.com/getodk/collect/issues) corresponding to what you will work on, leave a comment on issue asking to claim it. If there is no issue yet, create one to provide background on the problem you are solving. Issues that have been prioritised by the core team can be found in Collect's [backlog](https://github.com/orgs/getodk/projects/9/views/8).
+1. If there is an [issue](https://github.com/getodk/collect/issues) corresponding to what you will work on, leave a comment on the issue asking to claim it. If there is no issue yet, create one to provide background on the problem you are solving. Issues that have been prioritised by the core team can be found in Collect's [backlog](https://github.com/orgs/getodk/projects/9/views/8).
 
-1. If you are an external contributor, make sure to discuss working on the issue with a maintainer who will then assign you to it. If you're on the core team you can either assign yourself to an issue in [the backlog](https://github.com/orgs/getodk/projects/9/views/8) and move it to "in progress" or discuss adding an item to the backlog with the reset of the team.
+1. If you are an external contributor, make sure to discuss working on the issue with a maintainer who will then assign you to it. If you're on the core team you can either assign yourself to an issue in [the backlog](https://github.com/orgs/getodk/projects/9/views/8) and move it to "in progress" or discuss adding an item to the backlog with the rest of the team.
 
 1. Once you've made incremental progress towards you goal, commit your changes with a meaningful commit message. Use [keywords for closing issues](https://help.github.com/articles/closing-issues-via-commit-messages/) to refer to issues and have them automatically close when your changes are merged.
 
