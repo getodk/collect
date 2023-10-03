@@ -52,7 +52,7 @@ class SendFinalizedFormTest {
             .checkIsSnackbarWithMessageDisplayed(string.form_saved)
 
             // Check deprecation banner is shown
-            .assertText(string.edit_finalized_form_warning)
+            .assertText(string.edit_finalized_form_deprecation_message)
             .clickOnString(string.learn_more_button_text)
             .also {
                 intended(

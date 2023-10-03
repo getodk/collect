@@ -307,7 +307,7 @@ class MainMenuActivity : LocalizedActivity() {
             }
         } else if (editedFinalizedForm) {
             binding.deprecationBanner.root.visibility = View.VISIBLE
-            binding.deprecationBanner.message.setText(string.edit_finalized_form_warning)
+            binding.deprecationBanner.message.setText(string.edit_finalized_form_deprecation_message)
             binding.deprecationBanner.learnMoreButton.setOnClickListener {
                 val intent = Intent(this, WebViewActivity::class.java)
                 intent.putExtra("url", "https://forum.getodk.org/t/42007")
