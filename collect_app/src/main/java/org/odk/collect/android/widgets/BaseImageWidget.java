@@ -221,7 +221,7 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
             Intent i = new Intent(getContext(), DrawActivity.class);
             i.putExtra(DrawActivity.OPTION, drawOption);
             File file = getFile();
-            if (file != null) {
+            if (file != null && file.exists()) {
                 i.putExtra(DrawActivity.REF_IMAGE, Uri.fromFile(file));
             }
 
