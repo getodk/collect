@@ -7,6 +7,7 @@ import android.widget.TextView
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.material.MaterialPill
 import org.odk.collect.strings.R.string
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -26,14 +27,16 @@ object InstanceListItemView {
         setImageFromStatus(imageView, instance)
         setUpSubtext(view, instance, context)
 
-        val chip = view.findViewById<TextView>(R.id.chip)
-        if (chip != null) {
+        val pill = view.findViewById<MaterialPill>(R.id.chip)
+        if (pill != null) {
+            pill.setIcon(R.drawable.baseline_error_24)
+
             if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
-                chip.visibility = View.VISIBLE
-                chip.setText(string.incomplete)
+                pill.visibility = View.VISIBLE
+                pill.setText(string.incomplete)
             } else if (instance.status == Instance.STATUS_VALID) {
-                chip.visibility = View.VISIBLE
-                chip.setText(string.complete)
+                pill.visibility = View.VISIBLE
+                pill.setText(string.complete)
             }
         }
 
