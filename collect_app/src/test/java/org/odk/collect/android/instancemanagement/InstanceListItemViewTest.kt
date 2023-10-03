@@ -69,4 +69,20 @@ class InstanceListItemViewTest {
 
         assertThat(binding.chip.visibility, equalTo(View.GONE))
     }
+
+    @Test
+    fun chipCanBeRecycled() {
+        val binding = FormChooserListItemBinding.inflate(layoutInflater)
+        val valid = InstanceFixtures.instance(status = Instance.STATUS_VALID)
+        InstanceListItemView.setInstance(binding.root, valid, false)
+
+        assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
+        assertThat(binding.chip.text, equalTo(context.getString(string.complete)))
+
+        val invalid = InstanceFixtures.instance(status = Instance.STATUS_INVALID)
+        InstanceListItemView.setInstance(binding.root, invalid, false)
+
+        assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
+        assertThat(binding.chip.text, equalTo(context.getString(string.incomplete)))
+    }
 }

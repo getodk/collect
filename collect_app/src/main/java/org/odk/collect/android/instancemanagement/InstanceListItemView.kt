@@ -30,6 +30,7 @@ object InstanceListItemView {
         if (chip != null) {
             if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
                 chip.visibility = View.VISIBLE
+                chip.setText(string.incomplete)
             } else if (instance.status == Instance.STATUS_VALID) {
                 chip.visibility = View.VISIBLE
                 chip.setText(string.complete)
