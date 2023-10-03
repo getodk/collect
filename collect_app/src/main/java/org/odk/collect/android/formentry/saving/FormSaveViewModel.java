@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModel;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.externaldata.ExternalDataManager;
@@ -86,7 +88,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private final EntitiesRepository entitiesRepository;
     private final InstancesRepository instancesRepository;
     private Instance instance;
-    private AppState appState;
+    private final AppState appState;
 
     public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository, AppState appState) {
         this.stateHandle = stateHandle;
@@ -116,6 +118,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
         if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
             appState.set(EDITED_FINALIZED_FORM, true);
+            Analytics.log(AnalyticsEvents.EDIT_FINALIZED_FORM, "form");
         }
 
         if (isSaving() || formController == null) {
