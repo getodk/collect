@@ -88,4 +88,9 @@ public class ApplicationConstants {
         public static final String XML_OPENROSA_NAMESPACE = "http://openrosa.org/xforms";
         public static final String XML_OPENDATAKIT_NAMESPACE = "http://www.opendatakit.org/xforms";
     }
+
+    public abstract static class AppStateKeys {
+
+        public static final String EDITED_FINALIZED_FORM = "editedFinalizedForm";
+    }
 }

@@ -30,6 +30,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.ApplicationConstants.AppStateKeys.EDITED_FINALIZED_FORM
 import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
 import org.odk.collect.androidshared.data.getState
@@ -294,7 +295,7 @@ class MainMenuActivity : LocalizedActivity() {
         val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
         val usingGoogleDrive = ProjectKeys.PROTOCOL_GOOGLE_SHEETS == protocol
         val editedFinalizedForm =
-            application.getState().get<Boolean>("editedFinalizedForm") ?: false
+            application.getState().get<Boolean>(EDITED_FINALIZED_FORM) ?: false
 
         if (usingGoogleDrive) {
             binding.deprecationBanner.root.visibility = View.VISIBLE

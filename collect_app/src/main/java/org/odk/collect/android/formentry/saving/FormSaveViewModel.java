@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry.saving;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
+import static org.odk.collect.android.utilities.ApplicationConstants.AppStateKeys.EDITED_FINALIZED_FORM;
 import static org.odk.collect.shared.strings.StringUtils.isBlank;
 
 import android.net.Uri;
@@ -114,7 +115,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
         if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
-            appState.set("editedFinalizedForm", true);
+            appState.set(EDITED_FINALIZED_FORM, true);
         }
 
         if (isSaving() || formController == null) {
