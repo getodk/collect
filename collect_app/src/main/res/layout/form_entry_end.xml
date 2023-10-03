@@ -55,7 +55,7 @@ the specific language governing permissions and limitations under the License.
                 android:padding="@dimen/margin">
 
                 <ImageView
-                    android:id="@+id/instance_name_info_icon"
+                    android:id="@+id/deprecation_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_outline_info_24"
@@ -70,8 +70,8 @@ the specific language governing permissions and limitations under the License.
                     android:layout_marginStart="@dimen/margin"
                     android:textAppearance="?textAppearanceBodyLarge"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
-                    app:layout_constraintTop_toTopOf="@id/instance_name_info_icon"
+                    app:layout_constraintStart_toEndOf="@id/deprecation_icon"
+                    app:layout_constraintTop_toTopOf="@id/deprecation_icon"
                     tools:text="@string/form_edits_warning_save_as_draft_and_finalize_enabled"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

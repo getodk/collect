@@ -5,18 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:visibility="gone"
-    app:shapeAppearance="?shapeAppearanceLargeComponent"
     app:cardBackgroundColor="?colorSurfaceContainerHighest"
+    app:shapeAppearance="?shapeAppearanceLargeComponent"
     tools:visibility="visible">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/margin_standard"
-        android:paddingHorizontal="@dimen/margin_standard">
+        android:paddingHorizontal="@dimen/margin_standard"
+        android:paddingTop="@dimen/margin_standard">
 
         <ImageView
-            android:id="@+id/instance_name_info_icon"
+            android:id="@+id/deprecation_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_outline_info_24"
@@ -29,11 +29,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
-            android:text="@string/google_drive_deprecation_message"
             android:textAppearance="?textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
-            app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />
+            app:layout_constraintStart_toEndOf="@id/deprecation_icon"
+            app:layout_constraintTop_toTopOf="@id/deprecation_icon"
+            tools:text="@string/google_drive_deprecation_message" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/learn_more_button"
