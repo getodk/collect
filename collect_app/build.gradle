@@ -226,10 +226,6 @@ configurations.all {
 }
 
 dependencies {
-    repositories {
-        mavenLocal() // Only used for javarosa_local dependency
-    }
-
     coreLibraryDesugaring Dependencies.desugar
 
     implementation project(':shared')
