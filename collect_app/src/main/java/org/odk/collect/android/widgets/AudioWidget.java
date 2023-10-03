@@ -95,7 +95,9 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 binding.audioPlayer.waveform.addAmplitude(session.second);
             } else {
                 recordingInProgress = false;
+                binaryName = questionDetails.getPrompt().getAnswerText();
                 updateVisibilities();
+                updatePlayerMedia();
             }
         });
     }

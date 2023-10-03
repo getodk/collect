@@ -96,4 +96,23 @@ class AuditTest {
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
         assertThat(auditLog[1].get("event"), equalTo("form resume"))
     }
+
+    @Test // https://github.com/getodk/collect/issues/5659
+    fun savingFormWithBackgroundRecording_doesNotDuplicateAnyEvent() {
+        rule.startAtMainMenu()
+            .copyForm("one-question-background-audio-audit.xml")
+            .startBlankForm("One Question Background Audio And Audit")
+            .fillOutAndSave(
+                MainMenuPage(),
+                FormEntryPage.QuestionAndAnswer("what is your age", "31")
+            )
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog.size, equalTo(4))
+
+        assertThat(auditLog[0].get("event"), equalTo("form start"))
+        assertThat(auditLog[1].get("event"), equalTo("question"))
+        assertThat(auditLog[2].get("event"), equalTo("form save"))
+        assertThat(auditLog[3].get("event"), equalTo("form exit"))
+    }
 }

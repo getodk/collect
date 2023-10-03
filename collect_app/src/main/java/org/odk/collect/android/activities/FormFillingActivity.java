@@ -618,7 +618,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (session != null && session.getFile() != null) {
                 recordingHandler.handle(getFormController(), session, success -> {
                     if (success) {
-                        onScreenRefresh();
                         formSaveViewModel.resumeSave();
                     } else {
                         String path = session.getFile().getAbsolutePath();

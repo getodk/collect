@@ -39,8 +39,6 @@ public class RecordingHandler {
     public void handle(FormController formController, RecordingSession session, Consumer<Boolean> onRecordingHandled) {
         questionMediaManager.createAnswerFile(session.getFile()).observe(lifecycleOwner, result -> {
             if (result != null && result.isSuccess()) {
-                audioRecorder.cleanUp();
-
                 try {
                     if (session.getId() instanceof FormIndex) {
                         handleForegroundRecording(formController, session, result);
@@ -53,6 +51,7 @@ public class RecordingHandler {
                     Timber.e(e);
                     onRecordingHandled.accept(false);
                 }
+                audioRecorder.cleanUp();
             }
         });
     }
