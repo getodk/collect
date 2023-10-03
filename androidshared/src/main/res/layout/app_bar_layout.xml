@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/appBarLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="4dp">
+    android:layout_height="wrap_content">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -12,4 +11,5 @@
         android:layout_height="?attr/actionBarSize"
         tools:title="Title" />
 
+    <include layout="@layout/app_bar_shadow"/>
 </com.google.android.material.appbar.AppBarLayout>

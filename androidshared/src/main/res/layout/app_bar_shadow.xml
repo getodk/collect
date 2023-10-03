@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    We had to build this custom gradient because using colors with a given transparency level in Android gradients is not possible.
+    We can't specify alpha directly, and using color selector doesn't seem to work too:
+    see more at https://stackoverflow.com/questions/62982873/gradient-with-color-selector-attribute.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.10"
+        android:background="?colorOnSurface" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.07"
+        android:background="?colorOnSurface" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.04"
+        android:background="?colorOnSurface" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.01"
+        android:background="?colorOnSurface" />
+</LinearLayout>
