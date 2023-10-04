@@ -9,6 +9,7 @@ import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.android.instancemanagement.isDraft
+import org.odk.collect.android.instancemanagement.showAsEditable
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -108,9 +109,7 @@ class MainMenuViewModel(
     fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
-            val isDraft = instance.isDraft(settingsProvider)
-
-            val message = if (isDraft) {
+            val message = if (instance.isDraft()) {
                 org.odk.collect.strings.R.string.form_saved_as_draft
             } else if (instance.status == Instance.STATUS_COMPLETE) {
                 val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
@@ -123,14 +122,10 @@ class MainMenuViewModel(
                 return null
             }
 
-            val action = if (
-                isDraft &&
-                settingsProvider.getProtectedSettings()
-                    .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
-            ) {
+            val action = if (instance.showAsEditable(settingsProvider)) {
                 org.odk.collect.strings.R.string.edit_form
             } else {
-                if (isDraft || instance.canEditWhenComplete()) {
+                if (instance.isDraft() || instance.canEditWhenComplete()) {
                     org.odk.collect.strings.R.string.view_form
                 } else {
                     null

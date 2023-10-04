@@ -19,8 +19,12 @@ fun getStatusDescription(context: Context, state: String?, date: Date): String {
     return getStatusDescription(context.resources, state, date)
 }
 
-fun Instance.isDraft(settingsProvider: SettingsProvider): Boolean {
-    return draftStatuses.contains(status) && settingsProvider.getProtectedSettings()
+fun Instance.isDraft(): Boolean {
+    return draftStatuses.contains(status)
+}
+
+fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {
+    return isDraft() && settingsProvider.getProtectedSettings()
         .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 }
 
