@@ -5,10 +5,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textview.MaterialTextView
 import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormMapActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
@@ -100,7 +100,7 @@ class BlankFormListActivity : LocalizedActivity(), OnFormItemClickListener {
             findViewById<RecyclerView>(R.id.form_list).visibility =
                 if (forms.isEmpty()) View.GONE else View.VISIBLE
 
-            findViewById<TextView>(R.id.empty_list_message).visibility =
+            findViewById<MaterialTextView>(R.id.empty_list_message).visibility =
                 if (forms.isEmpty()) View.VISIBLE else View.GONE
 
             adapter.setData(forms)

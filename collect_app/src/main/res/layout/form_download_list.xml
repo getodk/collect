@@ -44,7 +44,7 @@ the License.
                 android:paddingBottom="8dp"
                 android:scrollbarStyle="outsideOverlay" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@android:id/empty"
                 style="@style/Widget.Collect.EmptyView"
                 android:text="@string/no_items_display" />
