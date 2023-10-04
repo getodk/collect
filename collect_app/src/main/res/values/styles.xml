@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Widget.Collect.EmptyView" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:textAppearance">?textAppearanceTitleMedium</item>
         <item name="android:textAlignment">center</item>
         <item name="android:background">?colorSurfaceContainerLow</item>

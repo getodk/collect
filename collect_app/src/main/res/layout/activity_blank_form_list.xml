@@ -14,8 +14,6 @@
     <TextView
         android:id="@+id/empty_list_message"
         style="@style/Widget.Collect.EmptyView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/no_items_display" />
 </LinearLayout>
