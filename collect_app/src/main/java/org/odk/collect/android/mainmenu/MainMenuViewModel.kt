@@ -8,6 +8,7 @@ import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
+import org.odk.collect.android.instancemanagement.isDraft
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -107,8 +108,7 @@ class MainMenuViewModel(
     fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
-            val isDraft =
-                instance.status == Instance.STATUS_INCOMPLETE || instance.status == Instance.STATUS_VALID
+            val isDraft = instance.isDraft(settingsProvider)
 
             val message = if (isDraft) {
                 org.odk.collect.strings.R.string.form_saved_as_draft

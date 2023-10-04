@@ -3,6 +3,8 @@ package org.odk.collect.android.instancemanagement
 import android.content.Context
 import android.content.res.Resources
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.strings.R
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -15,6 +17,11 @@ fun Instance.getStatusDescription(resources: Resources): String {
 
 fun getStatusDescription(context: Context, state: String?, date: Date): String {
     return getStatusDescription(context.resources, state, date)
+}
+
+fun Instance.isDraft(settingsProvider: SettingsProvider): Boolean {
+    return draftStatuses.contains(status) && settingsProvider.getProtectedSettings()
+        .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 }
 
 private fun getStatusDescription(resources: Resources, state: String?, date: Date): String {
@@ -60,3 +67,9 @@ private fun getStatusDescription(resources: Resources, state: String?, date: Dat
         ""
     }
 }
+
+private val draftStatuses = arrayOf(
+    Instance.STATUS_INCOMPLETE,
+    Instance.STATUS_INVALID,
+    Instance.STATUS_VALID
+)

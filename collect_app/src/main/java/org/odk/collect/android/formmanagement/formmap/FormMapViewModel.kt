@@ -8,6 +8,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
 import org.odk.collect.android.instancemanagement.getStatusDescription
+import org.odk.collect.android.instancemanagement.isDraft
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
@@ -150,7 +151,7 @@ class FormMapViewModel(
             )
         } else {
             val action =
-                if (instance.status == Instance.STATUS_INCOMPLETE || instance.status == Instance.STATUS_VALID) {
+                if (instance.isDraft(settingsProvider)) {
                     createEditAction()
                 } else {
                     createViewAction()
