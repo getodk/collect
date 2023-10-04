@@ -29,14 +29,16 @@ object InstanceListItemView {
 
         val pill = view.findViewById<MaterialPill>(R.id.chip)
         if (pill != null) {
-            pill.setIcon(R.drawable.baseline_error_24)
-
             if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
                 pill.visibility = View.VISIBLE
+                pill.setIcon(R.drawable.baseline_error_24)
                 pill.setText(string.incomplete)
+                pill.setPillBackgroundColor(view.context.resources.getColor(R.color.colorError))
             } else if (instance.status == Instance.STATUS_VALID) {
                 pill.visibility = View.VISIBLE
+                pill.setIcon(R.drawable.ic_check_circle_24)
                 pill.setText(string.complete)
+                pill.setPillBackgroundColor(view.context.resources.getColor(R.color.colorPrimary))
             }
         }
 

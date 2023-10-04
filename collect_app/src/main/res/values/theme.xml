@@ -64,6 +64,7 @@
         <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge</item>
         <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
 
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.Small</item>
         <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.Medium</item>
         <!--/Material3 attributes-->
 
