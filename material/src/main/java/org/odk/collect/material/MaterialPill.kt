@@ -39,8 +39,16 @@ class MaterialPill(context: Context, attrs: AttributeSet?) :
         findViewById<ImageView>(R.id.icon).setImageDrawable(drawable)
     }
 
+    fun setIconTint(@ColorInt color: Int) {
+        findViewById<ImageView>(R.id.icon).setColorFilter(color)
+    }
+
     fun setPillBackgroundColor(@ColorInt color: Int) {
         background = createMaterialShapeDrawable(color)
+    }
+
+    fun setTextColor(@ColorInt color: Int) {
+        findViewById<TextView>(R.id.text).setTextColor(color)
     }
 
     private fun getShapeAppearance(context: Context) = getThemeAttributeValue(
