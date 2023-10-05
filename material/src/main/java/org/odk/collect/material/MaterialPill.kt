@@ -22,6 +22,12 @@ import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 class MaterialPill(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
 
+    var text: String? = null
+        set(value) {
+            field = value
+            findViewById<TextView>(R.id.text).text = text
+        }
+
     private val shapeAppearanceModel =
         ShapeAppearanceModel.builder(context, getShapeAppearance(context), -1).build()
 
@@ -31,7 +37,7 @@ class MaterialPill(context: Context, attrs: AttributeSet?) :
     }
 
     fun setText(@StringRes id: Int) {
-        findViewById<TextView>(R.id.text).setText(id)
+        text = context.getString(id)
     }
 
     fun setIcon(@DrawableRes id: Int) {

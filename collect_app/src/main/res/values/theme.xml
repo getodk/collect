@@ -18,7 +18,8 @@
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
         <item name="colorSurfaceContainer">@color/colorSurfaceContainer</item>
-        <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
+        <item name="colorSurfaceContainerHighest">@color/colorSurfaceContainerHighest</item>
+        <item name="colorOnSurfaceContainerHighest">@color/colorOnSurfaceContainerHighest</item>
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
