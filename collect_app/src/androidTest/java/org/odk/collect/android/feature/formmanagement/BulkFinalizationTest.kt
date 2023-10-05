@@ -86,7 +86,30 @@ class BulkFinalizationTest {
     }
 
     @Test
-    fun doesNotFinalizeOtherTypesOfInstance() {
+    fun doesNotFinalizeInstancesWithSavePoints() {
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .startBlankForm("One Question")
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+
+            .clickDrafts()
+            .clickOnForm("One Question")
+            .killAndReopenApp(MainMenuPage())
+
+            .clickDrafts()
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
+            .assertText("One Question")
+            .pressBack(MainMenuPage())
+
+            .assertNumberOfEditableForms(1)
+            .assertNumberOfFinalizedForms(0)
+    }
+
+    @Test
+    fun doesNotFinalizeAlreadyFinalizedInstances() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
