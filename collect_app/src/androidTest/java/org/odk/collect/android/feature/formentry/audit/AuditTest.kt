@@ -115,4 +115,35 @@ class AuditTest {
         assertThat(auditLog[2].get("event"), equalTo("form save"))
         assertThat(auditLog[3].get("event"), equalTo("form exit"))
     }
+
+    @Test // https://github.com/getodk/collect/issues/5262
+    fun locationTrackingEventsShouldBeLoggedBeforeQuestionEventsWhenANewFormIsStartedOrAPreviouslySavedOneEdited() {
+        rule.startAtMainMenu()
+            .copyForm("location-audit.xml")
+            .startBlankForm("Audit with Location")
+            .pressBackAndSaveAsDraft()
+            .clickEditSavedForm()
+            .clickOnForm("Audit with Location")
+            .clickGoToStart()
+            .pressBackAndSaveAsDraft()
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog.size, equalTo(15))
+
+        assertThat(auditLog[0].get("event"), equalTo("form start"))
+        assertThat(auditLog[1].get("event"), equalTo("location tracking enabled"))
+        assertThat(auditLog[2].get("event"), equalTo("location permissions granted"))
+        assertThat(auditLog[3].get("event"), equalTo("location providers enabled"))
+        assertThat(auditLog[4].get("event"), equalTo("question"))
+        assertThat(auditLog[5].get("event"), equalTo("form save"))
+        assertThat(auditLog[6].get("event"), equalTo("form exit"))
+        assertThat(auditLog[7].get("event"), equalTo("form resume"))
+        assertThat(auditLog[8].get("event"), equalTo("jump"))
+        assertThat(auditLog[9].get("event"), equalTo("location tracking enabled"))
+        assertThat(auditLog[10].get("event"), equalTo("location permissions granted"))
+        assertThat(auditLog[11].get("event"), equalTo("location providers enabled"))
+        assertThat(auditLog[12].get("event"), equalTo("question"))
+        assertThat(auditLog[13].get("event"), equalTo("form save"))
+        assertThat(auditLog[14].get("event"), equalTo("form exit"))
+    }
 }

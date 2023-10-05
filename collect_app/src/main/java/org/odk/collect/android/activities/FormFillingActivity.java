@@ -693,6 +693,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
                 if (formController != null) {
                     formControllerAvailable(formController);
+                    activityDisplayed();
                     formEntryViewModel.refresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
@@ -874,6 +875,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         // If we're coming back from the hierarchy view, the user has either tapped the back
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
+            activityDisplayed();
             formEntryViewModel.refresh();
             return;
         }
