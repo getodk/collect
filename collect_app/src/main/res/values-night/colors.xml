@@ -4,6 +4,7 @@
     <color name="colorSurfaceVariant">#41484d</color>
     <color name="colorOnSurface">#FFFFFF</color>
     <color name="colorSurfaceContainerLow">#1D1B20</color>
+    <color name="colorSurfaceContainer">#41484d</color>
 
     <bool name="lightStatusBar">false</bool>
 
