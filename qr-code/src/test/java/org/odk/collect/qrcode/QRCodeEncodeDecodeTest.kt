@@ -1,6 +1,8 @@
 package org.odk.collect.qrcode
 
+import android.app.Application
 import android.graphics.Bitmap
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -8,6 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 
 @RunWith(AndroidJUnit4::class)
 class QRCodeEncodeDecodeTest {
@@ -31,6 +34,18 @@ class QRCodeEncodeDecodeTest {
         val data = List(5000) { ('a'..'z').random() }.joinToString("")
 
         QRCodeEncoderImpl().encode(data)
+    }
+
+    @Test
+    fun `Decoding a QR code that is a screenshot from ODK Collect does not throw any exception`() {
+        val imageStream: InputStream = ApplicationProvider.getApplicationContext<Application>().assets.open("qrScreenshotFromCollect.png")
+        QRCodeDecoderImpl().decode(imageStream)
+    }
+
+    @Test
+    fun `Decoding a QR code that is shared via ODK Collect does not throw any exception`() {
+        val imageStream: InputStream = ApplicationProvider.getApplicationContext<Application>().assets.open("qrSharedViaCollect.png")
+        QRCodeDecoderImpl().decode(imageStream)
     }
 
     private fun toStream(bitmap: Bitmap): ByteArrayInputStream {

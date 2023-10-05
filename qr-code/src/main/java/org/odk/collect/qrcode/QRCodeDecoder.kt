@@ -12,7 +12,6 @@ import com.google.zxing.multi.qrcode.QRCodeMultiReader
 import org.odk.collect.androidshared.utils.CompressionUtils
 import java.io.IOException
 import java.io.InputStream
-import java.lang.Boolean.FALSE
 import java.lang.Boolean.TRUE
 import java.util.zip.DataFormatException
 import kotlin.Exception
@@ -32,8 +31,7 @@ class QRCodeDecoderImpl : QRCodeDecoder {
                     getBinaryBitmap(bitmap),
                     mapOf(
                         DecodeHintType.TRY_HARDER to TRUE,
-                        DecodeHintType.POSSIBLE_FORMATS to BarcodeFormat.QR_CODE,
-                        DecodeHintType.PURE_BARCODE to FALSE
+                        DecodeHintType.POSSIBLE_FORMATS to BarcodeFormat.QR_CODE
                     )
                 )
 
