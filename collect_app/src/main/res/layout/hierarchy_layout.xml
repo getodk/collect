@@ -78,12 +78,9 @@ the License.
         android:layout_above="@id/buttonholder"
         android:layout_below="@id/pathtext" />
 
-    <TextView
+    <org.odk.collect.android.views.EmptyListView
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:padding="20dp"
-        android:text="@string/no_items_display"
-        android:textSize="21sp" />
+        app:title="@string/empty_list_title"/>
 </RelativeLayout>

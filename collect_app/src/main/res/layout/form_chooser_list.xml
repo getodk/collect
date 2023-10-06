@@ -13,10 +13,10 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <include layout="@layout/app_bar_with_progress_bar_layout"/>
 
@@ -38,11 +38,13 @@ the License.
                 android:scrollbarStyle="outsideOverlay"
                 android:divider="@drawable/list_item_divider"/>
 
-        <com.google.android.material.textview.MaterialTextView
+        <org.odk.collect.android.views.EmptyListView
             android:id="@android:id/empty"
-            style="@style/Widget.Collect.EmptyView"
-            android:text="@string/no_items_display_forms" />
-
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:icon="@drawable/ic_baseline_edit_72"
+            app:title="@string/empty_list_of_drafts_title"
+            app:subtitle="@string/empty_list_of_drafts_subtitle"/>
     </LinearLayout>
 
 </RelativeLayout>

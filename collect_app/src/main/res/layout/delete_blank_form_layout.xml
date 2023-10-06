@@ -11,14 +11,12 @@
         app:layout_constraintBottom_toTopOf="@id/buttons"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <org.odk.collect.android.views.EmptyListView
         android:id="@android:id/empty"
-        style="@style/Widget.Collect.EmptyView"
-        android:text="@string/no_items_display"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:icon="@drawable/ic_baseline_delete_72"
+        app:title="@string/empty_list_title"/>
 
     <LinearLayout
         android:id="@+id/buttons"
