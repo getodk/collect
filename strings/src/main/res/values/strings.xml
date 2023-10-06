@@ -1257,4 +1257,19 @@
 
     <!-- Message above a form draft that has not yet been completed -->
     <string name="incomplete" tools:ignore="UnusedResources">Incomplete</string>
+
+    <!-- General message displayed when the list of forms -->
+    <string name="empty_list_title">Nothing available to display</string>
+
+    <!-- Message displayed when the list of drafts is empty -->
+    <string name="empty_list_of_drafts_title">Nothing in drafts</string>
+    <string name="empty_list_of_drafts_subtitle">When you save as draft, forms will appear here</string>
+
+    <!-- Message displayed when the list of ready to send forms is empty -->
+    <string name="empty_list_of_finalized_forms_title">Nothing ready to send</string>
+    <string name="empty_list_of_finalized_forms_subtitle">When you finalize drafts, they will appear here</string>
+
+    <!-- Message displayed when the list of sent forms is empty -->
+    <string name="empty_list_of_sent_forms_title">Nothing in sent</string>
+    <string name="empty_list_of_sent_forms_subtitle">When you send finalized forms, they will appear here</string>
 </resources>
