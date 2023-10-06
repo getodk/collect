@@ -18,7 +18,6 @@
     <!--  Should be removed when these attributes are added to Material Components  -->
     <declare-styleable name="Material3PolyFill">
         <attr name="colorSurfaceContainerLow" format="color" />
-        <attr name="colorSurfaceContainer" format="color" />
         <attr name="colorSurfaceContainerHighest" format="color" />
 
         <!-- Needed because the colorOnSurface is incorrect for this in dark theme. Hopefully fixed in Material 3 -->

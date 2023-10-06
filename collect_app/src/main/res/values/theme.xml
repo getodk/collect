@@ -17,7 +17,6 @@
         <item name="colorOnError">@color/colorOnError</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
-        <item name="colorSurfaceContainer">@color/colorSurfaceContainer</item>
         <item name="colorSurfaceContainerHighest">@color/colorSurfaceContainerHighest</item>
         <item name="colorOnSurfaceContainerHighest">@color/colorOnSurfaceContainerHighest</item>
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>

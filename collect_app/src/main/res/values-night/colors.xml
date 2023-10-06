@@ -4,7 +4,6 @@
     <color name="colorSurfaceVariant">#41484d</color>
     <color name="colorOnSurface">#FFFFFF</color>
     <color name="colorSurfaceContainerLow">#1D1B20</color>
-    <color name="colorSurfaceContainer">#41484d</color>
     <color name="colorSurfaceContainerHighest">#EAF3F8</color>
     <color name="colorOnSurfaceContainerHighest">#000000</color>
 
