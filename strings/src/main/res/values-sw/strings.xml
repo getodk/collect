@@ -37,9 +37,6 @@
   <string name="filter_the_list">Chuja orodha</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Tafuta</string>
-  <string name="no_items_display">Hakuna kitu cha kuonyesha.</string>
-  <string name="no_items_display_forms">Hakuna kitu cha kuonyesha.\n\njaribu kuchukua na kujaza fomu tupu</string>
-  <string name="no_items_display_sent_forms">Hakuna kitu cha kuonyesha. \ N \ n Jaribu kutuma fomu zilizokamilika kabla ya kutazama.</string>
   <string name="not_granted_permission">Kitendo unachijaribu kufanya kinahitaji ruhusa ambayo bado haijatolewa.</string>
   <string name="storage_runtime_permission_denied_title">Ruhusa ya kuhifadhi</string>
   <string name="storage_runtime_permission_denied_desc">Bila hizi ruhusa Collect haiwezi kufikia fomu au kuhifadhi majibu. Fungua tena program ukiwa tayari kuziruhusu.</string>

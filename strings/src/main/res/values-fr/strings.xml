@@ -45,10 +45,6 @@
   <string name="filter_the_list">Filtrer la liste</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Rechercher</string>
-  <string name="no_items_display">Rien à afficher.</string>
-  <string name="no_items_display_forms">Il n\'y a rien à afficher.\n\nEssayez d\'obtenir et de remplir un formulaire vierge.</string>
-  <string name="no_items_display_sent_forms">Il n\'y a rien à afficher.\n\nEssayez d\'envoyer un formulaire finalisé.</string>
-  <string name="no_items_display_instances">Rien à afficher.\n\nEssayer de finaliser des ébauches avant d\'envoyer.</string>
   <string name="not_granted_permission">Vous n\'avez pas les permissions requises pour démarrer l\'activité demandée</string>
   <string name="storage_runtime_permission_denied_title">Autorisations de stockage</string>
   <string name="storage_runtime_permission_denied_desc">Sans ces permissions Collect ne peut pas accéder à vos formulaires ou enregistrer des réponses. Ré-ouvrez l\'application quand vous êtes prêt à donner les permissions requises. </string>

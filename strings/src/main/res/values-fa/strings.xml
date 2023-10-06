@@ -37,9 +37,6 @@
   <string name="filter_the_list">فلتر لیست</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">جستجو</string>
-  <string name="no_items_display">هیچ موردی برای نمایش وجورد ندارد.</string>
-  <string name="no_items_display_forms">هیج موردی برای نمایش در دسترس نیست. \n\n\و سعی کنید فرم خالی را دریافت و پر کنید.</string>
-  <string name="no_items_display_sent_forms">هیچ موردی برای نمایش در دسترس نیست. \n\n\ و سعی کنید فرم های نهایی را قبل از مشاهده ارسال کنید.</string>
   <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
   <string name="storage_runtime_permission_denied_title">مجوزهای برای ذخیره سازی</string>
   <string name="storage_runtime_permission_denied_desc">بدون مجوزها، مجموعه نمی‌تواند به فرم‌های شما دسترسی داشته باشد یا پاسخ‌ها را ذخیره کند. زمانی که برای اعطای برنامه آماده شدید، دوباره آن را باز کنید.</string>

@@ -21,8 +21,6 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
-  <string name="no_items_display">Akukho ukutholakayo ukuboniswa.</string>
-  <string name="no_items_display_forms">Akukho okutholakalayo ukuboniswa.\n\nzama ukuthola futhi ugcwalise ifomu elingenalutho.</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM

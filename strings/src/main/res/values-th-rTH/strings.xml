@@ -27,8 +27,6 @@
   <string name="sort_the_list">จัดเรียงรายการ</string>
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
-  <string name="no_items_display">ไม่มีอะไรให้แสดง</string>
-  <string name="no_items_display_forms">ไม่มีข้อมูลให้แสดง \n\n ลองเปิดและกรอกแบบฟอร์มเปล่าอีกครั้ง</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM

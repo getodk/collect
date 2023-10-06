@@ -38,9 +38,6 @@
   <string name="filter_the_list">筛选列表</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">搜索</string>
-  <string name="no_items_display">没有可显示内容.</string>
-  <string name="no_items_display_forms">无可显示内容。\n\n 请尝试获取并填写一个空白表格</string>
-  <string name="no_items_display_sent_forms">没有可显示的内容。\n\n在查看之前，请尝试发送已完成的表单</string>
   <string name="not_granted_permission">您尝试启动的活动需要未授予的权限。</string>
   <string name="storage_runtime_permission_denied_title">存储权限</string>
   <string name="storage_runtime_permission_denied_desc">没有这些权限，应用无法访问您的表单或保存答案。当您准备好授予他们时，请重新打开应用程序。</string>

@@ -35,9 +35,6 @@
   <string name="filter_the_list">فہرست فلٹر کریں</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">سرچ </string>
-  <string name="no_items_display">دکھانے کیلے کچھ بھی نہیں ہے</string>
-  <string name="no_items_display_forms">دکھانے کیلئےکچھ نہیں ہے خالی فارم حاصل کریں اور پر کریں</string>
-  <string name="no_items_display_sent_forms">دکھانے کے لئے کچھ بھی نہیں دستیاب. \ n \ دیکھنے سے پہلے فارم حتمی شکل میں بھیجیں</string>
   <string name="storage_runtime_permission_denied_title">سٹوریج پرمیشن</string>
   <string name="storage_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ آپ کے فارم تک رسائی حاصل نہیں کرسکتایا جواب محفوظ نہیں کر سکتا جب آپ پرمیشن دینے کے لئے تیار ہو تو ایپلکیشن دوبارہ کھولیں.</string>
   <string name="location_runtime_permissions_denied_title">لوکیشن پرمیشن</string>

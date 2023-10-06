@@ -45,10 +45,6 @@
   <string name="filter_the_list">Suodata listaa</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Etsi</string>
-  <string name="no_items_display">Ei näytettävää.</string>
-  <string name="no_items_display_forms">Ei näytettävää.\n\nKokeile tyhjän lomakkeen hakemista ja täyttämistä.</string>
-  <string name="no_items_display_sent_forms">Ei näytettävää.\n\nKokeile viimeistellyn lomakkeen lähettämistä ennen tarkastelua.</string>
-  <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile luonnosten viimeistelyä ennen lähettämistä.</string>
   <string name="not_granted_permission">Toiminto, jota yrität käynnistää, vaatii käyttöluvan jota ei ole myönnetty.</string>
   <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
   <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>

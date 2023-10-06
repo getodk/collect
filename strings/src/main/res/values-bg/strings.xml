@@ -38,9 +38,6 @@
   <string name="filter_the_list">Филтриране на списъка</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Търсене</string>
-  <string name="no_items_display">Няма нищо за показване.</string>
-  <string name="no_items_display_forms">Няма нищо за показване.\n\nИзтеглете и попълнете бланка.</string>
-  <string name="no_items_display_sent_forms">Няма нищо за показване.\n\nПърво изпратете приключени формуляри.</string>
   <string name="not_granted_permission">Тази дейност изисква допълнително разрешение, което не е одобрено.</string>
   <string name="storage_runtime_permission_denied_title">Резрешения за хранилището</string>
   <string name="storage_runtime_permission_denied_desc">Без тези разрешения, приложението няма достъп до вашите формуляри и не може да попълва такива. </string>

@@ -36,9 +36,6 @@
   <string name="filter_the_list">一覧をフィルター</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">検索</string>
-  <string name="no_items_display">表示できるものはありません。</string>
-  <string name="no_items_display_forms">表示できるものはありません。\n\n空のフォームを取得し、必要事項を記入してみてください。</string>
-  <string name="no_items_display_sent_forms">表示可能なものはありません。\n\n表示する前に確定済みのフォームを送信してみてください。</string>
   <string name="not_granted_permission">開始しようとしているアクティビティは、必要なアクセス許可が付与されていません。</string>
   <string name="storage_runtime_permission_denied_title">ストレージのアクセス許可</string>
   <string name="storage_runtime_permission_denied_desc">これらのアクセス許可がないと、Collect はフォームにアクセスしたり、回答を保存することができません。 アクセス許可を付与する準備ができたら、アプリをもう一度開いてください。</string>

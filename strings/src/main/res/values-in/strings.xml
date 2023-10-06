@@ -36,9 +36,6 @@
   <string name="filter_the_list">Pilah daftar</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Cari</string>
-  <string name="no_items_display">Tidak ada yang dapat ditampilkan.</string>
-  <string name="no_items_display_forms">Tidak ada yang dapat ditampilkan.\n\nCoba kembali mengunduh dan mengisi formulir yang masih kosong.</string>
-  <string name="no_items_display_sent_forms">Tidak ada yang dapat ditampilkan.\n\nCoba kirim formulir yang telah terfinalisasi sebelum melihat ke sini.</string>
   <string name="not_granted_permission">Aktivitas yang sedang Anda coba memerlukan izin yang belum Anda diberikan.</string>
   <string name="storage_runtime_permission_denied_title">Perizinan penyimpanan</string>
   <string name="storage_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses formulir Anda atau pun menyimpan jawabannya. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>

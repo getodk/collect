@@ -45,10 +45,6 @@
   <string name="filter_the_list">Lijst filteren</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Zoek</string>
-  <string name="no_items_display">Leeg</string>
-  <string name="no_items_display_forms">Leeg.\n\nDownload eerst een formulier en vul dat in.</string>
-  <string name="no_items_display_sent_forms">Leeg.\n\nVerstuur eerst afgeronde formulieren om deze te kunnen bekijken.</string>
-  <string name="no_items_display_instances">Niet beschikbaar om te tonen.\n\nProbeer concepten af te ronden voor het te verzenden.</string>
   <string name="storage_runtime_permission_denied_title">Opslagrechten</string>
   <string name="location_runtime_permissions_denied_title">Locatie rechten</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->

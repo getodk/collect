@@ -59,11 +59,6 @@
     <!-- Displayed in search boxes for form lists or question types that involve search -->
     <string name="search">Search</string>
 
-    <string name="no_items_display">Nothing available to display.</string>
-    <string name="no_items_display_forms">Nothing in drafts.\n\nWhen you save as draft, forms will appear here.</string>
-    <string name="no_items_display_sent_forms">Nothing in sent.\n\nWhen you send finalized forms, they will appear here.</string>
-    <string name="no_items_display_instances">Nothing ready to send.\n\nWhen you finalize drafts, they will appear here.</string>
-
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="storage_runtime_permission_denied_title">Storage permissions</string>
     <string name="storage_runtime_permission_denied_desc">Without these permissions Collect can\'t access your forms or save answers. Reopen the app when you are ready to grant them.</string>

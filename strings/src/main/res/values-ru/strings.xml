@@ -45,10 +45,6 @@
   <string name="filter_the_list">Фильтровать список</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Поиск</string>
-  <string name="no_items_display">Отсутствуют элементы для показа.</string>
-  <string name="no_items_display_forms">Отсутствуют элементы для показа.\n\nПопробуйте получить и заполнить бланк опросника.</string>
-  <string name="no_items_display_sent_forms">Пусто\n\nВыгрузите финализированные опросы перед просмотром</string>
-  <string name="no_items_display_instances">Ничего недоступно для отображения.\n\nПопробуйте завершить черновики перед отправкой.</string>
   <string name="not_granted_permission">Для действия, которое вы пытаетесь сделать, требуется разрешение, которое не предоставлено.</string>
   <string name="storage_runtime_permission_denied_title">Доступ к накопителю</string>
   <string name="storage_runtime_permission_denied_desc">Без этих разрешений Collect не сможет получить доступ к опросам или сохранять ответы. Откройте приложение заново когда вы будете готовы предоставить доступ.</string>
