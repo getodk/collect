@@ -104,7 +104,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     public FillBlankFormPage assertFormExists(String formName) {
         // Seen problems with disk syncing not being waited for even though it's an AsyncTask
         return WaitFor.waitFor(() -> {
-            assertTextDoesNotExist(org.odk.collect.strings.R.string.no_items_display_forms);
+            assertTextDoesNotExist(org.odk.collect.strings.R.string.empty_list_of_drafts_title);
 
             onView(withId(R.id.form_list))
                     .perform(RecyclerViewActions.actionOnItem(hasDescendant(withText(formName)), scrollTo()));
@@ -120,7 +120,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage assertNoForms() {
-        assertText(org.odk.collect.strings.R.string.no_items_display_forms);
+        assertText(org.odk.collect.strings.R.string.empty_list_title);
         return this;
     }
 }
