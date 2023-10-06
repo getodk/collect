@@ -30,12 +30,7 @@ fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {
 
 private fun getStatusDescription(resources: Resources, state: String?, date: Date): String {
     return try {
-        if (state == null) {
-            SimpleDateFormat(
-                resources.getString(R.string.added_on_date_at_time),
-                Locale.getDefault()
-            ).format(date)
-        } else if (Instance.STATUS_INCOMPLETE.equals(state, ignoreCase = true)) {
+        if (Instance.STATUS_INCOMPLETE.equals(state, ignoreCase = true)) {
             SimpleDateFormat(
                 resources.getString(R.string.saved_on_date_at_time),
                 Locale.getDefault()
@@ -56,6 +51,11 @@ private fun getStatusDescription(resources: Resources, state: String?, date: Dat
                 Locale.getDefault()
             ).format(date)
         } else if (Instance.STATUS_INVALID.equals(state, ignoreCase = true)) {
+            SimpleDateFormat(
+                resources.getString(R.string.saved_on_date_at_time),
+                Locale.getDefault()
+            ).format(date)
+        } else if (Instance.STATUS_VALID.equals(state, ignoreCase = true)) {
             SimpleDateFormat(
                 resources.getString(R.string.saved_on_date_at_time),
                 Locale.getDefault()
