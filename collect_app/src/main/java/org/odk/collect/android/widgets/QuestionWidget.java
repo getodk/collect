@@ -25,6 +25,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -342,6 +343,8 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         }
 
         answerContainer.addView(v, params);
+
+        adjustButtonFontSize(answerContainer);
     }
 
     private void hideAnswerContainerIfNeeded() {
@@ -414,6 +417,23 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public void widgetValueChanged() {
         if (valueChangedListener != null) {
             valueChangedListener.widgetValueChanged(this);
+        }
+    }
+
+    /*
+    Loop through each child view to identify buttons and dynamically adjust their font size based on
+    the current settings. This efficient approach eliminates the need to manually adjust button font
+    sizes for individual widgets. Furthermore, this method lays the groundwork for potential future
+    enhancements, such as extending font size adjustments to other view types like text views etc.
+     */
+    public void adjustButtonFontSize(ViewGroup view) {
+        for (int i = 0; i < view.getChildCount(); i++) {
+            View childView = view.getChildAt(i);
+            if (childView instanceof ViewGroup) {
+                adjustButtonFontSize((ViewGroup) childView);
+            } else if (childView instanceof Button) {
+                ((Button) childView).setTextSize(QuestionFontSizeUtils.getFontSize(settings, FontSize.LABEL_LARGE));
+            }
         }
     }
 }
