@@ -72,7 +72,7 @@ public final class WidgetViewUtils {
         return imageView;
     }
 
-    public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, int answerFontSize, ButtonClickListener listener) {
+    public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, ButtonClickListener listener) {
         final MaterialButton button = (MaterialButton) LayoutInflater
                 .from(context)
                 .inflate(R.layout.widget_answer_button, null, false);
@@ -83,7 +83,6 @@ public final class WidgetViewUtils {
             button.setId(withId);
             button.setText(text);
             button.setContentDescription(text);
-            button.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
             TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 
@@ -103,11 +102,11 @@ public final class WidgetViewUtils {
         return button;
     }
 
-    public static Button createSimpleButton(Context context, @IdRes int id, boolean readOnly, int answerFontSize, ButtonClickListener listener) {
-        return createSimpleButton(context, id, readOnly, null, answerFontSize, listener);
+    public static Button createSimpleButton(Context context, @IdRes int id, boolean readOnly, ButtonClickListener listener) {
+        return createSimpleButton(context, id, readOnly, null, listener);
     }
 
-    public static Button createSimpleButton(Context context, boolean readOnly, String text, int answerFontSize, ButtonClickListener listener) {
-        return createSimpleButton(context, R.id.simple_button, readOnly, text, answerFontSize, listener);
+    public static Button createSimpleButton(Context context, boolean readOnly, String text, ButtonClickListener listener) {
+        return createSimpleButton(context, R.id.simple_button, readOnly, text, listener);
     }
 }

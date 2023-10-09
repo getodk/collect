@@ -31,7 +31,6 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 /**
@@ -131,7 +130,7 @@ public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceive
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_printer);
-        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), buttonText, QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.LABEL_LARGE), this);
+        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), buttonText, this);
 
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());

@@ -48,7 +48,7 @@ public class RatingWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = RatingWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         View answerView = binding.getRoot();
 

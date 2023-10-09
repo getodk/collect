@@ -18,7 +18,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
-import android.util.TypedValue;
 import android.view.View;
 
 import org.javarosa.core.model.data.IAnswerData;
@@ -43,10 +42,8 @@ public class UrlWidget extends QuestionWidget {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = UrlWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-
-        binding.urlButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.urlButton.setOnClickListener(v -> onButtonClick());
 
         return binding.getRoot();

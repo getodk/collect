@@ -17,7 +17,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -103,11 +102,8 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = AudioWidgetAnswerBinding.inflate(LayoutInflater.from(context));
-
-        binding.captureButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
-        binding.chooseButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
 
         binding.captureButton.setOnClickListener(v -> {
             binding.audioPlayer.waveform.clear();

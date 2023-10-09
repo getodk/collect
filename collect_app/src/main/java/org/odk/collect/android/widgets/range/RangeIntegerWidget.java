@@ -48,7 +48,7 @@ public class RangeIntegerWidget extends QuestionWidget implements Slider.OnChang
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         RangeWidgetUtils.RangeWidgetLayoutElements layoutElements = RangeWidgetUtils.setUpLayoutElements(context, prompt);
         slider = layoutElements.getSlider();
         currentValue = layoutElements.getCurrentValue();

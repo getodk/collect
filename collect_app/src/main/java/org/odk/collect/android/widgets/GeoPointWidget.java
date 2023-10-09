@@ -49,14 +49,13 @@ public class GeoPointWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
         if (prompt.isReadOnly()) {
             binding.simpleButton.setVisibility(GONE);
         } else {
-            binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
             binding.simpleButton.setOnClickListener(v -> geoDataRequester.requestGeoPoint(prompt, answerText, waitingForDataRegistry));
         }
 

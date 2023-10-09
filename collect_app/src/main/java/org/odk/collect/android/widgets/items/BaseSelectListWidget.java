@@ -48,7 +48,7 @@ public abstract class BaseSelectListWidget extends QuestionWidget implements Mul
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = SelectListWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
         return binding.getRoot();
     }

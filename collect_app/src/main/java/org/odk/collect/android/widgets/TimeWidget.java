@@ -51,14 +51,12 @@ public class TimeWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = TimeWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         if (prompt.isReadOnly()) {
             binding.timeButton.setVisibility(GONE);
         } else {
-            binding.timeButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
-
             binding.timeButton.setOnClickListener(v -> {
                 waitingForDataRegistry.waitForData(prompt.getIndex());
                 widgetUtils.showTimePickerDialog(context, selectedTime);
