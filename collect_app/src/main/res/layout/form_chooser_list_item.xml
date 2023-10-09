@@ -16,13 +16,13 @@
         android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/margin_extra_small"
         android:background="?colorSurfaceContainerLow"
+        android:drawablePadding="@dimen/margin_small"
         android:gravity="center"
         android:padding="@dimen/margin_small"
-        android:text="@string/draft_errors"
         android:textAppearance="?textAppearanceLabelLarge"
         android:visibility="gone"
         app:drawableStartCompat="@drawable/baseline_error_24"
-        android:drawablePadding="@dimen/margin_small"
+        tools:text="@string/draft_errors"
         tools:visibility="visible" />
 
     <FrameLayout

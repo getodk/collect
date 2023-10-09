@@ -34,7 +34,7 @@ class AuditTest {
             )
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOnForm("One Question Audit")
             .clickGoToStart()
             .fillOutAndFinalize(
@@ -122,7 +122,7 @@ class AuditTest {
             .copyForm("location-audit.xml")
             .startBlankForm("Audit with Location")
             .pressBackAndSaveAsDraft()
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("Audit with Location")
             .clickGoToStart()
             .pressBackAndSaveAsDraft()

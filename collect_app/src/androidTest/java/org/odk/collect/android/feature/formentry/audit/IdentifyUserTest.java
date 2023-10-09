@@ -61,7 +61,7 @@ public class IdentifyUserTest {
                 .swipeToEndScreen()
                 .clickSaveAsDraft()
 
-                .clickEditSavedForm()
+                .clickDrafts()
                 .clickOnFormWithIdentityPrompt("Identify User")
                 .enterIdentity("Jack")
                 .clickKeyboardEnter(new FormHierarchyPage("Identify User"))

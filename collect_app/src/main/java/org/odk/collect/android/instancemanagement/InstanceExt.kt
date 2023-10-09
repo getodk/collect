@@ -11,13 +11,8 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-private val editableStatuses = arrayOf(
-    Instance.STATUS_INCOMPLETE,
-    Instance.STATUS_INVALID
-)
-
 fun Instance.canBeEdited(settingsProvider: SettingsProvider): Boolean {
-    return editableStatuses.contains(this.status) &&
+    return isDraft() &&
         settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
 }
 
@@ -29,14 +24,18 @@ fun getStatusDescription(context: Context, state: String?, date: Date): String {
     return getStatusDescription(context.resources, state, date)
 }
 
+fun Instance.isDraft(): Boolean {
+    return draftStatuses.contains(status)
+}
+
+fun Instance.showAsEditable(settingsProvider: SettingsProvider): Boolean {
+    return isDraft() && settingsProvider.getProtectedSettings()
+        .getBoolean(ProtectedProjectKeys.KEY_EDIT_SAVED)
+}
+
 private fun getStatusDescription(resources: Resources, state: String?, date: Date): String {
     return try {
-        if (state == null) {
-            SimpleDateFormat(
-                resources.getString(R.string.added_on_date_at_time),
-                Locale.getDefault()
-            ).format(date)
-        } else if (Instance.STATUS_INCOMPLETE.equals(state, ignoreCase = true)) {
+        if (Instance.STATUS_INCOMPLETE.equals(state, ignoreCase = true)) {
             SimpleDateFormat(
                 resources.getString(R.string.saved_on_date_at_time),
                 Locale.getDefault()
@@ -61,6 +60,11 @@ private fun getStatusDescription(resources: Resources, state: String?, date: Dat
                 resources.getString(R.string.saved_on_date_at_time),
                 Locale.getDefault()
             ).format(date)
+        } else if (Instance.STATUS_VALID.equals(state, ignoreCase = true)) {
+            SimpleDateFormat(
+                resources.getString(R.string.saved_on_date_at_time),
+                Locale.getDefault()
+            ).format(date)
         } else {
             SimpleDateFormat(
                 resources.getString(R.string.added_on_date_at_time),
@@ -72,3 +76,9 @@ private fun getStatusDescription(resources: Resources, state: String?, date: Dat
         ""
     }
 }
+
+private val draftStatuses = arrayOf(
+    Instance.STATUS_INCOMPLETE,
+    Instance.STATUS_INVALID,
+    Instance.STATUS_VALID
+)

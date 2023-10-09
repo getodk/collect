@@ -5,7 +5,6 @@ import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
-import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.EntitiesPage
 import org.odk.collect.android.support.pages.ExperimentalPage
@@ -57,7 +56,7 @@ class SwitchProjectTest {
             .swipeToNextQuestion("What is your age?")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .assertText("Two Question")
             .pressBack(MainMenuPage())
 
@@ -111,7 +110,7 @@ class SwitchProjectTest {
             .pressBack(MainMenuPage())
 
             // Check instances
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .assertText("Two Question")
             .pressBack(MainMenuPage())
 

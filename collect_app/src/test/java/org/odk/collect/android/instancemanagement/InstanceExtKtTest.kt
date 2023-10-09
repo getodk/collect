@@ -32,6 +32,12 @@ class InstanceExtKtTest {
             R.string.saved_on_date_at_time
         )
 
+        val valid = InstanceFixtures.instance(status = Instance.STATUS_VALID)
+        assertDateFormat(
+            valid.getStatusDescription(resources),
+            R.string.saved_on_date_at_time
+        )
+
         val complete = InstanceFixtures.instance(status = Instance.STATUS_COMPLETE)
         assertDateFormat(
             complete.getStatusDescription(resources),

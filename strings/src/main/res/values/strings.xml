@@ -1292,4 +1292,7 @@
     <!-- Message displayed when the list of sent forms is empty -->
     <string name="empty_list_of_sent_forms_title">Nothing in sent</string>
     <string name="empty_list_of_sent_forms_subtitle">When you send finalized forms, they will appear here</string>
+
+    <!-- Message above a form draft that has been completed -->
+    <string name="complete" oat:toReview="true">Complete</string>
 </resources>

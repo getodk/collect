@@ -5,17 +5,16 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.FormEntryPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.ProjectSettingsPage
-import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain.chain
+import org.odk.collect.strings.R.string
 
 @RunWith(AndroidJUnit4::class)
-class FormFinalizingTest {
+class FormEndTest {
     private val rule = CollectTestRule()
 
     @get:Rule
@@ -33,28 +32,34 @@ class FormFinalizingTest {
     }
 
     @Test
-    fun fillingForm_andPressingSaveAsDraft_doesNotFinalizesForm() {
+    fun fillingForm_andPressingSaveAsDraft_savesACompleteDraft() {
         rule.startAtMainMenu()
             .copyForm(FORM)
             .assertNumberOfFinalizedForms(0)
             .startBlankForm("One Question")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .assertNumberOfEditableForms(1)
             .assertNumberOfFinalizedForms(0)
+
+            .clickDrafts(1)
+            .assertText(string.complete)
+            .assertTextDoesNotExist(string.draft_errors)
     }
 
     @Test
-    fun fillingForm_andPressingBack_andPressingSave_doesNotFinalizesForm() {
+    fun fillingForm_andPressingSaveAsDraft_whenThereAreViolatedConstraints_savesAIncompleteDraft() {
         rule.startAtMainMenu()
-            .copyForm(FORM)
+            .copyForm("two-question-required.xml")
             .assertNumberOfFinalizedForms(0)
-            .startBlankForm("One Question")
-            .closeSoftKeyboard()
-            .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
-            .clickSaveChanges()
-            .assertNumberOfEditableForms(1)
+            .startBlankForm("Two Question Required")
+            .clickGoToArrow()
+            .clickGoToEnd()
+            .clickSaveAsDraft()
             .assertNumberOfFinalizedForms(0)
+
+            .clickDrafts(1)
+            .assertText(string.draft_errors)
+            .assertTextDoesNotExist(string.complete)
     }
 
     @Test
@@ -71,7 +76,7 @@ class FormFinalizingTest {
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.save_as_draft)
+            .assertTextDoesNotExist(string.save_as_draft)
     }
 
     @Test
@@ -81,14 +86,14 @@ class FormFinalizingTest {
             .clickSettings()
             .clickAccessControl()
             .clickFormEntrySettings()
-            .clickOnString(org.odk.collect.strings.R.string.finalize)
+            .clickOnString(string.finalize)
             .pressBack(AccessControlPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
             .copyForm(FORM)
             .startBlankForm("One Question")
             .swipeToEndScreen()
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.finalize)
+            .assertTextDoesNotExist(string.finalize)
     }
 
     companion object {

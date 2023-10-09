@@ -40,7 +40,7 @@ public class EditSavedFormTest {
                 .pressBack(new MainMenuPage())
 
                 .assertNumberOfEditableForms(0)
-                .clickEditSavedForm()
+                .clickDrafts()
                 .assertTextDoesNotExist("One Question")
 
                 // Tests that search doesn't change visibility. Move down to lower testing level.
@@ -68,7 +68,7 @@ public class EditSavedFormTest {
                 .pressBack(new MainMenuPage())
 
                 .assertNumberOfEditableForms(0)
-                .clickEditSavedForm()
+                .clickDrafts()
                 .assertTextDoesNotExist("One Question")
 
                 // Tests that search doesn't change visibility. Move down to lower testing level
