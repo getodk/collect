@@ -91,7 +91,7 @@ jobs:
 
       - run:
           name: Run code quality checks
-          command: ./gradlew pmd ktlintCheck checkstyle lintDebug -PlintStrings
+          command: ./gradlew pmd ktlintCheck checkstyle lintDebug
 
   test_modules:
     <<: *android_config

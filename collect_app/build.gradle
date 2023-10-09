@@ -216,10 +216,6 @@ android {
         htmlReport true
         lintConfig file("$rootDir/config/lint.xml")
         xmlReport true
-
-        if (!project.hasProperty("lintStrings")) {
-            disable += ["HardcodedText"]
-        }
     }
     namespace 'org.odk.collect.android'
 }
