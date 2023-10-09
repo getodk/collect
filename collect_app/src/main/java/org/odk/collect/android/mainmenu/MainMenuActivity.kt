@@ -161,7 +161,7 @@ class MainMenuActivity : LocalizedActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (!allowClick(javaClass.name)) {
+        if (!allowClick(ApplicationConstants.ScreenName.MAIN_MENU.name)) {
             return true
         }
         if (item.itemId == R.id.projects) {
