@@ -31,7 +31,7 @@ class AuditTest {
             )
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOnForm("One Question Audit")
             .clickGoToStart()
             .fillOutAndFinalize(

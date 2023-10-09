@@ -113,9 +113,10 @@ public class SaveFormToDisk {
 
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_saving_validating_message));
 
+        ValidationResult validationResult;
         try {
-            ValidationResult validationResult = formController.validateAnswers(shouldFinalize);
-            if (validationResult instanceof FailedValidationResult) {
+            validationResult = formController.validateAnswers(true);
+            if (shouldFinalize && validationResult instanceof FailedValidationResult) {
                 // validation failed, pass specific failure
                 saveToDiskResult.setSaveResult(((FailedValidationResult) validationResult).getStatus(), shouldFinalize);
                 return saveToDiskResult;
@@ -143,7 +144,7 @@ public class SaveFormToDisk {
         }
 
         try {
-            Instance instance = exportData(shouldFinalize, progressListener);
+            Instance instance = exportData(shouldFinalize, progressListener, validationResult);
 
             if (formController.getInstanceFile() != null) {
                 removeSavepointFiles(formController.getInstanceFile().getName());
@@ -175,7 +176,7 @@ public class SaveFormToDisk {
      * Post-condition: the uri field is set to the URI of the instance database row that matches
      * the instance currently managed by the {@link FormController}.
      */
-    private Instance updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted) {
+    private Instance updateInstanceDatabase(boolean incomplete, boolean canEditAfterCompleted, ValidationResult validationResult) {
         FormInstance formInstance = formController.getFormDef().getInstance();
 
         String instancePath = formController.getInstanceFile().getAbsolutePath();
@@ -193,7 +194,13 @@ public class SaveFormToDisk {
             instanceBuilder.displayName(instanceName);
         }
 
-        if (incomplete || !shouldFinalize) {
+        if (!shouldFinalize) {
+            if (validationResult instanceof FailedValidationResult) {
+                instanceBuilder.status(Instance.STATUS_INVALID);
+            } else {
+                instanceBuilder.status(Instance.STATUS_VALID);
+            }
+        } else if (incomplete) {
             instanceBuilder.status(Instance.STATUS_INCOMPLETE);
         } else {
             instanceBuilder.status(Instance.STATUS_COMPLETE);
@@ -333,7 +340,7 @@ public class SaveFormToDisk {
      * In theory we don't have to write to disk, and this is where you'd add
      * other methods.
      */
-    private Instance exportData(boolean markCompleted, FormSaver.ProgressListener progressListener) throws IOException, EncryptionException {
+    private Instance exportData(boolean markCompleted, FormSaver.ProgressListener progressListener, ValidationResult validationResult) throws IOException, EncryptionException {
         progressListener.onProgressUpdate(getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_saving_collecting_message));
 
         ByteArrayPayload payload = formController.getFilledInFormXml();
@@ -356,7 +363,7 @@ public class SaveFormToDisk {
         // Since we saved a reloadable instance, it is flagged as re-openable so that if any error
         // occurs during the packaging of the data for the server fails (e.g., encryption),
         // we can still reopen the filled-out form and re-save it at a later time.
-        Instance instance = updateInstanceDatabase(true, true);
+        Instance instance = updateInstanceDatabase(true, true, validationResult);
 
         if (markCompleted) {
             // now see if the packaging of the data for the server would make it
@@ -411,7 +418,7 @@ public class SaveFormToDisk {
             // 2. Overwrite the instanceXml with the submission.xml
             //    and remove the plaintext attachments if encrypting
 
-            instance = updateInstanceDatabase(false, canEditAfterCompleted);
+            instance = updateInstanceDatabase(false, canEditAfterCompleted, validationResult);
 
             if (!canEditAfterCompleted) {
                 manageFilesAfterSavingEncryptedForm(instanceXml, submissionXml);

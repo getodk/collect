@@ -31,7 +31,7 @@ public class QuickSaveTest {
                 .clickSave()
                 .pressBackAndDiscardChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question")
                 .assertText("Reuben")
                 .assertText("32");
@@ -47,7 +47,7 @@ public class QuickSaveTest {
                 .clickSave()
                 .pressBackAndDiscardChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question Required")
                 .assertText("Reuben");
     }
@@ -61,7 +61,7 @@ public class QuickSaveTest {
                 .clickSave()
                 .pressBackAndDiscardChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question Required")
                 .clickGoToStart()
                 .answerQuestion("What is your name?", "Another Reuben")
@@ -69,7 +69,7 @@ public class QuickSaveTest {
                 .clickSave()
                 .pressBackAndDiscardChanges()
 
-                .clickEditSavedForm(1)
+                .clickDrafts(1)
                 .clickOnForm("Two Question Required")
                 .assertText("Another Reuben");
     }

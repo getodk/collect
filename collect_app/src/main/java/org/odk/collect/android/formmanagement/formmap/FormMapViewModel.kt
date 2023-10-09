@@ -8,6 +8,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
 import org.odk.collect.android.instancemanagement.getStatusDescription
+import org.odk.collect.android.instancemanagement.showAsEditable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
@@ -149,11 +150,12 @@ class FormMapViewModel(
                 info
             )
         } else {
-            val action = if (instance.status == Instance.STATUS_INCOMPLETE) {
-                createEditAction()
-            } else {
-                createViewAction()
-            }
+            val action =
+                if (instance.showAsEditable(settingsProvider)) {
+                    createEditAction()
+                } else {
+                    createViewAction()
+                }
 
             MappableSelectItem.WithAction(
                 instance.dbId,

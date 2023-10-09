@@ -36,7 +36,8 @@ class InstancesDataService(
         )
         val editableInstances = instancesRepository.getCountByStatus(
             Instance.STATUS_INCOMPLETE,
-            Instance.STATUS_INVALID
+            Instance.STATUS_INVALID,
+            Instance.STATUS_VALID
         )
 
         appState.setLive(EDITABLE_COUNT_KEY, editableInstances)
@@ -52,8 +53,11 @@ class InstancesDataService(
         val entitiesRepository = entitiesRepositoryProvider.get()
         val projectRootDir = File(storagePathProvider.getProjectRootDirPath())
 
-        val instances =
-            instancesRepository.getAllByStatus(Instance.STATUS_INCOMPLETE, Instance.STATUS_INVALID)
+        val instances = instancesRepository.getAllByStatus(
+            Instance.STATUS_INCOMPLETE,
+            Instance.STATUS_INVALID,
+            Instance.STATUS_VALID
+        )
 
         val totalFailed = instances.fold(0) { failCount, instance ->
             val form = formsRepository.getAllByFormId(instance.formId)[0]

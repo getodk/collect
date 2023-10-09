@@ -267,6 +267,7 @@ class FormUriActivity : LocalizedActivity() {
 private val editableStatuses = arrayOf(
     Instance.STATUS_INCOMPLETE,
     Instance.STATUS_INVALID,
+    Instance.STATUS_VALID,
     Instance.STATUS_COMPLETE
 )
 
