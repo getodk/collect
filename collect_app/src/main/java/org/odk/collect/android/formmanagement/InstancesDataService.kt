@@ -1,6 +1,7 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.storage.StoragePathProvider
@@ -73,21 +74,25 @@ class InstancesDataService(
                 FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
 
             val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
-            if (FormEntryUseCases.getSavePoint(formController, File(cacheDir)) == null) {
-                val finalizedInstance = FormEntryUseCases.finalizeDraft(
-                    formController,
-                    instancesRepository,
-                    entitiesRepository
-                )
+            val newFailCount =
+                if (FormEntryUseCases.getSavePoint(formController, File(cacheDir)) == null) {
+                    val finalizedInstance = FormEntryUseCases.finalizeDraft(
+                        formController,
+                        instancesRepository,
+                        entitiesRepository
+                    )
 
-                if (finalizedInstance == null) {
-                    failCount + 1
+                    if (finalizedInstance == null) {
+                        failCount + 1
+                    } else {
+                        failCount
+                    }
                 } else {
-                    failCount
+                    failCount + 1
                 }
-            } else {
-                failCount + 1
-            }
+
+            Collect.getInstance().externalDataManager?.close()
+            newFailCount
         }
 
         update()
