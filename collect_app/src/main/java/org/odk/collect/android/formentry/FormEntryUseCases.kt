@@ -25,7 +25,11 @@ object FormEntryUseCases {
 
     @JvmStatic
     fun loadFormDef(xForm: File, projectRootDir: File, formMediaDir: File): FormDef? {
-        FormUtils.setupReferenceManagerForForm(ReferenceManager.instance(), projectRootDir, formMediaDir)
+        FormUtils.setupReferenceManagerForForm(
+            ReferenceManager.instance(),
+            projectRootDir,
+            formMediaDir
+        )
         return createFormDefFromCacheOrXml(xForm)
     }
 
@@ -60,6 +64,17 @@ object FormEntryUseCases {
             formEntryController,
             instance
         )
+    }
+
+    fun getSavePoint(formController: FormController, cacheDir: File): File? {
+        val instanceXml = formController.getInstanceFile()!!
+        val savepointFile = File(cacheDir, "${instanceXml.name}.save")
+
+        return if (savepointFile.exists() && savepointFile.lastModified() > instanceXml.lastModified()) {
+            savepointFile
+        } else {
+            null
+        }
     }
 
     fun saveDraft(
