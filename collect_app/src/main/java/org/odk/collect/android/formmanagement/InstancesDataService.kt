@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
@@ -70,16 +71,21 @@ class InstancesDataService(
             val formController =
                 FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
 
-            val instance = FormEntryUseCases.finalizeDraft(
-                formController,
-                instancesRepository,
-                entitiesRepository
-            )
+            val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
+            if (FormEntryUseCases.getSavePoint(formController, File(cacheDir)) == null) {
+                val finalizedInstance = FormEntryUseCases.finalizeDraft(
+                    formController,
+                    instancesRepository,
+                    entitiesRepository
+                )
 
-            if (instance == null) {
-                failCount + 1
+                if (finalizedInstance == null) {
+                    failCount + 1
+                } else {
+                    failCount
+                }
             } else {
-                failCount
+                failCount + 1
             }
         }
 
