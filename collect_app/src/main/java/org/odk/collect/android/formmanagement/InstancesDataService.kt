@@ -66,7 +66,8 @@ class InstancesDataService(
             val formMediaDir = FileUtils.getFormMediaDir(xForm)
             val formDef = FormEntryUseCases.loadFormDef(xForm, projectRootDir, formMediaDir)!!
 
-            val formEntryController = CollectFormEntryControllerFactory().create(formDef)
+            val formEntryController =
+                CollectFormEntryControllerFactory().create(formDef, formMediaDir)
             val instanceFile = File(instance.instanceFilePath)
             val formController =
                 FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
