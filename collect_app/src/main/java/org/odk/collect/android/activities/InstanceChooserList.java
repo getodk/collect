@@ -48,6 +48,7 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
+import org.odk.collect.android.formmanagement.FinalizeAllResult;
 import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
@@ -69,8 +70,6 @@ import org.odk.collect.strings.R.string;
 import java.util.Arrays;
 
 import javax.inject.Inject;
-
-import kotlin.Pair;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -164,29 +163,37 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         bulkFinalizationViewModel.getFinalizedForms().observe(this, finalizedForms -> {
             if (!finalizedForms.isConsumed()) {
-                Pair<Integer, Integer> pair = finalizedForms.getValue();
-                if (pair.getSecond().equals(0)) {
+                FinalizeAllResult result = finalizedForms.getValue();
+                if (result.getUnsupportedInstances()) {
+                    SnackbarUtils.showLongSnackbar(
+                            this.findViewById(android.R.id.content),
+                            getResources().getString(
+                                    string.bulk_finalize_unsupported,
+                                    result.getSuccessCount()
+                            )
+                    );
+                } else if (result.getFailureCount() == 0) {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
                             getResources().getQuantityString(
                                     plurals.bulk_finalize_success,
-                                    pair.getFirst(),
-                                    pair.getFirst()
+                                    result.getSuccessCount(),
+                                    result.getSuccessCount()
                             )
                     );
-                } else if (pair.getFirst().equals(pair.getSecond())) {
+                } else if (result.getSuccessCount() == 0) {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
                             getResources().getQuantityString(
                                     plurals.bulk_finalize_failure,
-                                    pair.getFirst(),
-                                    pair.getFirst()
+                                    result.getFailureCount(),
+                                    result.getFailureCount()
                             )
                     );
                 } else {
                     SnackbarUtils.showLongSnackbar(
                             this.findViewById(android.R.id.content),
-                            getString(string.bulk_finalize_partial_success, pair.getFirst() - pair.getSecond(), pair.getSecond())
+                            getString(string.bulk_finalize_partial_success, result.getSuccessCount(), result.getFailureCount())
                     );
                 }
 

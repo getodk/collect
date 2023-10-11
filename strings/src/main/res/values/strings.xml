@@ -1243,4 +1243,7 @@
 
     <!-- Message above a form draft that has been completed -->
     <string name="complete" oat:toReview="true">Complete</string>
+
+    <!-- Message shown when some forms finalize successfully but others need to be finalized manually -->
+    <string name="bulk_finalize_unsupported" oat:toReview="true">%d forms finalized. Some forms need to be finalized manually.</string>
 </resources>

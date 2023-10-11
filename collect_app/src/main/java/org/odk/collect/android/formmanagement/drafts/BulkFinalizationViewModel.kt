@@ -2,6 +2,7 @@ package org.odk.collect.android.formmanagement.drafts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import org.odk.collect.android.formmanagement.FinalizeAllResult
 import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
@@ -12,8 +13,8 @@ class BulkFinalizationViewModel(
     private val scheduler: Scheduler,
     private val instancesDataService: InstancesDataService
 ) {
-    private val _finalizedForms = MutableLiveData<Consumable<Pair<Int, Int>>>()
-    val finalizedForms: LiveData<Consumable<Pair<Int, Int>>> = _finalizedForms
+    private val _finalizedForms = MutableLiveData<Consumable<FinalizeAllResult>>()
+    val finalizedForms: LiveData<Consumable<FinalizeAllResult>> = _finalizedForms
 
     private val _isFinalizing = MutableNonNullLiveData(false)
     val isFinalizing: NonNullLiveData<Boolean> = _isFinalizing

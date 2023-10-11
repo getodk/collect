@@ -49,7 +49,7 @@ class InstancesDataService(
         onUpdate()
     }
 
-    fun finalizeAllDrafts(): Pair<Int, Int> {
+    fun finalizeAllDrafts(): FinalizeAllResult {
         val instancesRepository = instancesRepositoryProvider.get()
         val formsRepository = formsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
@@ -61,7 +61,7 @@ class InstancesDataService(
             Instance.STATUS_VALID
         )
 
-        val totalFailed = instances.fold(0) { failCount, instance ->
+        val result = instances.fold(FinalizeAllResult(0, 0, false)) { result, instance ->
             val (formDef, form) = FormEntryUseCases.loadFormDef(
                 instance,
                 formsRepository,
@@ -76,7 +76,7 @@ class InstancesDataService(
 
             val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
             val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
-            val newFailCount = if (savePoint == null && form.basE64RSAPublicKey == null) {
+            val newResult = if (savePoint == null && form.basE64RSAPublicKey == null) {
                 val finalizedInstance = FormEntryUseCases.finalizeDraft(
                     formController,
                     instancesRepository,
@@ -84,20 +84,20 @@ class InstancesDataService(
                 )
 
                 if (finalizedInstance == null) {
-                    failCount + 1
+                    result.copy(failureCount = result.failureCount + 1)
                 } else {
-                    failCount
+                    result
                 }
             } else {
-                failCount + 1
+                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
             }
 
             Collect.getInstance().externalDataManager?.close()
-            newFailCount
+            newResult
         }
 
         update()
-        return Pair(instances.size, totalFailed)
+        return result.copy(successCount = instances.size - result.failureCount)
     }
 
     companion object {
@@ -106,3 +106,5 @@ class InstancesDataService(
         private const val SENT_COUNT_KEY = "instancesSentCount"
     }
 }
+
+data class FinalizeAllResult(val successCount: Int, val failureCount: Int, val unsupportedInstances: Boolean)

@@ -100,7 +100,7 @@ class BulkFinalizationTest {
             .clickDrafts()
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
-            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
             .assertText("One Question")
             .pressBack(MainMenuPage())
 
@@ -119,7 +119,7 @@ class BulkFinalizationTest {
             .clickDrafts(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
-            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
             .assertText("encrypted")
             .pressBack(MainMenuPage())
 
