@@ -75,22 +75,22 @@ class InstancesDataService(
             val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
 
             val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
-            val newFailCount =
-                if (FormEntryUseCases.getSavePoint(formController, File(cacheDir)) == null) {
-                    val finalizedInstance = FormEntryUseCases.finalizeDraft(
-                        formController,
-                        instancesRepository,
-                        entitiesRepository
-                    )
+            val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
+            val newFailCount = if (savePoint == null && form.basE64RSAPublicKey == null) {
+                val finalizedInstance = FormEntryUseCases.finalizeDraft(
+                    formController,
+                    instancesRepository,
+                    entitiesRepository
+                )
 
-                    if (finalizedInstance == null) {
-                        failCount + 1
-                    } else {
-                        failCount
-                    }
-                } else {
+                if (finalizedInstance == null) {
                     failCount + 1
+                } else {
+                    failCount
                 }
+            } else {
+                failCount + 1
+            }
 
             Collect.getInstance().externalDataManager?.close()
             newFailCount

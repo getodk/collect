@@ -109,6 +109,25 @@ class BulkFinalizationTest {
     }
 
     @Test
+    fun doesNotFinalizeInstancesFromEncryptedForms() {
+        rule.startAtMainMenu()
+            .copyForm("encrypted.xml")
+            .startBlankForm("encrypted")
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+
+            .clickDrafts(1)
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
+            .assertText("encrypted")
+            .pressBack(MainMenuPage())
+
+            .assertNumberOfEditableForms(1)
+            .assertNumberOfFinalizedForms(0)
+    }
+
+    @Test
     fun doesNotFinalizeAlreadyFinalizedInstances() {
         rule.startAtMainMenu()
             .copyForm("one-question.xml")
