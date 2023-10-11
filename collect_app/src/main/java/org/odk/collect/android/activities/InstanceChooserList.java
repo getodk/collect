@@ -48,24 +48,21 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
-import org.odk.collect.android.formmanagement.FinalizeAllResult;
 import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.FinalizeAllSnackbarPresenter;
 import org.odk.collect.android.projects.CurrentProjectProvider;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
-import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.strings.R.plurals;
-import org.odk.collect.strings.R.string;
 
 import java.util.Arrays;
 
@@ -161,45 +158,10 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
             return dialog;
         });
 
-        bulkFinalizationViewModel.getFinalizedForms().observe(this, finalizedForms -> {
-            if (!finalizedForms.isConsumed()) {
-                FinalizeAllResult result = finalizedForms.getValue();
-                if (result.getUnsupportedInstances()) {
-                    SnackbarUtils.showLongSnackbar(
-                            this.findViewById(android.R.id.content),
-                            getResources().getString(
-                                    string.bulk_finalize_unsupported,
-                                    result.getSuccessCount()
-                            )
-                    );
-                } else if (result.getFailureCount() == 0) {
-                    SnackbarUtils.showLongSnackbar(
-                            this.findViewById(android.R.id.content),
-                            getResources().getQuantityString(
-                                    plurals.bulk_finalize_success,
-                                    result.getSuccessCount(),
-                                    result.getSuccessCount()
-                            )
-                    );
-                } else if (result.getSuccessCount() == 0) {
-                    SnackbarUtils.showLongSnackbar(
-                            this.findViewById(android.R.id.content),
-                            getResources().getQuantityString(
-                                    plurals.bulk_finalize_failure,
-                                    result.getFailureCount(),
-                                    result.getFailureCount()
-                            )
-                    );
-                } else {
-                    SnackbarUtils.showLongSnackbar(
-                            this.findViewById(android.R.id.content),
-                            getString(string.bulk_finalize_partial_success, result.getSuccessCount(), result.getFailureCount())
-                    );
-                }
-
-                finalizedForms.consume();
-            }
-        });
+        bulkFinalizationViewModel.getFinalizedForms().observe(
+                this,
+                new FinalizeAllSnackbarPresenter(this.findViewById(android.R.id.content), this)
+        );
     }
 
     private void init() {
