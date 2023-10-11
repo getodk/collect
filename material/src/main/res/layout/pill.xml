@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/margin_small">
+    android:paddingHorizontal="@dimen/margin_small"
+    android:paddingVertical="@dimen/margin_extra_small">
 
     <ImageView
         android:id="@+id/icon"

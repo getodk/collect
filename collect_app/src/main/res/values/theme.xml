@@ -58,6 +58,8 @@
         <item name="colorPrimaryContainer">?colorPrimary</item>
 
         <item name="colorOnPrimaryContainer">?colorOnPrimary</item>
+        <item name="colorErrorContainer">@color/colorErrorContainer</item>
+        <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
 
         <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
         <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>

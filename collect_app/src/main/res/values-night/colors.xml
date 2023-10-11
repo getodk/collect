@@ -6,6 +6,8 @@
     <color name="colorSurfaceContainerLow">#1D1B20</color>
     <color name="colorSurfaceContainerHighest">#EAF3F8</color>
     <color name="colorOnSurfaceContainerHighest">#000000</color>
+    <color name="colorErrorContainer">#ffdad6</color>
+    <color name="colorOnErrorContainer">#410002</color>
 
     <bool name="lightStatusBar">false</bool>
 

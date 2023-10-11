@@ -6,6 +6,8 @@
 
     <color name="colorError">#D42C2C</color>
     <color name="colorOnError">#ffffff</color>
+    <color name="colorErrorContainer">#F9DEDC</color>
+    <color name="colorOnErrorContainer">#410002</color>
 
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorSurfaceVariant">#dce3e9</color>
