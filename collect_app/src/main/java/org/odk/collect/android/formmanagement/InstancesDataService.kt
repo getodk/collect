@@ -54,6 +54,7 @@ class InstancesDataService(
         val formsRepository = formsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
         val projectRootDir = File(storagePathProvider.getProjectRootDirPath())
+        val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
 
         val instances = instancesRepository.getAllByStatus(
             Instance.STATUS_INCOMPLETE,
@@ -74,9 +75,9 @@ class InstancesDataService(
                 CollectFormEntryControllerFactory().create(formDef, formMediaDir)
             val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
 
-            val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
             val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
-            val newResult = if (savePoint == null && form.basE64RSAPublicKey == null) {
+            val needsEncrypted = form.basE64RSAPublicKey == null
+            val newResult = if (savePoint == null && needsEncrypted) {
                 val finalizedInstance = FormEntryUseCases.finalizeDraft(
                     formController,
                     instancesRepository,
