@@ -16,7 +16,7 @@ class BlankFormTestRule @JvmOverloads constructor(
         formEntryPage = fillNewForm(formFilename, formName)
     }
 
-    fun fillNewForm(): FormEntryPage {
+    fun startInFormEntry(): FormEntryPage {
         return formEntryPage
     }
 }

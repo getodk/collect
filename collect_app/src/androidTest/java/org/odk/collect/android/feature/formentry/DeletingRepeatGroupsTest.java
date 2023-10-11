@@ -26,7 +26,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfFirstRepeat_deletesFirstRepeat() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .deleteGroup("text1")
                 .assertText("2");
@@ -34,7 +34,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfMiddleRepeat_deletesMiddleRepeat() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .swipeToNextRepeat("repeatGroup", 2)
                 .deleteGroup("text1")
@@ -43,7 +43,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfLastRepeat_deletesLastRepeat() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .swipeToNextRepeat("repeatGroup", 2)
                 .swipeToNextRepeat("repeatGroup", 3)
@@ -54,7 +54,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfFirstRepeatInHierarchy_deletesFirstRepeat() {
-        FormHierarchyPage page = activityTestRule.fillNewForm()
+        FormHierarchyPage page = activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon();
@@ -73,7 +73,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfMiddleRepeatInHierarchy_deletesMiddleRepeat() {
-        FormHierarchyPage page = activityTestRule.fillNewForm()
+        FormHierarchyPage page = activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon();
@@ -92,7 +92,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfLastRepeatInHierarchy_deletesLastRepeat() {
-        FormHierarchyPage page = activityTestRule.fillNewForm()
+        FormHierarchyPage page = activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon();
@@ -111,7 +111,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfAllRepeatsInHierarchyStartingFromIndexThatWillBeDeleted_shouldBringAUserToTheFirstRelevantQuestionBeforeTheGroup() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -129,7 +129,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfAllRepeatsInHierarchyStartingFromIndexThatWillNotBeDeleted_shouldBringAUserBackToTheSameIndex() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .clickGoToArrow()
                 .clickOnText("repeatGroup")
                 .clickOnText("repeatGroup > 4")
@@ -146,7 +146,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfAllRepeatsInHierarchyStartingFromTheEndView_shouldBringAUserToTheEndView() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickGoToArrow()
@@ -164,7 +164,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfFirstRepeatWithFieldList_deletesFirstRepeat() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -178,7 +178,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfMiddleRepeatWithFieldList_deletesMiddleRepeat() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -192,7 +192,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfLastRepeatWithFieldList_deletesLastRepeat() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -206,7 +206,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfFirstRepeatWithFieldListInHierarchy_deletesFirstRepeat() {
-        FormHierarchyPage page = activityTestRule.fillNewForm()
+        FormHierarchyPage page = activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -226,7 +226,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfMiddleRepeatWithFieldListInHierarchy_deletesMiddleRepeat() {
-        FormHierarchyPage page = activityTestRule.fillNewForm()
+        FormHierarchyPage page = activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -245,7 +245,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfLastRepeatWithFieldListInHierarchy_deletesLastRepeat() {
-        FormHierarchyPage page = activityTestRule.fillNewForm()
+        FormHierarchyPage page = activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -264,7 +264,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfAllRepeatsWithFieldListInHierarchyStartingFromIndexThatWillBeDeleted_shouldBringAUserToTheFirstRelevantQuestionBeforeTheGroup() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .swipeToNextQuestion("text1")
                 .clickGoToArrow()
                 .clickGoUpIcon()
@@ -288,7 +288,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfAllRepeatsWithFieldListInHierarchyStartingFromIndexThatWillNotBeDeleted_shouldBringAUserBackToTheSameIndex() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .clickGoToArrow()
                 .clickOnText("repeatGroupFieldList")
                 .clickOnText("repeatGroupFieldList > 4")
@@ -305,7 +305,7 @@ public class DeletingRepeatGroupsTest {
 
     @Test
     public void requestingDeletionOfAllRepeatsWithFieldListInHierarchyStartingFromTheEndView_shouldBringAUserToTheEndView() {
-        activityTestRule.fillNewForm()
+        activityTestRule.startInFormEntry()
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickGoToArrow()
