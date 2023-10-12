@@ -47,8 +47,8 @@ import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.utilities.ExternalizableFormDefCache;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.shared.strings.Md5;
 
@@ -220,7 +220,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
         publishProgress(
                 getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_form_message));
 
-        final FormDef formDefFromCache = FormDefCache.readCache(formXml);
+        final FormDef formDefFromCache = new ExternalizableFormDefCache().readCache(formXml);
         if (formDefFromCache != null) {
             return formDefFromCache;
         }
@@ -239,7 +239,7 @@ public class FormLoaderTask extends AsyncTask<String, String, FormLoaderTask.FEC
             formDef = formDefFromXml;
 
             try {
-                FormDefCache.writeCache(formDef, formXml.getPath());
+                new ExternalizableFormDefCache().writeCache(formDef, formXml.getPath());
             } catch (IOException e) {
                 Timber.e(e);
             }

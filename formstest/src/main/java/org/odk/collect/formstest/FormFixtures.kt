@@ -9,6 +9,7 @@ object FormFixtures {
     fun form(
         formId: String = "formId",
         version: String = "1",
+        formFilePath: String? = null,
         mediaFiles: List<Pair<String, String>> = emptyList(),
         autoSend: String? = null
     ): Form {
@@ -23,7 +24,13 @@ object FormFixtures {
             .displayName("Test Form")
             .formId(formId)
             .version(version)
-            .formFilePath(FormUtils.createFormFixtureFile(formId, version, formFilesPath))
+            .formFilePath(
+                formFilePath ?: FormUtils.createFormFixtureFile(
+                    formId,
+                    version,
+                    formFilesPath
+                )
+            )
             .formMediaPath(mediaFilePath)
             .autoSend(autoSend)
             .build()

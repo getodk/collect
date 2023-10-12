@@ -4,20 +4,21 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.javarosa.core.model.FormDef
 import org.javarosa.core.model.data.IntegerData
-import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
 import org.javarosa.model.xform.XFormsModule
-import org.javarosa.xform.util.XFormUtils
 import org.junit.Before
 import org.junit.Test
 import org.kxml2.io.KXmlParser
 import org.kxml2.kdom.Document
+import org.mockito.kotlin.mock
 import org.odk.collect.android.entities.InMemEntitiesRepository
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.android.utilities.FormUtils
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.formstest.FormFixtures
+import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.formstest.InMemInstancesRepository
 import org.odk.collect.shared.TempFiles
 import java.io.File
@@ -26,6 +27,7 @@ import java.io.StringReader
 class FormEntryUseCasesTest {
 
     private val projectRootDir = TempFiles.createTempDir()
+    private val formsRepository = InMemFormsRepository()
     private val instancesRepository = InMemInstancesRepository()
 
     @Before
@@ -34,15 +36,34 @@ class FormEntryUseCasesTest {
     }
 
     @Test
+    fun loadFormDef_withInstance_loadsCorrectFormVersion() {
+        createForm(
+            copyTestForm("forms/one-question.xml"),
+            formId = "one-question",
+            version = "1"
+        )
+
+        val (formUpdated, formDefUpdated) = createForm(
+            copyTestForm("forms/one-question-updated.xml"),
+            formId = "one-question",
+            version = "2"
+        )
+
+        val instance = createDraft(formUpdated, formDefUpdated, instancesRepository)
+
+        val loadedFormDef =
+            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock()).first
+        assertThat(loadedFormDef.title, equalTo("One Question Updated"))
+    }
+
+    @Test
     fun finalizeDraft_whenValidationFails_marksInstanceAsHavingErrors() {
-        val formMediaDir = TempFiles.createTempDir()
-        val xForm = copyTestForm("forms/two-question-required.xml")
-        val formDef = parseForm(xForm, projectRootDir, formMediaDir)
-        val instance = createDraft(formDef, formMediaDir, instancesRepository)
+        val (form, formDef) = createForm(copyTestForm("forms/two-question-required.xml"))
+        val instance = createDraft(form, formDef, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
             FormEntryController(FormEntryModel(formDef)),
-            formMediaDir,
+            File(form.formMediaPath),
             File(instance.instanceFilePath)
         )
 
@@ -60,17 +81,15 @@ class FormEntryUseCasesTest {
 
     @Test
     fun finalizeDraft_canCreatePartialSubmissions() {
-        val formMediaDir = TempFiles.createTempDir()
-        val xForm = copyTestForm("forms/one-question-partial.xml")
-        val formDef = parseForm(xForm, projectRootDir, formMediaDir)
-        val instance = createDraft(formDef, formMediaDir, instancesRepository) {
+        val (form, formDef) = createForm(copyTestForm("forms/one-question-partial.xml"))
+        val instance = createDraft(form, formDef, instancesRepository) {
             it.stepToNextScreenEvent()
             it.answerQuestion(it.getFormIndex(), IntegerData(64))
         }
 
         val draftController = FormEntryUseCases.loadDraft(
             FormEntryController(FormEntryModel(formDef)),
-            formMediaDir,
+            File(form.formMediaPath),
             File(instance.instanceFilePath)
         )
 
@@ -91,14 +110,12 @@ class FormEntryUseCasesTest {
 
     @Test
     fun finalizeDraft_updatesInstanceNameInRepository() {
-        val formMediaDir = TempFiles.createTempDir()
-        val xForm = copyTestForm("forms/one-question-uuid-instance-name.xml")
-        val formDef = parseForm(xForm, projectRootDir, formMediaDir)
-        val instance = createDraft(formDef, formMediaDir, instancesRepository)
+        val (form, formDef) = createForm(copyTestForm("forms/one-question-uuid-instance-name.xml"))
+        val instance = createDraft(form, formDef, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
             FormEntryController(FormEntryModel(formDef)),
-            formMediaDir,
+            File(form.formMediaPath),
             File(instance.instanceFilePath)
         )
 
@@ -115,18 +132,25 @@ class FormEntryUseCasesTest {
         )
     }
 
-    private fun parseForm(xForm: File, projectRootDir: File, formMediaDir: File): FormDef {
-        FormUtils.setupReferenceManagerForForm(
-            ReferenceManager.instance(),
-            projectRootDir,
-            formMediaDir
+    private fun createForm(
+        xForm: File,
+        formId: String = "formId",
+        version: String = "formVersion"
+    ): Pair<Form, FormDef> {
+        val form = formsRepository.save(
+            FormFixtures.form(
+                formId = formId,
+                version = version,
+                formFilePath = xForm.absolutePath
+            )
         )
-        return XFormUtils.getFormFromFormXml(xForm.absolutePath, null)
+        val formDef = FormEntryUseCases.loadFormDef(form, projectRootDir, mock())
+        return Pair(form, formDef)
     }
 
     private fun createDraft(
+        form: Form,
         formDef: FormDef,
-        formMediaDir: File,
         instancesRepository: InMemInstancesRepository,
         fillIn: (FormController) -> Any = {}
     ): Instance {
@@ -134,16 +158,17 @@ class FormEntryUseCasesTest {
 
         val formController = FormEntryUseCases.loadBlankForm(
             FormEntryController(FormEntryModel(formDef)),
-            formMediaDir,
+            File(form.formMediaPath),
             instanceFile
         )
 
         fillIn(formController)
-        return FormEntryUseCases.saveDraft(formController, instancesRepository, instanceFile)
+        val instance = FormEntryUseCases.saveDraft(form, formController, instancesRepository)
+        return instance
     }
 
     private fun copyTestForm(testForm: String): File {
-        return TempFiles.createTempFile().also {
+        return TempFiles.createTempFile(".xml").also {
             FileUtils.copyFileFromResources(testForm, it.absolutePath)
         }
     }

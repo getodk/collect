@@ -2,6 +2,7 @@ package org.odk.collect.android.utilities;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.util.externalizable.ExtUtil;
+import org.odk.collect.android.formentry.FormDefCache;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.shared.strings.Md5;
@@ -16,11 +17,7 @@ import java.io.IOException;
 import timber.log.Timber;
 
 /** Methods for reading from and writing to the FormDef cache */
-public final class FormDefCache {
-
-    private FormDefCache() {
-        // Private constructor
-    }
+public final class ExternalizableFormDefCache implements FormDefCache {
 
     /**
      * Serializes a FormDef and saves it in the cache. To avoid problems from two callers
@@ -30,9 +27,10 @@ public final class FormDefCache {
      * @param formDef  - The FormDef to be cached
      * @param formPath - The form XML file
      */
-    public static void writeCache(FormDef formDef, String formPath) throws IOException {
+    @Override
+    public void writeCache(FormDef formDef, String formPath) throws IOException {
         final long formSaveStart = System.currentTimeMillis();
-        File cachedFormDefFile = FormDefCache.getCacheFile(new File(formPath));
+        File cachedFormDefFile = ExternalizableFormDefCache.getCacheFile(new File(formPath));
         final File tempCacheFile = File.createTempFile("cache", null,
                 new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE)));
         Timber.i("Started saving %s to the cache via temp file %s",
@@ -77,7 +75,8 @@ public final class FormDefCache {
      * @param formXml a File containing the XML version of the form
      * @return a FormDef, or null if the form is not present in the cache
      */
-    public static FormDef readCache(File formXml) {
+    @Override
+    public FormDef readCache(File formXml) {
         final File cachedForm = getCacheFile(formXml);
         if (cachedForm.exists()) {
             Timber.i("Attempting to load %s from cached file: %s.", formXml.getName(), cachedForm.getName());

@@ -14,7 +14,6 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.android.utilities.FormDefCache
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.entities.EntitiesRepository
 import org.odk.collect.forms.Form
@@ -28,18 +27,23 @@ object FormEntryUseCases {
     fun loadFormDef(
         instance: Instance,
         formsRepository: FormsRepository,
-        projectRootDir: File
-    ): LoadedFormDef {
+        projectRootDir: File,
+        formDefCache: FormDefCache
+    ): Pair<FormDef, Form> {
         val form = formsRepository.getAllByFormId(instance.formId)[0]
-        return loadFormDef(form, projectRootDir)
+        return Pair(
+            loadFormDef(form, projectRootDir, formDefCache),
+            form
+        )
     }
 
     fun loadFormDef(
         form: Form,
-        projectRootDir: File
-    ): LoadedFormDef {
+        projectRootDir: File,
+        formDefCache: FormDefCache
+    ): FormDef {
         val xForm = File(form.formFilePath)
-        val formMediaDir = FileUtils.getFormMediaDir(xForm)
+        val formMediaDir = File(form.formMediaPath)
 
         FormUtils.setupReferenceManagerForForm(
             ReferenceManager.instance(),
@@ -47,8 +51,7 @@ object FormEntryUseCases {
             formMediaDir
         )
 
-        val formDef = createFormDefFromCacheOrXml(xForm)!!
-        return LoadedFormDef(formDef, formMediaDir)
+        return createFormDefFromCacheOrXml(xForm, formDefCache)!!
     }
 
     fun loadBlankForm(
@@ -96,14 +99,16 @@ object FormEntryUseCases {
     }
 
     fun saveDraft(
-        formController: JavaRosaFormController,
-        instancesRepository: InstancesRepository,
-        instanceFile: File
+        form: Form,
+        formController: FormController,
+        instancesRepository: InstancesRepository
     ): Instance {
         saveFormToDisk(formController)
         return instancesRepository.save(
             Instance.Builder()
-                .instanceFilePath(instanceFile.absolutePath)
+                .formId(form.formId)
+                .formVersion(form.version)
+                .instanceFilePath(formController.getInstanceFile()!!.absolutePath)
                 .status(Instance.STATUS_INCOMPLETE)
                 .build()
         )
@@ -170,15 +175,15 @@ object FormEntryUseCases {
         return true
     }
 
-    private fun createFormDefFromCacheOrXml(xForm: File): FormDef? {
-        val formDefFromCache = FormDefCache.readCache(xForm)
+    private fun createFormDefFromCacheOrXml(xForm: File, formDefCache: FormDefCache): FormDef? {
+        val formDefFromCache = formDefCache.readCache(xForm)
         if (formDefFromCache != null) {
             return formDefFromCache
         }
 
         val lastSavedSrc = FileUtils.getOrCreateLastSavedSrc(xForm)
         return XFormUtils.getFormFromFormXml(xForm.absolutePath, lastSavedSrc)?.also {
-            FormDefCache.writeCache(it, xForm.path)
+            formDefCache.writeCache(it, xForm.path)
         }
     }
 
@@ -225,5 +230,3 @@ object FormEntryUseCases {
         }
     }
 }
-
-data class LoadedFormDef(val formDef: FormDef, val formMediaDir: File)
