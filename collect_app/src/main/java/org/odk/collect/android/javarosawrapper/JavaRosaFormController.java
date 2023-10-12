@@ -403,12 +403,32 @@ public class JavaRosaFormController implements FormController {
                 if (indexIsInFieldList()) {
                     stepToPreviousScreenEvent();
                 }
-                return new FailedValidationResult(validateOutcome.failedPrompt, validateOutcome.outcome);
+                return getFailedValidationResult(validateOutcome.failedPrompt, validateOutcome.outcome);
             }
             return SuccessValidationResult.INSTANCE;
         } catch (RuntimeException e) {
             throw new JavaRosaException(e);
         }
+    }
+
+    private ValidationResult getFailedValidationResult(FormIndex index, int status) {
+        ValidationResult validationResult = null;
+
+        String errorMessage;
+        if (status == FormEntryController.ANSWER_CONSTRAINT_VIOLATED) {
+            errorMessage = getQuestionPromptConstraintText(index);
+            if (errorMessage == null) {
+                errorMessage = getQuestionPrompt(index).getSpecialFormQuestionText("constraintMsg");
+            }
+            validationResult = new FailedValidationResult(index, status, errorMessage, org.odk.collect.strings.R.string.invalid_answer_error);
+        } else if (status == FormEntryController.ANSWER_REQUIRED_BUT_EMPTY) {
+            errorMessage = getQuestionPromptRequiredText(index);
+            if (errorMessage == null) {
+                errorMessage = getQuestionPrompt(index).getSpecialFormQuestionText("requiredMsg");
+            }
+            validationResult = new FailedValidationResult(index, status, errorMessage, org.odk.collect.strings.R.string.required_answer_error);
+        }
+        return validationResult;
     }
 
     public boolean saveAnswer(FormIndex index, IAnswerData data) throws JavaRosaException {
@@ -633,7 +653,7 @@ public class JavaRosaFormController implements FormController {
             if (evaluateConstraints) {
                 int saveStatus = answerQuestion(index, answer);
                 if (saveStatus != FormEntryController.ANSWER_OK) {
-                    return new FailedValidationResult(index, saveStatus);
+                    return getFailedValidationResult(index, saveStatus);
                 }
             } else {
                 saveAnswer(index, answer);
