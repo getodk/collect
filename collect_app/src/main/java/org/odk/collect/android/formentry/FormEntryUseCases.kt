@@ -17,20 +17,38 @@ import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormDefCache
 import org.odk.collect.android.utilities.FormUtils
 import org.odk.collect.entities.EntitiesRepository
+import org.odk.collect.forms.Form
+import org.odk.collect.forms.FormsRepository
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.instances.InstancesRepository
 import java.io.File
 
 object FormEntryUseCases {
 
-    @JvmStatic
-    fun loadFormDef(xForm: File, projectRootDir: File, formMediaDir: File): FormDef? {
+    fun loadFormDef(
+        instance: Instance,
+        formsRepository: FormsRepository,
+        projectRootDir: File
+    ): LoadedFormDef {
+        val form = formsRepository.getAllByFormId(instance.formId)[0]
+        return loadFormDef(form, projectRootDir)
+    }
+
+    fun loadFormDef(
+        form: Form,
+        projectRootDir: File
+    ): LoadedFormDef {
+        val xForm = File(form.formFilePath)
+        val formMediaDir = FileUtils.getFormMediaDir(xForm)
+
         FormUtils.setupReferenceManagerForForm(
             ReferenceManager.instance(),
             projectRootDir,
             formMediaDir
         )
-        return createFormDefFromCacheOrXml(xForm)
+
+        val formDef = createFormDefFromCacheOrXml(xForm)!!
+        return LoadedFormDef(formDef, formMediaDir)
     }
 
     fun loadBlankForm(
@@ -207,3 +225,5 @@ object FormEntryUseCases {
         }
     }
 }
+
+data class LoadedFormDef(val formDef: FormDef, val formMediaDir: File)

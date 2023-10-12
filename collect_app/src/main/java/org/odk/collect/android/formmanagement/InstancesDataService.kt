@@ -6,7 +6,6 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
@@ -62,10 +61,11 @@ class InstancesDataService(
         )
 
         val totalFailed = instances.fold(0) { failCount, instance ->
-            val form = formsRepository.getAllByFormId(instance.formId)[0]
-            val xForm = File(form.formFilePath)
-            val formMediaDir = FileUtils.getFormMediaDir(xForm)
-            val formDef = FormEntryUseCases.loadFormDef(xForm, projectRootDir, formMediaDir)!!
+            val (formDef, formMediaDir) = FormEntryUseCases.loadFormDef(
+                instance,
+                formsRepository,
+                projectRootDir
+            )
 
             val formEntryController =
                 CollectFormEntryControllerFactory().create(formDef, formMediaDir)
