@@ -30,7 +30,8 @@ object FormEntryUseCases {
         projectRootDir: File,
         formDefCache: FormDefCache
     ): Pair<FormDef, Form> {
-        val form = formsRepository.getAllByFormId(instance.formId)[0]
+        val form =
+            formsRepository.getAllByFormIdAndVersion(instance.formId, instance.formVersion)[0]
         return Pair(
             loadFormDef(form, projectRootDir, formDefCache),
             form
