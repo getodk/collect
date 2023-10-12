@@ -229,7 +229,7 @@ public class FormEntryViewModelTest {
     @Test
     public void moveForward_whenThereIsAFailedConstraint_setsFailedConstraint() throws Exception {
         Consumable<FailedValidationResult> failedValidationResult =
-                new Consumable<>(new FailedValidationResult(startingIndex, 0));
+                new Consumable<>(new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error));
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult.getValue());
 
         viewModel.moveForward(new HashMap<>());
@@ -243,7 +243,7 @@ public class FormEntryViewModelTest {
      */
     @Test
     public void moveForward_whenThereIsAFailedConstraint_doesNotFlushAuditLog() throws Exception {
-        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0);
+        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult);
 
         viewModel.moveForward(new HashMap<>());
@@ -254,7 +254,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void moveForward_whenThereIsAFailedConstraint_doesNotStepToNextEvent() throws Exception {
-        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0);
+        FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult);
 
         viewModel.moveForward(new HashMap<>());

@@ -574,7 +574,11 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
             ValidationResult validationResult = consumable.getValue();
             if (validationResult instanceof FailedValidationResult failedValidationResult) {
-                getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), formEntryViewModel.getErrorMessage(failedValidationResult, this));
+                String errorMessage = failedValidationResult.getCustomErrorMessage();
+                if (errorMessage == null) {
+                    errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
+                }
+                getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
                 swipeHandler.setBeenSwiped(false);
             } else if (validationResult instanceof SuccessValidationResult) {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
