@@ -62,9 +62,9 @@ class FormEntryUseCasesTest {
         val instance = createDraft(form, formDef, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
-            FormEntryController(FormEntryModel(formDef)),
-            File(form.formMediaPath),
-            File(instance.instanceFilePath)
+            form,
+            instance,
+            FormEntryController(FormEntryModel(formDef))
         )
 
         FormEntryUseCases.finalizeDraft(
@@ -88,9 +88,9 @@ class FormEntryUseCasesTest {
         }
 
         val draftController = FormEntryUseCases.loadDraft(
-            FormEntryController(FormEntryModel(formDef)),
-            File(form.formMediaPath),
-            File(instance.instanceFilePath)
+            form,
+            instance,
+            FormEntryController(FormEntryModel(formDef))
         )
 
         FormEntryUseCases.finalizeDraft(
@@ -114,9 +114,9 @@ class FormEntryUseCasesTest {
         val instance = createDraft(form, formDef, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
-            FormEntryController(FormEntryModel(formDef)),
-            File(form.formMediaPath),
-            File(instance.instanceFilePath)
+            form,
+            instance,
+            FormEntryController(FormEntryModel(formDef))
         )
 
         FormEntryUseCases.finalizeDraft(
@@ -157,8 +157,8 @@ class FormEntryUseCasesTest {
         val instanceFile = TempFiles.createTempFile("instance", ".xml")
 
         val formController = FormEntryUseCases.loadBlankForm(
+            form,
             FormEntryController(FormEntryModel(formDef)),
-            File(form.formMediaPath),
             instanceFile
         )
 

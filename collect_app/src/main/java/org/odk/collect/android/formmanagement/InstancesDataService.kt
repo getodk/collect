@@ -72,9 +72,7 @@ class InstancesDataService(
             val formMediaDir = File(form.formMediaPath)
             val formEntryController =
                 CollectFormEntryControllerFactory().create(formDef, formMediaDir)
-            val instanceFile = File(instance.instanceFilePath)
-            val formController =
-                FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
+            val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
 
             val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
             val newFailCount =

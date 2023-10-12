@@ -56,15 +56,15 @@ object FormEntryUseCases {
     }
 
     fun loadBlankForm(
+        form: Form,
         formEntryController: FormEntryController,
-        formMediaDir: File,
         instanceFile: File
-    ): JavaRosaFormController {
+    ): FormController {
         val instanceInit = InstanceInitializationFactory()
         formEntryController.model.form.initialize(true, instanceInit)
 
         return JavaRosaFormController(
-            formMediaDir,
+            File(form.formMediaPath),
             formEntryController,
             instanceFile
         )
@@ -72,19 +72,20 @@ object FormEntryUseCases {
 
     @JvmStatic
     fun loadDraft(
-        formEntryController: FormEntryController,
-        formMediaDir: File,
-        instance: File
+        form: Form,
+        instance: Instance,
+        formEntryController: FormEntryController
     ): FormController {
         val instanceInit = InstanceInitializationFactory()
 
-        importInstance(instance, formEntryController)
+        val instanceFile = File(instance.instanceFilePath)
+        importInstance(instanceFile, formEntryController)
         formEntryController.model.form.initialize(false, instanceInit)
 
         return JavaRosaFormController(
-            formMediaDir,
+            File(form.formMediaPath),
             formEntryController,
-            instance
+            instanceFile
         )
     }
 
