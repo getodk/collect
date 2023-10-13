@@ -63,11 +63,11 @@ class FirstLaunchActivity : LocalizedActivity() {
 
             dontHaveServer.apply {
                 text = SpannableStringBuilder()
-                        .append(getString(org.odk.collect.strings.R.string.dont_have_project))
-                        .append(" ")
-                        .color(getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent)) {
-                            append(getString(org.odk.collect.strings.R.string.try_demo))
-                        }
+                    .append(getString(org.odk.collect.strings.R.string.dont_have_project))
+                    .append(" ")
+                    .color(getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent)) {
+                        append(getString(org.odk.collect.strings.R.string.try_demo))
+                    }
 
                 setOnClickListener {
                     Analytics.log(AnalyticsEvents.TRY_DEMO)
@@ -76,8 +76,8 @@ class FirstLaunchActivity : LocalizedActivity() {
                     projectsDataService.setCurrentProject(Project.DEMO_PROJECT_ID)
 
                     ActivityUtils.startActivityAndCloseAllOthers(
-                            this@FirstLaunchActivity,
-                            MainMenuActivity::class.java
+                        this@FirstLaunchActivity,
+                        MainMenuActivity::class.java
                     )
                 }
             }
