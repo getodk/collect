@@ -8,21 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorSurface">
-
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/collect_app_name"
-            android:src="@drawable/odk_logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/center"
@@ -36,15 +22,26 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5">
 
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/collect_app_name"
+                android:src="@drawable/odk_logo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tagline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
                 android:lines="2"
                 android:text="@string/tagline"
                 android:textAppearance="?textAppearanceHeadline4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/logo" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/configure_via_qr_button"
@@ -102,7 +99,8 @@
             android:id="@+id/dont_have_server"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:paddingHorizontal="@dimen/margin_standard"
             android:textAppearance="?textAppearanceBody2"
             android:fontFamily="sans-serif-medium"
             app:layout_constraintBottom_toBottomOf="parent"
