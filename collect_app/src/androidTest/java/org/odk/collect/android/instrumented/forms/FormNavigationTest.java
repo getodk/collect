@@ -63,7 +63,7 @@ public class FormNavigationTest {
 
     private final FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory = new FormLoaderTask.FormEntryControllerFactory() {
         @Override
-        public FormEntryController create(FormDef formDef) {
+        public FormEntryController create(FormDef formDef, File formMediaDir) {
             return new FormEntryController(new FormEntryModel(formDef));
         }
     };

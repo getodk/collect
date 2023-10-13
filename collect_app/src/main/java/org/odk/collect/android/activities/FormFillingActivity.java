@@ -2076,8 +2076,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             t.cancel(true);
             t.destroy();
 
-            Collect.getInstance().setExternalDataManager(task.getExternalDataManager());
-
             // Set the language if one has already been set in the past
             String[] languageTest = formController.getLanguages();
             if (languageTest != null) {
