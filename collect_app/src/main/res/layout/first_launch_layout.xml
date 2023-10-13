@@ -104,6 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin"
             android:textAppearance="?textAppearanceBody2"
+            android:fontFamily="sans-serif-medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
