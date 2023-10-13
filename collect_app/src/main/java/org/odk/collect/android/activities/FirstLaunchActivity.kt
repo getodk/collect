@@ -1,6 +1,8 @@
 package org.odk.collect.android.activities
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
+import androidx.core.text.color
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.databinding.FirstLaunchLayoutBinding
@@ -10,8 +12,8 @@ import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
-import org.odk.collect.androidshared.ui.GroupClickListener.addOnClickListener
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -59,16 +61,25 @@ class FirstLaunchActivity : LocalizedActivity() {
                 versionInformation.versionToDisplay
             )
 
-            configureLater.addOnClickListener {
-                Analytics.log(AnalyticsEvents.TRY_DEMO)
+            dontHaveServer.apply {
+                text = SpannableStringBuilder()
+                        .append(getString(org.odk.collect.strings.R.string.dont_have_project))
+                        .append(" ")
+                        .color(getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent)) {
+                            append(getString(org.odk.collect.strings.R.string.try_demo))
+                        }
 
-                projectsRepository.save(Project.DEMO_PROJECT)
-                projectsDataService.setCurrentProject(Project.DEMO_PROJECT_ID)
+                setOnClickListener {
+                    Analytics.log(AnalyticsEvents.TRY_DEMO)
 
-                ActivityUtils.startActivityAndCloseAllOthers(
-                    this@FirstLaunchActivity,
-                    MainMenuActivity::class.java
-                )
+                    projectsRepository.save(Project.DEMO_PROJECT)
+                    projectsDataService.setCurrentProject(Project.DEMO_PROJECT_ID)
+
+                    ActivityUtils.startActivityAndCloseAllOthers(
+                            this@FirstLaunchActivity,
+                            MainMenuActivity::class.java
+                    )
+                }
             }
         }
     }

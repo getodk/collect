@@ -103,30 +103,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin"
-            android:text="@string/dont_have_project"
             android:textAppearance="?textAppearanceBody2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/try_collect"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <TextView
-            android:id="@+id/try_collect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_extra_small"
-            android:text="@string/try_demo"
-            android:textAppearance="@style/TextAppearance.Collect.Link"
-            app:layout_constraintBottom_toBottomOf="@+id/dont_have_server"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/dont_have_server"
-            app:layout_constraintTop_toTopOf="@+id/dont_have_server" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/configureLater"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:constraint_referenced_ids="dont_have_server,try_collect" />
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Don\'t have a project yet? Try a demo"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
