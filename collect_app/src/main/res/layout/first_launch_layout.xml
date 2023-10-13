@@ -106,7 +106,6 @@
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="Don\'t have a project yet? Try a demo"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
