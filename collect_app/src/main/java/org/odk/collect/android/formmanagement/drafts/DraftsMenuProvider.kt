@@ -1,9 +1,9 @@
 package org.odk.collect.android.formmanagement.drafts
 
+import android.content.Context
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.activity.ComponentActivity
 import androidx.core.view.MenuProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
@@ -11,18 +11,11 @@ import org.odk.collect.strings.R.plurals
 import org.odk.collect.strings.R.string
 
 class DraftsMenuProvider(
-    private val activity: ComponentActivity,
-    private val bulkFinalizationViewModel: BulkFinalizationViewModel
+    private val context: Context,
+    private val onFinalizeAll: Runnable
 ) : MenuProvider {
 
-    private var draftsCount: Int? = null
-
-    init {
-        bulkFinalizationViewModel.draftsCount.observe(activity) {
-            draftsCount = it
-            activity.invalidateOptionsMenu()
-        }
-    }
+    var draftsCount: Int? = null
 
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.drafts, menu)
@@ -36,21 +29,22 @@ class DraftsMenuProvider(
 
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         if (menuItem.itemId == R.id.bulk_finalize) {
-            val draftsCount = bulkFinalizationViewModel.draftsCount.value!!
-            val dialogTitle = activity.resources.getQuantityString(
-                plurals.bulk_finalize_confirmation,
-                draftsCount,
-                draftsCount
-            )
+            draftsCount?.also {
+                val dialogTitle = context.resources.getQuantityString(
+                    plurals.bulk_finalize_confirmation,
+                    it,
+                    it
+                )
 
-            MaterialAlertDialogBuilder(activity)
-                .setTitle(dialogTitle)
-                .setMessage(string.bulk_finalize_explanation)
-                .setPositiveButton(string.finalize) { _, _ ->
-                    bulkFinalizationViewModel.finalizeAllDrafts()
-                }
-                .setNegativeButton(string.cancel, null)
-                .show()
+                MaterialAlertDialogBuilder(context)
+                    .setTitle(dialogTitle)
+                    .setMessage(string.bulk_finalize_explanation)
+                    .setPositiveButton(string.finalize) { _, _ ->
+                        onFinalizeAll.run()
+                    }
+                    .setNegativeButton(string.cancel, null)
+                    .show()
+            }
 
             return true
         }

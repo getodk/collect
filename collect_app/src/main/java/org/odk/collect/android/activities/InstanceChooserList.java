@@ -149,13 +149,17 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                 instancesDataService
         );
 
-        DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(this, bulkFinalizationViewModel);
-        addMenuProvider(draftsMenuProvider);
-
         MaterialProgressDialogFragment.showOn(this, bulkFinalizationViewModel.isFinalizing(), getSupportFragmentManager(), () -> {
             MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
             dialog.setMessage("Finalizing drafts...");
             return dialog;
+        });
+
+        DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(this, bulkFinalizationViewModel::finalizeAllDrafts);
+        addMenuProvider(draftsMenuProvider);
+        bulkFinalizationViewModel.getDraftsCount().observe(this, draftsCount -> {
+            draftsMenuProvider.setDraftsCount(draftsCount);
+            invalidateMenu();
         });
 
         bulkFinalizationViewModel.getFinalizedForms().observe(
