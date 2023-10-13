@@ -35,8 +35,8 @@
             <include
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/google_drive_deprecation_banner"
-                layout="@layout/google_drive_deprecation_banner"
+                android:id="@+id/deprecation_banner"
+                layout="@layout/deprecation_banner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/map_box_initialization_fragment" />
@@ -49,7 +49,7 @@
                 app:layout_constraintWidth_max="@dimen/max_content_width"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/google_drive_deprecation_banner" />
+                app:layout_constraintTop_toBottomOf="@id/deprecation_banner" />
 
             <org.odk.collect.android.mainmenu.MainMenuButton
                 android:id="@+id/review_data"

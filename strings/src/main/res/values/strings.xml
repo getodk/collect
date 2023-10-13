@@ -1215,7 +1215,10 @@
     <string name="view_form">View</string>
     <string name="close_snackbar">Close snackbar</string>
 
-    <string name="edit_finalized_form_warning">In later releases, you will not be able to edit finalized forms. Save forms as draft to edit them later.\n\nYou can check for errors in a draft form by tapping the three dots (⋮) and then Check for errors.</string>
+    <string name="edit_finalized_form_warning">In later versions, finalized forms will no longer be editable. Save forms as draft to edit them later.\n\nYou can check for errors in a draft form by tapping the three dots (⋮) and then Check for errors.</string>
+
+    <!-- Message showed on main menu to inform users that the ability to edit finalized forms is going away -->
+    <string name="edit_finalized_form_deprecation_message">In later versions, finalized forms will no longer be editable.</string>
 
     <!-- Label for option that finalizes all the forms the user is currently looking at -->
     <string name="finalize_all_forms" oat:toReview="true">Finalize all forms</string>

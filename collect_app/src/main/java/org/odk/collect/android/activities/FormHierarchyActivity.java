@@ -15,6 +15,7 @@
 package org.odk.collect.android.activities;
 
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getPreviousLevel;
+import static org.odk.collect.androidshared.data.AppStateKt.getState;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -196,7 +197,8 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 fusedLocationClient,
                 permissionsProvider,
                 autoSendSettingsProvider,
-                instancesRepositoryProvider
+                instancesRepositoryProvider,
+                getState(getApplication())
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

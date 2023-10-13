@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry.saving;
 
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED;
 import static org.odk.collect.android.tasks.SaveFormToDisk.SAVED_AND_EXIT;
+import static org.odk.collect.android.utilities.ApplicationConstants.AppStateKeys.EDITED_FINALIZED_FORM;
 import static org.odk.collect.shared.strings.StringUtils.isBlank;
 
 import android.net.Uri;
@@ -16,6 +17,8 @@ import androidx.lifecycle.ViewModel;
 
 import org.apache.commons.io.IOUtils;
 import org.javarosa.form.api.FormEntryController;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.externaldata.ExternalDataManager;
@@ -29,6 +32,7 @@ import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
+import org.odk.collect.androidshared.data.AppState;
 import org.odk.collect.androidshared.livedata.LiveDataUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -84,8 +88,9 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private final EntitiesRepository entitiesRepository;
     private final InstancesRepository instancesRepository;
     private Instance instance;
+    private final AppState appState;
 
-    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
+    public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, CurrentProjectProvider currentProjectProvider, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository, AppState appState) {
         this.stateHandle = stateHandle;
         this.clock = clock;
         this.formSaver = formSaver;
@@ -95,6 +100,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         this.currentProjectProvider = currentProjectProvider;
         this.entitiesRepository = entitiesRepository;
         this.instancesRepository = instancesRepository;
+        this.appState = appState;
 
         if (stateHandle.get(ORIGINAL_FILES) != null) {
             originalFiles = stateHandle.get(ORIGINAL_FILES);
@@ -110,6 +116,11 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
+        if (instance != null && instance.getStatus().equals(Instance.STATUS_COMPLETE)) {
+            appState.set(EDITED_FINALIZED_FORM, true);
+            Analytics.log(AnalyticsEvents.EDIT_FINALIZED_FORM, "form");
+        }
+
         if (isSaving() || formController == null) {
             return;
         }

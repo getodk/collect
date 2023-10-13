@@ -63,8 +63,8 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.strings.R.string;
 import org.odk.collect.strings.R.plurals;
+import org.odk.collect.strings.R.string;
 
 import java.util.Arrays;
 
@@ -264,8 +264,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         if (status.equals(Instance.STATUS_INCOMPLETE)) {
             AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_NON_FINALIZED_FORM, formId, formTitle);
-        } else if (status.equals(Instance.STATUS_COMPLETE)) {
-            AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_FINALIZED_FORM, formId, formTitle);
         }
     }
 

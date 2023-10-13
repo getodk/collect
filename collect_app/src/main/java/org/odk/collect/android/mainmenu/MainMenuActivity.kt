@@ -30,8 +30,10 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectIconView
 import org.odk.collect.android.projects.ProjectSettingsDialog
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.ApplicationConstants.AppStateKeys.EDITED_FINALIZED_FORM
 import org.odk.collect.android.utilities.PlayServicesChecker
 import org.odk.collect.android.utilities.ThemeUtils
+import org.odk.collect.androidshared.data.getState
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.SnackbarUtils
@@ -41,6 +43,7 @@ import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
+import org.odk.collect.strings.R.string
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
@@ -130,7 +133,7 @@ class MainMenuActivity : LocalizedActivity() {
         currentProjectViewModel.refresh()
         mainMenuViewModel.refreshInstances()
         setButtonsVisibility()
-        manageGoogleDriveDeprecationBanner()
+        setupDeprecationBanner()
     }
 
     private fun setButtonsVisibility() {
@@ -151,7 +154,7 @@ class MainMenuActivity : LocalizedActivity() {
         (projectsMenuItem.actionView as ProjectIconView).apply {
             project = currentProjectViewModel.currentProject.value
             setOnClickListener { onOptionsItemSelected(projectsMenuItem) }
-            contentDescription = getString(org.odk.collect.strings.R.string.projects)
+            contentDescription = getString(string.projects)
         }
         return super.onPrepareOptionsMenu(menu)
     }
@@ -275,7 +278,7 @@ class MainMenuActivity : LocalizedActivity() {
     private fun initAppName() {
         binding.appName.text = String.format(
             "%s %s",
-            getString(org.odk.collect.strings.R.string.collect_app_name),
+            getString(string.collect_app_name),
             mainMenuViewModel.version
         )
 
@@ -287,18 +290,31 @@ class MainMenuActivity : LocalizedActivity() {
         }
     }
 
-    private fun manageGoogleDriveDeprecationBanner() {
+    private fun setupDeprecationBanner() {
         val unprotectedSettings = settingsProvider.getUnprotectedSettings()
         val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
-        if (ProjectKeys.PROTOCOL_GOOGLE_SHEETS == protocol) {
-            binding.googleDriveDeprecationBanner.root.visibility = View.VISIBLE
-            binding.googleDriveDeprecationBanner.learnMoreButton.setOnClickListener {
+        val usingGoogleDrive = ProjectKeys.PROTOCOL_GOOGLE_SHEETS == protocol
+        val editedFinalizedForm =
+            application.getState().get<Boolean>(EDITED_FINALIZED_FORM) ?: false
+
+        if (usingGoogleDrive) {
+            binding.deprecationBanner.root.visibility = View.VISIBLE
+            binding.deprecationBanner.message.setText(string.google_drive_deprecation_message)
+            binding.deprecationBanner.learnMoreButton.setOnClickListener {
                 val intent = Intent(this, WebViewActivity::class.java)
                 intent.putExtra("url", "https://forum.getodk.org/t/40097")
                 startActivity(intent)
             }
+        } else if (editedFinalizedForm) {
+            binding.deprecationBanner.root.visibility = View.VISIBLE
+            binding.deprecationBanner.message.setText(string.edit_finalized_form_deprecation_message)
+            binding.deprecationBanner.learnMoreButton.setOnClickListener {
+                val intent = Intent(this, WebViewActivity::class.java)
+                intent.putExtra("url", "https://forum.getodk.org/t/42007")
+                startActivity(intent)
+            }
         } else {
-            binding.googleDriveDeprecationBanner.root.visibility = View.GONE
+            binding.deprecationBanner.root.visibility = View.GONE
         }
     }
 
