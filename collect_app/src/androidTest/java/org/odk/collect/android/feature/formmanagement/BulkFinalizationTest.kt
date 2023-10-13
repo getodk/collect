@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.EditSavedFormPage
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
@@ -37,6 +38,7 @@ class BulkFinalizationTest {
             .clickDrafts(2)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 2)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
@@ -62,6 +64,7 @@ class BulkFinalizationTest {
             .clickDrafts(2)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_partial_success, 1, 1)
             .assertText("Two Question Required")
             .pressBack(MainMenuPage())
@@ -82,10 +85,12 @@ class BulkFinalizationTest {
             .clickDrafts(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
 
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
     }
 
@@ -104,6 +109,7 @@ class BulkFinalizationTest {
             .clickDrafts()
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
             .assertText("One Question")
             .pressBack(MainMenuPage())
@@ -123,6 +129,7 @@ class BulkFinalizationTest {
             .clickDrafts(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
             .assertText("encrypted")
             .pressBack(MainMenuPage())
@@ -143,6 +150,7 @@ class BulkFinalizationTest {
             .clickDrafts(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 1)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
@@ -162,6 +170,7 @@ class BulkFinalizationTest {
             .clickDrafts(1)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
             .pressBack(MainMenuPage())
 
         testDependencies.scheduler.runDeferredTasks()
@@ -170,5 +179,22 @@ class BulkFinalizationTest {
             .assertText("One Question")
 
         assertThat(testDependencies.server.submissions.size, equalTo(1))
+    }
+
+    @Test
+    fun canCancel() {
+        rule.withProject("http://example.com")
+            .copyForm("one-question.xml", "example.com")
+            .startBlankForm("One Question")
+            .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
+
+            .clickDrafts(1)
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .clickOnButtonInDialog(string.cancel, EditSavedFormPage())
+            .assertText("One Question")
+            .pressBack(MainMenuPage())
+
+            .assertNumberOfEditableForms(1)
     }
 }
