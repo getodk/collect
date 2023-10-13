@@ -3,6 +3,7 @@ package org.odk.collect.android.activities
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -88,7 +89,7 @@ class FirstLaunchActivityTest {
                         org.odk.collect.strings.R.string.collect_app_name
                     ) + " vfake"
                 )
-            ).check(matches(isDisplayed()))
+            ).perform(scrollTo()).check(matches(isDisplayed()))
         }
     }
 }
