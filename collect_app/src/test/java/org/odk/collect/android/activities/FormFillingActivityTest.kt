@@ -240,7 +240,7 @@ class FormFillingActivityTest {
         )
 
         val formsRepository = component.formsRepositoryProvider().get()
-        val form = formsRepository.save(form(formFile = formFile))
+        val form = formsRepository.save(form(formFilePath = formFile.absolutePath))
         return form
     }
 

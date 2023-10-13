@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<h:html xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml"
+    xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms"
+    xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.w3.org/2002/xforms">
+    <h:head>
+        <h:title>pull_data</h:title>
+        <model odk:xforms-version="1.0.0">
+            <instance>
+                <data id="pull_data">
+                    <fruit />
+                    <note_country />
+                    <meta>
+                        <instanceID />
+                    </meta>
+                </data>
+            </instance>
+            <instance id="fruits" src="jr://file-csv/fruits.csv" />
+            <bind calculate="pulldata('fruits', 'name', 'name_key', 'mango')" nodeset="/data/fruit"
+                type="string" />
+            <bind nodeset="/data/note_country" readonly="true()" type="string" />
+            <bind nodeset="/data/meta/instanceID" readonly="true()" type="string"
+                jr:preload="uid" />
+        </model>
+    </h:head>
+    <h:body>
+        <input ref="/data/note_country">
+            <label>The fruit <output value=" /data/fruit " /> is pulled csv data.
+            </label>
+        </input>
+    </h:body>
+</h:html>

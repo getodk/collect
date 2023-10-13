@@ -1,11 +1,12 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
+import org.odk.collect.android.application.Collect
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
-import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.android.utilities.ExternalizableFormDefCache
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidshared.data.AppState
@@ -61,32 +62,38 @@ class InstancesDataService(
         )
 
         val totalFailed = instances.fold(0) { failCount, instance ->
-            val form = formsRepository.getAllByFormId(instance.formId)[0]
-            val xForm = File(form.formFilePath)
-            val formMediaDir = FileUtils.getFormMediaDir(xForm)
-            val formDef = FormEntryUseCases.loadFormDef(xForm, projectRootDir, formMediaDir)!!
+            val (formDef, form) = FormEntryUseCases.loadFormDef(
+                instance,
+                formsRepository,
+                projectRootDir,
+                ExternalizableFormDefCache()
+            )
 
-            val formEntryController = CollectFormEntryControllerFactory().create(formDef)
-            val instanceFile = File(instance.instanceFilePath)
-            val formController =
-                FormEntryUseCases.loadDraft(formEntryController, formMediaDir, instanceFile)
+            val formMediaDir = File(form.formMediaPath)
+            val formEntryController =
+                CollectFormEntryControllerFactory().create(formDef, formMediaDir)
+            val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
 
             val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
-            if (FormEntryUseCases.getSavePoint(formController, File(cacheDir)) == null) {
-                val finalizedInstance = FormEntryUseCases.finalizeDraft(
-                    formController,
-                    instancesRepository,
-                    entitiesRepository
-                )
+            val newFailCount =
+                if (FormEntryUseCases.getSavePoint(formController, File(cacheDir)) == null) {
+                    val finalizedInstance = FormEntryUseCases.finalizeDraft(
+                        formController,
+                        instancesRepository,
+                        entitiesRepository
+                    )
 
-                if (finalizedInstance == null) {
-                    failCount + 1
+                    if (finalizedInstance == null) {
+                        failCount + 1
+                    } else {
+                        failCount
+                    }
                 } else {
-                    failCount
+                    failCount + 1
                 }
-            } else {
-                failCount + 1
-            }
+
+            Collect.getInstance().externalDataManager?.close()
+            newFailCount
         }
 
         update()

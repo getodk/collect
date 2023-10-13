@@ -42,7 +42,7 @@ public class FormLoaderTaskTest {
 
     private final FormEntryControllerFactory formEntryControllerFactory = new FormEntryControllerFactory() {
         @Override
-        public FormEntryController create(FormDef formDef) {
+        public FormEntryController create(FormDef formDef, File formMediaDir) {
             return new FormEntryController(new FormEntryModel(formDef));
         }
     };
