@@ -1,10 +1,13 @@
 package org.odk.collect.android.feature.formmanagement
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
@@ -16,15 +19,16 @@ import org.odk.collect.strings.R.string
 @RunWith(AndroidJUnit4::class)
 class BulkFinalizationTest {
 
-    val rule = CollectTestRule()
+    val testDependencies = TestDependencies()
+    val rule = CollectTestRule(useDemoProject = false)
 
     @get:Rule
-    val chain: RuleChain = TestRuleChain.chain().around(rule)
+    val chain: RuleChain = TestRuleChain.chain(testDependencies).around(rule)
 
     @Test
     fun canBulkFinalizeDrafts() {
-        rule.startAtMainMenu()
-            .copyForm("one-question.xml")
+        rule.withProject("http://example.com")
+            .copyForm("one-question.xml", "example.com")
             .startBlankForm("One Question")
             .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
             .startBlankForm("One Question")
@@ -42,8 +46,8 @@ class BulkFinalizationTest {
 
     @Test
     fun whenThereAreDraftsWithConstraintViolations_marksFormsAsHavingErrors() {
-        rule.startAtMainMenu()
-            .copyForm("two-question-required.xml")
+        rule.withProject("http://example.com")
+            .copyForm("two-question-required.xml", "example.com")
             .startBlankForm("Two Question Required")
             .fillOut(QuestionAndAnswer("What is your name?", "Dan"))
             .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
@@ -68,8 +72,8 @@ class BulkFinalizationTest {
 
     @Test
     fun whenADraftPreviouslyHadConstraintViolations_marksFormsAsHavingErrors() {
-        rule.startAtMainMenu()
-            .copyForm("two-question-required.xml")
+        rule.withProject("http://example.com")
+            .copyForm("two-question-required.xml", "example.com")
             .startBlankForm("Two Question Required")
             .fillOut(QuestionAndAnswer("What is your name?", "Dan"))
             .pressBack(SaveOrDiscardFormDialog(MainMenuPage()))
@@ -87,8 +91,8 @@ class BulkFinalizationTest {
 
     @Test
     fun doesNotFinalizeInstancesWithSavePoints() {
-        rule.startAtMainMenu()
-            .copyForm("one-question.xml")
+        rule.withProject("http://example.com")
+            .copyForm("one-question.xml", "example.com")
             .startBlankForm("One Question")
             .swipeToEndScreen()
             .clickSaveAsDraft()
@@ -110,8 +114,8 @@ class BulkFinalizationTest {
 
     @Test
     fun doesNotFinalizeInstancesFromEncryptedForms() {
-        rule.startAtMainMenu()
-            .copyForm("encrypted.xml")
+        rule.withProject("http://example.com")
+            .copyForm("encrypted.xml", "example.com")
             .startBlankForm("encrypted")
             .swipeToEndScreen()
             .clickSaveAsDraft()
@@ -129,8 +133,8 @@ class BulkFinalizationTest {
 
     @Test
     fun doesNotFinalizeAlreadyFinalizedInstances() {
-        rule.startAtMainMenu()
-            .copyForm("one-question.xml")
+        rule.withProject("http://example.com")
+            .copyForm("one-question.xml", "example.com")
             .startBlankForm("One Question")
             .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
             .startBlankForm("One Question")
@@ -144,5 +148,27 @@ class BulkFinalizationTest {
             .pressBack(MainMenuPage())
 
             .assertNumberOfFinalizedForms(2)
+    }
+
+    @Test
+    fun whenAutoSendIsEnabled_draftsAreSentAfterFinalizing() {
+        val mainMenuPage = rule.withProject(testDependencies.server.url)
+            .enableAutoSend()
+
+            .copyForm("one-question.xml", testDependencies.server.hostName)
+            .startBlankForm("One Question")
+            .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
+
+            .clickDrafts(1)
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .pressBack(MainMenuPage())
+
+        testDependencies.scheduler.runDeferredTasks()
+
+        mainMenuPage.clickViewSentForm(1)
+            .assertText("One Question")
+
+        assertThat(testDependencies.server.submissions.size, equalTo(1))
     }
 }

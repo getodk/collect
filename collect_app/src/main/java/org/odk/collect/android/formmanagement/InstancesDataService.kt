@@ -2,8 +2,10 @@ package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
+import org.odk.collect.android.projects.CurrentProjectProvider
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
@@ -19,6 +21,8 @@ class InstancesDataService(
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
     private val storagePathProvider: StoragePathProvider,
+    private val instanceSubmitScheduler: InstanceSubmitScheduler,
+    private val currentProjectProvider: CurrentProjectProvider,
     private val onUpdate: () -> Unit
 ) {
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
@@ -98,6 +102,8 @@ class InstancesDataService(
         }
 
         update()
+        instanceSubmitScheduler.scheduleSubmit(currentProjectProvider.getCurrentProject().uuid)
+
         return result.copy(successCount = instances.size - result.failureCount)
     }
 
