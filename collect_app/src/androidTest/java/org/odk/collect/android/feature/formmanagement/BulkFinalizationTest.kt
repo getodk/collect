@@ -36,9 +36,8 @@ class BulkFinalizationTest {
             .fillOutAndSave(QuestionAndAnswer("what is your age", "98"))
 
             .clickDrafts(2)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickFinalizeAll(2)
+            .clickFinalize()
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 2)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
@@ -62,9 +61,8 @@ class BulkFinalizationTest {
             )
 
             .clickDrafts(2)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickFinalizeAll(2)
+            .clickFinalize()
             .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_partial_success, 1, 1)
             .assertText("Two Question Required")
             .pressBack(MainMenuPage())
@@ -83,9 +81,8 @@ class BulkFinalizationTest {
             .clickSaveChanges()
 
             .clickDrafts(1)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickFinalizeAll(1)
+            .clickFinalize()
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
 
             .clickOptionsIcon(string.finalize_all_forms)
@@ -106,10 +103,9 @@ class BulkFinalizationTest {
             .clickOnForm("One Question")
             .killAndReopenApp(MainMenuPage())
 
-            .clickDrafts()
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickDrafts(1)
+            .clickFinalizeAll(1)
+            .clickFinalize()
             .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
             .assertText("One Question")
             .pressBack(MainMenuPage())
@@ -127,9 +123,8 @@ class BulkFinalizationTest {
             .clickSaveAsDraft()
 
             .clickDrafts(1)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickFinalizeAll(1)
+            .clickFinalize()
             .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
             .assertText("encrypted")
             .pressBack(MainMenuPage())
@@ -148,9 +143,8 @@ class BulkFinalizationTest {
             .fillOutAndFinalize(QuestionAndAnswer("what is your age", "98"))
 
             .clickDrafts(1)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickFinalizeAll(1)
+            .clickFinalize()
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_success, 1)
             .assertTextDoesNotExist("One Question")
             .pressBack(MainMenuPage())
@@ -168,9 +162,8 @@ class BulkFinalizationTest {
             .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
 
             .clickDrafts(1)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickFinalizeAll(1)
+            .clickFinalize()
             .pressBack(MainMenuPage())
 
         testDependencies.scheduler.runDeferredTasks()
@@ -189,9 +182,8 @@ class BulkFinalizationTest {
             .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
 
             .clickDrafts(1)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.cancel, EditSavedFormPage())
+            .clickFinalizeAll(1)
+            .clickCancel()
             .assertText("One Question")
             .pressBack(MainMenuPage())
 

@@ -19,6 +19,8 @@ class BulkFinalizationViewModel(
     private val _isFinalizing = MutableNonNullLiveData(false)
     val isFinalizing: NonNullLiveData<Boolean> = _isFinalizing
 
+    val draftsCount = instancesDataService.editableCount.value
+
     fun finalizeAllDrafts() {
         _isFinalizing.value = true
 

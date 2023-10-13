@@ -1249,4 +1249,10 @@
 
     <!-- Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel -->
     <string name="bulk_finalize_explanation" oat:toReview="true">Once you finalize all forms, they will be in "Ready to send" and you will not be able to make edits. Any forms that have errors will not be finalized.\n\nYou will not be able to undo this action.</string>
+
+    <!-- Dialog title that asks if the user wants to finalize all drafts -->
+    <plurals name="bulk_finalize_confirmation" oat:toReview="true">
+        <item quantity="one">Do you want to finalize %d form?</item>
+        <item quantity="other">Do you want to finalize %d forms?</item>
+    </plurals>
 </resources>

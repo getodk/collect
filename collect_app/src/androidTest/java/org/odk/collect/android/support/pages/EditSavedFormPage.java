@@ -16,13 +16,6 @@
 
 package org.odk.collect.android.support.pages;
 
-import android.widget.RelativeLayout;
-
-import androidx.appcompat.widget.Toolbar;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -37,11 +30,19 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
+import android.widget.RelativeLayout;
+
+import androidx.appcompat.widget.Toolbar;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.InstanceListCursorAdapter;
+import org.odk.collect.strings.R.string;
+
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     @Override
     public EditSavedFormPage assertOnPage() {
-        assertText(org.odk.collect.strings.R.string.review_data);
+        assertText(string.review_data);
         return this;
     }
 
@@ -92,5 +93,12 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     public EditSavedFormPage searchInBar(String query) {
         onView(withId(androidx.appcompat.R.id.search_src_text)).perform(replaceText(query));
         return this;
+    }
+
+    public BulkFinalizationConfirmationDialogPage clickFinalizeAll(int count) {
+        this.clickOptionsIcon(string.finalize_all_forms)
+                .clickOnString(string.finalize_all_forms);
+
+        return new BulkFinalizationConfirmationDialogPage(count).assertOnPage();
     }
 }
