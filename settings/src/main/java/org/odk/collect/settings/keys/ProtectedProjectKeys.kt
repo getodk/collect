@@ -40,7 +40,7 @@ object ProtectedProjectKeys {
     const val KEY_JUMP_TO = "jump_to"
     const val KEY_SAVE_MID = "save_mid"
     const val KEY_SAVE_AS_DRAFT = "save_as_draft"
-    const val KEY_FINALIZE = "finalize"
+    const val KEY_FINALIZE_IN_FORM_ENTRY = "finalize_in_form_entry"
 
     const val ALLOW_OTHER_WAYS_OF_EDITING_FORM = "allow_other_ways_of_editing_form"
     const val KEY_BULK_FINALIZE = "bulk_finalize"
@@ -82,7 +82,7 @@ object ProtectedProjectKeys {
         KEY_JUMP_TO,
         KEY_SAVE_MID,
         KEY_SAVE_AS_DRAFT,
-        KEY_FINALIZE,
+        KEY_FINALIZE_IN_FORM_ENTRY,
         ALLOW_OTHER_WAYS_OF_EDITING_FORM,
         KEY_BULK_FINALIZE
     )
