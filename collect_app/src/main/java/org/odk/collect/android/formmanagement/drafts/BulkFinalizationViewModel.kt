@@ -8,10 +8,13 @@ import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
+import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.ProtectedProjectKeys
 
 class BulkFinalizationViewModel(
     private val scheduler: Scheduler,
-    private val instancesDataService: InstancesDataService
+    private val instancesDataService: InstancesDataService,
+    private val settingsProvider: SettingsProvider
 ) {
     private val _finalizedForms = MutableLiveData<Consumable<FinalizeAllResult>>()
     val finalizedForms: LiveData<Consumable<FinalizeAllResult>> = _finalizedForms
@@ -20,6 +23,8 @@ class BulkFinalizationViewModel(
     val isFinalizing: NonNullLiveData<Boolean> = _isFinalizing
 
     val draftsCount = instancesDataService.editableCount
+    val isEnabled =
+        settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_BULK_FINALIZE)
 
     fun finalizeAllDrafts() {
         _isFinalizing.value = true

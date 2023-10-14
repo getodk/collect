@@ -43,6 +43,7 @@ object ProtectedProjectKeys {
     const val KEY_FINALIZE = "finalize"
 
     const val ALLOW_OTHER_WAYS_OF_EDITING_FORM = "allow_other_ways_of_editing_form"
+    const val KEY_BULK_FINALIZE = "bulk_finalize"
 
     fun allKeys() = listOf(
         KEY_ADMIN_PW,
@@ -82,6 +83,7 @@ object ProtectedProjectKeys {
         KEY_SAVE_MID,
         KEY_SAVE_AS_DRAFT,
         KEY_FINALIZE,
-        ALLOW_OTHER_WAYS_OF_EDITING_FORM
+        ALLOW_OTHER_WAYS_OF_EDITING_FORM,
+        KEY_BULK_FINALIZE
     )
 }

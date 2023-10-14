@@ -8,9 +8,11 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.AccessControlPage
 import org.odk.collect.android.support.pages.EditSavedFormPage
 import org.odk.collect.android.support.pages.FormEntryPage.QuestionAndAnswer
 import org.odk.collect.android.support.pages.MainMenuPage
+import org.odk.collect.android.support.pages.ProjectSettingsPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -188,5 +190,24 @@ class BulkFinalizationTest {
             .pressBack(MainMenuPage())
 
             .assertNumberOfEditableForms(1)
+    }
+
+    @Test
+    fun canBeDisabled() {
+        rule.withProject("http://example.com")
+            .openProjectSettingsDialog()
+            .clickSettings()
+            .clickAccessControl()
+            .clickFormEntrySettings()
+            .clickOnString(string.finalize_all_forms)
+            .pressBack(AccessControlPage())
+            .pressBack(ProjectSettingsPage())
+            .pressBack(MainMenuPage())
+
+            .copyForm("one-question.xml", "example.com")
+            .startBlankForm("One Question")
+            .fillOutAndSave(QuestionAndAnswer("what is your age", "1892"))
+            .clickDrafts()
+            .assertNoOptionsMenu()
     }
 }

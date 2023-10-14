@@ -1255,4 +1255,7 @@
         <item quantity="one">Do you want to finalize %d form?</item>
         <item quantity="other">Do you want to finalize %d forms?</item>
     </plurals>
+
+    <!-- Title of section of features that the user can uncheck to hide from the Drafts screen -->
+    <string name="uncheck_to_hide_from_drafts">Uncheck to hide from Drafts</string>
 </resources>

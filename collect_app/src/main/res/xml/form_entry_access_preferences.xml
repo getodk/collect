@@ -44,4 +44,11 @@
             android:title="@string/finalize"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/uncheck_to_hide_from_drafts">
+        <CheckBoxPreference
+            android:key="bulk_finalize"
+            android:title="@string/finalize_all_forms"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>
