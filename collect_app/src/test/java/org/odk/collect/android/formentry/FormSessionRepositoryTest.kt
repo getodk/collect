@@ -51,8 +51,9 @@ abstract class FormSessionRepositoryTest {
         val formController = mock<FormController>()
         val form = mock<Form>()
         formSessionRepository.set(id, formController, form)
+        assertThat(formSessionRepository.has(id), equalTo(true))
 
         formSessionRepository.clear(id)
-        assertThat(formSessionRepository.get(id).getOrAwaitValue(), equalTo(null))
+        assertThat(formSessionRepository.has(id), equalTo(false))
     }
 }

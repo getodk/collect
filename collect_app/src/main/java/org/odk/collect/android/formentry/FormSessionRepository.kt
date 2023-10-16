@@ -19,6 +19,8 @@ interface FormSessionRepository {
     }
 
     fun set(id: String, formController: FormController, form: Form, instance: Instance?)
+
+    fun has(id: String): Boolean
 }
 
 class AppStateFormSessionRepository(application: Application) : FormSessionRepository {
@@ -39,6 +41,10 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
 
     override fun clear(id: String) {
         appState.clear(getKey(id))
+    }
+
+    override fun has(id: String): Boolean {
+        return appState.has(getKey(id))
     }
 
     private fun getLiveData(id: String) =
