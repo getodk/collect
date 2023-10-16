@@ -1,6 +1,8 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
@@ -80,8 +82,14 @@ class InstancesDataService(
             val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
 
             val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
-            val needsEncrypted = form.basE64RSAPublicKey == null
-            val newResult = if (savePoint == null && needsEncrypted) {
+            val needsEncrypted = form.basE64RSAPublicKey != null
+            val newResult = if (savePoint != null) {
+                Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)
+                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+            } else if (needsEncrypted) {
+                Analytics.log(AnalyticsEvents.BULK_FINALIZE_ENCRYPTED_FORM)
+                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+            } else {
                 val finalizedInstance = FormEntryUseCases.finalizeDraft(
                     formController,
                     instancesRepository,
@@ -93,8 +101,6 @@ class InstancesDataService(
                 } else {
                     result
                 }
-            } else {
-                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
             }
 
             Collect.getInstance().externalDataManager?.close()
