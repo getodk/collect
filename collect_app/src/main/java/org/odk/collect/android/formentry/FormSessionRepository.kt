@@ -38,7 +38,7 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
     }
 
     override fun clear(id: String) {
-        getLiveData(id).value = null
+        appState.clear(getKey(id))
     }
 
     private fun getLiveData(id: String) =
