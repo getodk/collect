@@ -163,4 +163,14 @@ object AnalyticsEvents {
      */
     const val PERMISSIONS_DIALOG_CANCEL = "PermissionsDialogCancel"
     const val PERMISSIONS_DIALOG_OK = "PermissionsDialogOK"
+
+    /**
+     * Tracks how often form-level auto-delete setting is used
+     */
+    const val FORM_LEVEL_AUTO_DELETE = "FormLevelAutoDelete"
+
+    /**
+     * Tracks how often form-level auto-send setting is used
+     */
+    const val FORM_LEVEL_AUTO_SEND = "FormLevelAutoSend"
 }
