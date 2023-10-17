@@ -3,9 +3,8 @@ package org.odk.collect.material
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -13,6 +12,7 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
+import org.odk.collect.material.databinding.PillBinding
 
 /**
  * Implementation of "pills" present on the Material 3 website and its examples, but not
@@ -25,14 +25,15 @@ class MaterialPill(context: Context, attrs: AttributeSet?) :
     var text: String? = null
         set(value) {
             field = value
-            findViewById<TextView>(R.id.text).text = text
+            binding.text.text = text
         }
 
     private val shapeAppearanceModel =
         ShapeAppearanceModel.builder(context, getShapeAppearance(context), -1).build()
 
+    val binding = PillBinding.inflate(LayoutInflater.from(context), this, true)
+
     init {
-        inflate(context, R.layout.pill, this)
         background = createMaterialShapeDrawable(getDefaultBackgroundColor(context))
     }
 
@@ -42,11 +43,11 @@ class MaterialPill(context: Context, attrs: AttributeSet?) :
 
     fun setIcon(@DrawableRes id: Int) {
         val drawable = ResourcesCompat.getDrawable(resources, id, context.theme)
-        findViewById<ImageView>(R.id.icon).setImageDrawable(drawable)
+        binding.icon.setImageDrawable(drawable)
     }
 
     fun setIconTint(@ColorInt color: Int) {
-        findViewById<ImageView>(R.id.icon).setColorFilter(color)
+        binding.icon.setColorFilter(color)
     }
 
     fun setPillBackgroundColor(@ColorInt color: Int) {
@@ -54,7 +55,7 @@ class MaterialPill(context: Context, attrs: AttributeSet?) :
     }
 
     fun setTextColor(@ColorInt color: Int) {
-        findViewById<TextView>(R.id.text).setTextColor(color)
+        binding.text.setTextColor(color)
     }
 
     private fun getShapeAppearance(context: Context) = getThemeAttributeValue(
