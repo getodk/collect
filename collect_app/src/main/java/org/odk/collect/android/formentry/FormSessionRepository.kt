@@ -44,6 +44,7 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
      * See: https://github.com/getodk/collect/issues/5777
      */
     override fun clear(id: String) {
+        getLiveData(id).value = null
         appState.clear(getKey(id))
     }
 

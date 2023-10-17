@@ -26,6 +26,7 @@ class InMemFormSessionRepository : FormSessionRepository {
     }
 
     override fun clear(id: String) {
+        getLiveData(id).value = null
         map.remove(id)
     }
 
