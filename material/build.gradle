@@ -36,6 +36,11 @@ android {
             includeAndroidResources = true
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     namespace 'org.odk.collect.material'
 }
 

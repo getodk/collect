@@ -8,21 +8,13 @@
 
     <!-- Material Design reference: https://material.io/design/components/lists.html#specs -->
 
-    <com.google.android.material.textview.MaterialTextView
+    <org.odk.collect.material.MaterialPill
         android:id="@+id/chip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="@dimen/margin_extra_small"
-        android:background="?colorSurfaceContainerLow"
-        android:drawablePadding="@dimen/margin_small"
-        android:gravity="center"
-        android:padding="@dimen/margin_small"
-        android:textAppearance="?textAppearanceLabelLarge"
-        android:visibility="gone"
-        app:drawableStartCompat="@drawable/baseline_error_24"
-        tools:text="@string/draft_errors"
         tools:visibility="visible" />
 
     <FrameLayout

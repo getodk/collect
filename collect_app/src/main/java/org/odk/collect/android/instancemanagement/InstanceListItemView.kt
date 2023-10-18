@@ -6,7 +6,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.FormsRepositoryProvider
+import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.material.MaterialPill
 import org.odk.collect.strings.R.string
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -26,14 +28,24 @@ object InstanceListItemView {
         setImageFromStatus(imageView, instance)
         setUpSubtext(view, instance, context)
 
-        val chip = view.findViewById<TextView>(R.id.chip)
-        if (chip != null) {
+        val pill = view.findViewById<MaterialPill>(R.id.chip)
+        if (pill != null) {
             if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
-                chip.visibility = View.VISIBLE
-                chip.setText(string.draft_errors)
+                pill.visibility = View.VISIBLE
+                pill.setIcon(R.drawable.baseline_rule_24)
+                pill.setText(string.draft_errors)
+                pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorErrorContainer))
+                pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
+                pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
             } else if (instance.status == Instance.STATUS_VALID) {
-                chip.visibility = View.VISIBLE
-                chip.setText(string.complete)
+                pill.visibility = View.VISIBLE
+                pill.setIcon(R.drawable.baseline_check_24)
+                pill.setText(string.complete)
+                pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorSurfaceContainerHighest))
+                pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
+                pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
+            } else {
+                pill.visibility = View.GONE
             }
         }
 
