@@ -30,10 +30,6 @@ class InMemFormSessionRepository : FormSessionRepository {
         map.remove(id)
     }
 
-    override fun has(id: String): Boolean {
-        return map.containsKey(id)
-    }
-
     private fun getLiveData(id: String): MutableLiveData<FormSession> {
         return map.getOrPut(id) { MutableLiveData<FormSession>(null) }
     }

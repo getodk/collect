@@ -65,10 +65,6 @@ class AppState {
     fun clear(key: String) {
         map.remove(key)
     }
-
-    fun has(key: String): Boolean {
-        return map.containsKey(key)
-    }
 }
 
 interface StateStore {
