@@ -59,7 +59,7 @@ object Dependencies {
     const val gson = "com.google.code.gson:gson:2.10.1"
     const val firebase_analytics = "com.google.firebase:firebase-analytics:21.3.0"
     const val firebase_crashlytics = "com.google.firebase:firebase-crashlytics:18.3.7"
-    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.11"
+    const val leakcanary = "com.squareup.leakcanary:leakcanary-android:2.12"
     const val timber = "com.jakewharton.timber:timber:5.0.1"
     const val slf4j_api = "org.slf4j:slf4j-api:2.0.7"
     const val slf4j_timber = "com.arcao:slf4j-timber:3.1@aar"
