@@ -12,9 +12,11 @@ import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
+import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.async.Scheduler
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -76,12 +78,24 @@ class FirstLaunchActivity : LocalizedActivity() {
                 setOnClickListener {
                     Analytics.log(AnalyticsEvents.TRY_DEMO)
 
+                    val isLoading = MutableNonNullLiveData(true)
+                    MaterialProgressDialogFragment.showOn(
+                        this@FirstLaunchActivity,
+                        isLoading,
+                        supportFragmentManager
+                    ) {
+                        MaterialProgressDialogFragment().also { dialog ->
+                            dialog.message = getString(org.odk.collect.strings.R.string.loading)
+                        }
+                    }
+
                     scheduler.immediate(
                         background = {
                             projectsRepository.save(Project.DEMO_PROJECT)
                             projectsDataService.setCurrentProject(Project.DEMO_PROJECT_ID)
                         },
                         foreground = {
+                            isLoading.value = false
                             ActivityUtils.startActivityAndCloseAllOthers(
                                 this@FirstLaunchActivity,
                                 MainMenuActivity::class.java
