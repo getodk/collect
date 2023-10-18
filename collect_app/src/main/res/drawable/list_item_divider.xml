@@ -3,14 +3,11 @@
 
     <!-- Material Design reference: https://material.io/design/components/dividers.html#specs -->
 
-    <item android:left="72dp"
-          android:right="0dp">
-
+    <item>
         <shape android:shape="rectangle">
             <size android:height="1dp" />
             <solid android:color="@color/color_on_surface_low_emphasis"/>
         </shape>
-
     </item>
 
 </layer-list>

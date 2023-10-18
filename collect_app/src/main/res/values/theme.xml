@@ -17,7 +17,8 @@
         <item name="colorOnError">@color/colorOnError</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="colorSurfaceContainerLow">@color/colorSurfaceContainerLow</item>
-        <item name="colorSurfaceContainerHighest">@color/color_primary_low_emphasis</item>
+        <item name="colorSurfaceContainerHighest">@color/colorSurfaceContainerHighest</item>
+        <item name="colorOnSurfaceContainerHighest">@color/colorOnSurfaceContainerHighest</item>
         <item name="colorOutline">@color/color_on_surface_medium_emphasis</item>
 
         <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1
@@ -57,6 +58,8 @@
         <item name="colorPrimaryContainer">?colorPrimary</item>
 
         <item name="colorOnPrimaryContainer">?colorOnPrimary</item>
+        <item name="colorErrorContainer">@color/colorErrorContainer</item>
+        <item name="colorOnErrorContainer">@color/colorOnErrorContainer</item>
 
         <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
         <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>
@@ -64,6 +67,7 @@
         <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge</item>
         <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
 
+        <item name="shapeAppearanceCornerSmall">@style/ShapeAppearance.Material3.Corner.Small</item>
         <item name="shapeAppearanceCornerMedium">@style/ShapeAppearance.Material3.Corner.Medium</item>
         <!--/Material3 attributes-->
 

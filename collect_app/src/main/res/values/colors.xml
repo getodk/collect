@@ -6,11 +6,15 @@
 
     <color name="colorError">#D42C2C</color>
     <color name="colorOnError">#ffffff</color>
+    <color name="colorErrorContainer">#F9DEDC</color>
+    <color name="colorOnErrorContainer">#410002</color>
 
     <color name="colorSurface">#FFFFFF</color>
     <color name="colorSurfaceVariant">#dce3e9</color>
     <color name="colorOnSurface">#000000</color>
     <color name="colorSurfaceContainerLow">#F7F7FA</color>
+    <color name="colorSurfaceContainerHighest">#EAF3F8</color>
+    <color name="colorOnSurfaceContainerHighest">#000000</color>
 
     <bool name="lightStatusBar">true</bool>
 

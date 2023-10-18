@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
             android:textAppearance="?textAppearanceBody2"
+            android:textColor="?colorOnSurfaceContainerHighest"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/deprecation_icon"
             app:layout_constraintTop_toTopOf="@id/deprecation_icon"
