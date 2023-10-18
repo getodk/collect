@@ -22,7 +22,6 @@
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">തിരയുക</string>
-  <string name="no_items_display">സ്‌ക്രീനിൽ കാണിക്കുവാൻ ഒന്നും ലഭ്യം അല്ല </string>
   <string name="not_granted_permission">നിങ്ങൾ തുടങ്ങാൻ ഉദ്ദേശിക്കുന്ന പ്രവൃത്തിക്ക് ലഭിച്ചിട്ടില്ലാത്ത അനുമതികൾ വേണം </string>
   <string name="storage_runtime_permission_denied_title">സ്റ്റോറേജ് അനുമതികൾ </string>
   <string name="storage_runtime_permission_denied_desc">ഈ അനുമതികൾ ഇല്ലാതെ കളക്ടിന് നിങ്ങളുടെ ഫോമിലേക്ക് പ്രവേശിക്കുകയോ ഉത്തരങ്ങൾ സേവ് ചെയ്യുകയോ ചെയ്യാൻ ആകുന്നതല്ല. അനുമതി നല്കാൻ തയ്യാറാകുമ്പോൾ ആപ്പ് വീണ്ടും തുറക്കുക.</string>

@@ -59,11 +59,6 @@
     <!-- Displayed in search boxes for form lists or question types that involve search -->
     <string name="search">Search</string>
 
-    <string name="no_items_display">Nothing available to display.</string>
-    <string name="no_items_display_forms">Nothing available to display.\n\nTry getting and filling out a blank form.</string>
-    <string name="no_items_display_sent_forms">Nothing available to display.\n\nTry sending finalized forms before viewing.</string>
-    <string name="no_items_display_instances">Nothing available to display.\n\nTry finalizing drafts before sending.</string>
-
     <string name="not_granted_permission">The activity you are trying to start requires a permission which is not granted.</string>
     <string name="storage_runtime_permission_denied_title">Storage permissions</string>
     <string name="storage_runtime_permission_denied_desc">Without these permissions Collect can\'t access your forms or save answers. Reopen the app when you are ready to grant them.</string>
@@ -1257,4 +1252,19 @@
 
     <!-- Message above a form draft that has not yet been completed -->
     <string name="incomplete" tools:ignore="UnusedResources">Incomplete</string>
+
+    <!-- General message displayed when the list of forms -->
+    <string name="empty_list_title">Nothing available to display</string>
+
+    <!-- Message displayed when the list of drafts is empty -->
+    <string name="empty_list_of_drafts_title">Nothing in drafts</string>
+    <string name="empty_list_of_drafts_subtitle">When you save as draft, forms will appear here</string>
+
+    <!-- Message displayed when the list of ready to send forms is empty -->
+    <string name="empty_list_of_finalized_forms_title">Nothing ready to send</string>
+    <string name="empty_list_of_finalized_forms_subtitle">When you finalize drafts, they will appear here</string>
+
+    <!-- Message displayed when the list of sent forms is empty -->
+    <string name="empty_list_of_sent_forms_title">Nothing in sent</string>
+    <string name="empty_list_of_sent_forms_subtitle">When you send finalized forms, they will appear here</string>
 </resources>

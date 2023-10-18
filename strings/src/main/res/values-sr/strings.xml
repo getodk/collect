@@ -36,9 +36,6 @@
   <string name="filter_the_list">Filtriraj listu</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Pretraži</string>
-  <string name="no_items_display">Ništa nije dostupno za prikaz.</string>
-  <string name="no_items_display_forms">Povezivanje na mrežu trenutno nije dostupno. Pokušaj preuzeti i popuniti prazan formular.</string>
-  <string name="no_items_display_sent_forms">Ništa nije dostupno za prikaz. Pokušaj poslati završeni formular prije uvida.</string>
   <string name="not_granted_permission">Aktivnost koju pokušavate da pokrenete zahtijeva dozvolu koja nije odobrena.</string>
   <string name="storage_runtime_permission_denied_title">Dozvola za pristup memoriji</string>
   <string name="storage_runtime_permission_denied_desc">Bez ovih dozvola Collent ne može pristupiti formularima ili sačuvati odgovore. Ponovo otvorite aplikaciju kada budete spremni da dozvolite pristup.</string>

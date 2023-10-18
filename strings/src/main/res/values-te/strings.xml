@@ -36,9 +36,6 @@
   <string name="filter_the_list">జాబితాను ఫిల్టర్ చేయండి</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">వెతకండి</string>
-  <string name="no_items_display">చూపించడానికి ఏవీ అందుబాటులో లేవు</string>
-  <string name="no_items_display_forms">చూడటానికి ఏ ఫారంలు లేవు.\n\n ఖాళీ ఫారంను పొందడానికి మరియు నింపటానికి ప్రయత్నించండి</string>
-  <string name="no_items_display_sent_forms">చూడటానికి ఏ ఫారంలు లేవు.\n\n ముందు ఖరారు చేసిన ఫారంలను పంపడానికి ప్రయత్నించండి.</string>
   <string name="not_granted_permission">మీరు మొదులు పెట్టడానికి ప్రయత్నిస్తున్న పనికి అనుమతి అవసరం. అది మీకు ఇవ్వబడలేదు.</string>
   <string name="storage_runtime_permission_denied_title">నిల్వ ఉంచటానికి అనుమతులు</string>
   <string name="storage_runtime_permission_denied_desc">ఈ అనుమతులు లేకుండా మీ ఫారమ్‌లను యాక్సెస్ చేయలేరు లేదా సమాధానాలను సేవ్ చేయలేరు. మీరు వాటిని మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు ఆప్ ని తిరిగి తెరవండి.</string>

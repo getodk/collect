@@ -15,7 +15,7 @@ import org.junit.rules.ExternalResource
  */
 class FragmentScenarioLauncherRule @JvmOverloads constructor(
     private val defaultFactory: FragmentFactory? = null,
-    @StyleRes private val defaultThemeResId: Int = com.google.android.material.R.style.Theme_MaterialComponents
+    @StyleRes private val defaultThemeResId: Int = com.google.android.material.R.style.Theme_Material3_Light
 ) : ExternalResource() {
 
     private val scenarios = mutableListOf<FragmentScenario<*>>()

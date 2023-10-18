@@ -37,9 +37,6 @@
   <string name="filter_the_list">Filtrera listan</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Sök</string>
-  <string name="no_items_display">Inget tillgängligt för visning.</string>
-  <string name="no_items_display_forms">Inget tillgängligt för visning.\n\nProva att hämta och fylla i ett tomt formulär.</string>
-  <string name="no_items_display_sent_forms">Inget tillgängligt för visning.\n\nProva att skicka ett avslutat formulär innan visning.</string>
   <string name="storage_runtime_permission_denied_title">Lagringsbehörigheter</string>
   <string name="location_runtime_permissions_denied_title">Platsbehörigheter</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->

@@ -36,9 +36,6 @@
   <string name="filter_the_list">Filtruj listę</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Szukaj</string>
-  <string name="no_items_display">Brak informacji do wyświetlenia.</string>
-  <string name="no_items_display_forms">Brak informacji do wyświetlenia.\n\nSpróbuj pobrać i wypełnić pusty formularz.</string>
-  <string name="no_items_display_sent_forms">Brak informacji do wyświetlenia.\n\nSpróbuj wysłać skończone formularze przed obejrzeniem ich.</string>
   <string name="not_granted_permission">Aktywność, którą próbujesz wykonać, wymaga autoryzacji, której nie posiadasz.</string>
   <string name="storage_runtime_permission_denied_title">Uprawnienia do przechowywania</string>
   <string name="storage_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do formularzy i nie może zapisywać odpowiedzi. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>

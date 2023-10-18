@@ -21,8 +21,6 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <!--Displayed in search boxes for form lists or question types that involve search-->
-  <string name="no_items_display">প্রদর্শন করার মত কিছু পাওয়া যায়নি।</string>
-  <string name="no_items_display_forms">প্রদর্শন করার মত কিছু পাওয়া যায়নি।\n\nTry নতুন ফরম নামিয়ে আবার পুরন করে চেষ্টা করে দেখুন।</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM

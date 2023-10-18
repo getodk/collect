@@ -44,13 +44,12 @@ the License.
                 android:paddingBottom="8dp"
                 android:scrollbarStyle="outsideOverlay" />
 
-            <TextView
+            <org.odk.collect.android.views.EmptyListView
                 android:id="@android:id/empty"
-                style="@style/Widget.Collect.EmptyView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/no_items_display" />
+                app:icon="@drawable/ic_baseline_download_72"
+                app:title="@string/empty_list_title"/>
 
         </LinearLayout>
 

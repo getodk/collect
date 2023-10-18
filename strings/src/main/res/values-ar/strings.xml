@@ -36,9 +36,6 @@
   <string name="filter_the_list">فرز القائمة</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">بحث</string>
-  <string name="no_items_display">لا يوجد شيء للعرض.</string>
-  <string name="no_items_display_forms">لا شيء متاح للعرض./n/n حاول الحصول على نموذج فارغ و قم بتعبئته.</string>
-  <string name="no_items_display_sent_forms">لا شيء متاح للعرض./n/n حاول إرسال الاستمارات المكتملة قبل العرض.</string>
   <string name="not_granted_permission">النشاط الذي تحاول بدء القيام به يحتاج إلى إذن لم تحصل عليه بعد.</string>
   <string name="storage_runtime_permission_denied_title">أذونات التخزين</string>
   <string name="storage_runtime_permission_denied_desc">بدون هذه الأذونات لا يمكن لبرنامج ODK Collect الوصول إلى الاستمارات أو حفظ الإجابات. أعد فتح التطبيق عندما تكون مستعدًا لمنحهم.</string>

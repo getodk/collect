@@ -45,10 +45,6 @@
   <string name="filter_the_list">Liste filtern</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Suche</string>
-  <string name="no_items_display">Keine Inhalte vorhanden.</string>
-  <string name="no_items_display_forms">Nichts zum Anzeigen vorhanden.\n\nVersuchen Sie ein leeres Formular herunterzuladen und auszufüllen.</string>
-  <string name="no_items_display_sent_forms">Nichts zum Anzeigen vorhanden.\n\nVersenden Sie abgeschlossene Formulare bevor sie diese anzeigen. </string>
-  <string name="no_items_display_instances">Nichts zum Anzeigen vorhanden.\n\nVersuchen Sie Entwürfe abzuschließen, um sie zu versenden.</string>
   <string name="not_granted_permission">Die Aktivität, die Sie versuchen zu starten, benötigt eine Berechtigung, die nicht gewährt wurde. </string>
   <string name="storage_runtime_permission_denied_title">Speicher-Berechtigungen</string>
   <string name="storage_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf Formulare zugreifen und Antworten speichern. Starten Sie die App erneut, wenn sie bereit dazu sind die Berechtigung zu erteilen.</string>

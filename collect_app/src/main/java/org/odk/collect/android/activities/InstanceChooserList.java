@@ -51,6 +51,7 @@ import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.views.EmptyListView;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
@@ -96,7 +97,10 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
             editMode = true;
         } else {
             setTitle(getString(org.odk.collect.strings.R.string.view_sent_forms));
-            ((TextView) findViewById(android.R.id.empty)).setText(org.odk.collect.strings.R.string.no_items_display_sent_forms);
+            EmptyListView emptyListView = findViewById(android.R.id.empty);
+            emptyListView.setIcon(R.drawable.ic_baseline_inbox_72);
+            emptyListView.setTitle(getString(org.odk.collect.strings.R.string.empty_list_of_sent_forms_title));
+            emptyListView.setSubtitle(getString(org.odk.collect.strings.R.string.empty_list_of_sent_forms_subtitle));
         }
 
         sortingOptions = Arrays.asList(

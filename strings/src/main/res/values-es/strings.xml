@@ -45,10 +45,6 @@
   <string name="filter_the_list">Filtrar la lista</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Buscar</string>
-  <string name="no_items_display">No hay nada que mostrar.</string>
-  <string name="no_items_display_forms">No hay nada que mostrar.\n\nPruebe llenando un formulario en blanco.</string>
-  <string name="no_items_display_sent_forms">No hay nada que mostrar.\n\nPrueba enviando formularios finalizados antes de verlos.</string>
-  <string name="no_items_display_instances">No hay nada que mostrar.\n\n intente finalizar los formularios antes de enviarlos</string>
   <string name="not_granted_permission">La actividad que está intentando iniciar requiere un permiso que no se ha concedido.</string>
   <string name="storage_runtime_permission_denied_title">Permisos de Almacenamiento</string>
   <string name="storage_runtime_permission_denied_desc">Sin estos permisos no se puede accesar los formularios o guardar las respuetas. Abra la aplicación de nuevo cuando esté listo para dar acceso</string>

@@ -57,7 +57,6 @@
     <string name="manage_files">Burahin ang Inimpok na Form</string>
   <string name="noselect_error">Paumanhin, walang form na pinili!</string>
   <string name="no_connection">Wala koneksyon sa network</string>
-  <string name="no_items_display">Walang maipakita.</string>
   <string name="ok">OK</string>
   <string name="parse_error">Paumanhin, hindi ma-suri ang form.</string>
   <string name="password">Kontrasenyas</string>

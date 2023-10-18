@@ -30,7 +30,6 @@
   <string name="filter_the_list">Listeyi filtrele</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Arama</string>
-  <string name="no_items_display">Gösterecek bir şey yok</string>
   <string name="storage_runtime_permission_denied_title">Saklama izinleri</string>
   <string name="storage_runtime_permission_denied_desc">Bu izinler olmadan Collect formlarınıza erişemez ya da cevapları saklayamaz. İzinleri vermek için hazır olduğunuzda uygulamayı tekrar açın.</string>
   <string name="location_runtime_permissions_denied_title">Konum izinleri</string>

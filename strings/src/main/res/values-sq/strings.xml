@@ -34,9 +34,6 @@
   <string name="filter_the_list">Filtro listën</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Kërko</string>
-  <string name="no_items_display">Asgjë nuk mund të shfaqet</string>
-  <string name="no_items_display_forms">Asgjë nuk mund të shfaqet.\n\nProvoni të ngarkoni dhe plotësoni një formular bosh.</string>
-  <string name="no_items_display_sent_forms">Asgjë nuk mund të shfaqet.\n\nProvoni të përfundoni një formular përpara se të shihni</string>
   <string name="storage_runtime_permission_denied_desc">Pa këto leje Collect nuk mund të aksesojë format tuaja apo të ruajë përgjigjet. Rihapeni applikacionin kur të të jeni gati të lejoni ato.</string>
   <string name="location_runtime_permissions_denied_title">Lejo aksesin në vendndodhje</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->

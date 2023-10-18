@@ -44,10 +44,6 @@
   <string name="filter_the_list">Filtrovat výpis</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Hledat</string>
-  <string name="no_items_display">Není co zobrazit.</string>
-  <string name="no_items_display_forms">Není co zobrazit.\n\nZkuste stáhnout a vyplnit dotazník.</string>
-  <string name="no_items_display_sent_forms">Není k dispozici žádné zobrazení. \n\n Vyzkoušejte odeslání dokončených formulářů před prohlížením.</string>
-  <string name="no_items_display_instances">Nic není k dispozici k zobrazení.\n\nPřed odesláním zkuste dokončit návrhy.</string>
   <string name="not_granted_permission">Aktivita, kterou se pokoušíte spustit, vyžaduje oprávnění, které není uděleno.</string>
   <string name="storage_runtime_permission_denied_title">Povolení pro ukládání dat</string>
   <string name="storage_runtime_permission_denied_desc">Bez těchto oprávnění nelze přistupovat k formulářům nebo ukládat odpovědi. Opětovně otevřete aplikaci, až budete připraveni je udělit.</string>
