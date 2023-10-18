@@ -398,8 +398,9 @@ dependencies {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 
-    // Real LeakCanary for debug builds only: notifications, analysis, etc
+    // Real LeakCanary for debug and selfSigned builds only: notifications, analysis, etc
     debugImplementation Dependencies.leakcanary
+    selfSignedReleaseImplementation Dependencies.leakcanary
 }
 
 // Must be at bottom to prevent dependency collisions
