@@ -97,7 +97,7 @@ class BulkFinalizationTest {
             .clickOnForm("One Question")
             .killAndReopenApp(MainMenuPage())
 
-            .clickDrafts()
+            .clickDrafts(false)
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)

@@ -38,9 +38,17 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
+    private final boolean firstOpen;
+
+    public EditSavedFormPage(boolean first) {
+        this.firstOpen = first;
+    }
 
     @Override
     public EditSavedFormPage assertOnPage() {
+        if (firstOpen) {
+            clickOKOnDialog();
+        }
         assertText(org.odk.collect.strings.R.string.review_data);
         return this;
     }
