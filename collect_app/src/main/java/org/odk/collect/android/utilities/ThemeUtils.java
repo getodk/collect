@@ -123,47 +123,12 @@ public final class ThemeUtils {
     }
 
     @ColorInt
-    public int getColorSurface() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorSurface);
-    }
-
-    @ColorInt
-    public int getColorOnSurfaceLowEmphasis() {
-        return context.getResources().getColor(org.odk.collect.androidshared.R.color.color_on_surface_low_emphasis);
-    }
-
-    @ColorInt
     public int getAccentColor() {
         return getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent);
     }
 
     @ColorInt
-    public int getIconColor() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface);
-    }
-
-    @ColorInt
     public int getColorPrimary() {
         return getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimary);
-    }
-
-    @ColorInt
-    public int getColorOnPrimary() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnPrimary);
-    }
-
-    @ColorInt
-    public int getColorSecondary() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorSecondary);
-    }
-
-    @ColorInt
-    public int getColorError() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorError);
-    }
-
-    @ColorInt
-    public int getColorPrimaryDark() {
-        return getThemeAttributeValue(context, com.google.android.material.R.attr.colorPrimaryDark);
     }
 }
