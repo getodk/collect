@@ -196,7 +196,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
             }
         });
 
-        if (!settingsProvider.getMetaSettings().getBoolean(MetaKeys.DRAFTS_PILLS_EDUCATION_SHOWN) && !BuildConfig.DEBUG) {
+        if (!settingsProvider.getMetaSettings().getBoolean(MetaKeys.DRAFTS_PILLS_EDUCATION_SHOWN)) {
             new MaterialAlertDialogBuilder(this)
                     .setTitle(string.drafts_pills_education_title)
                     .setMessage(string.drafts_pills_education_message)
