@@ -12,7 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.support.QuestionWidgetHelpers
 import java.math.BigDecimal
@@ -95,6 +94,16 @@ class RangePickerIntegerWidgetTest {
 
         verify(listener).onLongClick(widget.binding.widgetButton)
         verify(listener).onLongClick(widget.binding.widgetAnswerText)
+    }
+
+    @Test
+    fun setData_callsValueChangeListener() {
+        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
+        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener(widget)
+        widget.setValueChangedListener(valueChangedListener)
+        widget.setNumberPickerValue(3)
+
+        verify(valueChangedListener).widgetValueChanged(widget)
     }
 
     private fun createWidget(prompt: FormEntryPrompt): RangePickerIntegerWidget {

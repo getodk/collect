@@ -7,7 +7,9 @@ import androidx.core.util.Pair;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.reference.ReferenceManager;
+import org.junit.Test;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.SelectWidgetTest;
@@ -16,8 +18,10 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.android.support.CollectHelpers.setupFakeReferenceManager;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 
 public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A extends IAnswerData>
         extends SelectWidgetTest<W, A> {
@@ -55,5 +59,15 @@ public abstract class SelectImageMapWidgetTest<W extends SelectImageMapWidget, A
 
         assertThat(getSpyWidget().binding.imageMap.getVisibility(), is(View.VISIBLE));
         assertThat(getSpyWidget().binding.imageMap.isClickable(), is(Boolean.FALSE));
+    }
+
+    @Test
+    public void selectArea_callsValueChangeListener() {
+        SelectImageMapWidget widget = getWidget();
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setValueChangedListener(valueChangedListener);
+        widget.selectArea("1");
+
+        verify(valueChangedListener).widgetValueChanged(widget);
     }
 }

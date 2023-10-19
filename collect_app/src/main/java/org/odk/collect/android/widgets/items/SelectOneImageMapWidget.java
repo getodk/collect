@@ -17,6 +17,7 @@
 package org.odk.collect.android.widgets.items;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.webkit.WebView;
 
@@ -24,7 +25,6 @@ import androidx.annotation.Nullable;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.SelectOneData;
-import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
@@ -75,7 +75,7 @@ public class SelectOneImageMapWidget extends SelectImageMapWidget {
     protected void selectArea(String areaId) {
         super.selectArea(areaId);
 
-        ((FormFillingActivity) getContext()).runOnUiThread(() -> {
+        ((Activity) getContext()).runOnUiThread(() -> {
             if (autoAdvance && listener != null) {
                 listener.advance();
             }
