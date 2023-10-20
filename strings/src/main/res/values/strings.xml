@@ -1240,7 +1240,7 @@
 
     <!-- Message shown after bulk finalization when no drafts finalized successfully -->
     <plurals name="bulk_finalize_failure">
-        <item quantity="one">%d draft has an error that must be addressed before finalizing.</item>
+        <item quantity="one">%d draft has errors that must be addressed before finalizing.</item>
         <item quantity="other">%d drafts have errors that must be addressed before finalizing.</item>
     </plurals>
 
