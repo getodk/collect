@@ -35,13 +35,13 @@ class FormEndViewModelTest {
 
     @Test
     fun `when 'Finalize' is enabled, isFinalizeEnabled should return true`() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_FINALIZE, true)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true)
         assertThat(formEndViewModel.isFinalizeEnabled(), equalTo(true))
     }
 
     @Test
     fun `when 'Finalize' is disabled, isFinalizeEnabled should return false`() {
-        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_FINALIZE, false)
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false)
         assertThat(formEndViewModel.isFinalizeEnabled(), equalTo(false))
     }
 

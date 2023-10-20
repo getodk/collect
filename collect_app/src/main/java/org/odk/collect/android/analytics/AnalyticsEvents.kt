@@ -178,4 +178,10 @@ object AnalyticsEvents {
      * Tracks how often a form is finalized using a `ref` attribute on the `submission` element
      */
     const val PARTIAL_FORM_FINALIZED = "PartialFormFinalized"
+
+    /**
+     * Tracks how often drafts that can't be bulk finalized are attempted to be
+     */
+    const val BULK_FINALIZE_ENCRYPTED_FORM = "BulkFinalizeEncryptedForm"
+    const val BULK_FINALIZE_SAVE_POINT = "BulkFinalizeSavePoint"
 }

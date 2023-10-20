@@ -1,9 +1,13 @@
 package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
+import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
+import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.ExternalizableFormDefCache
@@ -19,6 +23,8 @@ class InstancesDataService(
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val entitiesRepositoryProvider: EntitiesRepositoryProvider,
     private val storagePathProvider: StoragePathProvider,
+    private val instanceSubmitScheduler: InstanceSubmitScheduler,
+    private val projectsDataService: ProjectsDataService,
     private val onUpdate: () -> Unit
 ) {
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
@@ -49,11 +55,12 @@ class InstancesDataService(
         onUpdate()
     }
 
-    fun finalizeAllDrafts(): Pair<Int, Int> {
+    fun finalizeAllDrafts(): FinalizeAllResult {
         val instancesRepository = instancesRepositoryProvider.get()
         val formsRepository = formsRepositoryProvider.get()
         val entitiesRepository = entitiesRepositoryProvider.get()
         val projectRootDir = File(storagePathProvider.getProjectRootDirPath())
+        val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
 
         val instances = instancesRepository.getAllByStatus(
             Instance.STATUS_INCOMPLETE,
@@ -61,7 +68,7 @@ class InstancesDataService(
             Instance.STATUS_VALID
         )
 
-        val totalFailed = instances.fold(0) { failCount, instance ->
+        val result = instances.fold(FinalizeAllResult(0, 0, false)) { result, instance ->
             val (formDef, form) = FormEntryUseCases.loadFormDef(
                 instance,
                 formsRepository,
@@ -74,30 +81,36 @@ class InstancesDataService(
                 CollectFormEntryControllerFactory().create(formDef, formMediaDir)
             val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
 
-            val cacheDir = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE)
-            val newFailCount =
-                if (FormEntryUseCases.getSavePoint(formController, File(cacheDir)) == null) {
-                    val finalizedInstance = FormEntryUseCases.finalizeDraft(
-                        formController,
-                        instancesRepository,
-                        entitiesRepository
-                    )
+            val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
+            val needsEncrypted = form.basE64RSAPublicKey != null
+            val newResult = if (savePoint != null) {
+                Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)
+                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+            } else if (needsEncrypted) {
+                Analytics.log(AnalyticsEvents.BULK_FINALIZE_ENCRYPTED_FORM)
+                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+            } else {
+                val finalizedInstance = FormEntryUseCases.finalizeDraft(
+                    formController,
+                    instancesRepository,
+                    entitiesRepository
+                )
 
-                    if (finalizedInstance == null) {
-                        failCount + 1
-                    } else {
-                        failCount
-                    }
+                if (finalizedInstance == null) {
+                    result.copy(failureCount = result.failureCount + 1)
                 } else {
-                    failCount + 1
+                    result
                 }
+            }
 
             Collect.getInstance().externalDataManager?.close()
-            newFailCount
+            newResult
         }
 
         update()
-        return Pair(instances.size, totalFailed)
+        instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().uuid)
+
+        return result.copy(successCount = instances.size - result.failureCount)
     }
 
     companion object {
@@ -106,3 +119,5 @@ class InstancesDataService(
         private const val SENT_COUNT_KEY = "instancesSentCount"
     }
 }
+
+data class FinalizeAllResult(val successCount: Int, val failureCount: Int, val unsupportedInstances: Boolean)

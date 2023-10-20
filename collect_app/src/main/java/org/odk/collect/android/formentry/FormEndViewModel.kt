@@ -18,7 +18,7 @@ class FormEndViewModel(
     }
 
     fun isFinalizeEnabled(): Boolean {
-        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_FINALIZE)
+        return settingsProvider.getProtectedSettings().getBoolean(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY)
     }
 
     fun shouldFormBeSentAutomatically(): Boolean {

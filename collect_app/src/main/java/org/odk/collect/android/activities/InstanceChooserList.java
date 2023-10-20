@@ -52,12 +52,12 @@ import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.FinalizeAllSnackbarPresenter;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.views.EmptyListView;
-import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
@@ -65,14 +65,11 @@ import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.MetaKeys;
-import org.odk.collect.strings.R.plurals;
 import org.odk.collect.strings.R.string;
 
 import java.util.Arrays;
 
 import javax.inject.Inject;
-
-import kotlin.Pair;
 
 /**
  * Responsible for displaying all the valid instances in the instance directory.
@@ -165,11 +162,9 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
         BulkFinalizationViewModel bulkFinalizationViewModel = new BulkFinalizationViewModel(
                 scheduler,
-                instancesDataService
+                instancesDataService,
+                settingsProvider
         );
-
-        DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(bulkFinalizationViewModel);
-        addMenuProvider(draftsMenuProvider);
 
         MaterialProgressDialogFragment.showOn(this, bulkFinalizationViewModel.isFinalizing(), getSupportFragmentManager(), () -> {
             MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
@@ -177,37 +172,19 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
             return dialog;
         });
 
-        bulkFinalizationViewModel.getFinalizedForms().observe(this, finalizedForms -> {
-            if (!finalizedForms.isConsumed()) {
-                Pair<Integer, Integer> pair = finalizedForms.getValue();
-                if (pair.getSecond().equals(0)) {
-                    SnackbarUtils.showLongSnackbar(
-                            this.findViewById(android.R.id.content),
-                            getResources().getQuantityString(
-                                    plurals.bulk_finalize_success,
-                                    pair.getFirst(),
-                                    pair.getFirst()
-                            )
-                    );
-                } else if (pair.getFirst().equals(pair.getSecond())) {
-                    SnackbarUtils.showLongSnackbar(
-                            this.findViewById(android.R.id.content),
-                            getResources().getQuantityString(
-                                    plurals.bulk_finalize_failure,
-                                    pair.getFirst(),
-                                    pair.getFirst()
-                            )
-                    );
-                } else {
-                    SnackbarUtils.showLongSnackbar(
-                            this.findViewById(android.R.id.content),
-                            getString(string.bulk_finalize_partial_success, pair.getFirst() - pair.getSecond(), pair.getSecond())
-                    );
-                }
+        if (bulkFinalizationViewModel.isEnabled()) {
+            DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(this, bulkFinalizationViewModel::finalizeAllDrafts);
+            addMenuProvider(draftsMenuProvider, this);
+            bulkFinalizationViewModel.getDraftsCount().observe(this, draftsCount -> {
+                draftsMenuProvider.setDraftsCount(draftsCount);
+                invalidateMenu();
+            });
 
-                finalizedForms.consume();
-            }
-        });
+            bulkFinalizationViewModel.getFinalizedForms().observe(
+                    this,
+                    new FinalizeAllSnackbarPresenter(this.findViewById(android.R.id.content), this)
+            );
+        }
     }
 
     private void init() {

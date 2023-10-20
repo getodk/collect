@@ -8,10 +8,11 @@
         android:title="@string/moving_backwards_title"
         app:iconSpaceReserved="false" />
 
-    <PreferenceCategory android:title="@string/form_entry"
+    <PreferenceCategory
+        android:title="@string/form_entry"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false"
-        app:iconSpaceReserved="false" >
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="access_settings"
             android:title="@string/project_settings"
@@ -26,22 +27,34 @@
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
             android:key="save_mid"
-            android:title="@string/save_mid"
             android:summary="@string/save_mid_summary"
+            android:title="@string/save_mid"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/form_end"
+    <PreferenceCategory
+        android:title="@string/form_end"
         app:allowDividerAbove="false"
         app:allowDividerBelow="false"
-        app:iconSpaceReserved="false" >
+        app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="save_as_draft"
             android:title="@string/save_as_draft"
             app:iconSpaceReserved="false" />
         <CheckBoxPreference
-            android:key="finalize"
+            android:key="finalize_in_form_entry"
             android:title="@string/finalize"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/uncheck_to_hide_from_drafts"
+        app:allowDividerAbove="false"
+        app:allowDividerBelow="false"
+        app:iconSpaceReserved="false">
+        <CheckBoxPreference
+            android:key="bulk_finalize"
+            android:title="@string/finalize_all_drafts"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -2,6 +2,7 @@ package org.odk.collect.android.support.pages
 
 import android.app.Application
 import android.content.pm.ActivityInfo
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
@@ -34,6 +35,8 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import org.hamcrest.CoreMatchers.not
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.StringContains.containsString
 import org.hamcrest.core.StringEndsWith.endsWith
@@ -42,7 +45,6 @@ import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
-import org.odk.collect.android.support.ActivityHelpers
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
@@ -458,7 +460,7 @@ abstract class Page<T : Page<T>> {
 
     fun clickOptionsIcon(expectedOptionString: String): T {
         tryAgainOnFail({
-            Espresso.openActionBarOverflowOrOptionsMenu(ActivityHelpers.getActivity())
+            onView(OVERFLOW_BUTTON_MATCHER).perform(click())
             assertText(expectedOptionString)
         })
 
@@ -488,6 +490,11 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
+    fun assertNoOptionsMenu(): T {
+        onView(OVERFLOW_BUTTON_MATCHER).check(doesNotExist())
+        return this as T
+    }
+
     companion object {
         private fun rotateToLandscape(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
@@ -496,5 +503,10 @@ abstract class Page<T : Page<T>> {
         private fun rotateToPortrait(): ViewAction {
             return RotateAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         }
+
+        private val OVERFLOW_BUTTON_MATCHER: Matcher<View> = Matchers.anyOf(
+            allOf(isDisplayed(), withContentDescription("More options")),
+            allOf(isDisplayed(), withClassName(Matchers.endsWith("OverflowMenuButton")))
+        )
     }
 }
