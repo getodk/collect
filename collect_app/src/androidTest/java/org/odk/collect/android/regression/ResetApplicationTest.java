@@ -62,7 +62,7 @@ public class ResetApplicationTest {
                 .clickFillBlankForm()
                 .assertTextDoesNotExist("All widgets")
                 .pressBack(new MainMenuPage())
-                .clickDrafts()
+                .clickDrafts(false)
                 .assertTextDoesNotExist("All widgets");
     }
 

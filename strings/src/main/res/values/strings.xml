@@ -1295,4 +1295,7 @@
 
     <!-- Message above a form draft that has been completed -->
     <string name="complete" oat:toReview="true">Complete</string>
+
+    <!-- Title and message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
+    <string name="drafts_pills_education_title" oat:toReview="true">Drafts have changed</string>
 </resources>

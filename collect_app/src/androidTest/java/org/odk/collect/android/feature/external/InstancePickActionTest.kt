@@ -33,7 +33,7 @@ class InstancePickActionTest {
 
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = InstancesContract.CONTENT_TYPE
-        val result = rule.launchForResult(intent, EditSavedFormPage()) {
+        val result = rule.launchForResult(intent, EditSavedFormPage(true)) {
             it.clickOnFormClosingApp("One Question")
         }
 
