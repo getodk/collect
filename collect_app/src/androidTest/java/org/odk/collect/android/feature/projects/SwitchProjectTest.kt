@@ -110,7 +110,7 @@ class SwitchProjectTest {
             .pressBack(MainMenuPage())
 
             // Check instances
-            .clickDrafts(1)
+            .clickDrafts(1, false)
             .assertText("Two Question")
             .pressBack(MainMenuPage())
 

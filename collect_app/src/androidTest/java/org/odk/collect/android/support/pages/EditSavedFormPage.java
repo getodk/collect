@@ -36,14 +36,26 @@ import androidx.appcompat.widget.Toolbar;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-import org.odk.collect.strings.R.string;
 
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
+    private final boolean firstOpen;
+
+    public EditSavedFormPage(boolean first) {
+        this.firstOpen = first;
+    }
 
     @Override
     public EditSavedFormPage assertOnPage() {
-        assertText(string.review_data);
+        closeDraftsPillsEducationDialog();
+        assertText(org.odk.collect.strings.R.string.review_data);
         return this;
+    }
+
+    private void closeDraftsPillsEducationDialog() {
+        if (firstOpen) {
+            assertText(org.odk.collect.strings.R.string.drafts_pills_education_title);
+            clickOKOnDialog();
+        }
     }
 
     public EditSavedFormPage checkInstanceState(String instanceName, String desiredStatus) {
@@ -96,8 +108,8 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     }
 
     public BulkFinalizationConfirmationDialogPage clickFinalizeAll(int count) {
-        this.clickOptionsIcon(string.finalize_all_forms)
-                .clickOnString(string.finalize_all_forms);
+        this.clickOptionsIcon(org.odk.collect.strings.R.string.finalize_all_forms)
+                .clickOnString(org.odk.collect.strings.R.string.finalize_all_forms);
 
         return new BulkFinalizationConfirmationDialogPage(count).assertOnPage();
     }

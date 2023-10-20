@@ -37,8 +37,13 @@ class AppStateFormSessionRepository(application: Application) : FormSessionRepos
         getLiveData(id).value = FormSession(formController, form, instance)
     }
 
+    /**
+     * Ensure the object gets completely removed. Simply nullifying it might cause memory leaks.
+     * See: https://github.com/getodk/collect/issues/5777
+     */
     override fun clear(id: String) {
         getLiveData(id).value = null
+        appState.clear(getKey(id))
     }
 
     private fun getLiveData(id: String) =

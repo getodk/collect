@@ -89,7 +89,7 @@ class BulkFinalizationTest {
 
             .clickOptionsIcon(string.finalize_all_forms)
             .clickOnString(string.finalize_all_forms)
-            .clickOnButtonInDialog(string.finalize, EditSavedFormPage())
+            .clickOnButtonInDialog(string.finalize, EditSavedFormPage(false))
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
     }
 
@@ -105,10 +105,10 @@ class BulkFinalizationTest {
             .clickOnForm("One Question")
             .killAndReopenApp(MainMenuPage())
 
-            .clickDrafts(1)
-            .clickFinalizeAll(1)
-            .clickFinalize()
-            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
+            .clickDrafts(false)
+            .clickOptionsIcon(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_forms)
+            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
             .assertText("One Question")
             .pressBack(MainMenuPage())
 

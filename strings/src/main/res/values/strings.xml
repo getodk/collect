@@ -1258,4 +1258,8 @@
 
     <!-- Title of section of features that the user can uncheck to hide from the Drafts screen -->
     <string name="uncheck_to_hide_from_drafts">Uncheck to hide from Drafts</string>
+
+    <!-- Title and message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
+    <string name="drafts_pills_education_title" oat:toReview="true">Drafts have changed</string>
+    <string name="drafts_pills_education_message" oat:toReview="true">The draft list now shows validation errors. Drafts marked with \"Errors\" are either missing required questions or have values that are not allowed. Each time you save a form as draft, its validation status is updated.</string>
 </resources>
