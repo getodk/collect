@@ -38,11 +38,24 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
+    private final boolean firstOpen;
+
+    public EditSavedFormPage(boolean first) {
+        this.firstOpen = first;
+    }
 
     @Override
     public EditSavedFormPage assertOnPage() {
+        closeDraftsPillsEducationDialog();
         assertText(org.odk.collect.strings.R.string.review_data);
         return this;
+    }
+
+    private void closeDraftsPillsEducationDialog() {
+        if (firstOpen) {
+            assertText(org.odk.collect.strings.R.string.drafts_pills_education_title);
+            clickOKOnDialog();
+        }
     }
 
     public EditSavedFormPage checkInstanceState(String instanceName, String desiredStatus) {

@@ -1243,4 +1243,8 @@
 
     <!-- Message above a form draft that has been completed -->
     <string name="complete" oat:toReview="true">Complete</string>
+
+    <!-- Title and message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
+    <string name="drafts_pills_education_title" oat:toReview="true">Drafts have changed</string>
+    <string name="drafts_pills_education_message" oat:toReview="true">The draft list now shows validation errors. Drafts marked with \"Errors\" are either missing required questions or have values that are not allowed. Each time you save a form as draft, its validation status is updated.</string>
 </resources>

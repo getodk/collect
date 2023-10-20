@@ -63,6 +63,7 @@ import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.material.MaterialProgressDialogFragment;
 import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.strings.R.plurals;
 import org.odk.collect.strings.R.string;
 
@@ -122,6 +123,16 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(org.odk.collect.strings.R.string.review_data));
             editMode = true;
+
+            if (!settingsProvider.getMetaSettings().getBoolean(MetaKeys.DRAFTS_PILLS_EDUCATION_SHOWN)) {
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle(string.drafts_pills_education_title)
+                        .setMessage(string.drafts_pills_education_message)
+                        .setPositiveButton(string.ok, null)
+                        .show();
+
+                settingsProvider.getMetaSettings().save(MetaKeys.DRAFTS_PILLS_EDUCATION_SHOWN, true);
+            }
         } else {
             setTitle(getString(org.odk.collect.strings.R.string.view_sent_forms));
             ((TextView) findViewById(android.R.id.empty)).setText(org.odk.collect.strings.R.string.no_items_display_sent_forms);
