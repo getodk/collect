@@ -46,11 +46,16 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     @Override
     public EditSavedFormPage assertOnPage() {
-        if (firstOpen) {
-            clickOKOnDialog();
-        }
+        closeDraftsPillsEducationDialog();
         assertText(org.odk.collect.strings.R.string.review_data);
         return this;
+    }
+
+    private void closeDraftsPillsEducationDialog() {
+        if (firstOpen) {
+            assertText(org.odk.collect.strings.R.string.drafts_pills_education_title);
+            clickOKOnDialog();
+        }
     }
 
     public EditSavedFormPage checkInstanceState(String instanceName, String desiredStatus) {
