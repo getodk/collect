@@ -155,17 +155,17 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                         .withValues(false, false)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true,
-                                ProtectedProjectKeys.KEY_FINALIZE, false
+                                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false
                         )
                         .withValues(false, true)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
-                                ProtectedProjectKeys.KEY_FINALIZE, true
+                                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true
                         )
                         .withValues(false, null)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
-                                ProtectedProjectKeys.KEY_FINALIZE, true
+                                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true
                         ),
                 removeKey("mark_as_finalized"),
                 removeKey("default_completed"),
@@ -173,8 +173,14 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                         .withValues(false)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
-                                ProtectedProjectKeys.KEY_FINALIZE, true
-                        )
+                                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true
+                        ),
+                updateKeys("finalize").withValues(false)
+                        .toPairs(
+                                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false,
+                                ProtectedProjectKeys.KEY_BULK_FINALIZE, false
+                        ),
+                removeKey("finalize")
         );
     }
 }
