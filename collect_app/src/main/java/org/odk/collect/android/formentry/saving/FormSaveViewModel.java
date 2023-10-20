@@ -30,6 +30,7 @@ import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.androidshared.livedata.LiveDataUtils;
+import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.entities.EntitiesRepository;
@@ -84,6 +85,7 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
     private final EntitiesRepository entitiesRepository;
     private final InstancesRepository instancesRepository;
     private Instance instance;
+    private final Cancellable formSessionObserver;
 
     public FormSaveViewModel(SavedStateHandle stateHandle, Supplier<Long> clock, FormSaver formSaver, MediaUtils mediaUtils, Scheduler scheduler, AudioRecorder audioRecorder, ProjectsDataService projectsDataService, LiveData<FormSession> formSession, EntitiesRepository entitiesRepository, InstancesRepository instancesRepository) {
         this.stateHandle = stateHandle;
@@ -103,10 +105,15 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
             recentFiles = stateHandle.get(RECENT_FILES);
         }
 
-        LiveDataUtils.observe(formSession, it -> {
+        formSessionObserver = LiveDataUtils.observe(formSession, it -> {
             formController = it.getFormController();
             instance = it.getInstance();
         });
+    }
+
+    @Override
+    protected void onCleared() {
+        formSessionObserver.cancel();
     }
 
     public void saveForm(Uri instanceContentURI, boolean shouldFinalize, String updatedSaveName, boolean viewExiting) {
