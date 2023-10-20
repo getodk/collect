@@ -1238,11 +1238,11 @@
     <!-- Message shown when some drafts finalize successfully and others fail -->
     <string name="bulk_finalize_partial_success" oat:toReview="true">%d drafts finalized. %d drafts have errors. Address issues before finalizing all drafts.</string>
 
-    <!-- Message above a form draft that has not yet been completed -->
-    <string name="incomplete" oat:toReview="true">Incomplete</string>
+    <!-- Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature. -->
+    <string name="draft_errors">Errors</string>
 
-    <!-- Message above a form draft that has been completed -->
-    <string name="complete" oat:toReview="true">Complete</string>
+    <!-- Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature. -->
+    <string name="draft_no_errors">No errors</string>
 
     <!-- Message shown when some forms finalize successfully but others need to be finalized manually -->
     <string name="bulk_finalize_unsupported" oat:toReview="true">%d drafts finalized. Some drafts need to be finalized manually.</string>

@@ -33,14 +33,14 @@ object InstanceListItemView {
             if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
                 pill.visibility = View.VISIBLE
                 pill.setIcon(R.drawable.baseline_rule_24)
-                pill.setText(string.incomplete)
+                pill.setText(string.draft_errors)
                 pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorErrorContainer))
                 pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
                 pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
             } else if (instance.status == Instance.STATUS_VALID) {
                 pill.visibility = View.VISIBLE
                 pill.setIcon(R.drawable.baseline_check_24)
-                pill.setText(string.complete)
+                pill.setText(string.draft_no_errors)
                 pill.setPillBackgroundColor(getThemeAttributeValue(context, R.attr.colorSurfaceContainerHighest))
                 pill.setTextColor(getThemeAttributeValue(context, R.attr.colorOnSurfaceContainerHighest))
                 pill.setIconTint(getThemeAttributeValue(context, R.attr.colorOnSurfaceContainerHighest))
