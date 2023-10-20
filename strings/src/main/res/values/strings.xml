@@ -1220,10 +1220,13 @@
     <!-- Message showed on main menu to inform users that the ability to edit finalized forms is going away -->
     <string name="edit_finalized_form_deprecation_message">In later versions, finalized forms will no longer be editable.</string>
 
-    <!-- Label for option that finalizes all the drafts the user is currently looking at -->
-    <string name="finalize_all_forms" oat:toReview="true">Finalize all drafts</string>
+    <!-- Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend -->
+    <string name="finalize_all_drafts">Finalize all drafts</string>
 
-    <!-- Message shown when finalizing all drafts has succeeded and how many totally have been finalized -->
+    <!-- Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel -->
+    <string name="bulk_finalize_explanation">Once you finalize all drafts, they will be in "Ready to send" and you will not be able to make edits. Any drafts that have errors will not be finalized.\n\nYou will not be able to undo this action.</string>
+
+    <!-- Message shown when finalizing all drafts has succeeded -->
     <plurals name="bulk_finalize_success" oat:toReview="true">
         <item quantity="one">Success! %d draft finalized.</item>
         <item quantity="other">Success! %d drafts finalized.</item>
@@ -1246,9 +1249,6 @@
 
     <!-- Message shown when some forms finalize successfully but others need to be finalized manually -->
     <string name="bulk_finalize_unsupported" oat:toReview="true">%d drafts finalized. Some drafts need to be finalized manually.</string>
-
-    <!-- Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel -->
-    <string name="bulk_finalize_explanation" oat:toReview="true">Once you finalize all drafts, they will be in "Ready to send" and you will not be able to make edits. Any drafts that have errors will not be finalized.\n\nYou will not be able to undo this action.</string>
 
     <!-- Dialog title that asks if the user wants to finalize all drafts -->
     <plurals name="bulk_finalize_confirmation" oat:toReview="true">

@@ -87,8 +87,8 @@ class BulkFinalizationTest {
             .clickFinalize()
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
 
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
+            .clickOptionsIcon(string.finalize_all_drafts)
+            .clickOnString(string.finalize_all_drafts)
             .clickOnButtonInDialog(string.finalize, EditSavedFormPage(false))
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
     }
@@ -106,8 +106,8 @@ class BulkFinalizationTest {
             .killAndReopenApp(MainMenuPage())
 
             .clickDrafts(false)
-            .clickOptionsIcon(string.finalize_all_forms)
-            .clickOnString(string.finalize_all_forms)
+            .clickOptionsIcon(string.finalize_all_drafts)
+            .clickOnString(string.finalize_all_drafts)
             .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
             .assertText("One Question")
             .pressBack(MainMenuPage())
@@ -199,7 +199,7 @@ class BulkFinalizationTest {
             .clickSettings()
             .clickAccessControl()
             .clickFormEntrySettings()
-            .clickOnString(string.finalize_all_forms)
+            .clickOnString(string.finalize_all_drafts)
             .pressBack(AccessControlPage())
             .pressBack(ProjectSettingsPage())
             .pressBack(MainMenuPage())
