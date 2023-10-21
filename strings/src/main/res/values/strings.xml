@@ -1234,49 +1234,48 @@
     <string name="edit_finalized_form_deprecation_message" tools:ignore="UnusedResources">In later versions, finalized forms will no longer be editable.</string>
 
     <!-- Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend -->
-    <string name="finalize_all_drafts" oat:toReview="true">Finalize all drafts</string>
+    <string name="finalize_all_drafts">Finalize all drafts</string>
 
     <!-- Dialog title that asks if the user wants to finalize all drafts -->
-    <plurals name="bulk_finalize_confirmation" tools:ignore="UnusedResources">
+    <plurals name="bulk_finalize_confirmation">
         <item quantity="one">Do you want to finalize %d draft?</item>
         <item quantity="other">Do you want to finalize %d drafts?</item>
     </plurals>
 
     <!-- Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel -->
-    <string name="bulk_finalize_explanation" tools:ignore="UnusedResources">Once you finalize all drafts, they will be in "Ready to send" and you will not be able to make edits. Any drafts that have errors will not be finalized.\n\nYou will not be able to undo this action.</string>
+    <string name="bulk_finalize_explanation">Once you finalize all drafts, they will be in "Ready to send" and you will not be able to make edits. Any drafts that have errors will not be finalized.\n\nYou will not be able to undo this action.</string>
 
     <!-- Message shown after bulk finalization when finalizing all drafts has succeeded -->
-    <plurals name="bulk_finalize_success" oat:toReview="true">
+    <plurals name="bulk_finalize_success">
         <item quantity="one">Success! %d draft finalized.</item>
         <item quantity="other">Success! %d drafts finalized.</item>
     </plurals>
 
     <!-- Message shown after bulk finalization when no drafts finalized successfully -->
-    <plurals name="bulk_finalize_failure" oat:toReview="true">
+    <plurals name="bulk_finalize_failure">
         <item quantity="one">%d draft has errors that must be addressed before finalizing.</item>
         <item quantity="other">%d drafts have errors that must be addressed before finalizing.</item>
     </plurals>
 
     <!-- Message shown after bulk finalization when some drafts finalize successfully and others fail -->
-    <string name="bulk_finalize_partial_success" oat:toReview="true">%d drafts finalized. %d drafts have errors that must be addressed before finalizing.</string>
-
+    <string name="bulk_finalize_partial_success">%d drafts finalized. %d drafts have errors that must be addressed before finalizing.</string>
     <!-- Message shown when some drafts finalize successfully but others need to be finalized manually -->
-    <string name="bulk_finalize_unsupported" tools:ignore="UnusedResources">%d drafts finalized. Drafts that are left need to be finalized manually.</string>
+    <string name="bulk_finalize_unsupported">%d drafts finalized. Drafts that are left need to be finalized manually.</string>
 
     <!-- Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature. -->
-    <string name="draft_errors" tools:ignore="UnusedResources">Errors</string>
+    <string name="draft_errors">Errors</string>
 
     <!-- Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature. -->
-    <string name="draft_no_errors" tools:ignore="UnusedResources">No errors</string>
+    <string name="draft_no_errors">No errors</string>
 
     <!-- Title of section of features that the user can uncheck to hide from the Drafts screen -->
-    <string name="uncheck_to_hide_from_drafts" tools:ignore="UnusedResources">Uncheck to hide from Drafts</string>
+    <string name="uncheck_to_hide_from_drafts">Uncheck to hide from Drafts</string>
 
     <!-- Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
-    <string name="new_feature" tools:ignore="UnusedResources">New feature</string>
+    <string name="new_feature">New feature</string>
 
     <!-- Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
-    <string name="drafts_pills_education_message" tools:ignore="UnusedResources">The draft list now shows validation errors. Each time you save a form as draft, its validation status is updated.\n\nDrafts marked with \"Errors\" are either missing required questions or have values that are not allowed.</string>
+    <string name="drafts_pills_education_message">The draft list now shows validation errors. Each time you save a form as draft, its validation status is updated.\n\nDrafts marked with \"Errors\" are either missing required questions or have values that are not allowed.</string>
 
     <!-- General message displayed when the list of forms -->
     <string name="empty_list_title">Nothing available to display</string>
@@ -1292,10 +1291,4 @@
     <!-- Message displayed when the list of sent forms is empty -->
     <string name="empty_list_of_sent_forms_title">Nothing in sent</string>
     <string name="empty_list_of_sent_forms_subtitle">When you send finalized forms, they will appear here</string>
-
-    <!-- Message above a form draft that has been completed -->
-    <string name="complete" oat:toReview="true">Complete</string>
-
-    <!-- Title and message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
-    <string name="drafts_pills_education_title" oat:toReview="true">Drafts have changed</string>
 </resources>

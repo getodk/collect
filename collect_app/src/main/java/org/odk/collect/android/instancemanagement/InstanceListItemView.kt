@@ -40,7 +40,7 @@ object InstanceListItemView {
             } else if (instance.status == Instance.STATUS_VALID) {
                 pill.visibility = View.VISIBLE
                 pill.setIcon(R.drawable.baseline_check_24)
-                pill.setText(string.complete)
+                pill.setText(string.draft_no_errors)
                 pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorSurfaceContainerHighest))
                 pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
                 pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))

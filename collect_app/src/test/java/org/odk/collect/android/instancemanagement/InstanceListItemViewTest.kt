@@ -46,7 +46,7 @@ class InstanceListItemViewTest {
         InstanceListItemView.setInstance(binding.root, instance, false)
 
         assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
-        assertThat(binding.chip.text, equalTo(context.getString(string.complete)))
+        assertThat(binding.chip.text, equalTo(context.getString(string.draft_no_errors)))
     }
 
     @Test
@@ -77,7 +77,7 @@ class InstanceListItemViewTest {
         InstanceListItemView.setInstance(binding.root, valid, false)
 
         assertThat(binding.chip.visibility, equalTo(View.VISIBLE))
-        assertThat(binding.chip.text, equalTo(context.getString(string.complete)))
+        assertThat(binding.chip.text, equalTo(context.getString(string.draft_no_errors)))
 
         val invalid = InstanceFixtures.instance(status = Instance.STATUS_INVALID)
         InstanceListItemView.setInstance(binding.root, invalid, false)

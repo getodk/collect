@@ -42,7 +42,7 @@ class FormEndTest {
             .assertNumberOfFinalizedForms(0)
 
             .clickDrafts(1)
-            .assertText(string.complete)
+            .assertText(string.draft_no_errors)
             .assertTextDoesNotExist(string.draft_errors)
     }
 
@@ -59,7 +59,7 @@ class FormEndTest {
 
             .clickDrafts(1)
             .assertText(string.draft_errors)
-            .assertTextDoesNotExist(string.complete)
+            .assertTextDoesNotExist(string.draft_no_errors)
     }
 
     @Test
