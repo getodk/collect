@@ -1220,46 +1220,48 @@
     <!-- Message showed on main menu to inform users that the ability to edit finalized forms is going away -->
     <string name="edit_finalized_form_deprecation_message">In later versions, finalized forms will no longer be editable.</string>
 
-    <!-- Label for option that finalizes all the forms the user is currently looking at -->
-    <string name="finalize_all_forms" oat:toReview="true">Finalize all forms</string>
-
-    <!-- Message shown when finalizing all forms has succeeded and how many totally have been finalized -->
-    <plurals name="bulk_finalize_success" oat:toReview="true">
-        <item quantity="one">Success! %d form finalized.</item>
-        <item quantity="other">Success! %d forms finalized.</item>
-    </plurals>
-
-    <!-- Message shown when no forms finalized successfully -->
-    <plurals name="bulk_finalize_failure" oat:toReview="true">
-        <item quantity="one">%d form has an error. Address issues before finalizing all forms.</item>
-        <item quantity="other">%d forms have errors. Address issues before finalizing all forms.</item>
-    </plurals>
-
-    <!-- Message shown when some forms finalize successfully and others fail -->
-    <string name="bulk_finalize_partial_success" oat:toReview="true">%d forms finalized. %d forms have errors. Address issues before finalizing all forms.</string>
-
-    <!-- Message above a form draft that has not yet been completed -->
-    <string name="incomplete" oat:toReview="true">Incomplete</string>
-
-    <!-- Message above a form draft that has been completed -->
-    <string name="complete" oat:toReview="true">Complete</string>
-
-    <!-- Message shown when some forms finalize successfully but others need to be finalized manually -->
-    <string name="bulk_finalize_unsupported" oat:toReview="true">%d forms finalized. Some forms need to be finalized manually.</string>
-
-    <!-- Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel -->
-    <string name="bulk_finalize_explanation" oat:toReview="true">Once you finalize all forms, they will be in "Ready to send" and you will not be able to make edits. Any forms that have errors will not be finalized.\n\nYou will not be able to undo this action.</string>
+    <!-- Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend -->
+    <string name="finalize_all_drafts">Finalize all drafts</string>
 
     <!-- Dialog title that asks if the user wants to finalize all drafts -->
-    <plurals name="bulk_finalize_confirmation" oat:toReview="true">
-        <item quantity="one">Do you want to finalize %d form?</item>
-        <item quantity="other">Do you want to finalize %d forms?</item>
+    <plurals name="bulk_finalize_confirmation">
+        <item quantity="one">Do you want to finalize %d draft?</item>
+        <item quantity="other">Do you want to finalize %d drafts?</item>
     </plurals>
+
+    <!-- Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel -->
+    <string name="bulk_finalize_explanation">Once you finalize all drafts, they will be in "Ready to send" and you will not be able to make edits. Any drafts that have errors will not be finalized.\n\nYou will not be able to undo this action.</string>
+
+    <!-- Message shown after bulk finalization when finalizing all drafts has succeeded -->
+    <plurals name="bulk_finalize_success">
+        <item quantity="one">Success! %d draft finalized.</item>
+        <item quantity="other">Success! %d drafts finalized.</item>
+    </plurals>
+
+    <!-- Message shown after bulk finalization when no drafts finalized successfully -->
+    <plurals name="bulk_finalize_failure">
+        <item quantity="one">%d draft has errors that must be addressed before finalizing.</item>
+        <item quantity="other">%d drafts have errors that must be addressed before finalizing.</item>
+    </plurals>
+
+    <!-- Message shown after bulk finalization when some drafts finalize successfully and others fail -->
+    <string name="bulk_finalize_partial_success">%d drafts finalized. %d drafts have errors that must be addressed before finalizing.</string>
+
+    <!-- Message shown when some drafts finalize successfully but others need to be finalized manually -->
+    <string name="bulk_finalize_unsupported">%d drafts finalized. Drafts that are left need to be finalized manually.</string>
+
+    <!-- Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature. -->
+    <string name="draft_errors">Errors</string>
+
+    <!-- Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature. -->
+    <string name="draft_no_errors">No errors</string>
 
     <!-- Title of section of features that the user can uncheck to hide from the Drafts screen -->
     <string name="uncheck_to_hide_from_drafts">Uncheck to hide from Drafts</string>
 
-    <!-- Title and message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
-    <string name="drafts_pills_education_title" oat:toReview="true">Drafts have changed</string>
-    <string name="drafts_pills_education_message" oat:toReview="true">The draft list now shows validation errors. Drafts marked with \"Errors\" are either missing required questions or have values that are not allowed. Each time you save a form as draft, its validation status is updated.</string>
+    <!-- Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
+    <string name="new_feature">New feature</string>
+
+    <!-- Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
+    <string name="drafts_pills_education_message">The draft list now shows validation errors. Each time you save a form as draft, its validation status is updated.\n\nDrafts marked with \"Errors\" are either missing required questions or have values that are not allowed.</string>
 </resources>

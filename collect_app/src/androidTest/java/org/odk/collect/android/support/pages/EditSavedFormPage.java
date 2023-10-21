@@ -53,7 +53,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     private void closeDraftsPillsEducationDialog() {
         if (firstOpen) {
-            assertText(org.odk.collect.strings.R.string.drafts_pills_education_title);
+            assertText(org.odk.collect.strings.R.string.new_feature);
             clickOKOnDialog();
         }
     }
@@ -108,8 +108,8 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     }
 
     public BulkFinalizationConfirmationDialogPage clickFinalizeAll(int count) {
-        this.clickOptionsIcon(org.odk.collect.strings.R.string.finalize_all_forms)
-                .clickOnString(org.odk.collect.strings.R.string.finalize_all_forms);
+        this.clickOptionsIcon(org.odk.collect.strings.R.string.finalize_all_drafts)
+                .clickOnString(org.odk.collect.strings.R.string.finalize_all_drafts);
 
         return new BulkFinalizationConfirmationDialogPage(count).assertOnPage();
     }

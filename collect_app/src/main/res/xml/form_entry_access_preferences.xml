@@ -54,7 +54,7 @@
         app:iconSpaceReserved="false">
         <CheckBoxPreference
             android:key="bulk_finalize"
-            android:title="@string/finalize_all_forms"
+            android:title="@string/finalize_all_drafts"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>
