@@ -53,7 +53,7 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
 
     private void closeDraftsPillsEducationDialog() {
         if (firstOpen) {
-            assertText(org.odk.collect.strings.R.string.drafts_pills_education_title);
+            assertText(org.odk.collect.strings.R.string.new_feature);
             clickOKOnDialog();
         }
     }

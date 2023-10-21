@@ -1260,8 +1260,8 @@
     <string name="uncheck_to_hide_from_drafts">Uncheck to hide from Drafts</string>
 
     <!-- Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
-    <string name="drafts_pills_education_title">Drafts now show errors</string>
+    <string name="new_feature">New feature</string>
 
     <!-- Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
-    <string name="drafts_pills_education_message">The draft list now shows validation errors. Drafts marked with \"Errors\" are either missing required questions or have values that are not allowed.\n\nEach time you save a form as draft, its validation status is updated.</string>
+    <string name="drafts_pills_education_message">The draft list now shows validation errors. Each time you save a form as draft, its validation status is updated.\n\nDrafts marked with \"Errors\" are either missing required questions or have values that are not allowed.</string>
 </resources>
