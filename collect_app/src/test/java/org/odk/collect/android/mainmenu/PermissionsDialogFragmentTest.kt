@@ -70,4 +70,12 @@ class PermissionsDialogFragmentTest {
         launcherRule.launch(PermissionsDialogFragment::class.java).recreate()
         verify(requestPermissionsViewModel, never()).permissionsRequested()
     }
+
+    @Test
+    fun `The dialog should not be dismissed after clicking out of its area or on device back button`() {
+        val scenario = launcherRule.launch(PermissionsDialogFragment::class.java)
+        scenario.onFragment {
+            assertThat(it.isCancelable, equalTo(false))
+        }
+    }
 }
