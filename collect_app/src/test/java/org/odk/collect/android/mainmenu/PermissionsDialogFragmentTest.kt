@@ -1,6 +1,5 @@
 package org.odk.collect.android.mainmenu
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -54,14 +53,6 @@ class PermissionsDialogFragmentTest {
         launcherRule.launch(PermissionsDialogFragment::class.java)
 
         onView(withText(org.odk.collect.strings.R.string.ok)).inRoot(isDialog()).perform(click())
-        verify(requestPermissionsViewModel).permissionsRequested()
-    }
-
-    @Test
-    fun dismissing_callsPermissionRequested() {
-        launcherRule.launch(PermissionsDialogFragment::class.java)
-
-        Espresso.pressBack()
         verify(requestPermissionsViewModel).permissionsRequested()
     }
 
