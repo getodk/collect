@@ -21,6 +21,8 @@ class PermissionsDialogFragment(
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        isCancelable = false
+
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(org.odk.collect.strings.R.string.permission_dialog_title)
             .setView(R.layout.permissions_dialog_layout)
