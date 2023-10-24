@@ -106,9 +106,9 @@ class BulkFinalizationTest {
             .killAndReopenApp(MainMenuPage())
 
             .clickDrafts(false)
-            .clickOptionsIcon(string.finalize_all_drafts)
-            .clickOnString(string.finalize_all_drafts)
-            .checkIsSnackbarWithQuantityDisplayed(plurals.bulk_finalize_failure, 1)
+            .clickFinalizeAll(1)
+            .clickFinalize()
+            .checkIsSnackbarWithMessageDisplayed(string.bulk_finalize_unsupported, 0)
             .assertText("One Question")
             .pressBack(MainMenuPage())
 
