@@ -17,7 +17,7 @@ import com.bumptech.glide.request.target.Target
 class SvgSoftwareLayerSetter : RequestListener<PictureDrawable?> {
     override fun onLoadFailed(
         e: GlideException?,
-        model: Any,
+        model: Any?,
         target: Target<PictureDrawable?>,
         isFirstResource: Boolean
     ): Boolean {
@@ -27,7 +27,7 @@ class SvgSoftwareLayerSetter : RequestListener<PictureDrawable?> {
     }
 
     override fun onResourceReady(
-        resource: PictureDrawable?,
+        resource: PictureDrawable,
         model: Any,
         target: Target<PictureDrawable?>,
         dataSource: DataSource,

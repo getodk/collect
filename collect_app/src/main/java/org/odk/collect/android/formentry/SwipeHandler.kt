@@ -53,20 +53,20 @@ class SwipeHandler(context: Context, generalSettings: Settings) {
         override fun onShowPress(e: MotionEvent) = Unit
         override fun onLongPress(e: MotionEvent) = Unit
 
-        override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
             // The onFling() captures the 'up' event so our view thinks it gets long pressed. We don't want that, so cancel it.
             view?.cancelLongPress()
             return false
         }
 
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (view == null) {
                 return false
             }
 
             FlingRegister.flingDetected()
 
-            if (generalSettings.getString(ProjectKeys.KEY_NAVIGATION)!!.contains(ProjectKeys.NAVIGATION_SWIPE) && allowSwiping) {
+            if (e1 != null && generalSettings.getString(ProjectKeys.KEY_NAVIGATION)!!.contains(ProjectKeys.NAVIGATION_SWIPE) && allowSwiping) {
                 // Looks for user swipes. If the user has swiped, move to the appropriate screen.
 
                 // For all screens a swipe is left/right of at least .25" and up/down of less than .25" OR left/right of > .5"
