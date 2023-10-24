@@ -260,7 +260,11 @@ public class ODKAppSettingsMigratorTest {
 
         runMigrations();
 
-        assertSettings(protectedSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true, ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false);
+        assertSettings(protectedSettings,
+                ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true,
+                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false,
+                ProtectedProjectKeys.KEY_BULK_FINALIZE, false
+        );
 
         assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
         assertThat(protectedSettings.contains("default_completed"), equalTo(false));
@@ -273,7 +277,11 @@ public class ODKAppSettingsMigratorTest {
 
         runMigrations();
 
-        assertSettings(protectedSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false, ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true);
+        assertSettings(protectedSettings,
+                ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
+                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true,
+                ProtectedProjectKeys.KEY_BULK_FINALIZE, true
+        );
 
         assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
         assertThat(protectedSettings.contains("default_completed"), equalTo(false));
@@ -285,7 +293,11 @@ public class ODKAppSettingsMigratorTest {
 
         runMigrations();
 
-        assertSettings(protectedSettings, ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false, ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true);
+        assertSettings(protectedSettings,
+                ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
+                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true,
+                ProtectedProjectKeys.KEY_BULK_FINALIZE, true
+        );
 
         assertThat(protectedSettings.contains("mark_as_finalized"), equalTo(false));
         assertThat(protectedSettings.contains("default_completed"), equalTo(false));
@@ -322,7 +334,7 @@ public class ODKAppSettingsMigratorTest {
         initSettings(protectedSettings,
                 ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, false,
                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true,
-                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false
+                "finalize", false
         );
 
         runMigrations();
@@ -338,7 +350,7 @@ public class ODKAppSettingsMigratorTest {
         initSettings(protectedSettings,
                 ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM, true,
                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true,
-                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false
+                "finalize", false
         );
 
         runMigrations();
@@ -365,6 +377,20 @@ public class ODKAppSettingsMigratorTest {
         initSettings(protectedSettings, "finalize", false);
 
         runMigrations();
+
+        assertThat(protectedSettings.contains(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(true));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(false));
+    }
+
+    @Test
+    public void whenMarkAsFinalizeAndDefaultCompletedWereDisabled_disablesWaysToFinalize() {
+        initSettings(protectedSettings, "mark_as_finalized", false);
+        initSettings(unprotectedSettings, "default_completed", false);
+
+        runMigrations();
+
+        assertThat(protectedSettings.contains(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY), equalTo(true));
+        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY), equalTo(false));
 
         assertThat(protectedSettings.contains(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(true));
         assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(false));
