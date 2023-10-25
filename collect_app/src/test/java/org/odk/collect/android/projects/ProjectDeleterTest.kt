@@ -75,9 +75,9 @@ class ProjectDeleterTest {
     @Test
     fun `If there are invalid instances the project should not be deleted`() {
         instancesRepository.save(
-                Instance.Builder()
-                        .status(Instance.STATUS_INVALID)
-                        .build()
+            Instance.Builder()
+                .status(Instance.STATUS_INVALID)
+                .build()
         )
 
         val result = deleter.deleteProject(project1.uuid)
@@ -89,9 +89,9 @@ class ProjectDeleterTest {
     @Test
     fun `If there are valid instances the project should not be deleted`() {
         instancesRepository.save(
-                Instance.Builder()
-                        .status(Instance.STATUS_VALID)
-                        .build()
+            Instance.Builder()
+                .status(Instance.STATUS_VALID)
+                .build()
         )
 
         val result = deleter.deleteProject(project1.uuid)
