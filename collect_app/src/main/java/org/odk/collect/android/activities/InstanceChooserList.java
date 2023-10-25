@@ -252,7 +252,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         Form form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(formId, version);
         String formTitle = form != null ? form.getDisplayName() : "";
 
-        if (status.equals(Instance.STATUS_INCOMPLETE)) {
+        if (status.equals(Instance.STATUS_INCOMPLETE) || status.equals(Instance.STATUS_INVALID) || status.equals(Instance.STATUS_VALID)) {
             AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_NON_FINALIZED_FORM, formId, formTitle);
         }
     }
