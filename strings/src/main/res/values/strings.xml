@@ -1261,9 +1261,6 @@
     <!-- Message shown after bulk finalization when some drafts finalize successfully and others fail -->
     <string name="bulk_finalize_partial_success" tools:ignore="UnusedResources">%d drafts finalized. %d drafts have errors that must be addressed before finalizing.</string>
 
-    <!-- Message above a form draft that has not yet been completed -->
-    <string name="incomplete" tools:ignore="UnusedResources">Incomplete</string>
-
     <!-- Message shown when some drafts finalize successfully but others need to be finalized manually -->
     <string name="bulk_finalize_unsupported" tools:ignore="UnusedResources">%d drafts finalized. Drafts that are left need to be finalized manually.</string>
 
