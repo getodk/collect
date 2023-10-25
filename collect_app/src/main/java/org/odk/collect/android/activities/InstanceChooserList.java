@@ -213,6 +213,8 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                             c.getString(c.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE));
 
                     boolean canEdit = status.equals(Instance.STATUS_INCOMPLETE)
+                            || status.equals(Instance.STATUS_INVALID)
+                            || status.equals(Instance.STATUS_VALID)
                             || Boolean.parseBoolean(strCanEditWhenComplete);
                     if (!canEdit) {
                         createErrorDialog(getString(org.odk.collect.strings.R.string.cannot_edit_completed_form),
