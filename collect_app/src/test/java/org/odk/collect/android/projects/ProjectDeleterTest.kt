@@ -73,6 +73,34 @@ class ProjectDeleterTest {
     }
 
     @Test
+    fun `If there are invalid instances the project should not be deleted`() {
+        instancesRepository.save(
+            Instance.Builder()
+                .status(Instance.STATUS_INVALID)
+                .build()
+        )
+
+        val result = deleter.deleteProject(project1.uuid)
+
+        assertThat(result, instanceOf(DeleteProjectResult.UnsentInstances::class.java))
+        assertThat(projectsRepository.projects.contains(project1), equalTo(true))
+    }
+
+    @Test
+    fun `If there are valid instances the project should not be deleted`() {
+        instancesRepository.save(
+            Instance.Builder()
+                .status(Instance.STATUS_VALID)
+                .build()
+        )
+
+        val result = deleter.deleteProject(project1.uuid)
+
+        assertThat(result, instanceOf(DeleteProjectResult.UnsentInstances::class.java))
+        assertThat(projectsRepository.projects.contains(project1), equalTo(true))
+    }
+
+    @Test
     fun `If there are complete instances the project should not be deleted`() {
         instancesRepository.save(
             Instance.Builder()
