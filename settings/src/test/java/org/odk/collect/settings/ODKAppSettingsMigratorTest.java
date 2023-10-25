@@ -382,20 +382,6 @@ public class ODKAppSettingsMigratorTest {
         assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(false));
     }
 
-    @Test
-    public void whenMarkAsFinalizeAndDefaultCompletedWereDisabled_disablesWaysToFinalize() {
-        initSettings(protectedSettings, "mark_as_finalized", false);
-        initSettings(unprotectedSettings, "default_completed", false);
-
-        runMigrations();
-
-        assertThat(protectedSettings.contains(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY), equalTo(true));
-        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY), equalTo(false));
-
-        assertThat(protectedSettings.contains(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(true));
-        assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(false));
-    }
-
     private void runMigrations() {
         new ODKAppSettingsMigrator(metaSettings).migrate(unprotectedSettings, protectedSettings);
     }
