@@ -81,9 +81,7 @@ public class MapConfiguratorProvider {
                 new OsmDroidMapConfigurator(
                         new WebMapService(
                                 "Mapnik", 0, 19, 256, OSM_COPYRIGHT,
-                                "http://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                "http://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                "http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
                         )
                 )
         ));
