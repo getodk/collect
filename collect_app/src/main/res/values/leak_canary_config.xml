@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- This is needed to enable LeakCanary according to https://square.github.io/leakcanary/changelog/#api-breaking-bettering-changes -->
-    <string name="leak_canary_test_class_name" translatable="false">assertk.Assert</string>
+    <string name="leak_canary_test_class_name" translatable="false">androidx.test.ext.junit.runners.AndroidJUnit4</string>
     <bool name="leak_canary_allow_in_non_debuggable_build">true</bool>
 </resources>
