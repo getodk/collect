@@ -425,7 +425,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     sizes for individual widgets. Furthermore, this method lays the groundwork for potential future
     enhancements, such as extending font size adjustments to other view types like text views etc.
      */
-    public void adjustButtonFontSize(ViewGroup view) {
+    private void adjustButtonFontSize(ViewGroup view) {
         for (int i = 0; i < view.getChildCount(); i++) {
             View childView = view.getChildAt(i);
             if (childView instanceof ViewGroup) {
