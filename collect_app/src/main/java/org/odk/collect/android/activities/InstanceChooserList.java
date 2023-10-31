@@ -19,7 +19,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -32,7 +31,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
@@ -80,8 +78,6 @@ import javax.inject.Inject;
 public class InstanceChooserList extends AppListActivity implements AdapterView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
-
-    private static final boolean DO_NOT_EXIT = false;
 
     private boolean editMode;
 
@@ -209,20 +205,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                     setResult(RESULT_OK, new Intent().setData(instanceUri));
                     finish();
                 } else {
-                    // the form can be edited if it is incomplete or if, when it was
-                    // marked as complete, it was determined that it could be edited
-                    // later.
-                    String status = c.getString(c.getColumnIndex(DatabaseInstanceColumns.STATUS));
-                    String strCanEditWhenComplete =
-                            c.getString(c.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE));
-
-                    boolean canEdit = status.equals(Instance.STATUS_INCOMPLETE)
-                            || Boolean.parseBoolean(strCanEditWhenComplete);
-                    if (!canEdit) {
-                        createErrorDialog(getString(org.odk.collect.strings.R.string.cannot_edit_completed_form),
-                                DO_NOT_EXIT);
-                        return;
-                    }
                     // caller wants to view/edit a form, so launch FormFillingActivity
                     Intent parentIntent = this.getIntent();
                     Intent intent = new Intent(this, FormUriActivity.class);
@@ -254,7 +236,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         Form form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(formId, version);
         String formTitle = form != null ? form.getDisplayName() : "";
 
-        if (status.equals(Instance.STATUS_INCOMPLETE)) {
+        if (status.equals(Instance.STATUS_INCOMPLETE) || status.equals(Instance.STATUS_INVALID) || status.equals(Instance.STATUS_VALID)) {
             AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_NON_FINALIZED_FORM, formId, formTitle);
         } else if (status.equals(Instance.STATUS_COMPLETE)) {
             AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_FINALIZED_FORM, formId, formTitle);
@@ -301,26 +283,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
     @Override
     public void onLoaderReset(@NonNull Loader loader) {
         listAdapter.swapCursor(null);
-    }
-
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this).create();
-        alertDialog.setMessage(errorMsg);
-        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(org.odk.collect.strings.R.string.ok), errorListener);
-        alertDialog.show();
     }
 
     protected String getSortingOrder() {

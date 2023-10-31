@@ -30,22 +30,26 @@ object InstanceListItemView {
 
         val pill = view.findViewById<MaterialPill>(R.id.chip)
         if (pill != null) {
-            if (instance.status == Instance.STATUS_INVALID || instance.status == Instance.STATUS_INCOMPLETE) {
-                pill.visibility = View.VISIBLE
-                pill.setIcon(R.drawable.baseline_rule_24)
-                pill.setText(string.draft_errors)
-                pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorErrorContainer))
-                pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
-                pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
-            } else if (instance.status == Instance.STATUS_VALID) {
-                pill.visibility = View.VISIBLE
-                pill.setIcon(R.drawable.baseline_check_24)
-                pill.setText(string.draft_no_errors)
-                pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorSurfaceContainerHighest))
-                pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
-                pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
-            } else {
-                pill.visibility = View.GONE
+            when (instance.status) {
+                Instance.STATUS_INVALID, Instance.STATUS_INCOMPLETE -> {
+                    pill.visibility = View.VISIBLE
+                    pill.setIcon(R.drawable.baseline_rule_24)
+                    pill.setText(string.draft_errors)
+                    pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorErrorContainer))
+                    pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
+                    pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
+                }
+                Instance.STATUS_VALID -> {
+                    pill.visibility = View.VISIBLE
+                    pill.setIcon(R.drawable.baseline_check_24)
+                    pill.setText(string.draft_no_errors)
+                    pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorSurfaceContainerHighest))
+                    pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
+                    pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
+                }
+                else -> {
+                    pill.visibility = View.GONE
+                }
             }
         }
 
