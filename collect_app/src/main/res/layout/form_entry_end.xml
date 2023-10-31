@@ -90,7 +90,7 @@ the specific language governing permissions and limitations under the License.
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_as_draft"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Collect.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/save_as_draft"

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material3.Button.OutlinedButton` doesn't work properly on older API levels (22 and under) without a Material 3 theme so we fall back to Material 2 -->
+    <style name="Widget.Collect.Material3.Button.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton"></style>
+
+    <style name="Widget.Collect.Material3.Button.OutlinedButton.Icon" parent="Widget.MaterialComponents.Button.OutlinedButton"></style>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Collect.Material3.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton"></style>
+
+    <style name="Widget.Collect.Material3.Button.OutlinedButton.Icon" parent="Widget.Material3.Button.OutlinedButton.Icon"></style>
+</resources>
