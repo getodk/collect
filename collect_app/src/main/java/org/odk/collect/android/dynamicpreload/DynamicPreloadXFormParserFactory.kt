@@ -1,14 +1,11 @@
 package org.odk.collect.android.dynamicpreload
 
-import org.javarosa.core.model.DataBinding
 import org.javarosa.core.model.FormDef
-import org.javarosa.core.model.QuestionDef
 import org.javarosa.core.util.externalizable.ExtUtil
 import org.javarosa.core.util.externalizable.Externalizable
 import org.javarosa.core.util.externalizable.PrototypeFactory
 import org.javarosa.xform.parse.IXFormParserFactory
 import org.javarosa.xform.parse.XFormParser
-import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerPull
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
@@ -22,49 +19,10 @@ class DynamicPreloadXFormParserFactory(base: IXFormParserFactory) :
     }
 }
 
-class DynamicPreloadParseProcessor :
-    XFormParser.BindAttributeProcessor,
-    XFormParser.QuestionProcessor,
-    XFormParser.FormDefProcessor {
-
-    private var containsSearchOrPullData = false
-
-    override fun getBindAttributes(): Set<Pair<String, String>> {
-        return setOf(
-            Pair("", "calculate"),
-            Pair("", "readonly"),
-            Pair("", "required"),
-            Pair("", "relevant"),
-            Pair("", "constraint")
-        )
-    }
-
-    override fun processBindAttribute(name: String, value: String, binding: DataBinding) {
-        val condition = when (name) {
-            "calculate" -> binding.calculate.expr
-            "required" -> binding.requiredCondition?.expr
-            "relevant" -> binding.relevancyCondition?.expr
-            "readonly" -> binding.readonlyCondition?.expr
-            "constraint" -> binding.constraint
-            else -> null
-        }
-
-        if (
-            condition != null &&
-            condition.expr.containsFunc(ExternalDataHandlerPull.HANDLER_NAME)
-        ) {
-            containsSearchOrPullData = true
-        }
-    }
-
-    override fun processQuestion(question: QuestionDef) {
-        if (ExternalDataUtil.getSearchXPathExpression(question.appearanceAttr) != null) {
-            containsSearchOrPullData = true
-        }
-    }
+class DynamicPreloadParseProcessor : XFormParser.FormDefProcessor {
 
     override fun processFormDef(formDef: FormDef) {
-        formDef.extras.put(DynamicPreloadExtra(containsSearchOrPullData))
+        formDef.extras.put(DynamicPreloadExtra(true))
     }
 }
 
