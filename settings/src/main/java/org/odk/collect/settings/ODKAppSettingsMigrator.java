@@ -155,17 +155,17 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                         .withValues(false, false)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true,
-                                ProtectedProjectKeys.KEY_FINALIZE, false
+                                "finalize", false
                         )
                         .withValues(false, true)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
-                                ProtectedProjectKeys.KEY_FINALIZE, true
+                                "finalize", true
                         )
                         .withValues(false, null)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
-                                ProtectedProjectKeys.KEY_FINALIZE, true
+                                "finalize", true
                         ),
                 removeKey("mark_as_finalized"),
                 removeKey("default_completed"),
@@ -173,8 +173,19 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                         .withValues(false)
                         .toPairs(
                                 ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false,
-                                ProtectedProjectKeys.KEY_FINALIZE, true
+                                "finalize", true
+                        ),
+                updateKeys("finalize").withValues(false)
+                        .toPairs(
+                                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false,
+                                ProtectedProjectKeys.KEY_BULK_FINALIZE, false
                         )
+                        .withValues(true)
+                        .toPairs(
+                                ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true,
+                                ProtectedProjectKeys.KEY_BULK_FINALIZE, true
+                        ),
+                removeKey("finalize")
         );
     }
 }

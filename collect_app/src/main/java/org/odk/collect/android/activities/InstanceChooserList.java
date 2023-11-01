@@ -19,7 +19,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -32,7 +31,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
@@ -44,17 +42,28 @@ import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.analytics.AnalyticsUtils;
 import org.odk.collect.android.dao.CursorLoaderFactory;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
+import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
+import org.odk.collect.android.formmanagement.InstancesDataService;
+import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
+import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
 import org.odk.collect.android.injection.DaggerUtils;
+import org.odk.collect.android.instancemanagement.FinalizeAllSnackbarPresenter;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.views.EmptyListView;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.material.MaterialProgressDialogFragment;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.MetaKeys;
+import org.odk.collect.strings.R.string;
 
 import java.util.Arrays;
 
@@ -70,8 +79,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
     private static final String INSTANCE_LIST_ACTIVITY_SORTING_ORDER = "instanceListActivitySortingOrder";
     private static final String VIEW_SENT_FORM_SORTING_ORDER = "ViewSentFormSortingOrder";
 
-    private static final boolean DO_NOT_EXIT = false;
-
     private boolean editMode;
 
     @Inject
@@ -79,6 +86,21 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
+
+    @Inject
+    Scheduler scheduler;
+
+    @Inject
+    InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    EntitiesRepositoryProvider entitiesRepositoryProvider;
+
+    @Inject
+    SettingsProvider settingsProvider;
+
+    @Inject
+    InstancesDataService instancesDataService;
 
     private final ActivityResultLauncher<Intent> formLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         setResult(RESULT_OK, result.getData());
@@ -95,6 +117,16 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         if (formMode == null || ApplicationConstants.FormModes.EDIT_SAVED.equalsIgnoreCase(formMode)) {
             setTitle(getString(org.odk.collect.strings.R.string.review_data));
             editMode = true;
+
+            if (!settingsProvider.getMetaSettings().getBoolean(MetaKeys.DRAFTS_PILLS_EDUCATION_SHOWN)) {
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle(string.new_feature)
+                        .setMessage(string.drafts_pills_education_message)
+                        .setPositiveButton(string.ok, null)
+                        .show();
+
+                settingsProvider.getMetaSettings().save(MetaKeys.DRAFTS_PILLS_EDUCATION_SHOWN, true);
+            }
         } else {
             setTitle(getString(org.odk.collect.strings.R.string.view_sent_forms));
             EmptyListView emptyListView = findViewById(android.R.id.empty);
@@ -123,6 +155,32 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         );
 
         init();
+
+        BulkFinalizationViewModel bulkFinalizationViewModel = new BulkFinalizationViewModel(
+                scheduler,
+                instancesDataService,
+                settingsProvider
+        );
+
+        MaterialProgressDialogFragment.showOn(this, bulkFinalizationViewModel.isFinalizing(), getSupportFragmentManager(), () -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage("Finalizing drafts...");
+            return dialog;
+        });
+
+        if (bulkFinalizationViewModel.isEnabled()) {
+            DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(this, bulkFinalizationViewModel::finalizeAllDrafts);
+            addMenuProvider(draftsMenuProvider, this);
+            bulkFinalizationViewModel.getDraftsCount().observe(this, draftsCount -> {
+                draftsMenuProvider.setDraftsCount(draftsCount);
+                invalidateMenu();
+            });
+
+            bulkFinalizationViewModel.getFinalizedForms().observe(
+                    this,
+                    new FinalizeAllSnackbarPresenter(this.findViewById(android.R.id.content), this)
+            );
+        }
     }
 
     private void init() {
@@ -147,20 +205,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
                     setResult(RESULT_OK, new Intent().setData(instanceUri));
                     finish();
                 } else {
-                    // the form can be edited if it is incomplete or if, when it was
-                    // marked as complete, it was determined that it could be edited
-                    // later.
-                    String status = c.getString(c.getColumnIndex(DatabaseInstanceColumns.STATUS));
-                    String strCanEditWhenComplete =
-                            c.getString(c.getColumnIndex(DatabaseInstanceColumns.CAN_EDIT_WHEN_COMPLETE));
-
-                    boolean canEdit = status.equals(Instance.STATUS_INCOMPLETE)
-                            || Boolean.parseBoolean(strCanEditWhenComplete);
-                    if (!canEdit) {
-                        createErrorDialog(getString(org.odk.collect.strings.R.string.cannot_edit_completed_form),
-                                DO_NOT_EXIT);
-                        return;
-                    }
                     // caller wants to view/edit a form, so launch FormFillingActivity
                     Intent parentIntent = this.getIntent();
                     Intent intent = new Intent(this, FormUriActivity.class);
@@ -192,7 +236,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
         Form form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(formId, version);
         String formTitle = form != null ? form.getDisplayName() : "";
 
-        if (status.equals(Instance.STATUS_INCOMPLETE)) {
+        if (status.equals(Instance.STATUS_INCOMPLETE) || status.equals(Instance.STATUS_INVALID) || status.equals(Instance.STATUS_VALID)) {
             AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_NON_FINALIZED_FORM, formId, formTitle);
         } else if (status.equals(Instance.STATUS_COMPLETE)) {
             AnalyticsUtils.logFormEvent(AnalyticsEvents.EDIT_FINALIZED_FORM, formId, formTitle);
@@ -239,26 +283,6 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
     @Override
     public void onLoaderReset(@NonNull Loader loader) {
         listAdapter.swapCursor(null);
-    }
-
-    private void createErrorDialog(String errorMsg, final boolean shouldExit) {
-        AlertDialog alertDialog = new MaterialAlertDialogBuilder(this).create();
-        alertDialog.setMessage(errorMsg);
-        DialogInterface.OnClickListener errorListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                switch (i) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        if (shouldExit) {
-                            finish();
-                        }
-                        break;
-                }
-            }
-        };
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(org.odk.collect.strings.R.string.ok), errorListener);
-        alertDialog.show();
     }
 
     protected String getSortingOrder() {

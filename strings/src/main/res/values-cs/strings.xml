@@ -961,8 +961,7 @@
   <string name="crash_app">Aplikace Crash</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Vynucení nezachycené výjimky, která způsobí pád aplikace</string>
-  <string name="predicate_caching">Předpokládané ukládání do mezipaměti</string>
-  <string name="permission_dialog_title">O oprávněních</string>
+    <string name="permission_dialog_title">O oprávněních</string>
   <string name="permission_dialog_text">Budete požádáni o povolení přístupu ODK Collect k níže uvedeným funkcím, pokud je chcete používat, vyberte možnost \"povolit\".</string>
   <string name="notifications">Oznámení</string>
   <string name="required_for_notifications">Vyžaduje se pro zobrazení aktualizací při stahování, aktualizaci a odesílání formulářů.</string>

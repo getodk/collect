@@ -16,13 +16,6 @@
 
 package org.odk.collect.android.support.pages;
 
-import android.widget.RelativeLayout;
-
-import androidx.appcompat.widget.Toolbar;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.InstanceListCursorAdapter;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -37,12 +30,32 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 
+import android.widget.RelativeLayout;
+
+import androidx.appcompat.widget.Toolbar;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.adapters.InstanceListCursorAdapter;
+
 public class EditSavedFormPage extends Page<EditSavedFormPage> {
+    private final boolean firstOpen;
+
+    public EditSavedFormPage(boolean first) {
+        this.firstOpen = first;
+    }
 
     @Override
     public EditSavedFormPage assertOnPage() {
+        closeDraftsPillsEducationDialog();
         assertText(org.odk.collect.strings.R.string.review_data);
         return this;
+    }
+
+    private void closeDraftsPillsEducationDialog() {
+        if (firstOpen) {
+            assertText(org.odk.collect.strings.R.string.new_feature);
+            clickOKOnDialog();
+        }
     }
 
     public EditSavedFormPage checkInstanceState(String instanceName, String desiredStatus) {
@@ -92,5 +105,12 @@ public class EditSavedFormPage extends Page<EditSavedFormPage> {
     public EditSavedFormPage searchInBar(String query) {
         onView(withId(androidx.appcompat.R.id.search_src_text)).perform(replaceText(query));
         return this;
+    }
+
+    public BulkFinalizationConfirmationDialogPage clickFinalizeAll(int count) {
+        this.clickOptionsIcon(org.odk.collect.strings.R.string.finalize_all_drafts)
+                .clickOnString(org.odk.collect.strings.R.string.finalize_all_drafts);
+
+        return new BulkFinalizationConfirmationDialogPage(count).assertOnPage();
     }
 }

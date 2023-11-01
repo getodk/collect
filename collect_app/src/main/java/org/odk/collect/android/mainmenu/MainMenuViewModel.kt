@@ -4,12 +4,12 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import org.odk.collect.android.R
-import org.odk.collect.android.formmanagement.InstancesAppState
+import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.android.instancemanagement.canBeEdited
+import org.odk.collect.android.instancemanagement.isDraft
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.android.utilities.ContentUriHelper
@@ -25,7 +25,7 @@ class MainMenuViewModel(
     private val application: Application,
     private val versionInformation: VersionInformation,
     private val settingsProvider: SettingsProvider,
-    private val instancesAppState: InstancesAppState,
+    private val instancesDataService: InstancesDataService,
     private val scheduler: Scheduler,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
@@ -92,26 +92,26 @@ class MainMenuViewModel(
     fun refreshInstances() {
         scheduler.immediate<Any?>({
             InstanceDiskSynchronizer(settingsProvider).doInBackground()
-            instancesAppState.update()
+            instancesDataService.update()
             null
         }) { }
     }
 
     val editableInstancesCount: LiveData<Int>
-        get() = instancesAppState.editableCount
+        get() = instancesDataService.editableCount
 
     val sendableInstancesCount: LiveData<Int>
-        get() = instancesAppState.sendableCount
+        get() = instancesDataService.sendableCount
 
     val sentInstancesCount: LiveData<Int>
-        get() = instancesAppState.sentCount
+        get() = instancesDataService.sentCount
 
     fun getFormSavedSnackbarDetails(uri: Uri): Pair<Int, Int?>? {
         val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
         return if (instance != null) {
-            val message = if (instance.status == Instance.STATUS_INCOMPLETE) {
+            val message = if (instance.isDraft()) {
                 org.odk.collect.strings.R.string.form_saved_as_draft
-            } else if (instance.status == Instance.STATUS_COMPLETE) {
+            } else if (instance.status == Instance.STATUS_COMPLETE || instance.status == Instance.STATUS_SUBMISSION_FAILED) {
                 val form = formsRepositoryProvider.get().getAllByFormIdAndVersion(instance.formId, instance.formVersion).first()
                 if (form.shouldFormBeSentAutomatically(autoSendSettingsProvider.isAutoSendEnabledInSettings())) {
                     org.odk.collect.strings.R.string.form_sending
@@ -125,7 +125,7 @@ class MainMenuViewModel(
             val action = if (instance.canBeEdited(settingsProvider)) {
                 org.odk.collect.strings.R.string.edit_form
             } else {
-                if (instance.status == Instance.STATUS_INCOMPLETE || instance.canEditWhenComplete()) {
+                if (instance.isDraft() || instance.canEditWhenComplete()) {
                     org.odk.collect.strings.R.string.view_form
                 } else {
                     null

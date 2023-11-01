@@ -37,7 +37,7 @@ class FormSavedSnackbarTest {
             .answerQuestion(0, "25")
             .swipeToEndScreen()
             .clickSaveAsDraft()
-            .clickEditSavedForm()
+            .clickDrafts()
             .clickOnForm("One Question")
             .clickGoToEnd()
             .clickFinalize()

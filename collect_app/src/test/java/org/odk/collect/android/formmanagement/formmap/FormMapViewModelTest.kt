@@ -127,6 +127,94 @@ class FormMapViewModelTest {
     }
 
     @Test
+    fun `valid drafts with geometry have proper icons, actions and no info`() {
+        val form = formsRepository.save(
+            FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
+                .build()
+        )
+        val instance = instancesRepository.save(
+            InstanceUtils.buildInstance(
+                form.formId,
+                form.version,
+                TempFiles.createTempDir().absolutePath
+            )
+                .geometry("{ \"coordinates\": [1.0, 2.0] }")
+                .geometryType("Point")
+                .canEditWhenComplete(true)
+                .status(Instance.STATUS_VALID)
+                .build()
+        )
+
+        val viewModel = createAndLoadViewModel(form)
+        val expectedItem = MappableSelectItem.WithAction(
+            instance.dbId,
+            2.0,
+            1.0,
+            R.drawable.ic_room_form_state_incomplete_24dp,
+            R.drawable.ic_room_form_state_incomplete_48dp,
+            instance.displayName,
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.ic_form_state_saved,
+                    formatDate(
+                        org.odk.collect.strings.R.string.saved_on_date_at_time,
+                        instance.lastStatusChangeDate
+                    )
+                )
+            ),
+            action = MappableSelectItem.IconifiedText(
+                R.drawable.ic_edit,
+                application.getString(org.odk.collect.strings.R.string.edit_data)
+            )
+        )
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
+    }
+
+    @Test
+    fun `invalid drafts with geometry have proper icons, actions and no info`() {
+        val form = formsRepository.save(
+            FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)
+                .build()
+        )
+        val instance = instancesRepository.save(
+            InstanceUtils.buildInstance(
+                form.formId,
+                form.version,
+                TempFiles.createTempDir().absolutePath
+            )
+                .geometry("{ \"coordinates\": [1.0, 2.0] }")
+                .geometryType("Point")
+                .canEditWhenComplete(true)
+                .status(Instance.STATUS_INVALID)
+                .build()
+        )
+
+        val viewModel = createAndLoadViewModel(form)
+        val expectedItem = MappableSelectItem.WithAction(
+            instance.dbId,
+            2.0,
+            1.0,
+            R.drawable.ic_room_form_state_incomplete_24dp,
+            R.drawable.ic_room_form_state_incomplete_48dp,
+            instance.displayName,
+            listOf(
+                MappableSelectItem.IconifiedText(
+                    R.drawable.ic_form_state_saved,
+                    formatDate(
+                        org.odk.collect.strings.R.string.saved_on_date_at_time,
+                        instance.lastStatusChangeDate
+                    )
+                )
+            ),
+            action = MappableSelectItem.IconifiedText(
+                R.drawable.ic_edit,
+                application.getString(org.odk.collect.strings.R.string.edit_data)
+            )
+        )
+        assertThat(viewModel.getMappableItems().value!![0], equalTo(expectedItem))
+    }
+
+    @Test
     fun `finalized instances with geometry have view action and no info`() {
         val form = formsRepository.save(
             FormUtils.buildForm("id", "version", TempFiles.createTempDir().absolutePath)

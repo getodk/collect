@@ -963,8 +963,7 @@
   <string name="crash_app">Faire planter l\'application</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Forcer une exception qui fera planter l\'application </string>
-  <string name="predicate_caching">Mise en cache des prédicats</string>
-  <string name="permission_dialog_title">A propos des permissions</string>
+    <string name="permission_dialog_title">A propos des permissions</string>
   <string name="permission_dialog_text">Il vous sera demandé d\'autoriser ODK Collect à accéder aux fonctions ci-dessous, sélectionnez \"autoriser\" si vous souhaitez les utiliser.</string>
   <string name="notifications">Notifications</string>
   <string name="required_for_notifications">Requis pour afficher les mises à jours quand les formulaires sont téléchargés, mis à jour ou envoyés.</string>

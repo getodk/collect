@@ -321,6 +321,13 @@
           "type": "boolean"
         },
         "finalize": {
+          "type": "boolean",
+          "deprecated": true
+        },
+        "finalize_in_form_entry": {
+          "type": "boolean"
+        },
+        "bulk_finalize": {
           "type": "boolean"
         }
       }

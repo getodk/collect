@@ -4,19 +4,24 @@ import org.javarosa.core.model.FormDef
 import org.javarosa.entities.EntityFormFinalizationProcessor
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.form.api.FormEntryModel
+import org.odk.collect.android.application.Collect
+import org.odk.collect.android.externaldata.ExternalDataManagerImpl
+import org.odk.collect.android.externaldata.handler.ExternalDataHandlerPull
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory
-import org.odk.collect.settings.keys.ProjectKeys
-import org.odk.collect.shared.settings.Settings
+import java.io.File
 
-class CollectFormEntryControllerFactory constructor(private val settings: Settings) :
+class CollectFormEntryControllerFactory :
     FormEntryControllerFactory {
-    override fun create(formDef: FormDef): FormEntryController {
+    override fun create(formDef: FormDef, formMediaDir: File): FormEntryController {
+        val externalDataManager = ExternalDataManagerImpl(formMediaDir).also {
+            Collect.getInstance().externalDataManager = it
+        }
+
+        val externalDataHandlerPull = ExternalDataHandlerPull(externalDataManager)
+        formDef.evaluationContext.addFunctionHandler(externalDataHandlerPull)
+
         return FormEntryController(FormEntryModel(formDef)).also {
             it.addPostProcessor(EntityFormFinalizationProcessor())
-
-            if (!settings.getBoolean(ProjectKeys.KEY_PREDICATE_CACHING)) {
-                it.disablePredicateCaching()
-            }
         }
     }
 }

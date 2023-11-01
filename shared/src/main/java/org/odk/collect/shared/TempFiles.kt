@@ -6,6 +6,24 @@ import java.io.File
 object TempFiles {
 
     @JvmStatic
+    fun createTempFile(): File {
+        val tmpDir = getTempDir()
+        return File(tmpDir, getRandomName(tmpDir)).also {
+            it.createNewFile()
+            it.deleteOnExit()
+        }
+    }
+
+    @JvmStatic
+    fun createTempFile(extension: String): File {
+        val tmpDir = getTempDir()
+        return File(tmpDir, getRandomName(tmpDir) + extension).also {
+            it.createNewFile()
+            it.deleteOnExit()
+        }
+    }
+
+    @JvmStatic
     fun createTempFile(name: String, extension: String): File {
         val tmpDir = getTempDir()
         return File(tmpDir, name + getRandomName(tmpDir) + extension).also {

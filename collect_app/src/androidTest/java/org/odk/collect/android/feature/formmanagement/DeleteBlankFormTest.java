@@ -55,7 +55,7 @@ public class DeleteBlankFormTest {
                 .assertNoForms()
                 .pressBack(new MainMenuPage())
 
-                .clickEditSavedForm()
+                .clickDrafts()
                 .clickOnForm("One Question")
                 .clickOnQuestion("what is your age")
                 .answerQuestion("what is your age", "30")

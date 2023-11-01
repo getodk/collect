@@ -46,7 +46,7 @@ public class ResetApplicationTest {
                 .clickGoToArrow()
                 .clickJumpEndButton()
                 .clickSaveAsDraft()
-                .clickEditSavedForm()
+                .clickDrafts()
                 .assertText("All widgets")
                 .pressBack(new MainMenuPage())
                 .openProjectSettingsDialog()
@@ -62,7 +62,7 @@ public class ResetApplicationTest {
                 .clickFillBlankForm()
                 .assertTextDoesNotExist("All widgets")
                 .pressBack(new MainMenuPage())
-                .clickEditSavedForm()
+                .clickDrafts(false)
                 .assertTextDoesNotExist("All widgets");
     }
 

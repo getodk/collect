@@ -32,7 +32,7 @@ class FormEntryAccessPreferencesFragmentTest {
     @Test
     fun `when the 'Save as draft' option is unchecked, the 'Finalize' option can't be changed`() {
         adminSettings.save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, false)
-        adminSettings.save(ProtectedProjectKeys.KEY_FINALIZE, true)
+        adminSettings.save(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, true)
 
         val scenario = launcherRule.launch(FormEntryAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormEntryAccessPreferencesFragment ->
@@ -42,7 +42,7 @@ class FormEntryAccessPreferencesFragmentTest {
             )
 
             assertThat(
-                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY).isEnabled,
                 equalTo(false)
             )
         }
@@ -51,7 +51,7 @@ class FormEntryAccessPreferencesFragmentTest {
     @Test
     fun `when the 'Finalize' option is unchecked, the 'Save as draft' option can't be changed`() {
         adminSettings.save(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT, true)
-        adminSettings.save(ProtectedProjectKeys.KEY_FINALIZE, false)
+        adminSettings.save(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY, false)
 
         val scenario = launcherRule.launch(FormEntryAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormEntryAccessPreferencesFragment ->
@@ -61,7 +61,7 @@ class FormEntryAccessPreferencesFragmentTest {
             )
 
             assertThat(
-                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY).isEnabled,
                 equalTo(true)
             )
         }
@@ -72,18 +72,18 @@ class FormEntryAccessPreferencesFragmentTest {
         val scenario = launcherRule.launch(FormEntryAccessPreferencesFragment::class.java)
         scenario.onFragment { fragment: FormEntryAccessPreferencesFragment ->
             assertThat(
-                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY).isEnabled,
                 equalTo(true)
             )
 
             fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).performClick()
 
             assertThat(
-                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isEnabled,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY).isEnabled,
                 equalTo(false)
             )
             assertThat(
-                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).isChecked,
+                fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY).isChecked,
                 equalTo(true)
             )
         }
@@ -98,7 +98,7 @@ class FormEntryAccessPreferencesFragmentTest {
                 equalTo(true)
             )
 
-            fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE).performClick()
+            fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_FINALIZE_IN_FORM_ENTRY).performClick()
 
             assertThat(
                 fragment.getPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_SAVE_AS_DRAFT).isEnabled,

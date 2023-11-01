@@ -1,6 +1,5 @@
 package org.odk.collect.android.mainmenu
 
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -58,16 +57,16 @@ class PermissionsDialogFragmentTest {
     }
 
     @Test
-    fun dismissing_callsPermissionRequested() {
-        launcherRule.launch(PermissionsDialogFragment::class.java)
-
-        Espresso.pressBack()
-        verify(requestPermissionsViewModel).permissionsRequested()
-    }
-
-    @Test
     fun recreating_doesNotCallPermissionsRequested() {
         launcherRule.launch(PermissionsDialogFragment::class.java).recreate()
         verify(requestPermissionsViewModel, never()).permissionsRequested()
+    }
+
+    @Test
+    fun `The dialog should not be dismissed after clicking out of its area or on device back button`() {
+        val scenario = launcherRule.launch(PermissionsDialogFragment::class.java)
+        scenario.onFragment {
+            assertThat(it.isCancelable, equalTo(false))
+        }
     }
 }

@@ -39,18 +39,15 @@ import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.externaldata.ExternalAnswerResolver;
-import org.odk.collect.android.externaldata.ExternalDataHandler;
 import org.odk.collect.android.externaldata.ExternalDataManager;
-import org.odk.collect.android.externaldata.ExternalDataManagerImpl;
 import org.odk.collect.android.externaldata.ExternalDataReader;
 import org.odk.collect.android.externaldata.ExternalDataReaderImpl;
-import org.odk.collect.android.externaldata.handler.ExternalDataHandlerPull;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.utilities.ExternalizableFormDefCache;
 import org.odk.collect.android.utilities.FileUtils;
-import org.odk.collect.android.utilities.FormDefCache;
 import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerAsyncTaskMimic;
@@ -163,12 +160,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
             return null;
         }
 
-        externalDataManager = new ExternalDataManagerImpl(formMediaDir);
-
-        // add external data function handlers
-        ExternalDataHandler externalDataHandlerPull = new ExternalDataHandlerPull(
-                externalDataManager);
-        formDef.getEvaluationContext().addFunctionHandler(externalDataHandlerPull);
+        externalDataManager = Collect.getInstance().getExternalDataManager();
 
         try {
             loadExternalData(formMediaDir);
@@ -184,7 +176,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         }
 
         // create FormEntryController from formdef
-        final FormEntryController fec = formEntryControllerFactory.create(formDef);
+        final FormEntryController fec = formEntryControllerFactory.create(formDef, formMediaDir);
 
         boolean usedSavepoint = false;
 
@@ -235,7 +227,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         publishProgress(
                 getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.survey_loading_reading_form_message));
 
-        final FormDef formDefFromCache = FormDefCache.readCache(formXml);
+        final FormDef formDefFromCache = new ExternalizableFormDefCache().readCache(formXml);
         if (formDefFromCache != null) {
             return formDefFromCache;
         }
@@ -254,7 +246,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
             formDef = formDefFromXml;
 
             try {
-                FormDefCache.writeCache(formDef, formXml.getPath());
+                new ExternalizableFormDefCache().writeCache(formDef, formXml.getPath());
             } catch (IOException e) {
                 Timber.e(e);
             }
@@ -494,10 +486,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         return (data != null) ? data.getController() : null;
     }
 
-    public ExternalDataManager getExternalDataManager() {
-        return externalDataManager;
-    }
-
     public boolean hasUsedSavepoint() {
         return (data != null) && data.hasUsedSavepoint();
     }
@@ -580,6 +568,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
     }
 
     public interface FormEntryControllerFactory {
-        FormEntryController create(@NonNull FormDef formDef);
+        FormEntryController create(@NonNull FormDef formDef, @NonNull File formMediaDir);
     }
 }

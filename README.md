@@ -261,6 +261,7 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 
 ### Release checklist:
 - update translations
+- run `./gradlew checkAll` and ensure everything passes
 - tag the build by [adding a release](https://github.com/getodk/collect/releases).
     Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
 - run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.

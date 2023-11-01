@@ -85,7 +85,7 @@ public class EncryptedFormTest {
                 .swipeToEndScreen()
                 .clickFinalize()
                 .checkIsToastWithMessageDisplayed("This form does not specify an instanceID. You must specify one to enable encryption. Form has not been saved as finalized.")
-                .clickEditSavedForm()
+                .clickDrafts()
                 .checkInstanceState("encrypted-no-instanceID", Instance.STATUS_INCOMPLETE);
     }
 }

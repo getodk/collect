@@ -21,7 +21,8 @@ import org.odk.collect.androidtest.ActivityScenarioExtensions.saveInstanceState
 import timber.log.Timber
 import java.io.IOException
 
-class FormEntryActivityTestRule : ExternalResource() {
+open class FormEntryActivityTestRule :
+    ExternalResource() {
 
     private lateinit var intent: Intent
     private lateinit var scenario: ActivityScenario<Activity>
@@ -34,11 +35,15 @@ class FormEntryActivityTestRule : ExternalResource() {
         }
     }
 
-    fun setUpProjectAndCopyForm(formFilename: String): FormEntryActivityTestRule {
+    @JvmOverloads
+    fun setUpProjectAndCopyForm(
+        formFilename: String,
+        mediaFilePaths: List<String>? = null
+    ): FormEntryActivityTestRule {
         try {
             // Set up demo project
             CollectHelpers.addDemoProject()
-            StorageUtils.copyFormToDemoProject(formFilename, null, true)
+            StorageUtils.copyFormToDemoProject(formFilename, mediaFilePaths, true)
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

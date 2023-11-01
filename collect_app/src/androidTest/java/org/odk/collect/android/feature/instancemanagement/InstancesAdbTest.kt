@@ -6,7 +6,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -48,7 +47,7 @@ class InstancesAdbTest {
         Assert.assertTrue(instanceDeleted)
 
         mainMenuPage
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOnFormWithDialog("One Question")
             .assertText(org.odk.collect.strings.R.string.instance_deleted_message)
             .clickOK(MainMenuPage())

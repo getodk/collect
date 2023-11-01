@@ -9,15 +9,15 @@ object FormFixtures {
     fun form(
         formId: String = "formId",
         version: String = "1",
+        formFilePath: String? = null,
         mediaFiles: List<Pair<String, String>> = emptyList(),
-        autoSend: String? = null,
-        formFile: File? = null
+        autoSend: String? = null
     ): Form {
         val formFilesPath = TempFiles.createTempDir().absolutePath
-        val mediaFilesPath = TempFiles.createTempDir().absolutePath
+        val mediaFilePath = TempFiles.createTempDir().absolutePath
 
         mediaFiles.forEach { (name, contents) ->
-            File(mediaFilesPath, name).also { it.writeBytes(contents.toByteArray()) }
+            File(mediaFilePath, name).also { it.writeBytes(contents.toByteArray()) }
         }
 
         return Form.Builder()
@@ -25,13 +25,13 @@ object FormFixtures {
             .formId(formId)
             .version(version)
             .formFilePath(
-                formFile?.absolutePath ?: FormUtils.createFormFixtureFile(
+                formFilePath ?: FormUtils.createFormFixtureFile(
                     formId,
                     version,
                     formFilesPath
                 )
             )
-            .formMediaPath(mediaFilesPath)
+            .formMediaPath(mediaFilePath)
             .autoSend(autoSend)
             .build()
     }

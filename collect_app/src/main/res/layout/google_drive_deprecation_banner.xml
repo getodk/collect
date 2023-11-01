@@ -31,6 +31,7 @@
             android:layout_marginStart="@dimen/margin_standard"
             android:text="@string/google_drive_deprecation_message"
             android:textAppearance="?textAppearanceBody2"
+            android:textColor="?colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/instance_name_info_icon"
             app:layout_constraintTop_toTopOf="@id/instance_name_info_icon" />

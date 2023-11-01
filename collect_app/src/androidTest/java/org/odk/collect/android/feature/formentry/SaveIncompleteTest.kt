@@ -26,7 +26,7 @@ class SaveIncompleteTest {
             .swipeToNextQuestion("[saveIncomplete] What is your age?")
             .pressBackAndDiscardChanges()
 
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete")
             .assertText("Dez")
     }
@@ -40,7 +40,7 @@ class SaveIncompleteTest {
             .swipeToNextQuestion("[saveIncomplete] What is your age?", true)
             .pressBackAndDiscardChanges()
 
-            .clickEditSavedForm(1)
+            .clickDrafts(1)
             .clickOnForm("Two Question Save Incomplete Required")
             .assertText("Dez")
     }

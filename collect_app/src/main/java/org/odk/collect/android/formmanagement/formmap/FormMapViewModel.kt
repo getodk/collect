@@ -7,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import org.json.JSONException
 import org.json.JSONObject
 import org.odk.collect.android.R
-import org.odk.collect.android.external.InstanceProvider
+import org.odk.collect.android.instancemanagement.getStatusDescription
+import org.odk.collect.android.instancemanagement.showAsEditable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
@@ -21,7 +22,6 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 class FormMapViewModel(
@@ -102,11 +102,7 @@ class FormMapViewModel(
         latitude: Double,
         longitude: Double
     ): MappableSelectItem {
-        val instanceLastStatusChangeDate = InstanceProvider.getDisplaySubtext(
-            resources,
-            instance.status,
-            Date(instance.lastStatusChangeDate)
-        )
+        val instanceLastStatusChangeDate = instance.getStatusDescription(resources)
 
         return if (instance.deletedDate != null) {
             val deletedTime = resources.getString(org.odk.collect.strings.R.string.deleted_on_date_at_time)
@@ -154,11 +150,12 @@ class FormMapViewModel(
                 info
             )
         } else {
-            val action = if (instance.status == Instance.STATUS_INCOMPLETE) {
-                createEditAction()
-            } else {
-                createViewAction()
-            }
+            val action =
+                if (instance.showAsEditable(settingsProvider)) {
+                    createEditAction()
+                } else {
+                    createViewAction()
+                }
 
             MappableSelectItem.WithAction(
                 instance.dbId,
@@ -197,7 +194,7 @@ class FormMapViewModel(
 
     private fun getDrawableIdForStatus(status: String, enlarged: Boolean): Int {
         return when (status) {
-            Instance.STATUS_INCOMPLETE -> if (enlarged) R.drawable.ic_room_form_state_incomplete_48dp else R.drawable.ic_room_form_state_incomplete_24dp
+            Instance.STATUS_INCOMPLETE, Instance.STATUS_VALID, Instance.STATUS_INVALID -> if (enlarged) R.drawable.ic_room_form_state_incomplete_48dp else R.drawable.ic_room_form_state_incomplete_24dp
             Instance.STATUS_COMPLETE -> if (enlarged) R.drawable.ic_room_form_state_complete_48dp else R.drawable.ic_room_form_state_complete_24dp
             Instance.STATUS_SUBMITTED -> if (enlarged) R.drawable.ic_room_form_state_submitted_48dp else R.drawable.ic_room_form_state_submitted_24dp
             Instance.STATUS_SUBMISSION_FAILED -> if (enlarged) R.drawable.ic_room_form_state_submission_failed_48dp else R.drawable.ic_room_form_state_submission_failed_24dp
