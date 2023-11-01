@@ -144,7 +144,7 @@ Sites with compatible licenses (including [StackOverflow](http://stackoverflow.c
 
 ## Gradle sub modules
 
-Collect is a multi module Gradle project. Modules should have a focused feature or utility (like "location" or "analytics") rather than represent an architectural "layer" (like "ui" or "backend"). Collect has an `androidshared` and `shared` module for simple utilities that might be useful in any Android or Java application respectively.
+Collect is a multi module Gradle project. Modules should have a focused feature or utility (like "location" or "analytics") rather than represent an architectural "layer" (like "ui" or "backend"). Collect has an `androidshared` and `shared` module for simple utilities that might be useful in any Android or Java application respectively. Modules names should be lowercase and be dash seperated (like `test-forms` rather than `testforms` or `test_forms`).
 
 ### Adding a new module
 
