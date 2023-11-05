@@ -119,7 +119,7 @@ class FormUpdateTest {
             "One Question Last Saved",
             "one_question_last_saved",
             "1",
-            "one-question-last-saved-v1.xml"
+            "one-question-last-saved.xml"
         )
 
         val mainMenuPage = rule.withProject(testDependencies.server.url)
@@ -138,7 +138,7 @@ class FormUpdateTest {
             "One Question Last Saved",
             "one_question_last_saved",
             "2",
-            "one-question-last-saved-v2.xml"
+            "one-question-last-saved-updated.xml"
         )
 
         mainMenuPage.clickGetBlankForm()
