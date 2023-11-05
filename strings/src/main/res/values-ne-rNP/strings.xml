@@ -203,7 +203,6 @@
   <string name="openmap_usgs_topo">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Topo</string>
   <string name="openmap_usgs_sat">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Hybrid</string>
   <string name="openmap_usgs_img">अमेरिकी भूगर्भीय सर्वेक्षण राष्ट्रिय नक्शा Imagery</string>
-  <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="streets">टोलहरु</string>

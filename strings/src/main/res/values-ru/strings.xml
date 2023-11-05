@@ -358,7 +358,6 @@
   <string name="openmap_usgs_topo">Национальная карта USGS: топографическая</string>
   <string name="openmap_usgs_sat">Национальная карта USGS: спутниковая</string>
   <string name="openmap_usgs_img">Национальная карта USGS: съёмка с воздуха</string>
-  <string name="openmap_stamen_terrain">Stamen ландшафт</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Тёмная материя</string>
   <string name="basemap">Подложка</string>
   <string name="basemap_source">Источник</string>

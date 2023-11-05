@@ -289,7 +289,6 @@
   <string name="openmap_usgs_topo">USGS топографічна національна карта</string>
   <string name="openmap_usgs_sat">USGS Національна мапа Гібрид</string>
   <string name="openmap_usgs_img">USGS Національна мапа Картинки</string>
-  <string name="openmap_stamen_terrain">Stamen Ландшафт</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Базова мапа</string>

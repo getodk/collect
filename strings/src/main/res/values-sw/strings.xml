@@ -306,7 +306,6 @@
   <string name="openmap_usgs_topo">USGS ramani za kitaifa za topo</string>
   <string name="openmap_usgs_sat">USGS National Map Hybrid</string>
   <string name="openmap_usgs_img">USGS National Map Imagery</string>
-  <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Ramani msingi</string>

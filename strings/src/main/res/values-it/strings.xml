@@ -367,7 +367,6 @@
   <string name="openmap_usgs_topo">Mappa Topologia Nazionale USGS</string>
   <string name="openmap_usgs_sat">Mappa Ibrida Nazionale USGS</string>
   <string name="openmap_usgs_img">Immagini di Mappe Nazionali USGS</string>
-  <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Mappa Base</string>

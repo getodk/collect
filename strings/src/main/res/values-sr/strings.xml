@@ -292,7 +292,6 @@
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USCG National Map Hybrid</string>
   <string name="openmap_usgs_img">USGC National Map Imagery</string>
-  <string name="openmap_stamen_terrain">Rastresito zemljište</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Osnovna mapa</string>

@@ -369,7 +369,6 @@
   <string name="openmap_usgs_topo">USGS National Map topografinen</string>
   <string name="openmap_usgs_sat">USGS National Map hybridi</string>
   <string name="openmap_usgs_img">USGS National Map kuvat</string>
-  <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Peruskartta</string>
