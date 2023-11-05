@@ -1,6 +1,5 @@
 package org.odk.collect.android.formmanagement;
 
-import static org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME;
 import static org.odk.collect.android.utilities.FileUtils.interuptablyWriteFile;
 
 import org.javarosa.xform.parse.XFormParser;
@@ -20,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -99,7 +97,7 @@ public class ServerFormDownloader implements FormDownloader {
                 newAttachmentsDetected = mediaDownloader.download(fd, tempMediaPath, tempDir, stateListener);
             }
 
-            copySavedFileFromPreviousFormVersionIfExists(fd.getFormId(), tempMediaPath);
+            ServerFormDownloaderUseCases.INSTANCE.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
         } catch (FormDownloadException.DownloadingInterrupted | InterruptedException e) {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);
@@ -293,20 +291,6 @@ public class ServerFormDownloader implements FormDownloader {
                 }
 
             }
-        }
-    }
-
-    private void copySavedFileFromPreviousFormVersionIfExists(String formId, String mediaDirPath) {
-        File lastSavedFile = formsRepository
-                .getAllByFormId(formId)
-                .stream()
-                .max(Comparator.comparingLong(Form::getDate))
-                .map(form -> new File(form.getFormMediaPath(), LAST_SAVED_FILENAME))
-                .orElse(null);
-
-        if (lastSavedFile != null && lastSavedFile.exists()) {
-            new File(mediaDirPath).mkdir();
-            FileUtils.copyFile(lastSavedFile, new File(mediaDirPath, LAST_SAVED_FILENAME));
         }
     }
 
