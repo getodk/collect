@@ -382,6 +382,13 @@ public class ODKAppSettingsMigratorTest {
         assertThat(protectedSettings.getBoolean(ProtectedProjectKeys.KEY_BULK_FINALIZE), equalTo(false));
     }
 
+    @Test
+    public void migratesStamenMapsToOSM() {
+        initSettings(unprotectedSettings, "basemap_source", "stamen");
+        runMigrations();
+        assertSettings(unprotectedSettings, "basemap_source", "osm");
+    }
+
     private void runMigrations() {
         new ODKAppSettingsMigrator(metaSettings).migrate(unprotectedSettings, protectedSettings);
     }

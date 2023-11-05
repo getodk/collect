@@ -128,7 +128,9 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
 
                 moveKey("knownUrlList").toPreferences(metaSettings),
 
-                moveKey("default_completed").toPreferences(protectedSettings)
+                moveKey("default_completed").toPreferences(protectedSettings),
+
+                translateValue("stamen").toValue("osm").forKey(KEY_BASEMAP_SOURCE)
         );
     }
 
