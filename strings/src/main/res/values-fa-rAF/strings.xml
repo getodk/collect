@@ -1,0 +1,1011 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
+  <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
+  <string name="enter_data">شروع با فرم جدید</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="review_data">پیش نویس</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="send_data">آماده حهت ارسال</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="view_sent_forms">ارسال شد</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="get_forms">دانلود فرم</string>
+  <!--Text for an action button on the main screen.-->
+  <string name="manage_files">حذف فرم</string>
+  <string name="saved_forms">ذخیره فvم ها</string>
+  <string name="version_number">نسخه: %s</string>
+  <string name="id_number">شماره شناسایی: %s</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="added_on_date_at_time">اضافه شد EEE,MMM,dd,yyyy در HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="updated_on_date_at_time">\' بارگذاری \' EEE, MMM dd, yyyy \'at\' HH:mm
+ </string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="saved_on_date_at_time">ذخیره شد EEE,MMM,dd,yyyy در HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="finalized_on_date_at_time">نهایی شد EEE,MMM,dd,yyyy در HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">ارسال شده EEE,MMM,dd,yyyy در HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sending_failed_on_date_at_time">\'ارسال ناموفق بود\' EEE, MMM dd, yyyy\'در\' HH:mm</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="deleted_on_date_at_time">حذف شده EEE, MMM dd, yyyy در  HH:mm</string>
+  <string name="submission_deleted">ارسال حذف شد</string>
+  <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="modified_on_date_at_time">اصلاح شد EEE,MMM,dd,yyyy در HH:mm</string>
+  <string name="encrypted_form">فرم رمز گذاری شده</string>
+  <string name="deleted_form">حذف فرم</string>
+  <string name="sort_the_list">لیست را مرتب کنید</string>
+  <string name="sort_by">دسته بندی بر اساس</string>
+  <string name="sort_by_name_asc">اسم، الف-ی</string>
+  <string name="sort_by_name_desc">اسم ی-الف</string>
+  <string name="sort_by_date_desc">تاریخ،  جدیدترین در اولویت</string>
+  <string name="sort_by_date_asc">تاریخ،  قدیمی ترها در اولویت</string>
+  <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
+  <string name="filter_the_list">فیلتر لیست</string>
+  <!--Displayed in search boxes for form lists or question types that involve search-->
+  <string name="search">جستجو</string>
+  <string name="not_granted_permission">فعالیتی که شما میخواهید آنرا انجام دهید به مجوزی ضرورت دارد که به شما اعطا نشده است. </string>
+  <string name="storage_runtime_permission_denied_title">مجوزهای برای ذخیره سازی</string>
+  <string name="storage_runtime_permission_denied_desc">بدون مجوزها، مجموعه نمی‌تواند به فرم‌های شما دسترسی داشته باشد یا پاسخ‌ها را ذخیره کند. زمانی که برای اعطای برنامه آماده شدید، دوباره آن را باز کنید.</string>
+  <string name="location_runtime_permissions_denied_title">دسترسی لوکیشن</string>
+  <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
+  <string name="location_runtime_permissions_denied_desc">بدون اجازه <b>Precise Location</b> نمی تواند موقعیت مکانی شما را ضبط کند. لطفاً هنگامی که  اجازه دسترسی آن فعال شد، دوباره امتحان کنید.</string>
+  <string name="camera_runtime_permission_denied_title">دسترسی دوربین</string>
+  <string name="camera_runtime_permission_denied_desc">بدون این مجوز Collect نمی تواند به دوربین دسترسی داشته باشد. لطفاً هنگامی که آماده اعطای آن هستید دوباره امتحان کنید.</string>
+  <string name="record_audio_runtime_permission_denied_title">دسترسی ضبط صدا</string>
+  <string name="record_audio_runtime_permission_denied_desc">بدون این مجوز، Collect نمی تواند به میکروفون دسترسی داشته باشد. لطفاً هنگامی که آماده اعطای آن هستید دوباره امتحان کنید.</string>
+  <string name="get_accounts_runtime_permission_denied_title">دریافت مجوز حساب ها</string>
+  <string name="get_accounts_runtime_permission_denied_desc">بدون این مجوز Collect نمی تواند به حساب ها دسترسی داشته باشد. لطفاً هنگامی که آماده اعطای آن هستید دوباره امتحان کنید.</string>
+  <!--##############################################
+    # FILL BLANK FORM
+    ##############################################-->
+  <!--Accessibility description of the form map button (e.g. used by screen readers). This button is shown next to every form definition in Fill Blank Form. When tapped, a map of all filled forms for that form definition is shown.-->
+  <string name="open_form_map">نقشه فرم را باز کنید</string>
+  <string name="instance_scan_count">%1$dفرم ها اضافه شدند.</string>
+  <string name="finished_disk_scan">اسکن به پایان رسید. همه فرم ها بارگذاری شدند.</string>
+  <string name="xform_parse_error">خطای تجزیه XForm برای %1$s: %2$s وجود ندارد یا نامعتبر است.</string>
+  <string name="loading_form">در حال آماده سازی فرم</string>
+  <string name="survey_loading_reading_form_message">خواندن تعریف فرم…</string>
+  <string name="survey_loading_reading_data_message">خواندن داده های نظر سنجی </string>
+  <string name="survey_loading_reading_csv_message">خواندن اسناد CSV</string>
+  <string name="parse_error">با عرض پوزش، نمی توان فرم را تجزیه کرد.</string>
+  <string name="loading_form_failed">هنگام  آماده سازی فرم خطایی روی داد. لطفا دوباره تلاش کنید.</string>
+  <string name="parent_form_not_present">ویرایش این پیش نویس امکان پذیر نیست زیرا فرم خالی مربوطه وجود ندارد یا حذف شده است.\n\nشناسه فرم: %1$s</string>
+  <string name="cannot_edit_completed_form">این فرم بعد از نهایی شدن آن قابل ویرایش نیست. ممکن است رمزگذاری شده باشد. </string>
+  <!--Displayed when loading a form if that form was previously filled but closed because of a crash or system failure-->
+  <string name="savepoint_used">تغییرات ذخیره نشده از savepoint بازیابی شد!</string>
+  <!--Displayed in the form filling menu when a form definition specifies multiple languages-->
+  <string name="change_language">تغییر زبان</string>
+  <!--Text for button displayed in the form filling menu to see the form's table of contents-->
+  <string name="view_hierarchy">به Prompt بروید</string>
+  <!--Text for button displayed in the form filling menu to save the form-->
+  <string name="save_all_answers">ذخیره پیش نویس</string>
+  <!--Text of button from the form's table of contents to jump to the beginning of the form-->
+  <string name="jump_to_beginning">رفتن به ابتدا</string>
+  <!--Text of button from the form's table of contents to jump to the end of the form-->
+  <string name="jump_to_end">رفتن به انتها</string>
+  <!--Text of button from the form's table of contents to navigate out of a group or a repeat-->
+  <string name="jump_to_previous">بالا برو</string>
+  <!--Displayed below group names in a form's table of contents-->
+  <string name="group_label">گروه</string>
+  <!--Displayed below repeat names in a form's table of contents-->
+  <string name="repeatable_group_label">گروه تکرار شونده</string>
+  <string name="exit">خروج</string>
+  <!--This sentence is used in the dialog for adding repeats and will be completed by a singular noun usually. Examples would be ‘Add “observation”?’ or ‘Add “Reading”?’. If the phrase doesn’t make sense in your language you can add a word like “new”, being careful of gender/plural.-->
+  <string name="add_repeat_question">\"%s\" اضافه شود؟</string>
+  <string name="add_repeat">اضافه کردن</string>
+  <string name="dont_add_repeat">اضافه نکنید</string>
+  <string name="add_another_menu">اضافه کردن جدید</string>
+  <!--Title of overlay menu displayed when long pressing on a question in a form-->
+  <string name="edit_prompt">ویرایش سریع</string>
+  <string name="clearanswer_confirm">آیا برای \"%s\" پاسخ حذف شود؟</string>
+  <string name="clear_answer">حذف پاسخ</string>
+  <string name="clear_answer_ask">آیا این پاسخ حذف شود؟</string>
+  <string name="clear_answer_no">لغو</string>
+  <string name="discard_answer">حذف پاسخ</string>
+  <string name="discard_group">حذف گروه</string>
+  <string name="delete_repeat">حذف گروه</string>
+  <string name="delete_repeat_ask">این گروه را حذف کنید؟</string>
+  <string name="delete_repeat_confirm">حذف گروه \"%s\" با تمام زیر گروپ های آن</string>
+  <string name="delete_repeat_no">انصراف</string>
+  <string name="invalid_answer_error">متاسفانه، این پاسخ غیر معتبر است.</string>
+  <string name="required_answer_error">ببخشید، این پاسخ الزامی است!</string>
+  <string name="success_form_validation">موفق! هیچ خطایی در فرم شما یافت نشد.</string>
+  <string name="invalid_space_in_answer_singular">هشدار: مقدار اساسی %s دارای فاصله است</string>
+  <string name="invalid_space_in_answer_plural">هشدار: مقادیر اساسی %s دارای فاصله هستند</string>
+  <string name="too_complex_form">این فرم برای این دستگاه بسیار پیچیده است. سعی کنید برای ساده سازی فرم  یا اصطلاحات کمک بخواهید.</string>
+  <string name="survey_internal_error">خطای داخلی: گام به اعلان ناموفق بود.</string>
+  <string name="save_enter_data_description">شما در پایان %sقرار دارید.</string>
+  <string name="form_edits_warning_only_finalize_enabled">پس از نهایی کردن، نمی توانید ویرایش کنید.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">پس از نهایی کردن، نمی توانید ویرایش کنید. اگر نیاز به ایجاد تغییرات دارید، «به‌عنوان پیش‌نویس ذخیره کنید» تا زمانی که آماده ارسال شوید.</string>
+  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">پس از نهایی کردن، نمی توانید ویرایش کنید. اگر نیاز به ایجاد تغییرات دارید، «به‌عنوان پیش‌نویس ذخیره کنید» تا زمانی که آماده ارسال شوید.</string>
+  <string name="save_as_draft">ذخیره پیش نویس</string>
+  <string name="finalize">نهایی</string>
+  <string name="send">ارسال شد</string>
+  <string name="data_saved_error">متاسفانه فرم ذخیره نشد!</string>
+  <string name="data_saved_ok">فرم با موفقیت ذخیره شد!</string>
+  <string name="save_point_error">خطا در ذخیره نقطه یابی: %s</string>
+  <!--Dialog title when exiting a drawing view. The name of the kind of drawing will be included-->
+  <string name="quit_application">خروج %s</string>
+  <!--Used when exiting a form filling session in which a form was not properly loaded. &lt; and &gt; surrounds the text so it will appear as <no form loaded>-->
+  <string name="do_not_save">نادیده گرفتن فرم</string>
+  <string name="discard_changes">نادیده گرفتن تغییرات</string>
+  <string name="keep_changes">ذخیره تغییرات</string>
+  <string name="keep_editing">به ویرایش ادامه دهید</string>
+  <string name="quit_form_title">ذخبره فرم؟</string>
+  <string name="save_explanation">شما می توانید این فرم را ذخیره کرده و در هر زمان که بخواهید از پیش نویس های خود به آن دسترسی داشته باشید.</string>
+  <string name="save_explanation_with_last_saved">\"این فرم آخرین بار در\" EEE، MMM dd، yyyy \"در\" HH:mm ذخیره شده است. ذخیره به عنوان پیش نویس برای حفظ تغییرات.</string>
+  <string name="quit_form_continue_title">به ویرایش ادامه دهید؟</string>
+  <string name="discard_form_warning">اگر فرم را نادیده بگیرید، تغییراتی را که تاکنون انجام داده اید از دست خواهید داد.</string>
+  <string name="saving_form">در حال ذخیره فرم</string>
+  <string name="survey_saving_validating_message">در حال اعتبار سنجی پاسخ ها….</string>
+  <string name="survey_saving_collecting_message">در حال جمع آوری داده ها…</string>
+  <string name="survey_saving_saving_message">در حال ذخیره در کارت حافظه…</string>
+  <string name="survey_saving_finalizing_message">در حال نهایی کردن کارت حافظه</string>
+  <string name="survey_saving_encrypting_message">رمزگذاری داده ها…</string>
+  <string name="not_exactly_one_record_for_this_instance">نه دقیقاً یک رکورد برای این مثال!</string>
+  <string name="not_exactly_one_blank_form_for_this_form_id">دقیقاً یک فرم خالی با این jr_form_id مطابقت ندارد.</string>
+  <string name="no_form_id_specified">FormId مشخص نشده؟؟؟</string>
+  <string name="phone_does_not_support_rsa">تلفن از رمزگذاری RSA پشتیبانی نمی کند.</string>
+  <string name="invalid_rsa_public_key">کلید عمومی RSA نامعتبر است.</string>
+  <string name="encryption_error_message">فورم %s به عنوان نهایی ذخیره نشده است.</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI is incorrect-->
+  <string name="bad_uri">URI: %s : بی اعتبار</string>
+  <!--Displayed when form filling is attempted to be launched by intent but the intent URI mime type is unknown-->
+  <string name="unrecognized_uri">URI شناسایی نشده: %s</string>
+  <!--Text displayed when audio recording fails to start-->
+  <string name="start_recording_failed">ضبط شروع نشد.</string>
+  <!--Text displayed when user tries to start recording while the mic is already in use-->
+  <string name="mic_in_use">میکروفون در حال حاضر در حال استفاده است.</string>
+  <!--Error message displayed when copying media from a temporary directory fails-->
+  <string name="answer_file_copy_failed_message">رسانه را نمی توان به فورم پیوست کرد اما در %1$s موجود است</string>
+  <!--Text displayed in the audio bar when background audio recording is explicitly disabled from the options menu. Should be as short as possible. The inserted string is ⋮ which indicates the options menu.-->
+  <string name="recording_disabled">ضبط غیرفعال شد در %s فعال کنید</string>
+  <!--Error displayed when opened filled form has been deleted on disk-->
+  <string name="instance_deleted_message">فورم پر شده حذف شد!</string>
+  <!--Error displayed when something bad happens during updating widgets in a field-list group-->
+  <string name="update_widgets_error">شکست در تلاش برای به روزرسانی مقادیر\" این عمومآ به دلیل استفاده نادرست از حسابات در طرح فورم می باشد. اگر این مشگل به شکل دوامدار مواجه شدید: پس این موضوع را شخص که از شما خواسته تا معلومات را جمع آوری کنید به اشتراک بگدازید.</string>
+  <!--##############################################
+    # FORM FEATURES
+    ##############################################-->
+  <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <string name="launch_app">راه اندازی</string>
+  <string name="activity_not_found">برای انجام %s هیچ فعالیتی دریافت نشد:</string>
+  <string name="no_app"> درخواستی برای فورمه موجود نیست. لطفاً خواندن را به صورت دستی وارد کنید.</string>
+  <string name="null_intent_value">درخواست نامه خارجی اطلاعات مورد انتظار را ارائه نکرد.</string>
+  <string name="launch_printer">چاپ را آغاز کنید</string>
+  <string name="no_printer">چاپ کننده درخواستی نصب نشده است. لطفا چاپ کننده را نصب کنید.</string>
+  <string name="open_url">باز نمودن آدرس انترنتی</string>
+  <string name="capture_osm">راه اندازی ابزار نقشه</string>
+  <string name="recapture_osm">برچسپ گذاری مجدد OSM</string>
+  <string name="edited_osm_file">فایل OSM XML ویرایش شده</string>
+  <string name="invalid_osm_data">مشکلی پیش آمد. ما داده OSM معتبر دریافت نکردیم.</string>
+  <string name="alert">هشدار</string>
+  <string name="install_openmapkit">لطفاْ OpenMapKit را نصب کنید!</string>
+  <string name="get_barcode">دریافت بارکد</string>
+  <string name="replace_barcode">جاگزینی بارکود</string>
+  <string name="barcode_scanner_prompt">بارکد را داخل مستطیل قرار دهید</string>
+  <string name="open_file">فایل را باز کنید</string>
+  <string name="rank_items">رده بندی اقلام</string>
+  <string name="number_picker_title">شماره جمع کننده</string>
+  <string name="invalid_range_widget">این ویجت دارای پارامترهای نامعتبر است!</string>
+  <string name="svg_file_does_not_exist">فایل SVG موجود نیست!</string>
+  <string name="capture_image">گرفتن عکس</string>
+  <string name="choose_image">انتخاب تصویر</string>
+  <string name="selected_invalid_image">فایل انتخاب شده تصویر قابل اعتبار ندارد</string>
+  <string name="take_picture_instruction">برای گرفتن عکس روی صفحه ضربه بزنید</string>
+  <string name="error_front_camera_unavailable">این دستگاه دوربین جلو موجود نیست</string>
+  <string name="camera_error">هنگام عکس گرفتن خطایی روی داد.</string>
+  <string name="camera_failed_to_initialize">دوربین راه اندازی نشد!</string>
+  <string name="annotate_image">نوشتن بر روی تصویر</string>
+  <string name="gif_not_supported">فایل های Gif پشتیبانی نمی شوند</string>
+  <string name="invalid_file_type">برنامه یک نوع فایل نامعتبر را برگرداند</string>
+  <!--Dialog heading for saving annotated image-->
+  <string name="save_and_close">ذخیره کردن و خروج</string>
+  <string name="signature_capture">ثبت امضا</string>
+  <string name="sign_button">جمع آوری امضا</string>
+  <string name="markup_image">نشانه گذاری تصویر</string>
+  <string name="draw_image">تصویر طرح</string>
+  <string name="reset_image">تنظیم مجدد</string>
+  <string name="set_color">تنظیم رنگ</string>
+  <string name="capture_video">ضبط ویدیو</string>
+  <string name="choose_video">انتخاب ویدیو</string>
+  <string name="play_video">پخش ویدیو</string>
+  <string name="choose_file">انتخاب فایل</string>
+  <!--Text for button that deletes a file that is the answer to a question-->
+  <string name="delete_answer_file">حذف شده</string>
+  <!--Text for button that starts recording sound-->
+  <string name="capture_audio">ضبط صدا</string>
+  <!--Text for button that lets the user choose a sound file on their device-->
+  <string name="choose_sound">انتخاب صدا</string>
+  <!--Description text for button that that pauses recording sound-->
+  <string name="pause_recording">توقف </string>
+  <!--Description text for button that that resumes recording sound-->
+  <string name="resume_recording">از سر گرفتن</string>
+  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <string name="record_audio">ضبط صدا</string>
+  <string name="background_audio_permission_explanation">این فورم صدا را در پس زمینه ثبت میکند شما باید اجاره بدهید تا از میکروفون استفاده صورت بگیرد در غیر آن نمی توانید از فورم استفاد کنید.</string>
+  <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
+  <string name="stop_recording_confirmation">این فورم درخواست می دهد تا در پس زمنیه صدا ثیت گردد. غیر فعال ساختن این امکان ثیت را غیر فعال میسازد و صدای ثیت شده قبلی را از بین میبرد. آیا شما مطمن هستید که میخواهید ادامه بدهید.</string>
+  <!--Button text for the dialog confirming whether the user wants to disable background recording-->
+  <string name="disable_recording">غیرفعال کردن ضبط</string>
+  <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
+  <string name="background_audio_recording_enabled_explanation">ضبط بلافاصله شروع نمی شود. برای ضبط باید دوباره فورم را باز کنید.</string>
+  <!--Title for dialog asking the user if they want to delete a file-->
+  <string name="delete_answer_file_question">فایل حذف شود؟</string>
+  <!--Dialog text warning the user they won't be able to recover a file once deleted-->
+  <string name="answer_file_delete_warning">پس از حذف نمی توانید این فایل را بازیابی کنید. آیا مطمئن هستید که می خواهید ادامه دهید؟</string>
+  <!--Text for button that stops audio recording-->
+  <string name="stop_recording">متوقف کردن</string>
+  <!--Text to let the user know a recording is in progress-->
+  <string name="recording">ثبت کردن</string>
+  <!--Title of Android Notification Channel for audio recording notifications-->
+  <string name="recording_channel">ضبط صدا</string>
+  <!--Text for button that plays audio clip-->
+  <string name="play_audio">پخش صدا</string>
+  <!--Text to let the user know a file is being saved-->
+  <string name="saving_file">در حال ذخیره فایل</string>
+  <!--Text in dialog that instructs the user to stop recording audio before leaving the form-->
+  <string name="recording_warning">قبل از ترک این صفحه باید ضبط را متوقف کنید.</string>
+  <string name="error_attaching_binary_file">در زمان ضمیمه کردن فایل رسانه ای خطا رخ داد: %s</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="select_value">انتخاب مقدار</string>
+  <string name="select_answer">انتخاب پاسخ</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="edit_value">ویرایش مقدار</string>
+  <!--Displayed in form questions for which the user needs to select a value-->
+  <string name="no_value_selected">هیچ مقدار را انتخاب نگردیده است</string>
+  <string name="selected">انتخاب شد:</string>
+  <string name="trigger">درست است، لطفاً ادامه بدهید.</string>
+  <string name="ext_file_no_data_error">فایل حاوی هیچ data نیست!</string>
+  <string name="ext_conflicting_columns_error">ستون ها %s  برای مطابقت</string>
+  <string name="ext_sortBy_numeric_error">ستون مرتب سازی شما باید فقط حاوی مقادیر عددی باشد. مقدار متناقض \"%s\" بود.</string>
+  <string name="ext_search_wrong_arguments_error">خطای نحوی در تابع search (): این تابع به 1، 4 یا 6 آرگومان نیاز دارد.</string>
+  <string name="ext_search_wrong_function_error">خطای نحوی در تابع search(): تابع ناشناخته \'%s\'.</string>
+  <string name="ext_search_bad_function_error">خطای نحوی در تابع search(): \'%s\' به عنوان یک تابع ارزیابی نشد.</string>
+  <string name="ext_search_return_error">کنترل کننده جستجو یک موضوع از نوع \'%s\' را برگرداند.</string>
+  <string name="ext_import_generic_error">Data ها از %1$s وارد نشد. به دلیل: %2$s</string>
+  <string name="ext_import_progress_message">در حال جاگیری data از «%1$s»، لطفاً صبر کنید… %2$s</string>
+  <string name="ext_import_cancelled_message">خواندن Data لغو شد!</string>
+  <string name="ext_import_finalizing_message">در حال نهایی کردن data از پیش بارگیری شده…</string>
+  <string name="ext_import_completed_message">خوانش داده ها تکمیل شد!</string>
+  <string name="ext_not_initialized_error">مدیر data خارجی راه اندازی نشده است.</string>
+  <string name="ext_import_csv_missing_error">معلومات خارجی %1$s وارد نشده است. شاید فراموش کرده اید که فایل %2$s.csv را به فورم خود اضافه کنید؟</string>
+  <string name="ext_search_generic_error">خطای نحوی در تابع search(): %s</string>
+  <string name="ext_assign_value_error">نمی توان مقدار \"%s\" را اختصاص داد.</string>
+  <string name="parser_exception">XPathParser استثنا: \"%s\"</string>
+  <string name="get_bearing">ثبت بلبرینگ</string>
+  <string name="replace_bearing">بلبرینگ را تعویض کنید</string>
+  <string name="getting_bearing">در حال بار کردن بلبرینگ</string>
+  <string name="accept_bearing">ثبت بلبرینگ</string>
+  <string name="bearing">بلبرینگ: %.3f</string>
+  <string name="direction">مسیر %s</string>
+  <string name="bearing_lack_of_sensors">بلبرینگ را نمی توان جمع آوری کرد: دستگاه شتاب سنج، حسگر میدان مغناطیسی یا هر دو را ندارد.</string>
+  <string name="select_date">انتخاب تاریخ</string>
+  <string name="select_time">انتخاب زمان</string>
+  <string name="no_date_selected">هیچ تاریخی انتخاب نشده است</string>
+  <string name="no_time_selected">هیچ زمانی انتخاب نشده است</string>
+  <string name="ethiopian_month_1">مسکرم</string>
+  <string name="ethiopian_month_5">تیر</string>
+  <string name="ethiopian_month_7">مگابیت</string>
+  <string name="islamic_month_1">محرم</string>
+  <string name="islamic_month_2">صفر</string>
+  <string name="islamic_month_3">ربیع الاول</string>
+  <string name="islamic_month_4">ربیع الثانی</string>
+  <string name="islamic_month_5">جمادی الاول</string>
+  <string name="islamic_month_6">جمادی الثانی</string>
+  <string name="islamic_month_7">رجب</string>
+  <string name="islamic_month_8">شعبان</string>
+  <string name="islamic_month_9">رمضان</string>
+  <string name="islamic_month_10">شوال</string>
+  <string name="islamic_month_11">ذی القضه</string>
+  <string name="islamic_month_12">ذی الحجه</string>
+  <string name="persian_month_1">فروردین</string>
+  <string name="persian_month_2">اردیبهشت</string>
+  <string name="persian_month_3">خرداد</string>
+  <string name="persian_month_4">تیر</string>
+  <string name="persian_month_5">مرداد</string>
+  <string name="persian_month_6">شهریور</string>
+  <string name="persian_month_7">مهر</string>
+  <string name="persian_month_8">آبان</string>
+  <string name="persian_month_9">آذر</string>
+  <string name="persian_month_10">دی</string>
+  <string name="persian_month_11">بهمن</string>
+  <string name="persian_month_12">اسفند</string>
+  <!--Displays dates in specialized calendars with the Gregorian dates in parentheses. This is translated so right-to-left languages can specify the correct order-->
+  <string name="custom_date">%1$s (%2$s)</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is invalid-->
+  <string name="file_invalid">فایل: %s قابل اعتبار نیست.</string>
+  <!--Displayed when a form media file such as an image for a question label or an audio file for a choice is missing-->
+  <string name="file_missing">فایل: %sمفقود است.</string>
+  <!--Heading for a dialog which prompts the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="enter_identity">شناسایی را وارد کنید</string>
+  <!--Label for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="identity">شناسایی</string>
+  <!--Explanation for prompt for the user to identify themselves when making changes to data. See https://docs.getodk.org/form-audit-log/#enumerator-identification.-->
+  <string name="enter_identity_description">این فورم از شما می خواهد که خودتان را شناسایی کنید</string>
+  <!--Action to close a full screen dialog-->
+  <string name="close">مسدود کردن</string>
+  <!--Heading for a dialog which prompts the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes">دلیل برای تغییرات</string>
+  <!--Label for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason">علت</string>
+  <!--Explanation for prompt for the user to describe why a change was made to data. See https://docs.getodk.org/form-audit-log/#change-tracking.-->
+  <string name="reason_for_changes_description">باید دلیل تغییرات این فورم را توضیح دهید</string>
+  <!--Action to save the contents of a full screen dialog-->
+  <string name="save">ذخیره</string>
+  <!--Button text to select a place from a list presented on a map-->
+  <string name="select_place">مکان را انتخاب کنید</string>
+  <string name="choices">برگزیده</string>
+  <!--##############################################
+    # GEO
+    ##############################################-->
+  <!--TODO(ping): Delete these openmap_* strings when we're ready to move on from OSMDroid.
+   These strings are only being used to preserve compatibility with pre-existing
+    tile caches, and are not shown in the UI.-->
+  <string name="openmap_usgs_topo">نقشه ملی USGS Topo</string>
+  <string name="basemap">نقشه اصلی</string>
+  <string name="basemap_source">منبع</string>
+  <string name="basemap_source_unavailable">متأسفیم، %s نقشه پایه در این دستگاه موجود نیست. لطفاً نقشه پایه دیگری را در تنظیمات &gt; نقشه ها.</string>
+  <string name="map_style_label">%s سبک نقشه</string>
+  <string name="streets">سرک ها</string>
+  <string name="terrain">ناحیه</string>
+  <string name="hybrid">ترکیبی</string>
+  <string name="satellite">ستلایت</string>
+  <string name="light" tools:ignore="UnusedResources">روشن</string>
+  <string name="dark" tools:ignore="UnusedResources">تاریک</string>
+  <string name="outdoors" tools:ignore="UnusedResources">در فضای بیرونی </string>
+  <string name="topographic">توپوگرافی</string>
+  <string name="google_play_services_error_occured">دسترسی به نقشه های گوگل امکان پذیر نیست. آیا خدمات Google Play نصب شده است؟</string>
+  <string name="carto_map_style_positron">پوزیترون</string>
+  <string name="carto_map_style_dark_matter">ماده تاریک</string>
+  <string name="reference_layer"> مرجع به لایه</string>
+  <string name="layer_data_file">لایه data فایل </string>
+  <string name="view_change_location">مشاهده یا تغییر مکان</string>
+  <string name="change_location">تغییر موقعیت</string>
+  <string name="record_geopoint">یک نقطه را ثبت کنید</string>
+  <string name="location_accuracy">دقت: %1$s متر</string>
+  <string name="location_provider">ارائه دهنده مکان: %s</string>
+  <string name="get_location">ثبت لوکیشن</string>
+  <string name="provider_disabled_error">با معذرت، نشان دهنده های مکان غیرفعال هستند!</string>
+  <string name="gps_result">عرض جغرافیایی: %1$s\n طول: %2$s\lارتفاع: %3$smg دقت: %4$sm</string>
+  <string name="google_play_services_not_available">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما خدمات Google Play در دسترس نیست.</string>
+  <string name="location_providers_disabled_dialog_message">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما ارائه دهندگان موقعیت مکانی غیرفعال هستند. لطفا در تنظیمات اندروید فعال کنید.</string>
+  <!--Action to go to Android settings. Displayed when location providers are disabled.-->
+  <string name="go_to_settings">رفتن به تنظیمات </string>
+  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <string name="track_location">ردیابی مکان</string>
+  <string name="background_location_disabled">این فورم می خواهد موقعیت مکانی شما را ردیابی کند اما ردیابی غیرفعال است. لطفاً در منوی %1$s بالا فعال کنید.</string>
+  <string name="background_location_enabled">این فورم موقعیت مکانی شما را ردیابی می کند. می‌توانید ردیابی را در منوی %1$s بالا غیرفعال کنید.</string>
+  <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">بررسی خطا</string>
+  <string name="get_point">آغاز GeoPoint</string>
+  <string name="geopoint_view_read_only">نمایش GeoPoint</string>
+  <string name="geoshape_view_read_only">نمایش GeoShape</string>
+  <string name="geotrace_view_read_only">نمایش GeoTrace</string>
+  <string name="get_shape">آغاز GeoShape</string>
+  <string name="get_trace">آغاز GeoTrace</string>
+  <!--%1$s is the time taken so far in hh:mm:ss-->
+  <string name="time_elapsed">زمان سپری شده: %1$s</string>
+  <!--%1$s is the accuracy required for a point to be automatically saved-->
+  <string name="point_will_be_saved">نقطه در %1$s ذخیره خواهد شد</string>
+  <!--%1$s is the number of satellites being used to get location-->
+  <string name="satellites">ماهواره ها: %1$s</string>
+  <string name="waiting_for_location">تلاش برای بدست آوردن مکان لطفا منتظر باشید</string>
+  <string name="poor_accuracy">دقت ضعیف لطفا منتظر باشید</string>
+  <string name="unacceptable_accuracy">دقت غیر قابل قبول لطفا منتظر باشید</string>
+  <string name="improving_accuracy">بهبود دقت لطفا منتظر باشید</string>
+  <string name="accuracy_status_title">دریافت موقعیت مکانی</string>
+  <!--The accuracy of a location fix in meters-->
+  <string name="accuracy_m">%1$s متر</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in W 18°48'8"-->
+  <string name="west">W %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in E 18°48'8"-->
+  <string name="east">E %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in S 18°48'8"-->
+  <string name="south">S %1$s%2$s%3$s</string>
+  <!--%1$s represents degrees, %2$s represents minutes and %3$s represents seconds as in N 18°48'8"-->
+  <string name="north">شمال %1$s%2$s%3$s</string>
+  <string name="geoshape_title">GeoShape</string>
+  <string name="input_method">روش وروردی</string>
+  <string name="start">آغاز</string>
+  <string name="enable_gps">فعال ساختن GPS</string>
+  <string name="geotrace_title">GeoTrace</string>
+  <string name="gps_enable_message">در دستگاه شما GPS غیرفعال گردید. آیا میخواهید دوباره آنرا فعال کنید؟</string>
+  <string name="geo_clear_warning">ویژگی قبلا ایجاد شده است. آیا می خواهید ویژگی را پاک کنید؟</string>
+  <string name="geo_exit_warning">تغییرات کنار بگذرید و به ODK برگردید؟</string>
+  <string name="polygon_validator">برای ایجاد Polygon باید حداقل 3 امتیاز داشته باشد</string>
+  <string name="polyline_validator">برای ایجاد Polyline باید حداقل 2 امتیاز داشته باشد</string>
+  <string name="clear">پاک کردن</string>
+  <string name="placement_mode">قرار دادن با گشیدن انگشت</string>
+  <string name="manual_mode">ثبت دستی مکان</string>
+  <string name="automatic_mode">ثبت خودکار موقعیت مکانی</string>
+  <string name="recording_interval">فاصله ثبت:</string>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_seconds">
+    <item quantity="one">1%d ثانیه</item>
+    <item quantity="other">%d ثانیه</item>
+  </plurals>
+  <!--Used to display choices for location recording interval in geotrace and geoshape questions-->
+  <plurals name="number_of_minutes">
+    <item quantity="one">1%d دقیقه</item>
+    <item quantity="other">%d دقیقه</item>
+  </plurals>
+  <string name="accuracy_requirement">دقت مورد نیاز:</string>
+  <string name="none">هیچ کدام</string>
+  <!--Used to display choices for accuracy requirements in geotrace and geoshape questions-->
+  <string name="location_status_searching">در حال جستجو برای مکان، لطفا صبر کنید…</string>
+  <string name="location_status_accuracy">دقت مکان: %.2f m</string>
+  <string name="location_status_acceptable">دقت مکان: %.2f m (قابل قبول)</string>
+  <string name="location_status_unacceptable">دقت مکان: %.2f m (غیرقابل قبول)</string>
+  <string name="collection_status_paused">امتیازهای وارد شده: %d</string>
+  <string name="collection_status_placement">نقاط وارد شده: %d (برای قرار دادن نقاط ضربه بزنید)</string>
+  <string name="collection_status_manual">امتیازهای وارد شده: %d (ثبت دستی)</string>
+  <string name="collection_status_auto_seconds">امتیازهای وارد شده: %1$d (ثبت هر %2$d ثانیه)</string>
+  <string name="collection_status_auto_minutes">امتیازهای وارد شده: %1$d (ثبت هر %2$d دقیقه)</string>
+  <string name="collection_status_auto_seconds_accuracy">امتیازهای وارد شده: %1$d (ثبت هر %2$d ثانیه، دقت %3$d متر)</string>
+  <string name="collection_status_auto_minutes_accuracy">امتیازهای وارد شده: %1$d (ثبت هر %2$d ثانیه، دقت %3$d متر)</string>
+  <string name="geopoint_instruction">برای قرار دادن علامت طولانتر فشار دهید یا روی دکمه افزودن نشانگر انگیشت بکشید</string>
+  <string name="geopoint_no_draggable_instruction">روی دکمه افزودن نشانگر انگشیتان را بکشید</string>
+  <string name="discard">دور انداختن</string>
+  <string name="geoshape_view_change_location">نمایش و یا تغییر GeoShape</string>
+  <string name="geotrace_view_change_location">نمایش و یا تغییر GeoShape</string>
+  <string name="select_item_count">%s: %d (%d روی نقشه نشان داده شده است)</string>
+  <string name="select_item">برگزیدن</string>
+  <string name="new_item">گزینه جدید</string>
+  <!--Name of an action button-->
+  <string name="edit_data">بازنگری پیش نویس</string>
+  <string name="view_data">مشاهده فورم ذخیره شده</string>
+  <!--Name for the location tracking notifications. Will be seen in Android settings.-->
+  <string name="location_tracking_notification_channel_name">ردیابی موقعیت مکانی</string>
+  <!--Title for notification that lets user know their location is currently being tracked-->
+  <string name="location_tracking_notification_title">ردیابی مکان…</string>
+  <!--Text of button user can press to get help when setting up Reference Layers-->
+  <string name="get_help_with_reference_layers">از لایه های مرجع کمک بگیرید</string>
+  <!--Description for button that zooms to the user's current location on a map-->
+  <string name="show_my_location">نمایش لوکیشن من</string>
+  <!--Description for button that zooms a map so that it shows all items-->
+  <string name="zoom_to_fit_all">بزرگنمایی به تناسب همه</string>
+  <!--Description for button that pauses automatic location recording-->
+  <string name="pause_location_recording">توقف </string>
+  <!--Description for button that removes the last recorded point-->
+  <string name="remove_last_point">حذف نقطه آخر.</string>
+  <!--##############################################
+    # SEND FINALIZED FORM
+    ##############################################-->
+  <string name="uploading_data">در حال فرستادن فورم</string>
+  <string name="noselect_error">با عرض پوزش، شما هیچ فورمی را انتخاب نکرده اید!</string>
+  <string name="no_connection">اتصال شبکه در دسترس نیست</string>
+  <string name="sending_items">ارسال %1$s از %2$s فورم(های)</string>
+  <string name="send_selected_data">ارسال مورد انتخاب شده</string>
+  <string name="server_auth_credentials">پسورد و یا نام کاربری اشتباه برای سرور: %s</string>
+  <string name="server_requires_auth">سرور نیاز به احراز هویت دارد</string>
+  <string name="no_forms_uploaded">ببخشید، هیچ فورمی آپلود نشده است</string>
+  <string name="upload_results">نتایج آپلود</string>
+  <!--Name of option in Send Finalized Form menu to show only unsent forms (default) or show sent and unsent forms-->
+  <string name="change_view">تغییر چشم انداز</string>
+  <string name="show_sent_and_unsent_forms">نمایش فورم های ارسال شده و ارسال ناشده</string>
+  <string name="show_unsent_forms">نمایش فورم های ارسال نشده</string>
+  <string name="media_upload_error">فایل رسانه ای که وجود ندارد آپلود نشد: %1$s</string>
+  <string name="send_in_progress">ارسال در پس‌زمینه اجرا می‌شود، لطفاً به زودی دوباره امتحان کنید</string>
+  <string name="odk_permissions_fail">مجوز ارسال خودکار ODK ناموفق بود، لطفاً مطمئن شوید که همه مجوزهای لازم را دارید</string>
+  <string name="forms_upload_succeeded">آپلود فورم ها با موفقیت انجام شد</string>
+  <string name="forms_upload_failed">بارگذاری فورم ها انجام نشد</string>
+  <string name="all_uploads_succeeded">همه آپلودها با موفقیت انجام شد!</string>
+  <string name="some_uploads_failed">%1$s از %2$s بارگیره انجام نشد!</string>
+  <!--##############################################
+    # GET BLANK FORM
+    ##############################################-->
+  <string name="refresh">تازه</string>
+  <string name="download">انتخاب کنید</string>
+  <string name="downloading_data">در حال اتصال به سرور</string>
+  <string name="fetching_file">در حال دریافت %1$s. \n\n فورم %2$s از فورم (های) %3$s.</string>
+  <string name="form_download_progress">%1$s. دریافت فایل‌های رسانه: %2$s از %3$s</string>
+  <string name="version">نسخه:</string>
+  <string name="form_updates_available">آپدیت های فورم موجود است</string>
+  <string name="newer_version_of_a_form_info">این یک آپدیت به فورمی است که شما در اختیار دارید. </string>
+  <string name="form_update_error">آپدیت فورم ناموفق بود</string>
+  <string name="form_update_succeeded">آپدیت فورم با موفقیت انجام شد</string>
+  <string name="load_remote_form_error">دانلود فهرست فورم ناموفق بود</string>
+  <string name="forms_download_succeeded">دانلود فورم ها با موفقیت انجام شد</string>
+  <string name="forms_download_failed">دانلود فورم ها انجام نشد</string>
+  <string name="all_downloads_succeeded">همه دانلودها با موفقیت انجام شد!</string>
+  <string name="some_downloads_failed">%1$s از %2$s بارکردن انجام نشد!</string>
+  <!--Part of form download dialog. Clicking it displays additional information about a form that failed-->
+  <string name="form_details">شناسایی: %1$s نسخه: %2$s</string>
+  <!--##############################################
+    # GET BLANK FORM - ERROR MESSAGES
+    ##############################################-->
+  <string name="report_to_project_lead">اگر همچنان با این مشکل مواجه هستید، آن را به فردی که از شما خواسته است معلومات جمع آوری کنید، گزارش دهید.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="unreachable_error">Collect نمی تواند به سرور در %s برسد. آیا URL را درست وارد کردید؟</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="security_error">Collect نمی تواند به طور ایمن به سرور در %s متصل شود. آیا URL را درست وارد کردید؟</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="server_error">سرور %1$s کد وضعیت %2$s را برگرداند.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="invalid_response">سرور %s پاسخ نادرست ارائه کرد.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_no_hash_error">سرور برای این فورم hash ارائه نکرده است.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_parsing_error">این فورم قابل پردازش نیست.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_save_disk_error">هنگام بارکردن این فورم، خطای دیسک در دستگاه روخ داد.</string>
+  <!--Displayed in error dialog for form downloads. Followed by instructions to talk to person who asked to collect data-->
+  <string name="form_with_invalid_submission_error">این فورم دارای URL ارسال نادرست است.</string>
+  <!--##############################################
+    # DELETE SAVED FORM
+    ##############################################-->
+  <!--Title of a section in "Delete Saved Forms" for deleting filled/saved forms (as opposed to blank forms)-->
+  <string name="data">ذخیره فرم</string>
+  <!--Title of a section in "Delete Saved Forms" for deleting blank forms (as opposed to filled/saved forms)-->
+  <string name="forms">فورم های خالی</string>
+  <string name="delete_confirm">حذف فورم (های) %s</string>
+  <string name="delete_file">حذف مورد انتخاب شده</string>
+  <string name="delete_no">حذف نکنید</string>
+  <string name="delete_yes">حذف فورم ها</string>
+  <string name="file_deleted_error">متأسفیم، %1$s از %2$s فورم(های) انتخابی حذف نشد!</string>
+  <string name="form_delete_message">حذف کردن فورم های انتخاب شده</string>
+  <string name="deleting_form_dialog_update_message">در حال حذف فورم: %1$d از %2$d</string>
+  <string name="file_deleted_ok">%sفورم(ها) موفقانه حذف گردید!</string>
+  <string name="file_delete_in_progress">با معذرت، پروسه حذف فورم از قبل در جریان است!</string>
+  <!--##############################################
+    # UNPROTECTED SETTINGS
+    ##############################################-->
+  <string name="project_settings">تنظیمات پروژه</string>
+  <!--Title of a settings section-->
+  <string name="server_settings_title">سرور</string>
+  <!--Subtext of a settings section-->
+  <string name="server_settings_subtext">URL, نام کاربری، پسورد</string>
+  <!--Title of a settings section-->
+  <string name="project_display_title">نمایش پروژه</string>
+  <!--Subtext of a settings section-->
+  <string name="project_display_subtext">نام، نشان، رنگ</string>
+  <!--Title of a settings section-->
+  <string name="client">رابط کاربری</string>
+  <!--Subtext of a settings section-->
+  <string name="user_interface_settings_subtext">زبان برنامه، theme ، اندازه فونت</string>
+  <!--Title of a settings section-->
+  <string name="maps">نقشه ها</string>
+  <!--Subtext of a settings section-->
+  <string name="maps_settings_subtext">نقشه پایه، سبک ها، لایه ها</string>
+  <!--Title of a settings section-->
+  <string name="form_management_preferences">از مدیریت</string>
+  <!--Subtext of a settings section-->
+  <string name="form_management_settings_subtext">جدید سازی خودکار، ارسال خودکار، حذف خودکار</string>
+  <!--Title of a settings section-->
+  <string name="user_and_device_identity_title">شناسایی کاربر و دستگاه</string>
+  <!--Subtext of a settings section-->
+  <string name="user_and_device_identity_settings_subtext">نام کاربری، شماره تلفن، شناسایی دستگاه</string>
+  <!--Title of a settings section only available in beta or development builds.-->
+  <string name="experimental">ازمایشی</string>
+  <string name="protected_settings">محافظت شده</string>
+  <!--Title of a settings section-->
+  <string name="unlock_protected_settings_section_title">تنظیمات محافظت شده را باز کنید</string>
+  <!--Subtext of a settings section-->
+  <string name="unlock_protected_settings_section_subtext">پسورد را تغییر دهید، کنترل های دسترسی را تنظیم کنید</string>
+  <string name="set_admin_password">پسورد مدیریت را تنظیم کنید</string>
+  <!--Title of a settings section-->
+  <string name="project_management_section_title">مدیریت پروژه</string>
+  <!--Subtext of a settings section-->
+  <string name="project_management_section_subtext">تنظیم مجدد، دوباره شروع مردن، حذف کردن</string>
+  <!--Title of a settings section-->
+  <string name="access_control_section_title">کنترل دسترسی</string>
+  <!--Subtext of a settings section-->
+  <string name="access_control_section_subtext">رابط کاربری را محدود کنید</string>
+  <string name="server_preferences">تنظیمات سرور</string>
+  <!--Label for server type setting-->
+  <string name="type">نوع</string>
+  <string name="server_url">آدرس وب سایت </string>
+  <!--Title of dialog for configuring server URL-->
+  <string name="change_server_url">سرور آدرس وب سایت</string>
+  <string name="url_error">ببخشید، آدرس وب سایت اشتباه است!</string>
+  <string name="username">نام کاربر</string>
+  <string name="change_username">اسم کاربری</string>
+  <string name="password">پسورد</string>
+  <string name="change_password">پسورد ODK</string>
+  <string name="password_error_whitespace">فضای خالی پیشرو یا انتهایی در پسورد مجاز نیست</string>
+  <string name="username_error_whitespace">فضای خالی پیشرو یا انتهایی در نام کاربری مجاز نیست</string>
+  <string name="server_platform_google_sheets">گوگل درایو، گوگل شیت</string>
+  <string name="selected_google_account_text">حساب کاربری گوگل</string>
+  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
+  <string name="google_sheets_url">ارسال مجدد URL</string>
+  <!--Description for Fallback submission URL setting-->
+  <string name="google_sheets_url_hint">فورم ها باید URL ارسال را تنظیم کنند. اگر این کار را نکنند، از این URL استفاده خواهد شد.</string>
+  <string name="app_theme">ظاهر</string>
+  <string name="theme_light">روشن</string>
+  <string name="theme_dark">تیره</string>
+  <string name="theme_system">آز موضوع دستگاه استفاده کنید</string>
+  <string name="language">زبان</string>
+  <string name="use_device_language">از زبان دستگاه استفاده کنید</string>
+  <string name="font_size">اندازه فونت متن</string>
+  <string name="change_font_size">اندازه فونت متن</string>
+  <string name="font_size_extra_large">بسیار بزرگ</string>
+  <string name="font_size_large">بزرگ</string>
+  <string name="font_size_medium">متوسط</string>
+  <string name="font_size_small">کوچک</string>
+  <string name="font_size_extra_small">بسیار کوچک</string>
+  <string name="navigation">جهت یابی</string>
+  <string name="swipe_navigation">از سوایپ های افقی استفاده کنید</string>
+  <string name="buttons_navigation">از دکمه های جلو/عقب استفاده کنید</string>
+  <string name="swipe_buttons_navigation">از سوایپ ها و دکمه ها استفاده کنید</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_forward">بعدی</string>
+  <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
+  <string name="form_backward">قبلی</string>
+  <!--Heading for the settings category about updating blank forms-->
+  <string name="form_update_category">آپدیت فورم</string>
+  <!--Name of the setting that defines how blank forms are updated from the server.-->
+  <string name="form_update_mode_title">حالت خودکار آپدیت فورم خالی</string>
+  <!--One of the possible settings values for "Blank form update mode". Manual update mode means forms have to be explicitly downloaded from Get Blank Forms.-->
+  <string name="manual">کتابچه راهنمای</string>
+  <!--One of the possible settings values for "Blank form update mode". "Previously downloaded" update mode means forms that have been manually downloaded will be kept up to date.-->
+  <string name="previously_downloaded_only">فقط فورم‌های دانلود شده قبلی</string>
+  <!--One of the possible settings values for "Blank form update mode". "Exactly match server" update mode means that new forms or form updates on the server will be downloaded and forms that the server doesn't know about will be removed.-->
+  <string name="match_exactly">دقیقا مطابق با سرور</string>
+  <!--Name of the setting that defines how often blank forms are updated from the server.-->
+  <string name="form_update_frequency_title">آپدیت خودکار فرکانس </string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_fifteen_minutes">هر پانزده دقیقه بعد</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_one_hour">هر ساعت</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_six_hours">هر شش ساعت</string>
+  <!--Frequency for requesting blank form updates from the server-->
+  <string name="every_24_hours">هر 24 ساعت</string>
+  <!--Name of setting that defines whether form updates should be automatically downloaded when in "previously downloaded forms only" download mode-->
+  <string name="automatic_download">دانلود خودکار</string>
+  <string name="automatic_download_summary">نسخه های جدید فورم ها را به صورت خودکار دانلود کنید</string>
+  <string name="hide_old_form_versions_setting_title">مخفی کردن نسخه های قدیمی</string>
+  <string name="hide_old_form_versions_setting_summary">فقط جدیدترین نسخه در فورم خالی ظاهر می شود</string>
+  <string name="form_submission_category">ارسال فورم</string>
+  <string name="autosend_selector_title">ارسال خودکار</string>
+  <string name="autosend">ارسال خودکار</string>
+  <string name="off">خاموش</string>
+  <string name="wifi_autosend">تنها وای فای</string>
+  <string name="cellular_autosend">تنها تلفن همراه</string>
+  <string name="wifi_cellular_autosend">وای فای یا تلفن همراه</string>
+  <string name="delete_after_send">بعد از ارسال حذف کنید</string>
+  <string name="delete_after_send_summary">فورم های نهایی و رسانه یی را بعد از ارسال به سرور حذف کنید</string>
+  <string name="form_filling_category">فورم را پر کنید</string>
+  <string name="constraint_behavior_title"> محدودیت پردازش</string>
+  <string name="constraint_behavior">محدودیت رفتار پردازش </string>
+  <string name="constraint_behavior_on_swipe">با کشیدن انگشت به جلو اعتبارسنجی کنید</string>
+  <string name="constraint_behavior_on_finalize">اعتبارسنجی را تا نهایی شدن به تعویق بگذرید</string>
+  <string name="high_resolution_title">ویدیو با وضوح بالا</string>
+  <string name="high_resolution_summary">فعال ساختن ظبط ویدیو با رزولوشن بالا</string>
+  <string name="image_size_title">اندازه تصویر</string>
+  <string name="image_size_dialog_title">حداکثر پیکسل حاشیه بلند عکس</string>
+  <string name="image_size_large">بزرگ (3072 پکسل)</string>
+  <string name="image_size_medium">متوسط (2048 پکسل)</string>
+  <string name="image_size_small">کوچک (1024 پکسل)</string>
+  <string name="image_size_very_small">بسیار کوچک (640 پکسل)</string>
+  <string name="image_size_original">اندازه اصلی از دوربین (فرض کنید)</string>
+  <!--Name of setting for enabling guidance hints while filling forms. Guidance hints are meant for training or other specialized contexts.-->
+  <string name="guidance_hint_title">برای سوالات راهنمایی نشان دهید</string>
+  <string name="guidance_no">نخیر</string>
+  <string name="guidance_yes">بلی - همیشه نمایش داده شود</string>
+  <!--Guidance hints can be displayed behind an icon that must be tapped to reveal the hint.-->
+  <string name="guidance_yes_collapsed">بلی - فرو پاشیده</string>
+  <!--Title for setting to let the user switch between using Collect or another app (on the device) for recording audio-->
+  <string name="external_app_recording">از برنامه خارجی برای ثبت صدا استفاده کنید</string>
+  <string name="form_import_category">فورم را وارد کنید</string>
+  <string name="instance_sync">فورم ها را در هنگام واردات نهایی کنید</string>
+  <string name="instance_sync_summary">فورم هایی که مستقیماً به فلودر پنهانی اضافه شده اند تأثیر می گذارد.</string>
+  <string name="analytics_preferences">استفاده معلومات</string>
+  <string name="analytics">معلومات استفاده ناشناس را جمع آوری کنید</string>
+  <string name="analytics_summary">استفاده معلومات ناشناس به تیم ODK کمک می‌کند تا اصلاحات و ویژگی‌ها را اولویت‌بندی کند.</string>
+  <string name="form_metadata_title">فورم metadata</string>
+  <string name="form_metadata">فورم metadata</string>
+  <string name="form_metadata_summary">این مقادیر به فورم هایی اضافه می شود که دارای فیلدهای از پیش بار شده نام کاربری، ایمیل و/یا تلفن هستند تا فرد ارسال کننده معلومات را شناسایی کند.</string>
+  <string name="user_defined">تعریف شده توسط کاربر</string>
+  <string name="phone_number">شماره تماس</string>
+  <string name="email">ایمیل آدرس</string>
+  <string name="invalid_email_address">آدرس ایمیل اعتبار ندارد</string>
+  <string name="device_defined">تعریف شده توسط دستگاه</string>
+  <string name="device_id">نمبر شناسایی دستگاه</string>
+  <!--Displayed when a device property such as the phone number is not available-->
+  <string name="preference_not_available">در دسترس نیست</string>
+  <!--Label for an item displayed in the project settings menu to unlock settings-->
+  <string name="unlock_settings">تنظیمات را باز کنید</string>
+  <!--Label for an item displayed in the project settings menu to indicate that settings are unlocked-->
+  <string name="settings_unlocked">تنظیمات باز شد</string>
+  <!--##############################################
+     # PROTECTED SETTINGS
+     ##############################################-->
+  <string name="enter_new_password">پسورد جدید را داخل کنید</string>
+  <string name="admin_password">پسورد Admin</string>
+  <string name="admin_password_changed">پسورد Admin با موفقیت تغییر کرد</string>
+  <string name="admin_password_disabled">پسورد Admin غیر فعال گردید</string>
+  <string name="admin_password_incorrect">ببخشید، پسورد نادرست است</string>
+  <string name="enter_admin_password">پسورد عبور مدیریت را وارد کنید</string>
+  <string name="change_admin_password">پسورد عبور مدیریت را تغییر دهید</string>
+  <string name="show_password">نشان دادن پسورد</string>
+  <string name="found_in_main">برای پنهان شدن از منوی اصلی، علامت را بردارید</string>
+  <string name="found_in_settings">برای پنهان شدن از تنظیمات محافظت نشده، علامت را بردارید</string>
+  <string name="form_entry">برای پنهان شدن از ورود فورم، علامت را بردارید</string>
+  <string name="form_end">برای پنهان شدن از پایان فرم، علامت را بردارید</string>
+  <string name="reset_project_settings_title">تنظیم مجدد</string>
+  <string name="reset_project_settings_subtext">از میان تنظیمات، فورم‌ها، معلومات را انتخاب کنید</string>
+  <string name="delete_project">حذف شده</string>
+  <string name="select_all">انتخاب همه</string>
+  <string name="clear_all">پاک کردن همه</string>
+  <string name="reset_settings">تمام تنظیمات (تنظیمات داخلی، تنظیمات حفظ شده)</string>
+  <string name="reset_saved_forms">فورم های ذخیره شده ( نمونه ها، پایگاه معلومات نمونه ها)</string>
+  <string name="reset_blank_forms">فورم های خالی ( فورم ها، پایگاه معلومات فورم ها، پایگاه معلومات مجموعه اقلام )</string>
+  <string name="reset_layers">لایه های نقشه (پوشه لایه ها)</string>
+  <string name="reset_cache">بار کردن فورم حافظه پنهان (پوشه کش.)</string>
+  <string name="reset_settings_dialog_title">انتخاب موارد جهت تنظیم مجدد</string>
+  <string name="reset_settings_button_reset">تنظیم مجدد</string>
+  <string name="reset_in_progress">در حال تنظیم مجدد</string>
+  <string name="reset_app_state_result">نتایج تنظیم مجدد</string>
+  <string name="reset_app_state_warning">همه معلومات های انتخاب شده برای همیشه حذف می شوند. لغو وجود ندارد.</string>
+  <string name="reset_settings_result">تمام تنظیمات:: %s</string>
+  <string name="reset_saved_forms_result">فورم های ذخیره شده:: %s</string>
+  <string name="reset_blank_forms_result">قورم های خالی:: %s</string>
+  <string name="reset_layers_result">لایه های نقشه:: %s</string>
+  <string name="reset_cache_result">حافظه پنهان بار کردن فورم :: %s</string>
+  <string name="main_menu_settings">تنظیمات منوی اصلی</string>
+  <string name="main_menu_settings_summary">نمایش یا پنهان کردن دکمه ها</string>
+  <string name="user_settings">تنظیمات کاربر</string>
+  <string name="user_setting_summary">نمایش یا پنهان کردن تنظیمات</string>
+  <string name="form_entry_setting">تنظیمات ورود به فورم</string>
+  <string name="form_entry_settings_summary">نمایش یا پنهان کردن اقدامات</string>
+  <!--Name of a setting that determines whether users can navigate backwards in a form-->
+  <string name="moving_backwards_title">حرکت به سمت عقب</string>
+  <string name="moving_backwards_disabled_title">حرکت به عقب غیرفعال است</string>
+  <string name="yes">بلی</string>
+  <string name="no">نخیر</string>
+  <string name="moving_backwards_enabled_title">حرکت به عقب فعال شد</string>
+  <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
+  <string name="save_mid">ذخیره پیش نویس</string>
+  <string name="save_mid_summary">نماد ذخیره در نوار بالا و دکمه \"ذخیره به عنوان پیش نویس\" هنگام خروج از فرم</string>
+  <!--##############################################
+     # GOOGLE DRIVE, GOOGLE SHEETS
+     ##############################################-->
+  <!--Title of the screen that lists forms in user's Google Drive-->
+  <!--Title of the screen that lists forms shared with Google Drive user-->
+  <!--Button for navigating across Google Drive folders-->
+  <string name="google_auth_io_exception_msg">امکان برقراری تماس های API وجود ندارد. اگر در حال اجرای یک ساخت محلی هستید، لطفاً پروژه readme را بررسی کنید.</string>
+  <string name="no_google_account">هیچ حساب Google انتخاب نشده است!</string>
+  <string name="google_set_account">شما برگه‌های Google را به عنوان سرور خود انتخاب کرده‌اید، لطفاً قبل از ادامه، یک حساب Google مربوطه را در تنظیمات انتخاب کنید</string>
+  <string name="invalid_sheet_id">ورق با نمبر شناسایی نامعتبر: %1$s</string>
+  <string name="missing_submission_url">نشانی اینترنتی ارسال وجود ندارد</string>
+  <string name="google_sheets_access_denied">دسترسی رد شد. لطفاً مطمئن شوید که مالک صفحه‌گسترده به شما اجازه ویرایش داده است.</string>
+  <string name="google_sheets_missing_columns">صفحه گسترده فاقد ستون‌های زیر است: %1$s</string>
+  <string name="google_sheets_encrypted_message">فورم های رمزگذاری شده را نمی توان به Google Sheets ارسال کرد.</string>
+  <string name="missing_google_account_dialog_desc">برای ارسال فورم ها از طریق Google Sheets باید حساب Google خود را در تنظیمات سرور راه اندازی کنید.</string>
+  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
+  <string name="instance_upload_cancelled">بارگذاری نمونه لغو شد</string>
+  <string name="no_columns_to_upload">هیچ ستونی در فورم برای آپلود یافت نشد.</string>
+  <string name="missing_google_account_dialog_title">حساب Google تنظیم نشده است</string>
+  <!--##############################################
+     # ABOUT
+     ##############################################-->
+  <string name="about_preferences">در باره</string>
+  <string name="tell_your_friends">ODK Collect را به اشتراک بگذارید</string>
+  <string name="tell_your_friends_msg">آیا همکاران شما هنوز در حال جمع آوری معلومات بر روی کاغذ هستند؟ ODK Collect را با آنها به اشتراک بگذارید.</string>
+  <string name="leave_a_review">نظریه خود را راجع به Play Store بنویسید</string>
+  <string name="leave_a_review_msg"> (امیدوارم) بررسی ما باعث افزایش دید برنامه در  Play Store می شود.</string>
+  <string name="odk_website">به وبسایت ODK مراجعه کنید</string>
+  <string name="odk_website_summary">ODK برای جمع آوری data برای منافع اجتماعی در محیط های چالش برانگیز استفاده می شود.</string>
+  <string name="odk_forum">با انجمن ODK یکجا شوید</string>
+  <string name="odk_forum_summary">برای دریافت کمک، درخواست ویژگی‌ها، مشارکت کد/ترجمه به انجمن بپیوندید!</string>
+  <string name="all_open_source_licenses">منابع باز کتابخانه ها/مجوز ها</string>
+  <string name="all_open_source_licenses_msg">ما روی شانه های غول ها ایستاده ایم!</string>
+  <!--##############################################
+     # SETTINGS IMPORT
+     ##############################################-->
+  <string name="reconfigure_with_qr_code_settings_title">با کد QR تنظیم مجدد کنید</string>
+  <string name="reconfigure_with_qr_code_settings_subtext">تمام تنظیمات موجود را جایگزین کنید</string>
+  <string name="qr_code">تنظیم QR کد</string>
+  <string name="scan_qr_code_fragment_title">اسکن کنید</string>
+  <string name="view_qr_code_fragment_title">ًQR کد</string>
+  <string name="import_qrcode_sd">QR کد را وارد شد</string>
+  <string name="successfully_imported_settings">تنظیمات با موفقیت وارد شد</string>
+  <string name="encoding_max_limit" tools:ignore="UnusedResources">به حداکثر محدودیت رقم ها رسیده‌اید: QR کد نمی‌تواند برای همه تنظیمات ایجاد شود</string>
+  <string name="share">اشتراک گذاری</string>
+  <string name="turn_on_flashlight">روشن نمودن چراغ </string>
+  <string name="turn_off_flashlight">خاموش نمودن چراغ</string>
+  <string name="qrcode_with_both_passwords">حاوی اطلاعات حساس:<b> پسورد </b>مدیریت و <b>پسورد سرور</b></string>
+  <string name="qrcode_without_passwords">کد QR حاوی<b> پسورد عبور مدیریت</b> یا <b>سرور</b> نیست. برای تنظیم کردن انگشتات را بکشید</string>
+  <string name="qrcode_with_admin_password">حاوی اطلاعات حساس:<b> پسورد عبور </b>مدیریت</string>
+  <string name="qrcode_with_server_password">حاوی اطلاعات حساس:<b> پسورد عبور </b>سرور</string>
+  <string name="server_password">رمز سرور</string>
+  <string name="include_password_dialog">رمزهای عبور با code یکجاست</string>
+  <string name="generate">تولید کردن</string>
+  <string name="invalid_qrcode">QR کد شامل تنظیمات معتبری نیست</string>
+  <string name="qr_code_not_found">QR کد در تصویر انتخابی یافت نشد</string>
+  <string name="corrupt_imported_preferences_error">تنظیمات فعلی خراب است. از تنظیمات مدیریت پروژه، تنظیمات را بازنشانی کنید یا تنظیمات درست را وارد کنید.</string>
+  <string name="settings_with_gd_protocol">پروژه‌های Google Drive/Sheets دیگر نمی‌توانند ایجاد شوند</string>
+  <!--##############################################
+     # MISC
+     ##############################################-->
+  <string name="ok">درست است</string>
+  <!--Used in many dialogs to dismiss the dialog without taking any action-->
+  <string name="cancel">لغو </string>
+  <string name="cancel_loading_form">لغو</string>
+  <string name="cancel_location">لغو</string>
+  <string name="do_not_change">انصراف</string>
+  <string name="do_not_exit">انصراف</string>
+  <string name="canceling">لغو کردن</string>
+  <string name="notification_channel_name">اطلاعیه های عمومی</string>
+  <string name="success">موفقیت </string>
+  <string name="error_occured">خطا اتفاق افتاده است</string>
+  <string name="please_wait">لطفاً برای چند لحظه منتظر باشید</string>
+  <string name="please_wait_long">لطفاً منتظر باشید: این میتواند چند دقیقه را در بر بگیرد.</string>
+  <string name="fs_delete_media_path_if_file_error">\"%s\" حذف نشد. لطفا فایل را به صورت دستی حذف کنید و دوباره فورم را دانلود کنید.</string>
+  <string name="fs_create_media_folder_error">folder رسانه \'%s\' ایجاد نشد.</string>
+  <string name="fs_file_copy_error">\"%1$s\" روی \"%2$s\" کپی نشد. دلیل: %3$s</string>
+  <string name="survey_multiple_forms_error">شما دو فورم مختلف را باشناسایی و نسخه یکسان دانلود کرده اید. شاید همان فورم بارگذاری شده در زمان های مختلف یا در سرورهای مختلف باشد. در هر صورت باید یکی را حذف کنید.</string>
+  <string name="select_odk_shortcut">میانبر ODK را انتخاب کنید</string>
+  <string name="background_audio_help">این فورم صدا را از میکروفون دستگاه شما ضبط می‌کند. \n\n می‌توانید از نشانگر میزان صدا استفاده کنید تا مطمئن شوید میکروفون به اندازه کافی به صدایی که باید ضبط کنید نزدیک است. \n\n برای توقف ضبط لطفاً از این فورم خارج شوید. \n\ n برای اطلاعات بیشتر، لطفاً با شخصی که از شما خواسته است اطلاعات را جمع آوری کنید، تماس بگیرید.</string>
+  <string name="loading">بارگذاری…</string>
+  <!--##############################################
+     # Projects
+     ##############################################-->
+  <string name="projects">پروژه ها</string>
+  <string name="settings">تنظیمات</string>
+  <string name="add_project">اضافه کردن پروژه</string>
+  <string name="add">اضافه</string>
+  <!--Title of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project">پروژه تکراری</string>
+  <!--Detail text of the dialog shown when attempting to create a project with connection settings that match an existing project-->
+  <string name="duplicate_project_details">شما قبلاً پروژه ای با این تنظیمات اتصال دارید. آیا می خواهید به پروژه موجود تغییر دهید یا یک پروژه جدید اضافه کنید</string>
+  <!--Button text for adding a duplicate project-->
+  <string name="add_duplicate_project">اضافه کردن پروژه تکراری</string>
+  <!--Buton text for switching to an existing project-->
+  <string name="switch_to_existing">تغییر به پروژه موجود</string>
+  <string name="project_name">نام پروژه</string>
+  <string name="project_icon">نماد پروژه</string>
+  <string name="project_color">رنگ پروژه</string>
+  <!--Toast text shown when the current project is changed-->
+  <string name="switched_project">به %s تغییر وضعیت داد</string>
+  <!--Description for screen readers of which project is in use. This is part of the project selection dialog-->
+  <string name="using_project">با استفاده از %s</string>
+  <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
+  <string name="switch_to_project">به %s تغییر دهید</string>
+  <string name="delete_project_confirm_message">تمام فورم‌های خالی، ارسال‌ها و تنظیمات برای همیشه حذف خواهند شد.</string>
+  <string name="delete_project_yes">بلی</string>
+  <string name="delete_project_no">نخیر</string>
+  <string name="cannot_delete_project_title">پروژه قابل حذف نیست</string>
+  <string name="cannot_delete_project_message_one">شما موارد ارسالی ارسال نشده دارید. برای حذف پروژه، ابتدا باید آن موارد ارسالی را ارسال یا حذف کنید.</string>
+  <string name="cannot_delete_project_message_two">کارهای پس زمینه در حال اجرا هستند. لطفاً بعداً دوباره امتحان کنید.</string>
+  <string name="or">یا</string>
+  <string name="hex_color">رنگ Hex</string>
+  <string name="invalid_hex_code">hex code نادرست است</string>
+  <!--##############################################
+     # First launch and initial configuration
+     ##############################################-->
+  <!--Tag line displayed on the first launch screen. The text should be split into two lines with \n. Please
+    select the wording and where to put the \n for maximum impact in your language.-->
+  <string name="tagline">جمع‌آوری data در هر کجا</string>
+  <!--Text for the button that allows for configuring a project by scanning a QR code. Should be short-->
+  <string name="configure_with_qr_code">تنظیم کردن با QR code</string>
+  <!--Text for the button that allows for manually entering project details. Should be short-->
+  <string name="configure_manually">جزئیات پروژه را به صورت دستی وارد کنید</string>
+  <string name="project_config_tip">پس از اینکه پروژه خود را اضافه کردید، می توانید آن را در تنظیمات تنظیم کنید</string>
+  <!--Immediately followed by "Try Collect" which is a link to create a demo project-->
+  <string name="dont_have_project">هنوز پروژه ای ندارید؟</string>
+  <!--Preceded by "Don't have a project yet?" question-->
+  <string name="try_demo">نسخه ی نمایشی را امتحان کنید</string>
+  <string name="scan_configuration_qr_code"> QR کد پیکربندی را اسکن کنید</string>
+  <!--Error shown when a user tries to open a form that's in a different project-->
+  <string name="wrong_project_selected_for_form">برای باز کردن این فرم، ابتدا باید ODK Collect را باز کنید و به پروژه ای که مربوط آن است بروید.</string>
+  <!--Error shown when a user tries to open a form when there are no projects-->
+  <string name="app_not_configured">او دی کی کلیکت تنظیم نگردیده است، کوشش کنید تا او دی کی کلیکت را باز کنید و آنرا تنظیم کنید. اگر شما بالای میانبر فشار وارد کنید، پس از تنظیم کردن ODK collect شما نیاز پیدا خواهد کرد تا انرا دوباره ایجاد کنید.</string>
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
+  <string name="cannot_start_new_forms_in_google_drive_projects">فرم های جدید را نمی توان در پروژه های Google Drive شروع کرد.</string>
+  <!--##############################################
+    # Errors
+    ##############################################-->
+  <string name="show_details">نمایش جزئیات</string>
+  <string name="errors">اشتباه</string>
+  <!--##############################################
+    # Permissions
+    ##############################################-->
+  <string name="open_settings">تنظیمات را باز کنید</string>
+  <!--An entity is any person, place or thing that a form can be about. This title appears on an experimental settings screen to view entities managed in the current project.-->
+  <string name="entities_title">موجودیت ها</string>
+  <!--##############################################
+    # Crash handling
+    ##############################################-->
+  <string name="crash_last_run">آخرین باری که برنامه در حال اجرا بود یک خرابی وجود داشت!</string>
+  <string name="cant_start_app">نمی توان app را راه اندازی کرد!</string>
+  <!--##############################################
+    # Google Drive deprecation
+    ##############################################-->
+  <string name="learn_more_button_text">بیشتر بدانید</string>
+  <!--##############################################
+    # Developer tools
+    ##############################################-->
+  <!--Section title in settings-->
+  <string name="dev_tools">توسعه ابزارها</string>
+  <!--Option provided in the Developer tools settings to force an application crash-->
+  <string name="crash_app">از کار افتاد app</string>
+  <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
+  <string name="crash_app_summary">اجبار یک استثناء کشف نشده که باعث از کار افتادن برنامه می شود</string>
+  <string name="permission_dialog_title">درباره محدودیت ها</string>
+  <string name="permission_dialog_text">از شما خواسته می شود که به ODK Collect اجازه دسترسی به ویژگی های زیر را بدهید، اگر می خواهید از آنها استفاده کنید، \"اجازه\" را انتخاب کنید.</string>
+  <string name="notifications">اعلان ها</string>
+  <string name="required_for_notifications">برای نمایش به‌روزرسانی‌ها هنگام بارگیری، به‌روزرسانی و ارسال فرم‌ها ضروری است.</string>
+  <!--##############################################
+    # Form saved Snackbar
+    ##############################################-->
+  <string name="form_saved_as_draft">فرم شما به عنوان پیش نویس ذخیره شد.</string>
+  <string name="form_saved">فرم شما ذخیره شد.</string>
+  <string name="form_sending">در حال ارسال فرم</string>
+  <string name="edit_form">بازنگری</string>
+  <string name="view_form">نمایش</string>
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <plurals name="last_form_sent_seconds_ago">
+    <item quantity="one">آخرین فرم ارسال شده: 1%d ثانیه قبل</item>
+    <item quantity="other">آخرین فرم ارسال شده: 1%d ثانیه قبل</item>
+  </plurals>
+  <plurals name="last_form_sent_minutes_ago">
+    <item quantity="one">آخرین فرم ارسال شده: 1%d دقیقه قبل</item>
+    <item quantity="other">آخرین فرم ارسال شده: 1%d دقیقه قبل</item>
+  </plurals>
+  <plurals name="last_form_sent_hours_ago">
+    <item quantity="one">آخرین فرم ارسال شده: 1%d ساعت قبل</item>
+    <item quantity="other">آخرین فرم ارسال شده: 1%d ثانیه قبل</item>
+  </plurals>
+  <plurals name="last_form_sent_days_ago">
+    <item quantity="one">آخرین فرم ارسال شده: 1%d روز قبل</item>
+    <item quantity="other">آخرین فرم ارسال شده: 1%d روز قبل</item>
+  </plurals>
+  <plurals name="forms_ready_to_send">
+    <item quantity="one">1%d فرم آماده ارسال است</item>
+    <item quantity="other">1%d فرم آماده ارسال است</item>
+  </plurals>
+  <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">در نسخه های بعدی، فرم های نهایی شده دیگر قابل ویرایش نخواهند بود. فرم‌ها را به‌عنوان پیش‌نویس ذخیره کنید تا بعداً آن‌ها را ویرایش کنید. \n\nمی‌توانید با ضربه زدن روی سه نقطه (⋮) و سپس خطاها را در فرم پیش‌نویس بررسی کنید.</string>
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <string name="edit_finalized_form_deprecation_message" tools:ignore="UnusedResources">در نسخه های بعدی، فرم های نهایی شده دیگر قابل ویرایش نخواهند بود.</string>
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <string name="finalize_all_drafts">تمام پیش نویس ها را نهایی کنید.</string>
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <plurals name="bulk_finalize_confirmation">
+    <item quantity="one">آیا می‌خواهید 1%d پیش‌نویس را نهایی کنید؟</item>
+    <item quantity="other">آیا می‌خواهید 1%d پیش‌نویس ها را نهایی کنید؟</item>
+  </plurals>
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <string name="bulk_finalize_explanation">وقتی همه پیش‌نویس‌ها را نهایی کردید، در «آماده ارسال» قرار می‌گیرند و نمی‌توانید ویرایش کنید. هر پیش‌نویسی که دارای خطا باشد، نهایی نخواهد شد.\n\nشما نمی‌توانید این عمل را واگرد کنید.</string>
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <plurals name="bulk_finalize_success">
+    <item quantity="one">موفق! 1%d پیش‌نویس نهایی شد.</item>
+    <item quantity="other">موفق! 1%d پیش‌نویس نهایی شد.</item>
+  </plurals>
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <plurals name="bulk_finalize_failure">
+    <item quantity="one">1%d پیش نویس دارای خطاهایی است که باید قبل از نهایی شدن برطرف شوند.</item>
+    <item quantity="other">1%d پیش نویس دارای خطاهایی است که باید قبل از نهایی شدن برطرف شوند.</item>
+  </plurals>
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <string name="bulk_finalize_partial_success">1%d پیش‌نویس نهایی شد. 1%d پیش نویس دارای خطاهایی است که باید قبل از نهایی شدن برطرف شوند.</string>
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <string name="bulk_finalize_unsupported">1%d پیش‌نویس نهایی شد. پیش نویس هایی که باقی مانده اند باید به صورت دستی نهایی شوند.</string>
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <string name="draft_errors">اشتباه</string>
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <string name="draft_no_errors">بدون خطا</string>
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <string name="uncheck_to_hide_from_drafts">برای پنهان شدن از پیش نویس ها، علامت را بردارید.</string>
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <string name="new_feature">ویژگی های جدید</string>
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <string name="drafts_pills_education_message">فهرست پیش‌نویس اکنون خطاهای اعتبارسنجی را نشان می‌دهد. هر بار که فرمی را به‌عنوان پیش‌نویس ذخیره می‌کنید، وضعیت اعتبارسنجی آن به‌روزرسانی می‌شود.\n\nپیش‌نویس‌هایی که با «خطاها» علامت‌گذاری شده‌اند، یا سؤالات لازم را ندارند یا مقادیری دارند که مجاز نیستند.</string>
+  <!--General message displayed when the list of forms-->
+  <string name="empty_list_title">چیزی برای نمایش در دسترس نیست</string>
+  <!--Message displayed when the list of drafts is empty-->
+  <string name="empty_list_of_drafts_title">هیچ چیزی در پیش نویس ها وجود ندارد</string>
+  <string name="empty_list_of_drafts_subtitle">وقتی به عنوان پیش‌نویس ذخیره می‌کنید، فرم‌ها در اینجا ظاهر می‌شوند</string>
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <string name="empty_list_of_finalized_forms_title">چیزی برای ارسال آماده نیست</string>
+  <string name="empty_list_of_finalized_forms_subtitle">وقتی پیش‌نویس‌ها را نهایی کردید، در اینجا ظاهر می‌شوند</string>
+  <!--Message displayed when the list of sent forms is empty-->
+  <string name="empty_list_of_sent_forms_title">چیزی ارسال نشد</string>
+  <string name="empty_list_of_sent_forms_subtitle">هنگامی که فرم های نهایی شده را ارسال می کنید، آنها در اینجا ظاهر می شوند</string>
+</resources>
