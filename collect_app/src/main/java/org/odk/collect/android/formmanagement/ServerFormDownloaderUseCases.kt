@@ -6,6 +6,7 @@ import org.odk.collect.forms.FormsRepository
 import java.io.File
 
 object ServerFormDownloaderUseCases {
+    @JvmStatic
     fun copySavedFileFromPreviousFormVersionIfExists(formsRepository: FormsRepository, formId: String, mediaDirPath: String) {
         val lastSavedFile: File? = formsRepository
             .getAllByFormId(formId)

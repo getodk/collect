@@ -97,7 +97,7 @@ public class ServerFormDownloader implements FormDownloader {
                 newAttachmentsDetected = mediaDownloader.download(fd, tempMediaPath, tempDir, stateListener);
             }
 
-            ServerFormDownloaderUseCases.INSTANCE.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
+            ServerFormDownloaderUseCases.copySavedFileFromPreviousFormVersionIfExists(formsRepository, fd.getFormId(), tempMediaPath);
         } catch (FormDownloadException.DownloadingInterrupted | InterruptedException e) {
             Timber.i(e);
             cleanUp(fileResult, tempMediaPath);
