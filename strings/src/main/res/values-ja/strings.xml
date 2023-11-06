@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -36,9 +36,6 @@
   <string name="filter_the_list">一覧をフィルター</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">検索</string>
-  <string name="no_items_display">表示できるものはありません。</string>
-  <string name="no_items_display_forms">表示できるものはありません。\n\n空のフォームを取得し、必要事項を記入してみてください。</string>
-  <string name="no_items_display_sent_forms">表示可能なものはありません。\n\n表示する前に確定済みのフォームを送信してみてください。</string>
   <string name="not_granted_permission">開始しようとしているアクティビティは、必要なアクセス許可が付与されていません。</string>
   <string name="storage_runtime_permission_denied_title">ストレージのアクセス許可</string>
   <string name="storage_runtime_permission_denied_desc">これらのアクセス許可がないと、Collect はフォームにアクセスしたり、回答を保存することができません。 アクセス許可を付与する準備ができたら、アプリをもう一度開いてください。</string>
@@ -471,7 +468,6 @@
     ##############################################-->
   <string name="refresh">更新</string>
   <string name="download">選択を取得</string>
-  <string name="download_forms_result">ダウンロード結果</string>
   <string name="downloading_data">サーバーに接続</string>
   <string name="fetching_file">%1$s 取得中。\n\n%2$s / %3$s フォーム。</string>
   <string name="form_download_progress">%1$s。 メディア ファイルの取得中: %2$s / %3$s</string>
@@ -701,17 +697,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">マイ ドライブ</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">私と共有</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">選択済をダウンロード</string>
-  <string name="go_back">戻る</string>
   <string name="google_auth_io_exception_msg">API 呼び出しを行うことができません。 ローカルビルドを実行している場合は、プロジェクトのreadmeを確認してください。</string>
-  <string name="reading_files">ファイルを読み込んでいます</string>
-  <string name="drive_get_file">%1$s とメディアファイルを取得中。</string>
   <string name="no_google_account">Google アカウントが選択されていません!</string>
-  <string name="google_search_browse">フォームを検索するか、次の \'マイ ドライブ\' を選択して表示します。</string>
   <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
   <string name="missing_submission_url">送信 URL が見つかりません</string>
   <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
@@ -722,7 +711,6 @@
   <string name="instance_upload_cancelled">インスタンスのアップロードがキャンセルされました</string>
   <string name="no_columns_to_upload">アップロードするフォームにカラムが見つかりません。</string>
   <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
-  <string name="multiple_media_folders_detected_notification">複数のメディアフォルダが検出されました。メディアフォルダを削除してもう一度やり直してください</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -803,6 +791,7 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
   <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
   <!--##############################################
     # Errors
     ##############################################-->
@@ -825,4 +814,24 @@
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--General message displayed when the list of forms-->
+  <!--Message displayed when the list of drafts is empty-->
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Message displayed when the list of sent forms is empty-->
 </resources>

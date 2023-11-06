@@ -7,10 +7,10 @@ import java.util.TreeMap
 
 object LocaleHelper {
     private val TRANSLATIONS_AVAILABLE = arrayOf(
-        "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "en", "es", "et", "fa", "fi", "fr",
-        "hi", "in", "it", "ja", "ka", "km", "ln", "lo_LA", "lt", "mg", "ml", "mr", "ms", "my",
-        "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "rw", "si", "sl", "so", "sq", "sr",
-        "sv_SE", "sw", "sw_KE", "te", "th_TH", "ti", "tl", "tr", "uk", "ur", "ur_PK", "vi", "zh", "zu"
+        "af", "am", "ar", "bg", "bn", "ca", "cs", "da", "de", "en", "es", "et", "fa", "fa_AF",
+        "fi", "fr", "hi", "ht", "in", "it", "ja", "ka", "km", "ln", "lo_LA", "lt", "mg", "ml", "mr",
+        "ms", "my", "ne_NP", "nl", "no", "pl", "ps", "pt", "ro", "ru", "rw", "si", "sl", "so", "sq",
+        "sr", "sv_SE", "sw", "sw_KE", "te", "th_TH", "ti", "tl", "tr", "uk", "ur", "vi", "zh", "zu"
     )
 
     @JvmStatic

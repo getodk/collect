@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <string name="enter_data">ចាប់ផ្តើមទម្រង់ថ្មី</string>
   <!--Text for an action button on the main screen.-->
@@ -44,10 +44,6 @@
   <string name="filter_the_list">តម្រងបញ្ជី</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">ស្វែងរក</string>
-  <string name="no_items_display">គ្មានអ្វីដែលត្រូវបង្ហាញបាន</string>
-  <string name="no_items_display_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន.\n\nសូមព្យាយាមទាញ និងបំពេញទិន្នន័យ​ពី​សំណុំ​បែប​បទ​ទទេ</string>
-  <string name="no_items_display_sent_forms">គ្មានអ្វីដែលអាចបង្ហាញបាន។\n\nសូម​ព្យាយាម​បំពេញបញ្ចប់សំណុំ​បែប​បទ​​មុននឹងបង្ហាញ។</string>
-  <string name="no_items_display_instances">គ្មានអ្វីដែលត្រូវ​បង្ហាញ \n\n សូមព្យាយាមបំពេញបញ្ចាប់ទម្រង់ទិន្នន័យ​មុន​នឹង​ផ្ញើចេញ។</string>
   <string name="not_granted_permission">សកម្មភាពដែលអ្នកកំពុងព្យាយាមធ្វើទាមទារការអនុញ្ញាតដែលមិនត្រូវបានផ្តល់ឱ្យ។</string>
   <string name="storage_runtime_permission_denied_title">សិទ្ធិក្នុងការផ្ទុក</string>
   <string name="storage_runtime_permission_denied_desc">បើគ្មានការអនុញ្ញាតទាំងនេះ Collect មិនអាចចូលប្រើទម្រង់របស់អ្នក ឬរក្សាទុកចម្លើយ​បើក​កម្មវិធី​ឡើង​វិញ​នៅ​ពេល​អ្នក​រួចរាល់​ដើម្បី​ផ្តល់​សិទ្ធិ​ទាំងនេះ។</string>
@@ -418,7 +414,6 @@
     ##############################################-->
   <string name="refresh">ធ្វើឲ្យថ្មីឡើងវិញ</string>
   <string name="download">ទទួលការជ្រើសរើស</string>
-  <string name="download_forms_result">លទ្ធផលនៃការទាញយក</string>
   <string name="downloading_data">កំពុង​ភ្ជាប់​ទៅ​កាន់​ម៉ាស៊ីន​មេ</string>
   <string name="fetching_file">កំពុង​​ទទួល​យក %1$s ។ \n\n ​សំណុំបែបបទ​ទី %2$s នៃ %3$s ។</string>
   <string name="form_download_progress">%1$s. កំពុងទាញយកឯកសារមេឌៀ: %2$s of %3$s</string>
@@ -631,16 +626,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">ថាសរបស់ខ្ញុំ</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">ចែក​រំលែក​ជាមួយ​ខ្ញុំ</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">ទាញយកនូវជំរើស</string>
-  <string name="go_back">ត្រឡប់ក្រោយ</string>
   <string name="google_auth_io_exception_msg">មិន​អាច​ប្រើប្រាស់​ API បាន​។ ប្រសិន​ជា​អ្នក​កំពុង​ដំណើរការ​កសាង​ក្នុង​ម៉ាស៊ីន (local), សូម​អាន​អំពី​គម្រោង​នេះ​សារ​ឡើង​វិញ​។</string>
-  <string name="drive_get_file">កំពុង​ទទួល​ %1$s និង ឯកសារមេឌៀ</string>
   <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
-  <string name="google_search_browse">ការ​​ស្វែង​​រក​​សម្រាប់​​សំណុំ​​​បែប​​​បទ​។ ឬ​​រើស​ \'ថាស​​របស់​​ខ្ញុំ\' ខាង​​ក្រោម​​ដើម្បី​​រក​មើល</string>
   <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
   <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
   <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
@@ -648,7 +637,6 @@
   <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
   <string name="no_columns_to_upload">មិនមានជួរឈរក្នុងសំណុំបែបបទដើម្បីផ្ទុកឡើង។</string>
   <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
-  <string name="multiple_media_folders_detected_notification">ថតមេឌៀច្រើនជាងមួយត្រូវបានរកឃើញ សូមដកមួយហើយព្យាយាមម្តងទៀត</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -720,6 +708,7 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
   <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
   <!--##############################################
     # Errors
     ##############################################-->
@@ -742,4 +731,24 @@
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--General message displayed when the list of forms-->
+  <!--Message displayed when the list of drafts is empty-->
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Message displayed when the list of sent forms is empty-->
 </resources>
