@@ -60,6 +60,7 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
     }
 
     fun updateState(readOnly: Boolean) {
+        binding.root.visibility = VISIBLE
         if (readOnly) {
             binding.textInputLayout.visibility = GONE
             binding.textView.visibility = VISIBLE
@@ -145,11 +146,20 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
         binding.editText.setText(answer)
         binding.textView.text = answer
         Selection.setSelection(binding.editText.text, binding.editText.text.toString().length)
+
+        if (answer == null && !isEditableState()) {
+            binding.root.visibility = GONE
+        } else {
+            binding.root.visibility = VISIBLE
+        }
     }
 
     fun clearAnswer() {
         binding.editText.text = null
         binding.textView.text = null
+        if (!isEditableState()) {
+            binding.root.visibility = GONE
+        }
     }
 
     fun setError(error: String?) {
