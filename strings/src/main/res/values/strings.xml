@@ -1264,4 +1264,42 @@
 
     <!-- Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
     <string name="drafts_pills_education_message">The draft list now shows validation errors. Each time you save a form as draft, its validation status is updated.\n\nDrafts marked with \"Errors\" are either missing required questions or have values that are not allowed.</string>
+
+    <!-- General message displayed when the list of forms -->
+    <string tools:ignore="UnusedResources" name="empty_list_title">Nothing available to display</string>
+
+    <!-- Message displayed when the list of drafts is empty -->
+    <string tools:ignore="UnusedResources" name="empty_list_of_drafts_title">Nothing in drafts</string>
+    <string tools:ignore="UnusedResources" name="empty_list_of_drafts_subtitle">When you save as draft, forms will appear here</string>
+
+    <!-- Message displayed when the list of ready to send forms is empty -->
+    <string tools:ignore="UnusedResources" name="empty_list_of_finalized_forms_title">Nothing ready to send</string>
+    <string tools:ignore="UnusedResources" name="empty_list_of_finalized_forms_subtitle">When you finalize drafts, they will appear here</string>
+
+    <!-- Message displayed when the list of sent forms is empty -->
+    <string tools:ignore="UnusedResources" name="empty_list_of_sent_forms_title">Nothing in sent</string>
+    <string tools:ignore="UnusedResources" name="empty_list_of_sent_forms_subtitle">When you send finalized forms, they will appear here</string>
+
+    <plurals tools:ignore="UnusedResources" name="last_form_sent_seconds_ago">
+        <item quantity="one">Last form sent: %d second ago</item>
+        <item quantity="other">Last form sent: %d seconds ago</item>
+    </plurals>
+    <plurals tools:ignore="UnusedResources" name="last_form_sent_minutes_ago">
+        <item quantity="one">Last form sent: %d minute ago</item>
+        <item quantity="other">Last form sent: %d minutes ago</item>
+    </plurals>
+    <plurals tools:ignore="UnusedResources" name="last_form_sent_hours_ago">
+        <item quantity="one">Last form sent: %d hour ago</item>
+        <item quantity="other">Last form sent: %d hours ago</item>
+    </plurals>
+    <plurals tools:ignore="UnusedResources" name="last_form_sent_days_ago">
+        <item quantity="one">Last form sent: %d day ago</item>
+        <item quantity="other">Last form sent: %d days ago</item>
+    </plurals>
+    <plurals tools:ignore="UnusedResources" name="forms_ready_to_send">
+        <item quantity="one">%d form ready to send</item>
+        <item quantity="other">%d forms ready to send</item>
+    </plurals>
+
+    <string tools:ignore="UnusedResources" name="gif_not_supported">Gif files are not supported</string>
 </resources>

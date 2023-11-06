@@ -138,7 +138,7 @@
   <string name="save_explanation_with_last_saved">\'Tento formulář byl naposledy uložen dne\' EEE, MMM dd, yyyy \'v\' HH:mm\'. Uložit jako návrh pro zachování změn.\'</string>
   <string name="quit_form_continue_title">Pokračovat v úpravách?</string>
   <string name="discard_form_warning">Pokud formulář zahodíte, ztratíte všechny dosud provedené změny.</string>
-  <string name="discard_changes_warning">\'Tento formulář byl naposledy uložen dne\' EEE, MMM dd, yyyy \'v\' HH:mm\. Pokud změny zahodíte, ztratíte všechny změny, které jste od té doby provedli.\'</string>
+  <string name="discard_changes_warning">\'Tento formulář byl naposledy uložen dne\' EEE, MMM dd, yyyy \'v\' HH:mm\'. Pokud změny zahodíte, ztratíte všechny změny, které jste od té doby provedli.\'</string>
   <string name="saving_form">Ukládám dotazník</string>
   <string name="survey_saving_validating_message">Ověřuji odpovědi…</string>
   <string name="survey_saving_collecting_message">Sbírám data…</string>
