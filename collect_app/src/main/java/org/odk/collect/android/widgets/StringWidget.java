@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.QuestionDef;
 import org.javarosa.core.model.data.IAnswerData;
@@ -145,10 +146,12 @@ public class StringWidget extends QuestionWidget {
     @Override
     public void hideError() {
         widgetAnswerText.setError(null);
+        setBackground(null);
     }
 
     @Override
     public void displayError(String errorMessage) {
         widgetAnswerText.setError(errorMessage);
+        setBackground(ContextCompat.getDrawable(getContext(), R.drawable.question_with_error_border));
     }
 }
