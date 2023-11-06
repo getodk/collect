@@ -31,7 +31,7 @@ public class PromptAutoplayer {
     }
 
     public Boolean autoplayIfNeeded(FormEntryPrompt prompt) {
-        String autoplayOption = FormEntryPromptUtils.getBodyAttribute(prompt, AUTOPLAY_ATTRIBUTE);
+        String autoplayOption = FormEntryPromptUtils.getAdditionalAttribute(prompt, AUTOPLAY_ATTRIBUTE);
 
         if (hasAudioAutoplay(autoplayOption)) {
             List<Clip> clipsToPlay = new ArrayList<>();

@@ -44,9 +44,9 @@ class ActivityGeoDataRequester(
                         }
 
                         val accuracyThreshold =
-                            FormEntryPromptUtils.getBodyAttribute(prompt, "accuracyThreshold")
+                            FormEntryPromptUtils.getAdditionalAttribute(prompt, "accuracyThreshold")
                         val unacceptableAccuracyThreshold =
-                            FormEntryPromptUtils.getBodyAttribute(
+                            FormEntryPromptUtils.getAdditionalAttribute(
                                 prompt,
                                 "unacceptableAccuracyThreshold"
                             )

@@ -144,7 +144,7 @@ public final class FormEntryPromptUtils {
     }
 
     @Nullable
-    public static String getBodyAttribute(FormEntryPrompt formEntryPrompt, String attributeName) {
+    public static String getAdditionalAttribute(FormEntryPrompt formEntryPrompt, String attributeName) {
         String value = formEntryPrompt.getQuestion().getAdditionalAttribute(null, attributeName);
         return value != null && !value.isEmpty() ? value : null;
     }
