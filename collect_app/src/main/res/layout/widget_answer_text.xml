@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundColor="?colorSurfaceContainerLow"
-        app:errorTextAppearance="@style/TextAppearance.Collect.Subtitle1">
+        app:errorTextAppearance="?textAppearanceBodyLarge">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text"

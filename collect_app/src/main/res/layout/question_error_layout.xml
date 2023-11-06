@@ -26,7 +26,7 @@
         android:layout_marginEnd="@dimen/margin_standard"
         android:textColor="?colorError"
         android:layout_gravity="center_vertical"
-        style="@style/TextAppearance.Collect.Subtitle1"
+        android:textAppearance="?textAppearanceBodyLarge"
         app:layout_constraintStart_toEndOf="@id/required_error_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@id/required_error_image"
