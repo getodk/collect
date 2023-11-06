@@ -12,6 +12,7 @@ import timber.log.Timber
 import java.io.File
 
 object ImageCaptureIntentCreator {
+    @JvmStatic
     fun imageCaptureIntent(prompt: FormEntryPrompt, context: Context, tmpImageFilePath: String): Intent {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         val packageName = FormEntryPromptUtils.getBodyAttribute(prompt, "intent")

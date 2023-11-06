@@ -158,7 +158,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     }
 
     private void captureImage() {
-        Intent intent = ImageCaptureIntentCreator.INSTANCE.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
+        Intent intent = ImageCaptureIntentCreator.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
         imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.annotate_image);
     }
 

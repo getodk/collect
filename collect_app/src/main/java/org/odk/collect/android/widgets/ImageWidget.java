@@ -137,7 +137,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
             intent.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
             imageCaptureHandler.captureImage(intent, RequestCodes.MEDIA_FILE_PATH, org.odk.collect.strings.R.string.capture_image);
         } else {
-            Intent intent = ImageCaptureIntentCreator.INSTANCE.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
+            Intent intent = ImageCaptureIntentCreator.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
             imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.capture_image);
         }
     }
