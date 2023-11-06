@@ -86,7 +86,7 @@ public class ODKAppSettingsMigratorTest {
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_stamen_terrain");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "stamen");
+        assertSettings(unprotectedSettings, "basemap_source", "osm");
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_positron");
         runMigrations();
