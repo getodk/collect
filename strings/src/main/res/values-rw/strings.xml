@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -36,9 +36,6 @@
   <string name="filter_the_list">Hisha urutonde</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Shakisha</string>
-  <string name="no_items_display">Ntibibashije kuboneka</string>
-  <string name="no_items_display_forms">Ntakintu byerekana./n/n gerageza gushaka kandi wuzuzuze form iriho ubusa. </string>
-  <string name="no_items_display_sent_forms">Ntakibashije kugaragara.\n\n gerageza wohereze form zarangiye mbere yuko zisuzumwa.</string>
   <string name="not_granted_permission">Igikorwa mugerageza gutangira kirasaba uruhushya, kandi ntirwatanzwe</string>
   <string name="storage_runtime_permission_denied_title">Uburenganzira ku bubiko</string>
   <string name="storage_runtime_permission_denied_desc">Udafite ubwo burenganzira Collect ntabwo ishobora kwemera form cg ibike amakuru. Ongera ufungure iyo application mugihe ufite ubwo burenganzira</string>
@@ -477,7 +474,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
     ##############################################-->
   <string name="refresh">Rifureshinga </string>
   <string name="download">Byatoranijwe</string>
-  <string name="download_forms_result">Bika ibisubizo kuri Tabuleti</string>
   <string name="downloading_data">Kwihuza na Server </string>
   <string name="fetching_file">Akira %1$s.\n\n y\'inyandiko shingiro %2$s ya %3$s inyandiko shingiro (zose).</string>
   <string name="form_download_progress">%1$s. Akira ububiko bw\'amajwi: %2$s ya %3$s</string>
@@ -713,17 +709,10 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">My Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Ibyo nasangijwe</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Bika kuri tabuleti ibyo wahisemo</string>
-  <string name="go_back">Subira inyuma </string>
   <string name="google_auth_io_exception_msg">Ntabwo ushobora guhamaraga API. Niba ukurikize uko ahantu hateye, usabwa gusubira kumushinga wa readme cg somiwanjye</string>
-  <string name="reading_files">Usobanukirwe n\'ububiko</string>
-  <string name="drive_get_file">Akira %1$s n\'ububiko bw\'amajwi.</string>
   <string name="no_google_account">Ntago wahisemo email</string>
-  <string name="google_search_browse">Shakisha ama fomu. Cyangwa uhitemo \'My Drive\' hepfo kugirango ubashe urebe.</string>
   <string name="invalid_sheet_id">Indangarupapurombare itemejwe: %1$s</string>
   <string name="missing_submission_url">Haraburamo kohereza URL</string>
   <string name="google_sheets_access_denied">Ntibikunda kuyinjiramo.Wareba niba nyiri form yaguhaye uburenganzira bwo kuyinjiramo no kuba haricyo wahindura.</string>
@@ -734,7 +723,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="instance_upload_cancelled">Inzego ngenderwaho zitakunze mwiyoherezwa.</string>
   <string name="no_columns_to_upload">Nta tuyira twabonetse mu iyoherezwa ryinyandiko shingiro.</string>
   <string name="missing_google_account_dialog_title">Konti ya google ntiyahinduwe</string>
-  <string name="multiple_media_folders_detected_notification">Hejuru y\'imbumbe y\'ububiko bumwe bw\'amajwi bwagaragaye, usabwa gusiba bumwe noneho ugasubiramo.</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -838,6 +826,7 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <string name="scan_configuration_qr_code">Umubarendangabanga wemejwe kuri QR</string>
   <!--Error shown when a user tries to open a form that's in a different project-->
   <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
   <!--##############################################
     # Errors
     ##############################################-->
@@ -860,4 +849,24 @@ Birashoboka ko ari zimwe zashyizwemo mubihe bitandukanye cgw ziturutse ahatanduk
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--General message displayed when the list of forms-->
+  <!--Message displayed when the list of drafts is empty-->
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Message displayed when the list of sent forms is empty-->
 </resources>

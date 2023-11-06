@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <string name="enter_data">Aloita uusi lomake</string>
   <!--Text for an action button on the main screen.-->
@@ -45,10 +45,6 @@
   <string name="filter_the_list">Suodata listaa</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">Etsi</string>
-  <string name="no_items_display">Ei näytettävää.</string>
-  <string name="no_items_display_forms">Ei näytettävää.\n\nKokeile tyhjän lomakkeen hakemista ja täyttämistä.</string>
-  <string name="no_items_display_sent_forms">Ei näytettävää.\n\nKokeile viimeistellyn lomakkeen lähettämistä ennen tarkastelua.</string>
-  <string name="no_items_display_instances">Ei näytettävää.\n\nKokeile luonnosten viimeistelyä ennen lähettämistä.</string>
   <string name="not_granted_permission">Toiminto, jota yrität käynnistää, vaatii käyttöluvan jota ei ole myönnetty.</string>
   <string name="storage_runtime_permission_denied_title">Talletusluvat</string>
   <string name="storage_runtime_permission_denied_desc">Ilman näitä lupia Collect ei pysty lukemaan lomakemäärittelyitä tai tallentamaan vastauksia. Avaa sovellus uudestaan kun olet valmis antamaan luvat.</string>
@@ -115,6 +111,7 @@
   <string name="delete_repeat_no">Peruuta</string>
   <string name="invalid_answer_error">Pahoittelut, vastaus ei kelpaa!</string>
   <string name="required_answer_error">Pahoittelut, tämä vastaus on pakollinen!</string>
+  <string name="success_form_validation">Onnistui! Lomakkeestasi ei löytynyt virheitä.</string>
   <string name="invalid_space_in_answer_singular">Varoitus: taustalla olevassa arvossa %s on välilyöntejä</string>
   <string name="invalid_space_in_answer_plural">Varoitus: taustalla olevissa arvoissa %s on välilyöntejä</string>
   <string name="too_complex_form">Tämä lomake on liian monimutkainen tälle laitteelle. Yritä lausekkeiden yksinkertaistamista tai pyydä apua verkon keskusteluryhmästä.</string>
@@ -203,6 +200,7 @@
   <string name="camera_error">Virhe ottaessa kuvaa</string>
   <string name="camera_failed_to_initialize">Kameran alustaminen ei onnistunut!</string>
   <string name="annotate_image">Lisää merkinnät kuvaan</string>
+  <string name="gif_not_supported">Gif-tiedostoja ei tueta</string>
   <string name="invalid_file_type">Sovellus ilmoitti epäkelvon tiedostotyypin</string>
   <!--Dialog heading for saving annotated image-->
   <string name="save_and_close">Tallenna ja sulje</string>
@@ -410,6 +408,7 @@
   <string name="background_location_disabled">Tämä lomake haluaa seurata sijaintiasi, mutta seuranta on poissa päältä. Ole hyvä ja laita se päälle valikossa %1$s yllä.</string>
   <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
+  <string name="validate">Tarkista virheiden varalta</string>
   <string name="get_point">Käynnistä GeoPoint</string>
   <string name="geopoint_view_read_only">Tarkastele GeoPoint</string>
   <string name="geoshape_view_read_only">Katso GeoShape</string>
@@ -533,7 +532,6 @@
     ##############################################-->
   <string name="refresh">Päivitä</string>
   <string name="download">Hae valittu</string>
-  <string name="download_forms_result">Hae tulokset</string>
   <string name="downloading_data">Yhdistetään palvelimeen</string>
   <string name="fetching_file">Haetaan %1$s.\n\nLomake %2$s / %3$s.</string>
   <string name="form_download_progress">%1$s. Haetaan mediatiedostoja: %2$s / %3$s</string>
@@ -802,18 +800,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">Oma Drive</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">Minun kanssani jaetut</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">Lataaminen valittu</string>
-  <string name="go_back">Palaa</string>
   <string name="google_auth_io_exception_msg">API-kutsuja ei pystytä tekemään. Jos käytät paikallista ohjelmaversiota, katso projektin readme.</string>
-  <string name="reading_files">Luetaan tiedostoja</string>
-  <string name="drive_get_file">Haetaan %1$s ja mediatiedoja.</string>
   <string name="no_google_account">Ei valittua Google-tiliä!</string>
   <string name="google_set_account">Olet valinnut Google Sheets palvelimenasi, ole hyvä ja valitse vastaava Google-tili Asetuksissa ennen jatkamista</string>
-  <string name="google_search_browse">Etsi lomakkeita. Tai valitse \'Oma Drive\' alla selataksesi.</string>
   <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
   <string name="missing_submission_url">Lähetykseen tarvittava URL puuttuu</string>
   <string name="google_sheets_access_denied">Pääsy estetty. Varmista että taulukon omistaja on myöntänyt muokkausoikeudet.</string>
@@ -824,7 +815,6 @@
   <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
   <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
   <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
-  <string name="multiple_media_folders_detected_notification">Enemmän kuin yksi mediakansio löytyi; poista yksi ja yritä uudestaan</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -941,6 +931,8 @@
   <string name="wrong_project_selected_for_form">Avataksesi tämän lomakkeen, avaa ensin ODK Collect ja vaihda projektiin johon se sisältyy.</string>
   <!--Error shown when a user tries to open a form when there are no projects-->
   <string name="app_not_configured">ODK Collect ei ole konfiguroitu. Yritä avata ODK Collect ja konfiguroida sitä.\n\nJos käytit pikakuvaketta, saatat joutua luomaan sen uudelleen kun ODK Collect on konfiguroitu.</string>
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
+  <string name="cannot_start_new_forms_in_google_drive_projects">Uutta lomaketta ei voida aloittaa Google Drive -projektina.</string>
   <!--##############################################
     # Errors
     ##############################################-->
@@ -971,7 +963,7 @@
   <string name="crash_app">Kaada sovellus</string>
   <!--An uncaught exception is an exception that is not handled by ODK Collect and so will force the application to close-->
   <string name="crash_app_summary">Pakota havaitsematon poikkeus, joka aiheuttaa sovelluksen kaatumisen</string>
-    <string name="permission_dialog_title">Tietoa luvista</string>
+  <string name="permission_dialog_title">Tietoa luvista</string>
   <string name="permission_dialog_text">Sinulta tullaan pyytämään lupaa ODK Collectille pääsy toimintoihin alla, valitse \"Salli\" jos haluat käyttää niitä.</string>
   <string name="notifications">Ilmoitukset</string>
   <string name="required_for_notifications">Tarvitaan päivitysten näyttämiseen kun lomakkeita ladataan, päivitetään tai lähetetään.</string>
@@ -984,4 +976,74 @@
   <string name="edit_form">Muokkaa</string>
   <string name="view_form">Tarkastele</string>
   <string name="close_snackbar">Sulje ilmoitus</string>
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <plurals name="last_form_sent_seconds_ago">
+    <item quantity="one">Viime lomakelähetys: %d sekunti sitten</item>
+    <item quantity="other">Viime lomakelähetys: %d sekuntia sitten</item>
+  </plurals>
+  <plurals name="last_form_sent_minutes_ago">
+    <item quantity="one">Viime lomakelähetys: %d minuutti sitten</item>
+    <item quantity="other">Viime lomakelähetys: %d minuuttia sitten</item>
+  </plurals>
+  <plurals name="last_form_sent_hours_ago">
+    <item quantity="one">Viime lomakelähetys: %d tunti sitten</item>
+    <item quantity="other">Viime lomakelähetys: %d tuntia sitten</item>
+  </plurals>
+  <plurals name="last_form_sent_days_ago">
+    <item quantity="one">Viime lomakelähetys: %d päivä sitten</item>
+    <item quantity="other">Viime lomakelähetys: %d päivää sitten</item>
+  </plurals>
+  <plurals name="forms_ready_to_send">
+    <item quantity="one">%d lomake valmiina lähetettäväksi</item>
+    <item quantity="other">%d lomaketta valmiina lähetettäväksi</item>
+  </plurals>
+  <string name="edit_finalized_form_warning" tools:ignore="UnusedResources">Myöhemmissä versioissa viimeistellyt lomakkeet eivät enää tule olemaan muokattavissa. Tallenna lomakkeet luonnoksina muokataksesi niitä myöhemmin.\n\nVoit tarkistaa luonnoslomaketta virheiden varalta napsauttamalla kolmea pistettä (⋮) ja sitten Tarkista virheiden varalta.</string>
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <string name="edit_finalized_form_deprecation_message" tools:ignore="UnusedResources">Myöhemmissä versioissa viimeistellyt lomakkeet eivät enää tule olemaan muokattavissa. </string>
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <string name="finalize_all_drafts">Viimeistele kaikki lomakkeet</string>
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <plurals name="bulk_finalize_confirmation">
+    <item quantity="one">Haluatko viimeistellä %d luonnoksen?</item>
+    <item quantity="other">Haluatko viimeistellä %d luonnosta?</item>
+  </plurals>
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <string name="bulk_finalize_explanation">Kun viimeistelet kaikki luonnokset, ne tulevat olemaan \"Valmiita lähetykseen\" etkä voi enää muokata niitä. Jos lomakkeessa on virheitä sitä ei viimeistellä.\n\nTätä toimintoa ei voi perua.</string>
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <plurals name="bulk_finalize_success">
+    <item quantity="one">Onnistui! %d luonnos viimeistelty.</item>
+    <item quantity="other">Onnistui! %d luonnosta viimeistelty.</item>
+  </plurals>
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <plurals name="bulk_finalize_failure">
+    <item quantity="one">%d luonnoksessa on virheitä jotka pitää korjata ennen viimeistelyä.</item>
+    <item quantity="other">%d luonnoksessa on virheitä jotka pitää korjata ennen viimeistelyä.</item>
+  </plurals>
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <string name="bulk_finalize_partial_success">%d luonnosta viimeistelty. %d luonnoksessa on virheitä, jotka pitää korjata ennen viimeistelyä..</string>
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <string name="bulk_finalize_unsupported">%d luonnosta viimeistelty. Jäljelle jääneet luonnokset pitää viimeistellä manuaalisesti.</string>
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <string name="draft_errors">Virheitä</string>
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <string name="draft_no_errors">Ei virheitä</string>
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <string name="uncheck_to_hide_from_drafts">Poista rasti piilottaaksesi Luonnos-näkymästä</string>
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <string name="new_feature">Uusi ominaisuus</string>
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <string name="drafts_pills_education_message">Luonnoslista näyttää nyt varmennusvirheet. Lomakkeen varmennustila päivitetään aina kun tallennat lomakkeen luonnoksena.\n\nLuonnoksissa, joissa on merkintä \"Virhe\", on joko puuttuvia vaadittuja vastauksia tai arvoja, joita ei sallita.</string>
+  <!--General message displayed when the list of forms-->
+  <string name="empty_list_title">Ei näytettävää</string>
+  <!--Message displayed when the list of drafts is empty-->
+  <string name="empty_list_of_drafts_title">Ei luonnoksia</string>
+  <string name="empty_list_of_drafts_subtitle">Kun tallennat luonnoksen, lomakkeet näkyvät tässä</string>
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <string name="empty_list_of_finalized_forms_title">Ei valmista lähetettävää</string>
+  <string name="empty_list_of_finalized_forms_subtitle">Kun viimeistelet luonnoksia, ne näkyvät tässä</string>
+  <!--Message displayed when the list of sent forms is empty-->
+  <string name="empty_list_of_sent_forms_title">Ei lähetettyjä lomakkeita</string>
+  <string name="empty_list_of_sent_forms_subtitle">Kun lähetät viimeisteltyjä lomakkeita, ne näkyvät tässä</string>
 </resources>

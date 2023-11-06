@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -38,9 +38,6 @@
   <string name="filter_the_list">筛选列表</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
   <string name="search">搜索</string>
-  <string name="no_items_display">没有可显示内容.</string>
-  <string name="no_items_display_forms">无可显示内容。\n\n 请尝试获取并填写一个空白表格</string>
-  <string name="no_items_display_sent_forms">没有可显示的内容。\n\n在查看之前，请尝试发送已完成的表单</string>
   <string name="not_granted_permission">您尝试启动的活动需要未授予的权限。</string>
   <string name="storage_runtime_permission_denied_title">存储权限</string>
   <string name="storage_runtime_permission_denied_desc">没有这些权限，应用无法访问您的表单或保存答案。当您准备好授予他们时，请重新打开应用程序。</string>
@@ -502,7 +499,6 @@
     ##############################################-->
   <string name="refresh">刷新</string>
   <string name="download">下载选中项</string>
-  <string name="download_forms_result">下载结果</string>
   <string name="downloading_data">连接到服务器</string>
   <string name="fetching_file">获取 %1$s.\n\n表单 %2$s / %3$s 表单.</string>
   <string name="form_download_progress">%1$s. 加载媒体文件: %3$s 中的 %2$s</string>
@@ -766,18 +762,11 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">我的驱动器</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">与我共享</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">下载所选内容</string>
-  <string name="go_back">返回</string>
   <string name="google_auth_io_exception_msg">无法进行API调用。如果您正在运行本地生成，请查看项目自述文件。</string>
-  <string name="reading_files">正在读取文件</string>
-  <string name="drive_get_file">获取 %1$s和媒体文件.</string>
   <string name="no_google_account">无选中的谷歌账号！</string>
   <string name="google_set_account">您已选择Google Sheets作为服务器，请在“设置”中选择相应的Google帐户，然后继续</string>
-  <string name="google_search_browse">搜索表单。或选择下面的“我的驱动器”进行浏览。</string>
   <string name="invalid_sheet_id">工作表id无效: %1$s</string>
   <string name="missing_submission_url">缺失提交URL</string>
   <string name="google_sheets_access_denied">访问被拒绝。请确保电子表格所有者已授予您编辑权限。</string>
@@ -788,7 +777,6 @@
   <string name="instance_upload_cancelled">实例上载已取消</string>
   <string name="no_columns_to_upload">在表单中找不到要上载的列</string>
   <string name="missing_google_account_dialog_title">未设置Google帐户</string>
-  <string name="multiple_media_folders_detected_notification">检测到多个媒体文件夹，请删除一个并重试</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -903,6 +891,7 @@
   <string name="wrong_project_selected_for_form">要打开此表单，必须首先打开应用并切换到包含它的项目。</string>
   <!--Error shown when a user tries to open a form when there are no projects-->
   <string name="app_not_configured">尚未配置应用收集。尝试打开应用并对其进行配置。\n\n如果您点击了快捷方式，您可能需要在配置应用后重新创建它。</string>
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
   <!--##############################################
     # Errors
     ##############################################-->
@@ -934,4 +923,25 @@
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <string name="draft_errors">错误</string>
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--General message displayed when the list of forms-->
+  <!--Message displayed when the list of drafts is empty-->
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Message displayed when the list of sent forms is empty-->
 </resources>

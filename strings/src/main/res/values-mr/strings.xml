@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -15,6 +15,7 @@
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="finalized_on_date_at_time">\'इ.ई.ई., एमएमएम डीडी, य्यय\' एचएच: एमएम वर अंतिम रूप दिले</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
+  <string name="sent_on_date_at_time">\'सेंड ऑन\' EEE, MMM dd, yyyy HH: mm</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
   <string name="sending_failed_on_date_at_time">\'ईईई, एमएमएम डीडी, येय एचएच: एमएम \'वर पाठविणे अयशस्वी झाले</string>
   <!--Please format date appropriately for your language: http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html-->
@@ -27,9 +28,6 @@
   <!--A sort option for blank forms. When this option is selected, the form for which a filled instance was last filled will go first.-->
   <string name="filter_the_list">सूची फिल्टर करा</string>
   <!--Displayed in search boxes for form lists or question types that involve search-->
-  <string name="no_items_display">प्रदर्शनासाठी काहीही उपलब्ध नाही.</string>
-  <string name="no_items_display_forms">प्रदर्शित करण्यासाठी काहीही उपलब्ध नाही. \n\nरिक्त फॉर्म मिळविणे आणि भरण्याचा प्रयत्न करा.</string>
-  <string name="no_items_display_sent_forms">प्रदर्शनासाठी काहीही उपलब्ध नाही.\n\n पाहण्या पूर्वी अंतिम स्वरूप पाठविण्याचा प्रयत्न करा.</string>
   <!--Starting in Android 12, Android makes it possible to give precise or approximate location permissions to an application. ODK Collect only captures location if the precise location permission is granted.-->
   <!--##############################################
     # FILL BLANK FORM
@@ -465,16 +463,10 @@
      # GOOGLE DRIVE, GOOGLE SHEETS
      ##############################################-->
   <!--Title of the screen that lists forms in user's Google Drive-->
-  <string name="go_drive">माझे ड्राइव्ह</string>
   <!--Title of the screen that lists forms shared with Google Drive user-->
-  <string name="go_shared">माझ्यासह शेअर केलेले</string>
   <!--Button for navigating across Google Drive folders-->
-  <string name="download_selected">निवडलेल्या डाउनलोड करा</string>
-  <string name="go_back">परत जा</string>
   <string name="google_auth_io_exception_msg">API कॉल करण्यात अक्षम. आपण स्थानिक बिल्ड चालवत असल्यास, कृपया प्रोजेक्ट रीडमेचे पुनरावलोकन करा.</string>
-  <string name="drive_get_file"> %1$s आणि मीडिया फायली मिळवत आहे</string>
   <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
-  <string name="google_search_browse">फॉर्म शोधा किंवा ब्राउझ करण्यासाठी खालील \'माझे ड्राइव्ह\' निवडा.</string>
   <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
   <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>
   <string name="google_sheets_missing_columns">स्प्रेडशीटमध्ये खालील स्तंभ गहाळ आहेत:%1$s</string>
@@ -538,6 +530,7 @@
   <!--Preceded by "Don't have a project yet?" question-->
   <!--Error shown when a user tries to open a form that's in a different project-->
   <!--Error shown when a user tries to open a form when there are no projects-->
+  <!--Error shown when a user tries to start a new form in a Google Drive project-->
   <!--##############################################
     # Errors
     ##############################################-->
@@ -560,4 +553,24 @@
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--General message displayed when the list of forms-->
+  <!--Message displayed when the list of drafts is empty-->
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Message displayed when the list of sent forms is empty-->
 </resources>
