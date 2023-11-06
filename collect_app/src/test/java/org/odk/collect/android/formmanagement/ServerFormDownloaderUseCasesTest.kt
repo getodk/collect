@@ -4,16 +4,23 @@ import org.apache.commons.io.FileUtils
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import org.odk.collect.android.utilities.FileUtils.LAST_SAVED_FILENAME
 import org.odk.collect.forms.Form
+import org.odk.collect.forms.FormSource
+import org.odk.collect.forms.ManifestFile
+import org.odk.collect.forms.MediaFile
+import org.odk.collect.formstest.FormFixtures
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
 import org.odk.collect.shared.TempFiles
+import org.odk.collect.shared.strings.Md5
 import java.io.File
 
 class ServerFormDownloaderUseCasesTest {
     @Test
-    fun copySavedFileFromPreviousFormVersionIfExists_doesNotCopyAnyFileIfThereIsNoMatchingLastSavedFile() {
+    fun `copySavedFileFromPreviousFormVersionIfExists does not copy any file if there is no matching last-saved file`() {
         val destinationMediaDirPath = TempFiles.createTempDir().absolutePath
         ServerFormDownloaderUseCases.copySavedFileFromPreviousFormVersionIfExists(InMemFormsRepository(), "1", destinationMediaDirPath)
 
@@ -22,7 +29,7 @@ class ServerFormDownloaderUseCasesTest {
     }
 
     @Test
-    fun copySavedFileFromPreviousFormVersionIfExists_copiesTheNewestMatchingLastSavedFileForGivenFormId() {
+    fun `copySavedFileFromPreviousFormVersionIfExists copies the newest matching last-saved file for given formId`() {
         val tempDir1 = TempFiles.createTempDir()
         val file1 = TempFiles.createTempFile(tempDir1, "last-saved", ".xml")
         FileUtils.writeByteArrayToFile(file1, "file1".toByteArray())
@@ -90,5 +97,91 @@ class ServerFormDownloaderUseCasesTest {
 
         val resultFile = File(destinationMediaDirPath, LAST_SAVED_FILENAME)
         assertThat(resultFile.readText(), equalTo("file2"))
+    }
+
+    @Test
+    fun `download returns false when there is an existing copy of a media file and an older one`() {
+        var date: Long = 0
+        // Save forms
+        val formsRepository = InMemFormsRepository {
+            date += 1
+            date
+        }
+        val form1 = FormFixtures.form(
+            version = "1",
+            mediaFiles = listOf(Pair("file", "old"))
+        )
+        formsRepository.save(form1)
+
+        val form2 = FormFixtures.form(
+            version = "2",
+            mediaFiles = listOf(Pair("file", "existing"))
+        )
+        formsRepository.save(form2)
+
+        // Set up same media file on server
+        val existingMediaFileHash = Md5.getMd5Hash(File(form2.formMediaPath, "file"))!!
+        val mediaFile = MediaFile("file", existingMediaFileHash, "downloadUrl")
+        val manifestFile = ManifestFile(null, listOf(mediaFile))
+        val serverFormDetails =
+            ServerFormDetails(null, null, "formId", "3", null, false, true, manifestFile)
+        val formSource = mock<FormSource> {
+            on { fetchMediaFile(mediaFile.downloadUrl) } doReturn "existing".toByteArray()
+                .inputStream()
+        }
+
+        val result = ServerFormDownloaderUseCases.download(
+            formsRepository,
+            formSource,
+            serverFormDetails,
+            File(TempFiles.createTempDir(), "temp").absolutePath,
+            TempFiles.createTempDir(),
+            mock(),
+            true
+        )
+
+        assertThat(result, equalTo(false))
+    }
+
+    @Test
+    fun `download returns false when there is an existing copy of a media file and an older one and media file list hash doesn't match existing copy`() {
+        // Save forms
+        var date: Long = 0
+        val formsRepository = InMemFormsRepository {
+            date += 1
+            date
+        }
+        val form1 = FormFixtures.form(
+            version = "1",
+            mediaFiles = listOf(Pair("file", "old"))
+        )
+        formsRepository.save(form1)
+
+        val form2 = FormFixtures.form(
+            version = "2",
+            mediaFiles = listOf(Pair("file", "existing"))
+        )
+        formsRepository.save(form2)
+
+        // Set up same media file on server
+        val mediaFile = MediaFile("file", "somethingElse", "downloadUrl")
+        val manifestFile = ManifestFile(null, listOf(mediaFile))
+        val serverFormDetails =
+            ServerFormDetails(null, null, "formId", "3", null, false, true, manifestFile)
+        val formSource = mock<FormSource> {
+            on { fetchMediaFile(mediaFile.downloadUrl) } doReturn "existing".toByteArray()
+                .inputStream()
+        }
+
+        val result = ServerFormDownloaderUseCases.download(
+            formsRepository,
+            formSource,
+            serverFormDetails,
+            File(TempFiles.createTempDir(), "temp").absolutePath,
+            TempFiles.createTempDir(),
+            mock()
+        )
+
+        assertThat(result, equalTo(false))
     }
 }
