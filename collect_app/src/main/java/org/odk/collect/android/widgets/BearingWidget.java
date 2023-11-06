@@ -25,9 +25,12 @@ import android.hardware.SensorManager;
 import android.util.TypedValue;
 import android.view.View;
 
+import androidx.core.content.ContextCompat;
+
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.R;
 import org.odk.collect.android.activities.BearingActivity;
 import org.odk.collect.android.databinding.BearingWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -138,6 +141,7 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
 
         if (binding.widgetAnswerText.isEditableState()) {
             binding.widgetAnswerText.setError(errorMessage);
+            setBackground(ContextCompat.getDrawable(getContext(), R.drawable.question_with_error_border));
         } else {
             super.displayError(errorMessage);
         }

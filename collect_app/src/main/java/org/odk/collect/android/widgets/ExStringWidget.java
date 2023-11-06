@@ -200,7 +200,6 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     public void hideError() {
         super.hideError();
         errorLayout.setVisibility(GONE);
-        setBackground(null);
     }
 
     @Override
@@ -208,7 +207,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         hideError();
 
         if (widgetAnswerText.isEditableState()) {
-            widgetAnswerText.setError(errorMessage);
+            super.displayError(errorMessage);
         } else {
             ((TextView) errorLayout.findViewById(R.id.error_message)).setText(errorMessage);
             errorLayout.setVisibility(VISIBLE);
