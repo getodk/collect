@@ -1277,8 +1277,8 @@
     <!-- Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen -->
     <string name="drafts_pills_education_message">The draft list now shows validation errors. Each time you save a form as draft, its validation status is updated.\n\nDrafts marked with \"Errors\" are either missing required questions or have values that are not allowed.</string>
 
-    <!-- General message displayed when the list of forms -->
-    <string name="empty_list_title">Nothing available to display</string>
+    <!-- Message displayed when the list of questions is empty -->
+    <string name="empty_list_of_questions">Nothing available to display</string>
 
     <!-- Message displayed when the list of blank forms is empty -->
     <string name="empty_list_of_blank_forms_title">No blank forms</string>
