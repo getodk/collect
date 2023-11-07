@@ -12,7 +12,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FillBlankFormPage
-import org.odk.collect.android.support.pages.GetBlankFormPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.NotificationDrawerRule
@@ -62,8 +61,8 @@ class PreviouslyDownloadedOnlyTest {
             .clickNotification(
                 "ODK Collect",
                 "Form updates available",
-                GetBlankFormPage()
-            )
+                MainMenuPage()
+            ).pressBackKillingApp()
     }
 
     @Test
