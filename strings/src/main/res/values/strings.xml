@@ -1280,6 +1280,10 @@
     <!-- General message displayed when the list of forms -->
     <string name="empty_list_title">Nothing available to display</string>
 
+    <!-- Message displayed when the list of blank forms is empty -->
+    <string name="empty_list_of_blank_forms_title">No blank forms</string>
+    <string name="empty_list_of_blank_forms_subtitle">Download form to get started</string>
+
     <!-- Message displayed when the list of drafts is empty -->
     <string name="empty_list_of_drafts_title">Nothing in drafts</string>
     <string name="empty_list_of_drafts_subtitle">When you save as draft, forms will appear here</string>
@@ -1291,4 +1295,12 @@
     <!-- Message displayed when the list of sent forms is empty -->
     <string name="empty_list_of_sent_forms_title">Nothing in sent</string>
     <string name="empty_list_of_sent_forms_subtitle">When you send finalized forms, they will appear here</string>
+
+    <!-- Message displayed when the list of forms to download is empty -->
+    <string name="empty_list_of_forms_to_download_title">No forms to download</string>
+    <string name="empty_list_of_forms_to_download_subtitle">Download form to get started</string>
+
+    <!-- Message displayed when the list of forms to delete is empty -->
+    <string name="empty_list_of_forms_to_delete_title">No forms to delete</string>
+    <string name="empty_list_of_forms_to_delete_subtitle">Once you have saved forms they will appear here</string>
 </resources>

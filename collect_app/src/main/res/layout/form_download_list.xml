@@ -49,7 +49,8 @@ the License.
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:icon="@drawable/ic_baseline_download_72"
-                app:title="@string/empty_list_title"/>
+                app:title="@string/empty_list_of_forms_to_download_title"
+                app:subtitle="@string/empty_list_of_forms_to_download_subtitle"/>
 
         </LinearLayout>
 
