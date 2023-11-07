@@ -26,6 +26,10 @@
         <item name="strokeColor">@color/color_on_surface_low_emphasis</item>
     </style>
 
+    <style name="Widget.Collect.Button.IconButton.Outlined" parent="Widget.Material3.Button.IconButton.Outlined">
+        <item name="strokeColor">@color/color_on_surface_low_emphasis</item>
+    </style>
+
     <style name="Widget.Collect.Button.TextButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
