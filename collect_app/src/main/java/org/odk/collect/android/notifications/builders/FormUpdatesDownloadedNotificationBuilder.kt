@@ -9,6 +9,7 @@ import org.odk.collect.android.R
 import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
+import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
@@ -22,9 +23,7 @@ object FormUpdatesDownloadedNotificationBuilder {
         val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)
 
         val intent = if (allFormsDownloadedSuccessfully) {
-            Intent(application, BlankFormListActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            }
+            Intent(application, MainMenuActivity::class.java)
         } else {
             Intent(application, ErrorActivity::class.java).apply {
                 putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, application) as Serializable)

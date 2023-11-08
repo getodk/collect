@@ -81,9 +81,6 @@ class PreviouslyDownloadedOnlyTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
-        page.clickFillBlankForm()
-            .assertText("One Question Updated")
-
         notificationDrawerRule.open()
             .assertNotification(
                 "ODK Collect",
@@ -93,8 +90,9 @@ class PreviouslyDownloadedOnlyTest {
             .clickNotification(
                 "ODK Collect",
                 "Forms download succeeded",
-                FillBlankFormPage()
-            )
+                MainMenuPage()
+            ).clickFillBlankForm()
+            .assertText("One Question Updated")
     }
 
     @Test
