@@ -5,9 +5,8 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import org.odk.collect.android.R
-import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper
+import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.strings.localization.getLocalizedString
@@ -18,9 +17,7 @@ object FormsSyncFailedNotificationBuilder {
         val contentIntent = PendingIntent.getActivity(
             application,
             NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
-            Intent(application, BlankFormListActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            },
+            Intent(application, MainMenuActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 

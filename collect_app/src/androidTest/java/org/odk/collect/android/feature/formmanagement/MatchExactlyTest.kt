@@ -54,7 +54,7 @@ class MatchExactlyTest {
     }
 
     @Test
-    fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnError_showsNotification_andClickingNotification_returnsToFillBlankForms() {
+    fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnError_showsNotification_andClickingNotification_returnsToApp() {
         testDependencies.server.alwaysReturnError()
 
         rule.startAtMainMenu()
@@ -72,7 +72,7 @@ class MatchExactlyTest {
                 "ODK Collect",
                 "Form update failed",
                 FillBlankFormPage()
-            ).pressBack(MainMenuPage()) // Check we return to Fill Blank Form, not open a new one
+            ).pressBack(MainMenuPage())
     }
 
     @Test
