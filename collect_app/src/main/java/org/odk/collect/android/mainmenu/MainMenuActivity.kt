@@ -67,8 +67,8 @@ class MainMenuActivity : LocalizedActivity() {
         initSplashScreen()
 
         /*
-        Don't reopen if the app is already open - allows notifications to use this Activity
-        as a target to reopen the app without interrupting an ongoing session
+        Don't reopen if the app is already open - allows entry points like notifications to use
+        this Activity as a target to reopen the app without interrupting an ongoing session
         */
         if (!isTaskRoot) {
             super.onCreate(null)

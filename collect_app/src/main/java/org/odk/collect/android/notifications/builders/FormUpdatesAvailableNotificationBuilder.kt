@@ -2,11 +2,9 @@ package org.odk.collect.android.notifications.builders
 
 import android.app.Application
 import android.app.Notification
-import android.app.PendingIntent
-import android.content.Intent
 import androidx.core.app.NotificationCompat
-import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
+import org.odk.collect.android.notifications.NotificationUtils
 import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.strings.localization.getLocalizedString
 
@@ -14,13 +12,9 @@ object FormUpdatesAvailableNotificationBuilder {
 
     @JvmStatic
     fun build(application: Application, projectName: String): Notification {
-        val intent = Intent(application, MainMenuActivity::class.java)
-
-        val contentIntent = PendingIntent.getActivity(
+        val contentIntent = NotificationUtils.createOpenAppContentIntent(
             application,
-            RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION
         )
 
         return NotificationCompat.Builder(

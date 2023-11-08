@@ -3,27 +3,20 @@ package org.odk.collect.android.notifications.builders
 import android.app.Application
 import android.app.Notification
 import android.app.PendingIntent
-import android.content.Intent
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper
-import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
-import org.odk.collect.errors.ErrorActivity
+import org.odk.collect.android.notifications.NotificationUtils
+import org.odk.collect.android.notifications.NotificationUtils.createOpenErrorsActionIntent
 import org.odk.collect.errors.ErrorItem
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.strings.localization.getLocalizedString
-import java.io.Serializable
 
 object FormsSyncFailedNotificationBuilder {
 
     fun build(application: Application, exception: FormSourceException, projectName: String, notificationId: Int): Notification {
-        val contentIntent = PendingIntent.getActivity(
-            application,
-            NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
-            Intent(application, MainMenuActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val contentIntent = NotificationUtils.createOpenAppContentIntent(application, notificationId)
 
         return NotificationCompat.Builder(
             application,
@@ -53,16 +46,7 @@ object FormsSyncFailedNotificationBuilder {
             projectName,
             FormSourceExceptionMapper(application).getMessage(exception)
         )
-        val showDetailsIntent = Intent(application, ErrorActivity::class.java).apply {
-            putExtra(ErrorActivity.EXTRA_ERRORS, listOf(errorItem) as Serializable)
-            putExtra(ErrorActivity.EXTRA_NOTIFICATION_ID, notificationId)
-        }
 
-        return PendingIntent.getActivity(
-            application,
-            NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
-            showDetailsIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        return createOpenErrorsActionIntent(application, listOf(errorItem), notificationId)
     }
 }
