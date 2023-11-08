@@ -47,10 +47,9 @@ public class GeoShapeWidget extends QuestionWidget implements WidgetDataReceiver
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = GeoWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        binding.simpleButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.geoAnswerText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize);
 
         binding.simpleButton.setOnClickListener(v ->

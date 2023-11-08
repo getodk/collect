@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.util.TypedValue;
 import android.view.View;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -57,12 +56,10 @@ public class ExAudioWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         setupAnswerFile(prompt.getAnswerText());
 
         binding = ExAudioWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
-
-        binding.launchExternalAppButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.launchExternalAppButton.setOnClickListener(view -> launchExternalApp());
 
         return binding.getRoot();

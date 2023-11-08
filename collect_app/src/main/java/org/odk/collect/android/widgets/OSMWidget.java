@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.TypedValue;
 import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
@@ -84,13 +83,12 @@ public class OSMWidget extends QuestionWidget implements WidgetDataReceiver {
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         binding = OsmWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
         if (prompt.isReadOnly()) {
             binding.launchOpenMapKitButton.setVisibility(GONE);
         } else {
-            binding.launchOpenMapKitButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
             binding.launchOpenMapKitButton.setOnClickListener(v -> onButtonClick());
         }
 

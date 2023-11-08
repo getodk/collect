@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -47,12 +46,11 @@ public class ExImageWidget extends QuestionWidget implements FileWidget, WidgetD
     }
 
     @Override
-    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize, int controlFontSize) {
+    protected View onCreateAnswerView(Context context, FormEntryPrompt prompt, int answerFontSize) {
         setupAnswerFile(prompt.getAnswerText());
 
         binding = ExImageWidgetAnswerBinding.inflate(((Activity) context).getLayoutInflater());
 
-        binding.launchExternalAppButton.setTextSize(TypedValue.COMPLEX_UNIT_DIP, controlFontSize);
         binding.launchExternalAppButton.setVisibility(questionDetails.isReadOnly() ? GONE : VISIBLE);
         binding.launchExternalAppButton.setOnClickListener(view -> launchExternalApp());
         binding.imageView.setOnClickListener(view -> mediaUtils.openFile(getContext(), answerFile, "image/*"));

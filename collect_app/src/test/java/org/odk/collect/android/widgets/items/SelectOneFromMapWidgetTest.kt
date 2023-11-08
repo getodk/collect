@@ -86,7 +86,7 @@ class SelectOneFromMapWidgetTest {
 
         assertThat(
             widget.binding.button.textSize.toInt(),
-            equalTo(QuestionFontSizeUtils.getFontSize(settings, FontSize.LABEL_LARGE))
+            equalTo(QuestionFontSizeUtils.getFontSize(settings, FontSize.BODY_MEDIUM))
         )
     }
 

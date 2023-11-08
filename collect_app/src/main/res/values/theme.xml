@@ -87,6 +87,7 @@
         <!-- Material3 polyfill attributes (needed in Material Components yet). -->
         <item name="materialButtonIconStyle">@style/Widget.Collect.Button.Icon</item>
         <item name="materialButtonOutlinedIconStyle">@style/Widget.Collect.Button.OutlinedButton.Icon</item>
+        <item name="materialIconButtonOutlinedStyle">@style/Widget.Collect.Button.IconButton.Outlined</item>
         <item name="borderlessButtonIconStyle">@style/Widget.Collect.Button.TextButton.Icon</item>
 
         <!-- Custom theme text appearance for larger buttons -->
