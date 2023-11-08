@@ -10,6 +10,7 @@ import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
+import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.FillBlankFormPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -67,12 +68,37 @@ class MatchExactlyTest {
 
         notificationDrawerRule
             .open()
-            .assertNotification("ODK Collect", "Form update failed", "The server https://server.example.com returned status code 500. If you keep having this problem, report it to the person who asked you to collect data.")
+            .assertNotification("ODK Collect", "Form update failed", "Demo project")
             .clickNotification(
                 "ODK Collect",
                 "Form update failed",
                 FillBlankFormPage()
             ).pressBack(MainMenuPage())
+    }
+
+    @Test
+    fun whenMatchExactlyEnabled_clickingFillBlankForm_andClickingRefresh_whenThereIsAnError_showsNotification_andClickingShowDetails_showsErrorDetails() {
+        testDependencies.server.alwaysReturnError()
+
+        rule.startAtMainMenu()
+            .copyForm("one-question.xml")
+            .copyForm("one-question-repeat.xml")
+            .setServer(testDependencies.server.url)
+            .enableMatchExactly()
+            .clickFillBlankForm()
+            .clickRefreshWithError()
+
+        notificationDrawerRule
+            .open()
+            .assertNotification("ODK Collect", "Form update failed", "Demo project")
+            .clickAction(
+                "ODK Collect",
+                "Show details",
+                ErrorPage()
+            ).assertText(org.odk.collect.strings.R.string.form_update_error)
+            .assertText("Demo project")
+            .assertText("The server https://server.example.com returned status code 500. If you keep having this problem, report it to the person who asked you to collect data.")
+            .pressBack(FillBlankFormPage())
     }
 
     @Test

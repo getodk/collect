@@ -31,7 +31,7 @@ class NotificationDrawer {
     fun assertNotification(
         appName: String,
         title: String,
-        subtext: String,
+        subtext: String? = null,
         body: String? = null
     ): NotificationDrawer {
         val device = waitForNotification(appName)
@@ -39,20 +39,13 @@ class NotificationDrawer {
         val titleElement = device.findObject(By.text(title))
         assertThat(titleElement, not(nullValue()))
 
-        var subtextElement = device.findObject(By.text(subtext))
-        if (subtextElement == null) {
-            device.findObject(By.text(appName)).click() // Expand notification to show subtext
-            subtextElement = device.findObject(By.text(subtext))
+        if (subtext != null) {
+            assertExpandedText(device, appName, subtext)
         }
 
-        assertThat(subtextElement.text, `is`(subtext))
-
-        body?.let {
-            val bodyElement = device.findObject(By.text(body))
-            assertThat(bodyElement, not(nullValue()))
+        if (body != null) {
+            assertExpandedText(device, appName, body)
         }
-
-        assertExpandedText(device, appName, subtext)
 
         return this
     }
