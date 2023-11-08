@@ -9,6 +9,7 @@ import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.SendFinalizedFormPage
+import org.odk.collect.android.support.pages.ViewSentFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.NotificationDrawerRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -47,8 +48,8 @@ class AutoSendTest {
             .clickNotification(
                 "ODK Collect",
                 "Forms upload succeeded",
-                MainMenuPage()
-            )
+                ViewSentFormPage()
+            ).pressBack(MainMenuPage())
     }
 
     @Test
@@ -110,8 +111,8 @@ class AutoSendTest {
             .clickNotification(
                 "ODK Collect",
                 "Forms upload succeeded",
-                MainMenuPage()
-            )
+                ViewSentFormPage()
+            ).pressBack(MainMenuPage())
     }
 
     @Test

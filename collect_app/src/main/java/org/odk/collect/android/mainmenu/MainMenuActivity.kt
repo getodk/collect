@@ -66,6 +66,16 @@ class MainMenuActivity : LocalizedActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         initSplashScreen()
 
+        /*
+        Don't reopen if the app is already open - allows notifications to use this Activity
+        as a target to reopen the app without interrupting an ongoing session
+        */
+        if (!isTaskRoot) {
+            super.onCreate(null)
+            finish()
+            return
+        }
+
         CrashHandler.getInstance(this)?.also {
             if (it.hasCrashed(this)) {
                 super.onCreate(null)
