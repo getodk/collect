@@ -9,7 +9,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.FormSourceExceptionMapper
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.android.notifications.NotificationManagerNotifier
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.errors.ErrorItem
 import org.odk.collect.forms.FormSourceException
@@ -18,7 +17,7 @@ import java.io.Serializable
 
 object FormsSyncFailedNotificationBuilder {
 
-    fun build(application: Application, exception: FormSourceException, projectName: String): Notification {
+    fun build(application: Application, exception: FormSourceException, projectName: String, notificationId: Int): Notification {
         val contentIntent = PendingIntent.getActivity(
             application,
             NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
@@ -38,12 +37,17 @@ object FormsSyncFailedNotificationBuilder {
             addAction(
                 R.drawable.ic_outline_info_small,
                 application.getLocalizedString(org.odk.collect.strings.R.string.show_details),
-                getShowDetailsPendingIntent(application, projectName, exception)
+                getShowDetailsPendingIntent(application, projectName, exception, notificationId)
             )
         }.build()
     }
 
-    private fun getShowDetailsPendingIntent(application: Application, projectName: String, exception: FormSourceException): PendingIntent {
+    private fun getShowDetailsPendingIntent(
+        application: Application,
+        projectName: String,
+        exception: FormSourceException,
+        notificationId: Int
+    ): PendingIntent {
         val errorItem = ErrorItem(
             application.getLocalizedString(org.odk.collect.strings.R.string.form_update_error),
             projectName,
@@ -51,11 +55,12 @@ object FormsSyncFailedNotificationBuilder {
         )
         val showDetailsIntent = Intent(application, ErrorActivity::class.java).apply {
             putExtra(ErrorActivity.EXTRA_ERRORS, listOf(errorItem) as Serializable)
+            putExtra(ErrorActivity.EXTRA_NOTIFICATION_ID, notificationId)
         }
 
         return PendingIntent.getActivity(
             application,
-            ApplicationConstants.RequestCodes.FORMS_UPLOADED_NOTIFICATION,
+            NotificationManagerNotifier.FORM_SYNC_NOTIFICATION_ID,
             showDetailsIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

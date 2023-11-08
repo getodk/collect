@@ -66,23 +66,17 @@ class AutoSendTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
+        mainMenuPage.clickViewSentForm(1)
+            .assertText("One Question")
+
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload failed", "1 of 1 uploads failed!")
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                ErrorPage()
-            ).pressBack(MainMenuPage())
-            .clickViewSentForm(1)
-            .assertText("One Question")
-
-        notificationDrawerRule
-            .open()
-            .clickNotification(
-                "ODK Collect",
-                "Forms upload failed",
-                ViewSentFormPage()
+                ErrorPage(),
+                cancelsNotification = true
             )
     }
 
@@ -126,23 +120,17 @@ class AutoSendTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
+        mainMenuPage.clickViewSentForm(1)
+            .assertText("One Question Autosend")
+
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload failed", "1 of 1 uploads failed!")
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                ErrorPage()
-            ).pressBack(MainMenuPage())
-            .clickViewSentForm(1)
-            .assertText("One Question Autosend")
-
-        notificationDrawerRule
-            .open()
-            .clickNotification(
-                "ODK Collect",
-                "Forms upload failed",
-                ViewSentFormPage()
+                ErrorPage(),
+                cancelsNotification = true
             )
     }
 }

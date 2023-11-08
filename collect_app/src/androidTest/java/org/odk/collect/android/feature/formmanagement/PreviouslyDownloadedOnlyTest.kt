@@ -66,7 +66,7 @@ class PreviouslyDownloadedOnlyTest {
 
     @Test
     fun whenPreviouslyDownloadedOnlyEnabledWithAutomaticDownload_checkingAutoDownload_downloadsUpdatedForms_andDisplaysNotification() {
-        val page = MainMenuPage().assertOnPage()
+        MainMenuPage().assertOnPage()
             .setServer(testDependencies.server.url)
             .enablePreviouslyDownloadedOnlyUpdatesWithAutomaticDownload()
             .copyForm("one-question.xml")
@@ -121,10 +121,11 @@ class PreviouslyDownloadedOnlyTest {
                 "Forms download failed",
                 "1 of 1 downloads failed!"
             )
-            .clickNotification(
+            .clickAction(
                 "ODK Collect",
-                "Forms download failed",
-                ErrorPage()
+                "Show details",
+                ErrorPage(),
+                cancelsNotification = true
             )
     }
 

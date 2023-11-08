@@ -18,14 +18,19 @@ import java.io.Serializable
 
 object FormsSubmissionNotificationBuilder {
 
-    fun build(application: Application, result: Map<Instance, FormUploadException?>, projectName: String): Notification {
+    fun build(
+        application: Application,
+        result: Map<Instance, FormUploadException?>,
+        projectName: String,
+        notificationId: Int
+    ): Notification {
         val allFormsUploadedSuccessfully = FormsUploadResultInterpreter.allFormsUploadedSuccessfully(result)
 
         return NotificationCompat.Builder(
             application,
             NotificationManagerNotifier.COLLECT_NOTIFICATION_CHANNEL
         ).apply {
-            setContentIntent(getNotificationPendingIntent(application, allFormsUploadedSuccessfully))
+            setContentIntent(getNotificationPendingIntent(application))
             setContentTitle(getTitle(application, allFormsUploadedSuccessfully))
             setContentText(getMessage(application, allFormsUploadedSuccessfully, result))
             setSubText(projectName)
@@ -36,7 +41,7 @@ object FormsSubmissionNotificationBuilder {
                 addAction(
                     R.drawable.ic_outline_info_small,
                     application.getLocalizedString(org.odk.collect.strings.R.string.show_details),
-                    getShowDetailsPendingIntent(application, result)
+                    getShowDetailsPendingIntent(application, result, notificationId)
                 )
             }
         }.build()
@@ -62,7 +67,7 @@ object FormsSubmissionNotificationBuilder {
         }
     }
 
-    private fun getNotificationPendingIntent(application: Application, allFormsUploadedSuccessfully: Boolean): PendingIntent {
+    private fun getNotificationPendingIntent(application: Application): PendingIntent {
         val notifyIntent = Intent(application, MainMenuActivity::class.java)
 
         return PendingIntent.getActivity(
@@ -73,9 +78,14 @@ object FormsSubmissionNotificationBuilder {
         )
     }
 
-    private fun getShowDetailsPendingIntent(application: Application, result: Map<Instance, FormUploadException?>): PendingIntent {
+    private fun getShowDetailsPendingIntent(
+        application: Application,
+        result: Map<Instance, FormUploadException?>,
+        notificationId: Int
+    ): PendingIntent {
         val showDetailsIntent = Intent(application, ErrorActivity::class.java).apply {
             putExtra(ErrorActivity.EXTRA_ERRORS, FormsUploadResultInterpreter.getFailures(result, application) as Serializable)
+            putExtra(ErrorActivity.EXTRA_NOTIFICATION_ID, notificationId)
         }
 
         return PendingIntent.getActivity(

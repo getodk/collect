@@ -1,5 +1,7 @@
 package org.odk.collect.errors
 
+import android.app.NotificationManager
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -11,6 +13,7 @@ import org.odk.collect.strings.localization.getLocalizedString
 class ErrorActivity : LocalizedActivity() {
     companion object {
         const val EXTRA_ERRORS = "ERRORS"
+        const val EXTRA_NOTIFICATION_ID = "NOTIFICATION_ID"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,13 @@ class ErrorActivity : LocalizedActivity() {
             }
         } else {
             finish()
+        }
+
+        val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+        if (notificationId != -1) {
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(notificationId)
         }
     }
 }

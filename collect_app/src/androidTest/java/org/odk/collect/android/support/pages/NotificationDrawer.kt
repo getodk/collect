@@ -5,6 +5,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.CoreMatchers.nullValue
@@ -53,7 +54,8 @@ class NotificationDrawer {
     fun <D : Page<D>> clickAction(
         appName: String,
         actionText: String,
-        destination: D
+        destination: D,
+        cancelsNotification: Boolean = false
     ): D {
         val device = waitForNotification(appName)
 
@@ -65,9 +67,15 @@ class NotificationDrawer {
             throw AssertionError("Could not find \"$actionText\"")
         }
 
-        return waitFor {
+        val page = waitFor {
             destination.assertOnPage()
         }
+
+        open()
+        assertNoNotification(appName)
+        pressBack()
+
+        return page
     }
 
     fun <D : Page<D>> clickNotification(
@@ -104,6 +112,12 @@ class NotificationDrawer {
         device.wait(Until.gone(By.text("Notifications")), 1000L)
 
         isOpen = false
+    }
+
+    fun assertNoNotification(appName: String) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
+        assertThat("Expected no notification for app: $appName", result, equalTo(false))
     }
 
     private fun assertText(device: UiDevice, text: String): UiObject2 {
