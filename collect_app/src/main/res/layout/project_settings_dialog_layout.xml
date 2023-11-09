@@ -25,28 +25,27 @@
         android:layout_marginTop="@dimen/margin_standard"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_close"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/title"
-        style="@style/TextAppearance.Collect.Subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/projects"
-        app:layout_constraintBottom_toBottomOf="@+id/close_icon"
+        app:layout_constraintBottom_toBottomOf="@id/close_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/close_icon" />
+        app:layout_constraintTop_toTopOf="@id/close_icon" />
 
     <org.odk.collect.android.projects.ProjectListItemView
         android:id="@+id/current_project"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_standard"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/close_icon" />
+        android:layout_marginTop="@dimen/margin_small"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/general_settings_button"
@@ -55,8 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="38dp"
         android:text="@string/settings"
-        app:layout_constraintStart_toStartOf="@+id/current_project"
-        app:layout_constraintTop_toBottomOf="@+id/current_project" />
+        app:layout_constraintStart_toStartOf="@id/current_project"
+        app:layout_constraintTop_toBottomOf="@id/current_project" />
 
     <View
         android:id="@+id/top_divider"
@@ -66,17 +65,17 @@
         android:alpha="0.2"
         android:background="?colorOnSurface"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/general_settings_button" />
+        app:layout_constraintTop_toBottomOf="@id/general_settings_button" />
 
     <ScrollView
         android:id="@+id/project_list_container"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_divider"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
-        app:layout_constraintStart_toStartOf="@+id/guideline_start"
-        app:layout_constraintTop_toBottomOf="@+id/top_divider">
+        app:layout_constraintBottom_toTopOf="@id/bottom_divider"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/top_divider">
 
         <LinearLayout
             android:id="@+id/project_list"
@@ -91,7 +90,7 @@
         android:layout_height="1dp"
         android:alpha="0.2"
         android:background="?colorOnSurface"
-        app:layout_constraintBottom_toTopOf="@+id/add_project_button"
+        app:layout_constraintBottom_toTopOf="@id/add_project_button"
         app:layout_constraintStart_toStartOf="parent" />
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
