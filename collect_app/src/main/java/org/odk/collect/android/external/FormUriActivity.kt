@@ -19,7 +19,6 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.forms.Form
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 import java.io.File
 import javax.inject.Inject
 
@@ -61,7 +60,6 @@ class FormUriActivity : ComponentActivity() {
             !assertCurrentProjectUsed() -> Unit
             !assertValidUri() -> Unit
             !assertFormExists() -> Unit
-            !assertNotNewFormInGoogleDriveProject() -> Unit
             !assertFormNotEncrypted() -> Unit
             !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
             else -> startForm()
@@ -89,23 +87,6 @@ class FormUriActivity : ComponentActivity() {
             false
         } else {
             true
-        }
-    }
-
-    private fun assertNotNewFormInGoogleDriveProject(): Boolean {
-        val uri = intent.data!!
-        val uriMimeType = contentResolver.getType(uri)
-        return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
-            true
-        } else {
-            val unprotectedSettings = settingsProvider.getUnprotectedSettings()
-            val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
-            if (ProjectKeys.PROTOCOL_GOOGLE_SHEETS == protocol) {
-                displayErrorDialog(getString(org.odk.collect.strings.R.string.cannot_start_new_forms_in_google_drive_projects))
-                false
-            } else {
-                true
-            }
         }
     }
 
