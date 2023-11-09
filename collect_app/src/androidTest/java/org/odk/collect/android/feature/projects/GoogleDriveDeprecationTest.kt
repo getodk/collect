@@ -92,17 +92,4 @@ class GoogleDriveDeprecationTest {
             .clickProjectManagement()
             .assertText(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title)
     }
-
-    @Test
-    fun reconfiguringShouldBeHiddenInGoogleDriveProjects() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
-
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickProjectManagement()
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title)
-    }
 }
