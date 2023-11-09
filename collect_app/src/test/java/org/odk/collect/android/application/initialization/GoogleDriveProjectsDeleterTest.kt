@@ -12,6 +12,7 @@ import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 
 class GoogleDriveProjectsDeleterTest {
@@ -46,7 +47,7 @@ class GoogleDriveProjectsDeleterTest {
     }
 
     @Test
-    fun `GD projects that cannot be deleted because of unsent forms should be converted to ODK protocol`() {
+    fun `GD projects that cannot be deleted because of unsent forms should be converted to ODK protocol and marked as old GD projects`() {
         projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
         settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         whenever(projectDeleter.deleteProject("1")).thenReturn(DeleteProjectResult.UnsentInstances)
@@ -55,10 +56,11 @@ class GoogleDriveProjectsDeleterTest {
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_SERVER))
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_SERVER_URL), equalTo("https://example.com"))
+        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(true))
     }
 
     @Test
-    fun `GD projects that cannot be deleted because of running background jobs should be converted to ODK protocol`() {
+    fun `GD projects that cannot be deleted because of running background jobs should be converted to ODK protocol and marked as old GD projects`() {
         projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
         settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         whenever(projectDeleter.deleteProject("1")).thenReturn(DeleteProjectResult.RunningBackgroundJobs)
@@ -67,10 +69,11 @@ class GoogleDriveProjectsDeleterTest {
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_SERVER))
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_SERVER_URL), equalTo("https://example.com"))
+        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(true))
     }
 
     @Test
-    fun `If GD projects deletion results with 'DeletedSuccessfullyLastProject' there is no attempt to convert it to ODK protocol`() {
+    fun `If GD project deletion results in 'DeletedSuccessfullyLastProject' there is no attempt to convert it to ODK protocol and mark it as an old GD project`() {
         projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
         settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         whenever(projectDeleter.deleteProject("1")).thenReturn(DeleteProjectResult.DeletedSuccessfullyLastProject)
@@ -78,10 +81,11 @@ class GoogleDriveProjectsDeleterTest {
         googleDriveProjectsDeleter.run()
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_GOOGLE_SHEETS))
+        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(false))
     }
 
     @Test
-    fun `If GD projects deletion results with 'DeletedSuccessfullyInactiveProject' there is no attempt to convert it to ODK protocol`() {
+    fun `If GD project deletion results in 'DeletedSuccessfullyInactiveProject' there is no attempt to convert it to ODK protocol and mark it as an old GD project`() {
         projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
         settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         whenever(projectDeleter.deleteProject("1")).thenReturn(DeleteProjectResult.DeletedSuccessfullyInactiveProject)
@@ -89,10 +93,11 @@ class GoogleDriveProjectsDeleterTest {
         googleDriveProjectsDeleter.run()
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_GOOGLE_SHEETS))
+        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(false))
     }
 
     @Test
-    fun `If GD projects deletion results with 'DeletedSuccessfullyCurrentProject' there is no attempt to convert it to ODK protocol`() {
+    fun `If GD project deletion results in 'DeletedSuccessfullyCurrentProject' there is no attempt to convert it to ODK protocol and mark it as an old GD project`() {
         projectsRepository.save(Project.Saved("1", "project", "Q", "#000000"))
         settingsProvider.getUnprotectedSettings("1").save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         whenever(projectDeleter.deleteProject("1")).thenReturn(DeleteProjectResult.DeletedSuccessfullyCurrentProject(mock()))
@@ -100,5 +105,6 @@ class GoogleDriveProjectsDeleterTest {
         googleDriveProjectsDeleter.run()
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_GOOGLE_SHEETS))
+        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(false))
     }
 }
