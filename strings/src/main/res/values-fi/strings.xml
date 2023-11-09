@@ -898,7 +898,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Vaihda projektiin %s</string>
   <string name="delete_project_confirm_message">Kaikki tyhjät lomakkeet, lähetykset ja asetukset tullaan poistamaan pysyvästi.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Tämä on Google Drive/Sheets -projekti. Jos poistat sen, et voi luoda sitä uudestaan.&lt;/font&gt;\n\nKaikki tyhjät lomakkeet, lähetykset ja asetukset poistetaan pysyvästi.</string>
   <string name="delete_project_yes">Kyllä</string>
   <string name="delete_project_no">Ei</string>
   <string name="cannot_delete_project_title">Projektia ei voida poistaa.</string>

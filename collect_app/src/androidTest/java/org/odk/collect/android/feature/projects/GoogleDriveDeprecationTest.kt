@@ -87,32 +87,6 @@ class GoogleDriveDeprecationTest {
     }
 
     @Test
-    fun additionalWarningShouldNotBeDisplayedWhenRemovingNonGDProject() {
-        rule
-            .startAtMainMenu()
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickProjectManagement()
-            .clickOnDeleteProject()
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.delete_google_drive_project_confirm_message)
-    }
-
-    @Test
-    fun additionalWarningShouldBeDisplayedWhenRemovingGDProject() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
-
-        rule
-            .startAtMainMenu()
-            .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
-            .openProjectSettingsDialog()
-            .clickSettings()
-            .clickProjectManagement()
-            .clickOnDeleteProject()
-            .assertText(org.odk.collect.strings.R.string.delete_google_drive_project_confirm_message)
-    }
-
-    @Test
     fun reconfiguringShouldBeVisibleInNonGoogleDriveProjects() {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()

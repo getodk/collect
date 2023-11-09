@@ -899,7 +899,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambia a %s</string>
   <string name="delete_project_confirm_message">Tutti i formulari vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Questo è un progetto Google Drive/Fogli. Una volta eliminato, non sarai più in grado di crearlo di nuovo.&lt;/font&gt;\n\nTutti i moduli vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
   <string name="delete_project_yes">Sì</string>
   <string name="delete_project_no">No</string>
   <string name="cannot_delete_project_title">Il progetto non può essere cancellato</string>

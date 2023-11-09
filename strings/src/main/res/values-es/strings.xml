@@ -902,7 +902,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambiar a %s</string>
   <string name="delete_project_confirm_message">Todos los formularios, envíos y configuraciones en blanco se eliminarán de forma permanente.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Este es un proyecto de Google Drive/Sheets. Una vez que lo elimine, no podrá crearlo de nuevo.&lt;/font&gt;\n\nTodos los formularios, envíos y configuraciones en blanco se eliminarán de forma permanente.</string>
   <string name="delete_project_yes">Si</string>
   <string name="delete_project_no">No</string>
   <string name="cannot_delete_project_title">El proyecto no se puede eliminar</string>

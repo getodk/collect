@@ -901,7 +901,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Přepnout na %s</string>
   <string name="delete_project_confirm_message">Všechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Jedná se o projekt na Disku Google/Sheets. Jakmile jej odstraníte, nebude možné jej znovu vytvořit.&lt;/font&gt;\n\nVšechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
   <string name="delete_project_yes">Ano</string>
   <string name="delete_project_no">Ne</string>
   <string name="cannot_delete_project_title">Projekt nelze smazat</string>
