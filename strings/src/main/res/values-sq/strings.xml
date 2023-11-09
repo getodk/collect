@@ -372,10 +372,6 @@
   <string name="change_username">Emri i Përdoruesit</string>
   <string name="password">Fjalëkalimi</string>
   <string name="change_password">Fjalëkalimi</string>
-  <string name="selected_google_account_text">Llogaria në Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
   <string name="app_theme">Tema</string>
   <string name="language">Gjuha</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>

@@ -487,12 +487,6 @@
   <string name="change_password">ពាក្យ​សម្ងាត់ ODK</string>
   <string name="password_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ពាក្យ​សម្ងាត់​នៅផ្នែក​ខាង​មុខ ឬ​ខាង​ក្រោយ</string>
   <string name="username_error_whitespace">ការ​ដក​ឃ្លា​មិន​ត្រូវ​បាន​អនុញ្ញាតិ​នៅ​ក្នុង​ឈ្មោះ​អ្នក​ប្រើ​ប្រាស់​នៅ​ផ្នែក​​ខាង​​មុខ​ ឬ​​ខាង​​ក្រោយ</string>
-  <string name="server_platform_google_sheets">ថាស Google, សន្លឹក Google</string>
-  <string name="selected_google_account_text">គណនី Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">URL ដែលបានដាក់ស្នើ Fallback</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">ទម្រង់​ត្រូវតែ​កំណត់ URLក្នុងការបញ្ជូន​។ ប្រសិន​មិន​បាន​កំណត់, URL នេះ​នឹង​ត្រូវ​បាន​ប្រើប្រាស់។</string>
   <string name="app_theme">Theme</string>
   <string name="theme_light">Light theme</string>
   <string name="theme_dark">Dark theme</string>

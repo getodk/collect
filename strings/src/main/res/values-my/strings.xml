@@ -254,9 +254,6 @@
   <string name="change_username">ODK အသုံးပြုသူအမည်</string>
   <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
   <string name="change_password">ODK စကားဝှက်</string>
-  <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">စာလံုးအရြယ္အစား</string>
   <string name="change_font_size">စာလံုးအရြယ္အစား</string>
   <string name="font_size_extra_large">အလြန္ႀကီး</string>

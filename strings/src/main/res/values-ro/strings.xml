@@ -308,10 +308,6 @@
   <string name="change_password">Parola ODK</string>
   <string name="password_error_whitespace">Nu sunt permise spații în parole</string>
   <string name="username_error_whitespace">Nu sunt permise spații în numele de utilizator</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Cont Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">Mărimea fontului textului</string>
   <string name="change_font_size">Mărimea fontului textului</string>
   <string name="font_size_extra_large">Extra mare</string>

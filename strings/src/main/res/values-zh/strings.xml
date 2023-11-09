@@ -606,12 +606,6 @@
   <string name="change_password">密码</string>
   <string name="password_error_whitespace">密码中不允许有前导或尾随空格</string>
   <string name="username_error_whitespace">用户名中不允许有前导或尾随空格</string>
-  <string name="server_platform_google_sheets">谷歌硬盘，谷歌表格</string>
-  <string name="selected_google_account_text">Google账号</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">回退提交URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">表单必须设置提交URL。如果没有，将使用此URL。</string>
   <string name="app_theme">主题</string>
   <string name="theme_light">浅色主题</string>
   <string name="theme_dark">深色主题</string>

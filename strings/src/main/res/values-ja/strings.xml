@@ -550,12 +550,6 @@
   <string name="change_password">ODK パスワード</string>
   <string name="password_error_whitespace">パスワードの先頭または末尾に空白は使用できません</string>
   <string name="username_error_whitespace">ユーザー名の先頭または末尾に空白は使用できません</string>
-  <string name="server_platform_google_sheets">Google ドライブ, Google スプレッドシート</string>
-  <string name="selected_google_account_text">Google アカウント</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">フォールバック送信 URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">フォームは送信 URL を設定する必要があります。 そうしない場合に、この URL が使用されます。</string>
   <string name="app_theme">テーマ</string>
   <string name="theme_light">ライトテーマ</string>
   <string name="theme_dark">ダークテーマ</string>

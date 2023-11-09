@@ -255,9 +255,6 @@
   <string name="change_username">ব্যবহারকারীর নাম পরিবর্তন </string>
   <string name="password">পাসওয়ার্ড</string>
   <string name="change_password">পাসওয়ার্ড পরিবর্তন </string>
-  <string name="selected_google_account_text">গুগল একাউন্ট</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">ফন্ট আকার</string>
   <string name="change_font_size">ফন্ট আকার পরিবর্তন</string>
   <string name="font_size_extra_large">বিশাল বৃহৎ।</string>

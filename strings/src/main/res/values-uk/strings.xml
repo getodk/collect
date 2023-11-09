@@ -482,12 +482,6 @@
   <string name="change_password">Пароль ODK</string>
   <string name="password_error_whitespace">в паролях заборонені початкові та кінцеві пробіли</string>
   <string name="username_error_whitespace">в імені користувача заборонені початкові та кінцеві пробіли</string>
-  <string name="server_platform_google_sheets">Google Диск, Google Сторінки</string>
-  <string name="selected_google_account_text">Обліковий запис Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Запасний URL для надсилання</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">URL для відправки має бути зазначено в анкетах. Інакше, буде використано цей URL.</string>
   <string name="app_theme">Тема</string>
   <string name="theme_light">Світла тема</string>
   <string name="theme_dark">Темна тема</string>

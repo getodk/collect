@@ -639,12 +639,6 @@
   <string name="change_password">Heslo do ODK</string>
   <string name="password_error_whitespace">Počáteční nebo koncové mezery v heslech nejsou povoleny </string>
   <string name="username_error_whitespace">Počáteční nebo koncové mezery v uživatelských jménech nejsou povoleny</string>
-  <string name="server_platform_google_sheets">Disk Google, Tabulky Google</string>
-  <string name="selected_google_account_text">Účet Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Záložní odesílací URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formuláře musí obsahovat adresu URL pro podání. Pokud tomu tak není, použije se tato adresa URL.</string>
   <string name="app_theme">Vizuální styl</string>
   <string name="theme_light">Světlý styl</string>
   <string name="theme_dark">Tmavý styl</string>

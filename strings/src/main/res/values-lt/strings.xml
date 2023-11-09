@@ -248,9 +248,6 @@
   <string name="change_username">ODK naudotojo vardas</string>
   <string name="password">Slaptažodis</string>
   <string name="change_password">Slaptažodis</string>
-  <string name="selected_google_account_text">Google sąskaita</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">Teksto šrifto dydis</string>
   <string name="change_font_size">Teksto šrifto dydis</string>
   <string name="font_size_extra_large">Labai didelis</string>

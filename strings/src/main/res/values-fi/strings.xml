@@ -636,12 +636,6 @@
   <string name="change_password">ODK salasana</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google-tili</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Varalla oleva URL lähetystä varten</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>
   <string name="theme_dark">Tumma teema</string>

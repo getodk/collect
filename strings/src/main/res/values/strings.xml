@@ -788,13 +788,6 @@
     <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
     <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
 
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-    <string name="selected_google_account_text">Google account</string>
-    <!-- To use Google Drive, forms must set a submission URL. If they don't, this URL will be used. -->
-    <string name="google_sheets_url">Fallback submission URL</string>
-    <!-- Description for Fallback submission URL setting -->
-    <string name="google_sheets_url_hint">Forms must set a submission URL. If they don\'t, this URL will be used.</string>
-
     <string name="app_theme">Theme</string>
     <string name="theme_light">Light theme</string>
     <string name="theme_dark">Dark theme</string>

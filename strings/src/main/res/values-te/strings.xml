@@ -520,12 +520,6 @@
   <string name="change_password">ODK పాస్ వర్డ్ </string>
   <string name="password_error_whitespace">పాస్ వర్డ్ ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
   <string name="username_error_whitespace">యూసర్ నేమ్ లో ముందు లేదా తరువాత స్పేస్ ఉండకూడదు </string>
-  <string name="server_platform_google_sheets">గూగుల్ డ్రైవ్, గూగుల్ షీట్స్</string>
-  <string name="selected_google_account_text">గూగుల్ ఖాతా</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">ఫాల్‌బ్యాక్ సమర్పణ URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">ఫారమ్‌లు తప్పనిసరిగా సబ్మిషన్ URL ని సెట్ చేయాలి. లేకపోతే, ఈ URL ఉపయోగించబడుతుంది.</string>
   <string name="app_theme">థీము</string>
   <string name="theme_light">లైట్ థీము</string>
   <string name="theme_dark">డార్క్ థీము</string>

@@ -387,11 +387,6 @@
   <string name="change_username">ODK brugernavn</string>
   <string name="password">Adgangskode</string>
   <string name="change_password">ODK kodeord</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google-konto</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formularer skal definere en webadresse til til indberetninger. Hvis ikke den bliver defineret , vil denne webadresse blive anvendt.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Lyst tema</string>
   <string name="theme_dark">Mørkt tema</string>

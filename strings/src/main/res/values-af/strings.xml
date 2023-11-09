@@ -285,9 +285,6 @@
   <string name="change_username">ODK Gebruikersnaam</string>
   <string name="password">Wagwoord</string>
   <string name="change_password">ODK Wagwoord</string>
-  <string name="selected_google_account_text">Google rekening</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">Teks font grootte</string>
   <string name="change_font_size">Teks font grootte</string>
   <string name="font_size_extra_large">Extra Large</string>

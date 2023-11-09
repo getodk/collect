@@ -258,9 +258,6 @@
   <string name="change_username">ODK استعمال کرنے والے کا نام</string>
   <string name="password">شناختی لفظ (Password)</string>
   <string name="change_password">  ODK  کا شناختی لفظ (Password)</string>
-  <string name="selected_google_account_text">گوگل اکاونٹ</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="use_device_language">فون کی منتخب زبان استعمال کریں</string>
   <string name="font_size">ہجوں کے فانٹ کا ناپ</string>
   <string name="change_font_size">فانٹ کا سائز</string>

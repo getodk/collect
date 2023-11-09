@@ -564,12 +564,6 @@
   <string name="change_password">پسورد ODK</string>
   <string name="password_error_whitespace">فضای خالی پیشرو یا انتهایی در پسورد مجاز نیست</string>
   <string name="username_error_whitespace">فضای خالی پیشرو یا انتهایی در نام کاربری مجاز نیست</string>
-  <string name="server_platform_google_sheets">گوگل درایو، گوگل شیت</string>
-  <string name="selected_google_account_text">حساب کاربری گوگل</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">ارسال مجدد URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">فورم ها باید URL ارسال را تنظیم کنند. اگر این کار را نکنند، از این URL استفاده خواهد شد.</string>
   <string name="theme_system">آز موضوع دستگاه استفاده کنید</string>
   <string name="language">زبان</string>
   <string name="use_device_language">از زبان دستگاه استفاده کنید</string>

@@ -338,11 +338,6 @@
   <string name="change_password">ODK पासवर्ड </string>
   <string name="password_error_whitespace">पासवर्डमा खाली स्पेस हुनु हुँदैन ।</string>
   <string name="username_error_whitespace">प्रयोगकर्ता नाममा खाली स्पेस हुनु हुँदैन ।</string>
-  <string name="server_platform_google_sheets">गुगल ड्राइभ, गुगल सिट्स</string>
-  <string name="selected_google_account_text">गुगल एकाउण्ट</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">फारमहरु पठाउनको लागि URL सेट गर्नुपर्दछ । अन्यथा यही URL प्रयोग हुनेछ ।</string>
   <string name="font_size">अक्षरको आकार</string>
   <string name="change_font_size">अक्षरको आकार</string>
   <string name="font_size_extra_large">अझ ठूलो </string>

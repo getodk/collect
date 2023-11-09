@@ -561,12 +561,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="change_password">Ijambo banga rya ODK</string>
   <string name="password_error_whitespace">Mu ijambobanga ahantu hariho ubusa ntibyemewe </string>
   <string name="username_error_whitespace">Kuzuza ahantu hariho ubusa ntabwo byemewe mu izina ugomba gukoresha </string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Konte kuri Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Linki y\'ububiko bw\'ibyoherejwe bitagira linki</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Inyandiko shingiro igaragaza URL ngenderwaho. Iyo itabikora, iyo URL izakoreshwa.</string>
   <string name="app_theme">Isanganyamatsiko</string>
   <string name="theme_light">Urumuri rw\'insanganyamatsiko.</string>
   <string name="theme_dark">Umwijima w\'isanganyamatsiko.</string>

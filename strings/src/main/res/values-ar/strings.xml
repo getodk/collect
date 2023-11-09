@@ -565,12 +565,6 @@
   <string name="change_password">ODK كلمة المرور</string>
   <string name="password_error_whitespace">الفراغات في البداية أو النهاية غير مسموح بها في كلمات المرور</string>
   <string name="username_error_whitespace">الفراغات في البداية أو النهاية غير مسموح بها في اسم المستخدم</string>
-  <string name="server_platform_google_sheets">محرك الجوجل، صفحات الجوجل</string>
-  <string name="selected_google_account_text">حساب جوجل</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">رابط إرسال احتياطي</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">يجب أن تقوم الاستمارات بتعيين رابط للارسال. إذا لم يفعلوا ذلك، فسيتم استخدام عنوان الرابط هذا.</string>
   <string name="app_theme">المظهر</string>
   <string name="theme_light">مظهر فاتح</string>
   <string name="theme_dark">مظهر داكن</string>

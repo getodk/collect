@@ -283,9 +283,6 @@
   <string name="change_username">ບັນຊີຜູ້ໃຊ້ ODK</string>
   <string name="password">ລະຫັດຜ່ານ</string>
   <string name="change_password">ລະຫັດຜ່ານ ODK</string>
-  <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>

@@ -448,12 +448,6 @@
   <string name="change_password">  ODK  کا پاس ورڈ</string>
   <string name="password_error_whitespace">پاس ورڈز میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
   <string name="username_error_whitespace">صارف کےناموں میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
-  <string name="server_platform_google_sheets">گوگل ڈرائیو ، گوگل شیٹس </string>
-  <string name="selected_google_account_text">گوگل اکاونٹ</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">فال بیک  جمع کرانے کی یو آر ایل</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>
   <string name="app_theme">تھیم </string>
   <string name="theme_light">لائٹ تھیم </string>
   <string name="theme_dark">ڈارک تھیم </string>

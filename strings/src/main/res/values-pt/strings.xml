@@ -639,12 +639,6 @@
   <string name="change_password">Senha</string>
   <string name="password_error_whitespace">Espaços em branco antes e depois de senhas não são permitidos</string>
   <string name="username_error_whitespace">Espaços em branco antes e depois de nomes de usuários não são permitidos</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Conta Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">URL de submissão de reserva</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Os formulários devem configurar uma URL de envio. Se não foram, esta URL será utilizada.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema claro</string>
   <string name="theme_dark">Tema escuro</string>

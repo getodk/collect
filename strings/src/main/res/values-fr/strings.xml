@@ -641,12 +641,6 @@
   <string name="change_password">Mot de passe ODK</string>
   <string name="password_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du mot de passe</string>
   <string name="username_error_whitespace">Les espaces ne sont pas permis au début ou à la fin du nom d\'utilisateur</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Compte Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">URL de secours pour soumission de données</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Les formulaires doivent définir une URL de soumission. Si ce n\'est pas le cas, cette URL sera utilisée.</string>
   <string name="app_theme">Thème</string>
   <string name="theme_light">Thème clair</string>
   <string name="theme_dark">Thème sombre</string>

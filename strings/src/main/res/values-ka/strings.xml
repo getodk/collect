@@ -290,9 +290,6 @@
   <string name="change_username">ODK-ის მომხმარებლის სახელი</string>
   <string name="password">პაროლი</string>
   <string name="change_password">პაროლი</string>
-  <string name="selected_google_account_text">Google ექაუნთი</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">ტექსტის ზომა</string>
   <string name="change_font_size">ტექსტის ზომა</string>
   <string name="font_size_extra_large">ძალიან დიდი</string>
