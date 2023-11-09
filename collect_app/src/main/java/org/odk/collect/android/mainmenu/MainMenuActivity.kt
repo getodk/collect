@@ -39,6 +39,7 @@ import org.odk.collect.crashhandler.CrashHandler
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.Project.Saved
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
@@ -281,9 +282,9 @@ class MainMenuActivity : LocalizedActivity() {
     }
 
     private fun manageGoogleDriveDeprecationBanner() {
-        val unprotectedSettings = settingsProvider.getUnprotectedSettings()
-        val protocol = unprotectedSettings.getString(ProjectKeys.KEY_PROTOCOL)
-        if (ProjectKeys.PROTOCOL_GOOGLE_SHEETS == protocol) {
+        val projectId = currentProjectViewModel.currentProject.value.uuid
+        val isOldGDProject = settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject(projectId))
+        if (isOldGDProject) {
             binding.googleDriveDeprecationBanner.root.visibility = View.VISIBLE
             binding.googleDriveDeprecationBanner.learnMoreButton.setOnClickListener {
                 val intent = Intent(this, WebViewActivity::class.java)
