@@ -276,7 +276,6 @@ dependencies {
     implementation Dependencies.android_material
     implementation Dependencies.android_flexbox
 
-    implementation Dependencies.play_services_auth
     implementation Dependencies.play_services_maps
     implementation Dependencies.play_services_location
     implementation Dependencies.play_services_oss_licenses
@@ -304,19 +303,7 @@ dependencies {
         exclude group: 'org.slf4j'
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
     }
-    implementation(Dependencies.google_api_client_android) {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-    implementation(Dependencies.google_api_services_drive) {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-    implementation(Dependencies.google_api_services_sheets) {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-
+    implementation Dependencies.gson
     implementation Dependencies.timber
     implementation Dependencies.slf4j_api
     implementation Dependencies.slf4j_timber
