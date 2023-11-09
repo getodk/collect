@@ -23,7 +23,6 @@ import static org.odk.collect.settings.keys.ProjectKeys.KEY_FORM_UPDATE_MODE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_GUIDANCE_HINT;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_IMAGE_SIZE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 import static org.odk.collect.settings.keys.ProtectedProjectKeys.ALLOW_OTHER_WAYS_OF_EDITING_FORM;
 
 import android.content.Context;
@@ -40,7 +39,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.backgroundwork.FormUpdateScheduler;
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
-import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
 import javax.inject.Inject;
@@ -94,42 +92,32 @@ public class FormManagementPreferencesFragment extends BaseProjectPreferencesFra
         @Nullable Preference updateFrequency = findPreference(KEY_PERIODIC_FORM_UPDATES_CHECK);
         @Nullable CheckBoxPreference automaticDownload = findPreference(KEY_AUTOMATIC_UPDATE);
 
-        if (generalSettings.getString(KEY_PROTOCOL).equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
-            displayDisabled(findPreference(KEY_FORM_UPDATE_MODE), getString(org.odk.collect.strings.R.string.manual));
-            if (automaticDownload != null) {
-                displayDisabled(automaticDownload, false);
-            }
-            if (updateFrequency != null) {
-                updateFrequency.setEnabled(false);
-            }
-        } else {
-            switch (getFormUpdateMode(requireContext(), generalSettings)) {
-                case MANUAL:
-                    if (automaticDownload != null) {
-                        displayDisabled(automaticDownload, false);
-                    }
-                    if (updateFrequency != null) {
-                        updateFrequency.setEnabled(false);
-                    }
-                    break;
-                case PREVIOUSLY_DOWNLOADED_ONLY:
-                    if (automaticDownload != null) {
-                        automaticDownload.setEnabled(true);
-                        automaticDownload.setChecked(generalSettings.getBoolean(KEY_AUTOMATIC_UPDATE));
-                    }
-                    if (updateFrequency != null) {
-                        updateFrequency.setEnabled(true);
-                    }
-                    break;
-                case MATCH_EXACTLY:
-                    if (automaticDownload != null) {
-                        displayDisabled(automaticDownload, true);
-                    }
-                    if (updateFrequency != null) {
-                        updateFrequency.setEnabled(true);
-                    }
-                    break;
-            }
+        switch (getFormUpdateMode(requireContext(), generalSettings)) {
+            case MANUAL:
+                if (automaticDownload != null) {
+                    displayDisabled(automaticDownload, false);
+                }
+                if (updateFrequency != null) {
+                    updateFrequency.setEnabled(false);
+                }
+                break;
+            case PREVIOUSLY_DOWNLOADED_ONLY:
+                if (automaticDownload != null) {
+                    automaticDownload.setEnabled(true);
+                    automaticDownload.setChecked(generalSettings.getBoolean(KEY_AUTOMATIC_UPDATE));
+                }
+                if (updateFrequency != null) {
+                    updateFrequency.setEnabled(true);
+                }
+                break;
+            case MATCH_EXACTLY:
+                if (automaticDownload != null) {
+                    displayDisabled(automaticDownload, true);
+                }
+                if (updateFrequency != null) {
+                    updateFrequency.setEnabled(true);
+                }
+                break;
         }
     }
 
