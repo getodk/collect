@@ -96,27 +96,4 @@ class ProjectListItemViewTest {
         view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
         assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("foo / something something"))
     }
-
-    @Test
-    fun `shows Google account and "Google Drive" if protocol is Google Drive`() {
-        val generalSettings = mock<Settings> {
-            on { getString(ProjectKeys.KEY_PROTOCOL) } doReturn ProjectKeys.PROTOCOL_GOOGLE_SHEETS
-            on { getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) } doReturn "foo@bar.baz"
-        }
-
-        val view = ProjectListItemView(context)
-        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
-        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("foo@bar.baz / Google Drive"))
-    }
-
-    @Test
-    fun `shows "Google Drive" if protocol is Google Drive and username is not set`() {
-        val generalSettings = mock<Settings> {
-            on { getString(ProjectKeys.KEY_PROTOCOL) } doReturn ProjectKeys.PROTOCOL_GOOGLE_SHEETS
-        }
-
-        val view = ProjectListItemView(context)
-        view.setupView(Project.New("SOM", "S", "#ffffff"), generalSettings)
-        assertThat(view.findViewById<TextView>(R.id.project_subtext).text, equalTo("Google Drive"))
-    }
 }
