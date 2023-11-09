@@ -13,8 +13,6 @@ import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.TestDependencies
-import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.OkDialog
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
@@ -106,17 +104,5 @@ class GoogleDriveDeprecationTest {
             .clickSettings()
             .clickProjectManagement()
             .assertTextDoesNotExist(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title)
-    }
-
-    @Test
-    fun warningIsShownWhenTryingToDownloadForms() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
-
-        rule.startAtMainMenu()
-            .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
-            .clickGetBlankForm(OkDialog())
-            .assertText(org.odk.collect.strings.R.string.cannot_start_new_forms_in_google_drive_projects)
-            .clickOK(MainMenuPage())
     }
 }

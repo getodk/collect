@@ -1129,8 +1129,6 @@
     <string name="wrong_project_selected_for_form">To open this form, you must first open ODK Collect and switch to the project that contains it.</string>
     <!-- Error shown when a user tries to open a form when there are no projects -->
     <string name="app_not_configured">ODK Collect has not been configured. Try to open ODK Collect and configure it.\n\nIf you tapped on a shortcut, you might need to recreate it after configuring ODK Collect.</string>
-    <!-- Error shown when a user tries to start a new form in a Google Drive project -->
-    <string name="cannot_start_new_forms_in_google_drive_projects">New forms cannot be started in Google Drive projects.</string>
 
     <!--
     ##############################################
