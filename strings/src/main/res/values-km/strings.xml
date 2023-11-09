@@ -406,7 +406,6 @@
   <string name="change_view">ការផ្លាស់ប្តូរទិដ្ឋភាព</string>
   <string name="show_sent_and_unsent_forms">បង្ហាញសំណុំ​បែប​បទដែលបានផ្ញើចេញ និងមិនទាន់ផ្ញើចេញ</string>
   <string name="show_unsent_forms">បង្ហាញសំណុំ​បែប​បទដែលមិនទាន់បានផ្ញើចេញ</string>
-  <string name="media_upload_error">បរាជ័យក្នុងការផ្ទុកឯកសារមេឌៀដែលមិនមាន៖ %1$s</string>
   <string name="send_in_progress">កំពុងផ្ញើផ្នែកខាងក្រោយ, សូមព្យាយាមម្តងទៀតក្នុងរយះពេលខ្លី</string>
   <!--##############################################
     # GET BLANK FORM
@@ -615,21 +614,6 @@
   <string name="moving_backwards_enabled_title">អាច​ដំណើរការ​ត្រឡប់​ថយ​ក្រោយ​បាន</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">រក្សាទុកជាសេចក្តីព្រាង</string>
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">មិន​អាច​ប្រើប្រាស់​ API បាន​។ ប្រសិន​ជា​អ្នក​កំពុង​ដំណើរការ​កសាង​ក្នុង​ម៉ាស៊ីន (local), សូម​អាន​អំពី​គម្រោង​នេះ​សារ​ឡើង​វិញ​។</string>
-  <string name="no_google_account">គ្មាន​គណនី​ Google បាន​ជ្រើស​រើស</string>
-  <string name="invalid_sheet_id">លេខសម្គាល់សន្លឹកកិច្ចការមិនត្រឹមត្រូវ៖ %1$s</string>
-  <string name="google_sheets_access_denied">ដំណើរ​ការ​ត្រូវ​បាន​បដិសេធ។ សូមធ្វើឱ្យប្រាកដថាម្ចាស់សៀវភៅបញ្ជីប្រោសប្រណីអនុញ្ញាតឲ្យអ្នកកែសម្រួល។</string>
-  <string name="google_sheets_missing_columns">សៀវភៅបញ្ជីគឺបាត់បង់ជួរឈ: %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">បានបោះបង់ការផ្ទុកឡើងភ្លាមៗ</string>
-  <string name="no_columns_to_upload">មិនមានជួរឈរក្នុងសំណុំបែបបទដើម្បីផ្ទុកឡើង។</string>
-  <string name="missing_google_account_dialog_title">មិនទាន់ដាក់គណនី Google</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar sua câmera. Por favor, tente novamente quando estiver pronto a concedê-la.</string>
   <string name="record_audio_runtime_permission_denied_title">Permissão de gravar áudio</string>
   <string name="record_audio_runtime_permission_denied_desc">Sem esta permissão, o ODK Collect não consegue acessar seu microfone. Por favor, tente novamente quando estiver pronto a concedê-la.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Permissão para acessar contas</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Sem esta permissão, o ODK Collecta não consegue acessar as contas. Por favor, tente novamente quando estiver pronto a concedê-la.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -519,9 +517,7 @@
   <string name="change_view">Mudar visualização</string>
   <string name="show_sent_and_unsent_forms">Formulários enviados e não enviados</string>
   <string name="show_unsent_forms">Apenas formulários não enviados</string>
-  <string name="media_upload_error">Falhou ao fazer o upload do arquivo de media que não existe: %1$s</string>
   <string name="send_in_progress">Envio automático em segundo plano sendo executado, por favor, tente novamente em alguns instantes</string>
-  <string name="odk_permissions_fail">Permissão de envio automático do ODK falhou, por favor, certifique-se de que concedeu todas as permissões requisitadas.</string>
   <string name="forms_upload_succeeded">Formulários enviados com sucesso</string>
   <string name="forms_upload_failed">Falha no envio dos formulários</string>
   <string name="all_uploads_succeeded">Sucesso nos uploads!</string>
@@ -789,25 +785,6 @@
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Salvar como rascunho</string>
   <string name="save_mid_summary">Ícone Salvar na barra superior e botão \"Salvar como rascunho\" ao sair do formulário</string>
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Não foi capaz de chamar API. Se você está rodando em uma build local, por favor, revise o projeto</string>
-  <string name="no_google_account">Nenhuma conta do Google foi selecionada!</string>
-  <string name="google_set_account">Você selecionou o Google Sheets como seu servidor, por favor, selecione uma conta Google em Configurações Gerais antes de continuar.</string>
-  <string name="invalid_sheet_id">Nome do id: %1$s da guia incorreto</string>
-  <string name="missing_submission_url">Falta a URL de submissão</string>
-  <string name="google_sheets_access_denied">Acesso negado. Por favor, certifique-se de que o proprietário da planilha possui a permissão de edição.</string>
-  <string name="google_sheets_missing_columns">Estão faltando as seguintes colunas na planilha: %1$s</string>
-  <string name="google_sheets_encrypted_message">Formulários criptografados não podem ser enviados para Planilhas Google.</string>
-  <string name="missing_google_account_dialog_desc">Para enviar formulários via Planilhas Google, você tem que habilitar sua conta Google nas configurações do servidor.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Envio da instância cancelado</string>
-  <string name="no_columns_to_upload">Não encontrei colunas no formulário para enviar.</string>
-  <string name="missing_google_account_dialog_title">Não há conta Google definida.</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

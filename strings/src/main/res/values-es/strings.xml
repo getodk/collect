@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder a la cámara. Intente de nuevo cuando esté el permiso.</string>
   <string name="record_audio_runtime_permission_denied_title">Permiso de Grabación de Audio</string>
   <string name="record_audio_runtime_permission_denied_desc">Sin este permiso la aplicación no puede acceder al micrófono. Intente de nuevo cuando esté el permiso.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Obtener permiso de la cuenta</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Sin los permisos no se puede acceder las cuentas. Intente de nuevo cuando haya otorgado los permisos.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -519,9 +517,7 @@
   <string name="change_view">Cambiar Vista</string>
   <string name="show_sent_and_unsent_forms">Formularios enviados y no enviados</string>
   <string name="show_unsent_forms">Solo formularios no enviados</string>
-  <string name="media_upload_error">Falla en subida de archivo multimedia. No existe: %1$s</string>
   <string name="send_in_progress">Otro envío funcionando, reintentar en breve</string>
-  <string name="odk_permissions_fail">Falla en permiso de auto envío. Asegúrese de haber otorgado todos los permisos requeridos. </string>
   <string name="forms_upload_succeeded">Carga de formularios exitosa</string>
   <string name="forms_upload_failed">Error al cargar formularios</string>
   <string name="all_uploads_succeeded">¡Todas las cargas se realizaron correctamente!</string>
@@ -789,25 +785,6 @@
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Guardar como borrador</string>
   <string name="save_mid_summary">Icono Guardar en la barra superior y botón \"Guardar como borrador\" al salir del formulario</string>
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">No es posible hacer  llamado al API. Si usted esta ejecutando en un ambiente local, por favor revise readme del proyecto</string>
-  <string name="no_google_account">!Cuenta Google no Seleccionada¡</string>
-  <string name="google_set_account">Ha seleccionado Hojas de cálculo de Google como su servidor, seleccione una cuenta de Google correspondiente en Configuración antes de continuar</string>
-  <string name="invalid_sheet_id">id de hoja inválido:  %1$s</string>
-  <string name="missing_submission_url">Falta URL para envío </string>
-  <string name="google_sheets_access_denied">Acceso denegado. Por favor, asegúrese de que el propietario de la hoja de cálculo le ha concedido permisos de edición.</string>
-  <string name="google_sheets_missing_columns">Faltan las siguientes columnas de la hoja: %1$s</string>
-  <string name="google_sheets_encrypted_message">Los formularios encriptados no pueden ser enviados a Google Sheets</string>
-  <string name="missing_google_account_dialog_desc">Para enviar formularios vía Google Sheets debe definir una cuenta de Google en ajustes de servidor.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Cargue de Instancia cancelada</string>
-  <string name="no_columns_to_upload">No se encontraron columnas en el formulario para cargar.</string>
-  <string name="missing_google_account_dialog_title">No se ha definido una cuenta de Google</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

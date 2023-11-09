@@ -44,8 +44,6 @@
   <string name="camera_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до камери. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <string name="record_audio_runtime_permission_denied_title">Дозвіл на аудіозапис</string>
   <string name="record_audio_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до мікрофону. Будь ласка, спробуйте знову коли будете готові надати його.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Отримати дозволи облікового запису</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Без цього дозволу Collect не має доступу до облікових записів. Будь ласка, спробуйте знову коли будете готові надати його.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -401,9 +399,7 @@
   <string name="change_view">Змінити вигляд</string>
   <string name="show_sent_and_unsent_forms">Показати надіслані та ненадіслані анкети</string>
   <string name="show_unsent_forms">Показати ненадіслані анкети</string>
-  <string name="media_upload_error">Помилка завантаження неіснуючого медіа файлу: %1$s</string>
   <string name="send_in_progress">Зпущений тіньовий процес відправки, будь ласка, спробуйте знову пізніше</string>
-  <string name="odk_permissions_fail">Помилка автоматичного надсилання, будь ласка, перевірте надання всіх необхідних дозволів</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -610,23 +606,6 @@
   <string name="no">Ні</string>
   <string name="moving_backwards_enabled_title">Переміщення назад включене</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Неможливо здійснити виклики API. Якщо ви використовуєте локальну збірку, будь ласка, звурніться до документації проекту.</string>
-  <string name="no_google_account">Не вибраний жоден обліковий запис Google!</string>
-  <string name="invalid_sheet_id">пошкоджена сторінка id: %1$s</string>
-  <string name="missing_submission_url">Відсутній URL для надсилання</string>
-  <string name="google_sheets_access_denied">Відмова доступу. Будь ласка, переконайтесь, що власник Сторінок надав вам дозвіл на внесення змін.</string>
-  <string name="google_sheets_missing_columns">В Сторінках пропущена наступна колонка: %1$s</string>
-  <string name="missing_google_account_dialog_desc">Щоб надіслати анкету через Google Таблиці Ви повинні налаштувати обліковий запис Google в налаштуваннях сервера.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Завантаження екземпляру скасовано</string>
-  <string name="no_columns_to_upload">Стовбців для завантаження в анкеті не знайдено.</string>
-  <string name="missing_google_account_dialog_title">Нема облікового запису Google</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

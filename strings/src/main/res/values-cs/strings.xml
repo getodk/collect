@@ -54,8 +54,6 @@
   <string name="camera_runtime_permission_denied_desc">Bez tohoto povolení nelze přistupovat k fotoaparátu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
   <string name="record_audio_runtime_permission_denied_title">Oprávnění k nahrávání zvuku</string>
   <string name="record_audio_runtime_permission_denied_desc">Bez tohoto povolení nelze získat přístup k mikrofonu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Získat oprávnění k účtům</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže přistupovat k účtům. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -519,9 +517,7 @@
   <string name="change_view">Změnit pohled</string>
   <string name="show_sent_and_unsent_forms">Zobrazit odeslané a neodeslané dotazníky</string>
   <string name="show_unsent_forms">Zobrazit neodeslané dotazníky</string>
-  <string name="media_upload_error">Nepodařilo se nahrát soubor médií, který neexistuje.%1$s </string>
   <string name="send_in_progress">Odesílání na pozadí běží, zkuste to znovu</string>
-  <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
   <string name="forms_upload_succeeded">Nahrání formulářů bylo úspěšné</string>
   <string name="forms_upload_failed">Nahrávání formulářů selhalo</string>
   <string name="all_uploads_succeeded">Všechna nahrání se podařila!</string>
@@ -789,25 +785,6 @@
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Uložit jako návrh</string>
   <string name="save_mid_summary">Ikona pro uložení v horním panelu a tlačítko \"Uložit jako návrh\" při ukončení formuláře</string>
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Nepodařilo se provést volání API. Pokud používáte místní sestavení, přečtěte si projektové readme.</string>
-  <string name="no_google_account">Není vybrán žádný účet Google!</string>
-  <string name="google_set_account">Jako server jste vybrali službu Tabulky Google, před pokračováním vyberte v Nastavení odpovídající účet Google.</string>
-  <string name="invalid_sheet_id">neplatné ID listu: %1$s</string>
-  <string name="missing_submission_url">Chybí URL pro odeslání</string>
-  <string name="google_sheets_access_denied">Přístup odepřen. Ujistěte se, že vám vlastník tabulky udělil oprávnění ke změnám.</string>
-  <string name="google_sheets_missing_columns">V tabulce chybí následující sloupce: %1$s</string>
-  <string name="google_sheets_encrypted_message">Šifrované formuláře nelze odeslat do služby Google Sheets.</string>
-  <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Nahrání instance zrušeno</string>
-  <string name="no_columns_to_upload">V formuláře, který chcete nahrát, nebyly nalezeny žádné sloupce.</string>
-  <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

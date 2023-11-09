@@ -45,8 +45,6 @@
   <string name="camera_runtime_permission_denied_desc">Utatanze uruhushya porogaramu ntibasha gukoresha Camera bityo ongera kugerageza nyuma yuko uhaye uruhushya porogaramu</string>
   <string name="record_audio_runtime_permission_denied_title">Rikodinga uburenganzira bwa odiyo </string>
   <string name="record_audio_runtime_permission_denied_desc">Udafite uburenganzira Collect ntishobora kwemera konte. Mwakongera igihe mwaba mubonye ubwo burenganzira. </string>
-  <string name="get_accounts_runtime_permission_denied_title">Kubona uburenganzira kuri konte </string>
-  <string name="get_accounts_runtime_permission_denied_desc">Udafite uburenganzira Collect ntishobora kwemera konte. Wongere igihe uzaba wahawe ubwo burenganzira </string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -465,9 +463,7 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="change_view">Hindura uko bigaragara </string>
   <string name="show_sent_and_unsent_forms">Erekana Form zagiye na form zitagiye</string>
   <string name="show_unsent_forms">Erekana form zitagiye</string>
-  <string name="media_upload_error">Mugukurura amajwi ntaboneke mu bubiko, ntabwo abarimo ku: %1$s</string>
   <string name="send_in_progress">Ohereza ibyagaragajwe bitaremezwa, hita wongera ugerageze.</string>
-  <string name="odk_permissions_fail">ODK ihita yohereza ibitemejwe, izere neza niba wemeje ibisabwa byose.</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -698,24 +694,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <string name="no">Oya</string>
   <string name="moving_backwards_enabled_title">Gusubira inyuma byemejwe</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Ntabwo ushobora guhamaraga API. Niba ukurikize uko ahantu hateye, usabwa gusubira kumushinga wa readme cg somiwanjye</string>
-  <string name="no_google_account">Ntago wahisemo email</string>
-  <string name="invalid_sheet_id">Indangarupapurombare itemejwe: %1$s</string>
-  <string name="missing_submission_url">Haraburamo kohereza URL</string>
-  <string name="google_sheets_access_denied">Ntibikunda kuyinjiramo.Wareba niba nyiri form yaguhaye uburenganzira bwo kuyinjiramo no kuba haricyo wahindura.</string>
-  <string name="google_sheets_missing_columns">Haraburamo utuyira mu rupapurombare rukurikira: %1$s</string>
-  <string name="google_sheets_encrypted_message">Forms zifungurwa n\'ijambo banga ntago zemewe koherezwa muri Google Sheets</string>
-  <string name="missing_google_account_dialog_desc">Kugirango wohereza inyandiko shingiro ukoresheje urupapurombara rwa Google  ugomba kubanza gushyiramo email yawe muri Musakaza ry\'igenamiterere </string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Inzego ngenderwaho zitakunze mwiyoherezwa.</string>
-  <string name="no_columns_to_upload">Nta tuyira twabonetse mu iyoherezwa ryinyandiko shingiro.</string>
-  <string name="missing_google_account_dialog_title">Konti ya google ntiyahinduwe</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

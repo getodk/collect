@@ -27,12 +27,6 @@ public class InstanceUploaderUtilsTest {
                 is(getExpectedResultMsg()));
     }
 
-    @Test
-    public void doesUrlRefersToGoogleSheetsFileTest() {
-        assertThat(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://docs.google.com/spreadsheets/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"), is(true));
-        assertThat(InstanceUploaderUtils.doesUrlRefersToGoogleSheetsFile("https://drive.google.com/file/d/169qibpJCWgUy-SRtoyvKd1EKwV1nDfM0/edit#gid=773120038"), is(false));
-    }
-
     private InMemInstancesRepository getTestInstancesRepository() {
         InMemInstancesRepository instancesRepository = new InMemInstancesRepository();
 

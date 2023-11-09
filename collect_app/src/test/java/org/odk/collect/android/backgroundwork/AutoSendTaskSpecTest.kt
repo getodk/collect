@@ -1,6 +1,5 @@
 package org.odk.collect.android.backgroundwork
 
-import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
@@ -45,7 +44,6 @@ class AutoSendTaskSpecTest {
         CollectHelpers.overrideAppDependencyModule(object : AppDependencyModule() {
             override fun providesInstanceAutoSender(
                 autoSendSettingsProvider: AutoSendSettingsProvider?,
-                context: Context?,
                 notifier: Notifier?,
                 instancesDataService: InstancesDataService?,
                 propertyManager: PropertyManager?

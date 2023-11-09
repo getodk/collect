@@ -497,15 +497,6 @@
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Bewaar als concept</string>
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Niet instaat om API te bereiken. Als dit gebeurt in een local build, meer informatie in de readme van het project.</string>
-  <string name="no_google_account">Geen Google account geselecteerd!</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">Over</string>

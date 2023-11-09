@@ -33,7 +33,6 @@ the specific language governing permissions and limitations under the License.
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <!-- Normal permissions -->
@@ -132,9 +131,6 @@ the specific language governing permissions and limitations under the License.
             android:launchMode="singleTop" />
         <activity android:name=".activities.FormDownloadListActivity" />
         <activity android:name=".activities.DeleteSavedFormActivity" />
-        <activity
-            android:name=".gdrive.GoogleSheetsUploaderActivity"
-            android:configChanges="orientation|screenSize" />
         <activity
             android:name=".instancemanagement.send.InstanceUploaderListActivity"
             android:configChanges="orientation|screenSize" />

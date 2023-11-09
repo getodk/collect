@@ -419,17 +419,6 @@
   <string name="no">होइन</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="no_google_account">एउटा गुगल खाता छान्नुहोस् ! </string>
-  <string name="invalid_sheet_id">अमान्य शीट नम्बर 1 %1$s</string>
-  <string name="google_sheets_access_denied">अस्वीकृत । स्प्रेडशीट धनीबाट तपाईंले सम्पादन गर्ने अनुमति प्राप्त गर्नुपर्दछ । </string>
-  <string name="google_sheets_missing_columns">स्प्रेडशीटमा निम्न पंक्ती (column) हरु छैनन् : %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">जानकारी</string>

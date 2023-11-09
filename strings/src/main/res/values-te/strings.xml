@@ -45,8 +45,6 @@
   <string name="camera_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా కెమెరాను యాక్సెస్ చేయలేరు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <string name="record_audio_runtime_permission_denied_title">ఆడియో అనుమతి రికార్డ్ చేయండి</string>
   <string name="record_audio_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా మైక్రోఫోన్‌ను యాక్సెస్ చేయలేరు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
-  <string name="get_accounts_runtime_permission_denied_title">ఖాతాల అనుమతి పొందండి</string>
-  <string name="get_accounts_runtime_permission_denied_desc">ఈ అనుమతి లేకుండా ఖాతాలను యాక్సెస్ చేయదు. మీరు మంజూరు చేయడానికి సిద్ధంగా ఉన్నప్పుడు దయచేసి మళ్ళీ ప్రయత్నించండి.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -434,9 +432,7 @@
   <string name="change_view">వీక్షణను మార్చండి</string>
   <string name="show_sent_and_unsent_forms">పంపిన మరియు పంపని ఫారంలను చూపించు</string>
   <string name="show_unsent_forms">పంపని ఫారంలను చూపించు</string>
-  <string name="media_upload_error">ఉనికిలో లేని మీడియా ఫైల్‌ను అప్‌లోడ్ చేయడంలో విఫలమైంది:%1$s</string>
   <string name="send_in_progress">బ్యాక్ గ్రౌండ్ లో సెండ్ జరుగుతోంది , దయచేసి కాసేపట్లో మళ్ళీ ప్రయత్నించండి</string>
-  <string name="odk_permissions_fail">ODK ఆటోమాటిక్ గా పంపే అనుమతి లేదు, దయచేసి మీరు అవసరమైన అన్ని అనుమతులను మంజూరు చేశారని నిర్ధారించుకోండి</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -652,24 +648,6 @@
   <string name="no">లేదు</string>
   <string name="moving_backwards_enabled_title">వెనుకకు వెళ్ళటం ఆప్షన్ ప్రారంభించబడింది</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API కాల్స్  చేయడం సాధ్యం కాలేదు. మీరు లోకల్ బిల్డ్ నడుపుతున్నట్లయితే దయచేసి ప్రాజెక్ట్ readme ని సమీక్షించండి.</string>
-  <string name="no_google_account"> గూగుల్ ఖాతా ఎంచుకోబడలేదు</string>
-  <string name="invalid_sheet_id">చెల్లని షీట్ ఐడి:%1$s</string>
-  <string name="missing_submission_url">URL సబ్మిషన్  మర్చిపొయారు</string>
-  <string name="google_sheets_access_denied">అనుమతి లేదు. దయచేసి స్ప్రెడ్‌షీట్ యజమాని మీకు సవరణ అనుమతి ఇచ్చారని నిర్ధారించుకోండి.</string>
-  <string name="google_sheets_missing_columns">స్ప్రెడ్ షీట్ లో కింది కాలమ్స్ లేవు %1$s</string>
-  <string name="google_sheets_encrypted_message">గుప్తీకరించిన ఫారమ్‌లను గూగుల్ షీట్‌లకు సమర్పించలేము.</string>
-  <string name="missing_google_account_dialog_desc">గూగుల్ షీట్ల ద్వారా ఫారమ్‌లను సమర్పించడానికి మీరు మీ గూగుల్ ఖాతాను సర్వర్ సెట్టింగులలో సెటప్ చేయాలి.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">instance అప్‌లోడ్ రద్దు చేయబడింది</string>
-  <string name="no_columns_to_upload">అప్‌లోడ్ చేయడానికి ఫారమ్‌లో కాలమ్ లు ఏవీ కనుగొనబడలేదు</string>
-  <string name="missing_google_account_dialog_title">గూగుల్ ఖాతా సెట్ చేయబడలేదు</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

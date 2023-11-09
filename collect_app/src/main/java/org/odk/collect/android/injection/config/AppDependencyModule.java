@@ -13,9 +13,6 @@ import android.webkit.MimeTypeMap;
 
 import androidx.work.WorkManager;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 
 import org.javarosa.core.reference.ReferenceManager;
@@ -59,9 +56,6 @@ import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
-import org.odk.collect.android.gdrive.GoogleAccountPicker;
-import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher;
@@ -364,18 +358,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public GoogleApiProvider providesGoogleApiProvider(Context context) {
-        return new GoogleApiProvider(context);
-    }
-
-    @Provides
-    public GoogleAccountPicker providesGoogleAccountPicker(Context context) {
-        return new GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential
-                .usingOAuth2(context, singletonList(DriveScopes.DRIVE))
-                .setBackOff(new ExponentialBackOff()));
-    }
-
-    @Provides
     ScreenUtils providesScreenUtils(Context context) {
         return new ScreenUtils(context);
     }
@@ -528,9 +510,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Context context, Notifier notifier, InstancesDataService instancesDataService, PropertyManager propertyManager) {
+    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Notifier notifier, InstancesDataService instancesDataService, PropertyManager propertyManager) {
         InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(autoSendSettingsProvider);
-        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, instancesDataService, propertyManager);
+        return new InstanceAutoSender(instanceAutoSendFetcher, notifier, instancesDataService, propertyManager);
     }
 
     @Provides

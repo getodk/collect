@@ -31,7 +31,6 @@ import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLoc
 public final class InstanceUploaderUtils {
 
     public static final String DEFAULT_SUCCESSFUL_TEXT = "full submission upload was successful!";
-    public static final String SPREADSHEET_UPLOADED_TO_GOOGLE_DRIVE = "Failed. Records can only be submitted to spreadsheets created in Google Sheets. The submission spreadsheet specified was uploaded to Google Drive.";
 
     private InstanceUploaderUtils() {
     }
@@ -80,13 +79,5 @@ public final class InstanceUploaderUtils {
             text = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.success);
         }
         return text;
-    }
-
-    // If a spreadsheet is created using Excel (or a similar tool) and uploaded to GD it contains:
-    // drive.google.com/file/d/ instead of docs.google.com/spreadsheets/d/
-    // Such a file can't be used. We can write data only to documents generated via Google Sheets
-    // https://forum.getodk.org/t/error-400-bad-request-failed-precondition-on-collect-to-google-sheets/19801/5?u=grzesiek2010
-    public static boolean doesUrlRefersToGoogleSheetsFile(String url) {
-        return !url.contains("drive.google.com/file/d/");
     }
 }

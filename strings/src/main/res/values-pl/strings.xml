@@ -45,8 +45,6 @@
   <string name="camera_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do kamery. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <string name="record_audio_runtime_permission_denied_title">Uprawnienia do nagrywania dźwięku</string>
   <string name="record_audio_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do mikrofonu. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Uzyskaj uprawnienia do kont</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Bez tych uprawnieć Collect nie ma dostępu do kont. Spróbuj ponownie, kiedy uprawnienia zostaną nadane.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -437,9 +435,7 @@
   <string name="change_view">Zmień Widok</string>
   <string name="show_sent_and_unsent_forms">Pokaż Wysłane i Nie Wysłane Formularze</string>
   <string name="show_unsent_forms">Pokaż Nie Wysłane Formularze</string>
-  <string name="media_upload_error">Nie można załadować multimediów, plik nie istnieje: %1$s</string>
   <string name="send_in_progress">Trwa wysyłka w tle, spróbuj wkrótce ponownie</string>
-  <string name="odk_permissions_fail">Błąd uprawnień automatycznego wysyłania ODK. Upewnij się, że nadałeś wszystkie wymagane uprawnienia</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -647,24 +643,6 @@
   <string name="no">Nie</string>
   <string name="moving_backwards_enabled_title">Cofanie się jest możliwe</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API calls niemożliwe do wykonania. Jeśli uruchamiasz lokalny build, zapoznaj się z readme projektu.</string>
-  <string name="no_google_account">Nie wybrałeś konta Google!</string>
-  <string name="invalid_sheet_id">niepoprawne id arkusza: %1$s</string>
-  <string name="missing_submission_url">Brak URL przesyłania</string>
-  <string name="google_sheets_access_denied">Odmowa dostępu. Upewnij się, że właścicieil arkusza nadał Ci uprawnienia do edytowania.</string>
-  <string name="google_sheets_missing_columns">W arkuszu kalkulacyjnym brak następujących kolumn: %1$s</string>
-  <string name="google_sheets_encrypted_message">Zaszyfrowane formularze nie mogą być przesłane do Google Sheets.</string>
-  <string name="missing_google_account_dialog_desc">By przesłać formularz poprzez Arkusze Google, zapisz swoje konto Google w ustawieniach serwera.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Przesyłanie zostało anulowane</string>
-  <string name="no_columns_to_upload">W formularzu do przesłania nie znaleziono żadnych kolumn.</string>
-  <string name="missing_google_account_dialog_title">Nie wybrano konta Google</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

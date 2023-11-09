@@ -45,8 +45,6 @@
   <string name="camera_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الكاميرا. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <string name="record_audio_runtime_permission_denied_title">إذن تسجيل الصوت</string>
   <string name="record_audio_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الميكروفون. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
-  <string name="get_accounts_runtime_permission_denied_title">الحصول على إذن الحسابات</string>
-  <string name="get_accounts_runtime_permission_denied_desc">بدون هذا الإذن لا يمكن لبرنامج ODK Collect الوصول إلى الحسابات. يرجى المحاولة مرة أخرى عندما تكون مستعدًا لمنحه.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -474,9 +472,7 @@
   <string name="change_view">تغيير المشهد</string>
   <string name="show_sent_and_unsent_forms">عرض الاستمارات المرسلة وغير المرسلة</string>
   <string name="show_unsent_forms">عرض الاستمارات الغير مرسلة</string>
-  <string name="media_upload_error">فشل في تحميل ملف الوسائط المتعددة الغير موجود: %1$s</string>
   <string name="send_in_progress">خلفية الارسال تعمل. يرجى المحاولة مرة أخرى في وقت قريب</string>
-  <string name="odk_permissions_fail">فشل إذن ODK للإرسال التلقائي، يرجى التأكد من منحك جميع الأذونات المطلوبة</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -701,24 +697,6 @@
   <string name="no">لا</string>
   <string name="moving_backwards_enabled_title">تم تمكين التحرك إلى الوراء</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">غير قادر على تنفيذ استدعاء API. إن كنت تشغل نسخة خاصة، الرجاء مراجعة الوثائق الخاصة بالمشروع.</string>
-  <string name="no_google_account">لم يتم اختيار حساب جوجل!</string>
-  <string name="invalid_sheet_id">رقم تعرفة الصفحة غير صحيح: %1$s</string>
-  <string name="missing_submission_url">رابط الإرسال مفقود</string>
-  <string name="google_sheets_access_denied">تم رفض الوصول. الرجاء التأكد من منح مالك الجدول إذن التعديل لك.</string>
-  <string name="google_sheets_missing_columns">الأعمدة التالية مفقودة من الجدول: %1$s </string>
-  <string name="google_sheets_encrypted_message">لا يمكن إرسال الاستمارات المشفرة إلى أوراق Google Sheets.</string>
-  <string name="missing_google_account_dialog_desc">لإرسال الاستمارات عبر Google Sheets، يجب عليك إعداد حساب Google الخاص بك في إعدادات الخادم.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">تم إلغاء تحميل النموذج</string>
-  <string name="no_columns_to_upload">لا توجد أعمدة في الاستمارة للتحميل.</string>
-  <string name="missing_google_account_dialog_title">حساب Google لم يحدد</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

@@ -463,18 +463,6 @@
   <string name="no">नहीं</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API कॉल करने में असमर्थ यदि आप स्थानीय बिल्ड चला रहे हैं, तो कृपया  परियोजना readme की समीक्षा करें।</string>
-  <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
-  <string name="invalid_sheet_id">अमान्य शीट आईडी: %1$s</string>
-  <string name="google_sheets_access_denied">पहुंच अस्वीकृत। कृपया सुनिश्चित करें कि स्प्रैडशीट ओनर ने आपको संपादन अधिकार दिए हैं।</string>
-  <string name="google_sheets_missing_columns">स्प्रेडशीट में निम्न कॉलम लापता हैं: %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">बारे में </string>

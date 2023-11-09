@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder à la caméra. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
   <string name="record_audio_runtime_permission_denied_title">Autorisation d\'enregistrement audio</string>
   <string name="record_audio_runtime_permission_denied_desc">Sans cette permission, Collect ne peut pas accéder au microphone. Veuillez réessayer lorsque vous êtes prêt à l\'accorder.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Obtenir la permission des comptes</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Sans cette autorisation, Collect ne peut pas accéder aux comptes. Veuillez réessayer lorsque vous êtes prêt à l’accorder.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -521,9 +519,7 @@
   <string name="change_view">Changer l\'aspect de l\'affichage</string>
   <string name="show_sent_and_unsent_forms">Formulaires envoyés et non envoyés</string>
   <string name="show_unsent_forms">Que des formulaires non envoyés</string>
-  <string name="media_upload_error">Le téléversement du fichier média inexistant a échoué : %1$s</string>
   <string name="send_in_progress">L\'envoi s\'exécute en tâche de fond, essayer plus tard.</string>
-  <string name="odk_permissions_fail">Échec de l’autorisation d’envoi automatique ODK, veuillez vous assurer que vous avez accordé toutes les autorisations requises.</string>
   <string name="forms_upload_succeeded">Succès de l\'envoi des formulaires.</string>
   <string name="forms_upload_failed">Échec de l\'envoi des formulaires.</string>
   <string name="all_uploads_succeeded">Succès de tous les envois !</string>
@@ -791,25 +787,6 @@
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Enregistrer comme ébauche</string>
   <string name="save_mid_summary">Icône d\'enregistrement dans la barre supérieure et bouton \"Enregistrer comme ébauche\" en quittant le formulaire</string>
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Impossible de faire des appels API. Si vous exécutez une compilation locale, veuillez lire le fichier \"Readme\" du projet.</string>
-  <string name="no_google_account">Pas de compte Google choisi!</string>
-  <string name="google_set_account">Vous avez sélectionné Google Sheets comme serveur, merci de choisir le compte Google correspondant dans les Paramètres avant de poursuivre.</string>
-  <string name="invalid_sheet_id">Identifiant %1$s du tableur n\'est pas valable.</string>
-  <string name="missing_submission_url">URL de soumission manquante</string>
-  <string name="google_sheets_access_denied">Accès refusé. Assurez-vous que le propriétaire de la feuille de calcul vous a accordé la permission de modification.</string>
-  <string name="google_sheets_missing_columns">La feuille de calcul manque des colonnes suivantes : %1$s</string>
-  <string name="google_sheets_encrypted_message">Les formulaires cryptés ne peuvent pas être envoyés à Google Sheets.</string>
-  <string name="missing_google_account_dialog_desc">Pour envoyer des formulaires via Google Sheets, vous devez configurer votre compte Google dans les paramètres du serveur.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Instance de téléchargement annulée</string>
-  <string name="no_columns_to_upload">Aucune colonne retrouvée dans le formulaire à téléverser.</string>
-  <string name="missing_google_account_dialog_title">Compte Google non sélectionné</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

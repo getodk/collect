@@ -380,14 +380,6 @@
   <string name="moving_backwards_enabled_title">ወደኋላ መሄድ ተመርጧል</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-    <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="no_google_account">ምንም የ Google መለያ አልተመረጠም!</string>
-    <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">ስለ</string>

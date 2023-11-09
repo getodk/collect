@@ -46,8 +46,6 @@
   <string name="camera_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kutumia kamera. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <string name="record_audio_runtime_permission_denied_title">Ruhusa ya kurekodi sauti</string>
   <string name="record_audio_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kutumia kinakili sauti. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Pata ruhusa ya akaunti</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Bila hii ruhusa Collect haiwezi kufungua akaunti. Tafadhali jaribu tena ukiwa tayari kutoa ruhusa.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -399,9 +397,7 @@
   <string name="change_view">Badili muonekano</string>
   <string name="show_sent_and_unsent_forms">Onyesha fomu zilizotumwa na zisizotumwa </string>
   <string name="show_unsent_forms">Onyesha fomu zisizotumwa</string>
-  <string name="media_upload_error">Imeshindwa kupakia mafaili ya midia ambayo hayapo%1$s</string>
   <string name="send_in_progress">Utumaji unaendelea kwa nyuma, jaribu tena baada ya muda mfupi</string>
-  <string name="odk_permissions_fail">Uwezo wa utumaji wenyewe wa ODK umeshindikana kwa kukosa ruhusa, tafadhali hakikisha umeipa ruhusa zote zinazohitajika</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -612,23 +608,6 @@
   <string name="no">Hapana</string>
   <string name="moving_backwards_enabled_title">Kusonga nyuma kumewezeshwa</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Haiwezi kutengeneza API za kuita. Kama umejitengenezea ODK, tafadhali pitia mradi upya.</string>
-  <string name="no_google_account">Hakuna akaunti ya Google Iliyochaguliwa!</string>
-  <string name="invalid_sheet_id">KItambulisho cha karatasi ni batilii%1$s</string>
-  <string name="missing_submission_url">Wasilisho lililokosekana URL</string>
-  <string name="google_sheets_access_denied">Ruhusa imekatazwa. Tafadhali hakikisha mwenye programu ya lahajedwali \"spreadsheet\" amekuruhusu kufanya mabadiliko.</string>
-  <string name="google_sheets_missing_columns">Lahajedwali \"Spreadsheet\" zinakosa safu zifuatazo: %1$s</string>
-  <string name="missing_google_account_dialog_desc">Kuwasilisha  fomu kupitia karatasi ya Google , unatakiwa kurekebisha  akaunti yako ya Google kwenye mpangilio wa seva. </string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Mfano wa kupakia umesitishwa</string>
-  <string name="no_columns_to_upload">Hakuna safuwima zilizopatikana katika fomu za kupakia.</string>
-  <string name="missing_google_account_dialog_title">Akaunti ya Google haijawekwa sawa</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

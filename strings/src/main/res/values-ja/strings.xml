@@ -45,8 +45,6 @@
   <string name="camera_runtime_permission_denied_desc">このアクセス許可がないと、Collect はカメラにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <string name="record_audio_runtime_permission_denied_title">オーディオ録音アクセス許可</string>
   <string name="record_audio_runtime_permission_denied_desc">このアクセス許可がないと、Collect はマイクにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
-  <string name="get_accounts_runtime_permission_denied_title">アカウントのアクセス許可を取得</string>
-  <string name="get_accounts_runtime_permission_denied_desc">このアクセス許可がないと、Collect はアカウントにアクセスできません。 付与する準備ができたら、もう一度お試しください。</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -459,9 +457,7 @@
   <string name="change_view">ビューを変更</string>
   <string name="show_sent_and_unsent_forms">送信済および未送信のフォームを表示</string>
   <string name="show_unsent_forms">未送信のフォームを表示</string>
-  <string name="media_upload_error">メディアファイルが存在しないため、アップロードできませんでした: %1$s</string>
   <string name="send_in_progress">バックグラウンド送信が実行中です。しばらくして再度お試しください</string>
-  <string name="odk_permissions_fail">ODK 自動送信が失敗しました。必要なアクセス許可がすべて付与されていることを確認してください</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -686,24 +682,6 @@
   <string name="no">いいえ</string>
   <string name="moving_backwards_enabled_title">後ろへの移動は有効です</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API 呼び出しを行うことができません。 ローカルビルドを実行している場合は、プロジェクトのreadmeを確認してください。</string>
-  <string name="no_google_account">Google アカウントが選択されていません!</string>
-  <string name="invalid_sheet_id">無効なシート ID: %1$s</string>
-  <string name="missing_submission_url">送信 URL が見つかりません</string>
-  <string name="google_sheets_access_denied">アクセスが拒否されました。スプレッドシートの所有者がアクセス許可を与えていることを確認してください。</string>
-  <string name="google_sheets_missing_columns">スプレッドシートの次の列が見つかりません: %1$s</string>
-  <string name="google_sheets_encrypted_message">暗号化されたフォームは Google スプレッドに送信できません。</string>
-  <string name="missing_google_account_dialog_desc">Google スプレッドでフォームを送信するには、サーバー設定で Google アカウントを設定する必要があります。</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">インスタンスのアップロードがキャンセルされました</string>
-  <string name="no_columns_to_upload">アップロードするフォームにカラムが見つかりません。</string>
-  <string name="missing_google_account_dialog_title">Google アカウントが設定されていません</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

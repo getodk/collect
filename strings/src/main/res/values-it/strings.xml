@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può usare la fotocamera. Prova di nuovo quando hai autorizzato l\'uso della fotocamera</string>
   <string name="record_audio_runtime_permission_denied_title">Autorizzazione uso microfono</string>
   <string name="record_audio_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può registrare i suoni. Prova di nuovo quando hai autorizzato l\'uso del microfono</string>
-  <string name="get_accounts_runtime_permission_denied_title">Autorizzazione uso account</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può accedere al tuo account. Prova di nuovo quando hai autorizzato l\'accesso al tuo account</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -517,9 +515,7 @@
   <string name="change_view">Cambia Vista</string>
   <string name="show_sent_and_unsent_forms">Mostra Moduli Inviati e Non Inviati</string>
   <string name="show_unsent_forms">Mostra Moduli Non Inviati</string>
-  <string name="media_upload_error">Errore! il file di supporto da caricare non esiste: %1$s</string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
-  <string name="odk_permissions_fail">Errore auto invio ODK, perpiacere assicurati di avere tutti i permessi necessari</string>
   <string name="forms_upload_succeeded">Caricamento Formulario riuscito</string>
   <string name="forms_upload_failed">Caricamento Formulario fallito</string>
   <string name="all_uploads_succeeded">Tutti i caricamenti sono riusciti!</string>
@@ -787,25 +783,6 @@
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Salva come bozza</string>
   <string name="save_mid_summary">Icona Salva nella barra superiore e pulsante \"Salva come bozza\" all\'uscita dal modulo</string>
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Impossibile effettuare la chiamata API. Se stai eseguendo una build locale, per cortesia controllare il readme del progetto.</string>
-  <string name="no_google_account">Nessun Account Google selezionato!</string>
-  <string name="google_set_account">Hai selezionato Google sheets come server, per favore seleziona un account Google corrispondente in Impostazioni prima di continuare</string>
-  <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
-  <string name="missing_submission_url">Sottomissione URL mancante</string>
-  <string name="google_sheets_access_denied">Accesso negato. Per favore, verifica che il proprietario del documento ti abbia dato i permessi di modifica.</string>
-  <string name="google_sheets_missing_columns">Il foglio è mancante delle seguenti colonne: %1$s</string>
-  <string name="google_sheets_encrypted_message">I moduli crittografati non possono essere inviati a Fogli Google.</string>
-  <string name="missing_google_account_dialog_desc">Per inviare formulari tramite Fogli Google devi configurare il tuo account Google nelle impostazioni del server.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Caricamento dell\'istanza annullato</string>
-  <string name="no_columns_to_upload">Nessuna colonna nel file caricato</string>
-  <string name="missing_google_account_dialog_title">Account Google non specificato</string>
   <!--##############################################
      # ABOUT
      ##############################################-->
