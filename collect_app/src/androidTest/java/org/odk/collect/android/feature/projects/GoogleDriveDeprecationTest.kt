@@ -1,5 +1,7 @@
 package org.odk.collect.android.feature.projects
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
@@ -8,6 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.activities.WebViewActivity
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
@@ -16,6 +19,7 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.Project
+import org.odk.collect.settings.keys.MetaKeys
 
 class GoogleDriveDeprecationTest {
     private val rule = CollectTestRule()
@@ -47,21 +51,31 @@ class GoogleDriveDeprecationTest {
 
     @Test
     fun bannerIsVisibleInGoogleDriveProjects() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
+        val newProject = CollectHelpers.addProject(Project.New("Old GD project", "A", "#ffffff"))
+        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
+        component
+            .settingsProvider()
+            .getMetaSettings()
+            .save(MetaKeys.getKeyIsOldGDProject(newProject.uuid), true)
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
+            .selectProject("Old GD project")
             .assertText(org.odk.collect.strings.R.string.google_drive_deprecation_message)
     }
 
     @Test
     fun forumThreadIsOpenedAfterClickingLearnMore() {
-        CollectHelpers.addGDProject(gdProject1, "steph@curry.basket", testDependencies)
+        val newProject = CollectHelpers.addProject(Project.New("Old GD project", "A", "#ffffff"))
+        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
+        component
+            .settingsProvider()
+            .getMetaSettings()
+            .save(MetaKeys.getKeyIsOldGDProject(newProject.uuid), true)
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
-            .selectProject(gdProject1.name)
+            .selectProject("Old GD project")
             .clickOnString(org.odk.collect.strings.R.string.learn_more_button_text)
 
         intended(
