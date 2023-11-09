@@ -2,8 +2,6 @@ package org.odk.collect.android.instancemanagement.autosend
 
 import android.content.Context
 import org.odk.collect.android.formmanagement.InstancesDataService
-import org.odk.collect.android.gdrive.GoogleAccountsManager
-import org.odk.collect.android.gdrive.GoogleApiProvider
 import org.odk.collect.android.instancemanagement.InstanceSubmitter
 import org.odk.collect.android.instancemanagement.SubmitException
 import org.odk.collect.android.notifications.Notifier
@@ -11,24 +9,17 @@ import org.odk.collect.android.projects.ProjectDependencyProvider
 import org.odk.collect.android.upload.FormUploadException
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.metadata.PropertyManager
-import org.odk.collect.permissions.PermissionsProvider
 
 class InstanceAutoSender(
     private val instanceAutoSendFetcher: InstanceAutoSendFetcher,
     private val context: Context,
     private val notifier: Notifier,
-    private val googleAccountsManager: GoogleAccountsManager,
-    private val googleApiProvider: GoogleApiProvider,
-    private val permissionsProvider: PermissionsProvider,
     private val instancesDataService: InstancesDataService,
     private val propertyManager: PropertyManager
 ) {
     fun autoSendInstances(projectDependencyProvider: ProjectDependencyProvider): Boolean {
         val instanceSubmitter = InstanceSubmitter(
             projectDependencyProvider.formsRepository,
-            googleAccountsManager,
-            googleApiProvider,
-            permissionsProvider,
             projectDependencyProvider.generalSettings,
             propertyManager
         )
