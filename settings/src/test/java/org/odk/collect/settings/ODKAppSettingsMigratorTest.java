@@ -8,6 +8,7 @@ import static org.odk.collect.settings.support.SettingsUtils.initSettings;
 import static java.util.Arrays.asList;
 
 import org.junit.Test;
+import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.shared.settings.InMemSettings;
 import org.odk.collect.shared.settings.Settings;
@@ -70,7 +71,7 @@ public class ODKAppSettingsMigratorTest {
     public void shouldMigrateOsmMapSettings() {
         initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_streets");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "osm");
+        assertSettings(unprotectedSettings, "basemap_source", ProjectKeys.BASEMAP_SOURCE_OSM);
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_usgs_topo");
         runMigrations();
@@ -86,7 +87,7 @@ public class ODKAppSettingsMigratorTest {
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_stamen_terrain");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "osm");
+        assertSettings(unprotectedSettings, "basemap_source", ProjectKeys.BASEMAP_SOURCE_OSM);
 
         initSettings(unprotectedSettings, "map_sdk_behavior", "osmdroid", "map_basemap_behavior", "openmap_cartodb_positron");
         runMigrations();
@@ -386,7 +387,7 @@ public class ODKAppSettingsMigratorTest {
     public void migratesStamenMapsToOSM() {
         initSettings(unprotectedSettings, "basemap_source", "stamen");
         runMigrations();
-        assertSettings(unprotectedSettings, "basemap_source", "osm");
+        assertSettings(unprotectedSettings, "basemap_source", ProjectKeys.BASEMAP_SOURCE_OSM);
     }
 
     private void runMigrations() {

@@ -130,7 +130,7 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
 
                 moveKey("default_completed").toPreferences(protectedSettings),
 
-                translateValue("stamen").toValue("osm").forKey(KEY_BASEMAP_SOURCE)
+                translateValue("stamen").toValue(BASEMAP_SOURCE_OSM).forKey(KEY_BASEMAP_SOURCE)
         );
     }
 
