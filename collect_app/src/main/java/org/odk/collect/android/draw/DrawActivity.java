@@ -22,15 +22,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AlertDialog;
-import androidx.cardview.widget.CardView;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -39,17 +30,25 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.collect.ImmutableList;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
@@ -92,6 +91,9 @@ public class DrawActivity extends LocalizedActivity {
 
     @Inject
     PenColorPickerViewModel.Factory factory;
+
+    @Inject
+    Scheduler scheduler;
 
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
@@ -252,13 +254,22 @@ public class DrawActivity extends LocalizedActivity {
     }
 
     private void saveAndClose() {
-        try {
-            saveFile(output);
-            setResult(Activity.RESULT_OK);
-        } catch (FileNotFoundException e) {
-            setResult(Activity.RESULT_CANCELED);
-        }
-        this.finish();
+        scheduler.immediate(() -> {
+            try {
+                saveFile(output);
+                return true;
+            } catch (FileNotFoundException e) {
+                return false;
+            }
+        }, success -> {
+            if (success) {
+                setResult(Activity.RESULT_OK);
+            } else {
+                setResult(Activity.RESULT_CANCELED);
+            }
+
+            finish();
+        });
     }
 
     private void saveFile(File f) throws FileNotFoundException {

@@ -169,7 +169,6 @@ public class Collect extends Application implements
                     .detectAll()
                     .permitDiskReads()  // shared preferences are being read on main thread (`GetAndSubmitFormTest`)
                     .permitDiskWrites() // files are being created on the fly (`GetAndSubmitFormTest`)
-                    .permitCustomSlowCalls() // bitmaps are being compressed (`SignatureWidgetTest`)
                     .penaltyDeath();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
