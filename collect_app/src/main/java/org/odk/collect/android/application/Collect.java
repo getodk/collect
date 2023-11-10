@@ -19,6 +19,7 @@ import static org.odk.collect.settings.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FI
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
@@ -164,14 +165,18 @@ public class Collect extends Application implements
      */
     private void setupStrictMode() {
         if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            StrictMode.ThreadPolicy.Builder policyBuilder = new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
-                    .permitDiskReads()  // shared preferences are being read on main thread
-                    .penaltyLog()
-                    .build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
+                    .permitDiskReads()  // shared preferences are being read on main thread (`GetAndSubmitFormTest`)
+                    .permitDiskWrites() // files are being created on the fly (`GetAndSubmitFormTest`)
+                    .permitCustomSlowCalls() // bitmaps are being compressed (`SignatureWidgetTest`)
+                    .penaltyDeath();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                policyBuilder.permitUnbufferedIo(); // `ObjectInputStream#readObject` calls
+            }
+
+            StrictMode.setThreadPolicy(policyBuilder
                     .build());
         }
     }
