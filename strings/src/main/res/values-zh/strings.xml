@@ -590,8 +590,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">有限用户界面</string>
   <string name="server_preferences">服务器设置</string>
-  <!--Label for server type setting-->
-  <string name="type">类型</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">服務器 URL</string>

@@ -561,8 +561,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">Настройки сервера</string>
-  <!--Label for server type setting-->
-  <string name="type">Платформа</string>
   <string name="server_url">Сервер</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Адрес сервера</string>

@@ -362,8 +362,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">Parametrat e serverit</string>
-  <!--Label for server type setting-->
-  <string name="type">Tipi</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">URL e serverit</string>

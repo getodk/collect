@@ -623,8 +623,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">Limitar interface de usuário</string>
   <string name="server_preferences">Servidor</string>
-  <!--Label for server type setting-->
-  <string name="type">Tipo</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Servidor URL</string>

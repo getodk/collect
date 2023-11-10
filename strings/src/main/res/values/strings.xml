@@ -770,7 +770,6 @@
 
     <string name="server_preferences">Server Settings</string>
     <!-- Label for server type setting -->
-    <string name="type">Type</string>
     <string name="server_url">URL</string>
     <!-- Title of dialog for configuring server URL -->
     <string name="change_server_url">Server URL</string>

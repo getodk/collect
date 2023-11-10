@@ -343,8 +343,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">सर्व्हर सेटिंग्ज</string>
-  <!--Label for server type setting-->
-  <string name="type">प्रकार</string>
   <string name="server_url">यु र एल </string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">सर्व्हर युरएल</string>

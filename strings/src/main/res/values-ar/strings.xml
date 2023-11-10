@@ -549,8 +549,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">إعدادات الخادم</string>
-  <!--Label for server type setting-->
-  <string name="type">النوع</string>
   <string name="server_url">الرابط</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">رابط الخادم</string>

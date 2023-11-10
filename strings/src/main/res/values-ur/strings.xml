@@ -432,8 +432,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">سرور کی ترتیب</string>
-  <!--Label for server type setting-->
-  <string name="type">قسم</string>
   <string name="server_url">یو آر ایل</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">سروریو آر ایل</string>

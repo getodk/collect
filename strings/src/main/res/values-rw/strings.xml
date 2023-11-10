@@ -545,8 +545,6 @@ N\'ukomea guhura n\'iki kibazo, wakigeza kuwa gusabye gukusanya  amakuru.</strin
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">Igenamiterere ya musakaza</string>
-  <!--Label for server type setting-->
-  <string name="type">Ubwoko</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Server URL</string>

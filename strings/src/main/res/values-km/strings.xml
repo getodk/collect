@@ -474,8 +474,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">ការកំណត់ម៉ាស៊ីនមេ</string>
-  <!--Label for server type setting-->
-  <string name="type">ប្រភេទ</string>
   <string name="server_url">អាសយដ្ឋាន</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">URL ម៉ាស៊ីន​បម្រើ</string>

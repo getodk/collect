@@ -625,8 +625,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">Limiter l\'interface utilisateur</string>
   <string name="server_preferences">Serveur</string>
-  <!--Label for server type setting-->
-  <string name="type">Type</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">URL du serveur</string>

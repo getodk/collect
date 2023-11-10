@@ -350,8 +350,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">सर्वर सेटिंग</string>
-  <!--Label for server type setting-->
-  <string name="type">प्रकार</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">सर्वर URL</string>

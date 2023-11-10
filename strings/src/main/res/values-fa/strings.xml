@@ -548,8 +548,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">رابط کاربری را محدود کنید</string>
   <string name="server_preferences">تنظیمات سرور</string>
-  <!--Label for server type setting-->
-  <string name="type">نوع</string>
   <string name="server_url">آدرس وب سایت </string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">سرور آدرس وب سایت</string>
