@@ -762,7 +762,6 @@ class FormUriActivityTest {
         assertStartSavedFormIntent(null, instance.dbId, true)
     }
 
-    // TODO: Replace the explicit FormUriActivity intent with an implicit one Intent.ACTION_EDIT once it's possible https://github.com/android/android-test/issues/496
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
         Intent(context, FormUriActivity::class.java).apply {
             data = if (projectId == null) {
