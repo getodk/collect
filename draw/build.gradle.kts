@@ -1,0 +1,57 @@
+import dependencies.Dependencies
+import dependencies.Versions
+
+plugins {
+    id("com.android.library")
+    id("org.jetbrains.kotlin.android")
+}
+
+apply(from = "../config/quality.gradle")
+
+android {
+    namespace = "org.odk.collect.draw"
+    compileSdk = Versions.android_compile_sdk
+
+    defaultConfig {
+        minSdk = Versions.android_min_sdk
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    implementation(project(":shared"))
+    implementation(project(":androidshared"))
+    implementation(project(":strings"))
+
+    implementation(Dependencies.rarepebble_colorpicker)
+    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
+    implementation(Dependencies.androidx_lifecycle_viewmodel_ktx)
+    implementation(Dependencies.androidx_fragment_ktx)
+    implementation(Dependencies.android_material)
+
+    debugImplementation(project(":fragmentstest"))
+
+    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(Dependencies.androidx_test_espresso_core)
+    testImplementation(Dependencies.robolectric)
+}

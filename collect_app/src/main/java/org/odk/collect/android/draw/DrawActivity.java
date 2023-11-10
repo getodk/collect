@@ -31,9 +31,12 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,7 +51,12 @@ import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.draw.PenColorPickerDialog;
+import org.odk.collect.draw.PenColorPickerViewModel;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
@@ -90,10 +98,10 @@ public class DrawActivity extends LocalizedActivity {
     private AlertDialog alertDialog;
 
     @Inject
-    PenColorPickerViewModel.Factory factory;
+    Scheduler scheduler;
 
     @Inject
-    Scheduler scheduler;
+    SettingsProvider settingsProvider;
 
     private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
@@ -117,9 +125,22 @@ public class DrawActivity extends LocalizedActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        DaggerUtils.getComponent(this).inject(this);
+
+        PenColorPickerViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
+                return (T) new PenColorPickerViewModel(settingsProvider.getMetaSettings(), MetaKeys.LAST_USED_PEN_COLOR);
+            }
+        }).get(PenColorPickerViewModel.class);
+
+        this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
+                .forClass(PenColorPickerDialog.class, () -> new PenColorPickerDialog(viewModel))
+                .build());
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.draw_layout);
-        DaggerUtils.getComponent(this).inject(this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -241,7 +262,6 @@ public class DrawActivity extends LocalizedActivity {
         drawView = findViewById(R.id.drawView);
         drawView.setupView(OPTION_SIGNATURE.equals(loadOption));
 
-        PenColorPickerViewModel viewModel = new ViewModelProvider(this, factory).get(PenColorPickerViewModel.class);
         viewModel.getPenColor().observe(this, penColor -> {
             if (OPTION_SIGNATURE.equals(loadOption) && viewModel.isDefaultValue()) {
                 drawView.setColor(Color.BLACK);
