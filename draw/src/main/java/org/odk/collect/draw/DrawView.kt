@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.android.draw
+package org.odk.collect.draw
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -24,7 +24,6 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import java.io.File
 
@@ -109,6 +108,11 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         canvas.drawPath(currentPath, paint)
     }
 
+    fun getImagePath(): String {
+        val externalFilesDir = context.getExternalFilesDir("")
+        return externalFilesDir!!.absolutePath + File.separator + ".cache" + File.separator + "tmp.jpg"
+    }
+
     private fun touchStart(x: Float, y: Float) {
         currentPath.reset()
         currentPath.moveTo(x, y)
@@ -158,7 +162,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private fun resetImage(w: Int, h: Int) {
-        val backgroundBitmapFile = File(StoragePathProvider().getTmpImageFilePath())
+        val backgroundBitmapFile = File(getImagePath())
         if (backgroundBitmapFile.exists()) {
             bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!.copy(Bitmap.Config.ARGB_8888, true)
             canvas = Canvas(bitmap)

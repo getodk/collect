@@ -46,13 +46,13 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.IconMenuListAdapter;
 import org.odk.collect.android.adapters.model.IconMenuItem;
 import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.async.Scheduler;
+import org.odk.collect.draw.DrawView;
 import org.odk.collect.draw.PenColorPickerDialog;
 import org.odk.collect.draw.PenColorPickerViewModel;
 import org.odk.collect.settings.SettingsProvider;
@@ -145,6 +145,8 @@ public class DrawActivity extends LocalizedActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        drawView = findViewById(R.id.drawView);
+
         fabActions = findViewById(R.id.fab_actions);
         final FloatingActionButton fabSetColor = findViewById(R.id.fab_set_color);
         final CardView cardViewSetColor = findViewById(R.id.cv_set_color);
@@ -199,13 +201,13 @@ public class DrawActivity extends LocalizedActivity {
         fabSetColor.setOnClickListener(this::setColor);
 
         Bundle extras = getIntent().getExtras();
-        StoragePathProvider storagePathProvider = new StoragePathProvider();
+        String imagePath = drawView.getImagePath();
         if (extras == null) {
             loadOption = OPTION_DRAW;
             refImage = null;
-            savepointImage = new File(storagePathProvider.getTmpImageFilePath());
+            savepointImage = new File(imagePath);
             savepointImage.delete();
-            output = new File(storagePathProvider.getTmpImageFilePath());
+            output = new File(imagePath);
         } else {
             if (extras.getInt(SCREEN_ORIENTATION) == 1) {
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -227,7 +229,7 @@ public class DrawActivity extends LocalizedActivity {
                     ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
                 }
             } else {
-                savepointImage = new File(storagePathProvider.getTmpImageFilePath());
+                savepointImage = new File(imagePath);
                 savepointImage.delete();
                 if (refImage != null && refImage.exists()) {
                     ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
@@ -237,7 +239,7 @@ public class DrawActivity extends LocalizedActivity {
             if (uri != null) {
                 output = new File(uri.getPath());
             } else {
-                output = new File(storagePathProvider.getTmpImageFilePath());
+                output = new File(imagePath);
             }
         }
 
@@ -259,7 +261,6 @@ public class DrawActivity extends LocalizedActivity {
                     getString(org.odk.collect.strings.R.string.draw_image));
         }
 
-        drawView = findViewById(R.id.drawView);
         drawView.setupView(OPTION_SIGNATURE.equals(loadOption));
 
         viewModel.getPenColor().observe(this, penColor -> {
