@@ -24,11 +24,22 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import java.io.File
+import javax.inject.Inject
 
 class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+
+    init {
+        (getApplicationContext() as DrawDependencyComponentProvider)
+            .drawDependencyComponent.inject(this)
+    }
+
     private lateinit var bitmap: Bitmap
+
+    @Inject
+    lateinit var imagePath: String
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -108,11 +119,6 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         canvas.drawPath(currentPath, paint)
     }
 
-    fun getImagePath(): String {
-        val externalFilesDir = context.getExternalFilesDir("")
-        return externalFilesDir!!.absolutePath + File.separator + ".cache" + File.separator + "tmp.jpg"
-    }
-
     private fun touchStart(x: Float, y: Float) {
         currentPath.reset()
         currentPath.moveTo(x, y)
@@ -162,7 +168,7 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private fun resetImage(w: Int, h: Int) {
-        val backgroundBitmapFile = File(getImagePath())
+        val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
             bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!.copy(Bitmap.Config.ARGB_8888, true)
             canvas = Canvas(bitmap)

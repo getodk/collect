@@ -204,7 +204,7 @@ public class Collect extends Application implements
                 .build();
 
         drawDependencyComponent = DaggerDrawDependencyComponent.builder()
-                .drawDependencyModule(new CollectDrawDependencyModule(applicationComponent::scheduler, applicationComponent::settingsProvider))
+                .drawDependencyModule(new CollectDrawDependencyModule(applicationComponent))
                 .build();
 
         // Mapbox dependencies

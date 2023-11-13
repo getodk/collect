@@ -15,6 +15,7 @@ interface DrawDependencyComponentProvider {
 @Singleton
 interface DrawDependencyComponent {
     fun inject(drawActivity: DrawActivity)
+    fun inject(drawActivity: DrawView)
 }
 
 @Module
@@ -27,6 +28,11 @@ open class DrawDependencyModule {
 
     @Provides
     open fun providesSettingsProvider(): SettingsProvider {
+        throw UnsupportedOperationException("This should be overridden by dependent application")
+    }
+
+    @Provides
+    open fun providesImagePath(): String {
         throw UnsupportedOperationException("This should be overridden by dependent application")
     }
 }

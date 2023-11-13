@@ -5,14 +5,17 @@ import org.odk.collect.draw.DrawDependencyModule
 import org.odk.collect.settings.SettingsProvider
 
 class CollectDrawDependencyModule(
-    private val scheduler: () -> Scheduler,
-    private val settingsProvider: () -> SettingsProvider
+    private val applicationComponent: AppDependencyComponent
 ) : DrawDependencyModule() {
     override fun providesScheduler(): Scheduler {
-        return scheduler()
+        return applicationComponent.scheduler()
     }
 
     override fun providesSettingsProvider(): SettingsProvider {
-        return settingsProvider()
+        return applicationComponent.settingsProvider()
+    }
+
+    override fun providesImagePath(): String {
+        return applicationComponent.storagePathProvider().getTmpImageFilePath()
     }
 }
