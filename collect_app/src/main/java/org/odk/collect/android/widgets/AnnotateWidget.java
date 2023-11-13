@@ -25,27 +25,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 
-import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.utilities.ContentUriProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
+import org.odk.collect.android.widgets.utilities.ImageCaptureIntentCreator;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.ui.ToastUtils;
 
 import java.io.File;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 /**
  * Image widget that supports annotations on the image.
@@ -162,27 +158,7 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     }
 
     private void captureImage() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        // We give the camera an absolute filename/path where to put the
-        // picture because of bug:
-        // http://code.google.com/p/android/issues/detail?id=1480
-        // The bug appears to be fixed in Android 2.0+, but as of feb 2,
-        // 2010, G1 phones only run 1.6. Without specifying the path the
-        // images returned by the camera in 1.6 (and earlier) are ~1/4
-        // the size. boo.
-
-        try {
-            Uri uri = new ContentUriProvider().getUriForFile(getContext(),
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    new File(tmpImageFilePath));
-            // if this gets modified, the onActivityResult in
-            // FormEntyActivity will also need to be updated.
-            intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-            FileUtils.grantFilePermissions(intent, uri, getContext());
-        } catch (IllegalArgumentException e) {
-            Timber.e(e);
-        }
-
+        Intent intent = ImageCaptureIntentCreator.imageCaptureIntent(getFormEntryPrompt(), getContext(), tmpImageFilePath);
         imageCaptureHandler.captureImage(intent, RequestCodes.IMAGE_CAPTURE, org.odk.collect.strings.R.string.annotate_image);
     }
 
