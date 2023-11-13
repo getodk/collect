@@ -24,15 +24,14 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import java.io.File
 import javax.inject.Inject
 
-class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
 
     init {
-        (getApplicationContext() as DrawDependencyComponentProvider)
+        (context.applicationContext as DrawDependencyComponentProvider)
             .drawDependencyComponent.inject(this)
     }
 
@@ -88,10 +87,12 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 touchStart(x, y)
                 invalidate()
             }
+
             MotionEvent.ACTION_MOVE -> {
                 touchMove(x, y)
                 invalidate()
             }
+
             MotionEvent.ACTION_UP -> {
                 touchUp()
                 invalidate()
@@ -170,7 +171,8 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private fun resetImage(w: Int, h: Int) {
         val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
-            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!.copy(Bitmap.Config.ARGB_8888, true)
+            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!
+                .copy(Bitmap.Config.ARGB_8888, true)
             canvas = Canvas(bitmap)
         } else {
             bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)

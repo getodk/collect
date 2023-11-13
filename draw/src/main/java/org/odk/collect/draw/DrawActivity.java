@@ -92,6 +92,8 @@ public class DrawActivity extends LocalizedActivity {
     private String alertTitleString;
     private AlertDialog alertDialog;
 
+    private DrawViewModel drawViewModel;
+
     @Inject
     Scheduler scheduler;
 
@@ -266,26 +268,31 @@ public class DrawActivity extends LocalizedActivity {
             }
         });
 
+        drawViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
+                return (T) new DrawViewModel(output, scheduler);
+            }
+        }).get(DrawViewModel.class);
+
+        drawViewModel.getSaveResult().observe(this, (success) -> {
+            if (success != null) {
+                if (success) {
+                    setResult(Activity.RESULT_OK);
+                } else {
+                    setResult(Activity.RESULT_CANCELED);
+                }
+
+                finish();
+            }
+        });
+
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
     private void saveAndClose() {
-        scheduler.immediate(() -> {
-            try {
-                saveFile(output);
-                return true;
-            } catch (FileNotFoundException e) {
-                return false;
-            }
-        }, success -> {
-            if (success) {
-                setResult(Activity.RESULT_OK);
-            } else {
-                setResult(Activity.RESULT_CANCELED);
-            }
-
-            finish();
-        });
+        drawViewModel.save(drawView);
     }
 
     private void saveFile(File f) throws FileNotFoundException {

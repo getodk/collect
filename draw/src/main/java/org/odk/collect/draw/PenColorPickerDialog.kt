@@ -6,7 +6,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rarepebble.colorpicker.ColorPickerView
 
-class PenColorPickerDialog(private val model: PenColorPickerViewModel) : DialogFragment() {
+internal class PenColorPickerDialog(private val model: PenColorPickerViewModel) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val picker = ColorPickerView(requireContext()).apply {
