@@ -6,5 +6,4 @@
 
     <!-- touch target -->
     <dimen name="touch_target_size">48dp</dimen>
-    <dimen name="divider_accidental_tap">8dp</dimen>
 </resources>

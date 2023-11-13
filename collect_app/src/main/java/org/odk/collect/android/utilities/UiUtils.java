@@ -18,10 +18,7 @@ package org.odk.collect.android.utilities;
 
 import android.content.Context;
 import android.content.res.Resources;
-import androidx.annotation.DimenRes;
 import android.util.DisplayMetrics;
-
-import org.odk.collect.android.application.Collect;
 
 /**
  * Created by laguta.yurii@gmail.com on 26/8/17.
@@ -32,10 +29,6 @@ import org.odk.collect.android.application.Collect;
 public final class UiUtils {
 
     private UiUtils() {
-    }
-
-    public static int getDimen(@DimenRes int dimenResId) {
-        return Collect.getInstance().getResources().getDimensionPixelSize(dimenResId);
     }
 
     /**

@@ -6,11 +6,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
-import org.odk.collect.android.R;
-import org.odk.collect.android.support.rules.CollectTestRule;
-import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.FormEntryPage;
 import org.odk.collect.android.support.pages.SaveOrIgnoreDrawingDialog;
+import org.odk.collect.android.support.rules.CollectTestRule;
+import org.odk.collect.android.support.rules.TestRuleChain;
 
 // Issue number NODK-211
 @RunWith(AndroidJUnit4.class)
@@ -61,12 +60,12 @@ public class SignatureWidgetTest {
                 .clickOnQuestion("Signature widget")
                 .clickWidgetButton()
                 .waitForRotationToEnd()
-                .clickOnId(R.id.fab_actions)
-                .checkIsIdDisplayed(R.id.fab_save_and_close)
-                .clickOnId(R.id.fab_set_color)
+                .clickOnId(org.odk.collect.draw.R.id.fab_actions)
+                .checkIsIdDisplayed(org.odk.collect.draw.R.id.fab_save_and_close)
+                .clickOnId(org.odk.collect.draw.R.id.fab_set_color)
                 .clickOnString(org.odk.collect.strings.R.string.ok)
-                .clickOnId(R.id.fab_actions)
-                .checkIsIdDisplayed(R.id.fab_set_color)
+                .clickOnId(org.odk.collect.draw.R.id.fab_actions)
+                .checkIsIdDisplayed(org.odk.collect.draw.R.id.fab_set_color)
                 .pressBack(new SaveOrIgnoreDrawingDialog<>("Gather Signature", new FormEntryPage("All widgets")))
                 .clickSaveChanges()
                 .waitForRotationToEnd()

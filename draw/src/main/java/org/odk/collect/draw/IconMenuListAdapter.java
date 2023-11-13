@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.adapters;
+package org.odk.collect.draw;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,20 +23,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.model.IconMenuItem;
-
 import java.util.List;
 
 /**
  * Adapter for List of options with icons
  */
-public class IconMenuListAdapter extends BaseAdapter {
+class IconMenuListAdapter extends BaseAdapter {
 
     private final Context context;
     private final List<IconMenuItem> items;
 
-    public IconMenuListAdapter(Context context, List<IconMenuItem> items) {
+    IconMenuListAdapter(Context context, List<IconMenuItem> items) {
         this.context = context;
         this.items = items;
     }
@@ -72,5 +69,28 @@ public class IconMenuListAdapter extends BaseAdapter {
     private void refreshView(IconMenuItem item, TextView convertView) {
         convertView.setText(item.getTextResId());
         convertView.setCompoundDrawablesRelativeWithIntrinsicBounds(item.getImageResId(), 0, 0, 0);
+    }
+
+    /**
+     * Icon Menu Item representation
+     */
+
+    static class IconMenuItem {
+
+        private final int imageResId;
+        private final int textResId;
+
+        IconMenuItem(int imageResId, int textResId) {
+            this.imageResId = imageResId;
+            this.textResId = textResId;
+        }
+
+        int getImageResId() {
+            return imageResId;
+        }
+
+        int getTextResId() {
+            return textResId;
+        }
     }
 }

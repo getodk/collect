@@ -18,17 +18,10 @@ package org.odk.collect.android.utilities;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.widget.ListView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-
-import org.odk.collect.android.R;
 
 import timber.log.Timber;
 
@@ -39,22 +32,6 @@ import timber.log.Timber;
 public final class DialogUtils {
 
     private DialogUtils() {
-    }
-
-    /**
-     * List View used with actions
-     *
-     * @param context UI Context (Activity/Fragment)
-     * @return ListView with white divider between items to prevent accidental taps
-     */
-    @NonNull
-    public static ListView createActionListView(@NonNull Context context) {
-        int dividerHeight = UiUtils.getDimen(R.dimen.divider_accidental_tap);
-        ListView listView = new ListView(context);
-        listView.setPadding(0, dividerHeight, 0, 0);
-        listView.setDivider(new ColorDrawable(Color.TRANSPARENT));
-        listView.setDividerHeight(dividerHeight);
-        return listView;
     }
 
     /**

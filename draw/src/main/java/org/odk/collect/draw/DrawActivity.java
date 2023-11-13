@@ -13,20 +13,24 @@
  * the License.
  */
 
-package org.odk.collect.android.draw;
+package org.odk.collect.draw;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -40,21 +44,11 @@ import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.common.collect.ImmutableList;
 
-import org.odk.collect.android.R;
-import org.odk.collect.android.adapters.IconMenuListAdapter;
-import org.odk.collect.android.adapters.model.IconMenuItem;
-import org.odk.collect.android.injection.DaggerUtils;
-import org.odk.collect.android.utilities.AnimationUtils;
-import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.draw.DrawView;
-import org.odk.collect.draw.PenColorPickerDialog;
-import org.odk.collect.draw.PenColorPickerViewModel;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -62,6 +56,7 @@ import org.odk.collect.strings.localization.LocalizedActivity;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -125,7 +120,7 @@ public class DrawActivity extends LocalizedActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        DaggerUtils.getComponent(this).inject(this);
+        ((DrawDependencyComponentProvider) getApplicationContext()).getDrawDependencyComponent().inject(this);
 
         PenColorPickerViewModel viewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
@@ -164,12 +159,12 @@ public class DrawActivity extends LocalizedActivity {
                     fabActions.animate().rotation(45).setInterpolator(new AccelerateDecelerateInterpolator())
                             .setDuration(100).start();
 
-                    AnimationUtils.scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimationUtils.scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
-                    AnimationUtils.scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimationUtils.scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
-                    AnimationUtils.scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
-                    AnimationUtils.scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
+                    scaleInAnimation(fabSetColor, 50, 150, new OvershootInterpolator(), true);
+                    scaleInAnimation(cardViewSetColor, 50, 150, new OvershootInterpolator(), true);
+                    scaleInAnimation(fabSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    scaleInAnimation(cardViewSaveAndClose, 100, 150, new OvershootInterpolator(), true);
+                    scaleInAnimation(fabClear, 150, 150, new OvershootInterpolator(), true);
+                    scaleInAnimation(cardViewClear, 150, 150, new OvershootInterpolator(), true);
 
                     fabSetColor.show();
                     cardViewSetColor.setVisibility(View.VISIBLE);
@@ -350,18 +345,22 @@ public class DrawActivity extends LocalizedActivity {
      * saving
      */
     private void createQuitDrawDialog() {
-        ListView listView = DialogUtils.createActionListView(this);
+        int dividerHeight = getResources().getDimensionPixelSize(org.odk.collect.androidshared.R.dimen.margin_small);
+        ListView actionListView = new ListView(this);
+        actionListView.setPadding(0, dividerHeight, 0, 0);
+        actionListView.setDivider(new ColorDrawable(Color.TRANSPARENT));
+        actionListView.setDividerHeight(dividerHeight);
 
-        List<IconMenuItem> items;
-        items = ImmutableList.of(new IconMenuItem(org.odk.collect.geo.R.drawable.ic_save, org.odk.collect.strings.R.string.keep_changes),
-                new IconMenuItem(org.odk.collect.geo.R.drawable.ic_delete, org.odk.collect.strings.R.string.discard_changes));
+        List<IconMenuListAdapter.IconMenuItem> items;
+        items = Arrays.asList(new IconMenuListAdapter.IconMenuItem(org.odk.collect.icons.R.drawable.ic_save, org.odk.collect.strings.R.string.keep_changes),
+                new IconMenuListAdapter.IconMenuItem(org.odk.collect.icons.R.drawable.ic_delete, org.odk.collect.strings.R.string.discard_changes));
 
         final IconMenuListAdapter adapter = new IconMenuListAdapter(this, items);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        actionListView.setAdapter(adapter);
+        actionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                IconMenuItem item = (IconMenuItem) adapter.getItem(position);
+                IconMenuListAdapter.IconMenuItem item = (IconMenuListAdapter.IconMenuItem) adapter.getItem(position);
                 if (item.getTextResId() == org.odk.collect.strings.R.string.keep_changes) {
                     saveAndClose();
                 } else {
@@ -373,7 +372,7 @@ public class DrawActivity extends LocalizedActivity {
         alertDialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(alertTitleString)
                 .setPositiveButton(getString(org.odk.collect.strings.R.string.do_not_exit), null)
-                .setView(listView).create();
+                .setView(actionListView).create();
         alertDialog.show();
     }
 
@@ -397,5 +396,31 @@ public class DrawActivity extends LocalizedActivity {
 
             DialogFragmentUtils.showIfNotShowing(PenColorPickerDialog.class, getSupportFragmentManager());
         }
+    }
+
+    private static void scaleInAnimation(final View view, int startOffset, int duration,
+                                         Interpolator interpolator, final boolean isInvisible) {
+        ScaleAnimation scaleInAnimation = new ScaleAnimation(0f, 1f, 0f, 1f, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scaleInAnimation.setInterpolator(interpolator);
+        scaleInAnimation.setDuration(duration);
+        scaleInAnimation.setStartOffset(startOffset);
+        scaleInAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                if (isInvisible) {
+                    view.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        view.startAnimation(scaleInAnimation);
     }
 }
