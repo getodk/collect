@@ -82,5 +82,5 @@ the License.
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:title="@string/empty_list_title"/>
+        app:title="@string/empty_list_of_questions"/>
 </RelativeLayout>

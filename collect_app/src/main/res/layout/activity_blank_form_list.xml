@@ -17,5 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:icon="@drawable/ic_baseline_note_72"
-        app:title="@string/empty_list_title"/>
+        app:title="@string/empty_list_of_blank_forms_title"
+        app:subtitle="@string/empty_list_of_blank_forms_subtitle"/>
 </LinearLayout>

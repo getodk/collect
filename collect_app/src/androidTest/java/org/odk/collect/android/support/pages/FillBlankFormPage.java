@@ -120,7 +120,7 @@ public class FillBlankFormPage extends Page<FillBlankFormPage> {
     }
 
     public FillBlankFormPage assertNoForms() {
-        assertText(org.odk.collect.strings.R.string.empty_list_title);
+        assertText(org.odk.collect.strings.R.string.empty_list_of_blank_forms_title);
         return this;
     }
 }
