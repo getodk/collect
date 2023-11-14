@@ -161,7 +161,6 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -176,6 +175,7 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.system.ProcessRestoreDetector;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
@@ -298,6 +298,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private InternalRecordingRequester internalRecordingRequester;
     private ExternalAppRecordingRequester externalAppRecordingRequester;
     private FormEntryViewModelFactory viewModelFactory;
+    private AudioClipViewModel audioClipViewModel;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -622,6 +623,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     }
                 });
             }
+        });
+
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
+        audioClipViewModel = new ViewModelProvider(this, factory).get(AudioClipViewModel.class);
+        audioClipViewModel.isLoading().observe(this, (isLoading) -> {
+            findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
     }
 
@@ -1238,9 +1245,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
 
-        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
         ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(
-                new ViewModelProvider(this, factory).get(AudioClipViewModel.class),
+                audioClipViewModel,
                 odkViewLifecycle
         );
 

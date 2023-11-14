@@ -23,6 +23,7 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
     private val error = MutableLiveData<Exception?>()
     private val positions: MutableMap<String, MutableLiveData<Int>?> = HashMap()
     private var positionUpdatesCancellable: Cancellable? = null
+    private val isLoading = MutableLiveData(false)
 
     fun play(clip: Clip) {
         val playlist = LinkedList<Clip>()
@@ -197,6 +198,8 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
     }
 
     private fun loadNewClip(uri: String, onLoaded: () -> Unit, onLoadFailure: () -> Unit) {
+        isLoading.value = true
+
         scheduler.immediate(
             background = {
                 val mediaPlayer = _mediaPlayer ?: run {
@@ -220,8 +223,14 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
                 } else {
                     onLoadFailure()
                 }
+
+                isLoading.value = false
             }
         )
+    }
+
+    fun isLoading(): LiveData<Boolean> {
+        return isLoading
     }
 
     private class CurrentlyPlaying(val clip: Clip, val isPaused: Boolean, val playlist: Queue<Clip>) {

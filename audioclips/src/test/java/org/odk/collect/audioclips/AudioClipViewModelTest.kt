@@ -442,6 +442,18 @@ class AudioClipViewModelTest {
         assertThat(error.getOrAwaitValue(), equalTo<Exception?>(null))
     }
 
+    @Test
+    fun isLoading_isTrueWhenLoadingClip() {
+        val loading = viewModel.isLoading()
+        assertThat(loading.getOrAwaitValue(), equalTo(false))
+
+        viewModel.play(Clip("clip1", "file://missing.mp3"))
+        assertThat(loading.getOrAwaitValue(), equalTo(true))
+
+        fakeScheduler.flush()
+        assertThat(loading.getOrAwaitValue(), equalTo(false))
+    }
+
     private class RecordingMockMediaPlayerFactory : Supplier<MediaPlayer> {
         var createdInstances: MutableList<MediaPlayer> = ArrayList()
         override fun get(): MediaPlayer {
