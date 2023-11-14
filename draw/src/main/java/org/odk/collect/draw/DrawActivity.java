@@ -17,8 +17,6 @@ package org.odk.collect.draw;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -54,14 +52,10 @@ import org.odk.collect.settings.keys.MetaKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 /**
  * Modified from the FingerPaint example found in The Android Open Source
@@ -77,7 +71,6 @@ public class DrawActivity extends LocalizedActivity {
     public static final String REF_IMAGE = "refImage";
     public static final String SCREEN_ORIENTATION = "screenOrientation";
     public static final String EXTRA_OUTPUT = android.provider.MediaStore.EXTRA_OUTPUT;
-    public static final String SAVEPOINT_IMAGE = "savepointImage"; // during
     // restore
 
     private FloatingActionButton fabActions;
@@ -106,19 +99,6 @@ public class DrawActivity extends LocalizedActivity {
             createQuitDrawDialog();
         }
     };
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        try {
-            saveFile(savepointImage);
-        } catch (FileNotFoundException e) {
-            Timber.d(e);
-        }
-        if (savepointImage.exists()) {
-            outState.putString(SAVEPOINT_IMAGE, savepointImage.getAbsolutePath());
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -199,45 +179,28 @@ public class DrawActivity extends LocalizedActivity {
 
         Bundle extras = getIntent().getExtras();
         String imagePath = drawView.getImagePath();
-        if (extras == null) {
+        if (extras.getInt(SCREEN_ORIENTATION) == 1) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+        loadOption = extras.getString(OPTION);
+        if (loadOption == null) {
             loadOption = OPTION_DRAW;
-            refImage = null;
-            savepointImage = new File(imagePath);
-            savepointImage.delete();
-            output = new File(imagePath);
+        }
+        // refImage can also be present if resuming a drawing
+        Uri uri = (Uri) extras.get(REF_IMAGE);
+        if (uri != null) {
+            refImage = new File(uri.getPath());
+        }
+        savepointImage = new File(imagePath);
+        savepointImage.delete();
+        if (refImage != null && refImage.exists()) {
+            ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
+        }
+        uri = (Uri) extras.get(EXTRA_OUTPUT);
+        if (uri != null) {
+            output = new File(uri.getPath());
         } else {
-            if (extras.getInt(SCREEN_ORIENTATION) == 1) {
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
-            loadOption = extras.getString(OPTION);
-            if (loadOption == null) {
-                loadOption = OPTION_DRAW;
-            }
-            // refImage can also be present if resuming a drawing
-            Uri uri = (Uri) extras.get(REF_IMAGE);
-            if (uri != null) {
-                refImage = new File(uri.getPath());
-            }
-            String savepoint = extras.getString(SAVEPOINT_IMAGE);
-            if (savepoint != null) {
-                savepointImage = new File(savepoint);
-                if (!savepointImage.exists() && refImage != null
-                        && refImage.exists()) {
-                    ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
-                }
-            } else {
-                savepointImage = new File(imagePath);
-                savepointImage.delete();
-                if (refImage != null && refImage.exists()) {
-                    ImageFileUtils.copyImageAndApplyExifRotation(refImage, savepointImage);
-                }
-            }
-            uri = (Uri) extras.get(EXTRA_OUTPUT);
-            if (uri != null) {
-                output = new File(uri.getPath());
-            } else {
-                output = new File(imagePath);
-            }
+            output = new File(imagePath);
         }
 
         // At this point, we have:
@@ -291,33 +254,6 @@ public class DrawActivity extends LocalizedActivity {
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
-    private void saveAndClose() {
-        drawViewModel.save(drawView);
-    }
-
-    private void saveFile(File f) throws FileNotFoundException {
-        if (drawView.getWidth() == 0 || drawView.getHeight() == 0) {
-            // apparently on 4.x, the orientation change notification can occur
-            // sometime before the view is rendered. In that case, the view
-            // dimensions will not be known.
-            Timber.e(new Error("View has zero width or zero height"));
-        } else {
-            FileOutputStream fos;
-            fos = new FileOutputStream(f);
-            Bitmap bitmap = Bitmap.createBitmap(drawView.getBitmapWidth(),
-                    drawView.getBitmapHeight(), Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(bitmap);
-            drawView.drawOnCanvas(canvas, 0, 0);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
-            try {
-                fos.flush();
-                fos.close();
-            } catch (Exception e) {
-                Timber.e(e);
-            }
-        }
-    }
-
     private void reset() {
         savepointImage.delete();
         if (!OPTION_SIGNATURE.equals(loadOption) && refImage != null
@@ -369,7 +305,7 @@ public class DrawActivity extends LocalizedActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IconMenuListAdapter.IconMenuItem item = (IconMenuListAdapter.IconMenuItem) adapter.getItem(position);
                 if (item.getTextResId() == org.odk.collect.strings.R.string.keep_changes) {
-                    saveAndClose();
+                    drawViewModel.save(drawView);
                 } else {
                     cancelAndClose();
                 }
@@ -393,7 +329,7 @@ public class DrawActivity extends LocalizedActivity {
     private void close(View view) {
         if (view.getVisibility() == View.VISIBLE) {
             fabActions.performClick();
-            saveAndClose();
+            drawViewModel.save(drawView);
         }
     }
 
