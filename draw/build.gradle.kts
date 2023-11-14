@@ -17,7 +17,6 @@ android {
         minSdk = Versions.android_min_sdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
