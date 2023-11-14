@@ -18,8 +18,7 @@ internal class DrawViewModel(
     private val _saveResult = MutableLiveData<Boolean?>(null)
     val saveResult = _saveResult
 
-    @JvmOverloads
-    fun save(drawView: DrawView, fireAndForget: Boolean = false) {
+    fun save(drawView: DrawView) {
         scheduler.immediate(
             background = {
                 try {
@@ -30,9 +29,7 @@ internal class DrawViewModel(
                 }
             },
             foreground = { success ->
-                if (!fireAndForget) {
-                    _saveResult.value = success
-                }
+                _saveResult.value = success
             }
         )
     }
