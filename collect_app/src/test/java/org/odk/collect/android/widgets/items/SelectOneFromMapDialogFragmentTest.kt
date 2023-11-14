@@ -23,7 +23,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -192,7 +191,7 @@ class SelectOneFromMapDialogFragmentTest {
                             "A",
                             emptyList(),
                             IconifiedText(
-                                org.odk.collect.geo.R.drawable.ic_save,
+                                org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         ),
@@ -211,7 +210,7 @@ class SelectOneFromMapDialogFragmentTest {
                             "B",
                             emptyList(),
                             IconifiedText(
-                                org.odk.collect.geo.R.drawable.ic_save,
+                                org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         )
