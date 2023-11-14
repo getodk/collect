@@ -34,12 +34,7 @@ public class TestScheduler implements Scheduler {
 
     @Override
     public Cancellable repeat(@NotNull Runnable foreground, long repeatPeriod) {
-        increment();
-
-        return wrappedScheduler.repeat(() -> {
-            foreground.run();
-            decrement();
-        }, repeatPeriod);
+        return wrappedScheduler.repeat(foreground::run, repeatPeriod);
     }
 
     @Override

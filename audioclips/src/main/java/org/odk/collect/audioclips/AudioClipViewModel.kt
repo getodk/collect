@@ -85,24 +85,36 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
         val nextClip = playlist.poll()
         if (nextClip != null) {
             if (!isCurrentPlayingClip(nextClip.clipID, currentlyPlaying.value)) {
-                try {
-                    loadNewClip(nextClip.uRI)
-                } catch (ignored: IOException) {
-                    error.value = PlaybackFailedException(nextClip.uRI, getExceptionMsg(nextClip.uRI))
-                    playNext(playlist)
-                    return
-                }
+                loadNewClip(
+                    nextClip.uRI,
+                    onLoaded = {
+                        startPlayBack(nextClip, playlist)
+                    },
+                    onLoadFailure = {
+                        error.value =
+                            PlaybackFailedException(nextClip.uRI, getExceptionMsg(nextClip.uRI))
+                        playNext(playlist)
+                    }
+                )
+            } else {
+                startPlayBack(nextClip, playlist)
             }
-            _mediaPlayer?.seekTo(getPositionForClip(nextClip.clipID).value!!)
-            _mediaPlayer?.start()
-            currentlyPlaying.value = CurrentlyPlaying(
-                Clip(nextClip.clipID, nextClip.uRI),
-                false,
-                playlist
-            )
-
-            schedulePositionUpdates()
         }
+    }
+
+    private fun startPlayBack(
+        nextClip: Clip,
+        playlist: Queue<Clip>
+    ) {
+        _mediaPlayer?.seekTo(getPositionForClip(nextClip.clipID).value!!)
+        _mediaPlayer?.start()
+        currentlyPlaying.value = CurrentlyPlaying(
+            Clip(nextClip.clipID, nextClip.uRI),
+            false,
+            playlist
+        )
+
+        schedulePositionUpdates()
     }
 
     private fun getExceptionMsg(uri: String): Int {
@@ -184,17 +196,32 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
         return currentlyPlayingValue != null && currentlyPlayingValue.clip.clipID == clipID
     }
 
-    @Throws(IOException::class)
-    private fun loadNewClip(uri: String) {
-        val mediaPlayer = _mediaPlayer ?: run {
-            val newMediaPlayer = setupNewMediaPlayer()
-            _mediaPlayer = newMediaPlayer
-            newMediaPlayer
-        }
+    private fun loadNewClip(uri: String, onLoaded: () -> Unit, onLoadFailure: () -> Unit) {
+        scheduler.immediate(
+            background = {
+                val mediaPlayer = _mediaPlayer ?: run {
+                    val newMediaPlayer = setupNewMediaPlayer()
+                    _mediaPlayer = newMediaPlayer
+                    newMediaPlayer
+                }
 
-        mediaPlayer.reset()
-        mediaPlayer.setDataSource(uri)
-        mediaPlayer.prepare()
+                try {
+                    mediaPlayer.reset()
+                    mediaPlayer.setDataSource(uri)
+                    mediaPlayer.prepare()
+                    true
+                } catch (e: IOException) {
+                    false
+                }
+            },
+            foreground = { success ->
+                if (success) {
+                    onLoaded()
+                } else {
+                    onLoadFailure()
+                }
+            }
+        )
     }
 
     private class CurrentlyPlaying(val clip: Clip, val isPaused: Boolean, val playlist: Queue<Clip>) {
