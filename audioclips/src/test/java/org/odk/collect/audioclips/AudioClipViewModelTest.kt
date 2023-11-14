@@ -2,10 +2,12 @@ package org.odk.collect.audioclips
 
 import android.media.MediaPlayer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.doThrow
@@ -21,6 +23,7 @@ import java.io.File
 import java.io.IOException
 import java.util.function.Supplier
 
+@RunWith(AndroidJUnit4::class)
 class AudioClipViewModelTest {
 
     @get:Rule
@@ -188,6 +191,7 @@ class AudioClipViewModelTest {
 
     @Test
     fun background_releasesMediaPlayer() {
+        viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.background()
         verify(mediaPlayer).release()
     }
@@ -222,6 +226,7 @@ class AudioClipViewModelTest {
 
     @Test
     fun pause_pausesMediaPlayer() {
+        viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.pause()
         verify(mediaPlayer).pause()
     }
@@ -301,6 +306,7 @@ class AudioClipViewModelTest {
 
     @Test
     fun onCleared_releasesMediaPlayer() {
+        viewModel.play(Clip("clip1", "file://audio.mp3"))
         viewModel.onCleared()
         verify(mediaPlayer).release()
     }

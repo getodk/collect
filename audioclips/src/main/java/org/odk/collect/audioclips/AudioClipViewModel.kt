@@ -1,6 +1,7 @@
 package org.odk.collect.audioclips
 
 import android.media.MediaPlayer
+import android.os.StrictMode
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,12 +18,6 @@ import java.util.function.Supplier
 class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, private val scheduler: Scheduler) : ViewModel(), MediaPlayer.OnCompletionListener {
 
     private var _mediaPlayer: MediaPlayer? = null
-    private val mediaPlayer: MediaPlayer
-        get() {
-            val mediaPlayer = _mediaPlayer ?: setupNewMediaPlayer()
-            _mediaPlayer = mediaPlayer
-            return mediaPlayer
-        }
 
     private val currentlyPlaying = MutableLiveData<CurrentlyPlaying?>(null)
     private val error = MutableLiveData<Exception?>()
@@ -42,14 +37,14 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
 
     fun stop() {
         if (currentlyPlaying.value != null) {
-            mediaPlayer.stop()
+            _mediaPlayer?.stop()
         }
 
         cleanUpAfterClip()
     }
 
     fun pause() {
-        mediaPlayer.pause()
+        _mediaPlayer?.pause()
         val currentlyPlayingValue = currentlyPlaying.value
         if (currentlyPlayingValue != null) {
             currentlyPlaying.value = currentlyPlayingValue.paused()
@@ -72,7 +67,7 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
 
     fun setPosition(clipID: String, newPosition: Int) {
         if (isCurrentPlayingClip(clipID, currentlyPlaying.value)) {
-            mediaPlayer.seekTo(newPosition)
+            _mediaPlayer?.seekTo(newPosition)
         }
         getPositionForClip(clipID).value = newPosition
     }
@@ -98,8 +93,8 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
                     return
                 }
             }
-            mediaPlayer.seekTo(getPositionForClip(nextClip.clipID).value!!)
-            mediaPlayer.start()
+            _mediaPlayer?.seekTo(getPositionForClip(nextClip.clipID).value!!)
+            _mediaPlayer?.start()
             currentlyPlaying.value = CurrentlyPlaying(
                 Clip(nextClip.clipID, nextClip.uRI),
                 false,
@@ -155,11 +150,13 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
 
     private fun schedulePositionUpdates() {
         positionUpdatesCancellable = scheduler.repeat(
-            Runnable {
-                val currentlyPlaying = currentlyPlaying.value
-                if (currentlyPlaying != null) {
-                    val position = getPositionForClip(currentlyPlaying.clip.clipID)
-                    position.postValue(mediaPlayer.currentPosition)
+            {
+                _mediaPlayer?.let {
+                    val currentlyPlaying = currentlyPlaying.value
+                    if (currentlyPlaying != null) {
+                        val position = getPositionForClip(currentlyPlaying.clip.clipID)
+                        position.postValue(it.currentPosition)
+                    }
                 }
             },
             1000 / 12
@@ -171,11 +168,13 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
     }
 
     private fun releaseMediaPlayer() {
-        mediaPlayer.release()
+        _mediaPlayer?.release()
         _mediaPlayer = null
     }
 
     private fun setupNewMediaPlayer(): MediaPlayer {
+        StrictMode.noteSlowCall("MediaPlayer instantiation can be slow")
+
         val newMediaPlayer: MediaPlayer = mediaPlayerFactory.get()
         newMediaPlayer.setOnCompletionListener(this)
         return newMediaPlayer
@@ -187,6 +186,12 @@ class AudioClipViewModel(private val mediaPlayerFactory: Supplier<MediaPlayer>, 
 
     @Throws(IOException::class)
     private fun loadNewClip(uri: String) {
+        val mediaPlayer = _mediaPlayer ?: run {
+            val newMediaPlayer = setupNewMediaPlayer()
+            _mediaPlayer = newMediaPlayer
+            newMediaPlayer
+        }
+
         mediaPlayer.reset()
         mediaPlayer.setDataSource(uri)
         mediaPlayer.prepare()
