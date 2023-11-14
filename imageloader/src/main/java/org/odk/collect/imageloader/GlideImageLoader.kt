@@ -37,7 +37,7 @@ class GlideImageLoader : ImageLoader {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<PictureDrawable>?,
+                        target: Target<PictureDrawable>,
                         isFirstResource: Boolean
                     ): Boolean {
                         requestListener?.onLoadFailed()
@@ -45,10 +45,10 @@ class GlideImageLoader : ImageLoader {
                     }
 
                     override fun onResourceReady(
-                        resource: PictureDrawable?,
-                        model: Any?,
+                        resource: PictureDrawable,
+                        model: Any,
                         target: Target<PictureDrawable>?,
-                        dataSource: DataSource?,
+                        dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
                         requestListener?.onLoadSucceeded()
@@ -64,7 +64,7 @@ class GlideImageLoader : ImageLoader {
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<Drawable>?,
+                        target: Target<Drawable>,
                         isFirstResource: Boolean
                     ): Boolean {
                         requestListener?.onLoadFailed()
@@ -72,10 +72,10 @@ class GlideImageLoader : ImageLoader {
                     }
 
                     override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
+                        resource: Drawable,
+                        model: Any,
                         target: Target<Drawable>?,
-                        dataSource: DataSource?,
+                        dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
                         requestListener?.onLoadSucceeded()

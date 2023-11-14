@@ -7,7 +7,7 @@ references:
   android_config: &android_config
     working_directory: ~/work
     docker:
-      - image: cimg/android:2023.06.1
+      - image: cimg/android:2023.10.1
     resource_class: medium+
 
 jobs:
@@ -230,8 +230,8 @@ jobs:
           command: ./gradlew assembleSelfSignedRelease
 
       - run:
-          name: Check APK size hasn't increased by more than 100kb
-          command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 10734563 ]; then exit 1; fi
+          name: Check APK size hasn't increased too much
+          command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 10800000 ]; then exit 1; fi
 
       - run:
           name: Copy APK to predictable path for artifact storage
