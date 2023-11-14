@@ -49,17 +49,54 @@ class FormEntryUseCasesTest {
             version = "2"
         )
 
-        val instance = createDraft(formUpdated, formDefUpdated, instancesRepository)
+        val instance = createDraft(formUpdated!!, formDefUpdated!!, instancesRepository)
+
+        val loadedFormDef =
+            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock()).first!!
+        assertThat(loadedFormDef.title, equalTo("One Question Updated"))
+    }
+
+    @Test
+    fun loadFormDef_withInstance_returnsNull_ifTheFormDoesNotExistInTheDatabase() {
+        val (form, formDef) = createForm(
+            copyTestForm("forms/one-question.xml"),
+            formId = "one-question",
+            version = "1"
+        )
+
+        val instance = createDraft(form!!, formDef!!, instancesRepository)
+
+        formsRepository.deleteAll()
 
         val loadedFormDef =
             FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock()).first
-        assertThat(loadedFormDef.title, equalTo("One Question Updated"))
+
+        assertThat(loadedFormDef, equalTo(null))
+    }
+
+    @Test
+    fun loadFormDef_withInstance_returnsNull_ifTheFormFileDoesNotExist() {
+        val testForm = copyTestForm("forms/one-question.xml")
+        val (form, formDef) = createForm(
+            testForm,
+            formId = "one-question",
+            version = "1"
+        )
+
+        val instance = createDraft(form!!, formDef!!, instancesRepository)
+
+        testForm.delete()
+
+        val loadedFormDef =
+            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock()).first
+
+        assertThat(loadedFormDef, equalTo(null))
     }
 
     @Test
     fun finalizeDraft_whenValidationFails_marksInstanceAsHavingErrors() {
         val (form, formDef) = createForm(copyTestForm("forms/two-question-required.xml"))
-        val instance = createDraft(form, formDef, instancesRepository)
+        val instance = createDraft(form!!, formDef!!, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
             form,
@@ -82,7 +119,7 @@ class FormEntryUseCasesTest {
     @Test
     fun finalizeDraft_canCreatePartialSubmissions() {
         val (form, formDef) = createForm(copyTestForm("forms/one-question-partial.xml"))
-        val instance = createDraft(form, formDef, instancesRepository) {
+        val instance = createDraft(form!!, formDef!!, instancesRepository) {
             it.stepToNextScreenEvent()
             it.answerQuestion(it.getFormIndex(), IntegerData(64))
         }
@@ -111,7 +148,7 @@ class FormEntryUseCasesTest {
     @Test
     fun finalizeDraft_updatesInstanceNameInRepository() {
         val (form, formDef) = createForm(copyTestForm("forms/one-question-uuid-instance-name.xml"))
-        val instance = createDraft(form, formDef, instancesRepository)
+        val instance = createDraft(form!!, formDef!!, instancesRepository)
 
         val draftController = FormEntryUseCases.loadDraft(
             form,
@@ -136,7 +173,7 @@ class FormEntryUseCasesTest {
         xForm: File,
         formId: String = "formId",
         version: String = "formVersion"
-    ): Pair<Form, FormDef> {
+    ): Pair<Form?, FormDef?> {
         val form = formsRepository.save(
             FormFixtures.form(
                 formId = formId,
