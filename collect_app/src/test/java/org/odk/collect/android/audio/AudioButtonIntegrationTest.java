@@ -59,6 +59,7 @@ public class AudioButtonIntegrationTest {
         assertThat(button.isPlaying(), equalTo(false));
 
         button.performClick();
+        fakeScheduler.flush();
 
         assertThat(mediaPlayer.isPlaying(), is(true));
         assertThat(shadowOf(mediaPlayer).getDataSource(), equalTo(dataSource));
@@ -84,7 +85,10 @@ public class AudioButtonIntegrationTest {
         audioHelper.setAudio(button2, new Clip("clip2", testFile2));
 
         button1.performClick();
+        fakeScheduler.flush();
+
         button2.performClick();
+        fakeScheduler.flush();
 
         assertThat(mediaPlayer.isPlaying(), is(true));
         assertThat(shadowOf(mediaPlayer).getDataSource(), equalTo(dataSource2));
@@ -104,6 +108,7 @@ public class AudioButtonIntegrationTest {
         audioHelper.setAudio(button2, new Clip("clip2", testFile1));
 
         button2.performClick();
+        fakeScheduler.flush();
 
         assertThat(button1.isPlaying(), equalTo(false));
         assertThat(button2.isPlaying(), equalTo(true));
@@ -116,6 +121,8 @@ public class AudioButtonIntegrationTest {
 
         AudioButton button = new AudioButton(activity);
         audioHelper.setAudio(button, new Clip("clip1", testFile1));
+        button.performClick();
+        fakeScheduler.flush();
 
         activityController.pause();
 
@@ -131,6 +138,8 @@ public class AudioButtonIntegrationTest {
         audioHelper.setAudio(button, new Clip("clip1", testFile1));
 
         button.performClick();
+        fakeScheduler.flush();
+
         shadowOf(mediaPlayer).setCurrentPosition(1000);
         fakeScheduler.runForeground();
 
@@ -138,6 +147,8 @@ public class AudioButtonIntegrationTest {
         activityController.resume();
 
         button.performClick();
+        fakeScheduler.flush();
+
         assertThat(mediaPlayer.getCurrentPosition(), equalTo(0));
     }
 
@@ -148,6 +159,8 @@ public class AudioButtonIntegrationTest {
 
         AudioButton button = new AudioButton(activity);
         audioHelper.setAudio(button, new Clip("clip1", testFile1));
+        button.performClick();
+        fakeScheduler.flush();
 
         fakeLifecycleOwner.destroy();
 
@@ -165,6 +178,7 @@ public class AudioButtonIntegrationTest {
         assertThat(getOrAwaitValue(isPlaying), equalTo(false));
 
         button1.performClick();
+        fakeScheduler.flush();
         assertThat(getOrAwaitValue(isPlaying), equalTo(true));
 
         button1.performClick();
