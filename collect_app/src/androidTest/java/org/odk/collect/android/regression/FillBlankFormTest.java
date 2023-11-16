@@ -492,7 +492,8 @@ public class FillBlankFormTest {
         rule.startAtMainMenu()
                 .copyForm("validate.xml")
                 .startBlankForm("validate")
-                .clearTheText("2019")
+                .longPressOnQuestion("year")
+                .removeResponse()
                 .swipeToNextQuestionWithError()
                 .checkIsTextDisplayedOnDialog("The value \"-01-01\" can't be converted to a date.");
     }

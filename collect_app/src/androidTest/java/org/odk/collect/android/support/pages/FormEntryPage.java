@@ -291,8 +291,8 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage answerQuestion(int index, String answer) {
-        onView(withIndex(withClassName(endsWith("Text")), index)).perform(scrollTo());
-        onView(withIndex(withClassName(endsWith("Text")), index)).perform(replaceText(answer));
+        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(scrollTo());
+        onView(withIndex(withClassName(endsWith("EditText")), index)).perform(replaceText(answer));
         return this;
     }
 
