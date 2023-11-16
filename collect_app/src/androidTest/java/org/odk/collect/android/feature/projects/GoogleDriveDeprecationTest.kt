@@ -27,18 +27,6 @@ class GoogleDriveDeprecationTest {
         .around(RecordedIntentsRule())
         .around(rule)
 
-    private val gdProject1 = Project.New(
-        "GD Project 1",
-        "G",
-        "#3e9fcc"
-    )
-
-    private val gdProject2 = Project.New(
-        "GD Project 2",
-        "G",
-        "#3e9fcc"
-    )
-
     @Test
     fun bannerIsNotVisibleInNonGoogleDriveProjects() {
         rule
