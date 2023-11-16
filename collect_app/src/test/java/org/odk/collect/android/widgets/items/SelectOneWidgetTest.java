@@ -43,6 +43,7 @@ import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
@@ -285,6 +286,45 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
 
         FrameLayout view = (FrameLayout) getSpyWidget().binding.choicesRecyclerView.getLayoutManager().getChildAt(0);
         assertThat(view.isEnabled(), is(Boolean.FALSE));
+    }
+
+    @Test
+    public void clickingItem_callsValueChangedListener() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        WidgetValueChangedListener valueChangedListener = mock();
+        widget.setValueChangedListener(valueChangedListener);
+        populateRecyclerView(widget);
+
+        ((AudioVideoImageTextLabel) getWidget().binding.choicesRecyclerView.getChildAt(0)).getLabelTextView().performClick();
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void whenPromptHasNoButtonsAppearance_clickingItem_callsValueChangedListener() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withAppearance("no-buttons")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .build();
+
+        SelectOneWidget widget = getWidget();
+        WidgetValueChangedListener valueChangedListener = mock();
+        widget.setValueChangedListener(valueChangedListener);
+        populateRecyclerView(widget);
+
+        getWidget().binding.choicesRecyclerView.getChildAt(0).performClick();
+        verify(valueChangedListener).widgetValueChanged(widget);
     }
 
     private void overrideDependencyModule() throws Exception {

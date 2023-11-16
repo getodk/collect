@@ -137,6 +137,10 @@ public class SelectMultipleListAdapter extends AbstractSelectListAdapter {
             }
             playAudio(selection.choice);
         }
+
+        if (listener != null) {
+            listener.onItemClicked();
+        }
     }
 
     public void addItem(Selection item) {

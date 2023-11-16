@@ -2,6 +2,7 @@ package org.odk.collect.android.widgets.items;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import org.odk.collect.android.formentry.questions.NoButtonsItem;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.formentry.questions.QuestionTextSizeHelper;
 import org.odk.collect.android.injection.config.AppDependencyModule;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
@@ -160,27 +162,6 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         verify(audioHelper).setAudio(any(AudioButton.class), eq(new Clip("i am index 1", REFERENCES.get(1).second)));
     }
 
-    private void overrideDependencyModule() throws Exception {
-        ReferenceManager referenceManager = setupFakeReferenceManager(REFERENCES);
-        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
-
-            @Override
-            public ReferenceManager providesReferenceManager() {
-                return referenceManager;
-            }
-
-            @Override
-            public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
-                return context -> audioHelper;
-            }
-
-            @Override
-            public SoftKeyboardController provideSoftKeyboardController() {
-                return mock(SoftKeyboardController.class);
-            }
-        });
-    }
-
     @Test
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         // No appearance
@@ -224,6 +205,66 @@ public class SelectMultiWidgetTest extends GeneralSelectMultiWidgetTest<SelectMu
         TextView warningTv = getWidget().findViewById(R.id.warning_text);
         assertThat(warningTv.getVisibility(), is(View.VISIBLE));
         assertThat(warningTv.getText(), is("Warning: underlying values a a, b b have spaces"));
+    }
+
+    @Test
+    public void checkingCheckboxOnItem_callsValueChangedListener() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .build();
+
+        SelectMultiWidget widget = getWidget();
+        WidgetValueChangedListener valueChangedListener = mock();
+        widget.setValueChangedListener(valueChangedListener);
+        populateRecyclerView(widget);
+
+        ((CheckBox) ((AudioVideoImageTextLabel) getWidget().binding.choicesRecyclerView.getChildAt(0)).getLabelTextView()).setChecked(true);
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
+    public void whenPromptHasNoButtonsAppearance_clickingItem_callsValueChangedListener() {
+        formEntryPrompt = new MockFormEntryPromptBuilder()
+                .withIndex("i am index")
+                .withAppearance("no-buttons")
+                .withSelectChoices(asList(
+                        new SelectChoice("1", "1"),
+                        new SelectChoice("2", "2")
+                ))
+                .build();
+
+        SelectMultiWidget widget = getWidget();
+        WidgetValueChangedListener valueChangedListener = mock();
+        widget.setValueChangedListener(valueChangedListener);
+        populateRecyclerView(widget);
+
+        getWidget().binding.choicesRecyclerView.getChildAt(0).performClick();
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    private void overrideDependencyModule() throws Exception {
+        ReferenceManager referenceManager = setupFakeReferenceManager(REFERENCES);
+        CollectHelpers.overrideAppDependencyModule(new AppDependencyModule() {
+
+            @Override
+            public ReferenceManager providesReferenceManager() {
+                return referenceManager;
+            }
+
+            @Override
+            public AudioHelperFactory providesAudioHelperFactory(Scheduler scheduler) {
+                return context -> audioHelper;
+            }
+
+            @Override
+            public SoftKeyboardController provideSoftKeyboardController() {
+                return mock(SoftKeyboardController.class);
+            }
+        });
     }
 
     private ViewGroup getChoiceView(SelectMultiWidget widget, int index) {
