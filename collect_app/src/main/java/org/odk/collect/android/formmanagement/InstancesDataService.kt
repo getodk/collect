@@ -69,16 +69,18 @@ class InstancesDataService(
         )
 
         val result = instances.fold(FinalizeAllResult(0, 0, false)) { result, instance ->
-            val (formDef, form) = FormEntryUseCases.loadFormDef(
+            val formDefAndForm = FormEntryUseCases.loadFormDef(
                 instance,
                 formsRepository,
                 projectRootDir,
                 ExternalizableFormDefCache()
             )
 
-            if (formDef == null || form == null) {
+            if (formDefAndForm == null) {
                 result.copy(failureCount = result.failureCount + 1)
             } else {
+                val (formDef, form) = formDefAndForm
+
                 val formMediaDir = File(form.formMediaPath)
                 val formEntryController =
                     CollectFormEntryControllerFactory().create(formDef, formMediaDir)

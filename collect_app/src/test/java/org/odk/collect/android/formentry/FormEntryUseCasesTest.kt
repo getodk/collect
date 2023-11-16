@@ -52,7 +52,7 @@ class FormEntryUseCasesTest {
         val instance = createDraft(formUpdated!!, formDefUpdated!!, instancesRepository)
 
         val loadedFormDef =
-            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock()).first!!
+            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock())!!.first
         assertThat(loadedFormDef.title, equalTo("One Question Updated"))
     }
 
@@ -68,10 +68,10 @@ class FormEntryUseCasesTest {
 
         formsRepository.deleteAll()
 
-        val loadedFormDef =
-            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock()).first
+        val formDefAndForm =
+            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock())
 
-        assertThat(loadedFormDef, equalTo(null))
+        assertThat(formDefAndForm, equalTo(null))
     }
 
     @Test
@@ -87,10 +87,10 @@ class FormEntryUseCasesTest {
 
         testForm.delete()
 
-        val loadedFormDef =
-            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock()).first
+        val formDefAndForm =
+            FormEntryUseCases.loadFormDef(instance, formsRepository, projectRootDir, mock())
 
-        assertThat(loadedFormDef, equalTo(null))
+        assertThat(formDefAndForm, equalTo(null))
     }
 
     @Test
