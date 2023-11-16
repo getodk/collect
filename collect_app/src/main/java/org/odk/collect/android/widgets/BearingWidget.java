@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.util.TypedValue;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
