@@ -914,7 +914,6 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <string name="google_drive_deprecation_message">Tämä projekti käyttää Google Drive -tallennusta. Tämä toiminnallisuus poistetaan seuraavassa sovelluspäivityksessä.</string>
   <string name="learn_more_button_text">Lisätietoja</string>
   <!--##############################################
     # Developer tools

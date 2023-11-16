@@ -917,7 +917,6 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <string name="google_drive_deprecation_message">Esse projeto usa o Google Drive. Essa funcionalidade será removida na próxima atualização do app.</string>
   <string name="learn_more_button_text">Saiba mais</string>
   <!--##############################################
     # Developer tools

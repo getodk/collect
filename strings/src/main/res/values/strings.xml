@@ -1129,7 +1129,7 @@
     # Google Drive deprecation
     ##############################################
     -->
-    <string name="google_drive_deprecation_message">This project uses Google Drive. This functionality will be removed in the next app update.</string>
+    <string name="google_drive_removed_message">This project was previously connected to a Google Drive account. Google Drive support has been removed. You can configure a server or pull submissions to a computer.</string>
     <string name="learn_more_button_text">Learn more</string>
 
     <!--

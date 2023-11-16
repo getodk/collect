@@ -43,7 +43,7 @@ class GoogleDriveDeprecationTest {
     fun bannerIsNotVisibleInNonGoogleDriveProjects() {
         rule
             .startAtMainMenu()
-            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_deprecation_message)
+            .assertTextDoesNotExist(org.odk.collect.strings.R.string.google_drive_removed_message)
     }
 
     @Test
@@ -58,7 +58,7 @@ class GoogleDriveDeprecationTest {
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
             .selectProject("Old GD project")
-            .assertText(org.odk.collect.strings.R.string.google_drive_deprecation_message)
+            .assertText(org.odk.collect.strings.R.string.google_drive_removed_message)
     }
 
     @Test
