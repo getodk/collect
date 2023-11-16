@@ -27,7 +27,7 @@ class InstanceSubmitter(
     @Throws(SubmitException::class)
     fun submitInstances(toUpload: List<Instance>): Map<Instance, FormUploadException?> {
         if (toUpload.isEmpty()) {
-            throw SubmitException(SubmitException.Type.NOTHING_TO_SUBMIT)
+            throw SubmitException
         }
         val result = mutableMapOf<Instance, FormUploadException?>()
         val deviceId = propertyManager.getSingularProperty(PROPMGR_DEVICE_ID)
