@@ -314,7 +314,6 @@
   <string name="openmap_usgs_topo">USGS నేషనల్ మ్యాప్ టోపో</string>
   <string name="openmap_usgs_sat">USGS నేషనల్ మ్యాప్ హైబ్రిడ్</string>
   <string name="openmap_usgs_img">USGS నేషనల్ మ్యాప్ ఇమేజరీ</string>
-  <string name="openmap_stamen_terrain">స్టామిన్ భూభాగం</string>
   <string name="openmap_cartodb_positron">కార్టోడిబి పోసిట్రాన్</string>
   <string name="openmap_cartodb_darkmatter">కార్టోడిబి డార్క్ మేటర్</string>
   <string name="basemap">బేస్ మ్యాప్</string>

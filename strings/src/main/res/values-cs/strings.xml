@@ -366,7 +366,6 @@
   <string name="openmap_usgs_topo">Topologická mapa USGS National Map </string>
   <string name="openmap_usgs_sat">Hybridní mapa USGS National Map</string>
   <string name="openmap_usgs_img">Snímková mapa USGS National Map</string>
-  <string name="openmap_stamen_terrain">Plastická mapa</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Základní mapa</string>

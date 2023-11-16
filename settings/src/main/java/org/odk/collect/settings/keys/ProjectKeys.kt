@@ -70,6 +70,5 @@ object ProjectKeys {
     const val BASEMAP_SOURCE_MAPBOX = "mapbox"
     const val BASEMAP_SOURCE_OSM = "osm"
     const val BASEMAP_SOURCE_USGS = "usgs"
-    const val BASEMAP_SOURCE_STAMEN = "stamen"
     const val BASEMAP_SOURCE_CARTO = "carto"
 }

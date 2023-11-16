@@ -335,7 +335,6 @@
   <string name="openmap_usgs_topo">USGS National Map Topo</string>
   <string name="openmap_usgs_sat">USGS ナショナルマップ ハイブリッド</string>
   <string name="openmap_usgs_img">USGS ナショナルマップ画像</string>
-  <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB ポジトロン</string>
   <string name="openmap_cartodb_darkmatter">CartoDB ダークマター</string>
   <string name="basemap">基本地図</string>

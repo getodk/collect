@@ -209,7 +209,6 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <string name="openmap_usgs_topo">यूएसजीएस राष्ट्रीय नकाशा टोपो</string>
-  <string name="openmap_stamen_terrain">स्टेमेन टेरेइन</string>
   <string name="openmap_cartodb_positron">कार्टो डीबी पॉझिट्रॉन</string>
   <string name="openmap_cartodb_darkmatter">कार्टो डीबी गडद बाब</string>
   <string name="basemap">बेसमॅप</string>

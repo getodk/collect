@@ -343,7 +343,6 @@
   <string name="openmap_usgs_topo">USGS地形图</string>
   <string name="openmap_usgs_sat">USGS混合地图</string>
   <string name="openmap_usgs_img">USGS影像地图</string>
-  <string name="openmap_stamen_terrain">Stamen 地形</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">底图</string>

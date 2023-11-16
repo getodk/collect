@@ -44,16 +44,6 @@ class MapFragmentFactoryImplTest {
             mapFragmentFactoryImpl.createMapFragment(),
             instanceOf(OsmDroidMapFragment::class.java)
         )
-
-        // BASEMAP_SOURCE_STAMEN
-        settingsProvider
-            .getUnprotectedSettings()
-            .save(ProjectKeys.KEY_BASEMAP_SOURCE, ProjectKeys.BASEMAP_SOURCE_STAMEN)
-
-        assertThat(
-            mapFragmentFactoryImpl.createMapFragment(),
-            instanceOf(OsmDroidMapFragment::class.java)
-        )
     }
 
     @Test

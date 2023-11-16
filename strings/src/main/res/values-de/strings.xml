@@ -369,7 +369,6 @@
   <string name="openmap_usgs_topo">USGS Topografische Karte</string>
   <string name="openmap_usgs_sat">USGS National Karte Hybrid</string>
   <string name="openmap_usgs_img">USGS National Karte Imagery</string>
-  <string name="openmap_stamen_terrain">Stamen Terrain</string>
   <string name="openmap_cartodb_positron">CartoDB Positron</string>
   <string name="openmap_cartodb_darkmatter">CartoDB Dark Matter</string>
   <string name="basemap">Basiskarte</string>

@@ -2,7 +2,6 @@ package org.odk.collect.settings;
 
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_CARTO;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_OSM;
-import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_STAMEN;
 import static org.odk.collect.settings.keys.ProjectKeys.BASEMAP_SOURCE_USGS;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_BASEMAP_SOURCE;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_CARTO_MAP_STYLE;
@@ -94,7 +93,7 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_USGS, KEY_USGS_MAP_STYLE, "satellite")
 
                         .withValues("osmdroid", "openmap_stamen_terrain")
-                        .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_STAMEN)
+                        .toPairs(KEY_BASEMAP_SOURCE, "stamen")
 
                         .withValues("osmdroid", "openmap_cartodb_positron")
                         .toPairs(KEY_BASEMAP_SOURCE, BASEMAP_SOURCE_CARTO, KEY_CARTO_MAP_STYLE, "positron")
@@ -129,7 +128,9 @@ public class ODKAppSettingsMigrator implements SettingsMigrator {
 
                 moveKey("knownUrlList").toPreferences(metaSettings),
 
-                moveKey("default_completed").toPreferences(protectedSettings)
+                moveKey("default_completed").toPreferences(protectedSettings),
+
+                translateValue("stamen").toValue(BASEMAP_SOURCE_OSM).forKey(KEY_BASEMAP_SOURCE)
         );
     }
 
