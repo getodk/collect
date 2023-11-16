@@ -11,7 +11,6 @@ import org.junit.Test
 import org.junit.rules.RuleChain
 import org.odk.collect.android.activities.WebViewActivity
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -49,7 +48,7 @@ class GoogleDriveDeprecationTest {
 
     @Test
     fun bannerIsVisibleInGoogleDriveProjects() {
-        val newProject = CollectHelpers.addProject(Project.New("Old GD project", "A", "#ffffff"))
+        val newProject = addProject(Project.New("Old GD project", "A", "#ffffff"))
         val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
         component
             .settingsProvider()
@@ -64,7 +63,7 @@ class GoogleDriveDeprecationTest {
 
     @Test
     fun forumThreadIsOpenedAfterClickingLearnMore() {
-        val newProject = CollectHelpers.addProject(Project.New("Old GD project", "A", "#ffffff"))
+        val newProject = addProject(Project.New("Old GD project", "A", "#ffffff"))
         val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
         component
             .settingsProvider()
@@ -91,5 +90,11 @@ class GoogleDriveDeprecationTest {
             .clickSettings()
             .clickProjectManagement()
             .assertText(org.odk.collect.strings.R.string.reconfigure_with_qr_code_settings_title)
+    }
+
+    private fun addProject(project: Project): Project.Saved {
+        val component =
+            DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
+        return component.projectsRepository().save(project)
     }
 }

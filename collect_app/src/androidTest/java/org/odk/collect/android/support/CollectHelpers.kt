@@ -37,11 +37,4 @@ object CollectHelpers {
         component.projectsRepository().save(Project.DEMO_PROJECT)
         component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID)
     }
-
-    @JvmStatic
-    fun addProject(project: Project): Project.Saved {
-        val component =
-            DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-        return component.projectsRepository().save(project)
-    }
 }
