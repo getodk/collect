@@ -9,12 +9,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
 import org.javarosa.core.model.SelectChoice;
 import org.javarosa.core.model.actions.recordaudio.RecordAudioActionHandler;
 import org.javarosa.core.model.data.IAnswerData;
+import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.exception.ExternalDataException;
@@ -23,6 +25,7 @@ import org.odk.collect.android.formentry.audit.AuditEvent;
 import org.odk.collect.android.formentry.questions.SelectChoiceUtils;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.androidshared.data.Consumable;
@@ -32,9 +35,12 @@ import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
 
@@ -61,6 +67,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private AnswerListener answerListener;
 
     private final Cancellable formSessionObserver;
+
+    private final Map<FormIndex, List<SelectChoice>> choices = new HashMap<>();
 
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId) {
@@ -275,7 +283,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     @NonNull
     @Override
     public List<SelectChoice> loadSelectChoices(@NonNull FormEntryPrompt prompt) throws FileNotFoundException, XPathSyntaxException, ExternalDataException {
-        return SelectChoiceUtils.loadSelectChoices(prompt, formController);
+        List<SelectChoice> selectChoices = choices.get(prompt.getIndex());
+
+        if (selectChoices != null) {
+            return selectChoices;
+        } else {
+            // Not all select choices are loaded preemptively yet
+            return SelectChoiceUtils.loadSelectChoices(prompt, formController);
+        }
     }
 
     @Override
@@ -285,8 +300,31 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void refresh() {
+        choices.clear();
+
         if (formController != null) {
-            currentIndex.setValue(formController.getFormIndex());
+            currentIndex.setValue(formController.getFormIndex()); // Need to this first for `SavePointTest` for some reason
+
+            isLoading.setValue(true);
+            scheduler.immediate(() -> {
+                try {
+                    /*
+                     We can't load for field lists as their choices might change on screen (before
+                     refresh is called again).
+                    */
+                    if (!formController.indexIsInFieldList()) {
+                        preloadSelectChoices();
+                    }
+
+                    return null;
+                } catch (RepeatsInFieldListException | XPathSyntaxException |
+                         FileNotFoundException e) {
+                    return null;
+                }
+            }, (ignored) -> {
+                isLoading.setValue(false);
+                currentIndex.setValue(formController.getFormIndex());
+            });
         }
     }
 
@@ -315,6 +353,23 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                     validationResult.setValue(new Consumable<>(result));
                 }
         );
+    }
+
+    private void preloadSelectChoices() throws RepeatsInFieldListException, FileNotFoundException, XPathSyntaxException {
+        int event = formController.getEvent();
+        if (event == FormEntryController.EVENT_QUESTION || event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_REPEAT) {
+            FormEntryPrompt[] prompts = formController.getQuestionPrompts();
+            List<FormEntryPrompt> selectPrompts = Arrays.stream(prompts).filter((prompt) -> {
+                boolean isSelect = prompt.getControlType() == Constants.CONTROL_SELECT_ONE || prompt.getControlType() == Constants.CONTROL_SELECT_MULTI || prompt.getControlType() == Constants.CONTROL_RANK;
+
+                boolean isSelectOneExternal = prompt.getControlType() == Constants.CONTROL_INPUT && prompt.getDataType() == Constants.DATATYPE_TEXT && prompt.getQuestion().getAdditionalAttribute(null, "query") != null;
+                return isSelect || isSelectOneExternal;
+            }).collect(Collectors.toList());
+            for (FormEntryPrompt prompt : selectPrompts) {
+                List<SelectChoice> selectChoices = SelectChoiceUtils.loadSelectChoices(prompt, formController);
+                choices.put(prompt.getIndex(), selectChoices);
+            }
+        }
     }
 
     public interface AnswerListener {
