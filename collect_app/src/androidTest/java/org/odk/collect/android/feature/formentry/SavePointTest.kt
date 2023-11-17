@@ -45,17 +45,19 @@ class SavePointTest {
 
         // Check audit log
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
-        assertThat(auditLog.size, equalTo(7))
+        assertThat(auditLog.size, equalTo(8))
 
         assertThat(auditLog[0].get("event"), equalTo("form start"))
         assertThat(auditLog[1].get("event"), equalTo("question"))
-        // Second question event not logged - possibly a problem
+        assertThat(auditLog[1].get("node"), equalTo("/data/name"))
+        assertThat(auditLog[2].get("event"), equalTo("question"))
+        assertThat(auditLog[2].get("node"), equalTo("/data/age"))
 
-        assertThat(auditLog[2].get("event"), equalTo("form resume"))
-        assertThat(auditLog[3].get("event"), equalTo("jump"))
-        assertThat(auditLog[4].get("event"), equalTo("question"))
-        assertThat(auditLog[5].get("event"), equalTo("form save"))
-        assertThat(auditLog[6].get("event"), equalTo("form exit"))
+        assertThat(auditLog[3].get("event"), equalTo("form resume"))
+        assertThat(auditLog[4].get("event"), equalTo("jump"))
+        assertThat(auditLog[5].get("event"), equalTo("question"))
+        assertThat(auditLog[6].get("event"), equalTo("form save"))
+        assertThat(auditLog[7].get("event"), equalTo("form exit"))
     }
 
     @Test
@@ -90,18 +92,20 @@ class SavePointTest {
 
         // Check audit log
         val auditLog = StorageUtils.getAuditLogForFirstInstance()
-        assertThat(auditLog.size, equalTo(13))
+        assertThat(auditLog.size, equalTo(14))
 
         assertThat(auditLog[5].get("event"), equalTo("form resume"))
         assertThat(auditLog[6].get("event"), equalTo("jump"))
         assertThat(auditLog[7].get("event"), equalTo("question"))
-        // Second question event not logged - possibly a problem
+        assertThat(auditLog[7].get("node"), equalTo("/data/name"))
+        assertThat(auditLog[8].get("event"), equalTo("question"))
+        assertThat(auditLog[8].get("node"), equalTo("/data/age"))
 
-        assertThat(auditLog[8].get("event"), equalTo("form resume"))
-        assertThat(auditLog[9].get("event"), equalTo("jump"))
-        assertThat(auditLog[10].get("event"), equalTo("question"))
-        assertThat(auditLog[11].get("event"), equalTo("form save"))
-        assertThat(auditLog[12].get("event"), equalTo("form exit"))
+        assertThat(auditLog[9].get("event"), equalTo("form resume"))
+        assertThat(auditLog[10].get("event"), equalTo("jump"))
+        assertThat(auditLog[11].get("event"), equalTo("question"))
+        assertThat(auditLog[12].get("event"), equalTo("form save"))
+        assertThat(auditLog[13].get("event"), equalTo("form exit"))
     }
 
     @Test

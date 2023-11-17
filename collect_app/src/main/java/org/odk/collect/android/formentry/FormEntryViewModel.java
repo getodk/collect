@@ -3,6 +3,8 @@ package org.odk.collect.android.formentry;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.observe;
 
+import android.os.Looper;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -121,7 +123,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
         jumpBackIndex = formController.getFormIndex();
         jumpToNewRepeat();
-        refresh();
+        updateIndex();
     }
 
     public void jumpToNewRepeat() {
@@ -149,7 +151,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        refresh();
+        updateIndex();
     }
 
     public void cancelRepeatPrompt() {
@@ -168,7 +170,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        refresh();
+        updateIndex();
     }
 
     public void errorDisplayed() {
@@ -191,44 +193,46 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     public void moveForward(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
         isLoading.setValue(true);
-
         scheduler.immediate((Supplier<Boolean>) () -> {
-            return saveScreenAnswersToFormController(answers, evaluateConstraints);
-        }, updateSuccess -> {
-            isLoading.setValue(false);
-
+            boolean updateSuccess = saveScreenAnswersToFormController(answers, evaluateConstraints);
             if (updateSuccess) {
                 try {
                     formController.stepToNextScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.setValue(new FormError.NonFatal(e.getCause().getMessage()));
+                    error.postValue(new FormError.NonFatal(e.getCause().getMessage()));
                 }
 
+                updateIndex();
+            }
+
+            return updateSuccess;
+        }, updateSuccess -> {
+            isLoading.setValue(false);
+
+            if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                refresh();
             }
         });
     }
 
     public void moveBackward(HashMap<FormIndex, IAnswerData> answers) {
         isLoading.setValue(true);
-
-        scheduler.immediate((Supplier<Boolean>) () -> {
-            return saveScreenAnswersToFormController(answers, false);
-        }, updateSuccess -> {
-            isLoading.setValue(false);
-
+        scheduler.immediate((Supplier<Void>) () -> {
+            boolean updateSuccess = saveScreenAnswersToFormController(answers, false);
             if (updateSuccess) {
                 try {
                     formController.stepToPreviousScreenEvent();
                 } catch (JavaRosaException e) {
                     error.setValue(new FormError.NonFatal(e.getCause().getMessage()));
-                    return;
                 }
 
-                formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                refresh();
+                updateIndex();
             }
+
+            return null;
+        }, ignored -> {
+            formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+            isLoading.setValue(false);
         });
     }
 
@@ -300,31 +304,31 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void refresh() {
+        updateIndex();
+    }
+
+    private void updateIndex() {
         choices.clear();
 
         if (formController != null) {
-            currentIndex.setValue(formController.getFormIndex()); // Need to this first for `SavePointTest` for some reason
-
-            isLoading.setValue(true);
-            scheduler.immediate(() -> {
-                try {
+            try {
                     /*
                      We can't load for field lists as their choices might change on screen (before
-                     refresh is called again).
+                     updateIndex is called again).
                     */
-                    if (!formController.indexIsInFieldList()) {
-                        preloadSelectChoices();
-                    }
-
-                    return null;
-                } catch (RepeatsInFieldListException | XPathSyntaxException |
-                         FileNotFoundException e) {
-                    return null;
+                if (!formController.indexIsInFieldList()) {
+                    preloadSelectChoices();
                 }
-            }, (ignored) -> {
-                isLoading.setValue(false);
+            } catch (RepeatsInFieldListException | XPathSyntaxException |
+                     FileNotFoundException e) {
+                // Ignored
+            }
+
+            if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
                 currentIndex.setValue(formController.getFormIndex());
-            });
+            } else {
+                currentIndex.postValue(formController.getFormIndex());
+            }
         }
     }
 
@@ -343,13 +347,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                         error.postValue(new FormError.NonFatal(e.getMessage()));
                     }
 
+                    // JavaRosa moves to the index where the contraint failed
+                    if (result instanceof FailedValidationResult) {
+                        updateIndex();
+                    }
+
                     return result;
                 }, result -> {
                     isLoading.setValue(false);
-
-                    if (result instanceof FailedValidationResult) {
-                        refresh();
-                    }
                     validationResult.setValue(new Consumable<>(result));
                 }
         );
