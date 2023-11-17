@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.externaldata.handler;
+package org.odk.collect.android.dynamicpreload.handler;
 
 /**
  * Author: Meletis Margaritis

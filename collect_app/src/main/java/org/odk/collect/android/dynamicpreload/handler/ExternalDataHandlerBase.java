@@ -16,10 +16,10 @@
  * the License.
  */
 
-package org.odk.collect.android.externaldata.handler;
+package org.odk.collect.android.dynamicpreload.handler;
 
-import org.odk.collect.android.externaldata.ExternalDataHandler;
-import org.odk.collect.android.externaldata.ExternalDataManager;
+import org.odk.collect.android.dynamicpreload.ExternalDataHandler;
+import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 
 import java.util.Locale;
 

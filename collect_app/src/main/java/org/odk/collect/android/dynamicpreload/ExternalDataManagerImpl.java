@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.externaldata;
+package org.odk.collect.android.dynamicpreload;
 
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;

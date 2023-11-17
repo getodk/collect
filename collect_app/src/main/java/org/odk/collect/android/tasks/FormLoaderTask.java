@@ -38,10 +38,9 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.javarosa.xpath.XPathTypeMismatchException;
 import org.odk.collect.android.application.Collect;
-import org.odk.collect.android.externaldata.ExternalAnswerResolver;
-import org.odk.collect.android.externaldata.ExternalDataManager;
-import org.odk.collect.android.externaldata.ExternalDataReader;
-import org.odk.collect.android.externaldata.ExternalDataReaderImpl;
+import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver;
+import org.odk.collect.android.dynamicpreload.ExternalDataManager;
+import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
@@ -57,9 +56,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import timber.log.Timber;
 
@@ -141,6 +138,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
+        unzipMediaFiles(formMediaDir);
         setupReferenceManagerForForm(ReferenceManager.instance(), formMediaDir);
 
         FormDef formDef = null;
@@ -163,7 +161,9 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         externalDataManager = Collect.getInstance().getExternalDataManager();
 
         try {
-            loadExternalData(formMediaDir);
+            ExternalDataUseCases.create(formDef, formMediaDir, this::isCancelled, progress -> {
+                publishProgress(progress.apply(Collect.getInstance().getResources()));
+            });
         } catch (Exception e) {
             Timber.e(e, "Exception thrown while loading external data");
             errorMsg = e.getMessage();
@@ -221,6 +221,25 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
         }
         data = new FECWrapper(fc, usedSavepoint);
         return data;
+    }
+
+    private static void unzipMediaFiles(File formMediaDir) {
+        File[] zipFiles = formMediaDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.getName().toLowerCase(Locale.US).endsWith(".zip");
+            }
+        });
+
+        if (zipFiles != null) {
+            ZipUtils.unzip(zipFiles);
+            for (File zipFile : zipFiles) {
+                boolean deleted = zipFile.delete();
+                if (!deleted) {
+                    Timber.w("Cannot delete %s. It will be re-unzipped next time. :(", zipFile.toString());
+                }
+            }
+        }
     }
 
     private FormDef createFormDefFromCacheOrXml(String formPath, File formXml) throws XFormParser.ParseException {
@@ -341,60 +360,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
             formDef.initialize(true, instanceInit);
         }
         return usedSavepoint;
-    }
-
-    @SuppressWarnings("unchecked")
-    private void loadExternalData(File mediaFolder) {
-        // SCTO-594
-        File[] zipFiles = mediaFolder.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.getName().toLowerCase(Locale.US).endsWith(".zip");
-            }
-        });
-
-        if (zipFiles != null) {
-            ZipUtils.unzip(zipFiles);
-            for (File zipFile : zipFiles) {
-                boolean deleted = zipFile.delete();
-                if (!deleted) {
-                    Timber.w("Cannot delete %s. It will be re-unzipped next time. :(", zipFile.toString());
-                }
-            }
-        }
-
-        File[] csvFiles = mediaFolder.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                String lowerCaseName = file.getName().toLowerCase(Locale.US);
-                return lowerCaseName.endsWith(".csv") && !lowerCaseName.equalsIgnoreCase(
-                        ITEMSETS_CSV);
-            }
-        });
-
-        Map<String, File> externalDataMap = new HashMap<>();
-
-        if (csvFiles != null) {
-
-            for (File csvFile : csvFiles) {
-                String dataSetName = csvFile.getName().substring(0,
-                        csvFile.getName().lastIndexOf("."));
-                externalDataMap.put(dataSetName, csvFile);
-            }
-
-            if (!externalDataMap.isEmpty()) {
-
-                publishProgress(Collect.getInstance()
-                        .getString(org.odk.collect.strings.R.string.survey_loading_reading_csv_message));
-
-                ExternalDataReader externalDataReader = new ExternalDataReaderImpl(this);
-                externalDataReader.doImport(externalDataMap);
-            }
-        }
-    }
-
-    public void publishExternalDataLoadingProgress(String message) {
-        publishProgress(message);
     }
 
     @Override

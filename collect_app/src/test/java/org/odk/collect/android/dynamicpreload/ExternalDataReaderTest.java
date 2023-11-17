@@ -1,4 +1,4 @@
-package org.odk.collect.android.externaldata;
+package org.odk.collect.android.dynamicpreload;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,10 +32,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.COLUMN_DATASET_FILENAME;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.COLUMN_MD5_HASH;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME;
-import static org.odk.collect.android.externaldata.ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME;
+import static org.mockito.Mockito.mock;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.COLUMN_DATASET_FILENAME;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.COLUMN_MD5_HASH;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.EXTERNAL_DATA_TABLE_NAME;
+import static org.odk.collect.android.dynamicpreload.ExternalDataUtil.EXTERNAL_METADATA_TABLE_NAME;
 
 @RunWith(AndroidJUnit4.class)
 public class ExternalDataReaderTest {
@@ -75,7 +76,7 @@ public class ExternalDataReaderTest {
 
     @Test
     public void doImport_createsDataAndMetadataTables() {
-        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(null);
+        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
 
         assertThat(dbFile.exists(), is(true));
@@ -92,7 +93,7 @@ public class ExternalDataReaderTest {
      */
     @Test
     public void doImport_doesNotModifyOriginalCsv() {
-        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(null);
+        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
 
         assertThat(dbFile.exists(), is(true));
@@ -123,14 +124,14 @@ public class ExternalDataReaderTest {
     @Test
     public void doImport_reimportsCsvIfDatabaseFileIsDeleted() {
         // Create the DB file with an initial import
-        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(null);
+        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
         assertThat(dbFile.exists(), is(true));
 
         dbFile.delete();
 
         // Reimport
-        externalDataReader = new ExternalDataReaderImpl(null);
+        externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
         assertThat(dbFile.exists(), is(true));
     }
@@ -138,7 +139,7 @@ public class ExternalDataReaderTest {
     @Test
     public void doImport_reimportsCsvIfMetadataTableIsMissing() {
         // Create the DB file with an initial import
-        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(null);
+        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
         assertThat(dbFile.exists(), is(true));
 
@@ -148,7 +149,7 @@ public class ExternalDataReaderTest {
         db.close();
 
         // Reimport
-        externalDataReader = new ExternalDataReaderImpl(null);
+        externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
         assertThat(dbFile.exists(), is(true));
         db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -159,7 +160,7 @@ public class ExternalDataReaderTest {
     @Test
     public void doImport_reimportsCsvIfFileIsUpdated() throws IOException, InterruptedException {
         // Create the DB file with an initial import
-        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(null);
+        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
         assertThat(dbFile.exists(), is(true));
 
@@ -178,7 +179,7 @@ public class ExternalDataReaderTest {
         assertThat(newHash, is(not(originalHash)));
 
         // Reimport
-        externalDataReader = new ExternalDataReaderImpl(null);
+        externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
 
         db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
@@ -192,7 +193,7 @@ public class ExternalDataReaderTest {
     @Test
     public void doImport_skipsImportIfFileNotUpdated() {
         // Create the DB file with an initial import
-        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(null);
+        ExternalDataReader externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
         assertThat(dbFile.exists(), is(true));
         SQLiteDatabase db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
@@ -207,7 +208,7 @@ public class ExternalDataReaderTest {
         db.close();
 
         // Reimport
-        externalDataReader = new ExternalDataReaderImpl(null);
+        externalDataReader = new ExternalDataReaderImpl(() -> false, mock());
         externalDataReader.doImport(formDefToCsvMedia);
         db = SQLiteDatabase.openDatabase(dbFile.getAbsolutePath(), null, SQLiteDatabase.OPEN_READWRITE);
         cursor = db.rawQuery(SELECT_ALL_DATA_QUERY, null);

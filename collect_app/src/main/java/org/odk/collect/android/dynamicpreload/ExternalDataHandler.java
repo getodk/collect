@@ -16,28 +16,16 @@
  * the License.
  */
 
-package org.odk.collect.android.externaldata;
+package org.odk.collect.android.dynamicpreload;
 
-import org.javarosa.core.model.SelectChoice;
+import org.javarosa.core.model.condition.IFunctionHandler;
 
 /**
  * Author: Meletis Margaritis
- * Date: 18/11/2013
- * Time: 2:08 μμ
+ * Date: 30/04/13
+ * Time: 09:42
  */
-public class ExternalSelectChoice extends SelectChoice {
+public interface ExternalDataHandler extends IFunctionHandler {
 
-    String image;
-
-    public ExternalSelectChoice(String labelOrID, String value, boolean isLocalizable) {
-        super(labelOrID, value, isLocalizable);
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
+    void setExternalDataManager(ExternalDataManager externalDataManager);
 }

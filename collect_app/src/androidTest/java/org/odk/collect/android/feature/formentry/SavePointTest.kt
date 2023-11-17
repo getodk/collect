@@ -60,7 +60,7 @@ class SavePointTest {
     @Test
     fun whenEditing_savePointIsCreatedWhenMovingForwardInForm() {
         // Create instance
-        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+        rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
             .fillOutAndSave(
                 AppClosedPage(),
@@ -105,7 +105,7 @@ class SavePointTest {
     @Test
     fun savePointIsCreatedWhenLeavingTheApp() {
         // Create save point
-        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+        rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
             .answerQuestion("What is your name?", "Alexei")
             .let { simulateProcessDeath() }
@@ -135,7 +135,7 @@ class SavePointTest {
     @Test
     fun whenEditing_savePointIsCreatedWhenLeavingTheApp() {
         // Create instance
-        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+        rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
             .fillOutAndSave(
                 AppClosedPage(),
@@ -176,7 +176,7 @@ class SavePointTest {
     @Test
     fun blankFormSavePointIsNotUsedWhenEditingInstance() {
         // Create instance
-        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+        rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
             .fillOutAndSave(
                 AppClosedPage(),
@@ -199,7 +199,7 @@ class SavePointTest {
     @Test
     fun editedInstanceSavePointIsNotUsedWhenFillingBlankFormOfTheSameForm() {
         // Create instance
-        rule.setUpProjectAndCopyForm("two-question-audit.xml")
+        rule.setUpProjectAndCopyForm("two-question-audit.xml", listOf("external_data_10.zip"))
             .fillNewForm("two-question-audit.xml", "Two Question")
             .fillOutAndSave(
                 AppClosedPage(),

@@ -9,7 +9,7 @@ import org.javarosa.core.reference.ReferenceManager
 import org.javarosa.form.api.FormEntryController
 import org.javarosa.xform.parse.XFormParser
 import org.javarosa.xform.util.XFormUtils
-import org.odk.collect.android.externaldata.ExternalAnswerResolver
+import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver
 import org.odk.collect.android.javarosawrapper.FailedValidationResult
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController

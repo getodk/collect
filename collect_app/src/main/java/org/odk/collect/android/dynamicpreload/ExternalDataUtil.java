@@ -16,7 +16,7 @@
  * the License.
  */
 
-package org.odk.collect.android.externaldata;
+package org.odk.collect.android.dynamicpreload;
 
 import android.widget.Toast;
 
@@ -31,7 +31,7 @@ import org.javarosa.xpath.expr.XPathFuncExpr;
 import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.exception.ExternalDataException;
-import org.odk.collect.android.externaldata.handler.ExternalDataHandlerSearch;
+import org.odk.collect.android.dynamicpreload.handler.ExternalDataHandlerSearch;
 import org.odk.collect.android.javarosawrapper.FormController;
 
 import java.io.File;

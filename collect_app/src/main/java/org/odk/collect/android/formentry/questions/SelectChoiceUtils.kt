@@ -3,8 +3,8 @@ package org.odk.collect.android.formentry.questions
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.form.api.FormEntryPrompt
 import org.javarosa.xpath.parser.XPathSyntaxException
+import org.odk.collect.android.dynamicpreload.ExternalDataUtil
 import org.odk.collect.android.exception.ExternalDataException
-import org.odk.collect.android.externaldata.ExternalDataUtil
 import org.odk.collect.android.fastexternalitemset.ItemsetDao
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter
 import org.odk.collect.android.fastexternalitemset.XPathParseTool
