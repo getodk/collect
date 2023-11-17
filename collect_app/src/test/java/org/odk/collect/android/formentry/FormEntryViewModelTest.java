@@ -75,6 +75,7 @@ public class FormEntryViewModelTest {
     @Test
     public void addRepeat_stepsToNextScreenEvent() throws Exception {
         viewModel.addRepeat();
+        scheduler.runBackground();
         verify(formController).stepToNextScreenEvent();
     }
 
@@ -83,6 +84,7 @@ public class FormEntryViewModelTest {
         doThrow(new RuntimeException(new IOException("OH NO"))).when(formController).newRepeat();
 
         viewModel.addRepeat();
+        scheduler.runBackground();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 
@@ -95,6 +97,8 @@ public class FormEntryViewModelTest {
         doThrow(runtimeException).when(formController).newRepeat();
 
         viewModel.addRepeat();
+        scheduler.runBackground();
+
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("Unknown issue occurred while adding a new group")));
     }
 
@@ -103,6 +107,7 @@ public class FormEntryViewModelTest {
         when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.addRepeat();
+        scheduler.runBackground();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 
@@ -115,6 +120,8 @@ public class FormEntryViewModelTest {
         when(formController.stepToNextScreenEvent()).thenThrow(javaRosaException);
 
         viewModel.addRepeat();
+        scheduler.runBackground();
+
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("Unknown issue occurred while adding a new group")));
     }
 
@@ -130,7 +137,11 @@ public class FormEntryViewModelTest {
     @Test
     public void cancelRepeatPrompt_afterPromptForNewRepeatAndCancelRepeatPrompt_doesNotJumpBack() {
         viewModel.promptForNewRepeat();
+        scheduler.runBackground();
+
         viewModel.cancelRepeatPrompt();
+        scheduler.runBackground();
+
         verify(formController).jumpToIndex(startingIndex);
 
         viewModel.cancelRepeatPrompt();
@@ -142,6 +153,7 @@ public class FormEntryViewModelTest {
         when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.cancelRepeatPrompt();
+        scheduler.runBackground();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 
@@ -208,7 +220,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
-        viewModel.refresh();
+        viewModel.refreshSync();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveForward(new HashMap<>());
@@ -323,7 +335,7 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
-        viewModel.refresh();
+        viewModel.refreshSync();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveBackward(new HashMap<>());

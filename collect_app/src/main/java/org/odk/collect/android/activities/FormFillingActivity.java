@@ -860,7 +860,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
             activityDisplayed();
-            formEntryViewModel.refresh();
+            formEntryViewModel.refreshSync();
             return;
         }
 
@@ -2109,7 +2109,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             boolean pendingActivityResult = task.hasPendingActivityResult();
                             if (pendingActivityResult) {
                                 formControllerAvailable(formController);
-                                formEntryViewModel.refresh();
+                                formEntryViewModel.refreshSync();
                                 onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                             } else {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
