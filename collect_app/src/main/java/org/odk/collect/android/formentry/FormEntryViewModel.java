@@ -21,6 +21,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
+import org.odk.collect.android.async.ViewModelWorker;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -47,12 +48,10 @@ import java.util.stream.Collectors;
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
 
     private final Supplier<Long> clock;
-    private final Scheduler scheduler;
 
     private final MutableLiveData<FormError> error = new MutableLiveData<>(null);
     private final MutableNonNullLiveData<Boolean> hasBackgroundRecording = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<FormIndex> currentIndex = new MutableLiveData<>(null);
-    private final MutableNonNullLiveData<Boolean> isLoading = new MutableNonNullLiveData<>(false);
     private final MutableLiveData<Consumable<ValidationResult>>
             validationResult = new MutableLiveData<>(new Consumable<>(null));
     @NonNull
@@ -72,11 +71,13 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final Map<FormIndex, List<SelectChoice>> choices = new HashMap<>();
 
+    private final ViewModelWorker worker;
+
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId) {
         this.clock = clock;
-        this.scheduler = scheduler;
         this.formSessionRepository = formSessionRepository;
+        worker = new ViewModelWorker(scheduler);
 
         this.sessionId = sessionId;
         formSessionObserver = observe(formSessionRepository.get(this.sessionId), formSession -> {
@@ -112,7 +113,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public NonNullLiveData<Boolean> isLoading() {
-        return isLoading;
+        return worker.isWorking();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -121,15 +122,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return;
         }
 
-        isLoading.setValue(true);
-        scheduler.immediate((Supplier<Void>) () -> {
+        worker.immediate((Supplier<Void>) () -> {
             jumpBackIndex = formController.getFormIndex();
             jumpToNewRepeat();
             updateIndex();
             return null;
-        }, ignored -> {
-            isLoading.setValue(false);
-        });
+        }, ignored -> {});
     }
 
     public void jumpToNewRepeat() {
@@ -141,8 +139,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return;
         }
 
-        isLoading.setValue(true);
-        scheduler.immediate((Supplier<Void>) () -> {
+        worker.immediate((Supplier<Void>) () -> {
             jumpBackIndex = null;
 
             try {
@@ -161,9 +158,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
             updateIndex();
             return null;
-        }, ignored -> {
-            isLoading.setValue(false);
-        });
+        }, ignored -> {});
     }
 
     public void cancelRepeatPrompt() {
@@ -171,8 +166,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return;
         }
 
-        isLoading.setValue(true);
-        scheduler.immediate((Supplier<Void>) () -> {
+        worker.immediate((Supplier<Void>) () -> {
             if (jumpBackIndex != null) {
                 formController.jumpToIndex(jumpBackIndex);
                 jumpBackIndex = null;
@@ -186,9 +180,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
             updateIndex();
             return null;
-        }, ignored -> {
-            isLoading.setValue(false);
-        });
+        }, ignored -> {});
     }
 
     public void errorDisplayed() {
@@ -210,8 +202,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void moveForward(HashMap<FormIndex, IAnswerData> answers, Boolean evaluateConstraints) {
-        isLoading.setValue(true);
-        scheduler.immediate((Supplier<Boolean>) () -> {
+        worker.immediate(() -> {
             boolean updateSuccess = saveScreenAnswersToFormController(answers, evaluateConstraints);
             if (updateSuccess) {
                 try {
@@ -225,8 +216,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
             return updateSuccess;
         }, updateSuccess -> {
-            isLoading.setValue(false);
-
             if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
             }
@@ -234,8 +223,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void moveBackward(HashMap<FormIndex, IAnswerData> answers) {
-        isLoading.setValue(true);
-        scheduler.immediate((Supplier<Void>) () -> {
+        worker.immediate((Supplier<Void>) () -> {
             boolean updateSuccess = saveScreenAnswersToFormController(answers, false);
             if (updateSuccess) {
                 try {
@@ -250,7 +238,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return null;
         }, ignored -> {
             formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-            isLoading.setValue(false);
         });
     }
 
@@ -327,13 +314,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void refresh() {
-        isLoading.setValue(true);
-        scheduler.immediate((Supplier<Void>) () -> {
+        worker.immediate((Supplier<Void>) () -> {
             updateIndex();
             return null;
-        }, ignored -> {
-            isLoading.setValue(false);
-        });
+        }, ignored -> {});
     }
 
     private void updateIndex() {
@@ -366,8 +350,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void validate() {
-        isLoading.setValue(true);
-        scheduler.immediate(
+        worker.immediate(
                 () -> {
                     ValidationResult result = null;
                     try {
@@ -383,7 +366,6 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
                     return result;
                 }, result -> {
-                    isLoading.setValue(false);
                     validationResult.setValue(new Consumable<>(result));
                 }
         );
