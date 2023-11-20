@@ -55,7 +55,7 @@ class QRCodeViewModelTest {
             fakeScheduler
         )
 
-        fakeScheduler.runBackground() // Run initial QR generation
+        fakeScheduler.flush() // Run initial QR generation
         return viewModel
     }
 }

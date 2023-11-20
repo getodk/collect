@@ -205,7 +205,7 @@ public class FormEntryViewModelTest {
         HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
         viewModel.moveForward(answers);
 
-        scheduler.runBackground();
+        scheduler.flush();
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(answers, false);
         verifier.verify(formController).stepToNextScreenEvent();
@@ -302,7 +302,7 @@ public class FormEntryViewModelTest {
         viewModel.moveForward(new HashMap<>());
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(true));
 
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
     }
 
@@ -320,7 +320,7 @@ public class FormEntryViewModelTest {
         HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
         viewModel.moveBackward(answers);
 
-        scheduler.runBackground();
+        scheduler.flush();
         InOrder verifier = inOrder(formController, auditEventLogger);
         verifier.verify(formController).saveAllScreenAnswers(answers, false);
         verifier.verify(formController).stepToPreviousScreenEvent();
@@ -380,7 +380,7 @@ public class FormEntryViewModelTest {
         viewModel.moveBackward(new HashMap<>());
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(true));
 
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
     }
 
@@ -391,7 +391,7 @@ public class FormEntryViewModelTest {
         viewModel.validate();
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(true));
 
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
     }
 

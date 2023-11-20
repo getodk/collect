@@ -14,7 +14,12 @@ class FakeScheduler : Scheduler {
     private var repeatTasks = ArrayList<RepeatTask>()
 
     override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
-        backgroundTasks.addLast(Runnable { foreground.accept(background.get()) })
+        backgroundTasks.addLast(
+            Runnable {
+                val result = background.get()
+                foregroundTasks.add(Runnable { foreground.accept(result) })
+            }
+        )
     }
 
     override fun immediate(foreground: Runnable) {
@@ -78,8 +83,10 @@ class FakeScheduler : Scheduler {
     }
 
     fun flush() {
-        runBackground()
-        runForeground()
+        while (backgroundTasks.isNotEmpty() || foregroundTasks.isNotEmpty()) {
+            runBackground()
+            runForeground()
+        }
     }
 
     fun isRepeatRunning(): Boolean {
