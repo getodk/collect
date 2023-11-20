@@ -12,7 +12,6 @@ import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
 import org.odk.collect.settings.InMemSettingsProvider
-import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 
 class GoogleDriveProjectsDeleterTest {
@@ -56,7 +55,7 @@ class GoogleDriveProjectsDeleterTest {
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_SERVER))
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_SERVER_URL), equalTo("https://example.com"))
-        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(true))
+        assertThat(projectsRepository.get("1")!!.isOldGoogleDriveProject, equalTo(true))
     }
 
     @Test
@@ -69,7 +68,7 @@ class GoogleDriveProjectsDeleterTest {
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_SERVER))
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_SERVER_URL), equalTo("https://example.com"))
-        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(true))
+        assertThat(projectsRepository.get("1")!!.isOldGoogleDriveProject, equalTo(true))
     }
 
     @Test
@@ -81,7 +80,7 @@ class GoogleDriveProjectsDeleterTest {
         googleDriveProjectsDeleter.run()
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_GOOGLE_SHEETS))
-        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(false))
+        assertThat(projectsRepository.get("1")!!.isOldGoogleDriveProject, equalTo(false))
     }
 
     @Test
@@ -93,7 +92,7 @@ class GoogleDriveProjectsDeleterTest {
         googleDriveProjectsDeleter.run()
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_GOOGLE_SHEETS))
-        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(false))
+        assertThat(projectsRepository.get("1")!!.isOldGoogleDriveProject, equalTo(false))
     }
 
     @Test
@@ -105,6 +104,6 @@ class GoogleDriveProjectsDeleterTest {
         googleDriveProjectsDeleter.run()
 
         assertThat(settingsProvider.getUnprotectedSettings("1").getString(ProjectKeys.KEY_PROTOCOL), equalTo(ProjectKeys.PROTOCOL_GOOGLE_SHEETS))
-        assertThat(settingsProvider.getMetaSettings().getBoolean(MetaKeys.getKeyIsOldGDProject("1")), equalTo(false))
+        assertThat(projectsRepository.get("1")!!.isOldGoogleDriveProject, equalTo(false))
     }
 }

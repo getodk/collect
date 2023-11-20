@@ -16,7 +16,6 @@ import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.keys.MetaKeys
 
 class GoogleDriveDeprecationTest {
     private val rule = CollectTestRule()
@@ -36,12 +35,7 @@ class GoogleDriveDeprecationTest {
 
     @Test
     fun bannerIsVisibleInGoogleDriveProjects() {
-        val newProject = addProject(Project.New("Old GD project", "A", "#ffffff"))
-        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-        component
-            .settingsProvider()
-            .getMetaSettings()
-            .save(MetaKeys.getKeyIsOldGDProject(newProject.uuid), true)
+        addProject(Project.Saved("1", "Old GD project", "A", "#ffffff", true))
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()
@@ -51,12 +45,7 @@ class GoogleDriveDeprecationTest {
 
     @Test
     fun forumThreadIsOpenedAfterClickingLearnMore() {
-        val newProject = addProject(Project.New("Old GD project", "A", "#ffffff"))
-        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
-        component
-            .settingsProvider()
-            .getMetaSettings()
-            .save(MetaKeys.getKeyIsOldGDProject(newProject.uuid), true)
+        addProject(Project.Saved("1", "Old GD project", "A", "#ffffff", true))
 
         rule.startAtMainMenu()
             .openProjectSettingsDialog()

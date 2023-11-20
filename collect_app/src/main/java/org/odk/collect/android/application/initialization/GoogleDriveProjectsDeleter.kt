@@ -4,7 +4,6 @@ import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.MetaKeys
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.upgrade.Upgrade
 
@@ -28,7 +27,7 @@ class GoogleDriveProjectsDeleter(
                 if (result == DeleteProjectResult.UnsentInstances || result == DeleteProjectResult.RunningBackgroundJobs) {
                     unprotectedSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
                     unprotectedSettings.save(ProjectKeys.KEY_SERVER_URL, "https://example.com")
-                    settingsProvider.getMetaSettings().save(MetaKeys.getKeyIsOldGDProject(it.uuid), true)
+                    it.isOldGoogleDriveProject = true
                 }
             }
         }
