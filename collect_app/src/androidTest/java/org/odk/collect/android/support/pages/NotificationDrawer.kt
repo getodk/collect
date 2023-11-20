@@ -67,13 +67,15 @@ class NotificationDrawer {
             throw AssertionError("Could not find \"$actionText\"")
         }
 
+        if (cancelsNotification) {
+            device.openNotification()
+            assertNoNotification(appName)
+            device.pressBack()
+        }
+
         val page = waitFor {
             destination.assertOnPage()
         }
-
-        open()
-        assertNoNotification(appName)
-        pressBack()
 
         return page
     }
