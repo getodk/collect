@@ -72,9 +72,8 @@ class FakeScheduler : Scheduler {
     }
 
     fun runBackground() {
-        if (backgroundTasks.isNotEmpty()) {
-            backgroundTasks.first().run()
-            backgroundTasks.removeFirst()
+        while (backgroundTasks.isNotEmpty()) {
+            backgroundTasks.remove().run()
         }
     }
 
