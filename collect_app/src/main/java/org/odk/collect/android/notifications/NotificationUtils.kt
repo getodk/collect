@@ -3,6 +3,7 @@ package org.odk.collect.android.notifications
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.mainmenu.MainMenuActivity
 import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.errors.ErrorItem
@@ -16,7 +17,9 @@ object NotificationUtils {
      * [Intent] will either land the user where they were last or reopen the app.
      */
     fun createOpenAppContentIntent(context: Context, requestCode: Int): PendingIntent {
-        val intent = Intent(context, MainMenuActivity::class.java)
+        val intent = context
+            .packageManager
+            .getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)
 
         return PendingIntent.getActivity(
             context,
