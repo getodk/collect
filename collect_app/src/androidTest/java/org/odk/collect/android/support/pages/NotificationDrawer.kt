@@ -116,7 +116,7 @@ class NotificationDrawer {
         isOpen = false
     }
 
-    fun assertNoNotification(appName: String) {
+    private fun assertNoNotification(appName: String) {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
         assertThat("Expected no notification for app: $appName", result, equalTo(false))
