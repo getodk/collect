@@ -28,7 +28,7 @@ class AutoSendTest {
     fun whenAutoSendEnabled_fillingAndFinalizingForm_sendsFormAndNotifiesUser() {
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .enableAutoSend()
+            .enableAutoSend(testDependencies.scheduler)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .inputText("31")
@@ -57,7 +57,7 @@ class AutoSendTest {
 
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .enableAutoSend()
+            .enableAutoSend(testDependencies.scheduler)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .inputText("31")
