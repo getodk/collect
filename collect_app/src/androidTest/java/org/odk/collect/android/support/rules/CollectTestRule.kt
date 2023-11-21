@@ -7,6 +7,7 @@ import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
 import org.odk.collect.android.BuildConfig.APPLICATION_ID
 import org.odk.collect.android.external.AndroidShortcutsActivity
+import org.odk.collect.android.support.StubOpenRosaServer
 import org.odk.collect.android.support.pages.FirstLaunchPage
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.pages.Page
@@ -35,11 +36,25 @@ class CollectTestRule @JvmOverloads constructor(
 
     fun startAtFirstLaunch() = FirstLaunchPage()
 
-    fun withProject(serverUrl: String): MainMenuPage =
-        startAtFirstLaunch()
+    fun withProject(serverUrl: String): MainMenuPage {
+        return startAtFirstLaunch()
             .clickManuallyEnterProjectDetails()
             .inputUrl(serverUrl)
             .addProject()
+    }
+
+    fun withProject(testServer: StubOpenRosaServer, vararg formFiles: String): MainMenuPage {
+        val mainMenuPage = startAtFirstLaunch()
+            .clickManuallyEnterProjectDetails()
+            .inputUrl(testServer.url)
+            .addProject()
+
+        return if (formFiles.isNotEmpty()) {
+            formFiles.fold(mainMenuPage) { page, formFile -> page.copyForm(formFile, testServer.hostName) }
+        } else {
+            mainMenuPage
+        }
+    }
 
     fun launchShortcuts(): ShortcutsPage {
         val scenario = launchForResult(AndroidShortcutsActivity::class.java)
