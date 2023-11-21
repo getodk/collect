@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import androidx.activity.viewModels
 import androidx.core.text.color
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.analytics.Analytics
@@ -15,8 +17,6 @@ import org.odk.collect.android.projects.ManualProjectCreatorDialog
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.projects.QrCodeProjectCreatorDialog
 import org.odk.collect.android.version.VersionInformation
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.async.Scheduler
@@ -59,6 +59,25 @@ class FirstLaunchActivity : LocalizedActivity() {
         FirstLaunchLayoutBinding.inflate(layoutInflater).apply {
             setContentView(this.root)
 
+            MaterialProgressDialogFragment.showOn(
+                this@FirstLaunchActivity,
+                viewModel.isLoading,
+                supportFragmentManager
+            ) {
+                MaterialProgressDialogFragment().also { dialog ->
+                    dialog.message = getString(org.odk.collect.strings.R.string.loading)
+                }
+            }
+
+            viewModel.isLoading.observe(this@FirstLaunchActivity) { isLoading ->
+                if (!isLoading) {
+                    ActivityUtils.startActivityAndCloseAllOthers(
+                        this@FirstLaunchActivity,
+                        MainMenuActivity::class.java
+                    )
+                }
+            }
+
             configureViaQrButton.setOnClickListener {
                 DialogFragmentUtils.showIfNotShowing(
                     QrCodeProjectCreatorDialog::class.java,
@@ -88,24 +107,6 @@ class FirstLaunchActivity : LocalizedActivity() {
                     }
 
                 setOnClickListener {
-                    MaterialProgressDialogFragment.showOn(
-                        this@FirstLaunchActivity,
-                        viewModel.isLoading,
-                        supportFragmentManager
-                    ) {
-                        MaterialProgressDialogFragment().also { dialog ->
-                            dialog.message = getString(org.odk.collect.strings.R.string.loading)
-                        }
-                    }
-
-                    viewModel.isLoading.observe(this@FirstLaunchActivity) { isLoading ->
-                        if (!isLoading) {
-                            ActivityUtils.startActivityAndCloseAllOthers(
-                                this@FirstLaunchActivity,
-                                MainMenuActivity::class.java
-                            )
-                        }
-                    }
                     viewModel.tryDemo()
                 }
             }
@@ -118,8 +119,8 @@ private class FirstLaunchViewModel(
     private val projectsRepository: ProjectsRepository,
     private val projectsDataService: ProjectsDataService
 ) : ViewModel() {
-    private val _isLoading = MutableNonNullLiveData(false)
-    val isLoading: NonNullLiveData<Boolean> = _isLoading
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
     fun tryDemo() {
         Analytics.log(AnalyticsEvents.TRY_DEMO)
