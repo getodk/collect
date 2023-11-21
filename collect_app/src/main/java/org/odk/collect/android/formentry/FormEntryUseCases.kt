@@ -84,10 +84,14 @@ object FormEntryUseCases {
         form: Form,
         instance: Instance,
         formEntryController: FormEntryController
-    ): FormController {
+    ): FormController? {
         val instanceInit = InstanceInitializationFactory()
 
         val instanceFile = File(instance.instanceFilePath)
+        if (!instanceFile.exists()) {
+            return null
+        }
+
         importInstance(instanceFile, formEntryController)
         formEntryController.model.form.initialize(false, instanceInit)
 

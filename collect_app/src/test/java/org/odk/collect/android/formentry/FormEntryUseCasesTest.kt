@@ -94,6 +94,25 @@ class FormEntryUseCasesTest {
     }
 
     @Test
+    fun loadDraft_returnsNull_ifTheInstanceFileDoesNotExist() {
+        val (form, formDef) = createForm(copyTestForm("forms/one-question-partial.xml"))
+        val instance = createDraft(form!!, formDef!!, instancesRepository) {
+            it.stepToNextScreenEvent()
+            it.answerQuestion(it.getFormIndex(), IntegerData(64))
+        }
+
+        File(instance.instanceFilePath).delete()
+
+        val draftController = FormEntryUseCases.loadDraft(
+            form,
+            instance,
+            FormEntryController(FormEntryModel(formDef))
+        )
+
+        assertThat(draftController, equalTo(null))
+    }
+
+    @Test
     fun finalizeDraft_whenValidationFails_marksInstanceAsHavingErrors() {
         val (form, formDef) = createForm(copyTestForm("forms/two-question-required.xml"))
         val instance = createDraft(form!!, formDef!!, instancesRepository)
@@ -102,7 +121,7 @@ class FormEntryUseCasesTest {
             form,
             instance,
             FormEntryController(FormEntryModel(formDef))
-        )
+        )!!
 
         FormEntryUseCases.finalizeDraft(
             draftController,
@@ -128,7 +147,7 @@ class FormEntryUseCasesTest {
             form,
             instance,
             FormEntryController(FormEntryModel(formDef))
-        )
+        )!!
 
         FormEntryUseCases.finalizeDraft(
             draftController,
@@ -154,7 +173,7 @@ class FormEntryUseCasesTest {
             form,
             instance,
             FormEntryController(FormEntryModel(formDef))
-        )
+        )!!
 
         FormEntryUseCases.finalizeDraft(
             draftController,

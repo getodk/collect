@@ -85,31 +85,34 @@ class InstancesDataService(
                 val formEntryController =
                     CollectFormEntryControllerFactory().create(formDef, formMediaDir)
                 val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
-
-                val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
-                val needsEncrypted = form.basE64RSAPublicKey != null
-                val newResult = if (savePoint != null) {
-                    Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)
-                    result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
-                } else if (needsEncrypted) {
-                    Analytics.log(AnalyticsEvents.BULK_FINALIZE_ENCRYPTED_FORM)
-                    result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+                if (formController == null) {
+                    result.copy(failureCount = result.failureCount + 1)
                 } else {
-                    val finalizedInstance = FormEntryUseCases.finalizeDraft(
-                        formController,
-                        instancesRepository,
-                        entitiesRepository
-                    )
-
-                    if (finalizedInstance == null) {
-                        result.copy(failureCount = result.failureCount + 1)
+                    val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
+                    val needsEncrypted = form.basE64RSAPublicKey != null
+                    val newResult = if (savePoint != null) {
+                        Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)
+                        result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+                    } else if (needsEncrypted) {
+                        Analytics.log(AnalyticsEvents.BULK_FINALIZE_ENCRYPTED_FORM)
+                        result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
                     } else {
-                        result
-                    }
-                }
+                        val finalizedInstance = FormEntryUseCases.finalizeDraft(
+                            formController,
+                            instancesRepository,
+                            entitiesRepository
+                        )
 
-                Collect.getInstance().externalDataManager?.close()
-                newResult
+                        if (finalizedInstance == null) {
+                            result.copy(failureCount = result.failureCount + 1)
+                        } else {
+                            result
+                        }
+                    }
+
+                    Collect.getInstance().externalDataManager?.close()
+                    newResult
+                }
             }
         }
 
