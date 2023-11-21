@@ -68,7 +68,7 @@ class PreviouslyDownloadedOnlyTest {
                 "ODK Collect",
                 "Form updates available",
                 MainMenuPage()
-            ).pressBackKillingApp()
+            )
     }
 
     @Test
