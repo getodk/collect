@@ -76,7 +76,7 @@ public class FormEntryViewModelTest {
     @Test
     public void addRepeat_stepsToNextScreenEvent() throws Exception {
         viewModel.addRepeat();
-        scheduler.runBackground();
+        scheduler.flush();
         verify(formController).stepToNextScreenEvent();
     }
 
@@ -85,7 +85,7 @@ public class FormEntryViewModelTest {
         doThrow(new RuntimeException(new IOException("OH NO"))).when(formController).newRepeat();
 
         viewModel.addRepeat();
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 
@@ -98,7 +98,7 @@ public class FormEntryViewModelTest {
         doThrow(runtimeException).when(formController).newRepeat();
 
         viewModel.addRepeat();
-        scheduler.runBackground();
+        scheduler.flush();
 
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("Unknown issue occurred while adding a new group")));
     }
@@ -108,7 +108,7 @@ public class FormEntryViewModelTest {
         when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.addRepeat();
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 
@@ -121,7 +121,7 @@ public class FormEntryViewModelTest {
         when(formController.stepToNextScreenEvent()).thenThrow(javaRosaException);
 
         viewModel.addRepeat();
-        scheduler.runBackground();
+        scheduler.flush();
 
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("Unknown issue occurred while adding a new group")));
     }
@@ -138,10 +138,10 @@ public class FormEntryViewModelTest {
     @Test
     public void cancelRepeatPrompt_afterPromptForNewRepeatAndCancelRepeatPrompt_doesNotJumpBack() {
         viewModel.promptForNewRepeat();
-        scheduler.runBackground();
+        scheduler.flush();
 
         viewModel.cancelRepeatPrompt();
-        scheduler.runBackground();
+        scheduler.flush();
 
         verify(formController).jumpToIndex(startingIndex);
 
@@ -154,7 +154,7 @@ public class FormEntryViewModelTest {
         when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.cancelRepeatPrompt();
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 
@@ -221,11 +221,12 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
-        viewModel.refreshSync();
+        viewModel.refresh();
+        scheduler.flush();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveForward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(nextIndex));
     }
 
@@ -234,7 +235,7 @@ public class FormEntryViewModelTest {
         when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveForward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
@@ -246,7 +247,7 @@ public class FormEntryViewModelTest {
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult.getValue());
 
         viewModel.moveForward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         assertThat(getOrAwaitValue(viewModel.getValidationResult()), equalTo(failedValidationResult));
     }
@@ -260,7 +261,7 @@ public class FormEntryViewModelTest {
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult);
 
         viewModel.moveForward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         verify(auditEventLogger, never()).flush();
     }
@@ -271,7 +272,7 @@ public class FormEntryViewModelTest {
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult);
 
         viewModel.moveForward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         verify(formController, never()).stepToNextScreenEvent();
     }
@@ -281,7 +282,7 @@ public class FormEntryViewModelTest {
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveForward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
@@ -291,7 +292,7 @@ public class FormEntryViewModelTest {
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveForward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         verify(formController, never()).stepToNextScreenEvent();
     }
@@ -312,7 +313,7 @@ public class FormEntryViewModelTest {
         HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
         viewModel.moveForward(answers, true);
 
-        scheduler.runBackground();
+        scheduler.flush();
         verify(formController).saveAllScreenAnswers(answers, true);
     }
 
@@ -336,11 +337,12 @@ public class FormEntryViewModelTest {
             return 0;
         });
 
-        viewModel.refreshSync();
+        viewModel.refresh();
+        scheduler.flush();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
 
         viewModel.moveBackward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(nextIndex));
     }
 
@@ -349,7 +351,7 @@ public class FormEntryViewModelTest {
         when(formController.stepToPreviousScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveBackward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
@@ -359,7 +361,7 @@ public class FormEntryViewModelTest {
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveBackward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
@@ -369,7 +371,7 @@ public class FormEntryViewModelTest {
         when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveBackward(new HashMap<>());
-        scheduler.runBackground();
+        scheduler.flush();
 
         verify(formController, never()).stepToPreviousScreenEvent();
     }
@@ -401,7 +403,7 @@ public class FormEntryViewModelTest {
         when(formController.validateAnswers(true, true)).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.validate();
-        scheduler.runBackground();
+        scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 }
