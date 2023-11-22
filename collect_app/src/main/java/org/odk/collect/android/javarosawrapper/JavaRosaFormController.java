@@ -395,13 +395,15 @@ public class JavaRosaFormController implements FormController {
         }
     }
 
-    public ValidationResult validateAnswers(boolean markCompleted) throws JavaRosaException {
+    public ValidationResult validateAnswers(boolean markCompleted, boolean moveToInvalidateIndex) throws JavaRosaException {
         try {
             ValidateOutcome validateOutcome = getFormDef().validate(markCompleted);
             if (validateOutcome != null) {
-                this.jumpToIndex(validateOutcome.failedPrompt);
-                if (indexIsInFieldList()) {
-                    stepToPreviousScreenEvent();
+                if (moveToInvalidateIndex) {
+                    this.jumpToIndex(validateOutcome.failedPrompt);
+                    if (indexIsInFieldList()) {
+                        stepToPreviousScreenEvent();
+                    }
                 }
                 return new FailedValidationResult(validateOutcome.failedPrompt, validateOutcome.outcome);
             }

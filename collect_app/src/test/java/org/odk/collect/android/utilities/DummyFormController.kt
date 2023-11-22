@@ -75,7 +75,7 @@ open class DummyFormController : FormController {
 
     override fun answerQuestion(index: FormIndex?, data: IAnswerData?): Int = -1
 
-    override fun validateAnswers(markCompleted: Boolean): ValidationResult = SuccessValidationResult
+    override fun validateAnswers(markCompleted: Boolean, moveToInvalidateIndex: Boolean): ValidationResult = SuccessValidationResult
 
     override fun saveAnswer(index: FormIndex?, data: IAnswerData?): Boolean = false
 

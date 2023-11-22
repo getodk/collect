@@ -139,7 +139,7 @@ interface FormController {
      * type.
      */
     @Throws(JavaRosaException::class)
-    fun validateAnswers(markCompleted: Boolean): ValidationResult
+    fun validateAnswers(markCompleted: Boolean, moveToInvalidateIndex: Boolean): ValidationResult
 
     /**
      * saveAnswer attempts to save the current answer into the data model without doing any

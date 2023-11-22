@@ -167,7 +167,7 @@ object FormEntryUseCases {
         formController: FormController,
         entitiesRepository: EntitiesRepository
     ): Boolean {
-        val validationResult = formController.validateAnswers(true)
+        val validationResult = formController.validateAnswers(markCompleted = true, moveToInvalidateIndex = false)
         if (validationResult is FailedValidationResult) {
             return false
         }
