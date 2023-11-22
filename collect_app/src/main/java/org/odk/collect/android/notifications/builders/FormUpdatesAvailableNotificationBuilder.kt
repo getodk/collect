@@ -5,16 +5,15 @@ import android.app.Notification
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.notifications.NotificationUtils
-import org.odk.collect.android.utilities.ApplicationConstants.RequestCodes
 import org.odk.collect.strings.localization.getLocalizedString
 
 object FormUpdatesAvailableNotificationBuilder {
 
     @JvmStatic
-    fun build(application: Application, projectName: String): Notification {
+    fun build(application: Application, projectName: String, notificationId: Int): Notification {
         val contentIntent = NotificationUtils.createOpenAppContentIntent(
             application,
-            RequestCodes.FORM_UPDATES_AVAILABLE_NOTIFICATION
+            notificationId
         )
 
         return NotificationCompat.Builder(

@@ -8,7 +8,6 @@ import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.NotificationManagerNotifier
 import org.odk.collect.android.notifications.NotificationUtils
-import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
 import org.odk.collect.strings.localization.getLocalizedString
 
@@ -19,7 +18,7 @@ object FormUpdatesDownloadedNotificationBuilder {
 
         val contentIntent = NotificationUtils.createOpenAppContentIntent(
             application,
-            ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION
+            notificationId
         )
 
         val errorItems = FormsDownloadResultInterpreter.getFailures(result, application)

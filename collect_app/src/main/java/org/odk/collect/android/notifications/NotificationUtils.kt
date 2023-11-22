@@ -16,14 +16,14 @@ object NotificationUtils {
      * finishes automatically if it's not started as the root of a task, so that means the
      * [Intent] will either land the user where they were last or reopen the app.
      */
-    fun createOpenAppContentIntent(context: Context, requestCode: Int): PendingIntent {
+    fun createOpenAppContentIntent(context: Context, notificationId: Int): PendingIntent {
         val intent = context
             .packageManager
             .getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)
 
         return PendingIntent.getActivity(
             context,
-            requestCode,
+            notificationId,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

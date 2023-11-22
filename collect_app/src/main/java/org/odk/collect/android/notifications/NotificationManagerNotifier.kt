@@ -36,7 +36,8 @@ class NotificationManagerNotifier(
                 FORM_UPDATE_NOTIFICATION_ID,
                 FormUpdatesAvailableNotificationBuilder.build(
                     application,
-                    getProjectName(projectId)
+                    getProjectName(projectId),
+                    FORM_UPDATE_NOTIFICATION_ID
                 )
             )
             metaPrefs.save(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId)
