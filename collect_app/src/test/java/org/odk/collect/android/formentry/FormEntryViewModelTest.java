@@ -4,16 +4,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -28,26 +26,29 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InOrder;
-import org.mockito.stubbing.Answer;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEventLogger;
 import org.odk.collect.android.formentry.support.InMemFormSessionRepository;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
-import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.javarosawrapper.SuccessValidationResult;
+import org.odk.collect.android.javarosawrapper.ValidationResult;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
+import org.odk.collect.android.utilities.StubFormController;
 import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
 public class FormEntryViewModelTest {
 
     private FormEntryViewModel viewModel;
-    private FormController formController;
+    private FakeFormController formController;
     private FormIndex startingIndex;
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
@@ -58,14 +59,9 @@ public class FormEntryViewModelTest {
 
     @Before
     public void setup() {
-        formController = mock(FormController.class);
         startingIndex = new FormIndex(null, 0, 0, new TreeReference());
-        when(formController.getFormIndex()).thenReturn(startingIndex);
-        when(formController.getFormDef()).thenReturn(new FormDef());
-        when(formController.getEvent()).thenReturn(FormEntryController.EVENT_END_OF_FORM);
-
         auditEventLogger = mock(AuditEventLogger.class);
-        when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
+        formController = new FakeFormController(startingIndex, auditEventLogger);
 
         scheduler = new FakeScheduler();
 
@@ -77,12 +73,12 @@ public class FormEntryViewModelTest {
     public void addRepeat_stepsToNextScreenEvent() throws Exception {
         viewModel.addRepeat();
         scheduler.flush();
-        verify(formController).stepToNextScreenEvent();
+        assertThat(formController.getStepPosition(), equalTo(1));
     }
 
     @Test
     public void addRepeat_whenThereIsAnErrorCreatingRepeat_setsErrorWithMessage() {
-        doThrow(new RuntimeException(new IOException("OH NO"))).when(formController).newRepeat();
+        formController.setNewRepeatError(new RuntimeException(new IOException("OH NO")));
 
         viewModel.addRepeat();
         scheduler.flush();
@@ -94,8 +90,7 @@ public class FormEntryViewModelTest {
         RuntimeException runtimeException = mock(RuntimeException.class);
         when(runtimeException.getCause()).thenReturn(null);
         when(runtimeException.getMessage()).thenReturn("Unknown issue occurred while adding a new group");
-
-        doThrow(runtimeException).when(formController).newRepeat();
+        formController.setNewRepeatError(runtimeException);
 
         viewModel.addRepeat();
         scheduler.flush();
@@ -105,7 +100,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void addRepeat_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithMessage() throws Exception {
-        when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+        formController.setNextStepError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.addRepeat();
         scheduler.flush();
@@ -117,8 +112,7 @@ public class FormEntryViewModelTest {
         JavaRosaException javaRosaException = mock(JavaRosaException.class);
         when(javaRosaException.getCause()).thenReturn(null);
         when(javaRosaException.getMessage()).thenReturn("Unknown issue occurred while adding a new group");
-
-        when(formController.stepToNextScreenEvent()).thenThrow(javaRosaException);
+        formController.setNextStepError(javaRosaException);
 
         viewModel.addRepeat();
         scheduler.flush();
@@ -127,31 +121,46 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void cancelRepeatPrompt_afterPromptForNewRepeatAndAddRepeat_doesNotJumpBack() {
+    public void cancelRepeatPrompt_afterPromptForNewRepeatAndAddRepeat_stepsToNextRatherThanJumpingBack() {
+        FormIndex originalIndex = formController.getFormIndex();
+        formController.setNextRepeatPrompt(new FormIndex(null, originalIndex.getLocalIndex() + 1, 0, new TreeReference()));
+
         viewModel.promptForNewRepeat();
+        scheduler.flush();
+
         viewModel.addRepeat();
+        scheduler.flush();
 
+        FormIndex newIndex = new FormIndex(null, originalIndex.getLocalIndex() + 2, 0, new TreeReference());
+        formController.jumpToIndex(newIndex);
         viewModel.cancelRepeatPrompt();
-        verify(formController, never()).jumpToIndex(startingIndex);
+        scheduler.flush();
+        assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, newIndex.getLocalIndex() + 1, 0, new TreeReference())));
     }
 
     @Test
-    public void cancelRepeatPrompt_afterPromptForNewRepeatAndCancelRepeatPrompt_doesNotJumpBack() {
+    public void cancelRepeatPrompt_afterPromptForNewRepeatAndCancelRepeatPrompt_stepsToNextRatherThanJumpingBack() {
+        FormIndex originalIndex = formController.getFormIndex();
+        formController.setNextRepeatPrompt(new FormIndex(null, originalIndex.getLocalIndex() + 1, 0, new TreeReference()));
+
         viewModel.promptForNewRepeat();
         scheduler.flush();
 
         viewModel.cancelRepeatPrompt();
         scheduler.flush();
 
-        verify(formController).jumpToIndex(startingIndex);
+        assertThat(formController.getFormIndex(), equalTo(originalIndex));
 
+        FormIndex newIndex = new FormIndex(null, originalIndex.getLocalIndex() + 2, 0, new TreeReference());
+        formController.jumpToIndex(newIndex);
         viewModel.cancelRepeatPrompt();
-        verify(formController, atMostOnce()).jumpToIndex(startingIndex);
+        scheduler.flush();
+        assertThat(formController.getFormIndex(), equalTo(new FormIndex(null, newIndex.getLocalIndex() + 1, 0, new TreeReference())));
     }
 
     @Test
-    public void cancelRepeatPrompt_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithMessage() throws Exception {
-        when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+    public void cancelRepeatPrompt_whenThereIsAnErrorSteppingToNextScreen_setsErrorWithMessage() {
+        formController.setNextStepError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.cancelRepeatPrompt();
         scheduler.flush();
@@ -162,7 +171,7 @@ public class FormEntryViewModelTest {
     public void getQuestionPrompt_returnsPromptForIndex() {
         FormIndex formIndex = new FormIndex(null, 1, 1, new TreeReference());
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder().build();
-        when(formController.getQuestionPrompt(formIndex)).thenReturn(prompt);
+        formController.setPrompt(formIndex, prompt);
 
         assertThat(viewModel.getQuestionPrompt(formIndex), is(prompt));
     }
@@ -193,46 +202,8 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void updateAnswersForScreen_flushesAuditLoggerAfterSaving() throws Exception {
-        viewModel.updateAnswersForScreen(new HashMap<>(), false);
-
-        InOrder verifier = inOrder(formController, auditEventLogger);
-        verifier.verify(formController).saveAllScreenAnswers(any(), anyBoolean());
-        verifier.verify(auditEventLogger).flush();
-    }
-
-    @Test
-    public void moveForward_savesAnswersToFormController_andThenStepsToNextEvent_andFlushesLogger() throws Exception {
-        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
-        viewModel.moveForward(answers);
-
-        scheduler.flush();
-        InOrder verifier = inOrder(formController, auditEventLogger);
-        verifier.verify(formController).saveAllScreenAnswers(answers, false);
-        verifier.verify(formController).stepToNextScreenEvent();
-        verifier.verify(auditEventLogger).flush();
-    }
-
-    @Test
-    public void moveForward_updatesIndexAfterSteppingToNextEvent() throws Exception {
-        FormIndex nextIndex = new FormIndex(null, 1, 1, new TreeReference());
-        when(formController.stepToNextScreenEvent()).thenAnswer((Answer<Integer>) invocation -> {
-            when(formController.getFormIndex()).thenReturn(nextIndex);
-            return 0;
-        });
-
-        viewModel.refresh();
-        scheduler.flush();
-        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
-
-        viewModel.moveForward(new HashMap<>());
-        scheduler.flush();
-        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(nextIndex));
-    }
-
-    @Test
-    public void moveForward_whenThereIsAnErrorSteppingToNextEvent_setErrorWithMessage() throws Exception {
-        when(formController.stepToNextScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+    public void moveForward_whenThereIsAnErrorSteppingToNextEvent_setErrorWithMessage() {
+        formController.setNextStepError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveForward(new HashMap<>());
         scheduler.flush();
@@ -241,10 +212,10 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void moveForward_whenThereIsAFailedConstraint_setsFailedConstraint() throws Exception {
+    public void moveForward_whenThereIsAFailedConstraint_setsFailedConstraint() {
         Consumable<FailedValidationResult> failedValidationResult =
                 new Consumable<>(new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error));
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult.getValue());
+        formController.setFailedConstraint(failedValidationResult.getValue());
 
         viewModel.moveForward(new HashMap<>());
         scheduler.flush();
@@ -258,7 +229,7 @@ public class FormEntryViewModelTest {
     @Test
     public void moveForward_whenThereIsAFailedConstraint_doesNotFlushAuditLog() throws Exception {
         FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult);
+        formController.setFailedConstraint(failedValidationResult);
 
         viewModel.moveForward(new HashMap<>());
         scheduler.flush();
@@ -269,17 +240,17 @@ public class FormEntryViewModelTest {
     @Test
     public void moveForward_whenThereIsAFailedConstraint_doesNotStepToNextEvent() throws Exception {
         FailedValidationResult failedValidationResult = new FailedValidationResult(startingIndex, 0, null, org.odk.collect.strings.R.string.invalid_answer_error);
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenReturn(failedValidationResult);
+        formController.setFailedConstraint(failedValidationResult);
 
         viewModel.moveForward(new HashMap<>());
         scheduler.flush();
 
-        verify(formController, never()).stepToNextScreenEvent();
+        assertThat(formController.getStepPosition(), equalTo(0));
     }
 
     @Test
-    public void moveForward_whenThereIsAnErrorSaving_setsErrorWithMessage() throws Exception {
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+    public void moveForward_whenThereIsAnErrorSaving_setsErrorWithMessage() {
+        formController.setSaveError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveForward(new HashMap<>());
         scheduler.flush();
@@ -288,17 +259,17 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void moveForward_whenThereIsAnErrorSaving_doesNotStepToNextEvent() throws Exception {
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+    public void moveForward_whenThereIsAnErrorSaving_doesNotStepToNextEvent() {
+        formController.setSaveError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveForward(new HashMap<>());
         scheduler.flush();
 
-        verify(formController, never()).stepToNextScreenEvent();
+        assertThat(formController.getStepPosition(), equalTo(0));
     }
 
     @Test
-    public void moveForward_setsLoadingToTrueWhileBackgroundWorkHappens() throws Exception {
+    public void moveForward_setsLoadingToTrueWhileBackgroundWorkHappens() {
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
 
         viewModel.moveForward(new HashMap<>());
@@ -309,46 +280,8 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void moveForward_whenEvaluateConstraintsIsTrue_savesAnswersWithEvaluateConstraintsTrue() throws Exception {
-        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
-        viewModel.moveForward(answers, true);
-
-        scheduler.flush();
-        verify(formController).saveAllScreenAnswers(answers, true);
-    }
-
-    @Test
-    public void moveBackward_savesAnswersToFormController_andThenStepsToPreviousEvent_andFlushesLogger() throws Exception {
-        HashMap<FormIndex, IAnswerData> answers = new HashMap<>();
-        viewModel.moveBackward(answers);
-
-        scheduler.flush();
-        InOrder verifier = inOrder(formController, auditEventLogger);
-        verifier.verify(formController).saveAllScreenAnswers(answers, false);
-        verifier.verify(formController).stepToPreviousScreenEvent();
-        verifier.verify(auditEventLogger).flush();
-    }
-
-    @Test
-    public void moveBackward_updatesIndexAfterSteppingToPreviousEvent() throws Exception {
-        FormIndex nextIndex = new FormIndex(null, 1, 1, new TreeReference());
-        when(formController.stepToPreviousScreenEvent()).thenAnswer((Answer<Integer>) invocation -> {
-            when(formController.getFormIndex()).thenReturn(nextIndex);
-            return 0;
-        });
-
-        viewModel.refresh();
-        scheduler.flush();
-        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(startingIndex));
-
-        viewModel.moveBackward(new HashMap<>());
-        scheduler.flush();
-        assertThat(getOrAwaitValue(viewModel.getCurrentIndex()), equalTo(nextIndex));
-    }
-
-    @Test
     public void moveBackward_whenThereIsAnErrorSteppingToPreviousEvent_setErrorWithMessage() throws Exception {
-        when(formController.stepToPreviousScreenEvent()).thenThrow(new JavaRosaException(new IOException("OH NO")));
+        formController.setPreviousStepError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveBackward(new HashMap<>());
         scheduler.flush();
@@ -357,8 +290,8 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void moveBackward_whenThereIsAnErrorSaving_setsErrorWithMessage() throws Exception {
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+    public void moveBackward_whenThereIsAnErrorSaving_setsErrorWithMessage() {
+        formController.setSaveError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.moveBackward(new HashMap<>());
         scheduler.flush();
@@ -368,12 +301,12 @@ public class FormEntryViewModelTest {
 
     @Test
     public void moveBackward_whenThereIsAnErrorSaving_doesNotStepToPreviousEvent() throws Exception {
-        when(formController.saveAllScreenAnswers(any(), anyBoolean())).thenThrow(new JavaRosaException(new IOException("OH NO")));
+        formController.setPreviousStepError((new JavaRosaException(new IOException("OH NO"))));
 
         viewModel.moveBackward(new HashMap<>());
         scheduler.flush();
 
-        verify(formController, never()).stepToPreviousScreenEvent();
+        assertThat(formController.getStepPosition(), equalTo(0));
     }
 
     @Test
@@ -399,11 +332,174 @@ public class FormEntryViewModelTest {
     }
 
     @Test
-    public void validate_whenThereIsAnErrorValidating_setsError() throws Exception {
-        when(formController.validateAnswers(true, true)).thenThrow(new JavaRosaException(new IOException("OH NO")));
+    public void validate_whenThereIsAnErrorValidating_setsError() {
+        formController.setValidationError(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.validate();
         scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
+    }
+
+    private static class FakeFormController extends StubFormController {
+        private FormIndex index;
+        private final AuditEventLogger auditEventLogger;
+        private final LinkedList<Integer> nextEvents = new LinkedList<>();
+        private Integer currentEvent = FormEntryController.EVENT_END_OF_FORM;
+        private int step;
+        private RuntimeException newRepeatError;
+        private JavaRosaException nextStepError;
+        private JavaRosaException saveError;
+        private Map<FormIndex, FormEntryPrompt> prompts = new HashMap<>();
+        private FailedValidationResult failedConstraint;
+        private JavaRosaException validationError;
+        private JavaRosaException previousStepError;
+        private FormIndex nextRepeatPrompt;
+
+        FakeFormController(FormIndex startingIndex, AuditEventLogger auditEventLogger) {
+            this.index = startingIndex;
+            this.auditEventLogger = auditEventLogger;
+        }
+
+        @Nullable
+        @Override
+        public FormIndex getFormIndex() {
+            return index;
+        }
+
+        @Nullable
+        @Override
+        public FormDef getFormDef() {
+            return new FormDef();
+        }
+
+        @Override
+        public int getEvent() {
+            return currentEvent;
+        }
+
+        @Nullable
+        @Override
+        public AuditEventLogger getAuditEventLogger() {
+            return auditEventLogger;
+        }
+
+        @Override
+        public int stepToNextScreenEvent() throws JavaRosaException {
+            if (nextStepError != null) {
+                throw nextStepError;
+            }
+
+            step = step + 1;
+            index = new FormIndex(null, index.getLocalIndex() + 1, 0, new TreeReference());
+
+            if (!nextEvents.isEmpty()) {
+                currentEvent = nextEvents.pop();
+            } else {
+                currentEvent = FormEntryController.EVENT_END_OF_FORM;
+            }
+
+            return currentEvent;
+        }
+
+        @Override
+        public void newRepeat() {
+            if (newRepeatError != null) {
+                throw newRepeatError;
+            }
+        }
+
+        @NonNull
+        @Override
+        public ValidationResult saveAllScreenAnswers(@Nullable HashMap<FormIndex, IAnswerData> answers, boolean evaluateConstraints) throws JavaRosaException {
+            if (saveError != null) {
+                throw saveError;
+            } else if (failedConstraint != null) {
+                return failedConstraint;
+            } else {
+                return SuccessValidationResult.INSTANCE;
+            }
+        }
+
+        @Nullable
+        @Override
+        public FormEntryPrompt getQuestionPrompt(FormIndex index) {
+            return prompts.get(index);
+        }
+
+        @NonNull
+        @Override
+        public ValidationResult validateAnswers(boolean markCompleted, boolean moveToInvalidIndex) throws JavaRosaException {
+            if (validationError != null) {
+                throw validationError;
+            } else {
+                return SuccessValidationResult.INSTANCE;
+            }
+        }
+
+        @Override
+        public int stepToPreviousScreenEvent() throws JavaRosaException {
+            if (previousStepError != null) {
+                throw previousStepError;
+            }
+
+            step = step - 1;
+            index = new FormIndex(null, index.getLocalIndex() - 1, 0, new TreeReference());
+            return FormEntryController.EVENT_BEGINNING_OF_FORM;
+        }
+
+        @Override
+        public void jumpToNewRepeatPrompt() {
+            if (nextRepeatPrompt != null) {
+                index = nextRepeatPrompt;
+            } else {
+                throw new IllegalStateException("No repeat prompt index set!");
+            }
+        }
+
+        @Override
+        public int jumpToIndex(@Nullable FormIndex index) {
+                this.index = index;
+                return FormEntryController.EVENT_END_OF_FORM;
+        }
+
+        public void addNextEvents(List<Integer> events) {
+            nextEvents.addAll(events);
+        }
+
+        public int getStepPosition() {
+            return step;
+        }
+
+        public void setNewRepeatError(RuntimeException exception) {
+            this.newRepeatError = exception;
+        }
+
+        public void setNextStepError(JavaRosaException exception) {
+            this.nextStepError = exception;
+        }
+
+        public void setPreviousStepError(JavaRosaException exception) {
+            this.previousStepError = exception;
+        }
+
+        public void setSaveError(JavaRosaException exception) {
+            this.saveError = exception;
+        }
+
+        public void setPrompt(FormIndex index, FormEntryPrompt prompt) {
+            prompts.put(index, prompt);
+        }
+
+        public void setFailedConstraint(FailedValidationResult result) {
+            this.failedConstraint = result;
+        }
+
+        public void setValidationError(JavaRosaException exception) {
+            this.validationError = exception;
+        }
+
+        public void setNextRepeatPrompt(FormIndex nextRepeatPrompt) {
+            this.nextRepeatPrompt = nextRepeatPrompt;
+        }
     }
 }
