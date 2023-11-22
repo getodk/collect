@@ -58,7 +58,15 @@ public class AuditEventLogger {
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
                          boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
         checkAndroidUIThread();
+        internalLog(eventType, formIndex, writeImmediatelyToDisk, questionAnswer, currentTime, changeReason);
+    }
 
+    public synchronized void logEventSynchronized(AuditEvent.AuditEventType eventType, FormIndex formIndex,
+                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
+        internalLog(eventType, formIndex, writeImmediatelyToDisk, questionAnswer, currentTime, changeReason);
+    }
+
+    private void internalLog(AuditEvent.AuditEventType eventType, FormIndex formIndex, boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }

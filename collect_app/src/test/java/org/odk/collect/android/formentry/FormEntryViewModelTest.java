@@ -22,6 +22,7 @@ import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Rule;
@@ -40,7 +41,6 @@ import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.function.Supplier;
 
 @RunWith(AndroidJUnit4.class)
 @SuppressWarnings("PMD.DoubleBraceInitialization")
@@ -62,6 +62,7 @@ public class FormEntryViewModelTest {
         startingIndex = new FormIndex(null, 0, 0, new TreeReference());
         when(formController.getFormIndex()).thenReturn(startingIndex);
         when(formController.getFormDef()).thenReturn(new FormDef());
+        when(formController.getEvent()).thenReturn(FormEntryController.EVENT_END_OF_FORM);
 
         auditEventLogger = mock(AuditEventLogger.class);
         when(formController.getAuditEventLogger()).thenReturn(auditEventLogger);
@@ -69,7 +70,7 @@ public class FormEntryViewModelTest {
         scheduler = new FakeScheduler();
 
         formSessionRepository.set("blah", formController, mock());
-        viewModel = new FormEntryViewModel(mock(Supplier.class), scheduler, formSessionRepository, "blah");
+        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah");
     }
 
     @Test

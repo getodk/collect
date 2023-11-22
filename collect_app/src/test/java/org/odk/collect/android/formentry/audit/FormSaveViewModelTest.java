@@ -4,9 +4,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.javarosa.form.api.FormEntryController.EVENT_GROUP;
-import static org.javarosa.form.api.FormEntryController.EVENT_QUESTION;
-import static org.javarosa.form.api.FormEntryController.EVENT_REPEAT;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,7 +27,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.common.io.Files;
 
 import org.javarosa.form.api.FormEntryController;
-import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,10 +35,8 @@ import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.javarosawrapper.RepeatsInFieldListException;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.support.CollectHelpers;
-import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.tasks.SaveFormToDisk;
 import org.odk.collect.android.tasks.SaveToDiskResult;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -61,7 +55,6 @@ import org.robolectric.annotation.LooperMode;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 @RunWith(AndroidJUnit4.class)
 @LooperMode(LooperMode.Mode.LEGACY)
@@ -156,93 +149,6 @@ public class FormSaveViewModelTest {
 
         whenFormSaverFinishes(SaveFormToDisk.SAVED);
         assertThat(saveResult.getValue().getState(), equalTo(SAVED));
-    }
-
-    @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnQuestion_logsSaveAndQuestionAuditEventsAfterFlush() throws RepeatsInFieldListException {
-        when(formController.getEvent()).thenReturn(EVENT_QUESTION);
-        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withIndex("index1")
-                .withAnswerDisplayText("answer")
-                .build();
-        when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
-
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        whenFormSaverFinishes(SaveFormToDisk.SAVED);
-
-        InOrder verifier = inOrder(logger);
-        verifier.verify(logger).flush();
-        verifier.verify(logger).logEvent(
-                AuditEvent.AuditEventType.FORM_SAVE,
-                false,
-                CURRENT_TIME
-        );
-        verifier.verify(logger).logEvent(
-                AuditEvent.AuditEventType.QUESTION,
-                prompt.getIndex(),
-                true,
-                prompt.getAnswerValue().getDisplayText(),
-                CURRENT_TIME,
-                null
-        );
-    }
-
-    @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnGroup_logsSaveAndQuestionAuditEventsAfterFlush() throws RepeatsInFieldListException {
-        when(formController.getEvent()).thenReturn(EVENT_GROUP);
-        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withIndex("index1")
-                .withAnswerDisplayText("answer")
-                .build();
-        when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
-
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        whenFormSaverFinishes(SaveFormToDisk.SAVED);
-
-        InOrder verifier = inOrder(logger);
-        verifier.verify(logger).flush();
-        verifier.verify(logger).logEvent(
-                AuditEvent.AuditEventType.FORM_SAVE,
-                false,
-                CURRENT_TIME
-        );
-        verifier.verify(logger).logEvent(
-                AuditEvent.AuditEventType.QUESTION,
-                prompt.getIndex(),
-                true,
-                prompt.getAnswerValue().getDisplayText(),
-                CURRENT_TIME,
-                null
-        );
-    }
-
-    @Test
-    public void whenFormSaverFinishes_saved_andFormIsCurrentlyOnRepeat_logsSaveAndQuestionAuditEventsAfterFlush() throws RepeatsInFieldListException {
-        when(formController.getEvent()).thenReturn(EVENT_REPEAT);
-        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
-                .withIndex("index1")
-                .withAnswerDisplayText("answer")
-                .build();
-        when(formController.getQuestionPrompts()).thenReturn(Arrays.asList(prompt).toArray(new FormEntryPrompt[]{}));
-
-        viewModel.saveForm(Uri.parse("file://form"), true, "", false);
-        whenFormSaverFinishes(SaveFormToDisk.SAVED);
-
-        InOrder verifier = inOrder(logger);
-        verifier.verify(logger).flush();
-        verifier.verify(logger).logEvent(
-                AuditEvent.AuditEventType.FORM_SAVE,
-                false,
-                CURRENT_TIME
-        );
-        verifier.verify(logger).logEvent(
-                AuditEvent.AuditEventType.QUESTION,
-                prompt.getIndex(),
-                true,
-                prompt.getAnswerValue().getDisplayText(),
-                CURRENT_TIME,
-                null
-        );
     }
 
     @Test

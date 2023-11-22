@@ -25,6 +25,7 @@ import org.odk.collect.android.async.ViewModelWorker;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.questions.SelectChoiceUtils;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -324,6 +325,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         choices.clear();
 
         if (formController != null) {
+            if (formController.getEvent() == FormEntryController.EVENT_BEGINNING_OF_FORM) {
+                try {
+                    formController.stepToNextScreenEvent();
+                } catch (JavaRosaException e) {
+                    // Ignored
+                }
+            }
+
             try {
                     /*
                      We can't load for field lists as their choices might change on screen (before
@@ -336,6 +345,8 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                      FileNotFoundException e) {
                 // Ignored
             }
+
+            AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
 
             if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
                 currentIndex.setValue(formController.getFormIndex());
