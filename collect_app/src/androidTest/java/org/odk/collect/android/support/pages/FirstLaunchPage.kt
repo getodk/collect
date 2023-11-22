@@ -10,7 +10,7 @@ class FirstLaunchPage : Page<FirstLaunchPage>() {
     }
 
     fun clickTryCollect(): MainMenuPage {
-        scrollToAndClickText(org.odk.collect.strings.R.string.try_demo)
+        scrollToAndClickSubtext(org.odk.collect.strings.R.string.try_demo)
         return MainMenuPage().assertOnPage()
     }
 

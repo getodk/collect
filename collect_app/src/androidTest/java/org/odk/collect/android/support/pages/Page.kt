@@ -30,6 +30,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -350,6 +351,11 @@ abstract class Page<T : Page<T>> {
 
     fun scrollToAndClickText(text: Int): T {
         onView(withText(getTranslatedString(text))).perform(scrollTo(), click())
+        return this as T
+    }
+
+    fun scrollToAndClickSubtext(text: Int): T {
+        onView(withSubstring(getTranslatedString(text))).perform(scrollTo(), click())
         return this as T
     }
 
