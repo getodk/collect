@@ -29,21 +29,30 @@ object FormEntryUseCases {
         formsRepository: FormsRepository,
         projectRootDir: File,
         formDefCache: FormDefCache
-    ): Pair<FormDef, Form> {
+    ): Pair<FormDef, Form>? {
         val form =
-            formsRepository.getAllByFormIdAndVersion(instance.formId, instance.formVersion)[0]
-        return Pair(
-            loadFormDef(form, projectRootDir, formDefCache),
-            form
-        )
+            formsRepository.getAllByFormIdAndVersion(instance.formId, instance.formVersion).firstOrNull()
+        return if (form == null) {
+            null
+        } else {
+            val formDef = loadFormDef(form, projectRootDir, formDefCache)
+            return if (formDef == null) {
+                null
+            } else {
+                Pair(formDef, form)
+            }
+        }
     }
 
     fun loadFormDef(
         form: Form,
         projectRootDir: File,
         formDefCache: FormDefCache
-    ): FormDef {
+    ): FormDef? {
         val xForm = File(form.formFilePath)
+        if (!xForm.exists()) {
+            return null
+        }
         val formMediaDir = File(form.formMediaPath)
 
         FormUtils.setupReferenceManagerForForm(
@@ -75,10 +84,14 @@ object FormEntryUseCases {
         form: Form,
         instance: Instance,
         formEntryController: FormEntryController
-    ): FormController {
+    ): FormController? {
         val instanceInit = InstanceInitializationFactory()
 
         val instanceFile = File(instance.instanceFilePath)
+        if (!instanceFile.exists()) {
+            return null
+        }
+
         importInstance(instanceFile, formEntryController)
         formEntryController.model.form.initialize(false, instanceInit)
 
