@@ -52,7 +52,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -411,16 +410,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
-        // this issue by including WebViews
-        if (Build.VERSION.SDK_INT >= 24) {
-            try {
-                new WebView(this);
-            } catch (Exception | Error e) {
-                // Don't crash if WebView not available
-            }
-        }
-
         Collect.getInstance().getComponent().inject(this);
 
         if (savedInstanceState == null) {
