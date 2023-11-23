@@ -53,6 +53,7 @@ class ApplicationInitializer(
             settingsProvider,
             context
         ).initialize()
+        SystemThemeMismatchFixInitializer(context).initialize()
     }
 
     private fun initializeFrameworks() {
