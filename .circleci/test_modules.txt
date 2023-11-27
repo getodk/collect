@@ -20,3 +20,4 @@ shadows
 metadata
 selfie-camera
 draw
+printer
