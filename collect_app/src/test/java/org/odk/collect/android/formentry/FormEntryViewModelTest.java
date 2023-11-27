@@ -385,7 +385,7 @@ public class FormEntryViewModelTest {
 
     @Test
     public void validate_whenThereIsAnErrorValidating_setsError() throws Exception {
-        when(formController.validateAnswers(true)).thenThrow(new JavaRosaException(new IOException("OH NO")));
+        when(formController.validateAnswers(true, true)).thenThrow(new JavaRosaException(new IOException("OH NO")));
 
         viewModel.validate();
         scheduler.runBackground();

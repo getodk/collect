@@ -8,10 +8,12 @@ import org.javarosa.xform.parse.XFormParser;
 import org.javarosa.xform.util.XFormUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+import org.odk.collect.android.utilities.FileUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -20,6 +22,35 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 public class FormControllerTest {
+    @Test
+    public void validateAnswers_shouldNotChangeFormIndexToTheIndexOfInvalidQuestionIfAskedNotToDoThat() throws Exception {
+        String form = new String(
+                FileUtils.getResourceAsStream("forms/two-question-required.xml").readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+
+        FormController formController = createFormController(form);
+        formController.stepToNextScreenEvent();
+
+        assertThat(formController.getFormIndex().toString(), equalTo("0, "));
+        formController.validateAnswers(true, false);
+        assertThat(formController.getFormIndex().toString(), equalTo("0, "));
+    }
+
+    @Test
+    public void validateAnswers_shouldChangeFormIndexToTheIndexOfInvalidQuestionIfAskedToDoThat() throws Exception {
+        String form = new String(
+                FileUtils.getResourceAsStream("forms/two-question-required.xml").readAllBytes(),
+                StandardCharsets.UTF_8
+        );
+
+        FormController formController = createFormController(form);
+        formController.stepToNextScreenEvent();
+
+        assertThat(formController.getFormIndex().toString(), equalTo("0, "));
+        formController.validateAnswers(true, true);
+        assertThat(formController.getFormIndex().toString(), equalTo("1, "));
+    }
 
     @Test
     public void jumpToNewRepeatPrompt_whenIndexIsInRepeat_jumpsToRepeatPrompt() throws Exception {
