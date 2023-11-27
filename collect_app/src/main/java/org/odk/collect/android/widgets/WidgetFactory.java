@@ -176,6 +176,8 @@ public class WidgetFactory {
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
+                        } else if (appearance.equals(Appearances.PRINTER)) {
+                            questionWidget = new PrinterWidget(activity, questionDetails);
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {
