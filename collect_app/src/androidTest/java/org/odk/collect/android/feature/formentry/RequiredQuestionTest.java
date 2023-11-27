@@ -113,4 +113,13 @@ public class RequiredQuestionTest {
                 .clickGoToEnd()
                 .clickSaveAndExitWithError("Custom required message2");
     }
+
+    @Test // https://github.com/getodk/collect/issues/5847
+    public void savingFormWithInvalidQuestion_shouldNotChangeTheCurrentQuestionIndex() {
+        rule.startAtMainMenu()
+                .copyForm("two-question-required.xml")
+                .startBlankForm("Two Question Required")
+                .clickSave()
+                .swipeToNextQuestion("What is your age?");
+    }
 }
