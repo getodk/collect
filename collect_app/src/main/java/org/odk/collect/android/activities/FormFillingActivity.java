@@ -1756,13 +1756,15 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         alertDialog = new MaterialAlertDialogBuilder(this)
                 .setSingleChoiceItems(languages, selected,
                         (dialog, whichButton) -> {
-                            Form form = formsRepository.getOneByPath(formPath);
-                            if (form != null) {
-                                formsRepository.save(new Form.Builder(form)
-                                        .language(languages[whichButton])
-                                        .build()
-                                );
-                            }
+                            scheduler.immediate(true, () -> {
+                                Form form = formsRepository.getOneByPath(formPath);
+                                if (form != null) {
+                                    formsRepository.save(new Form.Builder(form)
+                                            .language(languages[whichButton])
+                                            .build()
+                                    );
+                                }
+                            });
 
                             getFormController().setLanguage(languages[whichButton]);
                             dialog.dismiss();

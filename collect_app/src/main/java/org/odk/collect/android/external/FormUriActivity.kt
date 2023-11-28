@@ -16,6 +16,7 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
+import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -42,6 +43,9 @@ class FormUriActivity : ComponentActivity() {
 
     @Inject
     lateinit var settingsProvider: SettingsProvider
+
+    @Inject
+    lateinit var scheduler: Scheduler
 
     private var formFillingAlreadyStarted = false
 
@@ -119,8 +123,14 @@ class FormUriActivity : ComponentActivity() {
         } else {
             instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
                 if (!File(it.instanceFilePath).exists()) {
-                    Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE)
-                    InstanceDeleter(instanceRepositoryProvider.get(), formsRepositoryProvider.get()).delete(it.dbId)
+                    scheduler.immediate(background = true) {
+                        Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE)
+                        InstanceDeleter(
+                            instanceRepositoryProvider.get(),
+                            formsRepositoryProvider.get()
+                        ).delete(it.dbId)
+                    }
+
                     displayErrorDialog(getString(org.odk.collect.strings.R.string.instance_deleted_message))
                     return false
                 }

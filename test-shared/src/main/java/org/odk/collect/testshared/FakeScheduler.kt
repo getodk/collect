@@ -22,8 +22,12 @@ class FakeScheduler : Scheduler {
         )
     }
 
-    override fun immediate(foreground: Runnable) {
-        foregroundTasks.push(foreground)
+    override fun immediate(background: Boolean, runnable: Runnable) {
+        if (background) {
+            backgroundTasks.push(runnable)
+        } else {
+            foregroundTasks.push(runnable)
+        }
     }
 
     override fun networkDeferred(tag: String, spec: TaskSpec, inputData: Map<String, String>) {}

@@ -2,6 +2,7 @@ package org.odk.collect.android.support;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.work.WorkManager;
 
@@ -48,11 +49,11 @@ public class TestScheduler implements Scheduler {
     }
 
     @Override
-    public void immediate(@NotNull Runnable foreground) {
+    public void immediate(boolean background, @NonNull Runnable runnable) {
         increment();
 
-        wrappedScheduler.immediate(() -> {
-            foreground.run();
+        wrappedScheduler.immediate(background, () -> {
+            runnable.run();
             decrement();
         });
     }

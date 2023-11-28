@@ -18,9 +18,15 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         }
     }
 
-    override fun immediate(foreground: Runnable) {
-        CoroutineScope(foregroundContext).launch {
-            foreground.run()
+    override fun immediate(background: Boolean, runnable: Runnable) {
+        val context = if (background) {
+            backgroundContext
+        } else {
+            foregroundContext
+        }
+
+        CoroutineScope(context).launch {
+            runnable.run()
         }
     }
 

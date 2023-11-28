@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
+import android.os.StrictMode
 import timber.log.Timber
 import java.io.File
 
@@ -23,7 +24,11 @@ open class DatabaseConnection(
 ) {
 
     val writeableDatabase: SQLiteDatabase
-        get() = dbHelper.writableDatabase
+        get() {
+            StrictMode.noteSlowCall("Accessing writable DB")
+            return dbHelper.writableDatabase
+        }
+
     val readableDatabase: SQLiteDatabase
         get() = dbHelper.readableDatabase
 
