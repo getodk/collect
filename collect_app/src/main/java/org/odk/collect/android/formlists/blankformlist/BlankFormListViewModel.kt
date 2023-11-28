@@ -31,7 +31,7 @@ class BlankFormListViewModel(
     private val _filterText = MutableLiveData("")
     private val _sortingOrder = MutableLiveData(generalSettings.getInt("formChooserListSortingOrder"))
     private val filteredForms = LiveDataUtils.zip3(formsDataService.getForms(projectId), _filterText, _sortingOrder)
-    val formsToDisplay: LiveData<List<BlankFormListItem>> = filteredForms.map { (forms, filter, sort) ->
+    val formsToDisplay: LiveData<List<BlankFormListItem>> = LiveDataUtils.asyncMap(scheduler, filteredForms) { (forms, filter, sort) ->
         filterAndSortForms(forms, sort, filter)
     }
 
