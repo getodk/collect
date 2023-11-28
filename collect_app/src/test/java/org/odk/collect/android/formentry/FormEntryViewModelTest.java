@@ -3,12 +3,14 @@ package org.odk.collect.android.formentry;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
+import static org.javarosa.core.model.Constants.CONTROL_SELECT_ONE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.odk.collect.androidtest.LiveDataTestUtilsKt.getOrAwaitValue;
+import static java.util.Arrays.asList;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -18,6 +20,8 @@ import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
+import org.javarosa.measure.Measure;
+import org.javarosa.xpath.parser.XPathSyntaxException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,6 +35,7 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.testshared.FakeScheduler;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -348,5 +353,35 @@ public class FormEntryViewModelTest {
         viewModel.validate();
         scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
+    }
+
+    @Test
+    public void refresh_whenThereIsASelectOnePrompt_preloadsSelectChoices() {
+        formController.setCurrentEvent(FormEntryController.EVENT_QUESTION);
+
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder()
+                .withControlType(CONTROL_SELECT_ONE)
+                .build();
+        formController.setQuestionPrompts(asList(prompt));
+
+        int loadCount = Measure.withMeasure(asList("LoadSelectChoices"), () -> {
+            viewModel.refresh();
+            scheduler.runBackground();
+        });
+        assertThat(loadCount, equalTo(1));
+
+        loadCount = Measure.withMeasure(asList("LoadSelectChoices"), () -> {
+            scheduler.runForeground();
+        });
+        assertThat(loadCount, equalTo(0));
+
+        loadCount = Measure.withMeasure(asList("LoadSelectChoices"), () -> {
+            try {
+                viewModel.loadSelectChoices(prompt);
+            } catch (FileNotFoundException | XPathSyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        assertThat(loadCount, equalTo(0));
     }
 }

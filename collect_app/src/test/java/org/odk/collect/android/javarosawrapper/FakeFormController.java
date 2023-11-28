@@ -32,6 +32,7 @@ public class FakeFormController extends StubFormController {
     private JavaRosaException validationError;
     private JavaRosaException previousStepError;
     private FormIndex nextRepeatPrompt;
+    private List<FormEntryPrompt> currentPrompts;
 
     public FakeFormController(FormIndex startingIndex, AuditEventLogger auditEventLogger) {
         this.index = startingIndex;
@@ -140,6 +141,12 @@ public class FakeFormController extends StubFormController {
         return FormEntryController.EVENT_END_OF_FORM;
     }
 
+    @NonNull
+    @Override
+    public FormEntryPrompt[] getQuestionPrompts() {
+        return currentPrompts.toArray(new FormEntryPrompt[] {});
+    }
+
     public void addNextEvents(List<Integer> events) {
         nextEvents.addAll(events);
     }
@@ -182,5 +189,9 @@ public class FakeFormController extends StubFormController {
 
     public void setCurrentEvent(int event) {
         this.currentEvent = event;
+    }
+
+    public void setQuestionPrompts(List<FormEntryPrompt> prompts) {
+        this.currentPrompts = prompts;
     }
 }
