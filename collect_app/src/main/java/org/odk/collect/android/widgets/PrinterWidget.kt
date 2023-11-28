@@ -9,13 +9,13 @@ import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.utilities.PrintableHtmlParser
-import org.odk.collect.printer.Printer
+import org.odk.collect.printer.HtmlPrinter
 
 class PrinterWidget(
     context: Context,
     questionDetails: QuestionDetails,
     private val printableHtmlParser: PrintableHtmlParser,
-    private val printer: Printer
+    private val htmlPrinter: HtmlPrinter
 ) : QuestionWidget(context, questionDetails) {
     init {
         render()
@@ -39,6 +39,6 @@ class PrinterWidget(
 
     private fun print() {
         val content = printableHtmlParser.parse(formEntryPrompt.answerText)
-        printer.print(context, content)
+        htmlPrinter.print(context, content)
     }
 }

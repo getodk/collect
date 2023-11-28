@@ -7,7 +7,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-class Printer {
+class HtmlPrinter {
     private var webView: WebView? = null
 
     fun print(context: Context, htmlDocument: String) {

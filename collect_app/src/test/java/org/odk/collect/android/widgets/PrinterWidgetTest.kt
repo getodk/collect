@@ -10,13 +10,13 @@ import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.utilities.PrintableHtmlParser
-import org.odk.collect.printer.Printer
+import org.odk.collect.printer.HtmlPrinter
 
 class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
     private val printableHtmlParser = mock<PrintableHtmlParser>()
-    private val printer = mock<Printer>()
+    private val htmlPrinter = mock<HtmlPrinter>()
 
-    override fun createWidget() = PrinterWidget(activity, QuestionDetails(formEntryPrompt), printableHtmlParser, printer)
+    override fun createWidget() = PrinterWidget(activity, QuestionDetails(formEntryPrompt), printableHtmlParser, htmlPrinter)
 
     @Test
     fun `clicking the button should trigger printing parsed html document`() {
@@ -26,7 +26,7 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         val widget = createWidget()
         widget.findViewById<MaterialButton>(R.id.printer_button).performClick()
 
-        verify(printer).print(activity, "test content")
+        verify(htmlPrinter).print(activity, "test content")
     }
 
     @Test

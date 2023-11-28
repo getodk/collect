@@ -67,7 +67,7 @@ import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.printer.Printer;
+import org.odk.collect.printer.HtmlPrinter;
 import org.odk.collect.qrcode.QRCodeCreatorImpl;
 
 /**
@@ -180,7 +180,7 @@ public class WidgetFactory {
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
                         } else if (appearance.equals(Appearances.PRINTER)) {
-                            questionWidget = new PrinterWidget(activity, questionDetails, new PrintableHtmlParser(new QRCodeCreatorImpl()), new Printer());
+                            questionWidget = new PrinterWidget(activity, questionDetails, new PrintableHtmlParser(new QRCodeCreatorImpl()), new HtmlPrinter());
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {
