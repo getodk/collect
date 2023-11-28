@@ -179,4 +179,8 @@ public class FakeFormController extends StubFormController {
     public void setNextRepeatPrompt(FormIndex nextRepeatPrompt) {
         this.nextRepeatPrompt = nextRepeatPrompt;
     }
+
+    public void setCurrentEvent(int event) {
+        this.currentEvent = event;
+    }
 }

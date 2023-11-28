@@ -16,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.data.StringData;
 import org.javarosa.core.model.instance.TreeReference;
+import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.junit.Before;
 import org.junit.Rule;
@@ -57,6 +58,25 @@ public class FormEntryViewModelTest {
 
         formSessionRepository.set("blah", formController, mock());
         viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah");
+    }
+
+    @Test
+    public void refresh_whenEventIsBeginningOfForm_stepsForwards() {
+        formController.setCurrentEvent(FormEntryController.EVENT_BEGINNING_OF_FORM);
+
+        viewModel.refresh();
+        scheduler.flush();
+        assertThat(formController.getStepPosition(), equalTo(1));
+    }
+
+    @Test
+    public void refresh_whenEventIsBeginningOfForm_andThereIsAnErrorSteppingForward_setsError() {
+        formController.setCurrentEvent(FormEntryController.EVENT_BEGINNING_OF_FORM);
+        formController.setNextStepError(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.refresh();
+        scheduler.flush();
+        assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
 
     @Test
@@ -329,5 +349,4 @@ public class FormEntryViewModelTest {
         scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
-
 }
