@@ -8,8 +8,15 @@ import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.widgets.utilities.PrintableHtmlParser
+import org.odk.collect.printer.Printer
 
-class PrinterWidget(context: Context, questionDetails: QuestionDetails) : QuestionWidget(context, questionDetails) {
+class PrinterWidget(
+    context: Context,
+    questionDetails: QuestionDetails,
+    private val printableHtmlParser: PrintableHtmlParser,
+    private val printer: Printer
+) : QuestionWidget(context, questionDetails) {
     init {
         render()
     }
@@ -30,5 +37,8 @@ class PrinterWidget(context: Context, questionDetails: QuestionDetails) : Questi
 
     override fun clearAnswer() = Unit
 
-    private fun print() = Unit
+    private fun print() {
+        val content = printableHtmlParser.parse(formEntryPrompt.answerText)
+        printer.print(context, content)
+    }
 }

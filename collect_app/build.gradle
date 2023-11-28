@@ -261,6 +261,7 @@ dependencies {
     implementation project(':metadata')
     implementation project(':google-maps')
     implementation project(':draw')
+    implementation project(':printer')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
