@@ -11,7 +11,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.GroupDef;
@@ -39,12 +38,10 @@ import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader {
 
@@ -334,10 +331,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
 
             try {
-                    /*
-                     We can't load for field lists as their choices might change on screen (before
-                     updateIndex is called again).
-                    */
+                /*
+                 We can't load for field lists as their choices might change on screen (before
+                 updateIndex is called again).
+                */
                 if (!formController.indexIsInFieldList()) {
                     preloadSelectChoices();
                 }
@@ -384,15 +381,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private void preloadSelectChoices() throws RepeatsInFieldListException, FileNotFoundException, XPathSyntaxException {
         int event = formController.getEvent();
-        if (event == FormEntryController.EVENT_QUESTION || event == FormEntryController.EVENT_GROUP || event == FormEntryController.EVENT_REPEAT) {
+        if (event == FormEntryController.EVENT_QUESTION) {
             FormEntryPrompt[] prompts = formController.getQuestionPrompts();
-            List<FormEntryPrompt> selectPrompts = Arrays.stream(prompts).filter((prompt) -> {
-                boolean isSelect = prompt.getControlType() == Constants.CONTROL_SELECT_ONE || prompt.getControlType() == Constants.CONTROL_SELECT_MULTI || prompt.getControlType() == Constants.CONTROL_RANK;
-
-                boolean isSelectOneExternal = prompt.getControlType() == Constants.CONTROL_INPUT && prompt.getDataType() == Constants.DATATYPE_TEXT && prompt.getQuestion().getAdditionalAttribute(null, "query") != null;
-                return isSelect || isSelectOneExternal;
-            }).collect(Collectors.toList());
-            for (FormEntryPrompt prompt : selectPrompts) {
+            for (FormEntryPrompt prompt : prompts) {
                 List<SelectChoice> selectChoices = SelectChoiceUtils.loadSelectChoices(prompt, formController);
                 choices.put(prompt.getIndex(), selectChoices);
             }

@@ -22,7 +22,7 @@ object SelectChoiceUtils {
         return when {
             isFastExternalItemsetUsed(prompt) -> readFastExternalItems(prompt, formController)
             isSearchPulldataItemsetUsed(prompt) -> readSearchPulldataItems(prompt, formController)
-            else -> prompt.selectChoices
+            else -> prompt.selectChoices ?: emptyList()
         }
     }
 
