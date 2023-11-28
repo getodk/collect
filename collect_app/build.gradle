@@ -314,6 +314,8 @@ dependencies {
 
     implementation Dependencies.danlew_android_joda
 
+    implementation(Dependencies.jsoup)
+
     // Android Architecture Components:
     implementation Dependencies.androidx_lifecycle_runtime_ktx
     implementation Dependencies.androidx_lifecycle_livedata_ktx
