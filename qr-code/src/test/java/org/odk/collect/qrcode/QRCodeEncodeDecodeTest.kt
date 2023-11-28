@@ -19,21 +19,21 @@ class QRCodeEncodeDecodeTest {
     fun `Encoded and decoded text should be unchanged`() {
         val data = "Some random text"
 
-        val qrCodeEncoder = QRCodeEncoderImpl()
+        val qrCodeEncoder = QRCodeCreatorImpl()
         val qrCodeDecoder = QRCodeDecoderImpl()
 
-        val encodedData = qrCodeEncoder.encode(data)
+        val encodedData = qrCodeEncoder.createEncoded(data)
 
         val decodedData = qrCodeDecoder.decode(toStream(encodedData))
 
         assertThat(decodedData, equalTo(data))
     }
 
-    @Test(expected = QRCodeEncoder.MaximumCharactersLimitException::class)
+    @Test(expected = QRCodeCreator.MaximumCharactersLimitException::class)
     fun `When there are more than 4k characters passed to encode, throw an exception`() {
         val data = List(5000) { ('a'..'z').random() }.joinToString("")
 
-        QRCodeEncoderImpl().encode(data)
+        QRCodeCreatorImpl().createEncoded(data)
     }
 
     @Test
