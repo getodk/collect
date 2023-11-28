@@ -40,7 +40,9 @@ class PrinterWidget(
     override fun clearAnswer() = Unit
 
     private fun print() {
-        val content = printableHtmlParser.parse(formEntryPrompt.answerText, questionMediaManager)
-        htmlPrinter.print(context, content)
+        formEntryPrompt.answerText?.let {
+            val content = printableHtmlParser.parse(it, questionMediaManager)
+            htmlPrinter.print(context, content)
+        }
     }
 }

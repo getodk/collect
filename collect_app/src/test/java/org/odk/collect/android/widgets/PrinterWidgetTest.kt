@@ -5,6 +5,7 @@ import org.javarosa.core.model.data.IAnswerData
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
@@ -21,7 +22,7 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
     override fun createWidget() = PrinterWidget(activity, QuestionDetails(formEntryPrompt), questionMediaManager, printableHtmlParser, htmlPrinter)
 
     @Test
-    fun `clicking the button should trigger printing parsed html document`() {
+    fun `clicking the button should trigger printing parsed html document if answer exists`() {
         whenever(formEntryPrompt.answerText).thenReturn("blah")
         whenever(printableHtmlParser.parse("blah", questionMediaManager)).thenReturn("test content")
 
@@ -29,6 +30,16 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         widget.findViewById<MaterialButton>(R.id.printer_button).performClick()
 
         verify(htmlPrinter).print(activity, "test content")
+    }
+
+    @Test
+    fun `clicking the button should not trigger printing if there is no answer`() {
+        whenever(formEntryPrompt.answerText).thenReturn(null)
+
+        val widget = createWidget()
+        widget.findViewById<MaterialButton>(R.id.printer_button).performClick()
+
+        verifyNoInteractions(htmlPrinter)
     }
 
     @Test
