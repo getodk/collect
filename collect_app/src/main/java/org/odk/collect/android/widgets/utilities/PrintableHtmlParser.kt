@@ -1,20 +1,42 @@
 package org.odk.collect.android.widgets.utilities
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Base64
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.qrcode.QRCodeCreator
 import java.io.ByteArrayOutputStream
 
 class PrintableHtmlParser(private val qrCodeCreator: QRCodeCreator) {
-    fun parse(htmlDocument: String): String {
+    fun parse(htmlDocument: String, questionMediaManager: QuestionMediaManager): String {
         val document = Jsoup.parse(htmlDocument)
 
-        return convertQRCodeElementsToImages(document).html()
+        return convertQRCodeElementsToImages(document, questionMediaManager).html()
     }
 
-    private fun convertQRCodeElementsToImages(document: Document): Document {
+    private fun convertQRCodeElementsToImages(document: Document, questionMediaManager: QuestionMediaManager): Document {
+        parseImages(document, questionMediaManager)
+        parseQRCodes(document)
+
+        return document
+    }
+
+    private fun parseImages(document: Document, questionMediaManager: QuestionMediaManager) {
+        for (imgElement in document.getElementsByTag("img")) {
+            val file = questionMediaManager.getAnswerFile(imgElement.attributes().get("src"))
+            if (file != null && file.exists()) {
+                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+                if (bitmap != null) {
+                    val imageData = bitmapToBase64(bitmap)
+                    imgElement.attr("src", "data:image/png;base64,$imageData")
+                }
+            }
+        }
+    }
+
+    private fun parseQRCodes(document: Document) {
         for (qrcodeElement in document.getElementsByTag("qrcode")) {
             val newElement = document.createElement("img").apply {
                 attributes().addAll(qrcodeElement.attributes())
@@ -23,7 +45,6 @@ class PrintableHtmlParser(private val qrCodeCreator: QRCodeCreator) {
             }
             qrcodeElement.replaceWith(newElement)
         }
-        return document
     }
 
     private fun bitmapToBase64(bitmap: Bitmap): String {

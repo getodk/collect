@@ -180,7 +180,7 @@ public class WidgetFactory {
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
                         } else if (appearance.equals(Appearances.PRINTER)) {
-                            questionWidget = new PrinterWidget(activity, questionDetails, new PrintableHtmlParser(new QRCodeCreatorImpl()), new HtmlPrinter());
+                            questionWidget = new PrinterWidget(activity, questionDetails, questionMediaManager, new PrintableHtmlParser(new QRCodeCreatorImpl()), new HtmlPrinter());
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {
