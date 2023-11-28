@@ -52,6 +52,10 @@ public final class FormEntryPromptUtils {
         IAnswerData data = fep.getAnswerValue();
         final String appearance = fep.getQuestion().getAppearanceAttr();
 
+        if (appearance != null && appearance.equals(Appearances.PRINTER)) {
+            return "";
+        }
+
         if (data instanceof MultipleItemsData) {
             StringBuilder answerText = new StringBuilder();
             List<Selection> values = (List<Selection>) data.getValue();
