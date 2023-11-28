@@ -71,13 +71,6 @@ class MainMenuActivity : LocalizedActivity() {
 
             super.onCreate(savedInstanceState)
             setContentView(R.layout.main_menu_activity)
-
-            if (savedInstanceState == null) {
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.fragment_container, MainMenuFragment::class.java, null)
-                    .commit()
-            }
         }
     }
 
