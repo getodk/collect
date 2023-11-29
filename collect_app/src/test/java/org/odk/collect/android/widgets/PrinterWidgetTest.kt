@@ -1,7 +1,10 @@
 package org.odk.collect.android.widgets
 
 import com.google.android.material.button.MaterialButton
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.data.IAnswerData
+import org.javarosa.core.model.data.StringData
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -9,6 +12,7 @@ import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
+import org.odk.collect.android.support.WidgetTestActivity
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.utilities.PrintableHtmlParser
@@ -40,6 +44,24 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         widget.findViewById<MaterialButton>(R.id.printer_button).performClick()
 
         verifyNoInteractions(htmlPrinter)
+    }
+
+    @Test
+    fun `the widget should always return null as the answer`() {
+        whenever(formEntryPrompt.answerText).thenReturn("blah")
+        whenever(formEntryPrompt.answerValue).thenReturn(StringData("blah"))
+
+        val widget = createWidget()
+        widget.findViewById<MaterialButton>(R.id.printer_button).performClick()
+
+        assertThat(widget.answer, equalTo(null))
+    }
+
+    @Test
+    override fun widgetShouldBeRegisteredForContextMenu() {
+        val viewsRegisterForContextMenu = (activity as WidgetTestActivity).viewsRegisterForContextMenu
+
+        assertThat(viewsRegisterForContextMenu.isEmpty(), equalTo(true))
     }
 
     @Test
