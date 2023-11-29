@@ -1,14 +1,26 @@
 package org.odk.collect.testshared
 
+import androidx.lifecycle.LiveData
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import org.odk.collect.androidtest.getOrAwaitValue
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import java.util.LinkedList
 import java.util.function.Consumer
 import java.util.function.Supplier
+import kotlin.coroutines.CoroutineContext
 
 class FakeScheduler : Scheduler {
+
+    private val backgroundDispatcher = object : CoroutineDispatcher() {
+        override fun dispatch(context: CoroutineContext, block: Runnable) {
+            backgroundTasks.add(block)
+        }
+    }
 
     private var foregroundTasks = LinkedList<Runnable>()
     private var backgroundTasks = LinkedList<Runnable>()
@@ -56,7 +68,7 @@ class FakeScheduler : Scheduler {
     override fun cancelAllDeferred() {}
 
     override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
-        throw UnsupportedOperationException()
+        return flow.flowOn(backgroundDispatcher)
     }
 
     fun runForeground() {
@@ -107,6 +119,12 @@ class FakeScheduler : Scheduler {
     }
 
     override fun cancelDeferred(tag: String) {}
+}
+
+fun <T> LiveData<T>.getOrAwaitValue(
+    scheduler: FakeScheduler
+): T {
+    return this.getOrAwaitValue { scheduler.flush() }
 }
 
 private data class RepeatTask(val interval: Long, val runnable: Runnable, var lastRun: Long?)
