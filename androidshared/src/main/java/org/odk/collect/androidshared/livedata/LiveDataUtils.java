@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Cancellable;
-import org.odk.collect.async.Scheduler;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -67,15 +66,6 @@ public class LiveDataUtils {
                 new LiveData[]{one, two, three, four},
                 values -> new Quad<>((T) values[0], (U) values[1], (V) values[2], (W) values[3])
         );
-    }
-
-    public static <T, U> LiveData<U> asyncMap(Scheduler scheduler, LiveData<T> liveData, Function<T, U> func) {
-        MediatorLiveData<U> mediator = new MediatorLiveData<>();
-        mediator.addSource(liveData, value -> {
-            scheduler.immediate(() -> func.apply(value), mediator::setValue);
-        });
-
-        return mediator;
     }
 
     private abstract static class DeferrableUpdateMediatorLiveData<T> extends MediatorLiveData<T> {

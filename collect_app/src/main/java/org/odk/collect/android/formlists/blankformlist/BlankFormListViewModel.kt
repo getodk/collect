@@ -5,11 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
-import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
@@ -28,12 +33,19 @@ class BlankFormListViewModel(
     private val showAllVersions: Boolean = false
 ) : ViewModel() {
 
-    private val _filterText = MutableLiveData("")
-    private val _sortingOrder = MutableLiveData(generalSettings.getInt("formChooserListSortingOrder"))
-    private val filteredForms = LiveDataUtils.zip3(formsDataService.getForms(projectId), _filterText, _sortingOrder)
-    val formsToDisplay: LiveData<List<BlankFormListItem>> = LiveDataUtils.asyncMap(scheduler, filteredForms) { (forms, filter, sort) ->
-        filterAndSortForms(forms, sort, filter)
-    }
+    private val _filterText = MutableStateFlow("")
+    private val _sortingOrder = MutableStateFlow(generalSettings.getInt("formChooserListSortingOrder"))
+    private val filteredForms = formsDataService.getFormsAsFlow(projectId)
+        .combine(_filterText) { forms, filter ->
+            Pair(forms, filter)
+        }.combine(_sortingOrder) { (forms, filter), sort ->
+            Triple(forms, filter, sort)
+        }
+
+    val formsToDisplay: LiveData<List<BlankFormListItem>> =
+        filteredForms.map { (forms, filter, sort) ->
+            filterAndSortForms(forms, sort, filter)
+        }.flowOn(Dispatchers.IO).asLiveData()
 
     val syncResult: LiveData<String?> = formsDataService.getDiskError(projectId)
     val isLoading: LiveData<Boolean> = formsDataService.isSyncing(projectId)
