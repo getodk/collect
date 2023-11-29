@@ -1,8 +1,10 @@
 package org.odk.collect.android.widgets
 
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.google.android.material.button.MaterialButton
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
@@ -38,6 +40,8 @@ class PrinterWidget(
     override fun getAnswer(): IAnswerData? = null
 
     override fun clearAnswer() = Unit
+
+    override fun registerToClearAnswerOnLongPress(activity: Activity?, viewGroup: ViewGroup?) = Unit
 
     private fun print() {
         formEntryPrompt.answerText?.let {
