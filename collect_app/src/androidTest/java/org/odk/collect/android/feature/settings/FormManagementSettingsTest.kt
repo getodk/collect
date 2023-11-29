@@ -8,7 +8,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import org.odk.collect.android.R
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.MainMenuPage
 import org.odk.collect.android.support.rules.CollectTestRule
@@ -27,7 +26,7 @@ class FormManagementSettingsTest {
 
     @Test
     fun whenMatchExactlyEnabled_changingAutomaticUpdateFrequency_changesTaskFrequency() {
-        var deferredTasks = testDependencies.scheduler.deferredTasks
+        var deferredTasks = testDependencies.scheduler.getDeferredTasks()
 
         assertThat(deferredTasks, `is`(empty()))
 
@@ -38,14 +37,14 @@ class FormManagementSettingsTest {
             .clickUpdateForms()
             .clickOption(org.odk.collect.strings.R.string.match_exactly)
 
-        deferredTasks = testDependencies.scheduler.deferredTasks
+        deferredTasks = testDependencies.scheduler.getDeferredTasks()
 
         assertThat(deferredTasks.size, `is`(1))
 
         val matchExactlyTag = deferredTasks[0].tag
 
         page.clickAutomaticUpdateFrequency().clickOption(org.odk.collect.strings.R.string.every_one_hour)
-        deferredTasks = testDependencies.scheduler.deferredTasks
+        deferredTasks = testDependencies.scheduler.getDeferredTasks()
 
         assertThat(deferredTasks.size, `is`(1))
         assertThat(deferredTasks[0].tag, `is`(matchExactlyTag))
@@ -54,7 +53,7 @@ class FormManagementSettingsTest {
 
     @Test
     fun whenPreviouslyDownloadedOnlyEnabled_changingAutomaticUpdateFrequency_changesTaskFrequency() {
-        var deferredTasks = testDependencies.scheduler.deferredTasks
+        var deferredTasks = testDependencies.scheduler.getDeferredTasks()
 
         assertThat(deferredTasks, `is`(empty()))
 
@@ -65,14 +64,14 @@ class FormManagementSettingsTest {
             .clickUpdateForms()
             .clickOption(org.odk.collect.strings.R.string.previously_downloaded_only)
 
-        deferredTasks = testDependencies.scheduler.deferredTasks
+        deferredTasks = testDependencies.scheduler.getDeferredTasks()
 
         assertThat(deferredTasks.size, `is`(1))
 
         val previouslyDownloadedTag = deferredTasks[0].tag
         page.clickAutomaticUpdateFrequency().clickOption(org.odk.collect.strings.R.string.every_one_hour)
 
-        deferredTasks = testDependencies.scheduler.deferredTasks
+        deferredTasks = testDependencies.scheduler.getDeferredTasks()
 
         assertThat(deferredTasks.size, `is`(1))
         assertThat(deferredTasks[0].tag, `is`(previouslyDownloadedTag))

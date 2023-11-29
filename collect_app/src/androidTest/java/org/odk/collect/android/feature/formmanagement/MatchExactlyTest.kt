@@ -180,6 +180,6 @@ class MatchExactlyTest {
             .enableMatchExactly()
             .enableManualUpdates()
 
-        assertThat(testDependencies.scheduler.deferredTasks, `is`(empty()))
+        assertThat(testDependencies.scheduler.getDeferredTasks(), `is`(empty()))
     }
 }

@@ -153,6 +153,6 @@ class PreviouslyDownloadedOnlyTest {
             .enablePreviouslyDownloadedOnlyUpdates()
             .enableManualUpdates()
 
-        assertThat(testDependencies.scheduler.deferredTasks, equalTo(emptyList()))
+        assertThat(testDependencies.scheduler.getDeferredTasks(), equalTo(emptyList()))
     }
 }
