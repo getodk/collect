@@ -19,6 +19,8 @@ package org.odk.collect.forms;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * A form definition stored on the device.
  * <p>
@@ -281,13 +283,22 @@ public final class Form {
     }
 
     @Override
-    public boolean equals(Object other) {
-        return other == this || other instanceof Form && this.md5Hash.equals(((Form) other).md5Hash);
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Form form = (Form) o;
+        return deleted == form.deleted && Objects.equals(dbId, form.dbId) && Objects.equals(displayName, form.displayName) && Objects.equals(description, form.description) && Objects.equals(formId, form.formId) && Objects.equals(version, form.version) && Objects.equals(formFilePath, form.formFilePath) && Objects.equals(submissionUri, form.submissionUri) && Objects.equals(base64RSAPublicKey, form.base64RSAPublicKey) && Objects.equals(md5Hash, form.md5Hash) && Objects.equals(date, form.date) && Objects.equals(jrCacheFilePath, form.jrCacheFilePath) && Objects.equals(formMediaPath, form.formMediaPath) && Objects.equals(language, form.language) && Objects.equals(autoSend, form.autoSend) && Objects.equals(autoDelete, form.autoDelete) && Objects.equals(geometryXPath, form.geometryXPath) && Objects.equals(lastDetectedAttachmentsUpdateDate, form.lastDetectedAttachmentsUpdateDate);
     }
 
     @Override
     public int hashCode() {
-        return md5Hash.hashCode();
+        return Objects.hash(dbId, displayName, description, formId, version, formFilePath, submissionUri, base64RSAPublicKey, md5Hash, date, jrCacheFilePath, formMediaPath, language, autoSend, autoDelete, geometryXPath, deleted, lastDetectedAttachmentsUpdateDate);
     }
 
     @Override

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
@@ -180,7 +179,7 @@ class FormsDataService(
 
     private fun syncWithDb(projectId: String) {
         val projectDependencies = projectDependencyProviderFactory.create(projectId)
-        getFormsFlow(projectId).update { projectDependencies.formsRepository.all }
+        getFormsFlow(projectId).value = projectDependencies.formsRepository.all
     }
 
     private fun getFormsFlow(projectId: String): MutableStateFlow<List<Form>> {
