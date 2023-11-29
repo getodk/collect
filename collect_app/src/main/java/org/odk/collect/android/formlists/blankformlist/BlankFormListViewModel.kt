@@ -7,15 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.odk.collect.android.formmanagement.FormsDataService
 import org.odk.collect.android.preferences.utilities.FormUpdateMode
 import org.odk.collect.android.preferences.utilities.SettingsUtils
 import org.odk.collect.async.Scheduler
+import org.odk.collect.async.flowOnBackground
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.FormSourceException
 import org.odk.collect.forms.FormSourceException.AuthRequired
@@ -45,7 +44,7 @@ class BlankFormListViewModel(
     val formsToDisplay: LiveData<List<BlankFormListItem>> =
         filteredForms.map { (forms, filter, sort) ->
             filterAndSortForms(forms, sort, filter)
-        }.flowOn(Dispatchers.IO).asLiveData()
+        }.flowOnBackground(scheduler).asLiveData()
 
     val syncResult: LiveData<String?> = formsDataService.getDiskError(projectId)
     val isLoading: LiveData<Boolean> = formsDataService.isSyncing(projectId)

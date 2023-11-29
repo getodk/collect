@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import kotlinx.coroutines.flow.Flow
 import java.util.function.Consumer
 import java.util.function.Supplier
 
@@ -74,4 +75,10 @@ interface Scheduler {
     fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable
 
     fun cancelAllDeferred()
+
+    fun <T> flowOnBackground(flow: Flow<T>): Flow<T>
+}
+
+fun <T> Flow<T>.flowOnBackground(scheduler: Scheduler): Flow<T> {
+    return scheduler.flowOnBackground(this)
 }

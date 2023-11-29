@@ -1,5 +1,6 @@
 package org.odk.collect.testshared
 
+import kotlinx.coroutines.flow.Flow
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
@@ -53,6 +54,10 @@ class FakeScheduler : Scheduler {
     }
 
     override fun cancelAllDeferred() {}
+
+    override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
+        throw UnsupportedOperationException()
+    }
 
     fun runForeground() {
         while (foregroundTasks.isNotEmpty()) {

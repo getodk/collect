@@ -3,24 +3,30 @@ package org.odk.collect.android.support
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.WorkManager
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
+import kotlinx.coroutines.flow.Flow
 import org.odk.collect.async.Cancellable
 import org.odk.collect.async.CoroutineAndWorkManagerScheduler
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.TaskSpec
 import java.util.function.Consumer
 import java.util.function.Supplier
+import kotlin.coroutines.CoroutineContext
 
-class TestScheduler : Scheduler {
+class TestScheduler : Scheduler, CoroutineDispatcher() {
 
     private val wrappedScheduler: Scheduler
     private val lock = Any()
     private var tasks = 0
     private var finishedCallback: Runnable? = null
     private val deferredTasks: MutableList<DeferredTask> = ArrayList()
+    private val backgroundDispatcher = Dispatchers.IO
 
     init {
         val workManager = WorkManager.getInstance(ApplicationProvider.getApplicationContext())
-        wrappedScheduler = CoroutineAndWorkManagerScheduler(workManager)
+        wrappedScheduler = CoroutineAndWorkManagerScheduler(Dispatchers.Main, this, workManager)
     }
 
     override fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable {
@@ -102,6 +108,19 @@ class TestScheduler : Scheduler {
     }
 
     override fun cancelAllDeferred() {}
+
+    override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
+        return wrappedScheduler.flowOnBackground(flow)
+    }
+
+    override fun dispatch(context: CoroutineContext, block: Runnable) {
+        increment()
+        backgroundDispatcher.dispatch(context) {
+            block.run()
+            decrement()
+        }
+    }
+
     class DeferredTask(
         val tag: String,
         val spec: TaskSpec,
