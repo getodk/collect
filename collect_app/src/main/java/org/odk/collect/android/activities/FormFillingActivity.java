@@ -1491,11 +1491,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             outAnimation.setDuration(0);
         }
 
-        // drop keyboard before transition...
-        if (currentView != null) {
-            softKeyboardController.hideSoftKeyboard(currentView);
-        }
-
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
