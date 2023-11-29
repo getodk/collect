@@ -34,7 +34,7 @@ class BlankFormListViewModel(
 
     private val _filterText = MutableStateFlow("")
     private val _sortingOrder = MutableStateFlow(generalSettings.getInt("formChooserListSortingOrder"))
-    private val filteredForms = formsDataService.getFormsAsFlow(projectId)
+    private val filteredForms = formsDataService.getForms(projectId)
         .combine(_filterText) { forms, filter ->
             Pair(forms, filter)
         }.combine(_sortingOrder) { (forms, filter), sort ->

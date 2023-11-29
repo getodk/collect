@@ -2,6 +2,7 @@ package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
@@ -23,7 +24,7 @@ class FormsDataService(
     private val clock: Supplier<Long>
 ) {
 
-    fun getFormsAsFlow(projectId: String): StateFlow<List<Form>> {
+    fun getForms(projectId: String): Flow<List<Form>> {
         return getFormsFlow(projectId)
     }
 

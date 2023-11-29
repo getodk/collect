@@ -39,7 +39,7 @@ class BlankFormListViewModelTest {
     private val instancesRepository = InMemInstancesRepository()
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val formsDataService: FormsDataService = mock {
-        on { getFormsAsFlow(any()) } doReturn MutableStateFlow(emptyList())
+        on { getForms(any()) } doReturn MutableStateFlow(emptyList())
     }
 
     private val scheduler = FakeScheduler()
@@ -422,7 +422,7 @@ class BlankFormListViewModelTest {
     }
 
     private fun saveForms(vararg forms: Form) {
-        whenever(formsDataService.getFormsAsFlow(any())).thenReturn(MutableStateFlow(forms.toList()))
+        whenever(formsDataService.getForms(any())).thenReturn(MutableStateFlow(forms.toList()))
     }
 
     private fun saveInstances(vararg instances: Instance) {
