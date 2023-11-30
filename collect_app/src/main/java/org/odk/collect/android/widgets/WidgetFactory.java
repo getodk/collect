@@ -65,6 +65,7 @@ import org.odk.collect.android.widgets.utilities.StringRequester;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.androidshared.system.IntentLauncherImpl;
+import org.odk.collect.async.Scheduler;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.printer.HtmlPrinter;
@@ -93,6 +94,8 @@ public class WidgetFactory {
     private final StringRequester stringRequester;
     private final FormController formController;
 
+    private final Scheduler scheduler;
+
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
                          boolean useExternalRecorder,
@@ -105,7 +108,8 @@ public class WidgetFactory {
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
                          StringRequester stringRequester,
-                         FormController formController) {
+                         FormController formController,
+                         Scheduler scheduler) {
         this.activity = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -119,6 +123,7 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.formController = formController;
+        this.scheduler = scheduler;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -180,7 +185,7 @@ public class WidgetFactory {
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
                         } else if (appearance.equals(Appearances.PRINTER)) {
-                            questionWidget = new PrinterWidget(activity, questionDetails, questionMediaManager, new PrintableHtmlParser(new QRCodeCreatorImpl()), new HtmlPrinter());
+                            questionWidget = new PrinterWidget(activity, questionDetails, scheduler, questionMediaManager, new PrintableHtmlParser(new QRCodeCreatorImpl()), new HtmlPrinter());
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {

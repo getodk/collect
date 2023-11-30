@@ -1,15 +1,15 @@
 package org.odk.collect.android.support
 
 import android.view.View
-import androidx.fragment.app.FragmentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import org.odk.collect.android.utilities.ScreenContext
 
-class WidgetTestActivity : FragmentActivity(), ScreenContext {
+class WidgetTestActivity : AppCompatActivity(), ScreenContext {
     @JvmField
     val viewsRegisterForContextMenu = mutableListOf<View>()
 
-    override fun getActivity(): FragmentActivity {
+    override fun getActivity(): AppCompatActivity {
         return this
     }
 

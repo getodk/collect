@@ -1208,7 +1208,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 odkViewLifecycle
         );
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this));
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this), scheduler);
     }
 
     @Override

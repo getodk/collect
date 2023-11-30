@@ -17,13 +17,15 @@ import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.base.QuestionWidgetTest
 import org.odk.collect.android.widgets.utilities.PrintableHtmlParser
 import org.odk.collect.printer.HtmlPrinter
+import org.odk.collect.testshared.FakeScheduler
 
 class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
+    private val scheduler = FakeScheduler()
     private val questionMediaManager = mock<QuestionMediaManager>()
     private val printableHtmlParser = mock<PrintableHtmlParser>()
     private val htmlPrinter = mock<HtmlPrinter>()
 
-    override fun createWidget() = PrinterWidget(activity, QuestionDetails(formEntryPrompt), questionMediaManager, printableHtmlParser, htmlPrinter)
+    override fun createWidget() = PrinterWidget(activity, QuestionDetails(formEntryPrompt), scheduler, questionMediaManager, printableHtmlParser, htmlPrinter)
 
     @Test
     fun `clicking the button should trigger printing parsed html document if answer exists`() {
@@ -32,6 +34,7 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
 
         val widget = createWidget()
         widget.findViewById<MaterialButton>(R.id.printer_button).performClick()
+        scheduler.runBackground()
 
         verify(htmlPrinter).print(activity, "test content")
     }
