@@ -12,6 +12,8 @@ class HtmlPrinter {
 
     fun print(context: Context, htmlDocument: String) {
         webView = WebView(context).apply {
+            settings.allowFileAccess = true
+
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest) = false
 

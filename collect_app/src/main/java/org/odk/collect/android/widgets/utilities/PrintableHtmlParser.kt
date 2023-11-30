@@ -1,7 +1,6 @@
 package org.odk.collect.android.widgets.utilities
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Base64
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -27,11 +26,7 @@ class PrintableHtmlParser(private val qrCodeCreator: QRCodeCreator) {
         for (imgElement in document.getElementsByTag("img")) {
             val file = questionMediaManager.getAnswerFile(imgElement.attributes().get("src"))
             if (file != null && file.exists()) {
-                val bitmap = BitmapFactory.decodeFile(file.absolutePath)
-                if (bitmap != null) {
-                    val imageData = bitmapToBase64(bitmap)
-                    imgElement.attr("src", "data:image/png;base64,$imageData")
-                }
+                imgElement.attr("src", "file://${file.absolutePath}")
             }
         }
     }

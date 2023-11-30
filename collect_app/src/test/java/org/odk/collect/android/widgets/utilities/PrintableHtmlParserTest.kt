@@ -1,8 +1,5 @@
 package org.odk.collect.android.widgets.utilities
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -14,7 +11,6 @@ import org.mockito.kotlin.whenever
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.qrcode.QRCodeCreatorImpl
 import java.io.File
-import java.io.FileOutputStream
 
 @RunWith(AndroidJUnit4::class)
 class PrintableHtmlParserTest {
@@ -62,18 +58,8 @@ class PrintableHtmlParserTest {
     }
 
     @Test
-    fun `parsing an HTML with images sets the src attribute to data urls`() {
-        val bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-        Canvas(bitmap).also {
-            it.drawColor(Color.WHITE)
-        }
+    fun `parsing an HTML with images sets the src attribute to an absolute path of an image`() {
         val tempFile = File.createTempFile("photo", ".png")
-
-        val fos = FileOutputStream(tempFile)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
-        fos.flush()
-        fos.close()
-
         whenever(questionMediaManager.getAnswerFile("photo.png")).thenReturn(tempFile)
 
         val printableHtmlParser = PrintableHtmlParser(QRCodeCreatorImpl())
@@ -82,7 +68,7 @@ class PrintableHtmlParserTest {
             questionMediaManager
         )
 
-        assertThat(parsedHtml, equalTo("<html>\n <head></head>\n <body>\n  <img width=\"150\" height=\"150\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAEElEQVR4AQEFAPr/AAAAAAAABQAB\nZHiVOAAAAABJRU5ErkJggg==\n\">\n </body>\n</html>"))
+        assertThat(parsedHtml, equalTo("<html>\n <head></head>\n <body>\n  <img width=\"150\" height=\"150\" src=\"file://${tempFile.absolutePath}\">\n </body>\n</html>"))
     }
 
     @Test
