@@ -12,14 +12,10 @@ class PrintableHtmlParser(private val qrCodeCreator: QRCodeCreator) {
     fun parse(htmlDocument: String, questionMediaManager: QuestionMediaManager): String {
         val document = Jsoup.parse(htmlDocument)
 
-        return convertQRCodeElementsToImages(document, questionMediaManager).html()
-    }
-
-    private fun convertQRCodeElementsToImages(document: Document, questionMediaManager: QuestionMediaManager): Document {
         parseImages(document, questionMediaManager)
         parseQRCodes(document)
 
-        return document
+        return document.html()
     }
 
     private fun parseImages(document: Document, questionMediaManager: QuestionMediaManager) {
