@@ -168,7 +168,7 @@ public class InstanceChooserList extends AppListActivity implements AdapterView.
             return dialog;
         });
 
-        if (bulkFinalizationViewModel.isEnabled()) {
+        if (bulkFinalizationViewModel.isEnabled() && editMode) {
             DraftsMenuProvider draftsMenuProvider = new DraftsMenuProvider(this, bulkFinalizationViewModel::finalizeAllDrafts);
             addMenuProvider(draftsMenuProvider, this);
             bulkFinalizationViewModel.getDraftsCount().observe(this, draftsCount -> {
