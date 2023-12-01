@@ -29,7 +29,7 @@ class BulkFinalizationTest {
     val chain: RuleChain = TestRuleChain.chain(testDependencies).around(rule)
 
     @Test
-    fun canBulkFinalizeDrafts() {
+    fun canBulkFinalizeDraftsInTheListOfDrafts() {
         rule.withProject("http://example.com")
             .copyForm("one-question.xml", "example.com")
             .startBlankForm("One Question")
@@ -45,6 +45,16 @@ class BulkFinalizationTest {
             .pressBack(MainMenuPage())
 
             .assertNumberOfFinalizedForms(2)
+    }
+
+    @Test
+    fun canNotBulkFinalizeDraftsInTheListOfSentForms() {
+        rule.withProject("http://example.com")
+            .copyForm("one-question.xml", "example.com")
+            .startBlankForm("One Question")
+            .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
+            .clickViewSentForm(0)
+            .assertNoOptionsMenu()
     }
 
     @Test
