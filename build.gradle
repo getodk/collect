@@ -119,3 +119,20 @@ task cacheToMavenLocal(type: Sync) {
 
     includeEmptyDirs false
 }
+
+tasks.register('testLab') {
+    dependsOn "collect_app:assembleDebug", "collect_app:assembleDebugAndroidTest"
+    doLast {
+        exec {
+            executable 'gcloud'
+            args('beta', 'firebase', 'test', 'android', 'run',
+                    '--type', 'instrumentation',
+                    '--num-uniform-shards=50',
+                    '--app', 'collect_app/build/outputs/apk/debug/collect-debug.apk',
+                    '--test', 'collect_app/build/outputs/apk/androidTest/debug/collect-debug-androidTest.apk',
+                    '--device', 'model=MediumPhone.arm,version=30,locale=en,orientation=portrait',
+                    '--timeout', '10m'
+            )
+        }
+    }
+}
