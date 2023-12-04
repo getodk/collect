@@ -30,12 +30,20 @@ class DynamicPreloadParseProcessor :
     private var containsSearch = false
 
     override fun processXPath(xPathExpression: XPathExpression) {
+        if (containsPullData) {
+            return // No need to search if we already found pulldata
+        }
+
         if (xPathExpression.containsFunc("pulldata")) {
             containsPullData = true
         }
     }
 
     override fun processQuestion(question: QuestionDef) {
+        if (containsSearch) {
+            return // No need to search if we already found search
+        }
+
         if (ExternalDataUtil.getSearchXPathExpression(question.appearanceAttr) != null) {
             containsSearch = true
         }
