@@ -1,6 +1,6 @@
 shared:test
-androidshared:testDebug
 formstest:test
+androidshared:testDebug
 async:testDebug
 strings:testDebug
 audioclips:testDebug
@@ -18,3 +18,4 @@ entities:testDebug
 qr-code:testDebug
 shadows:testDebug
 metadata:testDebug
+selfie-camera:testDebug
