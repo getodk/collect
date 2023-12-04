@@ -261,10 +261,9 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 
 ### Release checklist:
 - update translations
-- run `./gradlew checkAll` and ensure everything passes
+- run `./gradlew createRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
 - tag the build by [adding a release](https://github.com/getodk/collect/releases).
     Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
-- run `./gradlew assembleOdkCollectRelease`. If successful, a signed release will be at `collect_app/build/outputs/apk`.
 - verify the apk size. If it has grown more than a few hundred kilobytes, discuss with the dev team.
 - verify a basic "happy path": scan a QR code to configure a new project, get a blank form, fill it, open the form map (confirms that the Google Maps key is correct), send form
 - verify new APK can be installed as update to previous version and that above "happy path" works in that case also

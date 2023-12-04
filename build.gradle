@@ -78,29 +78,6 @@ task checkCode(type: GradleBuild) {
     tasks = ['pmd', 'ktlintCheck', 'checkstyle', 'lintDebug']
 }
 
-task checkTests(type: GradleBuild) {
-    tasks = ['testDebugUnitTest', 'connectedDebugAndroidTest']
-}
-
-task checkAll(type: GradleBuild) {
-    tasks = ['checkCode', 'checkTests']
-}
-
-task checkFeature(type: GradleBuild) {
-    tasks = ["connectedDebugAndroidTest"]
-    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.feature"]
-}
-
-task checkRegression(type: GradleBuild) {
-    tasks = ["connectedDebugAndroidTest"]
-    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.regression"]
-}
-
-task checkInstrumented(type: GradleBuild) {
-    tasks = ["connectedDebugAndroidTest"]
-    startParameter.projectProperties = ["android.testInstrumentationRunnerArguments.package": "org.odk.collect.android.instrumented"]
-}
-
 // Create local Maven repo from cached Gradle dependencies
 task cacheToMavenLocal(type: Sync) {
     from new File(gradle.gradleUserHomeDir, 'caches/modules-2/files-2.1')
@@ -135,4 +112,8 @@ tasks.register('testLab') {
             )
         }
     }
+}
+
+tasks.register('createRelease') {
+    dependsOn "testLab", "collect_app:assembleOdkCollectRelease"
 }
