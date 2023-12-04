@@ -58,7 +58,6 @@ import org.odk.collect.android.widgets.utilities.AudioRecorderRecordingStatusHan
 import org.odk.collect.android.widgets.utilities.DateTimeWidgetUtils;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.GetContentAudioFileRequester;
-import org.odk.collect.android.widgets.utilities.PrintableHtmlParser;
 import org.odk.collect.android.widgets.utilities.RecordingRequester;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -185,7 +184,7 @@ public class WidgetFactory {
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
                         } else if (appearance.equals(Appearances.PRINTER)) {
-                            questionWidget = new PrinterWidget(activity, questionDetails, scheduler, questionMediaManager, new PrintableHtmlParser(new QRCodeCreatorImpl()), new HtmlPrinter());
+                            questionWidget = new PrinterWidget(activity, questionDetails, scheduler, questionMediaManager, new QRCodeCreatorImpl(), new HtmlPrinter());
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {
