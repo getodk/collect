@@ -270,7 +270,7 @@ Maintainers keep a folder with a clean checkout of the code and use [jenv.be](ht
 - write Play Store release notes, include link to forum post
 - create a release with the correct version by tagging the commit and running `./collect_app:assembleOdkCollectRelease`
   - Tags for full releases must have the format `vX.X.X`. Tags for beta releases must have the format `vX.X.X-beta.X`.
-- add a release to Github [here](https://github.com/getodk/collect/releases), generate release notes and attach the APK with the name `ODK-Collect-vX.X.X.apk`
+- add a release to Github [here](https://github.com/getodk/collect/releases), generate release notes and attach the APK
 - upload APK to Play Store
 - if there was an active beta before release (this can happen with point releases), publish a new beta release to replace the previous one which was disabled by the production release
 - backup dependencies for the release by downloading the `vX.X.X.tar` artifact from the `create_dependency_backup` job on Circle CI (for the release commit) and then uploading it to the "Collect Dependency Backups" folder in GetODK's Google Drive
