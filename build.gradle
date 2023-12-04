@@ -114,6 +114,6 @@ tasks.register('testLab') {
     }
 }
 
-tasks.register('createRelease') {
+tasks.register('releaseCheck') {
     dependsOn "testLab", "collect_app:assembleOdkCollectRelease"
 }
