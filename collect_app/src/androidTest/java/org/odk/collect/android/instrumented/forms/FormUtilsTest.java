@@ -49,8 +49,8 @@ public class FormUtilsTest {
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
         final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
         // Load the form in order to populate the ReferenceManager
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
-        formLoaderTask.executeSynchronously(formPath);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, formPath, null, null, formEntryControllerFactory, mock());
+        formLoaderTask.executeSynchronously();
 
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);

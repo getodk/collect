@@ -712,9 +712,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     formEntryViewModel.refreshSync();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
+                    formLoaderTask = new FormLoaderTask(instancePath, formPath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
                     showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-                    formLoaderTask.execute(formPath);
+                    formLoaderTask.execute();
                 }
 
                 return;
@@ -756,10 +756,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             instancePath = loadSavePoint();
         }
 
-        formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
+        formLoaderTask = new FormLoaderTask(instancePath, formPath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-        formLoaderTask.execute(formPath);
+        formLoaderTask.execute();
     }
 
     private String loadSavePoint() {

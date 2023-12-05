@@ -66,13 +66,14 @@ import timber.log.Timber;
  * @author Carl Hartung (carlhartung@gmail.com)
  * @author Yaw Anokwa (yanokwa@gmail.com)
  */
-public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, FormLoaderTask.FECWrapper> {
+public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLoaderTask.FECWrapper> {
     private static final String ITEMSETS_CSV = "itemsets.csv";
 
     private FormLoaderListener stateListener;
     private String errorMsg;
     private String warningMsg;
     private String instancePath;
+    private final String formPath;
     private final String xpath;
     private final String waitingXPath;
     private FormEntryControllerFactory formEntryControllerFactory;
@@ -112,9 +113,10 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler) {
+    public FormLoaderTask(String instancePath, String formPath, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler) {
         super(scheduler);
         this.instancePath = instancePath;
+        this.formPath = formPath;
         this.xpath = xpath;
         this.waitingXPath = waitingXPath;
         this.formEntryControllerFactory = formEntryControllerFactory;
@@ -125,10 +127,9 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<String, String, Form
      * from XML. If given an instance, it will be used to fill the {@link FormDef}.
      */
     @Override
-    protected FECWrapper doInBackground(String... path) {
+    protected FECWrapper doInBackground(Void... ignored) {
         errorMsg = null;
 
-        final String formPath = path[0];
         if (formPath == null) {
             Timber.e(new Error("formPath is null"));
             errorMsg = "formPath is null, please email support@getodk.org with a description of what you were doing when this happened.";

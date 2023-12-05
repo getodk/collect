@@ -131,7 +131,7 @@ public class FormNavigationTest {
             Timber.i(e);
         }
 
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), null, null, formEntryControllerFactory, mock());
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), formPath(formName), null, null, formEntryControllerFactory, mock());
         formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
             @Override
             public void loadingComplete(FormLoaderTask task, FormDef fd, String warningMsg) {
@@ -164,7 +164,7 @@ public class FormNavigationTest {
 
             }
         });
-        formLoaderTask.executeSynchronously(formPath(formName));
+        formLoaderTask.executeSynchronously();
     }
 
     /**
