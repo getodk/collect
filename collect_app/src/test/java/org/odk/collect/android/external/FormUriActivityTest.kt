@@ -22,6 +22,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.work.WorkManager
 import com.google.gson.Gson
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -45,6 +46,7 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
@@ -57,15 +59,19 @@ import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.UUIDGenerator
+import org.odk.collect.testshared.FakeScheduler
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class FormUriActivityTest {
+
     private val context = ApplicationProvider.getApplicationContext<Application>()
     private val projectsRepository = InMemProjectsRepository()
     private val projectsDataService = mock<ProjectsDataService>()
     private val formsRepository = InMemFormsRepository()
     private val instancesRepository = InMemInstancesRepository()
+    private val fakeScheduler = FakeScheduler()
+
     private val settingsProvider = InMemSettingsProvider().apply {
         getProtectedSettings().save(ProtectedProjectKeys.KEY_EDIT_SAVED, true)
     }
@@ -115,12 +121,17 @@ class FormUriActivityTest {
             override fun providesSettingsProvider(context: Context): SettingsProvider {
                 return settingsProvider
             }
+
+            override fun providesScheduler(workManager: WorkManager?): Scheduler {
+                return fakeScheduler
+            }
         })
     }
 
     @Test
     fun `When there are no projects then display alert dialog`() {
         val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(
             scenario,
@@ -150,6 +161,7 @@ class FormUriActivityTest {
                 form.dbId
             )
         )
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(
             scenario,
@@ -175,6 +187,7 @@ class FormUriActivityTest {
 
         val scenario =
             launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(null, form.dbId))
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(
             scenario,
@@ -201,6 +214,7 @@ class FormUriActivityTest {
                 data = null
             }
         )
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(
             scenario,
@@ -227,6 +241,7 @@ class FormUriActivityTest {
                 data = Uri.parse("blah")
             }
         )
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(
             scenario,
@@ -242,6 +257,7 @@ class FormUriActivityTest {
 
         val scenario =
             launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, 1))
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
@@ -267,6 +283,7 @@ class FormUriActivityTest {
                 form.dbId
             )
         )
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
@@ -279,6 +296,7 @@ class FormUriActivityTest {
 
         val scenario =
             launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, 1))
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
@@ -309,6 +327,8 @@ class FormUriActivityTest {
                 instance.dbId
             )
         )
+        fakeScheduler.flush()
+        fakeScheduler.flush()
 
         assertThat(instancesRepository.get(instance.dbId), equalTo(null))
         assertErrorDialogAndClickCancelButton(
@@ -337,6 +357,7 @@ class FormUriActivityTest {
                 instance.dbId
             )
         )
+        fakeScheduler.flush()
 
         val expectedMessage = context.getString(
             org.odk.collect.strings.R.string.parent_form_not_present,
@@ -367,6 +388,7 @@ class FormUriActivityTest {
                 instance.dbId
             )
         )
+        fakeScheduler.flush()
 
         val expectedMessage = context.getString(
             org.odk.collect.strings.R.string.parent_form_not_present,
@@ -416,6 +438,7 @@ class FormUriActivityTest {
                 instance.dbId
             )
         )
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(
             scenario,
@@ -454,6 +477,7 @@ class FormUriActivityTest {
                 instance.dbId
             )
         )
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickCancelButton(
             scenario,
@@ -483,6 +507,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, false)
     }
@@ -504,6 +529,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        fakeScheduler.flush()
 
         assertStartBlankFormIntent(project.uuid, form.dbId)
     }
@@ -528,6 +554,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, false)
     }
@@ -552,6 +579,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, false)
     }
@@ -576,6 +604,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, false)
     }
@@ -596,7 +625,9 @@ class FormUriActivityTest {
 
         val scenario =
             launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        fakeScheduler.flush()
         scenario.recreate()
+        fakeScheduler.flush()
 
         Intents.intended(hasComponent(FormFillingActivity::class.java.name), Intents.times(1))
     }
@@ -616,6 +647,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
+        fakeScheduler.flush()
 
         assertStartBlankFormIntent(project.uuid, form.dbId)
     }
@@ -640,6 +672,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, true)
     }
@@ -664,6 +697,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launch<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
+        fakeScheduler.flush()
 
         assertStartSavedFormIntent(project.uuid, instance.dbId, true)
     }
@@ -683,6 +717,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launch<FormUriActivity>(getBlankFormIntent(null, form.dbId))
+        fakeScheduler.flush()
 
         assertStartBlankFormIntent(null, form.dbId)
     }
@@ -707,6 +742,7 @@ class FormUriActivityTest {
         )
 
         launcherRule.launch<FormUriActivity>(getSavedIntent(null, instance.dbId))
+        fakeScheduler.flush()
 
         assertStartSavedFormIntent(null, instance.dbId, true)
     }
@@ -714,6 +750,7 @@ class FormUriActivityTest {
     @Test
     fun `The activity should be finished after clicking the back button when an error dialog is displayed`() {
         val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
+        fakeScheduler.flush()
 
         assertErrorDialogAndClickBackButton(
             scenario,
