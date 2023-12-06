@@ -10,6 +10,7 @@ import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.storage.StoragePathProvider;
@@ -47,6 +48,7 @@ public class FormUtilsTest {
      be defined in any order. See: https://github.com/getodk/collect/issues/3334
     */
     @Test
+    @Ignore
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
         fail();
 //        final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;

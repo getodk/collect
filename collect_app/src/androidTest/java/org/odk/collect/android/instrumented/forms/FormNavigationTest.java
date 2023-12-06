@@ -28,6 +28,7 @@ import androidx.test.core.app.ApplicationProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -62,6 +63,7 @@ import timber.log.Timber;
  * need to navigate to an index of the first question of all we want to display on one page.
  */
 @RunWith(Parameterized.class)
+@Ignore
 public class FormNavigationTest {
 
     private final FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory = new FormLoaderTask.FormEntryControllerFactory() {

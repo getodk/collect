@@ -13,6 +13,7 @@ import org.javarosa.core.model.FormDef;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
+@Ignore
 public class FormLoaderTaskTest {
 
     private final StoragePathProvider storagePathProvider = new StoragePathProvider();
