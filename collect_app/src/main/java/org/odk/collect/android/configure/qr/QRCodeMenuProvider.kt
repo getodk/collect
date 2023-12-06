@@ -4,18 +4,19 @@ import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.FileProvider
-import org.odk.collect.android.utilities.MenuDelegate
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.async.Scheduler
 import org.odk.collect.settings.SettingsProvider
 import timber.log.Timber
 
-class QRCodeMenuDelegate internal constructor(
+class QRCodeMenuProvider internal constructor(
     private val activity: FragmentActivity,
     private val intentLauncher: IntentLauncher,
     qrCodeGenerator: QRCodeGenerator,
@@ -23,7 +24,7 @@ class QRCodeMenuDelegate internal constructor(
     private val fileProvider: FileProvider,
     settingsProvider: SettingsProvider,
     scheduler: Scheduler
-) : MenuDelegate {
+) : MenuProvider {
     private var qrFilePath: String? = null
 
     init {
@@ -44,11 +45,15 @@ class QRCodeMenuDelegate internal constructor(
         }
     }
 
-    override fun onCreateOptionsMenu(menuInflater: MenuInflater, menu: Menu) {
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.qr_code_scan_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemSelected(item: MenuItem): Boolean {
+        if (!MultiClickGuard.allowClick(javaClass.name)) {
+            return true
+        }
+
         when (item.itemId) {
             R.id.menu_item_scan_sd_card -> {
                 val photoPickerIntent = Intent(Intent.ACTION_GET_CONTENT)
@@ -84,8 +89,6 @@ class QRCodeMenuDelegate internal constructor(
         }
         return false
     }
-
-    override fun onPrepareOptionsMenu(menu: Menu) = Unit
 
     companion object {
         const val SELECT_PHOTO = 111

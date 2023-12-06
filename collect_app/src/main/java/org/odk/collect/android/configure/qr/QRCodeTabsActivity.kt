@@ -2,8 +2,6 @@ package org.odk.collect.android.configure.qr
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -12,7 +10,6 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileProvider
 import org.odk.collect.androidshared.system.IntentLauncher
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler
 import org.odk.collect.permissions.PermissionListener
@@ -54,7 +51,6 @@ class QRCodeTabsActivity : LocalizedActivity() {
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
-    private lateinit var menuDelegate: QRCodeMenuDelegate
     private lateinit var activityResultDelegate: QRCodeActivityResultDelegate
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +66,7 @@ class QRCodeTabsActivity : LocalizedActivity() {
             projectsDataService.getCurrentProject()
         )
 
-        menuDelegate = QRCodeMenuDelegate(
+        val menuProvider = QRCodeMenuProvider(
             this,
             intentLauncher,
             qrCodeGenerator,
@@ -79,6 +75,7 @@ class QRCodeTabsActivity : LocalizedActivity() {
             settingsProvider,
             scheduler
         )
+        addMenuProvider(menuProvider, this)
 
         permissionsProvider.requestCameraPermission(
             this,
@@ -108,23 +105,6 @@ class QRCodeTabsActivity : LocalizedActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
             tab.text = fragmentTitleList[position]
         }.attach()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuDelegate.onCreateOptionsMenu(menuInflater, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (!allowClick(javaClass.name)) {
-            return true
-        }
-
-        return if (menuDelegate.onOptionsItemSelected(item)) {
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
