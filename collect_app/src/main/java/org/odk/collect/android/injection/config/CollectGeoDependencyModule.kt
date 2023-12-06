@@ -1,9 +1,11 @@
 package org.odk.collect.android.injection.config
 
+import OfflineMapLayer
 import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import androidx.fragment.app.FragmentActivity
+import org.odk.collect.android.formlists.sorting.OfflineMapLayersListBottomSheetDialog
 import org.odk.collect.android.preferences.screens.MapsPreferencesFragment
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyModule
@@ -15,6 +17,8 @@ import org.odk.collect.location.tracker.ForegroundServiceLocationTracker
 import org.odk.collect.location.tracker.LocationTracker
 import org.odk.collect.maps.MapFragmentFactory
 import org.odk.collect.permissions.PermissionsChecker
+import java.util.function.Consumer
+import org.odk.collect.android.R
 
 class CollectGeoDependencyModule(
     private val mapFragmentFactory: MapFragmentFactory,
@@ -26,7 +30,20 @@ class CollectGeoDependencyModule(
     override fun providesReferenceLayerSettingsNavigator(): ReferenceLayerSettingsNavigator {
         return object : ReferenceLayerSettingsNavigator {
             override fun navigateToReferenceLayerSettings(activity: FragmentActivity) {
-                MapsPreferencesFragment.showReferenceLayerDialog(activity)
+                // Create a few OfflineMapLayer items
+                val options: List<OfflineMapLayer> = listOf(
+                        OfflineMapLayer("Map Layer 1", R.drawable.ic_map),
+                        OfflineMapLayer("Map Layer 2", R.drawable.ic_map),
+                )
+                val selectedOption: Int = 0
+                val onSelectedOptionChanged = Consumer<Int> { position ->
+                    // Handle the selected option change
+                    // For example: Update UI or perform actions based on the selected option
+                }
+                // Call the showBottomSheet method
+                OfflineMapLayersListBottomSheetDialog.showBottomSheet(activity, options, selectedOption, onSelectedOptionChanged)
+
+//                MapsPreferencesFragment.showReferenceLayerDialog(activity)
             }
         }
     }
