@@ -31,7 +31,6 @@ open class DatabaseConnection(
 
     val readableDatabase: SQLiteDatabase
         get() {
-            StrictMode.noteSlowCall("Accessing readable DB")
             return dbHelper.readableDatabase
         }
 
