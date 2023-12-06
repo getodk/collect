@@ -3,6 +3,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -15,7 +16,7 @@ import org.odk.collect.android.R
 // Example ViewHolder for the adapter
 class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val layerTitle: TextView = itemView.findViewById(R.id.layerTitle)
-    val layerIcon: ImageView = itemView.findViewById(R.id.layerIcon)
+    val radioButton: RadioButton = itemView.findViewById(R.id.layerRadioButton)
     // Other views in your layout
 }
 
@@ -35,18 +36,12 @@ class OfflineMapLayersAdapter(
         val layer = layers[position]
 
         holder.layerTitle.text = layer.title
-        holder.layerIcon.setImageResource(layer.icon)
-        holder.layerIcon.tag = layer.icon
+
 
         // Apply color to selected item
         if (position == selectedLayer) {
             val colorAccent = ContextCompat.getColor(holder.itemView.context, R.color.colorOnPrimary)
-
             holder.layerTitle.setTextColor(colorAccent)
-            DrawableCompat.setTintList(
-                    holder.layerIcon.drawable,
-                    ColorStateList.valueOf(colorAccent)
-            )
         }
 
         // Handle item click

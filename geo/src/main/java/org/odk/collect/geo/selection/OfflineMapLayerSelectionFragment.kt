@@ -28,30 +28,22 @@ class OfflineMapLayerSelectionFragment(
     private val featureIdsByItemId: MutableMap<Long, Int> = mutableMapOf()
     private val itemsByFeatureId: MutableMap<Int, OfflineMapLayerItem> = mutableMapOf()
 
-    // Other injected dependencies here
-
-    // Other variables and constants here
-
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.selection_map_layout, container, false)
-
-        // Initialize views and UI components
-
-        return view
+        return inflater.inflate(R.layout.fragment_offline_map_selection, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // Initialize map and other components
-        // Set up listeners and UI interactions
+        super.onViewCreated(view, savedInstanceState)
+        // Initialize views and set up UI interactions
+        // For example, set onClickListeners, initialize RecyclerView, etc.
+        // Access views using 'view.findViewById'
     }
 
     private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
-        // Handle feature click on the map to update item selection status
         val item = itemsByFeatureId[featureId]
         item?.let {
             it.isSelected = !it.isSelected
@@ -59,8 +51,6 @@ class OfflineMapLayerSelectionFragment(
             // Handle UI updates or other actions based on item selection
         }
     }
-
-    // Other lifecycle methods and helper functions here
 
     companion object {
         const val REQUEST_SELECT_ITEM = "select_item"
