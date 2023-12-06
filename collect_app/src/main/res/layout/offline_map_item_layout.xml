@@ -1,0 +1,31 @@
+<!-- your_layer_item_layout.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/layerIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/googleg_disabled_color_18"
+    android:contentDescription="@string/dark" />
+
+    <TextView
+        android:id="@+id/layerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+         />
+
+    <!-- Add other views or customize as needed -->
+
+</LinearLayout>
