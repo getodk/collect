@@ -7,7 +7,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -18,14 +20,14 @@ import org.odk.collect.android.formentry.questions.AnswersProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
-import org.odk.collect.android.utilities.MenuDelegate;
 import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
+import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProtectedProjectKeys;
 
-public class FormEntryMenuDelegate implements MenuDelegate {
+public class FormEntryMenuProvider implements MenuProvider {
 
     private final AppCompatActivity activity;
     private final AnswersProvider answersProvider;
@@ -38,7 +40,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
 
     private final FormEntryMenuClickListener formEntryMenuClickListener;
 
-    public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
+    public FormEntryMenuProvider(AppCompatActivity activity, AnswersProvider answersProvider,
                                  FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
                                  BackgroundLocationViewModel backgroundLocationViewModel,
                                  BackgroundAudioViewModel backgroundAudioViewModel,
@@ -56,12 +58,12 @@ public class FormEntryMenuDelegate implements MenuDelegate {
     }
 
     @Override
-    public void onCreateOptionsMenu(MenuInflater menuInflater, Menu menu) {
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.form_menu, menu);
     }
 
     @Override
-    public void onPrepareOptionsMenu(Menu menu) {
+    public void onPrepareMenu(@NonNull Menu menu) {
         FormController formController = formEntryViewModel.getFormController();
 
         boolean useability;
@@ -101,7 +103,11 @@ public class FormEntryMenuDelegate implements MenuDelegate {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemSelected(@NonNull MenuItem item) {
+        if (!MultiClickGuard.allowClick(getClass().getName())) {
+            return true;
+        }
+
         if (item.getItemId() == R.id.menu_add_repeat) {
             if (audioRecorder.isRecording() && !backgroundAudioViewModel.isBackgroundRecording()) {
                 DialogFragmentUtils.showIfNotShowing(RecordingWarningDialogFragment.class, activity.getSupportFragmentManager());

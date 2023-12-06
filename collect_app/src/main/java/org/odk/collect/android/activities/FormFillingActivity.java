@@ -45,7 +45,6 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -101,7 +100,7 @@ import org.odk.collect.android.formentry.FormAnimation;
 import org.odk.collect.android.formentry.FormAnimationType;
 import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEndViewModel;
-import org.odk.collect.android.formentry.FormEntryMenuDelegate;
+import org.odk.collect.android.formentry.FormEntryMenuProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormError;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
@@ -180,7 +179,6 @@ import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -291,7 +289,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private boolean newForm = true;
 
     MediaLoadingFragment mediaLoadingFragment;
-    private FormEntryMenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
     private WaitingForDataRegistry waitingForDataRegistry;
     private InternalRecordingRequester internalRecordingRequester;
@@ -476,7 +473,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         initToolbar();
 
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
-        menuDelegate = new FormEntryMenuDelegate(
+        FormEntryMenuProvider menuProvider = new FormEntryMenuProvider(
                 this,
                 () -> getAnswers(),
                 formEntryViewModel,
@@ -484,7 +481,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
                 settingsProvider,
-                new FormEntryMenuDelegate.FormEntryMenuClickListener() {
+                new FormEntryMenuProvider.FormEntryMenuClickListener() {
                     @Override
                     public void changeLanguage() {
                         createLanguageDialog();
@@ -496,6 +493,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     }
                 }
         );
+
+        addMenuProvider(menuProvider, this);
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
@@ -1032,32 +1031,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 Timber.e(new Error("Attempting to return data to a widget or set of widgets not looking for data"));
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menuDelegate.onPrepareOptionsMenu(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (!MultiClickGuard.allowClick(getClass().getName())) {
-            return true;
-        }
-
-        if (menuDelegate.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     // The method saves questions one by one in order to support calculations in field-list groups

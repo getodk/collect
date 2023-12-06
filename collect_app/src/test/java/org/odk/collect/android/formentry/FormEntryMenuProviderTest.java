@@ -43,16 +43,16 @@ import java.util.HashMap;
 
 @RunWith(AndroidJUnit4.class)
 @LooperMode(LooperMode.Mode.PAUSED)
-public class FormEntryMenuDelegateTest {
+public class FormEntryMenuProviderTest {
 
-    private FormEntryMenuDelegate formEntryMenuDelegate;
+    private FormEntryMenuProvider formEntryMenuProvider;
     private AppCompatActivity activity;
     private FormEntryViewModel formEntryViewModel;
     private AnswersProvider answersProvider;
     private AudioRecorder audioRecorder;
     private BackgroundAudioViewModel backgroundAudioViewModel;
     private SettingsProvider settingsProvider;
-    private FormEntryMenuDelegate.FormEntryMenuClickListener formEntryMenuClickListener;
+    private FormEntryMenuProvider.FormEntryMenuClickListener formEntryMenuClickListener;
     private FormController formController = mock(FormController.class);
 
     @Before
@@ -74,9 +74,9 @@ public class FormEntryMenuDelegateTest {
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableNonNullLiveData<>(true));
 
         settingsProvider = TestSettingsProvider.getSettingsProvider();
-        formEntryMenuClickListener = mock(FormEntryMenuDelegate.FormEntryMenuClickListener.class);
+        formEntryMenuClickListener = mock(FormEntryMenuProvider.FormEntryMenuClickListener.class);
 
-        formEntryMenuDelegate = new FormEntryMenuDelegate(
+        formEntryMenuProvider = new FormEntryMenuProvider(
                 activity,
                 answersProvider,
                 formEntryViewModel,
@@ -93,8 +93,8 @@ public class FormEntryMenuDelegateTest {
         when(formEntryViewModel.canAddRepeat()).thenReturn(true);
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_add_repeat).isVisible(), equalTo(true));
     }
@@ -104,8 +104,8 @@ public class FormEntryMenuDelegateTest {
         when(formEntryViewModel.canAddRepeat()).thenReturn(false);
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_add_repeat).isVisible(), equalTo(false));
     }
@@ -115,8 +115,8 @@ public class FormEntryMenuDelegateTest {
         when(formEntryViewModel.getFormController()).thenReturn(null);
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_add_repeat).isVisible(), equalTo(false));
     }
@@ -126,8 +126,8 @@ public class FormEntryMenuDelegateTest {
         when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableNonNullLiveData<>(true));
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_record_audio).isVisible(), equalTo(true));
     }
@@ -137,8 +137,8 @@ public class FormEntryMenuDelegateTest {
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableNonNullLiveData<>(true));
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_record_audio).isChecked(), equalTo(true));
     }
@@ -148,8 +148,8 @@ public class FormEntryMenuDelegateTest {
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableNonNullLiveData<>(false));
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_record_audio).isChecked(), equalTo(false));
     }
@@ -159,8 +159,8 @@ public class FormEntryMenuDelegateTest {
         when(formEntryViewModel.hasBackgroundRecording()).thenReturn(new MutableNonNullLiveData<>(false));
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_record_audio).isVisible(), equalTo(false));
     }
@@ -170,8 +170,8 @@ public class FormEntryMenuDelegateTest {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, true);
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_save).isVisible(), equalTo(true));
     }
@@ -181,8 +181,8 @@ public class FormEntryMenuDelegateTest {
         settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, false);
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_save).isVisible(), equalTo(false));
     }
@@ -192,8 +192,8 @@ public class FormEntryMenuDelegateTest {
         when(formController.getLanguages()).thenReturn(new String[]{"English", "Spanish"});
 
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_languages).isVisible(), equalTo(true));
     }
@@ -201,8 +201,8 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onPrepare_whenThereIsJustOneDefinedLanguage_hidesChangeLanguage() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_languages).isVisible(), equalTo(false));
     }
@@ -210,34 +210,34 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenAddRepeat_callsPromptForNewRepeat() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel).promptForNewRepeat();
     }
 
     @Test
     public void onItemSelected_whenAddRepeat_savesScreenAnswers() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         HashMap answers = new HashMap();
         when(answersProvider.getAnswers()).thenReturn(answers);
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel).updateAnswersForScreen(answers, false);
     }
 
     @Test
     public void onItemSelected_whenAddRepeat_whenRecording_showsWarning() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel, never()).promptForNewRepeat();
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
@@ -248,13 +248,13 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenAddRepeat_whenRecordingInTheBackground_doesNotShowWarning() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
         when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(true);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_add_repeat));
         verify(formEntryViewModel).promptForNewRepeat();
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
@@ -264,10 +264,10 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenPreferences_startsPreferencesActivityWithChangeSettingsRequest() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_preferences));
         ShadowActivity.IntentForResult nextStartedActivity = shadowOf(activity).getNextStartedActivityForResult();
         assertThat(nextStartedActivity, not(nullValue()));
         assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(ProjectPreferencesActivity.class.getName()));
@@ -277,12 +277,12 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenPreferences_whenRecording_showsWarning() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_preferences));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_preferences));
         assertThat(shadowOf(activity).getNextStartedActivityForResult(), is(nullValue()));
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
@@ -293,10 +293,10 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenHierarchy_startsHierarchyActivity() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_goto));
         ShadowActivity.IntentForResult nextStartedActivity = shadowOf(activity).getNextStartedActivityForResult();
         assertThat(nextStartedActivity, not(nullValue()));
         assertThat(nextStartedActivity.intent.getComponent().getClassName(), is(FormHierarchyActivity.class.getName()));
@@ -306,34 +306,34 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenHierarchy_savesScreenAnswers() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         HashMap answers = new HashMap();
         when(answersProvider.getAnswers()).thenReturn(answers);
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_goto));
         verify(formEntryViewModel).updateAnswersForScreen(answers, false);
     }
 
     @Test
     public void onItemSelected_whenHierarchy_callsOpenHierarchy() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_goto));
         verify(formEntryViewModel).openHierarchy();
     }
 
     @Test
     public void onItemSelected_whenHierarchy_whenRecording_showsWarning() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_goto));
         assertThat(shadowOf(activity).getNextStartedActivity(), is(nullValue()));
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
@@ -344,13 +344,13 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenHierarchy_whenRecordingInBackground_doesNotShowWarning() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         when(audioRecorder.isRecording()).thenReturn(true);
         when(backgroundAudioViewModel.isBackgroundRecording()).thenReturn(true);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_goto));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_goto));
         assertThat(shadowOf(activity).getNextStartedActivity(), is(notNullValue()));
 
         RecordingWarningDialogFragment dialog = getFragmentByClass(activity.getSupportFragmentManager(), RecordingWarningDialogFragment.class);
@@ -360,32 +360,32 @@ public class FormEntryMenuDelegateTest {
     @Test
     public void onItemSelected_whenRecordAudio_whenBackgroundRecordingDisabled_enablesBackgroundRecording_andShowsDialog() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableNonNullLiveData<>(false));
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_record_audio));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_record_audio));
         verify(backgroundAudioViewModel).setBackgroundRecordingEnabled(true);
     }
 
     @Test
     public void onItemSelected_whenChangeLanguage_callsChangeLanguage() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_languages));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_languages));
         verify(formEntryMenuClickListener).changeLanguage();
     }
 
     @Test
     public void onItemSelected_whenSave_callsSave() {
         RoboMenu menu = new RoboMenu();
-        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
-        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity.class).getMenuInflater());
+        formEntryMenuProvider.onPrepareMenu(menu);
 
-        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_save));
+        formEntryMenuProvider.onMenuItemSelected(new RoboMenuItem(R.id.menu_save));
         verify(formEntryMenuClickListener).save();
     }
 }

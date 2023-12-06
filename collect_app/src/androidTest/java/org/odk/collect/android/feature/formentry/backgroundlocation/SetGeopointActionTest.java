@@ -10,6 +10,7 @@ import androidx.test.core.app.ApplicationProvider;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
+import org.odk.collect.android.formentry.FormEntryMenuProvider;
 import org.odk.collect.android.support.rules.BlankFormTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 
@@ -29,7 +30,7 @@ public class SetGeopointActionTest {
     }
 
     /**
-     * Could be replaced in test for {@link org.odk.collect.android.formentry.FormEntryMenuDelegate}
+     * Could be replaced in test for {@link FormEntryMenuProvider}
      */
     @Test
     public void locationCollectionToggle_ShouldBeAvailable() {
