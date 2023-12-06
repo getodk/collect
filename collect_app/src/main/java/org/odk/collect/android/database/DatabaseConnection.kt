@@ -25,13 +25,13 @@ open class DatabaseConnection(
 
     val writeableDatabase: SQLiteDatabase
         get() {
-            StrictMode.noteSlowCall("Accessing DB")
+            StrictMode.noteSlowCall("Accessing writable DB")
             return dbHelper.writableDatabase
         }
 
     val readableDatabase: SQLiteDatabase
         get() {
-            StrictMode.noteSlowCall("Accessing DB")
+            StrictMode.noteSlowCall("Accessing readable DB")
             return dbHelper.readableDatabase
         }
 

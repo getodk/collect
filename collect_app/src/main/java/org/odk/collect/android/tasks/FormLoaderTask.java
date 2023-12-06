@@ -95,7 +95,8 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private Intent intent;
     private ExternalDataManager externalDataManager;
     private FormDef formDef;
-    private String formPath;
+    private Form form;
+    private Instance instance;
 
     @Override
     protected void onPreExecute() {
@@ -106,8 +107,12 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         return instancePath;
     }
 
-    public String getFormPath() {
-        return formPath;
+    public Form getForm() {
+        return form;
+    }
+
+    public Instance getInstance() {
+        return instance;
     }
 
     public static class FECWrapper {
@@ -152,16 +157,14 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         errorMsg = null;
 
         if (uriMimeType != null && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
-
+            instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
             instancePath = instance.getInstanceFilePath();
 
             List<Form> candidateForms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
-            formPath = candidateForms.get(0).getFormFilePath();
+            form = candidateForms.get(0);
         } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
-            Form form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
-            formPath = form.getFormFilePath();
+            form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
 
             /**
              * This is the fill-blank-form code path.See if there is a savepoint for this form
@@ -172,13 +175,13 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             instancePath = loadSavePoint();
         }
 
-        if (formPath == null) {
+        if (form.getFormFilePath() == null) {
             Timber.e(new Error("formPath is null"));
             errorMsg = "formPath is null, please email support@getodk.org with a description of what you were doing when this happened.";
             return null;
         }
 
-        final File formXml = new File(formPath);
+        final File formXml = new File(form.getFormFilePath());
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
 
         unzipMediaFiles(formMediaDir);
@@ -186,7 +189,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
 
         FormDef formDef = null;
         try {
-            formDef = createFormDefFromCacheOrXml(formPath, formXml);
+            formDef = createFormDefFromCacheOrXml(form.getFormFilePath(), formXml);
         } catch (StackOverflowError e) {
             Timber.e(e);
             errorMsg = getLocalizedString(Collect.getInstance(), org.odk.collect.strings.R.string.too_complex_form);
@@ -572,9 +575,9 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     }
 
     private String loadSavePoint() {
-        final String filePrefix = formPath.substring(
-                formPath.lastIndexOf('/') + 1,
-                formPath.lastIndexOf('.'))
+        final String filePrefix = form.getFormFilePath().substring(
+                form.getFormFilePath().lastIndexOf('/') + 1,
+                form.getFormFilePath().lastIndexOf('.'))
                 + "_";
         final String fileSuffix = ".xml.save";
         File cacheDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));

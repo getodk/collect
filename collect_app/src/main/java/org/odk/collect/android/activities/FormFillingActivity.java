@@ -92,7 +92,6 @@ import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler;
 import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.exception.JavaRosaException;
-import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.BackgroundAudioPermissionDialogFragment;
 import org.odk.collect.android.formentry.BackgroundAudioViewModel;
@@ -150,7 +149,6 @@ import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
@@ -299,6 +297,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private ExternalAppRecordingRequester externalAppRecordingRequester;
     private FormEntryViewModelFactory viewModelFactory;
     private AudioClipViewModel audioClipViewModel;
+    private Form form;
+    private Instance instance;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -645,13 +645,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     private void formControllerAvailable(@NonNull FormController formController) {
-        Form form = formsRepository.getOneByPath(formPath);
-        String instancePath = formController.getInstanceFile().getAbsolutePath();
-        Instance instance = instancesRepositoryProvider.get().getOneByPath(instancePath);
         formSessionRepository.set(sessionId, formController, form, instance);
-
         AnalyticsUtils.setForm(formController);
-
         backgroundLocationViewModel.formFinishedLoading();
     }
 
@@ -707,7 +702,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 FormController formController = getFormController();
 
                 if (formController != null) {
-                    formControllerAvailable(formController);
                     activityDisplayed();
                     formEntryViewModel.refreshSync();
                 } else {
@@ -1923,7 +1917,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         final FormController formController = task.getFormController();
         instancePath = task.getInstancePath();
-        formPath = task.getFormPath();
+        instance = task.getInstance();
+        form = task.getForm();
+        formPath = form.getFormFilePath();
 
         if (formController != null) {
             formLoaderTask.setFormLoaderListener(null);
@@ -1936,8 +1932,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             String[] languageTest = formController.getLanguages();
             if (languageTest != null) {
                 String defaultLanguage = formController.getLanguage();
-                Form form = formsRepository.getOneByPath(formPath);
-
                 if (form != null) {
                     String newLanguage = form.getLanguage();
 
@@ -2106,9 +2100,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             Uri uri = null;
             String path = getAbsoluteInstancePath();
             if (path != null) {
-                Instance instance = new InstancesRepositoryProvider(this).get().getOneByPath(path);
-                if (instance != null) {
-                    uri = InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid(), instance.getDbId());
+                if (formSaveViewModel.getInstance() != null) {
+                    uri = InstancesContract.getUri(projectsDataService.getCurrentProject().getUuid(), formSaveViewModel.getInstance().getDbId());
                 }
             }
 
