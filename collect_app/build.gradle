@@ -82,7 +82,7 @@ android {
         testInstrumentationRunner('androidx.test.runner.AndroidJUnitRunner')
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
-        archivesBaseName = 'collect'
+        archivesBaseName = 'ODK-Collect'
     }
 
     signingConfigs {
@@ -147,15 +147,11 @@ android {
         }
     }
 
-    // https://stackoverflow.com/a/27119543/152938
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            outputFileName = new File(outputFileName.replace(".apk", "-${defaultConfig.versionName}.apk"))
-        }
-    }
-    testVariants.all { variant ->
-        variant.outputs.all { output ->
-            outputFileName = new File(outputFileName.replace(".apk", "-${defaultConfig.versionName}.apk"))
+    applicationVariants.configureEach { variant ->
+        if (variant.getName() == "selfSignedRelease" || variant.getName() == "odkCollectRelease") {
+            variant.outputs.configureEach { output ->
+                outputFileName = new File(outputFileName.replace("${variant.getName()}.apk", "${defaultConfig.versionName}.apk"))
+            }
         }
     }
 

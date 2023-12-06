@@ -19,3 +19,7 @@ dependencies {
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
 }
+
+tasks.register("testDebug") {
+    dependsOn "test"
+}

@@ -21,3 +21,7 @@ dependencies {
     implementation Dependencies.mockito_kotlin
     implementation Dependencies.hamcrest
 }
+
+tasks.register("testDebug") {
+    dependsOn "test"
+}

@@ -84,7 +84,7 @@ class CaptureSelfieActivityTest {
             it.putExtra(CaptureSelfieActivity.EXTRA_TMP_PATH, "blah")
         }
 
-        val scenario = launcher.launch<CaptureSelfieActivity>(intent)
+        val scenario = launcher.launchForResult<CaptureSelfieActivity>(intent)
         onView(withId(R.id.preview)).perform(click())
 
         assertThat(scenario.result.resultCode, equalTo(Activity.RESULT_OK))
