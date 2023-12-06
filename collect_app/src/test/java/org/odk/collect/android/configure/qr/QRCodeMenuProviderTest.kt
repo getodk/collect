@@ -41,10 +41,10 @@ class QRCodeMenuProviderTest {
     fun setup() {
         activity = Robolectric.setupActivity(FragmentActivity::class.java)
         intentLauncher = IntentLauncherImpl
-        setupMenuDelegate()
+        setupMenuProvider()
     }
 
-    private fun setupMenuDelegate() {
+    private fun setupMenuProvider() {
         menuProvider = QRCodeMenuProvider(
             activity,
             intentLauncher,
@@ -76,7 +76,7 @@ class QRCodeMenuProviderTest {
     @Test
     fun clickingOnImportQRCode_whenPickerActivityNotAvailable_showsToast() {
         intentLauncher = ErrorIntentLauncher()
-        setupMenuDelegate()
+        setupMenuProvider()
         menuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_item_scan_sd_card))
 
         assertThat(
