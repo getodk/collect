@@ -1,5 +1,6 @@
 package org.odk.collect.android.instrumented.forms;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.odk.collect.android.support.StorageUtils.copyFormToStorage;
 
@@ -47,26 +48,27 @@ public class FormUtilsTest {
     */
     @Test
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
-        final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
-        // Load the form in order to populate the ReferenceManager
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, formPath, null, null, formEntryControllerFactory, mock());
-        formLoaderTask.executeSynchronously();
-
-        final File formXml = new File(formPath);
-        final File formMediaDir = FileUtils.getFormMediaDir(formXml);
-        List<RootTranslator> rootTranslators = FormUtils.buildSessionRootTranslators(formMediaDir.getName(), FormUtils.enumerateHostStrings());
-
-        // Check each type of host string to determine that only one match is resolved.
-        for (String hostString : FormUtils.enumerateHostStrings()) {
-            String uri = String.format("jr://%s/test", hostString);
-            int matchCount = 0;
-            for (RootTranslator rootTranslator : rootTranslators) {
-                if (rootTranslator.derives(uri)) {
-                    matchCount++;
-                }
-            }
-            Assert.assertEquals("Expected only a single match for URI: " + uri, 1, matchCount);
-        }
+        fail();
+//        final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
+//        // Load the form in order to populate the ReferenceManager
+//        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, formPath, null, null, formEntryControllerFactory, mock());
+//        formLoaderTask.executeSynchronously();
+//
+//        final File formXml = new File(formPath);
+//        final File formMediaDir = FileUtils.getFormMediaDir(formXml);
+//        List<RootTranslator> rootTranslators = FormUtils.buildSessionRootTranslators(formMediaDir.getName(), FormUtils.enumerateHostStrings());
+//
+//        // Check each type of host string to determine that only one match is resolved.
+//        for (String hostString : FormUtils.enumerateHostStrings()) {
+//            String uri = String.format("jr://%s/test", hostString);
+//            int matchCount = 0;
+//            for (RootTranslator rootTranslator : rootTranslators) {
+//                if (rootTranslator.derives(uri)) {
+//                    matchCount++;
+//                }
+//            }
+//            Assert.assertEquals("Expected only a single match for URI: " + uri, 1, matchCount);
+//        }
     }
 
     /* Verify that the host strings appear in an order that does not allow for greedy matches, e.g.

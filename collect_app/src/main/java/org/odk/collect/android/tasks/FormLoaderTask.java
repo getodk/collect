@@ -20,6 +20,7 @@ import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLoc
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -41,21 +42,31 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.dynamicpreload.ExternalAnswerResolver;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
+import org.odk.collect.android.external.FormsContract;
+import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
+import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalizableFormDefCache;
 import org.odk.collect.android.utilities.FileUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.ZipUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerAsyncTaskMimic;
+import org.odk.collect.forms.Form;
+import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 import timber.log.Timber;
@@ -73,7 +84,8 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private String errorMsg;
     private String warningMsg;
     private String instancePath;
-    private final String formPath;
+    private final Uri uri;
+    private final String uriMimeType;
     private final String xpath;
     private final String waitingXPath;
     private FormEntryControllerFactory formEntryControllerFactory;
@@ -83,10 +95,19 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private Intent intent;
     private ExternalDataManager externalDataManager;
     private FormDef formDef;
+    private String formPath;
 
     @Override
     protected void onPreExecute() {
 
+    }
+
+    public String getInstancePath() {
+        return instancePath;
+    }
+
+    public String getFormPath() {
+        return formPath;
     }
 
     public static class FECWrapper {
@@ -113,10 +134,10 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
 
     FECWrapper data;
 
-    public FormLoaderTask(String instancePath, String formPath, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler) {
+    public FormLoaderTask(Uri uri, String uriMimeType, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler) {
         super(scheduler);
-        this.instancePath = instancePath;
-        this.formPath = formPath;
+        this.uri = uri;
+        this.uriMimeType = uriMimeType;
         this.xpath = xpath;
         this.waitingXPath = waitingXPath;
         this.formEntryControllerFactory = formEntryControllerFactory;
@@ -129,6 +150,27 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     @Override
     protected FECWrapper doInBackground(Void... ignored) {
         errorMsg = null;
+
+        if (uriMimeType != null && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
+            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
+
+            instancePath = instance.getInstanceFilePath();
+
+            List<Form> candidateForms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
+
+            formPath = candidateForms.get(0).getFormFilePath();
+        } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
+            Form form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
+            formPath = form.getFormFilePath();
+
+            /**
+             * This is the fill-blank-form code path.See if there is a savepoint for this form
+             * that has never been explicitly saved by the user. If there is, open this savepoint(resume this filled-in form).
+             * Savepoints for forms that were explicitly saved will be recovered when that
+             * explicitly saved instance is edited via edit-saved-form.
+             */
+            instancePath = loadSavePoint();
+        }
 
         if (formPath == null) {
             Timber.e(new Error("formPath is null"));
@@ -527,6 +569,51 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             }
             ida.close();
         }
+    }
+
+    private String loadSavePoint() {
+        final String filePrefix = formPath.substring(
+                formPath.lastIndexOf('/') + 1,
+                formPath.lastIndexOf('.'))
+                + "_";
+        final String fileSuffix = ".xml.save";
+        File cacheDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
+        File[] files = cacheDir.listFiles(pathname -> {
+            String name = pathname.getName();
+            return name.startsWith(filePrefix)
+                    && name.endsWith(fileSuffix);
+        });
+
+        if (files != null) {
+            /**
+             * See if any of these savepoints are for a filled-in form that has never
+             * been explicitly saved by the user.
+             */
+            for (File candidate : files) {
+                String instanceDirName = candidate.getName()
+                        .substring(
+                                0,
+                                candidate.getName().length()
+                                        - fileSuffix.length());
+                File instanceDir = new File(
+                        new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator
+                                + instanceDirName);
+                File instanceFile = new File(instanceDir,
+                        instanceDirName + ".xml");
+                if (instanceDir.exists()
+                        && instanceDir.isDirectory()
+                        && !instanceFile.exists()) {
+                    // yes! -- use this savepoint file
+                    return instanceFile
+                            .getAbsolutePath();
+                }
+            }
+
+        } else {
+            Timber.e(new Error("Couldn't access cache directory when looking for save points!"));
+        }
+
+        return null;
     }
 
     public FormDef getFormDef() {

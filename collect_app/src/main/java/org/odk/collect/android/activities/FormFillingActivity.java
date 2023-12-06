@@ -712,9 +712,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     formEntryViewModel.refreshSync();
                 } else {
                     Timber.w("Reloading form and restoring state.");
-                    formLoaderTask = new FormLoaderTask(instancePath, formPath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
-                    showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
-                    formLoaderTask.execute();
+                    loadFromIntent(getIntent());
                 }
 
                 return;
@@ -735,76 +733,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             uriMimeType = getContentResolver().getType(uri);
         }
 
-        if (uriMimeType != null && uriMimeType.equals(InstancesContract.CONTENT_ITEM_TYPE)) {
-            Instance instance = new InstancesRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
-
-            instancePath = instance.getInstanceFilePath();
-
-            List<Form> candidateForms = formsRepository.getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
-
-            formPath = candidateForms.get(0).getFormFilePath();
-        } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
-            Form form = formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri));
-            formPath = form.getFormFilePath();
-
-            /**
-             * This is the fill-blank-form code path.See if there is a savepoint for this form
-             * that has never been explicitly saved by the user. If there is, open this savepoint(resume this filled-in form).
-             * Savepoints for forms that were explicitly saved will be recovered when that
-             * explicitly saved instance is edited via edit-saved-form.
-             */
-            instancePath = loadSavePoint();
-        }
-
-        formLoaderTask = new FormLoaderTask(instancePath, formPath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
+        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute();
-    }
-
-    private String loadSavePoint() {
-        final String filePrefix = formPath.substring(
-                formPath.lastIndexOf('/') + 1,
-                formPath.lastIndexOf('.'))
-                + "_";
-        final String fileSuffix = ".xml.save";
-        File cacheDir = new File(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE));
-        File[] files = cacheDir.listFiles(pathname -> {
-            String name = pathname.getName();
-            return name.startsWith(filePrefix)
-                    && name.endsWith(fileSuffix);
-        });
-
-        if (files != null) {
-            /**
-             * See if any of these savepoints are for a filled-in form that has never
-             * been explicitly saved by the user.
-             */
-            for (File candidate : files) {
-                String instanceDirName = candidate.getName()
-                        .substring(
-                                0,
-                                candidate.getName().length()
-                                        - fileSuffix.length());
-                File instanceDir = new File(
-                        storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator
-                                + instanceDirName);
-                File instanceFile = new File(instanceDir,
-                        instanceDirName + ".xml");
-                if (instanceDir.exists()
-                        && instanceDir.isDirectory()
-                        && !instanceFile.exists()) {
-                    // yes! -- use this savepoint file
-                    return instanceFile
-                            .getAbsolutePath();
-                }
-            }
-
-        } else {
-            Timber.e(new Error("Couldn't access cache directory when looking for save points!"));
-        }
-
-        return null;
     }
 
 
@@ -1990,6 +1922,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         DialogFragmentUtils.dismissDialog(FormLoadingDialogFragment.class, getSupportFragmentManager());
 
         final FormController formController = task.getFormController();
+        instancePath = task.getInstancePath();
+        formPath = task.getFormPath();
 
         if (formController != null) {
             formLoaderTask.setFormLoaderListener(null);

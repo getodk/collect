@@ -18,6 +18,7 @@ package org.odk.collect.android.instrumented.forms;
 
 import static junit.framework.Assert.assertEquals;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 import android.app.Application;
@@ -121,50 +122,51 @@ public class FormNavigationTest {
 
     @Test
     public void formNavigationTestCase() throws ExecutionException, InterruptedException {
+        fail();
         testIndices(formName, expectedIndices);
     }
 
     private void testIndices(String formName, String[] expectedIndices) throws ExecutionException, InterruptedException {
-        try {
-            copyToStorage(formName);
-        } catch (IOException e) {
-            Timber.i(e);
-        }
-
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), formPath(formName), null, null, formEntryControllerFactory, mock());
-        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
-            @Override
-            public void loadingComplete(FormLoaderTask task, FormDef fd, String warningMsg) {
-                try {
-                    // For each form, simulate swiping forward through screens until the end of the
-                    // form and then swiping back once. Verify the expected indices before and after each swipe.
-                    for (int i = 0; i < expectedIndices.length - 1; i++) {
-                        FormController formController = task.getFormController();
-                        // check the current index
-                        assertEquals(expectedIndices[i], formController.getFormIndex().toString());
-                        if (i < expectedIndices.length - 2) {
-                            formController.stepToNextScreenEvent();
-                        } else {
-                            formController.stepToPreviousScreenEvent();
-                        }
-                        // check the index again after navigating
-                        assertEquals(expectedIndices[i + 1], formController.getFormIndex().toString());
-                    }
-                } catch (Exception e) {
-                    Timber.i(e);
-                }
-            }
-
-            @Override
-            public void loadingError(String errorMsg) {
-            }
-
-            @Override
-            public void onProgressStep(String stepMessage) {
-
-            }
-        });
-        formLoaderTask.executeSynchronously();
+//        try {
+//            copyToStorage(formName);
+//        } catch (IOException e) {
+//            Timber.i(e);
+//        }
+//
+//        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath(formName), formPath(formName), null, null, formEntryControllerFactory, mock());
+//        formLoaderTask.setFormLoaderListener(new FormLoaderListener() {
+//            @Override
+//            public void loadingComplete(FormLoaderTask task, FormDef fd, String warningMsg) {
+//                try {
+//                    // For each form, simulate swiping forward through screens until the end of the
+//                    // form and then swiping back once. Verify the expected indices before and after each swipe.
+//                    for (int i = 0; i < expectedIndices.length - 1; i++) {
+//                        FormController formController = task.getFormController();
+//                        // check the current index
+//                        assertEquals(expectedIndices[i], formController.getFormIndex().toString());
+//                        if (i < expectedIndices.length - 2) {
+//                            formController.stepToNextScreenEvent();
+//                        } else {
+//                            formController.stepToPreviousScreenEvent();
+//                        }
+//                        // check the index again after navigating
+//                        assertEquals(expectedIndices[i + 1], formController.getFormIndex().toString());
+//                    }
+//                } catch (Exception e) {
+//                    Timber.i(e);
+//                }
+//            }
+//
+//            @Override
+//            public void loadingError(String errorMsg) {
+//            }
+//
+//            @Override
+//            public void onProgressStep(String stepMessage) {
+//
+//            }
+//        });
+//        formLoaderTask.executeSynchronously();
     }
 
     /**
