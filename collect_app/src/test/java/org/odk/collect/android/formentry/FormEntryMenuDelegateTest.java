@@ -30,6 +30,8 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
+import org.odk.collect.settings.SettingsProvider;
+import org.odk.collect.settings.keys.ProtectedProjectKeys;
 import org.odk.collect.testshared.RobolectricHelpers;
 import org.robolectric.Robolectric;
 import org.robolectric.annotation.LooperMode;
@@ -49,11 +51,14 @@ public class FormEntryMenuDelegateTest {
     private AnswersProvider answersProvider;
     private AudioRecorder audioRecorder;
     private BackgroundAudioViewModel backgroundAudioViewModel;
+    private SettingsProvider settingsProvider;
+    private FormEntryMenuDelegate.FormEntryMenuClickListener formEntryMenuClickListener;
+    private FormController formController = mock(FormController.class);
 
     @Before
     public void setup() {
         activity = RobolectricHelpers.createThemedActivity(AppCompatActivity.class);
-        FormController formController = mock(FormController.class);
+        formController = mock(FormController.class);
         answersProvider = mock(AnswersProvider.class);
 
         audioRecorder = mock(AudioRecorder.class);
@@ -68,6 +73,9 @@ public class FormEntryMenuDelegateTest {
         backgroundAudioViewModel = mock(BackgroundAudioViewModel.class);
         when(backgroundAudioViewModel.isBackgroundRecordingEnabled()).thenReturn(new MutableNonNullLiveData<>(true));
 
+        settingsProvider = TestSettingsProvider.getSettingsProvider();
+        formEntryMenuClickListener = mock(FormEntryMenuDelegate.FormEntryMenuClickListener.class);
+
         formEntryMenuDelegate = new FormEntryMenuDelegate(
                 activity,
                 answersProvider,
@@ -75,7 +83,8 @@ public class FormEntryMenuDelegateTest {
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                TestSettingsProvider.getSettingsProvider()
+                settingsProvider,
+                formEntryMenuClickListener
         );
     }
 
@@ -154,6 +163,48 @@ public class FormEntryMenuDelegateTest {
         formEntryMenuDelegate.onPrepareOptionsMenu(menu);
 
         assertThat(menu.findItem(R.id.menu_record_audio).isVisible(), equalTo(false));
+    }
+
+    @Test
+    public void onPrepare_whenSavingFormInTheMiddleEnabled_showsSave() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, true);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_save).isVisible(), equalTo(true));
+    }
+
+    @Test
+    public void onPrepare_whenSavingFormInTheMiddleDisabled_hidesSave() {
+        settingsProvider.getProtectedSettings().save(ProtectedProjectKeys.KEY_SAVE_MID, false);
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_save).isVisible(), equalTo(false));
+    }
+
+    @Test
+    public void onPrepare_whenThereAreMoreThanOneDefinedLanguages_showsChangeLanguage() {
+        when(formController.getLanguages()).thenReturn(new String[]{"English", "Spanish"});
+
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_languages).isVisible(), equalTo(true));
+    }
+
+    @Test
+    public void onPrepare_whenThereIsJustOneDefinedLanguage_hidesChangeLanguage() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        assertThat(menu.findItem(R.id.menu_languages).isVisible(), equalTo(false));
     }
 
     @Test
@@ -316,5 +367,25 @@ public class FormEntryMenuDelegateTest {
 
         formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_record_audio));
         verify(backgroundAudioViewModel).setBackgroundRecordingEnabled(true);
+    }
+
+    @Test
+    public void onItemSelected_whenChangeLanguage_callsChangeLanguage() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_languages));
+        verify(formEntryMenuClickListener).changeLanguage();
+    }
+
+    @Test
+    public void onItemSelected_whenSave_callsSave() {
+        RoboMenu menu = new RoboMenu();
+        formEntryMenuDelegate.onCreateOptionsMenu(Robolectric.setupActivity(FragmentActivity.class).getMenuInflater(), menu);
+        formEntryMenuDelegate.onPrepareOptionsMenu(menu);
+
+        formEntryMenuDelegate.onOptionsItemSelected(new RoboMenuItem(R.id.menu_save));
+        verify(formEntryMenuClickListener).save();
     }
 }

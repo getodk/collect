@@ -36,11 +36,14 @@ public class FormEntryMenuDelegate implements MenuDelegate {
     private final AudioRecorder audioRecorder;
     private final SettingsProvider settingsProvider;
 
+    private final FormEntryMenuClickListener formEntryMenuClickListener;
+
     public FormEntryMenuDelegate(AppCompatActivity activity, AnswersProvider answersProvider,
                                  FormEntryViewModel formEntryViewModel, AudioRecorder audioRecorder,
                                  BackgroundLocationViewModel backgroundLocationViewModel,
                                  BackgroundAudioViewModel backgroundAudioViewModel,
-                                 SettingsProvider settingsProvider) {
+                                 SettingsProvider settingsProvider,
+                                 FormEntryMenuClickListener formEntryMenuClickListener) {
         this.activity = activity;
         this.answersProvider = answersProvider;
 
@@ -49,6 +52,7 @@ public class FormEntryMenuDelegate implements MenuDelegate {
         this.backgroundLocationViewModel = backgroundLocationViewModel;
         this.backgroundAudioViewModel = backgroundAudioViewModel;
         this.settingsProvider = settingsProvider;
+        this.formEntryMenuClickListener = formEntryMenuClickListener;
     }
 
     @Override
@@ -158,8 +162,20 @@ public class FormEntryMenuDelegate implements MenuDelegate {
             formEntryViewModel.saveScreenAnswersToFormController(answersProvider.getAnswers(), false);
             formEntryViewModel.validate();
             return true;
+        } else if (item.getItemId() == R.id.menu_languages) {
+            formEntryMenuClickListener.changeLanguage();
+            return true;
+        } else if (item.getItemId() == R.id.menu_save) {
+            formEntryMenuClickListener.save();
+            return true;
         } else {
             return false;
         }
+    }
+
+    public interface FormEntryMenuClickListener {
+        void changeLanguage();
+
+        void save();
     }
 }

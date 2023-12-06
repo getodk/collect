@@ -483,7 +483,18 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                settingsProvider
+                settingsProvider,
+                new FormEntryMenuDelegate.FormEntryMenuClickListener() {
+                    @Override
+                    public void changeLanguage() {
+                        createLanguageDialog();
+                    }
+
+                    @Override
+                    public void save() {
+                        saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
+                    }
+                }
         );
 
         nextButton = findViewById(R.id.form_forward_button);
@@ -1043,16 +1054,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
 
         if (menuDelegate.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        // These actions should move into the `FormEntryMenuDelegate`
-        if (item.getItemId() == R.id.menu_languages) {
-            createLanguageDialog();
-            return true;
-        } else if (item.getItemId() == R.id.menu_save) {
-            // don't exit
-            saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
             return true;
         }
 
@@ -1635,8 +1636,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      * isntancs as complete. If updatedSaveName is non-null, the instances
      * content provider is updated with the new name
      */
-    private boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
-                             boolean current) {
+    public boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
+                            boolean current) {
         // save current answer
         if (current) {
             if (!formEntryViewModel.updateAnswersForScreen(getAnswers(), complete)) {
@@ -1780,7 +1781,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      * Creates and displays a dialog allowing the user to set the language for
      * the form.
      */
-    private void createLanguageDialog() {
+    public void createLanguageDialog() {
         FormController formController = getFormController();
         final String[] languages = formController.getLanguages();
         int selected = -1;
