@@ -13,10 +13,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import org.odk.collect.androidshared.livedata.NonNullLiveData;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 
 import java.io.Serializable;
@@ -141,13 +141,15 @@ public class MaterialProgressDialogFragment extends DialogFragment {
         return dialogView;
     }
 
-    public static void showOn(LifecycleOwner lifecycleOwner, NonNullLiveData<Boolean> liveData, FragmentManager fragmentManager, Supplier<MaterialProgressDialogFragment> supplier) {
+    public static void showOn(LifecycleOwner lifecycleOwner, LiveData<Boolean> liveData, FragmentManager fragmentManager, Supplier<MaterialProgressDialogFragment> supplier) {
         liveData.observe(lifecycleOwner, isLoading -> {
-            if (isLoading) {
-                MaterialProgressDialogFragment dialog = supplier.get();
-                DialogFragmentUtils.showIfNotShowing(dialog, MaterialProgressDialogFragment.class.getName(), fragmentManager);
-            } else {
-                DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class.getName(), fragmentManager);
+            if (isLoading != null) {
+                if (isLoading) {
+                    MaterialProgressDialogFragment dialog = supplier.get();
+                    DialogFragmentUtils.showIfNotShowing(dialog, MaterialProgressDialogFragment.class.getName(), fragmentManager);
+                } else {
+                    DialogFragmentUtils.dismissDialog(MaterialProgressDialogFragment.class.getName(), fragmentManager);
+                }
             }
         });
     }

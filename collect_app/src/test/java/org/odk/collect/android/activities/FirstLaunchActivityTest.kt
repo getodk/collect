@@ -3,14 +3,17 @@ package org.odk.collect.android.activities
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.CoreMatchers.nullValue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,7 +29,9 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.version.VersionInformation
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
+import org.odk.collect.material.MaterialProgressDialogFragment
 import org.odk.collect.strings.localization.getLocalizedString
+import org.odk.collect.testshared.RobolectricHelpers
 
 @RunWith(AndroidJUnit4::class)
 class FirstLaunchActivityTest {
@@ -88,7 +93,28 @@ class FirstLaunchActivityTest {
                         org.odk.collect.strings.R.string.collect_app_name
                     ) + " vfake"
                 )
-            ).check(matches(isDisplayed()))
+            ).perform(scrollTo()).check(matches(isDisplayed()))
+        }
+    }
+
+    @Test
+    fun `Adding demo project displays a progress dialog`() {
+        val scenario = launcherRule.launch(FirstLaunchActivity::class.java)
+        scenario.onActivity {
+            val dialogClass = MaterialProgressDialogFragment::class.java
+            assertThat(RobolectricHelpers.getFragmentByClass(it.supportFragmentManager, dialogClass), nullValue())
+
+            onView(
+                withText(
+                    containsString(
+                        ApplicationProvider.getApplicationContext<Collect>().getLocalizedString(
+                            org.odk.collect.strings.R.string.try_demo
+                        )
+                    )
+                )
+            ).perform(scrollTo()).perform(click())
+
+            assertThat(RobolectricHelpers.getFragmentByClass(it.supportFragmentManager, dialogClass), notNullValue())
         }
     }
 }
