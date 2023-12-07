@@ -188,8 +188,6 @@
   <string name="pause_recording">إيقاف مؤقت</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">استئناف</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">تسجيل صورت</string>
   <string name="background_audio_permission_explanation">هذا النموذج يسجل الصوت في الخلفية. يجب أن تمنح الإذن لاستخدام الميكروفون الخاص بك. إذا لم تقم بذلك ، فلن تتمكن من فتح هذا النموذج.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">يطلب هذا النموذج تسجيل صوت في الخلفية. سيؤدي تعطيله إلى إيقاف التسجيل وتجاهل الصوت الموجود. هل انت متأكد انك تريد المتابعة؟</string>
@@ -363,8 +361,6 @@
   <string name="location_providers_disabled_dialog_message">تريد هذه الاستمارة تتبع موقعك ولكن موفري الموقع معطلين. يرجى التمكين في إعدادات أندرويد.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">إذهب للاعدادات</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">تتبع الموقع</string>
   <string name="background_location_disabled">تريد هذه الاستمارة تتبع موقعك ولكن تم تعطيل التتبع. يرجى التمكين في القائمة %1$s أعلاه.</string>
   <string name="background_location_enabled">هذه الاستمارة تقوم بتتبع موقعك. يمكنك تعطيل التتبع في القائمة %1$s أعلاه.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

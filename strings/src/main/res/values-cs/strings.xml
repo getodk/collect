@@ -217,8 +217,6 @@
   <string name="pause_recording">Pauza</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Pokračovat</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">Záznam zvuku</string>
   <string name="background_audio_permission_explanation">This form records audio in the background. You must grant permission to use your microphone. If you do not, you will not be able to open this form.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">Tento formulář požaduje záznam zvuku na pozadí. Jeho deaktivací se zastaví nahrávání a zahodí se stávající zvuk. Opravdu chcete pokračovat?</string>
@@ -395,8 +393,6 @@
   <string name="location_providers_disabled_dialog_message">Tento formulář chce sledovat vaši polohu, ale poskytovatelé polohy jsou zakázáni. Zvolte prosím nastavení v systému Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Jít do nastavení</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Sledovat polohu</string>
   <string name="background_location_disabled">Tento formulář chce sledovat vaši polohu, ale sledování je zakázáno. Aktivujte prosím v nabídce %1$s výše.</string>
   <string name="background_location_enabled">Tento formulář sleduje vaši polohu. Sledování můžete zakázat v nabídce %1$s výše.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

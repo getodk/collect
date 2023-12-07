@@ -282,8 +282,11 @@
     <!-- Description text for button that that resumes recording sound -->
     <string name="resume_recording">Resume</string>
 
-    <!-- Text next to checkbox to allow the user to toggle audio recording on and off -->
-    <string name="record_audio">Record audio</string>
+    <!-- Displayed in the form filling menu when a form has background audio recording enabled -->
+    <string name="record_audio_on">Record audio: on</string>
+
+    <!-- Displayed in the form filling menu when a form has background audio recording disabled -->
+    <string name="record_audio_off">Record audio: off</string>
 
     <string name="background_audio_permission_explanation">This form records audio in the background. You must grant permission to use your microphone. If you do not, you will not be able to open this form.</string>
 
@@ -489,8 +492,10 @@
     <string name="location_providers_disabled_dialog_message">This form wants to track your location but location providers are disabled. Please enable in Android settings.</string>
     <!-- Action to go to Android settings. Displayed when location providers are disabled. -->
     <string name="go_to_settings">Go to settings</string>
-    <!-- Label for a menu item that can be toggled to turn background location tracking on and off during form filling -->
-    <string name="track_location">Track location</string>
+    <!-- Displayed in the form filling menu when a form has background location enabled -->
+    <string name="track_location_on">Track location: on</string>
+    <!-- Displayed in the form filling menu when a form has background location disabled -->
+    <string name="track_location_off">Track location: off</string>
     <string name="background_location_disabled">This form wants to track your location but tracking is disabled. Please enable in the %1$s menu above.</string>
     <string name="background_location_enabled">This form tracks your location. You can disable tracking in the %1$s menu above.</string>
 

@@ -220,8 +220,6 @@
   <string name="pause_recording">Pausar</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Reanudar</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">Grabar audio</string>
   <string name="background_audio_permission_explanation">Este formulario graba audio en segundo plano. Debe otorgar permiso para usar su micrófono. Si no lo hace, no podrá abrir este formulario.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">Este formulario solicita una grabación de audio de fondo. Si lo desactiva, se detendrá la grabación y se descartará el audio existente. ¿Estas seguro que deseas continuar?</string>
@@ -398,8 +396,6 @@
   <string name="location_providers_disabled_dialog_message">Este formulario quiere rastrear su ubicación pero los proveedores de ubicación están deshabilitados Por favor, habilite en la configuración de Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Ir a ajustes</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Rastrear ubicación</string>
   <string name="background_location_disabled">Este formulario requiere registrar su localización, pero el rastreo esta deshabilitado. Favor habilitar en el menú de arriba %1$s .</string>
   <string name="background_location_enabled">Este formulario registra su localización. Puede deshabilitar el rastreo en el menú de arriba %1$s.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

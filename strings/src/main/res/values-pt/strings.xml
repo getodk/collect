@@ -220,8 +220,6 @@
   <string name="pause_recording">Pausar</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Continuar</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">Gravar áudio</string>
   <string name="background_audio_permission_explanation">Esse formulário grava áudio em segundo plano. Você precisa dar permissão de acesso ao microfone para o ODK Collect. Se não permitir isso, você não poderá abrir esse formulário.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">Esse formulário solicita gravação de áudio em segundo plano. Desabilitar isso irá interromper a gravação e descartar o áudio já gravado. Você tem certeza que deseja continuar?</string>
@@ -398,8 +396,6 @@
   <string name="location_providers_disabled_dialog_message">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu dispositivo. Por favor, habilite nas configurações do celular.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Ir para as configurações</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Rastrear localização</string>
   <string name="background_location_disabled">Este formulário necessita rastrear sua localização, mas a localização está desabilitada no seu celular. Por favor, habilite no menu %1$s acima.</string>
   <string name="background_location_enabled">Este formulário rastreia a sua localização. Você pode desabilitar o rastreamento de localização no menu %1$s acima.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
