@@ -69,42 +69,51 @@ class InstancesDataService(
         )
 
         val result = instances.fold(FinalizeAllResult(0, 0, false)) { result, instance ->
-            val (formDef, form) = FormEntryUseCases.loadFormDef(
+            val formDefAndForm = FormEntryUseCases.loadFormDef(
                 instance,
                 formsRepository,
                 projectRootDir,
                 ExternalizableFormDefCache()
             )
 
-            val formMediaDir = File(form.formMediaPath)
-            val formEntryController =
-                CollectFormEntryControllerFactory().create(formDef, formMediaDir)
-            val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
-
-            val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
-            val needsEncrypted = form.basE64RSAPublicKey != null
-            val newResult = if (savePoint != null) {
-                Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)
-                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
-            } else if (needsEncrypted) {
-                Analytics.log(AnalyticsEvents.BULK_FINALIZE_ENCRYPTED_FORM)
-                result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+            if (formDefAndForm == null) {
+                result.copy(failureCount = result.failureCount + 1)
             } else {
-                val finalizedInstance = FormEntryUseCases.finalizeDraft(
-                    formController,
-                    instancesRepository,
-                    entitiesRepository
-                )
+                val (formDef, form) = formDefAndForm
 
-                if (finalizedInstance == null) {
+                val formMediaDir = File(form.formMediaPath)
+                val formEntryController =
+                    CollectFormEntryControllerFactory().create(formDef, formMediaDir)
+                val formController = FormEntryUseCases.loadDraft(form, instance, formEntryController)
+                if (formController == null) {
                     result.copy(failureCount = result.failureCount + 1)
                 } else {
-                    result
+                    val savePoint = FormEntryUseCases.getSavePoint(formController, File(cacheDir))
+                    val needsEncrypted = form.basE64RSAPublicKey != null
+                    val newResult = if (savePoint != null) {
+                        Analytics.log(AnalyticsEvents.BULK_FINALIZE_SAVE_POINT)
+                        result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+                    } else if (needsEncrypted) {
+                        Analytics.log(AnalyticsEvents.BULK_FINALIZE_ENCRYPTED_FORM)
+                        result.copy(failureCount = result.failureCount + 1, unsupportedInstances = true)
+                    } else {
+                        val finalizedInstance = FormEntryUseCases.finalizeDraft(
+                            formController,
+                            instancesRepository,
+                            entitiesRepository
+                        )
+
+                        if (finalizedInstance == null) {
+                            result.copy(failureCount = result.failureCount + 1)
+                        } else {
+                            result
+                        }
+                    }
+
+                    Collect.getInstance().externalDataManager?.close()
+                    newResult
                 }
             }
-
-            Collect.getInstance().externalDataManager?.close()
-            newResult
         }
 
         update()

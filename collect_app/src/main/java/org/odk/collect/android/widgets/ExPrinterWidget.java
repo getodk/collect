@@ -200,12 +200,6 @@ public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceive
     }
 
     @Override
-    public void setFocus(Context context) {
-        // focus on launch button
-        launchIntentButton.requestFocus();
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return !event.isAltPressed() && super.onKeyDown(keyCode, event);
     }

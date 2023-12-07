@@ -375,7 +375,7 @@ public class AppDependencyModule {
 
     @Provides
     public SoftKeyboardController provideSoftKeyboardController() {
-        return new SoftKeyboardController();
+        return SoftKeyboardController.INSTANCE;
     }
 
     @Provides

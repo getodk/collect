@@ -85,10 +85,6 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     }
 
     @Override
-    public void setFocus(Context context) {
-    }
-
-    @Override
     public void setOnLongClickListener(OnLongClickListener l) {
         showRankingDialogButton.setOnLongClickListener(l);
     }

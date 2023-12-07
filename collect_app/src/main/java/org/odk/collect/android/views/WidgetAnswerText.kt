@@ -168,9 +168,9 @@ class WidgetAnswerText(context: Context, attrs: AttributeSet?) : FrameLayout(con
 
     fun setFocus(focus: Boolean) {
         if (focus) {
-            SoftKeyboardController().showSoftKeyboard(binding.editText)
+            SoftKeyboardController.showSoftKeyboard(binding.editText)
         } else {
-            SoftKeyboardController().hideSoftKeyboard(binding.editText)
+            SoftKeyboardController.hideSoftKeyboard(binding.editText)
         }
     }
 
