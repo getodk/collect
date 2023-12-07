@@ -48,7 +48,6 @@ import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.listeners.DownloadFormsTaskListener;
 import org.odk.collect.android.listeners.FormListDownloaderListener;
-import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.android.openrosa.HttpCredentialsInterface;
 import org.odk.collect.android.tasks.DownloadFormListTask;
 import org.odk.collect.android.tasks.DownloadFormsTask;
@@ -57,6 +56,7 @@ import org.odk.collect.android.utilities.AuthDialogUtility;
 import org.odk.collect.android.utilities.DialogUtils;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.views.DayNightProgressDialog;
+import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.forms.FormSourceException;
@@ -95,8 +95,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
         AdapterView.OnItemClickListener, RefreshFormListDialogFragment.RefreshFormListDialogFragmentListener,
         FormsDownloadResultDialog.FormDownloadResultDialogListener {
     private static final String FORM_DOWNLOAD_LIST_SORTING_ORDER = "formDownloadListSortingOrder";
-
-    public static final String DISPLAY_ONLY_UPDATED_FORMS = "displayOnlyUpdatedForms";
     private static final String BUNDLE_SELECTED_COUNT = "selectedcount";
 
     public static final String FORMNAME = "formname";
@@ -117,8 +115,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     private final ArrayList<HashMap<String, String>> filteredFormList = new ArrayList<>();
 
     private static final boolean DO_NOT_EXIT = false;
-
-    private boolean displayOnlyUpdatedForms;
 
     private FormDownloadListViewModel viewModel;
 
@@ -152,10 +148,6 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
     private void init(Bundle savedInstanceState) {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            if (bundle.containsKey(DISPLAY_ONLY_UPDATED_FORMS)) {
-                displayOnlyUpdatedForms = (boolean) bundle.get(DISPLAY_ONLY_UPDATED_FORMS);
-            }
-
             if (bundle.containsKey(ApplicationConstants.BundleKeys.FORM_IDS)) {
                 viewModel.setDownloadOnlyMode(true);
                 viewModel.setFormIdsToDownload(bundle.getStringArray(ApplicationConstants.BundleKeys.FORM_IDS));
@@ -507,30 +499,28 @@ public class FormDownloadListActivity extends FormListActivity implements FormLi
                 String formDetailsKey = ids.get(i);
                 ServerFormDetails details = viewModel.getFormDetailsByFormId().get(formDetailsKey);
 
-                if (!displayOnlyUpdatedForms || details.isUpdated()) {
-                    HashMap<String, String> item = new HashMap<>();
-                    item.put(FORMNAME, details.getFormName());
-                    item.put(FORMID_DISPLAY,
-                            ((details.getFormVersion() == null) ? "" : (getString(org.odk.collect.strings.R.string.version) + " "
-                                    + details.getFormVersion() + " ")) + "ID: " + details.getFormId());
-                    item.put(FORMDETAIL_KEY, formDetailsKey);
-                    item.put(FORM_ID_KEY, details.getFormId());
-                    item.put(FORM_VERSION_KEY, details.getFormVersion());
+                HashMap<String, String> item = new HashMap<>();
+                item.put(FORMNAME, details.getFormName());
+                item.put(FORMID_DISPLAY,
+                        ((details.getFormVersion() == null) ? "" : (getString(org.odk.collect.strings.R.string.version) + " "
+                                + details.getFormVersion() + " ")) + "ID: " + details.getFormId());
+                item.put(FORMDETAIL_KEY, formDetailsKey);
+                item.put(FORM_ID_KEY, details.getFormId());
+                item.put(FORM_VERSION_KEY, details.getFormVersion());
 
-                    // Insert the new form in alphabetical order.
-                    if (viewModel.getFormList().isEmpty()) {
-                        viewModel.addForm(item);
-                    } else {
-                        int j;
-                        for (j = 0; j < viewModel.getFormList().size(); j++) {
-                            HashMap<String, String> compareMe = viewModel.getFormList().get(j);
-                            String name = compareMe.get(FORMNAME);
-                            if (name.compareTo(viewModel.getFormDetailsByFormId().get(ids.get(i)).getFormName()) > 0) {
-                                break;
-                            }
+                // Insert the new form in alphabetical order.
+                if (viewModel.getFormList().isEmpty()) {
+                    viewModel.addForm(item);
+                } else {
+                    int j;
+                    for (j = 0; j < viewModel.getFormList().size(); j++) {
+                        HashMap<String, String> compareMe = viewModel.getFormList().get(j);
+                        String name = compareMe.get(FORMNAME);
+                        if (name.compareTo(viewModel.getFormDetailsByFormId().get(ids.get(i)).getFormName()) > 0) {
+                            break;
                         }
-                        viewModel.addForm(j, item);
                     }
+                    viewModel.addForm(j, item);
                 }
             }
 

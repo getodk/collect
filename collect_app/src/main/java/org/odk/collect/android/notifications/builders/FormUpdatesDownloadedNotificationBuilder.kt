@@ -2,41 +2,28 @@ package org.odk.collect.android.notifications.builders
 
 import android.app.Application
 import android.app.Notification
-import android.app.PendingIntent
-import android.content.Intent
 import androidx.core.app.NotificationCompat
 import org.odk.collect.android.R
-import org.odk.collect.android.formlists.blankformlist.BlankFormListActivity
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.NotificationManagerNotifier
-import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.notifications.NotificationUtils
 import org.odk.collect.android.utilities.FormsDownloadResultInterpreter
-import org.odk.collect.errors.ErrorActivity
 import org.odk.collect.strings.localization.getLocalizedString
-import java.io.Serializable
 
 object FormUpdatesDownloadedNotificationBuilder {
 
-    fun build(application: Application, result: Map<ServerFormDetails, FormDownloadException?>, projectName: String): Notification {
+    fun build(application: Application, result: Map<ServerFormDetails, FormDownloadException?>, projectName: String, notificationId: Int): Notification {
         val allFormsDownloadedSuccessfully = FormsDownloadResultInterpreter.allFormsDownloadedSuccessfully(result)
 
-        val intent = if (allFormsDownloadedSuccessfully) {
-            Intent(application, BlankFormListActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            }
-        } else {
-            Intent(application, ErrorActivity::class.java).apply {
-                putExtra(ErrorActivity.EXTRA_ERRORS, FormsDownloadResultInterpreter.getFailures(result, application) as Serializable)
-            }
-        }
-
-        val contentIntent = PendingIntent.getActivity(
+        val contentIntent = NotificationUtils.createOpenAppContentIntent(
             application,
-            ApplicationConstants.RequestCodes.FORMS_DOWNLOADED_NOTIFICATION,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            notificationId
         )
+
+        val errorItems = FormsDownloadResultInterpreter.getFailures(result, application)
+        val showDetailsIntent =
+            NotificationUtils.createOpenErrorsActionIntent(application, errorItems, notificationId)
 
         val title =
             if (allFormsDownloadedSuccessfully) {
@@ -66,6 +53,14 @@ object FormUpdatesDownloadedNotificationBuilder {
             setSubText(projectName)
             setSmallIcon(org.odk.collect.icons.R.drawable.ic_notification_small)
             setAutoCancel(true)
+
+            if (!allFormsDownloadedSuccessfully) {
+                addAction(
+                    R.drawable.ic_outline_info_small,
+                    application.getLocalizedString(org.odk.collect.strings.R.string.show_details),
+                    showDetailsIntent
+                )
+            }
         }.build()
     }
 }

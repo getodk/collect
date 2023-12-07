@@ -157,7 +157,7 @@ class BulkFinalizationTest {
     @Test
     fun whenAutoSendIsEnabled_draftsAreSentAfterFinalizing() {
         val mainMenuPage = rule.withProject(testDependencies.server.url)
-            .enableAutoSend()
+            .enableAutoSend(testDependencies.scheduler)
 
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")

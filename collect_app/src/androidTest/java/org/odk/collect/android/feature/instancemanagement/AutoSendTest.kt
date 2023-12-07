@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.odk.collect.android.support.TestDependencies
 import org.odk.collect.android.support.pages.ErrorPage
 import org.odk.collect.android.support.pages.MainMenuPage
-import org.odk.collect.android.support.pages.SendFinalizedFormPage
+import org.odk.collect.android.support.pages.ViewSentFormPage
 import org.odk.collect.android.support.rules.CollectTestRule
 import org.odk.collect.android.support.rules.NotificationDrawerRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -28,7 +28,7 @@ class AutoSendTest {
     fun whenAutoSendEnabled_fillingAndFinalizingForm_sendsFormAndNotifiesUser() {
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .enableAutoSend()
+            .enableAutoSend(testDependencies.scheduler)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .inputText("31")
@@ -47,8 +47,8 @@ class AutoSendTest {
             .clickNotification(
                 "ODK Collect",
                 "Forms upload succeeded",
-                MainMenuPage()
-            )
+                ViewSentFormPage()
+            ).pressBack(MainMenuPage())
     }
 
     @Test
@@ -57,7 +57,7 @@ class AutoSendTest {
 
         val mainMenuPage = rule.startAtMainMenu()
             .setServer(testDependencies.server.url)
-            .enableAutoSend()
+            .enableAutoSend(testDependencies.scheduler)
             .copyForm("one-question.xml")
             .startBlankForm("One Question")
             .inputText("31")
@@ -66,8 +66,7 @@ class AutoSendTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
-        mainMenuPage
-            .clickViewSentForm(1)
+        mainMenuPage.clickViewSentForm(1)
             .assertText("One Question")
 
         notificationDrawerRule
@@ -76,15 +75,8 @@ class AutoSendTest {
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                ErrorPage()
-            )
-
-        notificationDrawerRule
-            .open()
-            .clickNotification(
-                "ODK Collect",
-                "Forms upload failed",
-                SendFinalizedFormPage()
+                ErrorPage(),
+                cancelsNotification = true
             )
     }
 
@@ -110,8 +102,8 @@ class AutoSendTest {
             .clickNotification(
                 "ODK Collect",
                 "Forms upload succeeded",
-                MainMenuPage()
-            )
+                ViewSentFormPage()
+            ).pressBack(MainMenuPage())
     }
 
     @Test
@@ -128,17 +120,17 @@ class AutoSendTest {
 
         testDependencies.scheduler.runDeferredTasks()
 
-        mainMenuPage
-            .clickViewSentForm(1)
+        mainMenuPage.clickViewSentForm(1)
             .assertText("One Question Autosend")
 
         notificationDrawerRule
             .open()
             .assertNotification("ODK Collect", "Forms upload failed", "1 of 1 uploads failed!")
-            .clickNotification(
+            .clickAction(
                 "ODK Collect",
-                "Forms upload failed",
-                SendFinalizedFormPage()
+                "Show details",
+                ErrorPage(),
+                cancelsNotification = true
             )
     }
 }

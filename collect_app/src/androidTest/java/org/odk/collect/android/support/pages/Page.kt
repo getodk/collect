@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoActivityResumedException
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.click
@@ -40,6 +41,7 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.StringContains.containsString
 import org.hamcrest.core.StringEndsWith.endsWith
 import org.junit.Assert
+import org.junit.Assert.fail
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
@@ -93,6 +95,15 @@ abstract class Page<T : Page<T>> {
     fun <D : Page<D>> pressBack(destination: D): D {
         Espresso.pressBack()
         return destination.assertOnPage()
+    }
+
+    fun pressBackKillingApp() {
+        try {
+            Espresso.pressBack()
+            fail("App was not killed!")
+        } catch (e: NoActivityResumedException) {
+            // App killed as expected
+        }
     }
 
     fun assertTexts(vararg texts: String): T {
