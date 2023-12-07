@@ -52,7 +52,6 @@ import org.odk.collect.projects.Project
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.InMemSettingsProvider
 import org.odk.collect.settings.SettingsProvider
-import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
 import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.UUIDGenerator
@@ -154,58 +153,6 @@ class FormUriActivityTest {
             scenario,
             context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form)
         )
-    }
-
-    @Test
-    fun `When attempting to start a new form in a Google Drive project then display alert dialog`() {
-        val project = Project.Saved("123", "GD project", "A", "#cccccc")
-        projectsRepository.save(project)
-        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-
-        val form = formsRepository.save(
-            FormUtils.buildForm(
-                "1",
-                "1",
-                TempFiles.createTempDir().absolutePath
-            ).build()
-        )
-
-        val scenario = launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
-
-        assertErrorDialog(
-            scenario,
-            context.getString(org.odk.collect.strings.R.string.cannot_start_new_forms_in_google_drive_projects)
-        )
-    }
-
-    @Test
-    fun `When attempting to edit form in a Google Drive project then start form filling`() {
-        val project = Project.Saved("123", "GD project", "A", "#cccccc")
-        projectsRepository.save(project)
-        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
-        settingsProvider.getUnprotectedSettings().save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-
-        formsRepository.save(
-            FormUtils.buildForm(
-                "1",
-                "1",
-                TempFiles.createTempDir().absolutePath
-            ).build()
-        )
-
-        val instance = instancesRepository.save(
-            Instance.Builder()
-                .formId("1")
-                .formVersion("1")
-                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
-                .status(Instance.STATUS_INCOMPLETE)
-                .build()
-        )
-
-        launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, instance.dbId))
-
-        assertStartSavedFormIntent(project.uuid, instance.dbId, true)
     }
 
     @Test

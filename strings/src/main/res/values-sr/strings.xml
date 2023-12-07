@@ -45,8 +45,6 @@
   <string name="camera_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupiti kameri. Molim ponovo pokušajte kada budete spremni da dozvolite pristup.</string>
   <string name="record_audio_runtime_permission_denied_title">Dozvola za snimanje audija</string>
   <string name="record_audio_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit mikrofonu. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Dozvole za dobijanje korisničkih imena.</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Bez ovih dozvola Collect ne može pristupit korisničkim nalozima. Molim pokušajte ponovo kada budete spremni da odoborite dozvole.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -401,9 +399,7 @@
   <string name="change_view">Promijeni izgled</string>
   <string name="show_sent_and_unsent_forms">Prikaži poslate i neposlate formulare</string>
   <string name="show_unsent_forms">Prikaži neposlate formulare</string>
-  <string name="media_upload_error">Greška prilikom otpreme medija fajla koji ne postoji: %1$s</string>
   <string name="send_in_progress">Otpremanje u pozadini je u toku, molim pokušajte za koji trenutak</string>
-  <string name="odk_permissions_fail">ODK automatsko otpremanje nije uspjelo, molim da se uvjerite da ste odobrili sve neophodne pristupe</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -470,8 +466,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">Podešavanje servera</string>
-  <!--Label for server type setting-->
-  <string name="type">Vrsta</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Adresa - URL - servera</string>
@@ -482,12 +476,6 @@
   <string name="change_password">ODK Lozinka</string>
   <string name="password_error_whitespace">Prazan prostor na početku ili kraju nije dozvoljen kod lozinki</string>
   <string name="username_error_whitespace">Prazan prostor na početku ili kraju nije dozvoljen kod korisničkih imena</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google korisnički nalog</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Rezervni URL za otpremanje</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formular mora podesiti URL za otpremanje. Ukoliko to nije slučaj, ovaj URL će biti korišćen.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Svijetla tema</string>
   <string name="theme_dark">Tamna tema</string>
@@ -616,24 +604,6 @@
   <string name="no">Ne</string>
   <string name="moving_backwards_enabled_title">Kretanje unazad je omogućeno</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Ne mogu da napravim API poziv. Ukoliko koristite lokalnu verziju aplikacije, molim pogledajte readme fajl.</string>
-  <string name="no_google_account">Google nalog nije odabran!</string>
-  <string name="invalid_sheet_id">Pogrešan ID stranice:  %1$s</string>
-  <string name="missing_submission_url">URL za otpremanje nedostaje</string>
-  <string name="google_sheets_access_denied">Pristup odbijen. Uvjerite se da Vam je vlasnik formulara omogućio da unosite izmjene. </string>
-  <string name="google_sheets_missing_columns">Fajlu nedostaju sledeće kolone: %1$s</string>
-  <string name="google_sheets_encrypted_message">Enkriptovani formulari ne mogu se otpremiti na Google Sheets.</string>
-  <string name="missing_google_account_dialog_desc">Da biste otpremili formulara putem Goodle Sheeta morate da postavite Google korisnički nalog u podešavanjima Servera.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Otpremanje prekinuto</string>
-  <string name="no_columns_to_upload">Nisu pronađene kolone za otremanje.</string>
-  <string name="missing_google_account_dialog_title">Google korisnički nalog nije napravljen</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

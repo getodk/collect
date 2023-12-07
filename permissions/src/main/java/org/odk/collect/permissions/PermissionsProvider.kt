@@ -44,9 +44,6 @@ open class PermissionsProvider internal constructor(
         )
     }
 
-    val isGetAccountsPermissionGranted: Boolean
-        get() = permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)
-
     open fun requestCameraPermission(activity: Activity, action: PermissionListener) {
         requestPermissions(
             activity,
@@ -151,30 +148,6 @@ open class PermissionsProvider internal constructor(
             },
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO
-        )
-    }
-
-    fun requestGetAccountsPermission(activity: Activity, action: PermissionListener) {
-        requestPermissions(
-            activity,
-            object : PermissionListener {
-                override fun granted() {
-                    action.granted()
-                }
-
-                override fun denied() {
-                    action.denied()
-
-                    permissionsDialogCreator.showAdditionalExplanation(
-                        activity,
-                        org.odk.collect.strings.R.string.get_accounts_runtime_permission_denied_title,
-                        org.odk.collect.strings.R.string.get_accounts_runtime_permission_denied_desc,
-                        R.drawable.ic_get_accounts,
-                        action
-                    )
-                }
-            },
-            Manifest.permission.GET_ACCOUNTS
         )
     }
 

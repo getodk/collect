@@ -50,11 +50,7 @@ internal class SettingsImporter(
             JSONObject()
         }
 
-        val connectionIdentifier = if (generalSettings.getString(ProjectKeys.KEY_PROTOCOL).equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
-            generalSettings.getString(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT) ?: ""
-        } else {
-            generalSettings.getString(ProjectKeys.KEY_SERVER_URL) ?: ""
-        }
+        val connectionIdentifier = generalSettings.getString(ProjectKeys.KEY_SERVER_URL) ?: ""
 
         importProjectDetails(
             project,

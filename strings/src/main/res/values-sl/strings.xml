@@ -251,7 +251,6 @@
   <string name="change_view">Spremeni pogled</string>
   <string name="show_sent_and_unsent_forms">Pokaži poslane in neposlane obrazce</string>
   <string name="show_unsent_forms">Pokaži neposlane obrazce</string>
-  <string name="media_upload_error">Medijske datoteke %1$s ni bilo mogoče naložiti, ker ne obstaja.</string>
   <string name="send_in_progress">Pošiljanja se izvaja v ozadju, prosim poskusite znova cez malo časa</string>
   <!--##############################################
     # GET BLANK FORM
@@ -323,12 +322,6 @@
   <string name="change_password">ODk geslo</string>
   <string name="password_error_whitespace">Presledki na začetku ali na koncu gesla niso dovoljeni</string>
   <string name="username_error_whitespace">Presledki na začetku ali na koncu uporabniškega imena niso dovoljeni</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Goggle račun</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">URL za nadomestno predložitev</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Obrazci morajo nastaviti URL za predložitev. Če ne, bo uporabljen ta URL.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Svetla tema</string>
   <string name="theme_dark">Temna tema</string>
@@ -406,16 +399,6 @@
   <string name="form_entry_setting">Nastavitve za vnos obrazca</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="no_google_account">Google račun ni izbran!</string>
-  <string name="google_sheets_access_denied">Dostop zavrnjen. Prosim, prepričajte se, da je lastnik preglednice odobril urejanje.</string>
-  <string name="google_sheets_missing_columns">Preglednici manjkajo naslednji stolpci: %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->

@@ -45,8 +45,6 @@
   <string name="camera_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses kamera. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <string name="record_audio_runtime_permission_denied_title">Izin untuk merekam suara</string>
   <string name="record_audio_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses mikrofon pada perangkat. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Izin untuk mengakses akun</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Tanpa perizinan tadi, Collect tidak dapat mengakses akun. Buka ulang aplikasi jika Anda sudah yakin untuk memberikan izin.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -464,9 +462,7 @@
   <string name="change_view">Ubah Tampilan</string>
   <string name="show_sent_and_unsent_forms">Tampilkan Formulir Terkirim dan Belum Terkirim</string>
   <string name="show_unsent_forms">Tampilkan Formulir Belum Terkirim</string>
-  <string name="media_upload_error">Tidak berhasil mengunggah berkas media yang tidak ditemukan: %1$s</string>
   <string name="send_in_progress">Pengiriman sedang berlangsung, mohon coba beberapa saat lagi.</string>
-  <string name="odk_permissions_fail">Izin pengiriman otomatis tidak berhasil, mohon pastikan semua izin yang dibutuhkan telah diberikan.</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -566,8 +562,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">Batas antarmuka pengguna</string>
   <string name="server_preferences">Pengaturan Server</string>
-  <!--Label for server type setting-->
-  <string name="type">Tipe</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Server URL</string>
@@ -578,12 +572,6 @@
   <string name="change_password">Kata Sandi ODK</string>
   <string name="password_error_whitespace">Tidak diperkenankan menggunakan spasi pada kata sandi</string>
   <string name="username_error_whitespace">Tidak diperkenankan menggunakan spasi pada nama pengguna</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Akun Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">URL kembali setelah pengiriman</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">URL pengiriman harus ditetapkan pada formulir. Jika tidak, URL ini yang akan digunakan.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema terang</string>
   <string name="theme_dark">Tema gelap</string>
@@ -728,24 +716,6 @@
   <string name="no">Tidak</string>
   <string name="moving_backwards_enabled_title">Kembali ke halaman sebelumnya diaktifkan</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Tidak dapat memanggil API. Jika Anda menjalankan kompilasi lokal, mohon baca project readme.</string>
-  <string name="no_google_account">Tidak ada Akun Google yang dipilih.</string>
-  <string name="invalid_sheet_id">Id sheet tidak valid: %1$s</string>
-  <string name="missing_submission_url">URL pengiriman tidak ditemukan.</string>
-  <string name="google_sheets_access_denied">Akses ditolak. Pastikan pemilik spreadsheet memberikan Anda akses untuk mengubah.</string>
-  <string name="google_sheets_missing_columns">Kolom yang dimaksud pada spreadsheet tidak ditemukan: %1$s</string>
-  <string name="google_sheets_encrypted_message">Formulir terenkripsi tidak dapat dikirimkan ke Google Sheets.</string>
-  <string name="missing_google_account_dialog_desc">Untuk dapat mengirim formulir melalui Google Sheet Anda harus mengatur akun Google Anda di pengaturan Server.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Permintaan unggah dibatalkan</string>
-  <string name="no_columns_to_upload">Tidak ada kolom yang ditemukan di dalam formulir untuk diunggah.</string>
-  <string name="missing_google_account_dialog_title">Akun Google belum diatur</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

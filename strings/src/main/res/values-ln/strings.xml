@@ -194,13 +194,6 @@
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <!--##############################################

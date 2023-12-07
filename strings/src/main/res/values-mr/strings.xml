@@ -343,8 +343,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">सर्व्हर सेटिंग्ज</string>
-  <!--Label for server type setting-->
-  <string name="type">प्रकार</string>
   <string name="server_url">यु र एल </string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">सर्व्हर युरएल</string>
@@ -355,12 +353,6 @@
   <string name="change_password">ODK संकेतशब्द</string>
   <string name="password_error_whitespace">पासवर्डमध्ये अग्रस्थानी किंवा अनुसरणी व्हायरसपासची परवानगी नाही</string>
   <string name="username_error_whitespace">वापरकर्तानावांमध्ये अग्रगण्य किंवा अनुसरणी व्हायरसपेस अनुमत नाहीत</string>
-  <string name="server_platform_google_sheets">गूगल ड्राइव्ह, गूगल पत्रक</string>
-  <string name="selected_google_account_text">गूगल खाते</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">फॉलबॅक सबमिशन युरएल</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">फॉर्म एक सबमिशन युरएल सेट करणे आवश्यक आहे नसल्यास, ही युरएल वापरली जाईल.</string>
   <string name="language">भाषा</string>
   <string name="use_device_language">डिव्हाइस भाषा वापरा</string>
   <string name="font_size">मजकूर फॉन्ट आकार</string>
@@ -457,18 +449,6 @@
   <string name="form_entry_setting">फॉर्म प्रवेश सेटिंग्ज</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-    <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API कॉल करण्यात अक्षम. आपण स्थानिक बिल्ड चालवत असल्यास, कृपया प्रोजेक्ट रीडमेचे पुनरावलोकन करा.</string>
-  <string name="no_google_account">कोणतेही गूगल खाते निवडलेले नाही!</string>
-  <string name="invalid_sheet_id">अवैध पत्रक id: %1$s</string>
-  <string name="google_sheets_access_denied">प्रवेश नाकारला. कृपया स्प्रेडशीटच्या मालकास आपल्याला संपादन परवानगी मंजूर केल्याची खात्री करा.</string>
-  <string name="google_sheets_missing_columns">स्प्रेडशीटमध्ये खालील स्तंभ गहाळ आहेत:%1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->

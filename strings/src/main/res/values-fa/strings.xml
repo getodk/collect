@@ -46,8 +46,6 @@
   <string name="camera_runtime_permission_denied_desc">بدون این مجوز Collect نمی تواند به دوربین دسترسی داشته باشد. لطفاً هنگامی که آماده اعطای آن هستید دوباره امتحان کنید.</string>
   <string name="record_audio_runtime_permission_denied_title">ثبت مجوز صوتی</string>
   <string name="record_audio_runtime_permission_denied_desc">بدون این مجوز، Collect نمی تواند به میکروفون دسترسی داشته باشد. لطفاً هنگامی که آماده اعطای آن هستید دوباره امتحان کنید.</string>
-  <string name="get_accounts_runtime_permission_denied_title">دریافت مجوز حساب ها</string>
-  <string name="get_accounts_runtime_permission_denied_desc">بدون این مجوز Collect نمی تواند به حساب ها دسترسی داشته باشد. لطفاً هنگامی که آماده اعطای آن هستید دوباره امتحان کنید.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -444,9 +442,7 @@
   <string name="change_view">تغییر چشم انداز</string>
   <string name="show_sent_and_unsent_forms">نمایش فورم های ارسال شده و ارسال ناشده</string>
   <string name="show_unsent_forms">نمایش فورم های ارسال نشده</string>
-  <string name="media_upload_error">فایل رسانه ای که وجود ندارد آپلود نشد: %1$s</string>
   <string name="send_in_progress">ارسال در پس‌زمینه اجرا می‌شود، لطفاً به زودی دوباره امتحان کنید</string>
-  <string name="odk_permissions_fail">مجوز ارسال خودکار ODK ناموفق بود، لطفاً مطمئن شوید که همه مجوزهای لازم را دارید</string>
   <string name="forms_upload_succeeded">آپلود فورم ها با موفقیت انجام شد</string>
   <string name="forms_upload_failed">بارگذاری فورم ها انجام نشد</string>
   <string name="all_uploads_succeeded">همه آپلودها با موفقیت انجام شد!</string>
@@ -552,8 +548,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">رابط کاربری را محدود کنید</string>
   <string name="server_preferences">تنظیمات سرور</string>
-  <!--Label for server type setting-->
-  <string name="type">نوع</string>
   <string name="server_url">آدرس وب سایت </string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">سرور آدرس وب سایت</string>
@@ -564,12 +558,6 @@
   <string name="change_password">پسورد ODK</string>
   <string name="password_error_whitespace">فضای خالی پیشرو یا انتهایی در پسورد مجاز نیست</string>
   <string name="username_error_whitespace">فضای خالی پیشرو یا انتهایی در نام کاربری مجاز نیست</string>
-  <string name="server_platform_google_sheets">گوگل درایو، گوگل شیت</string>
-  <string name="selected_google_account_text">حساب کاربری گوگل</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">ارسال مجدد URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">فورم ها باید URL ارسال را تنظیم کنند. اگر این کار را نکنند، از این URL استفاده خواهد شد.</string>
   <string name="theme_system">آز موضوع دستگاه استفاده کنید</string>
   <string name="language">زبان</string>
   <string name="use_device_language">از زبان دستگاه استفاده کنید</string>
@@ -712,25 +700,6 @@
   <string name="no">نخیر</string>
   <string name="moving_backwards_enabled_title">حرکت به عقب فعال شد</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">امکان برقراری تماس های API وجود ندارد. اگر در حال اجرای یک ساخت محلی هستید، لطفاً پروژه readme را بررسی کنید.</string>
-  <string name="no_google_account">هیچ حساب Google انتخاب نشده است!</string>
-  <string name="google_set_account">شما برگه‌های Google را به عنوان سرور خود انتخاب کرده‌اید، لطفاً قبل از ادامه، یک حساب Google مربوطه را در تنظیمات انتخاب کنید</string>
-  <string name="invalid_sheet_id">ورق با نمبر شناسایی نامعتبر: %1$s</string>
-  <string name="missing_submission_url">نشانی اینترنتی ارسال وجود ندارد</string>
-  <string name="google_sheets_access_denied">دسترسی رد شد. لطفاً مطمئن شوید که مالک صفحه‌گسترده به شما اجازه ویرایش داده است.</string>
-  <string name="google_sheets_missing_columns">صفحه گسترده فاقد ستون‌های زیر است: %1$s</string>
-  <string name="google_sheets_encrypted_message">فورم های رمزگذاری شده را نمی توان به Google Sheets ارسال کرد.</string>
-  <string name="missing_google_account_dialog_desc">برای ارسال فورم ها از طریق Google Sheets باید حساب Google خود را در تنظیمات سرور راه اندازی کنید.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">بارگذاری نمونه لغو شد</string>
-  <string name="no_columns_to_upload">هیچ ستونی در فورم برای آپلود یافت نشد.</string>
-  <string name="missing_google_account_dialog_title">حساب Google تنظیم نشده است</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

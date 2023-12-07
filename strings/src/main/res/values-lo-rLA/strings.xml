@@ -283,9 +283,6 @@
   <string name="change_username">ບັນຊີຜູ້ໃຊ້ ODK</string>
   <string name="password">ລະຫັດຜ່ານ</string>
   <string name="change_password">ລະຫັດຜ່ານ ODK</string>
-  <string name="selected_google_account_text">ບັນຊີໃຊ້ງານໃນ Google </string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="change_font_size">ຂະໜາດຕົວອັກສອນ</string>
   <string name="font_size_extra_large">ຂະໜາດໃຫຍ່ທີ່ສຸດ</string>
@@ -335,14 +332,6 @@
   <string name="reset_project_settings_title">ຕັ້ງຄ່າຄືນໃໝ່</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-    <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="no_google_account">ບໍ່ໄດ້ເລືອກບັນຊີຂອງ Google</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->

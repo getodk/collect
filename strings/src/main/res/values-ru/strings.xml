@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать видео-камеру. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <string name="record_audio_runtime_permission_denied_title">Доступ к записи аудио</string>
   <string name="record_audio_runtime_permission_denied_desc">Без данного разрешения Collect не сможет использовать микрофон. Попробуйте снова когда будете готовы предоставить доступ.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Получить разрешение для учетных записей</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Без данного разрешения Collect не сможет получить доступ к учётным записям. Попробуйте снова когда будете готовы предоставить доступ.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -477,9 +475,7 @@
   <string name="change_view">Изменить внешний вид</string>
   <string name="show_sent_and_unsent_forms">Показывать выгруженные и невыгруженные опросы</string>
   <string name="show_unsent_forms">Показать невыгруженные опросы</string>
-  <string name="media_upload_error">Не удалось загрузить медиа-файл, который не существует %1$s</string>
   <string name="send_in_progress">Выполняется отправка в фоне, попробуйте снова через некоторое время.</string>
-  <string name="odk_permissions_fail">Нет разрешения на авто-выгрузку. Проверьте системные настройки приложения</string>
   <string name="forms_upload_succeeded">Загрузка форм выполнена успешно</string>
   <string name="forms_upload_failed">Не удалось загрузить формы</string>
   <string name="all_uploads_succeeded">Все загрузки выполнены успешно!</string>
@@ -565,8 +561,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">Настройки сервера</string>
-  <!--Label for server type setting-->
-  <string name="type">Платформа</string>
   <string name="server_url">Сервер</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Адрес сервера</string>
@@ -577,12 +571,6 @@
   <string name="change_password">Пароль ODK</string>
   <string name="password_error_whitespace">Не допускается использовать пробелы в начале и конце пароля</string>
   <string name="username_error_whitespace">Не допускается использовать пробелы в начале и конце имени пользователя</string>
-  <string name="server_platform_google_sheets">Google диск и таблицы</string>
-  <string name="selected_google_account_text">Учётная запись Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Резервный URL для выгрузки</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">В опроснике должен быть указан URL-выгрузки. Иначе, будет применён этот адрес.</string>
   <string name="app_theme">Тема</string>
   <string name="theme_light">Светлая</string>
   <string name="theme_dark">Тёмная</string>
@@ -718,23 +706,6 @@
   <string name="moving_backwards_enabled_title">Возвращение назад разрешено</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
   <string name="save_mid">Сохранить как черновик</string>
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Не удалось вызвать API. Если была запущена локальная сборка, пожалуйста, обратитесь к документации проекта.</string>
-  <string name="no_google_account">Учётная запись Google не выбрана!</string>
-  <string name="invalid_sheet_id">Неверный идентификатор листа: %1$s</string>
-  <string name="missing_submission_url">Отсутствует URL для выгрузки</string>
-  <string name="google_sheets_access_denied">Доступ запрещен. Пожалуйста, удостоверьтесь, что владелец таблицы выдал вам разрешение на редактирование.</string>
-  <string name="google_sheets_missing_columns">Таблица не содержит следующие столбцы: %1$s</string>
-  <string name="missing_google_account_dialog_desc">Для отправки ответов через Google таблицы необходимо указать учётную запись через которую это будет происходить</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Загрузка отменена</string>
-  <string name="no_columns_to_upload">В опросе для загрузки нет ни одного столбца.</string>
-  <string name="missing_google_account_dialog_title">Учётная запись Google не установлена</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

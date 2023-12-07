@@ -54,8 +54,6 @@
   <string name="camera_runtime_permission_denied_desc">Bez tohoto povolení nelze přistupovat k fotoaparátu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
   <string name="record_audio_runtime_permission_denied_title">Oprávnění k nahrávání zvuku</string>
   <string name="record_audio_runtime_permission_denied_desc">Bez tohoto povolení nelze získat přístup k mikrofonu. Zkuste to prosím znovu, když jste připraveni jej udělit.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Získat oprávnění k účtům</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Bez tohoto povolení Collect nemůže přistupovat k účtům. Zkuste to prosím znovu, až budete  připraveni jej udělit.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -519,9 +517,7 @@
   <string name="change_view">Změnit pohled</string>
   <string name="show_sent_and_unsent_forms">Zobrazit odeslané a neodeslané dotazníky</string>
   <string name="show_unsent_forms">Zobrazit neodeslané dotazníky</string>
-  <string name="media_upload_error">Nepodařilo se nahrát soubor médií, který neexistuje.%1$s </string>
   <string name="send_in_progress">Odesílání na pozadí běží, zkuste to znovu</string>
-  <string name="odk_permissions_fail">automatické odeslání oprávnění ODK selhalo, ujistěte se, že jste udělili všechna požadovaná oprávnění</string>
   <string name="forms_upload_succeeded">Nahrání formulářů bylo úspěšné</string>
   <string name="forms_upload_failed">Nahrávání formulářů selhalo</string>
   <string name="all_uploads_succeeded">Všechna nahrání se podařila!</string>
@@ -627,8 +623,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">Omezení uživatelského rozhraní</string>
   <string name="server_preferences">Nastavení serveru</string>
-  <!--Label for server type setting-->
-  <string name="type">Typ</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">URL Serveru</string>
@@ -639,12 +633,6 @@
   <string name="change_password">Heslo do ODK</string>
   <string name="password_error_whitespace">Počáteční nebo koncové mezery v heslech nejsou povoleny </string>
   <string name="username_error_whitespace">Počáteční nebo koncové mezery v uživatelských jménech nejsou povoleny</string>
-  <string name="server_platform_google_sheets">Disk Google, Tabulky Google</string>
-  <string name="selected_google_account_text">Účet Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Záložní odesílací URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formuláře musí obsahovat adresu URL pro podání. Pokud tomu tak není, použije se tato adresa URL.</string>
   <string name="app_theme">Vizuální styl</string>
   <string name="theme_light">Světlý styl</string>
   <string name="theme_dark">Tmavý styl</string>
@@ -796,25 +784,6 @@
   <string name="save_mid">Uložit jako návrh</string>
   <string name="save_mid_summary">Ikona pro uložení v horním panelu a tlačítko \"Uložit jako návrh\" při ukončení formuláře</string>
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Nepodařilo se provést volání API. Pokud používáte místní sestavení, přečtěte si projektové readme.</string>
-  <string name="no_google_account">Není vybrán žádný účet Google!</string>
-  <string name="google_set_account">Jako server jste vybrali službu Tabulky Google, před pokračováním vyberte v Nastavení odpovídající účet Google.</string>
-  <string name="invalid_sheet_id">neplatné ID listu: %1$s</string>
-  <string name="missing_submission_url">Chybí URL pro odeslání</string>
-  <string name="google_sheets_access_denied">Přístup odepřen. Ujistěte se, že vám vlastník tabulky udělil oprávnění ke změnám.</string>
-  <string name="google_sheets_missing_columns">V tabulce chybí následující sloupce: %1$s</string>
-  <string name="google_sheets_encrypted_message">Šifrované formuláře nelze odeslat do služby Google Sheets.</string>
-  <string name="missing_google_account_dialog_desc">Chcete-li odeslat formuláře prostřednictvím tabulek Google, musíte nastavit účet Google v nastavení serveru.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Nahrání instance zrušeno</string>
-  <string name="no_columns_to_upload">V formuláře, který chcete nahrát, nebyly nalezeny žádné sloupce.</string>
-  <string name="missing_google_account_dialog_title">Účet Google není nastaven</string>
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">Více o….</string>
@@ -901,7 +870,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Přepnout na %s</string>
   <string name="delete_project_confirm_message">Všechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Jedná se o projekt na Disku Google/Sheets. Jakmile jej odstraníte, nebude možné jej znovu vytvořit.&lt;/font&gt;\n\nVšechny prázdné formuláře, podání a nastavení budou trvale odstraněny.</string>
   <string name="delete_project_yes">Ano</string>
   <string name="delete_project_no">Ne</string>
   <string name="cannot_delete_project_title">Projekt nelze smazat</string>
@@ -949,7 +917,6 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <string name="google_drive_deprecation_message">Tento projekt používá Disk Google. Tato funkce bude v příští aktualizaci aplikace odstraněna.</string>
   <string name="learn_more_button_text">Více informací</string>
   <!--##############################################
     # Developer tools

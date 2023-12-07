@@ -231,7 +231,7 @@ jobs:
 
       - run:
           name: Check APK size hasn't increased too much
-          command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 10800000 ]; then exit 1; fi
+          command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 10200000 ]; then exit 1; fi
 
       - run:
           name: Copy APK to predictable path for artifact storage

@@ -377,9 +377,7 @@
   <string name="change_view">Ändra vy</string>
   <string name="show_sent_and_unsent_forms">Visa skickade och oskickade formulär</string>
   <string name="show_unsent_forms">Visa oskickade formulär</string>
-  <string name="media_upload_error">Fel vid uppladdning av mediafil som inte finns: %1$s</string>
   <string name="send_in_progress">Sändning pågår i bakgrunden, vänligen försök igen senare</string>
-  <string name="odk_permissions_fail">ODK auto inskickningsfel, kontrollera att du har beviljat nödvändiga rättigheter</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -447,8 +445,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">Serverinställningar</string>
-  <!--Label for server type setting-->
-  <string name="type">Typ</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Server-URL</string>
@@ -459,12 +455,6 @@
   <string name="change_password">ODK lösenord</string>
   <string name="password_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i lösenord</string>
   <string name="username_error_whitespace">Inledande eller avslutande blanksteg är inte tillåtet i användarnamn</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google-konto</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Reserv-URL för uppladdning</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formulären måste ange en uppladdnings-URL. Om dem inte gör det används denna URL.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Ljust tema</string>
   <string name="theme_dark">Mörkt tema</string>
@@ -592,21 +582,6 @@
   <string name="no">Nej</string>
   <string name="moving_backwards_enabled_title">Bakåtnavigering aktiverad</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API-anrop misslyckades. Om du kör programmet lokalt, vänligen gå igenom projektets \'readme\'.</string>
-  <string name="no_google_account">Inget Google-konto valt!</string>
-  <string name="invalid_sheet_id">Ogiltigt ID för ark: %1$s</string>
-  <string name="missing_submission_url">URL för inskickning saknas</string>
-  <string name="google_sheets_access_denied">Åtkomst nekad. Vänligen se till att kalkylarkets ägare har gett dig åtkomsträttigheter.</string>
-  <string name="google_sheets_missing_columns">Kalkylarket saknar följande kolumner: %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="no_columns_to_upload">Inga kolumner hittades i formuläret som ska laddas upp</string>
-  <string name="missing_google_account_dialog_title">Google-konto är inte inställt</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

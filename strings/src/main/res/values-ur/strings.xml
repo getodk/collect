@@ -43,8 +43,6 @@
   <string name="camera_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو کیمرے تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ  پرمیشن دینے کے لئے تیار ہو</string>
   <string name="record_audio_runtime_permission_denied_title">ریکارڈ آڈیو پرمیشن</string>
   <string name="record_audio_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو مائیکروفون تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
-  <string name="get_accounts_runtime_permission_denied_title">گیٹ اکاؤنٹس پرمیشن</string>
-  <string name="get_accounts_runtime_permission_denied_desc">اس اجازت کے بغیر کولیکٹ کو اکاؤنٹس تک رسائی نہیں مل سکتی. برائےمہربانی دوبارہ کوشش کریں جب آپ پرمیشن دینے کے لئے تیار ہو</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -366,9 +364,7 @@
   <string name="change_view">نظارہ بدلیں</string>
   <string name="show_sent_and_unsent_forms">بھیجے گئے اور نہ بھیجے گئے فارم دکھائیں</string>
   <string name="show_unsent_forms">نہ بھیجے گئے فارم دکھایٰیں</string>
-  <string name="media_upload_error"> میڈیا فائل کو اپ لوڈ کرنے میں ناکام جو کہ موجود نہیں:%1$s</string>
   <string name="send_in_progress">پس منظر چل رہا ہے، براہ مہربانی دوبارہ کوشش کریں</string>
-  <string name="odk_permissions_fail">او ڈی کے آٹو خود اجازت کی ناکامی، براہ کرم یقینی بنائیں کہ آپ نے تمام مستحق اجازت دی ہے</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -436,8 +432,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">سرور کی ترتیب</string>
-  <!--Label for server type setting-->
-  <string name="type">قسم</string>
   <string name="server_url">یو آر ایل</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">سروریو آر ایل</string>
@@ -448,12 +442,6 @@
   <string name="change_password">  ODK  کا پاس ورڈ</string>
   <string name="password_error_whitespace">پاس ورڈز میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
   <string name="username_error_whitespace">صارف کےناموں میں شروع اور بعد میں سپیسس کی اجازت نہیں ہے</string>
-  <string name="server_platform_google_sheets">گوگل ڈرائیو ، گوگل شیٹس </string>
-  <string name="selected_google_account_text">گوگل اکاونٹ</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">فال بیک  جمع کرانے کی یو آر ایل</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">فارم جمع کرانے کا یو آرال مقرر کرنا لازمی ہے. اگر مقررنہیں کرتے تو یہ یو آرال استعمال کیا جائے گا</string>
   <string name="app_theme">تھیم </string>
   <string name="theme_light">لائٹ تھیم </string>
   <string name="theme_dark">ڈارک تھیم </string>
@@ -582,22 +570,6 @@
   <string name="no">نہیں </string>
   <string name="moving_backwards_enabled_title">پیچھے کی طرف حرکت  فعال</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">اے پی آئ کالز بنانے میں ناکام اگر آپ لوکل بلڈ چلا رہے ہیں تو، براہ کرم پراجیکٹ ریڈمی پڑھ لیں.</string>
-  <string name="no_google_account">کوئی گوگل اکاؤنٹ منتخب نہیں ہوا!</string>
-  <string name="invalid_sheet_id">غلط شیٹ ID:%1$s</string>
-  <string name="google_sheets_access_denied">رسائی مسترد کر دی . براہ کرم یقینی بنائیں کہ اسپریڈ شیٹ مالک نے آپ کو ترمیم کی  اجازت دی ہے</string>
-  <string name="google_sheets_missing_columns">اسپریڈ شیٹ میں مندرجہ بالا کالم غائب ہیں:%1$s</string>
-  <string name="missing_google_account_dialog_desc">گوگل شیٹس  کے ذریعے فارم جمع کرنے کے لئے آپ کو سرور کی سیٹنگنزمیں اپناگوگل اکاؤنٹ بنانا ہوگا.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">انسٹنس اپ لوڈ منسوخ</string>
-  <string name="no_columns_to_upload">اپ لوڈ کرنے کیلئے فارم میں کوئی کالم نہیں مل سکا.</string>
-  <string name="missing_google_account_dialog_title">گوگل اکاؤنٹ سیٹ نہیں ہے</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

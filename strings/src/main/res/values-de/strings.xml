@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Kamera zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
   <string name="record_audio_runtime_permission_denied_title">Audioaufnahmeberechtigung</string>
   <string name="record_audio_runtime_permission_denied_desc">Ohne diese Berechtigungen kann Collect nicht auf das Mikrofon zugreifen. Bitte versuchen Sie es erneut, wenn Sie bereit dazu sind die Berechtigungen zu erteilen.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Kontoberechtigungen abfragen</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Ohne diese Berechtigung kann Collect nicht auf die Konten zugreifen. Bitte versuchen Sie es erneut, wenn Sie dazu bereit sind die Berechtigung zu erteilen.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -516,9 +514,7 @@
   <string name="change_view">Ansicht ändern</string>
   <string name="show_sent_and_unsent_forms">Gesendete und nicht gesendete Formulare</string>
   <string name="show_unsent_forms">Nur nicht gesendete Formulare</string>
-  <string name="media_upload_error">Nicht vorhandene Mediendatei konnte nicht hochgeladen werden: %1$s</string>
   <string name="send_in_progress">Sendevorgang läuft im Hintergrund. Bitte versuchen Sie es später nochmal.</string>
-  <string name="odk_permissions_fail">ODK Auto-Send Berechtigungsfehler, bitte stellen Sie sicher, dass Sie alle benötigten Berechtigungen erteilt haben</string>
   <string name="forms_upload_succeeded">Formular-Upload erfolgreich</string>
   <string name="forms_upload_failed">Formular-Upload fehlgeschlagen</string>
   <string name="all_uploads_succeeded">Alle Uploads erfolgreich!</string>
@@ -624,8 +620,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">Bedienung beschränken</string>
   <string name="server_preferences">Server-Einstellungen</string>
-  <!--Label for server type setting-->
-  <string name="type">Typ</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Server URL</string>
@@ -636,12 +630,6 @@
   <string name="change_password">ODK Passwort</string>
   <string name="password_error_whitespace">Leerzeichen am Anfang und Ende von Passwörtern nicht erlaubt</string>
   <string name="username_error_whitespace">Leerzeichen am Anfang und Ende von Benutzernamen nicht erlaubt</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google-Konto</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Ersatz-Übermittlungs-URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formulare müssen eine Übermittlungs-URL setzen. Wenn nicht, wird diese URL verwendet.</string>
   <string name="app_theme">Theme</string>
   <string name="theme_light">Helles Theme</string>
   <string name="theme_dark">Dunkles Theme</string>
@@ -793,25 +781,6 @@
   <string name="save_mid">Als Entwurf speichern</string>
   <string name="save_mid_summary">Speichern-Icon in oberer Leiste und \"Als Entwurf speichern\"-Button beim Verlassen des Formulars</string>
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API-Aufrufe nicht möglich. Wenn Sie einen lokalen Build laufen lassen, beachten Sie die Readme des Projekts.</string>
-  <string name="no_google_account">Kein Google-Konto ausgewählt!</string>
-  <string name="google_set_account">Sie haben Google Sheets als Server ausgewählt. Bitte geben Sie unter Einstellungen ein Google-Konto an, bevor Sie fortfahren.</string>
-  <string name="invalid_sheet_id">Ungültige Sheet ID: %1$s</string>
-  <string name="missing_submission_url">Fehlende Übermittlungs-URL</string>
-  <string name="google_sheets_access_denied">Zugriff verweigert. Bitte stellen Sie sicher, dass der Tabellen-Besitzer Ihnen eine Zugriffsberechtigung erteilt hat.</string>
-  <string name="google_sheets_missing_columns">Die folgenden Spalten fehlen in der Tabelle: %1$s</string>
-  <string name="google_sheets_encrypted_message">Verschlüsselte Formulare können nicht an Google Sheets übermittelt werden.</string>
-  <string name="missing_google_account_dialog_desc">Um Formulare über Google Tabellen einzureichen, müssen Sie Ihr Google-Konto bei den Server-Einstellungen einrichten.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Instanz Upload abgebrochen</string>
-  <string name="no_columns_to_upload">Keine Spalten zum Hochladen im Formular gefunden.</string>
-  <string name="missing_google_account_dialog_title">Google-Konto nicht eingestellt</string>
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">Über</string>
@@ -898,7 +867,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Wechseln zu %s</string>
   <string name="delete_project_confirm_message">Alle Blanko-Formulare, Übermittlung und Einstellungen werden dauerhaft gelöscht. </string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Das ist ein Google Drive/Sheets Projekt. Sobald sie es löschen, können sie es nicht erneut erstellen.&lt;/font&gt;\n\nAlle Blanko-Formulare, Einsendungen und Einstellungen werden dauerhaft gelöscht.</string>
   <string name="delete_project_yes">Ja</string>
   <string name="delete_project_no">Nein</string>
   <string name="cannot_delete_project_title">Projekt kann nicht gelöscht werden</string>
@@ -946,7 +914,6 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <string name="google_drive_deprecation_message">Dieses Projekt verwendet Google Drive. Diese Funktion wird mit dem nächsten App-Update entfernt.</string>
   <string name="learn_more_button_text">Mehr erfahren</string>
   <!--##############################################
     # Developer tools

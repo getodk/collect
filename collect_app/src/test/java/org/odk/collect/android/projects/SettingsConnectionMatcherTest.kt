@@ -42,14 +42,6 @@ class SettingsConnectionMatcherTest {
 
     @Test
     fun `returns a matching project uuid when a default project exists and a user tries to add another default project`() {
-        assertThat(
-            "Test assumes wrong default",
-            Defaults.unprotected[ProjectKeys.KEY_PROTOCOL],
-            `is`(
-                ProjectKeys.PROTOCOL_SERVER
-            )
-        )
-
         val defaultUrl = Defaults.unprotected[ProjectKeys.KEY_SERVER_URL] as String
         createServerProject("a uuid", defaultUrl, "")
         val jsonSettings = getDefaultServerSettingsJson()
@@ -95,32 +87,10 @@ class SettingsConnectionMatcherTest {
     }
 
     @Test
-    fun `returns null when protocol is Google Drive and accounts don't match`() {
-        createGoogleDriveProject("a uuid", "foo@bar.baz")
-        val jsonSettings = getGoogleDriveSettingsJson("baz@bar.quux")
-
-        assertThat(
-            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
-            `is`(nullValue())
-        )
-    }
-
-    @Test
-    fun `returns a matching project uuid when protocol is Google Drive and accounts match`() {
-        createGoogleDriveProject("a uuid", "foo@bar.baz")
-        val jsonSettings = getGoogleDriveSettingsJson("foo@bar.baz")
-
-        assertThat(
-            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
-            `is`("a uuid")
-        )
-    }
-
-    @Test
     fun `returns a matching project uuid when there are multiple projects`() {
         createServerProject("a uuid", "https://example.com", "foo")
-        createGoogleDriveProject("another uuid", "foo@bar.baz")
-        val jsonSettings = getGoogleDriveSettingsJson("foo@bar.baz")
+        createServerProject("another uuid", "https://example2.com", "foo2")
+        val jsonSettings = getServerSettingsJson("https://example2.com", "foo2")
 
         assertThat(
             settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
@@ -131,7 +101,6 @@ class SettingsConnectionMatcherTest {
     @Test
     fun `returns uuid of first matching project when there are multiple matching projects`() {
         createServerProject("a uuid", "https://example.com", "foo")
-        createGoogleDriveProject("another uuid", "foo@bar.baz")
         createServerProject("uuid 3", "https://foo.org", "foo")
         createServerProject("uuid 4", "https://foo.org", "foo")
 
@@ -143,34 +112,12 @@ class SettingsConnectionMatcherTest {
         )
     }
 
-    @Test
-    fun `returns null when a project with Google Drive exists and a user tries to add a project with the default settings`() {
-        createGoogleDriveProject("a uuid", "foo@bar.baz")
-        val jsonSettings = getDefaultServerSettingsJson()
-
-        assertThat(
-            settingsConnectionMatcher.getProjectWithMatchingConnection(jsonSettings),
-            `is`(nullValue())
-        )
-    }
-
     private fun createServerProject(projectId: String, url: String, username: String) {
         inMemProjectsRepository.save(Project.Saved(projectId, "no-op", "n", "#ffffff"))
 
         val generalSettings = inMemSettingsProvider.getUnprotectedSettings(projectId)
-        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, url)
         generalSettings.save(ProjectKeys.KEY_USERNAME, username)
-    }
-
-    private fun createGoogleDriveProject(projectId: String, account: String) {
-        inMemProjectsRepository.save(Project.Saved(projectId, "no-op", "n", "#ffffff"))
-
-        val generalSettings = inMemSettingsProvider.getUnprotectedSettings(projectId)
-        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-        generalSettings.save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, account)
-        generalSettings.save(ProjectKeys.KEY_SERVER_URL, "")
-        generalSettings.save(ProjectKeys.KEY_USERNAME, "")
     }
 
     private fun getDefaultServerSettingsJson(): String {
@@ -183,9 +130,5 @@ class SettingsConnectionMatcherTest {
 
     private fun getServerSettingsJson(url: String, username: String): String {
         return "{ \"general\": { \"server_url\": \"$url\", \"username\": \"$username\" } }"
-    }
-
-    private fun getGoogleDriveSettingsJson(account: String): String {
-        return "{ \"general\": { \"protocol\": \"google_sheets\", \"selected_google_account\": \"$account\" } }"
     }
 }

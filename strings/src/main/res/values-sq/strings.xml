@@ -362,8 +362,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">Parametrat e serverit</string>
-  <!--Label for server type setting-->
-  <string name="type">Tipi</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">URL e serverit</string>
@@ -372,10 +370,6 @@
   <string name="change_username">Emri i Përdoruesit</string>
   <string name="password">Fjalëkalimi</string>
   <string name="change_password">Fjalëkalimi</string>
-  <string name="selected_google_account_text">Llogaria në Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formularët duhet të kenë një URL ku dërgohen. Nëse jo, do të përdoret kjo URL.</string>
   <string name="app_theme">Tema</string>
   <string name="language">Gjuha</string>
   <string name="use_device_language">Përdor gjuhën e aparatit</string>
@@ -497,18 +491,6 @@
   <string name="no">Jo</string>
   <string name="moving_backwards_enabled_title">Të shkuarit mbrapsht është aktivizuar</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Nuk është e mundur të kryhen thirrje API. Nëse jeni duke përdorur një ndërtim lokal, lutemi rishihni instruksionet (readme) e projektit. </string>
-  <string name="no_google_account">Nuk keni përzgjedhur një llogari në Google!</string>
-  <string name="invalid_sheet_id">Numri i identifikimit të tabelës: %1$s i pavlefshëm.</string>
-  <string name="google_sheets_access_denied">Ju është mohuar aksesi. Lutemi, sigurohuni që zotëruesi i spreadsheet-it ju ka dhënë të drejtën për të modifikuar.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="missing_google_account_dialog_title">Llogaria në Google nuk është përcaktuar</string>
   <!--##############################################
      # ABOUT
      ##############################################-->

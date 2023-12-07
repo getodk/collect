@@ -3,14 +3,12 @@ package org.odk.collect.android.backgroundwork;
 import static org.odk.collect.android.backgroundwork.BackgroundWorkUtils.getPeriodInMilliseconds;
 import static org.odk.collect.android.preferences.utilities.SettingsUtils.getFormUpdateMode;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 
 import android.app.Application;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.shared.settings.Settings;
 
 import java.util.HashMap;
@@ -30,14 +28,6 @@ public class FormUpdateAndInstanceSubmitScheduler implements FormUpdateScheduler
     @Override
     public void scheduleUpdates(String projectId) {
         Settings generalSettings = settingsProvider.getUnprotectedSettings(projectId);
-
-        String protocol = generalSettings.getString(KEY_PROTOCOL);
-        if (protocol.equals(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
-            scheduler.cancelDeferred(getMatchExactlyTag(projectId));
-            scheduler.cancelDeferred(getAutoUpdateTag(projectId));
-            return;
-        }
-
         String period = generalSettings.getString(KEY_PERIODIC_FORM_UPDATES_CHECK);
         long periodInMilliseconds = getPeriodInMilliseconds(period, application);
 

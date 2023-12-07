@@ -46,7 +46,6 @@ import org.odk.collect.android.fragments.BarCodeScannerFragment;
 import org.odk.collect.android.fragments.SavedFormListFragment;
 import org.odk.collect.android.fragments.dialogs.FormsDownloadResultDialog;
 import org.odk.collect.android.fragments.dialogs.SelectMinimalDialog;
-import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.googlemaps.GoogleMapFragment;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.openrosa.OpenRosaHttpInterface;
@@ -161,8 +160,6 @@ public interface AppDependencyComponent {
     void inject(FormDownloadListActivity formDownloadListActivity);
 
     void inject(InstanceUploaderListActivity activity);
-
-    void inject(GoogleSheetsUploaderActivity googleSheetsUploaderActivity);
 
     void inject(QuestionWidget questionWidget);
 

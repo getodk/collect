@@ -69,8 +69,6 @@
     <string name="camera_runtime_permission_denied_desc">Without this permission Collect can\'t access the camera. Please try again when you are ready to grant it.</string>
     <string name="record_audio_runtime_permission_denied_title">Record audio permission</string>
     <string name="record_audio_runtime_permission_denied_desc">Without this permission Collect can\'t access the microphone. Please try again when you are ready to grant it.</string>
-    <string name="get_accounts_runtime_permission_denied_title">Get accounts permission</string>
-    <string name="get_accounts_runtime_permission_denied_desc">Without this permission Collect can\'t access accounts. Please try again when you are ready to grant it.</string>
 
     <!--
     ##############################################
@@ -634,11 +632,7 @@
     <string name="show_sent_and_unsent_forms">Show Sent and Unsent Forms</string>
     <string name="show_unsent_forms">Show Unsent Forms</string>
 
-    <string name="media_upload_error">Failed to upload media file that does not exist: %1$s</string>
-
     <string name="send_in_progress">Background send running, please try again shortly</string>
-
-    <string name="odk_permissions_fail">ODK auto send permission failure, please make sure your have granted all required permissions</string>
 
     <string name="forms_upload_succeeded">Forms upload succeeded</string>
     <string name="forms_upload_failed">Forms upload failed</string>
@@ -776,7 +770,6 @@
 
     <string name="server_preferences">Server Settings</string>
     <!-- Label for server type setting -->
-    <string name="type">Type</string>
     <string name="server_url">URL</string>
     <!-- Title of dialog for configuring server URL -->
     <string name="change_server_url">Server URL</string>
@@ -787,13 +780,6 @@
     <string name="change_password">ODK Password</string>
     <string name="password_error_whitespace">Leading or trailing whitespace not allowed in passwords</string>
     <string name="username_error_whitespace">Leading or trailing whitespace not allowed in usernames</string>
-
-    <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-    <string name="selected_google_account_text">Google account</string>
-    <!-- To use Google Drive, forms must set a submission URL. If they don't, this URL will be used. -->
-    <string name="google_sheets_url">Fallback submission URL</string>
-    <!-- Description for Fallback submission URL setting -->
-    <string name="google_sheets_url_hint">Forms must set a submission URL. If they don\'t, this URL will be used.</string>
 
     <string name="app_theme">Theme</string>
     <string name="theme_light">Light theme</string>
@@ -968,29 +954,6 @@
     <!-- Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end -->
     <string name="save_mid">Save as draft</string>
     <string name="save_mid_summary">Save icon in top bar and \"Save as draft\" button when exiting form</string>
-
-    <!--
-     ##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################
-     -->
-    <!-- Title of the screen that lists forms in user's Google Drive -->
-    <!-- Title of the screen that lists forms shared with Google Drive user -->
-    <!-- Button for navigating across Google Drive folders -->
-    <string name="google_auth_io_exception_msg">Unable to make API calls. If you are running a local build, please review the project readme.</string>
-    <string name="no_google_account">No Google Account Selected!</string>
-    <string name="google_set_account">You have selected Google Sheets as your server, please select a corresponding Google account in Settings before continuing</string>
-    <string name="invalid_sheet_id">invalid sheet id: %1$s</string>
-    <string name="missing_submission_url">Missing submission URL</string>
-    <string name="google_sheets_access_denied">Access denied. Please make sure the spreadsheet owner has granted you edit permission.</string>
-    <string name="google_sheets_missing_columns">Spreadsheet is missing the following columns: %1$s</string>
-    <string name="google_sheets_encrypted_message">Encrypted forms can\'t be submitted to Google Sheets.</string>
-    <string name="missing_google_account_dialog_desc">To submit forms via Google Sheets you have to set up your Google account in the Server settings.</string>
-    <!-- Text shown in dialog when a Google Sheets form upload was canceled before completion -->
-    <string name="instance_upload_cancelled">Instance upload canceled</string>
-    <string name="no_columns_to_upload">No columns found in the form to upload.</string>
-    <string name="missing_google_account_dialog_title">Google account not set</string>
-
     <!--
      ##############################################
      # ABOUT
@@ -1097,7 +1060,6 @@
     <!-- Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog -->
     <string name="switch_to_project">Switch to %s</string>
     <string name="delete_project_confirm_message">All blank forms, submissions and settings will be permanently deleted.</string>
-    <string name="delete_google_drive_project_confirm_message"><font fgcolor='#D42C2C'>This is a Google Drive/Sheets project. Once you delete it, you will not be able to create it again.</font>\n\nAll blank forms, submissions and settings will be permanently deleted.</string>
     <string name="delete_project_yes">Yes</string>
     <string name="delete_project_no">No</string>
     <string name="cannot_delete_project_title">Project can\'t be deleted</string>
@@ -1130,8 +1092,6 @@
     <string name="wrong_project_selected_for_form">To open this form, you must first open ODK Collect and switch to the project that contains it.</string>
     <!-- Error shown when a user tries to open a form when there are no projects -->
     <string name="app_not_configured">ODK Collect has not been configured. Try to open ODK Collect and configure it.\n\nIf you tapped on a shortcut, you might need to recreate it after configuring ODK Collect.</string>
-    <!-- Error shown when a user tries to start a new form in a Google Drive project -->
-    <string name="cannot_start_new_forms_in_google_drive_projects">New forms cannot be started in Google Drive projects.</string>
 
     <!--
     ##############################################
@@ -1169,7 +1129,7 @@
     # Google Drive deprecation
     ##############################################
     -->
-    <string name="google_drive_deprecation_message">This project uses Google Drive. This functionality will be removed in the next app update.</string>
+    <string name="google_drive_removed_message">This project was previously connected to a Google Drive account. Google Drive support has been removed. You can configure a server or pull submissions to a computer.</string>
     <string name="learn_more_button_text">Learn more</string>
 
     <!--

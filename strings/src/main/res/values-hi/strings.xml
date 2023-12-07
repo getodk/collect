@@ -350,8 +350,6 @@
   <!--Title of a settings section-->
   <!--Subtext of a settings section-->
   <string name="server_preferences">सर्वर सेटिंग</string>
-  <!--Label for server type setting-->
-  <string name="type">प्रकार</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">सर्वर URL</string>
@@ -362,12 +360,6 @@
   <string name="change_password">odk पासवर्ड</string>
   <string name="password_error_whitespace">पासवर्ड में अग्रणी या अनुगामी व्हाइटस्पेस की अनुमति नहीं है</string>
   <string name="username_error_whitespace">उपयोगकर्ता नामों में अग्रणी या अनुगामी श्वेत स्थान की अनुमति नहीं है</string>
-  <string name="server_platform_google_sheets">गूगल ड्राइव, गूगल शीट्</string>
-  <string name="selected_google_account_text">गूगल अकाउंट</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">फ़ॉलबैक सबमिशन URL</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">फॉर्म को एक सबमिशन URL सेट करना होगा यदि नहीं तो इस URL का उपयोग किया जाएगा।</string>
   <string name="language">भाषा</string>
   <string name="use_device_language">डिवाइस की भाषा प्रयोग करें </string>
   <string name="font_size">अक्षर फॉन्ट आकार</string>
@@ -468,18 +460,6 @@
   <string name="yes">हाँ</string>
   <string name="no">नहीं</string>
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API कॉल करने में असमर्थ यदि आप स्थानीय बिल्ड चला रहे हैं, तो कृपया  परियोजना readme की समीक्षा करें।</string>
-  <string name="no_google_account">कोई गूगल अकाउंट नही चुना!</string>
-  <string name="invalid_sheet_id">अमान्य शीट आईडी: %1$s</string>
-  <string name="google_sheets_access_denied">पहुंच अस्वीकृत। कृपया सुनिश्चित करें कि स्प्रैडशीट ओनर ने आपको संपादन अधिकार दिए हैं।</string>
-  <string name="google_sheets_missing_columns">स्प्रेडशीट में निम्न कॉलम लापता हैं: %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->

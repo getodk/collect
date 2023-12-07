@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può usare la fotocamera. Prova di nuovo quando hai autorizzato l\'uso della fotocamera</string>
   <string name="record_audio_runtime_permission_denied_title">Autorizzazione uso microfono</string>
   <string name="record_audio_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può registrare i suoni. Prova di nuovo quando hai autorizzato l\'uso del microfono</string>
-  <string name="get_accounts_runtime_permission_denied_title">Autorizzazione uso account</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Senza questa autorizzazione Collect non può accedere al tuo account. Prova di nuovo quando hai autorizzato l\'accesso al tuo account</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -517,9 +515,7 @@
   <string name="change_view">Cambia Vista</string>
   <string name="show_sent_and_unsent_forms">Mostra Moduli Inviati e Non Inviati</string>
   <string name="show_unsent_forms">Mostra Moduli Non Inviati</string>
-  <string name="media_upload_error">Errore! il file di supporto da caricare non esiste: %1$s</string>
   <string name="send_in_progress">Invio in background in corso, perpiacere riprova più tardi</string>
-  <string name="odk_permissions_fail">Errore auto invio ODK, perpiacere assicurati di avere tutti i permessi necessari</string>
   <string name="forms_upload_succeeded">Caricamento Formulario riuscito</string>
   <string name="forms_upload_failed">Caricamento Formulario fallito</string>
   <string name="all_uploads_succeeded">Tutti i caricamenti sono riusciti!</string>
@@ -625,8 +621,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">Limita l\'interfaccia utente</string>
   <string name="server_preferences">Impostazioni Server</string>
-  <!--Label for server type setting-->
-  <string name="type">Tipo</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Server URL</string>
@@ -637,12 +631,6 @@
   <string name="change_password">Password ODK</string>
   <string name="password_error_whitespace">Spazi vuoti all\'inizio e alla fine delle password non sono ammessi</string>
   <string name="username_error_whitespace">Spazi vuoti all\'inizio e alla fine delle username non sono ammessi</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Account Google</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">URL di destinazione predefinito</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">I moduli devono avere un URL di destinazione. Se non ne viene specificato uno, sarà utilizzato il seguente URL.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Tema chiaro</string>
   <string name="theme_dark">Tema scuro</string>
@@ -794,25 +782,6 @@
   <string name="save_mid">Salva come bozza</string>
   <string name="save_mid_summary">Icona Salva nella barra superiore e pulsante \"Salva come bozza\" all\'uscita dal modulo</string>
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Impossibile effettuare la chiamata API. Se stai eseguendo una build locale, per cortesia controllare il readme del progetto.</string>
-  <string name="no_google_account">Nessun Account Google selezionato!</string>
-  <string name="google_set_account">Hai selezionato Google sheets come server, per favore seleziona un account Google corrispondente in Impostazioni prima di continuare</string>
-  <string name="invalid_sheet_id">Il foglio ha un ID non valido: %1$s</string>
-  <string name="missing_submission_url">Sottomissione URL mancante</string>
-  <string name="google_sheets_access_denied">Accesso negato. Per favore, verifica che il proprietario del documento ti abbia dato i permessi di modifica.</string>
-  <string name="google_sheets_missing_columns">Il foglio è mancante delle seguenti colonne: %1$s</string>
-  <string name="google_sheets_encrypted_message">I moduli crittografati non possono essere inviati a Fogli Google.</string>
-  <string name="missing_google_account_dialog_desc">Per inviare formulari tramite Fogli Google devi configurare il tuo account Google nelle impostazioni del server.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Caricamento dell\'istanza annullato</string>
-  <string name="no_columns_to_upload">Nessuna colonna nel file caricato</string>
-  <string name="missing_google_account_dialog_title">Account Google non specificato</string>
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">Informazioni</string>
@@ -899,7 +868,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Cambia a %s</string>
   <string name="delete_project_confirm_message">Tutti i formulari vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Questo è un progetto Google Drive/Fogli. Una volta eliminato, non sarai più in grado di crearlo di nuovo.&lt;/font&gt;\n\nTutti i moduli vuoti, gli invii e le impostazioni verranno eliminati definitivamente.</string>
   <string name="delete_project_yes">Sì</string>
   <string name="delete_project_no">No</string>
   <string name="cannot_delete_project_title">Il progetto non può essere cancellato</string>
@@ -947,7 +915,6 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <string name="google_drive_deprecation_message">Questo progetto utilizza Google Drive. Questa funzionalità verrà rimossa nel prossimo aggiornamento dell\'app.</string>
   <string name="learn_more_button_text">Saperne di più</string>
   <!--##############################################
     # Developer tools

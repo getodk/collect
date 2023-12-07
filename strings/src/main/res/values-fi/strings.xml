@@ -55,8 +55,6 @@
   <string name="camera_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään kameraa. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
   <string name="record_audio_runtime_permission_denied_title">Äänen tallentamisen käyttölupa</string>
   <string name="record_audio_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei pysty käyttämään mikrofonia. Ole hyvä ja yritä uudestaa kun olet valmis myöntämään sen.</string>
-  <string name="get_accounts_runtime_permission_denied_title">Hae tilin käyttöluvat</string>
-  <string name="get_accounts_runtime_permission_denied_desc">Ilman tätä käyttölupaa Collect ei voi saada yhteyttää tileihin. Ole hyvä ja yritä uudestaan kun olet valmis myöntämään sen.</string>
   <!--##############################################
     # FILL BLANK FORM
     ##############################################-->
@@ -516,9 +514,7 @@
   <string name="change_view">Vaihda näkymää</string>
   <string name="show_sent_and_unsent_forms">Näytä lähetetyt ja lähettämättömät lomakkeet</string>
   <string name="show_unsent_forms">Näytä lähettämättömät lomakkeet</string>
-  <string name="media_upload_error">Palvelimelle ei voida siirtää tiedostoa, jota ei ole olemassa: %1$s</string>
   <string name="send_in_progress">Taustalähetys käynnissä, yritä hetken kuluttua uudestaan</string>
-  <string name="odk_permissions_fail">Automaattisella ODK-lähetyksellä käyttölupavirhe, varmista että olet antanut sovellukselle kaikki tarvittavat käyttöluvat</string>
   <string name="forms_upload_succeeded">Lomakkeiden lähetys onnistui</string>
   <string name="forms_upload_failed">Lomakkeiden lähetys epäonnistui</string>
   <string name="all_uploads_succeeded">Kaikki lähetykset onnistuivat!</string>
@@ -624,8 +620,6 @@
   <!--Subtext of a settings section-->
   <string name="access_control_section_subtext">Käyttöliittymän rajoittaminen</string>
   <string name="server_preferences">Palvelinasetukset</string>
-  <!--Label for server type setting-->
-  <string name="type">Tyyppi</string>
   <string name="server_url">URL</string>
   <!--Title of dialog for configuring server URL-->
   <string name="change_server_url">Palvelimen URL</string>
@@ -636,12 +630,6 @@
   <string name="change_password">ODK salasana</string>
   <string name="password_error_whitespace">Salasanan alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
   <string name="username_error_whitespace">Käyttäjänimen alussa tai lopussa ei saa olla välilyöntimerkkejä</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google-tili</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <string name="google_sheets_url">Varalla oleva URL lähetystä varten</string>
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Lomakkeiden täytyy asettaa URL lähetystä varten. Jos ei, käytetään tätä URL:ää.</string>
   <string name="app_theme">Teema</string>
   <string name="theme_light">Vaalea teema</string>
   <string name="theme_dark">Tumma teema</string>
@@ -793,25 +781,6 @@
   <string name="save_mid">Tallenna luonnoksena</string>
   <string name="save_mid_summary">Tallennusikoni yläpalkissa ja \"Tallenna luonnoksena\" -painike lomakkeelta poistuessa</string>
   <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">API-kutsuja ei pystytä tekemään. Jos käytät paikallista ohjelmaversiota, katso projektin readme.</string>
-  <string name="no_google_account">Ei valittua Google-tiliä!</string>
-  <string name="google_set_account">Olet valinnut Google Sheets palvelimenasi, ole hyvä ja valitse vastaava Google-tili Asetuksissa ennen jatkamista</string>
-  <string name="invalid_sheet_id">Virheellinen lehden id: %1$s</string>
-  <string name="missing_submission_url">Lähetykseen tarvittava URL puuttuu</string>
-  <string name="google_sheets_access_denied">Pääsy estetty. Varmista että taulukon omistaja on myöntänyt muokkausoikeudet.</string>
-  <string name="google_sheets_missing_columns">Työkirjasta puuttuvat seuraavat sarakkeet: %1$s</string>
-  <string name="google_sheets_encrypted_message">Salattuja lomakkeita ei voi lähettää Google Sheets -palveluun.</string>
-  <string name="missing_google_account_dialog_desc">Lähettääksesi lomakkeita Google Sheets -palvelun kautta sinun on asetettava Google-tili palvelinasetuksissa.</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
-  <string name="instance_upload_cancelled">Instanssin siirtäminen peruttu</string>
-  <string name="no_columns_to_upload">Palvelimelle siirrettävässä lomakkeessa ei ollut sarakkeita.</string>
-  <string name="missing_google_account_dialog_title">Google-tiliä ei ole asetettu</string>
-  <!--##############################################
      # ABOUT
      ##############################################-->
   <string name="about_preferences">Lisätietoja</string>
@@ -898,7 +867,6 @@
   <!--Description for screen readers of the action to switch to a different existing project. This is part of the project selection dialog-->
   <string name="switch_to_project">Vaihda projektiin %s</string>
   <string name="delete_project_confirm_message">Kaikki tyhjät lomakkeet, lähetykset ja asetukset tullaan poistamaan pysyvästi.</string>
-  <string name="delete_google_drive_project_confirm_message">&lt;font fgcolor="#D42C2C"&gt;Tämä on Google Drive/Sheets -projekti. Jos poistat sen, et voi luoda sitä uudestaan.&lt;/font&gt;\n\nKaikki tyhjät lomakkeet, lähetykset ja asetukset poistetaan pysyvästi.</string>
   <string name="delete_project_yes">Kyllä</string>
   <string name="delete_project_no">Ei</string>
   <string name="cannot_delete_project_title">Projektia ei voida poistaa.</string>
@@ -946,7 +914,6 @@
   <!--##############################################
     # Google Drive deprecation
     ##############################################-->
-  <string name="google_drive_deprecation_message">Tämä projekti käyttää Google Drive -tallennusta. Tämä toiminnallisuus poistetaan seuraavassa sovelluspäivityksessä.</string>
   <string name="learn_more_button_text">Lisätietoja</string>
   <!--##############################################
     # Developer tools

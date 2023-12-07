@@ -341,10 +341,6 @@
   <string name="change_password">ODK salasõna</string>
   <string name="password_error_whitespace">Salasõna alguses või lõpus ei ole lubatud kasutada tühikut</string>
   <string name="username_error_whitespace">Kasutajanime alguses või lõpus ei ole lubatud kasutada tühikut</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google konto</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">Teksti suurus</string>
   <string name="change_font_size">Teksti suurus</string>
   <string name="font_size_extra_large">Väga suur</string>
@@ -415,16 +411,6 @@
   <string name="reset_cache_result">Vormi laadimise vahemälu :: %s</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-    <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="no_google_account">Google kontot ei ole valitud!</string>
-  <string name="invalid_sheet_id">Vale lehe id: %1$s</string>
-  <string name="google_sheets_missing_columns">Arvutustabelist on puudu järgmised tulbad: %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->

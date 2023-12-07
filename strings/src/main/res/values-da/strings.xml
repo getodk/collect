@@ -315,8 +315,6 @@
   <string name="change_view">Skift vinkel</string>
   <string name="show_sent_and_unsent_forms">Vis afsendte(uploadede) og ikke-afsendte formularer</string>
   <string name="show_unsent_forms">Vis ikke-afsendte formularer</string>
-  <string name="media_upload_error">Felde ved upload af mediefiler der ikke eksisterer: %1$s</string>
-  <string name="odk_permissions_fail">ODK auto-afsending fejlede. Tjek om du har givet alle nødvendige tilladelser.</string>
   <!--##############################################
     # GET BLANK FORM
     ##############################################-->
@@ -387,11 +385,6 @@
   <string name="change_username">ODK brugernavn</string>
   <string name="password">Adgangskode</string>
   <string name="change_password">ODK kodeord</string>
-  <string name="server_platform_google_sheets">Google Drive, Google Sheets</string>
-  <string name="selected_google_account_text">Google-konto</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
-  <string name="google_sheets_url_hint">Formularer skal definere en webadresse til til indberetninger. Hvis ikke den bliver defineret , vil denne webadresse blive anvendt.</string>
   <string name="app_theme">Tema</string>
   <string name="theme_light">Lyst tema</string>
   <string name="theme_dark">Mørkt tema</string>
@@ -473,19 +466,6 @@
   <string name="user_settings">Brugerindstillinger</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <string name="google_auth_io_exception_msg">Ikke muligt at foretage API-kald. Hvis du kører med en lokal deployment, læs da projekt \"readme\".</string>
-  <string name="no_google_account">Ingen Google-konto valgt.</string>
-  <string name="invalid_sheet_id">Invalid sheet id: %1$s</string>
-  <string name="missing_submission_url">Mangler indberetningsadresse</string>
-  <string name="google_sheets_access_denied">Adgang ikke tilladt. Tjek om ejeren af regnearket/spreadsheet har givet dig editerings-rettigheder.</string>
-  <string name="google_sheets_missing_columns">Regnearket mangler følgende kolonner: %1$s</string>
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->

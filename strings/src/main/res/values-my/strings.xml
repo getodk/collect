@@ -254,9 +254,6 @@
   <string name="change_username">ODK အသုံးပြုသူအမည်</string>
   <string name="password">လ်ိဳ႔၀ွက္နံပါတ္</string>
   <string name="change_password">ODK စကားဝှက်</string>
-  <string name="selected_google_account_text">ဂူးဂယ္ (လ္) အေကာင့္</string>
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <string name="font_size">စာလံုးအရြယ္အစား</string>
   <string name="change_font_size">စာလံုးအရြယ္အစား</string>
   <string name="font_size_extra_large">အလြန္ႀကီး</string>
@@ -301,13 +298,6 @@
   <string name="reset_project_settings_title">မူလအတုိင္းျပန္ထားရန္</string>
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->
