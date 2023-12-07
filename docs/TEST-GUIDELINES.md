@@ -22,7 +22,7 @@ These tests live in `collect_app/src/androidTest/java/feature` and use the Andro
 
 ### Regression tests
 
-These look very similar to Collect's Feature tests but instead of being written by developers as part of development they are written by Collect's QA team with an aim of test cases they repeat frequently. Generally these shouldn't be written as part of a PR.
+These look very similar to Collect's Feature tests but instead of being written by developers as part of development they were written by Collect's QA team with an aim of test cases they repeat frequently. These are incrementally being transitioned to feature tests.
 
 ### Instrumented tests
 
