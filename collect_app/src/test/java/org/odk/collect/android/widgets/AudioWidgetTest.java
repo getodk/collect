@@ -369,6 +369,18 @@ public class AudioWidgetTest {
     }
 
     @Test
+    public void whenRecordingFinished_callValueChangeListeners() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+
+        recordingRequester.setDuration(prompt.getIndex().toString(), 5);
+        recordingRequester.reset();
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
+    @Test
     public void afterSetBinaryData_clickingPlayAndPause_playsAndPausesAudio() throws Exception {
         FormEntryPrompt prompt = promptWithAnswer(null);
         AudioWidget widget = createWidget(prompt);

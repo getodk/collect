@@ -574,15 +574,11 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
             ValidationResult validationResult = consumable.getValue();
             if (validationResult instanceof FailedValidationResult failedValidationResult) {
-                try {
-                    createConstraintToast(failedValidationResult.getIndex(), failedValidationResult.getStatus());
-                    if (getFormController().indexIsInFieldList() && getFormController().getQuestionPrompts().length > 1) {
-                        getCurrentViewIfODKView().highlightWidget(failedValidationResult.getIndex());
-                    }
-                } catch (RepeatsInFieldListException e) {
-                    createErrorDialog(new FormError.NonFatal(e.getMessage()));
+                String errorMessage = failedValidationResult.getCustomErrorMessage();
+                if (errorMessage == null) {
+                    errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
                 }
-
+                getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
                 swipeHandler.setBeenSwiped(false);
             } else if (validationResult instanceof SuccessValidationResult) {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
@@ -1557,42 +1553,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     }
 
     /**
-     * Creates and displays a dialog displaying the violated constraint.
-     */
-    private void createConstraintToast(FormIndex index, int saveStatus) {
-        FormController formController = getFormController();
-        String constraintText;
-        switch (saveStatus) {
-            case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
-                constraintText = formController
-                        .getQuestionPromptConstraintText(index);
-                if (constraintText == null) {
-                    constraintText = formController.getQuestionPrompt(index)
-                            .getSpecialFormQuestionText("constraintMsg");
-                    if (constraintText == null) {
-                        constraintText = getString(org.odk.collect.strings.R.string.invalid_answer_error);
-                    }
-                }
-                break;
-            case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                constraintText = formController
-                        .getQuestionPromptRequiredText(index);
-                if (constraintText == null) {
-                    constraintText = formController.getQuestionPrompt(index)
-                            .getSpecialFormQuestionText("requiredMsg");
-                    if (constraintText == null) {
-                        constraintText = getString(org.odk.collect.strings.R.string.required_answer_error);
-                    }
-                }
-                break;
-            default:
-                return;
-        }
-
-        ToastUtils.showShortToastInMiddle(this, constraintText);
-    }
-
-    /**
      * Creates and displays a dialog asking the user if they'd like to create a
      * repeat of the current group.
      */
@@ -2470,7 +2430,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             @Override
                             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                                 if (!odkView.isDisplayed(changedWidget)) {
-                                    odkView.scrollTo(changedWidget);
+                                    odkView.scrollToTopOf(changedWidget);
                                 }
                                 odkView.removeOnLayoutChangeListener(this);
                             }

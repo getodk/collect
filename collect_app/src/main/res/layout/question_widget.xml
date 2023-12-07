@@ -26,4 +26,6 @@
         android:layout_height="wrap_content">
 
     </RelativeLayout>
+
+    <include layout="@layout/question_error_layout" />
 </LinearLayout>

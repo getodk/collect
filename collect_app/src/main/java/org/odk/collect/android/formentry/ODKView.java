@@ -18,8 +18,6 @@ import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -473,7 +471,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         return qw.getLocalVisibleRect(scrollBounds);
     }
 
-    public void scrollTo(@Nullable QuestionWidget qw) {
+    public void scrollToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
             findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
         }
@@ -610,37 +608,20 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         }
     }
 
-    /**
-     * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds, scrolls the
-     * view to display that question at the top and gives it focus.
-     */
-    public void highlightWidget(FormIndex formIndex) {
-        QuestionWidget qw = getQuestionWidget(formIndex);
-
-        if (qw != null) {
-            // postDelayed is needed because otherwise scrolling may not work as expected in case when
-            // answers are validated during form finalization.
-            new Handler().postDelayed(() -> {
-                qw.setFocus(getContext());
-                scrollTo(qw);
-
-                ValueAnimator va = new ValueAnimator();
-                va.setIntValues(new ThemeUtils(getContext()).getColorError(), getDrawingCacheBackgroundColor());
-                va.setEvaluator(new ArgbEvaluator());
-                va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
-                va.setDuration(2500);
-                va.start();
-            }, 100);
-        }
-    }
-
-    private QuestionWidget getQuestionWidget(FormIndex formIndex) {
-        for (QuestionWidget qw : widgets) {
-            if (formIndex.equals(qw.getFormEntryPrompt().getIndex())) {
-                return qw;
+    public void setErrorForQuestionWithIndex(FormIndex formIndex, String errorMessage) {
+        for (QuestionWidget questionWidget : getWidgets()) {
+            if (formIndex.equals(questionWidget.getFormEntryPrompt().getIndex())) {
+                questionWidget.displayError(errorMessage);
+                // postDelayed is needed because otherwise scrolling may not work as expected in case when
+                // answers are validated during form finalization.
+                postDelayed(() -> {
+                    questionWidget.setFocus(getContext());
+                    scrollToTopOf(questionWidget);
+                }, 400);
+            } else {
+                questionWidget.hideError();
             }
         }
-        return null;
     }
 
     /**

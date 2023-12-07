@@ -80,6 +80,6 @@ public class FormEndPage extends Page<FormEndPage> {
 
     public FormEntryPage assertConstraintDisplayed(String constraintText) {
         FormEntryPage formEntryPage = new FormEntryPage(formName);
-        return formEntryPage.assertConstraintDisplayed(constraintText);
+        return formEntryPage.assertText(constraintText);
     }
 }

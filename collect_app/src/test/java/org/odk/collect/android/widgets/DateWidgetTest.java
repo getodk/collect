@@ -154,6 +154,16 @@ public class DateWidgetTest {
                 DateTimeWidgetUtils.getDateTimeLabel(dateAnswer.toDate(), datePickerDetails, false, widget.getContext()));
     }
 
+    @Test
+    public void setData_callsValueChangeListener() {
+        DateWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setValueChangedListener(valueChangedListener);
+        widget.setData(dateAnswer);
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
     private DateWidget createWidget(FormEntryPrompt prompt) {
         return new DateWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry());
     }

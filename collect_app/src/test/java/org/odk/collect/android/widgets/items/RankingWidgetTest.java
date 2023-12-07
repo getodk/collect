@@ -12,17 +12,21 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.junit.Test;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.widgets.base.SelectWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
 
 public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleItemsData> {
 
@@ -64,5 +68,20 @@ public class RankingWidgetTest extends SelectWidgetTest<RankingWidget, MultipleI
         TextView warningTv = getWidget().findViewById(R.id.warning_text);
         assertThat(warningTv.getVisibility(), is(View.VISIBLE));
         assertThat(warningTv.getText(), is("Warning: underlying values a a, b b have spaces"));
+    }
+
+    @Test
+    public void setData_callsValueChangeListener() {
+        RankingWidget widget = createWidget();
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setValueChangedListener(valueChangedListener);
+        widget.setData(
+                Arrays.asList(
+                        new SelectChoice("a", "a a"),
+                        new SelectChoice("a", "b b")
+                )
+        );
+
+        verify(valueChangedListener).widgetValueChanged(widget);
     }
 }

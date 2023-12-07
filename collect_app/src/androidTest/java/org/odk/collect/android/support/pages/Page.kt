@@ -10,7 +10,6 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -299,11 +298,6 @@ abstract class Page<T : Page<T>> {
 
     fun checkIfElementIsGone(id: Int): T {
         onView(withId(id)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
-        return this as T
-    }
-
-    fun clearTheText(text: String?): T {
-        onView(withText(text)).perform(ViewActions.clearText())
         return this as T
     }
 

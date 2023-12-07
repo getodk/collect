@@ -7,7 +7,7 @@
     <color name="colorPrimaryInverse">#6dd2ff</color>
 
     <color name="colorError">#ba1a1a</color>
-    <color name="colorOnError">#ffffff</color>
+    <!-- <color name="colorOnError">#ffffff</color> -->
     <color name="colorErrorContainer">#ffdad6</color>
     <color name="colorOnErrorContainer">#410002</color>
 

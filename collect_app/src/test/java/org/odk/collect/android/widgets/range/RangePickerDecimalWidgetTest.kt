@@ -99,6 +99,16 @@ class RangePickerDecimalWidgetTest {
         verify(listener).onLongClick(widget.binding.widgetAnswerText)
     }
 
+    @Test
+    fun setData_callsValueChangeListener() {
+        val widget = createWidget(QuestionWidgetHelpers.promptWithQuestionDefAndAnswer(rangeQuestion, null))
+        val valueChangedListener = QuestionWidgetHelpers.mockValueChangedListener(widget)
+        widget.setValueChangedListener(valueChangedListener)
+        widget.setNumberPickerValue(3)
+
+        verify(valueChangedListener).widgetValueChanged(widget)
+    }
+
     private fun createWidget(prompt: FormEntryPrompt): RangePickerDecimalWidget {
         return RangePickerDecimalWidget(QuestionWidgetHelpers.widgetTestActivity(), QuestionDetails(prompt))
     }

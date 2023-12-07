@@ -97,6 +97,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
                 binaryName = questionDetails.getPrompt().getAnswerText();
                 updateVisibilities();
                 updatePlayerMedia();
+                widgetValueChanged();
             }
         });
     }

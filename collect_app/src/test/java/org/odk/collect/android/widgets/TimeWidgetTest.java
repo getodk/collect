@@ -142,6 +142,16 @@ public class TimeWidgetTest {
         assertEquals(widget.binding.timeAnswerText.getText(), DateTimeUtils.getTimeData(timeAnswer.toDateTime()).getDisplayText());
     }
 
+    @Test
+    public void setData_callsValueChangeListener() {
+        TimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setValueChangedListener(valueChangedListener);
+        widget.setData(timeAnswer.toDateTime());
+
+        verify(valueChangedListener).widgetValueChanged(widget);
+    }
+
     private TimeWidget createWidget(FormEntryPrompt prompt) {
         return new TimeWidget(widgetActivity, new QuestionDetails(prompt), widgetUtils, new FakeWaitingForDataRegistry());
     }
