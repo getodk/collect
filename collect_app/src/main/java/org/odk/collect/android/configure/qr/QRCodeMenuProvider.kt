@@ -1,9 +1,11 @@
 package org.odk.collect.android.configure.qr
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -45,8 +47,13 @@ class QRCodeMenuProvider internal constructor(
         }
     }
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.qr_code_scan_menu, menu)
+
+        if (menu is MenuBuilder) {
+            menu.setOptionalIconsVisible(true)
+        }
     }
 
     override fun onMenuItemSelected(item: MenuItem): Boolean {
