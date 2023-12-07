@@ -36,6 +36,6 @@ public class SetGeopointActionTest {
     public void locationCollectionToggle_ShouldBeAvailable() {
         rule.startInFormEntry()
                 .clickOptionsIcon()
-                .assertText(org.odk.collect.strings.R.string.track_location);
+                .assertText(org.odk.collect.strings.R.string.track_location_on);
     }
 }

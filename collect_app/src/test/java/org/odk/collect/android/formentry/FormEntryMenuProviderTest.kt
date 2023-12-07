@@ -27,13 +27,13 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.settings.keys.ProtectedProjectKeys
+import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.RobolectricHelpers.createThemedActivity
 import org.odk.collect.testshared.RobolectricHelpers.getFragmentByClass
 import org.robolectric.Robolectric
 import org.robolectric.Shadows
 import org.robolectric.annotation.LooperMode
 import org.robolectric.fakes.RoboMenu
-import org.robolectric.fakes.RoboMenuItem
 
 @RunWith(AndroidJUnit4::class)
 @LooperMode(LooperMode.Mode.PAUSED)
@@ -111,6 +111,17 @@ class FormEntryMenuProviderTest {
     }
 
     @Test
+    fun onPrepare_whenFormDoesNotHaveBackgroundRecording_hidesRecordAudio() {
+        whenever(formEntryViewModel.hasBackgroundRecording()).thenReturn(MutableNonNullLiveData(false))
+
+        val menu = RoboMenu()
+        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
+        formEntryMenuProvider.onPrepareMenu(menu)
+
+        assertThat(menu.findItem(R.id.menu_record_audio).isVisible, equalTo(false))
+    }
+
+    @Test
     fun onPrepare_whenBackgroundRecodingEnabled_checksRecordAudio() {
         whenever(backgroundAudioViewModel.isBackgroundRecordingEnabled).thenReturn(MutableNonNullLiveData(true))
 
@@ -118,7 +129,7 @@ class FormEntryMenuProviderTest {
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
 
-        assertThat(menu.findItem(R.id.menu_record_audio).isChecked, equalTo(true))
+        assertThat(menu.findItem(R.id.menu_record_audio).title, equalTo(activity.getLocalizedString(org.odk.collect.strings.R.string.record_audio_on)))
     }
 
     @Test
@@ -129,18 +140,7 @@ class FormEntryMenuProviderTest {
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
 
-        assertThat(menu.findItem(R.id.menu_record_audio).isChecked, equalTo(false))
-    }
-
-    @Test
-    fun onPrepare_whenFormDoesNotHaveBackgroundRecording_hidesRecordAudio() {
-        whenever(formEntryViewModel.hasBackgroundRecording()).thenReturn(MutableNonNullLiveData(false))
-
-        val menu = RoboMenu()
-        formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
-        formEntryMenuProvider.onPrepareMenu(menu)
-
-        assertThat(menu.findItem(R.id.menu_record_audio).isVisible, equalTo(false))
+        assertThat(menu.findItem(R.id.menu_record_audio).title, equalTo(activity.getLocalizedString(org.odk.collect.strings.R.string.record_audio_off)))
     }
 
     @Test
@@ -190,7 +190,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_add_repeat))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_add_repeat))
 
         verify(formEntryViewModel).promptForNewRepeat()
     }
@@ -203,7 +203,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_add_repeat))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_add_repeat))
 
         verify(formEntryViewModel).updateAnswersForScreen(answers, false)
     }
@@ -215,7 +215,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_add_repeat))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_add_repeat))
 
         verify(formEntryViewModel, never()).promptForNewRepeat()
         val dialog = getFragmentByClass(activity.supportFragmentManager, RecordingWarningDialogFragment::class.java)
@@ -231,7 +231,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_add_repeat))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_add_repeat))
 
         verify(formEntryViewModel).promptForNewRepeat()
         val dialog = getFragmentByClass(activity.supportFragmentManager, RecordingWarningDialogFragment::class.java)
@@ -243,7 +243,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_preferences))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_preferences))
         val nextStartedActivity = Shadows.shadowOf(activity).nextStartedActivityForResult
 
         assertThat(nextStartedActivity, notNullValue())
@@ -258,7 +258,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_preferences))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_preferences))
 
         assertThat(Shadows.shadowOf(activity).nextStartedActivityForResult, nullValue())
         val dialog = getFragmentByClass(activity.supportFragmentManager, RecordingWarningDialogFragment::class.java)
@@ -271,7 +271,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_goto))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_goto))
         val nextStartedActivity = Shadows.shadowOf(activity).nextStartedActivityForResult
 
         assertThat(nextStartedActivity, notNullValue())
@@ -287,7 +287,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_goto))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_goto))
 
         verify(formEntryViewModel).updateAnswersForScreen(answers, false)
     }
@@ -297,7 +297,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_goto))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_goto))
 
         verify(formEntryViewModel).openHierarchy()
     }
@@ -309,7 +309,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_goto))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_goto))
 
         assertThat(Shadows.shadowOf(activity).nextStartedActivity, nullValue())
         val dialog = getFragmentByClass(activity.supportFragmentManager, RecordingWarningDialogFragment::class.java)
@@ -325,7 +325,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_goto))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_goto))
 
         assertThat(Shadows.shadowOf(activity).nextStartedActivity, notNullValue())
         val dialog = getFragmentByClass(activity.supportFragmentManager, RecordingWarningDialogFragment::class.java)
@@ -339,7 +339,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_record_audio))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_record_audio))
 
         verify(backgroundAudioViewModel).setBackgroundRecordingEnabled(true)
     }
@@ -349,7 +349,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_languages))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_languages))
 
         verify(formEntryMenuClickListener).changeLanguage()
     }
@@ -359,7 +359,7 @@ class FormEntryMenuProviderTest {
         val menu = RoboMenu()
         formEntryMenuProvider.onCreateMenu(menu, Robolectric.setupActivity(FragmentActivity::class.java).menuInflater)
         formEntryMenuProvider.onPrepareMenu(menu)
-        formEntryMenuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_save))
+        formEntryMenuProvider.onMenuItemSelected(menu.findItem(R.id.menu_save))
 
         verify(formEntryMenuClickListener).save()
     }
