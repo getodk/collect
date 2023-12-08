@@ -36,4 +36,17 @@ class ExternalDataUseCasesTest {
         ExternalDataUseCases.create(form, mediaDir, { false }, {})
         assertThat(mediaDir.listFiles().size, equalTo(2))
     }
+
+    @Test
+    fun `create() leaves original CSV in place`() {
+        val form = FormDef().also {
+            it.extras.put(DynamicPreloadExtra(true))
+        }
+
+        val mediaDir = TempFiles.createTempDir()
+        val csv = File(mediaDir, "items.csv").also { it.writeText("name_key,name\nmango,Mango") }
+
+        ExternalDataUseCases.create(form, mediaDir, { false }, {})
+        assertThat(csv.exists(), equalTo(true))
+    }
 }

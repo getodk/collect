@@ -1,9 +1,6 @@
 package org.odk.collect.android.instrumented.tasks;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 
 import android.app.Application;
 
@@ -12,7 +9,6 @@ import androidx.test.core.app.ApplicationProvider;
 import org.javarosa.core.model.FormDef;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryModel;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,11 +16,9 @@ import org.junit.rules.RuleChain;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
 import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.StorageUtils;
 import org.odk.collect.android.support.rules.RunnableRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
-import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.FormLoaderTask.FormEntryControllerFactory;
 import org.odk.collect.projects.Project;
 
@@ -65,40 +59,6 @@ public class FormLoaderTaskTest {
                     throw new RuntimeException(e);
                 }
             }));
-
-    // Validate the use of CSV files as secondary instances accessed through "jr://file-csv"
-    @Test
-    public void loadFormWithSecondaryCSV() throws Exception {
-        fail();
-//        final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SECONDARY_INSTANCE_EXTERNAL_CSV_FORM;
-//        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, formPath, null, null, formEntryControllerFactory, mock());
-//        FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously();
-//        Assert.assertNotNull(wrapper);
-    }
-
-    // Validate the use of a CSV file externally accessed through search/pulldata
-    @Test
-    public void loadSearchFromExternalCSV() throws Exception {
-        fail();
-//        final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
-//        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, formPath, null, null, formEntryControllerFactory, mock());
-//        FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously();
-//        assertThat(wrapper, notNullValue());
-    }
-
-    @Test
-    public void loadSearchFromexternalCsvLeavesFileUnchanged() throws Exception {
-        fail();
-//        final String formPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FORM;
-//        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, formPath, null, null, formEntryControllerFactory, mock());
-//        FormLoaderTask.FECWrapper wrapper = formLoaderTask.executeSynchronously();
-//        Assert.assertNotNull(wrapper);
-//        Assert.assertNotNull(wrapper.getController());
-//
-//        File mediaFolder = wrapper.getController().getMediaFolder();
-//        File importedCSV = new File(mediaFolder + File.separator + SIMPLE_SEARCH_EXTERNAL_CSV_FILE);
-//        Assert.assertTrue("Expected the imported CSV file to remain unchanged", importedCSV.exists());
-    }
 
     // Validate that importing external data multiple times does not fail due to side effects from import
     @Test

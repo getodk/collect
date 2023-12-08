@@ -33,7 +33,6 @@ public class ExternalSecondaryInstanceTest {
 
     @Test
     public void displaysAllOptionsFromSecondaryInstance() {
-        //TestCase1
         new MainMenuPage()
                 .copyForm("external_select_10.xml", Collections.singletonList("external_data_10.xml"))
                 .startBlankForm("external select 10")
@@ -42,5 +41,16 @@ public class ExternalSecondaryInstanceTest {
                 .assertText("aa")
                 .assertText("ab")
                 .assertText("ac");
+    }
+
+    @Test
+    public void displaysAllOptionsFromCSVSecondaryInstance() {
+        new MainMenuPage()
+                .copyForm("external_select_10_csv.xml", Collections.singletonList("external_data_10.csv"))
+                .startBlankForm("external select 10")
+                .assertQuestion("First")
+                .assertText("One")
+                .assertText("Two")
+                .assertText("Three");
     }
 }
