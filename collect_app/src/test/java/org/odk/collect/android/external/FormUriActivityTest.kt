@@ -610,7 +610,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `Form filling should not be started again after recreating the activity or getting back to it`() {
+    fun `Form filling should not be started again after recreating the activity`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(projectsDataService.getCurrentProject()).thenReturn(project)
@@ -626,6 +626,28 @@ class FormUriActivityTest {
         val scenario =
             launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         fakeScheduler.flush()
+        scenario.recreate()
+        fakeScheduler.flush()
+
+        Intents.intended(hasComponent(FormFillingActivity::class.java.name), Intents.times(1))
+    }
+
+    @Test
+    fun `Form filling should be started again after recreating the activity before starting`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath
+            ).build()
+        )
+
+        val scenario =
+            launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, form.dbId))
         scenario.recreate()
         fakeScheduler.flush()
 
