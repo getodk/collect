@@ -71,11 +71,11 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), this, false);
+        captureButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), this, false, R.id.capture_image);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this, true);
+        chooseButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this, true, R.id.choose_image);
 
-        annotateButton = createSimpleButton(getContext(), R.id.markup_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), this, true);
+        annotateButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), this, true, R.id.markup_image);
 
         annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
 

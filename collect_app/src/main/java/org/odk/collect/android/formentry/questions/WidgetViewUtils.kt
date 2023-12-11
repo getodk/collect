@@ -39,16 +39,15 @@ object WidgetViewUtils {
     }
 
     @JvmStatic
-    fun createSimpleButton(context: Context, @IdRes withId: Int, readOnly: Boolean, text: String?, listener: ButtonClickListener, addMargin: Boolean): Button {
+    @JvmOverloads
+    fun createSimpleButton(context: Context, readOnly: Boolean, text: String?, listener: ButtonClickListener, addMargin: Boolean, @IdRes withId: Int = R.id.simple_button): Button {
         val button = LayoutInflater
             .from(context)
             .inflate(R.layout.widget_answer_button, null, false) as MaterialButton
         if (readOnly) {
             button.visibility = View.GONE
         } else {
-            if (withId != -1) {
-                button.id = withId
-            }
+            button.id = withId
             button.text = text
             button.contentDescription = text
             if (addMargin) {

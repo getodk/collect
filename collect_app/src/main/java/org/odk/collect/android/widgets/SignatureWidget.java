@@ -51,7 +51,7 @@ public class SignatureWidget extends BaseImageWidget implements ButtonClickListe
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        signButton = createSimpleButton(getContext(), -1, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.sign_button), this, false);
+        signButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.sign_button), this, false);
 
         answerLayout.addView(signButton);
         answerLayout.addView(errorTextView);

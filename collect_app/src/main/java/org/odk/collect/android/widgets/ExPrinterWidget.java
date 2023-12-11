@@ -129,7 +129,7 @@ public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceive
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_printer);
-        launchIntentButton = createSimpleButton(getContext(), -1, getFormEntryPrompt().isReadOnly(), buttonText, this, false);
+        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), buttonText, this, false);
 
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());

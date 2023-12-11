@@ -100,7 +100,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     @Override
     protected void setUpLayout(Context context) {
-        launchIntentButton = createSimpleButton(getContext(), -1, getFormEntryPrompt().isReadOnly(), getButtonText(), this, false);
+        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), this, false);
 
         widgetAnswerText.setAnswer(getFormEntryPrompt().getAnswerText());
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(

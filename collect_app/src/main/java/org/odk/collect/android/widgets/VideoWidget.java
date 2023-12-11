@@ -77,11 +77,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), this, false);
+        captureButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), this, false, R.id.capture_video);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), this, true);
+        chooseButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), this, true, R.id.choose_video);
 
-        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(org.odk.collect.strings.R.string.play_video), this, true);
+        playButton = createSimpleButton(getContext(), false, getContext().getString(org.odk.collect.strings.R.string.play_video), this, true, R.id.play_video);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
