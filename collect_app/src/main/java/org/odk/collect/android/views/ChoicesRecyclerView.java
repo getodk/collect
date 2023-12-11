@@ -85,7 +85,7 @@ public class ChoicesRecyclerView extends RecyclerView {
         }
     }
 
-    private static class FlexItemDecoration extends RecyclerView.ItemDecoration {
+    static class FlexItemDecoration extends RecyclerView.ItemDecoration {
         private final int margin;
 
         FlexItemDecoration(int margin) {

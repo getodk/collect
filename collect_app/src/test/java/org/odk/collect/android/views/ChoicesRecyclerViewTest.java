@@ -122,7 +122,7 @@ public class ChoicesRecyclerViewTest {
     }
 
     @Test
-    public void whenFLexAppearanceIsUsed_shouldNotDividersBeAdded() {
+    public void whenFLexAppearanceIsUsed_shouldFlexItemDecorationBeAdded() {
         List<SelectChoice> items = getTestChoices();
         setUpFormEntryPrompt(items, "");
 
@@ -130,7 +130,8 @@ public class ChoicesRecyclerViewTest {
 
         initRecyclerView(adapter, true);
 
-        assertThat(recyclerView.getItemDecorationCount(), is(0));
+        assertThat(recyclerView.getItemDecorationCount(), is(1));
+        assertThat(recyclerView.getItemDecorationAt(0), is(instanceOf(ChoicesRecyclerView.FlexItemDecoration.class)));
     }
 
     @Test
