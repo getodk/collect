@@ -73,7 +73,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     private final AudioVideoImageTextLabel audioVideoImageTextLabel;
     protected final QuestionDetails questionDetails;
     private final TextView helpTextView;
-    private final View helpTextLayout;
     private final View guidanceTextLayout;
     private final View textLayout;
     private final TextView warningText;
@@ -82,7 +81,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     private AtomicBoolean expanded;
     protected final ThemeUtils themeUtils;
     protected AudioHelper audioHelper;
-    private final ViewGroup containerView;
     private WidgetValueChangedListener valueChangedListener;
 
     @Inject
@@ -122,12 +120,11 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         this.questionDetails = questionDetails;
         formEntryPrompt = questionDetails.getPrompt();
 
-        containerView = inflate(context, getLayout(), this).findViewById(R.id.question_widget_container);
-
+        ViewGroup containerView = inflate(context, getLayout(), this).findViewById(R.id.question_widget_container);
         audioVideoImageTextLabel = containerView.findViewById(R.id.question_label);
         setupQuestionLabel();
 
-        helpTextLayout = findViewById(R.id.help_text);
+        View helpTextLayout = findViewById(R.id.help_text);
         guidanceTextLayout = helpTextLayout.findViewById(R.id.guidance_text_layout);
         textLayout = helpTextLayout.findViewById(R.id.text_layout);
         warningText = helpTextLayout.findViewById(R.id.warning_text);
@@ -289,20 +286,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         return false;
     }
 
-    @Deprecated
-    protected void addQuestionLabel(View v) {
-        if (v == null) {
-            Timber.e(new Error("cannot add a null view as questionMediaLayout"));
-            return;
-        }
-        // default for questionmedialayout
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-        containerView.addView(v, params);
-    }
-
     private TextView setupHelpText(TextView helpText, FormEntryPrompt prompt) {
         String s = prompt.getHelpText();
 
@@ -376,10 +359,6 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public void showWarning(String warningBody) {
         warningText.setVisibility(View.VISIBLE);
         warningText.setText(warningBody);
-    }
-
-    public View getHelpTextLayout() {
-        return helpTextLayout;
     }
 
     public AudioVideoImageTextLabel getAudioVideoImageTextLabel() {
