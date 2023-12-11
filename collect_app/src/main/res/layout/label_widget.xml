@@ -4,8 +4,7 @@
     android:id="@+id/question_widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginEnd="@dimen/margin_small"
-    android:layout_marginTop="@dimen/margin_small">
+    android:padding="@dimen/margin_standard">
 
     <org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel
         android:id="@+id/question_label"

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="@dimen/margin_small"
-    android:paddingEnd="@dimen/margin_standard"
-    android:button="@drawable/inset_check_box"
+    android:paddingStart="@dimen/margin_standard"
     tools:text="Option A">
 
 </androidx.appcompat.widget.AppCompatCheckBox>

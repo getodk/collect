@@ -1,13 +1,9 @@
 package org.odk.collect.android.formentry.questions;
 
 import static android.view.View.GONE;
-import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
-import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -26,25 +22,8 @@ import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 
 public final class WidgetViewUtils {
-
-    private static final int WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER = 4;
-
     private WidgetViewUtils() {
 
-    }
-
-    public static int getStandardMargin(Context context) {
-        Resources resources = context.getResources();
-        int marginStandard = dpFromPx(context, resources.getDimensionPixelSize(org.odk.collect.androidshared.R.dimen.margin_standard));
-
-        return marginStandard - WIDGET_ANSWER_STANDARD_MARGIN_MODIFIER;
-    }
-
-    public static TextView getCenteredAnswerTextView(Context context, int answerFontSize) {
-        TextView textView = createAnswerTextView(context, answerFontSize);
-        textView.setGravity(Gravity.CENTER);
-
-        return textView;
     }
 
     public static TextView createAnswerTextView(Context context, int answerFontSize) {
@@ -72,7 +51,7 @@ public final class WidgetViewUtils {
         return imageView;
     }
 
-    public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, ButtonClickListener listener) {
+    public static Button createSimpleButton(Context context, @IdRes final int withId, boolean readOnly, String text, ButtonClickListener listener, boolean addMargin) {
         final MaterialButton button = (MaterialButton) LayoutInflater
                 .from(context)
                 .inflate(R.layout.widget_answer_button, null, false);
@@ -80,17 +59,20 @@ public final class WidgetViewUtils {
         if (readOnly) {
             button.setVisibility(GONE);
         } else {
-            button.setId(withId);
+            if (withId != -1) {
+                button.setId(withId);
+            }
             button.setText(text);
             button.setContentDescription(text);
 
-            TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+            if (addMargin) {
+                TableLayout.LayoutParams params = new TableLayout.LayoutParams();
 
-            float marginExtraSmall = context.getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_extra_small);
-            int topMargin = pxFromDp(context, marginExtraSmall);
-            params.setMargins(7, topMargin, 7, 5);
+                int marginStandard = (int) context.getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_standard);
+                params.setMargins(0, marginStandard, 0, 0);
 
-            button.setLayoutParams(params);
+                button.setLayoutParams(params);
+            }
 
             button.setOnClickListener(v -> {
                 if (MultiClickGuard.allowClick(QuestionWidget.class.getName())) {
@@ -100,13 +82,5 @@ public final class WidgetViewUtils {
         }
 
         return button;
-    }
-
-    public static Button createSimpleButton(Context context, @IdRes int id, boolean readOnly, ButtonClickListener listener) {
-        return createSimpleButton(context, id, readOnly, null, listener);
-    }
-
-    public static Button createSimpleButton(Context context, boolean readOnly, String text, ButtonClickListener listener) {
-        return createSimpleButton(context, R.id.simple_button, readOnly, text, listener);
     }
 }

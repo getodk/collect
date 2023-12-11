@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -130,13 +129,13 @@ public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceive
 
         String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
         String buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_printer);
-        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), buttonText, this);
+        launchIntentButton = createSimpleButton(getContext(), -1, getFormEntryPrompt().isReadOnly(), buttonText, this, false);
 
         // finish complex layout
         LinearLayout printLayout = new LinearLayout(getContext());
         printLayout.setOrientation(LinearLayout.VERTICAL);
         printLayout.addView(launchIntentButton);
-        addAnswerView(printLayout, WidgetViewUtils.getStandardMargin(context));
+        addAnswerView(printLayout);
     }
 
     protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {

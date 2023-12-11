@@ -31,7 +31,6 @@ import android.widget.Button;
 import org.odk.collect.android.R;
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -66,17 +65,17 @@ public class AnnotateWidget extends BaseImageWidget implements ButtonClickListen
         setUpLayout();
         updateAnswer();
         adjustAnnotateButtonAvailability();
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
+        addAnswerView(answerLayout);
     }
 
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image), this, false);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this, true);
 
-        annotateButton = createSimpleButton(getContext(), R.id.markup_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), this);
+        annotateButton = createSimpleButton(getContext(), R.id.markup_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.markup_image), this, true);
 
         annotateButton.setOnClickListener(v -> imageClickHandler.clickImage("annotateButton"));
 

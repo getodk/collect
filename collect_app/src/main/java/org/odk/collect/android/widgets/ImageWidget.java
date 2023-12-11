@@ -26,7 +26,6 @@ import android.widget.Button;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.Appearances;
@@ -62,7 +61,7 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         imageCaptureHandler = new ImageCaptureHandler();
         setUpLayout();
         updateAnswer();
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
+        addAnswerView(answerLayout);
     }
 
     @Override
@@ -72,9 +71,9 @@ public class ImageWidget extends BaseImageWidget implements ButtonClickListener 
         String appearance = getFormEntryPrompt().getAppearanceHint();
         selfie = Appearances.isFrontCameraAppearance(getFormEntryPrompt());
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image),  this);
+        captureButton = createSimpleButton(getContext(), R.id.capture_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_image),  this, false);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this);
+        chooseButton = createSimpleButton(getContext(), R.id.choose_image, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_image), this, true);
 
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);

@@ -1,9 +1,11 @@
 package org.odk.collect.android.views;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -48,7 +50,10 @@ public class ChoicesRecyclerView extends RecyclerView {
     }
 
     private void enableFlexboxLayout() {
-        setLayoutManager(new FlexboxLayoutManager(getContext()));
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(getContext());
+        setLayoutManager(layoutManager);
+        int marginBetweenItems = getResources().getDimensionPixelSize(org.odk.collect.androidshared.R.dimen.margin_standard);
+        addItemDecoration(new FlexItemDecoration(marginBetweenItems));
     }
 
     private void enableGridLayout(int numColumns) {
@@ -77,6 +82,20 @@ public class ChoicesRecyclerView extends RecyclerView {
             getLayoutParams().height = (int) (ScreenUtils.getScreenHeight(getContext()) * 0.9);
         } else {
             setNestedScrollingEnabled(false);
+        }
+    }
+
+    private static class FlexItemDecoration extends RecyclerView.ItemDecoration {
+        private final int margin;
+
+        FlexItemDecoration(int margin) {
+            this.margin = margin;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+            outRect.bottom = margin;
+            outRect.right = margin;
         }
     }
 }

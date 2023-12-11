@@ -21,7 +21,6 @@ import android.widget.Button;
 
 import org.odk.collect.android.draw.DrawActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -46,13 +45,13 @@ public class DrawWidget extends BaseImageWidget implements ButtonClickListener {
         imageClickHandler = new DrawImageClickHandler(DrawActivity.OPTION_DRAW, RequestCodes.DRAW_IMAGE, org.odk.collect.strings.R.string.draw_image);
         setUpLayout();
         updateAnswer();
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
+        addAnswerView(answerLayout);
     }
 
     @Override
     protected void setUpLayout() {
         super.setUpLayout();
-        drawButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.draw_image), this);
+        drawButton = createSimpleButton(getContext(), -1, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.draw_image), this, false);
 
         answerLayout.addView(drawButton);
         answerLayout.addView(errorTextView);

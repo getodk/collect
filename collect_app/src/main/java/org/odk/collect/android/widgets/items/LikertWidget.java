@@ -3,7 +3,6 @@ package org.odk.collect.android.widgets.items;
 import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
 import static android.widget.RelativeLayout.CENTER_IN_PARENT;
 import static android.widget.RelativeLayout.TRUE;
-import static org.odk.collect.android.utilities.ViewUtils.dpFromPx;
 import static org.odk.collect.android.utilities.ViewUtils.pxFromDp;
 
 import android.annotation.SuppressLint;
@@ -66,7 +65,7 @@ public class LikertWidget extends QuestionWidget {
 
         setButtonListener();
         setSavedButton();
-        addAnswerView(view, dpFromPx(context, 10));
+        addAnswerView(view);
     }
 
     public void setMainViewLayoutParameters() {

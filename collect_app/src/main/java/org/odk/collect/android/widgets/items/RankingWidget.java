@@ -31,7 +31,6 @@ import org.javarosa.core.model.data.SelectMultiData;
 import org.javarosa.core.model.data.helper.Selection;
 import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.fragments.dialogs.RankingWidgetDialog;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
@@ -141,7 +140,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
     }
 
     private void setUpLayout(List<SelectChoice> items) {
-        showRankingDialogButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.rank_items), this);
+        showRankingDialogButton = createSimpleButton(getContext(), -1, getFormEntryPrompt().isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.rank_items), this, false);
         answerTextView = createAnswerTextView(getContext(), getAnswerText(), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6));
         answerTextView.setVisibility(answerTextView.getText().toString().isBlank() ? GONE : VISIBLE);
 
@@ -150,7 +149,7 @@ public class RankingWidget extends QuestionWidget implements WidgetDataReceiver,
         widgetLayout.addView(showRankingDialogButton);
         widgetLayout.addView(answerTextView);
 
-        addAnswerView(widgetLayout, WidgetViewUtils.getStandardMargin(getContext()));
+        addAnswerView(widgetLayout);
         SpacesInUnderlyingValuesWarning
                 .forQuestionWidget(this)
                 .renderWarningIfNecessary(items);
