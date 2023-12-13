@@ -9,6 +9,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressBack
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
@@ -17,6 +18,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtraWithKey
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -120,7 +122,7 @@ class FormUriActivityTest {
     fun `When there are no projects then display alert dialog`() {
         val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
 
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.app_not_configured)
         )
@@ -149,7 +151,7 @@ class FormUriActivityTest {
             )
         )
 
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form)
         )
@@ -174,7 +176,7 @@ class FormUriActivityTest {
         val scenario =
             launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(null, form.dbId))
 
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form)
         )
@@ -200,7 +202,7 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.unrecognized_uri)
         )
@@ -226,7 +228,7 @@ class FormUriActivityTest {
             }
         )
 
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.unrecognized_uri)
         )
@@ -241,7 +243,7 @@ class FormUriActivityTest {
         val scenario =
             launcherRule.launchForResult<FormUriActivity>(getBlankFormIntent(project.uuid, 1))
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
+        assertErrorDialogAndClickCancelButton(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
 
     @Test
@@ -266,7 +268,7 @@ class FormUriActivityTest {
             )
         )
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
+        assertErrorDialogAndClickCancelButton(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
 
     @Test
@@ -278,7 +280,7 @@ class FormUriActivityTest {
         val scenario =
             launcherRule.launchForResult<FormUriActivity>(getSavedIntent(project.uuid, 1))
 
-        assertErrorDialog(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
+        assertErrorDialogAndClickCancelButton(scenario, context.getString(org.odk.collect.strings.R.string.bad_uri))
     }
 
     @Test
@@ -309,7 +311,7 @@ class FormUriActivityTest {
         )
 
         assertThat(instancesRepository.get(instance.dbId), equalTo(null))
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.instance_deleted_message)
         )
@@ -341,7 +343,7 @@ class FormUriActivityTest {
             instance.formId
         )
 
-        assertErrorDialog(scenario, expectedMessage)
+        assertErrorDialogAndClickCancelButton(scenario, expectedMessage)
     }
 
     @Test
@@ -373,7 +375,7 @@ class FormUriActivityTest {
             } ${instance.formVersion}"
         )
 
-        assertErrorDialog(scenario, expectedMessage)
+        assertErrorDialogAndClickCancelButton(scenario, expectedMessage)
     }
 
     @Test
@@ -415,7 +417,7 @@ class FormUriActivityTest {
             )
         )
 
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.survey_multiple_forms_error)
         )
@@ -453,7 +455,7 @@ class FormUriActivityTest {
             )
         )
 
-        assertErrorDialog(
+        assertErrorDialogAndClickCancelButton(
             scenario,
             context.getString(org.odk.collect.strings.R.string.encrypted_form)
         )
@@ -709,6 +711,16 @@ class FormUriActivityTest {
         assertStartSavedFormIntent(null, instance.dbId, true)
     }
 
+    @Test
+    fun `The activity should be finished after clicking the back button when an error dialog is displayed`() {
+        val scenario = launcherRule.launchForResult(FormUriActivity::class.java)
+
+        assertErrorDialogAndClickBackButton(
+            scenario,
+            context.getString(org.odk.collect.strings.R.string.app_not_configured)
+        )
+    }
+
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
         Intent(context, FormUriActivity::class.java).apply {
             data = if (projectId == null) {
@@ -749,11 +761,20 @@ class FormUriActivityTest {
             .build()
     }
 
-    private fun assertErrorDialog(scenario: ActivityScenario<FormUriActivity>, message: String) {
+    private fun assertErrorDialogAndClickCancelButton(scenario: ActivityScenario<FormUriActivity>, message: String) {
         onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withId(android.R.id.button1)).perform(click())
 
         assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+    }
+
+    private fun assertErrorDialogAndClickBackButton(scenario: ActivityScenario<FormUriActivity>, message: String) {
+        onView(withText(message)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(isRoot()).perform(pressBack())
+
+        scenario.onActivity {
+            assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
+        }
     }
 
     private fun assertStartBlankFormIntent(projectId: String?, dbId: Long) {
