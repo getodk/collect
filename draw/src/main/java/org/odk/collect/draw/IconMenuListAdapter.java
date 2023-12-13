@@ -26,8 +26,10 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Adapter for List of options with icons
+ * @deprecated This should be replaced with a basic
+ * {@link androidx.constraintlayout.widget.ConstraintLayout} in the places it's used.
  */
+@Deprecated
 class IconMenuListAdapter extends BaseAdapter {
 
     private final Context context;
