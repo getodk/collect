@@ -240,15 +240,13 @@ public class DrawActivity extends LocalizedActivity {
         }).get(DrawViewModel.class);
 
         drawViewModel.getSaveResult().observe(this, (success) -> {
-            if (success != null) {
-                if (success) {
-                    setResult(Activity.RESULT_OK);
-                } else {
-                    setResult(Activity.RESULT_CANCELED);
-                }
-
-                finish();
+            if (success) {
+                setResult(Activity.RESULT_OK);
+            } else {
+                setResult(Activity.RESULT_CANCELED);
             }
+
+            finish();
         });
 
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);

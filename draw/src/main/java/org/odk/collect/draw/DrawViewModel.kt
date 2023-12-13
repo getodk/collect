@@ -15,7 +15,7 @@ internal class DrawViewModel(
     private val scheduler: Scheduler
 ) : ViewModel() {
 
-    private val _saveResult = MutableLiveData<Boolean?>(null)
+    private val _saveResult = MutableLiveData<Boolean>()
     val saveResult = _saveResult
 
     fun save(drawView: DrawView) {
