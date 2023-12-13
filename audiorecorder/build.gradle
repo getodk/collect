@@ -49,7 +49,7 @@ dependencies {
     implementation Dependencies.timber
 
     testImplementation project(path: ':androidtest')
-    testImplementation project(path: ':testshared')
+    testImplementation project(path: ':test-shared')
     testImplementation project(path: ':servicetest')
     testImplementation Dependencies.junit
     testImplementation Dependencies.robolectric

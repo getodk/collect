@@ -70,7 +70,7 @@ dependencies {
 
     debugImplementation project(path: ':fragmentstest')
     testImplementation project(path: ':androidtest')
-    testImplementation project(path: ':testshared')
+    testImplementation project(path: ':test-shared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.hamcrest
     testImplementation Dependencies.androidx_test_ext_junit
