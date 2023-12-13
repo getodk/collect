@@ -1,5 +1,20 @@
 package org.odk.collect.android.widgets;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearance;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
+import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
+import static org.robolectric.Shadows.shadowOf;
+
 import android.view.View;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -13,26 +28,13 @@ import org.junit.runner.RunWith;
 import org.odk.collect.android.fakes.FakePermissionsProvider;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.WidgetValueChangedListener;
+import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.support.WidgetTestActivity;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.androidshared.system.CameraUtils;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.androidshared.system.CameraUtils;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowToast;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAnswer;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithAppearance;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.promptWithReadOnly;
-import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.widgetTestActivity;
-import static org.robolectric.Shadows.shadowOf;
 
 /**
  * @author James Knight
@@ -181,6 +183,23 @@ public class BarcodeWidgetTest {
         widget.binding.barcodeButton.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity().getBooleanExtra(Appearances.FRONT, false), is(true));
+    }
+
+    @Test
+    public void whenPromptHasNoAnswerAppearance_answerIsNotDisplayed() {
+        FormEntryPrompt prompt = new MockFormEntryPromptBuilder(promptWithAppearance(Appearances.NO_ANSWER))
+                .withAnswer(new StringData("original contents"))
+                .build();
+
+        BarcodeWidget widget = createWidget(prompt);
+        assertThat(widget.binding.barcodeAnswerText.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
+        assertThat(widget.getAnswer(), equalTo(new StringData("original contents")));
+
+        widget.setData("updated contents");
+        assertThat(widget.binding.barcodeAnswerText.getVisibility(), equalTo(View.GONE));
+        assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
+        assertThat(widget.getAnswer(), equalTo(new StringData("updated contents")));
     }
 
     public BarcodeWidget createWidget(FormEntryPrompt prompt) {
