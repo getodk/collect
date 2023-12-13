@@ -1,25 +1,12 @@
-package org.odk.collect.android.draw
+package org.odk.collect.draw
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.rarepebble.colorpicker.ColorPickerView
-import org.odk.collect.android.injection.DaggerUtils
-import javax.inject.Inject
 
-class PenColorPickerDialog : DialogFragment() {
-    @Inject
-    lateinit var factory: PenColorPickerViewModel.Factory
-
-    private val model: PenColorPickerViewModel by activityViewModels { factory }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        DaggerUtils.getComponent(context).inject(this)
-    }
+internal class PenColorPickerDialog(private val model: PenColorPickerViewModel) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val picker = ColorPickerView(requireContext()).apply {

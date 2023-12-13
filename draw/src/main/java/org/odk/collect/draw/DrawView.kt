@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.odk.collect.android.draw
+package org.odk.collect.draw
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -24,12 +24,21 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.androidshared.bitmap.ImageFileUtils
 import java.io.File
+import javax.inject.Inject
 
-class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+class DrawView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
+
+    init {
+        (context.applicationContext as DrawDependencyComponentProvider)
+            .drawDependencyComponent.inject(this)
+    }
+
     private lateinit var bitmap: Bitmap
+
+    @Inject
+    lateinit var imagePath: String
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -78,10 +87,12 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 touchStart(x, y)
                 invalidate()
             }
+
             MotionEvent.ACTION_MOVE -> {
                 touchMove(x, y)
                 invalidate()
             }
+
             MotionEvent.ACTION_UP -> {
                 touchUp()
                 invalidate()
@@ -158,9 +169,10 @@ class DrawView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
 
     private fun resetImage(w: Int, h: Int) {
-        val backgroundBitmapFile = File(StoragePathProvider().getTmpImageFilePath())
+        val backgroundBitmapFile = File(imagePath)
         if (backgroundBitmapFile.exists()) {
-            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!.copy(Bitmap.Config.ARGB_8888, true)
+            bitmap = ImageFileUtils.getBitmapScaledToDisplay(backgroundBitmapFile, h, w, true)!!
+                .copy(Bitmap.Config.ARGB_8888, true)
             canvas = Canvas(bitmap)
         } else {
             bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)

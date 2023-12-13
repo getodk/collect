@@ -254,6 +254,7 @@ dependencies {
     implementation project(':qr-code')
     implementation project(':metadata')
     implementation project(':google-maps')
+    implementation project(':draw')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
@@ -288,7 +289,6 @@ dependencies {
     implementation Dependencies.persian_joda_time
     implementation Dependencies.myanmar_calendar
     implementation Dependencies.bikram_sambat
-    implementation Dependencies.rarepebble_colorpicker
     implementation Dependencies.commons_io
     implementation (Dependencies.opencsv) {
         exclude group: 'commons-logging'

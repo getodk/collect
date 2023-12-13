@@ -123,7 +123,7 @@ the specific language governing permissions and limitations under the License.
             android:theme="@style/Theme.Collect.FormEntry"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".draw.DrawActivity"
+            android:name="org.odk.collect.draw.DrawActivity"
             android:screenOrientation="landscape" />
         <activity android:name=".activities.InstanceChooserList" />
         <activity

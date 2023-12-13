@@ -53,7 +53,7 @@ public class AudioRecordingTest {
             .around(rule);
 
     @Test
-    public void onAudioQuestion_withoutAudioQuality_canRecordInApp() {
+    public void onAudioQuestion_withoutAudioQuality_canRecordAndPlayBackInApp() {
         new MainMenuPage()
                 .copyForm("audio-question.xml")
                 .startBlankForm("Audio Question")
@@ -61,7 +61,7 @@ public class AudioRecordingTest {
                 .clickOnContentDescription(org.odk.collect.strings.R.string.stop_recording)
                 .assertContentDescriptionNotDisplayed(org.odk.collect.strings.R.string.stop_recording)
                 .assertTextDoesNotExist(org.odk.collect.strings.R.string.capture_audio)
-                .assertContentDescriptionDisplayed(org.odk.collect.strings.R.string.play_audio);
+                .clickOnContentDescription(org.odk.collect.strings.R.string.play_audio);
     }
 
     @Test

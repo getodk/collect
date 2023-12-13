@@ -19,3 +19,4 @@ qr-code
 shadows
 metadata
 selfie-camera
+draw

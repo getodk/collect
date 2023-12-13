@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="org.odk.collect.android.draw.DrawActivity">
+    android:fitsSystemWindows="true">
 
-    <org.odk.collect.android.draw.DrawView
+    <org.odk.collect.draw.DrawView
         android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-    </org.odk.collect.android.draw.DrawView>
+    </org.odk.collect.draw.DrawView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_clear"

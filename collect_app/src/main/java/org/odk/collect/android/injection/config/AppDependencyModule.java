@@ -40,7 +40,6 @@ import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
-import org.odk.collect.android.draw.PenColorPickerViewModel;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.AppStateFormSessionRepository;
@@ -614,11 +613,6 @@ public class AppDependencyModule {
     @Provides
     public ImageLoader providesImageLoader() {
         return new GlideImageLoader();
-    }
-
-    @Provides
-    public PenColorPickerViewModel.Factory providesPenColorPickerViewModel(SettingsProvider settingsProvider) {
-        return new PenColorPickerViewModel.Factory(settingsProvider.getMetaSettings());
     }
 
     @Provides
