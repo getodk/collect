@@ -340,7 +340,7 @@ dependencies {
     testImplementation Dependencies.mockito_kotlin
 
     testImplementation project(':androidtest')
-    testImplementation(project(path: ':testshared')) {
+    testImplementation(project(path: ':test-shared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
     testImplementation(project(":shadows"))
@@ -377,7 +377,7 @@ dependencies {
     androidTestImplementation Dependencies.uiautomator
 
     debugImplementation project(':fragmentstest')
-    debugImplementation(project(':testshared')) {
+    debugImplementation(project(':test-shared',)) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 

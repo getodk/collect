@@ -56,8 +56,7 @@ dependencies {
 
     debugImplementation project(':fragmentstest')
 
-    testImplementation project(':testshared')
-
+    testImplementation project(':test-shared')
     testImplementation Dependencies.junit
     testImplementation Dependencies.androidx_test_ext_junit
     testImplementation Dependencies.androidx_test_espresso_core

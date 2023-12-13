@@ -49,7 +49,7 @@ dependencies {
     implementation Dependencies.timber
 
     testImplementation project(':androidtest')
-    testImplementation project(':testshared')
+    testImplementation project(':test-shared')
     testImplementation project(':fragmentstest')
     testImplementation project(':strings')
 
