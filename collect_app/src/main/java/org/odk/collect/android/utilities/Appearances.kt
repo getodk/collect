@@ -69,7 +69,7 @@ object Appearances {
     const val NEW_FRONT = "new-front"
     const val NEW = "new"
     const val FRONT = "front"
-    const val NO_ANSWER = "no-answer"
+    const val HIDDEN_ANSWER = "hidden-answer"
 
     // Maps appearances
     const val PLACEMENT_MAP = "placement-map"

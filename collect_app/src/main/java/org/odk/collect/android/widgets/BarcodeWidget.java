@@ -105,7 +105,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     }
 
     private void updateVisibility() {
-        if (hasAppearance(getFormEntryPrompt(), Appearances.NO_ANSWER)) {
+        if (hasAppearance(getFormEntryPrompt(), Appearances.HIDDEN_ANSWER)) {
             binding.barcodeAnswerText.setVisibility(GONE);
         } else {
             binding.barcodeAnswerText.setVisibility(binding.barcodeAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
