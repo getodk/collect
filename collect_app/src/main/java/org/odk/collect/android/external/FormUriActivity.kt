@@ -195,6 +195,7 @@ class FormUriActivity : ComponentActivity() {
         MaterialAlertDialogBuilder(this)
             .setMessage(message)
             .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ -> finish() }
+            .setOnCancelListener { finish() }
             .create()
             .show()
     }
