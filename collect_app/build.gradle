@@ -251,7 +251,7 @@ dependencies {
     implementation(project(':settings')) {
         exclude group: 'joda-time'
     }
-    implementation project(':externalapp')
+    implementation project(':external-app')
     implementation project(':maps')
     implementation project(':osmdroid')
     implementation project(':entities')
