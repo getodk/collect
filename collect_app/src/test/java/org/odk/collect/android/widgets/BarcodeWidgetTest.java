@@ -186,7 +186,7 @@ public class BarcodeWidgetTest {
     }
 
     @Test
-    public void whenPromptHasNoAnswerAppearance_answerIsNotDisplayed() {
+    public void whenPromptHasHiddenAnswerAppearance_answerIsNotDisplayed() {
         FormEntryPrompt prompt = new MockFormEntryPromptBuilder(promptWithAppearance(Appearances.HIDDEN_ANSWER))
                 .withAnswer(new StringData("original contents"))
                 .build();
