@@ -192,10 +192,13 @@ public class BarcodeWidgetTest {
                 .build();
 
         BarcodeWidget widget = createWidget(prompt);
+
+        // Check initial value is not shown
         assertThat(widget.binding.barcodeAnswerText.getVisibility(), equalTo(View.GONE));
         assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
         assertThat(widget.getAnswer(), equalTo(new StringData("original contents")));
 
+        // Check updates aren't shown
         widget.setData("updated contents");
         assertThat(widget.binding.barcodeAnswerText.getVisibility(), equalTo(View.GONE));
         assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
