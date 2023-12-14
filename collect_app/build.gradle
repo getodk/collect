@@ -238,7 +238,7 @@ dependencies {
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
-    implementation project(':imageloader')
+    implementation project(':image-loader')
     implementation project(':errors')
     implementation project(':upgrade')
     implementation project(':permissions')
