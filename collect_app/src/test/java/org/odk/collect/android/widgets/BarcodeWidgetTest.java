@@ -2,7 +2,6 @@ package org.odk.collect.android.widgets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -63,19 +62,19 @@ public class BarcodeWidgetTest {
 
     @Test
     public void usingReaDOnly_shouldHideBarcodeButton() {
-        assertThat(createWidget(promptWithReadOnly()).binding.barcodeButton.getVisibility(), is(View.GONE));
+        assertThat(createWidget(promptWithReadOnly()).binding.barcodeButton.getVisibility(), equalTo(View.GONE));
     }
 
     @Test
     public void whenPromptHasAnswer_replaceBarcodeButtonIsDisplayed() {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.binding.barcodeButton.getText().toString(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
+        assertThat(widget.binding.barcodeButton.getText().toString(), equalTo(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
     }
 
     @Test
     public void whenPromptHasAnswer_answerTextViewShowsCorrectAnswer() {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.binding.barcodeAnswerText.getText().toString(), is("blah"));
+        assertThat(widget.binding.barcodeAnswerText.getText().toString(), equalTo("blah"));
     }
 
     @Test
@@ -87,7 +86,7 @@ public class BarcodeWidgetTest {
     @Test
     public void getAnswer_whenPromptHasAnswer_returnsCorrectAnswer() {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
-        assertThat(widget.getAnswer().getDisplayText(), is("blah"));
+        assertThat(widget.getAnswer().getDisplayText(), equalTo("blah"));
     }
 
     @Test
@@ -95,8 +94,8 @@ public class BarcodeWidgetTest {
         BarcodeWidget widget = createWidget(promptWithAnswer(new StringData("blah")));
         widget.clearAnswer();
 
-        assertThat(widget.binding.barcodeAnswerText.getText().toString(), is(""));
-        assertThat(widget.binding.barcodeButton.getText().toString(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.get_barcode)));
+        assertThat(widget.binding.barcodeAnswerText.getText().toString(), equalTo(""));
+        assertThat(widget.binding.barcodeButton.getText().toString(), equalTo(widgetTestActivity.getString(org.odk.collect.strings.R.string.get_barcode)));
     }
 
     @Test
@@ -112,14 +111,14 @@ public class BarcodeWidgetTest {
     public void setData_updatesWidgetAnswer_afterStrippingInvalidCharacters() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("\ud800blah\b");
-        assertThat(widget.binding.barcodeAnswerText.getText().toString(), is("blah"));
+        assertThat(widget.binding.barcodeAnswerText.getText().toString(), equalTo("blah"));
     }
 
     @Test
     public void setData_updatesButtonLabel() {
         BarcodeWidget widget = createWidget(promptWithAnswer(null));
         widget.setData("\ud800blah\b");
-        assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
+        assertThat(widget.binding.barcodeButton.getText(), equalTo(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
     }
 
     @Test
@@ -150,7 +149,7 @@ public class BarcodeWidgetTest {
         widget.binding.barcodeButton.performClick();
 
         assertThat(shadowActivity.getNextStartedActivity(), nullValue());
-        assertThat(waitingForDataRegistry.waiting.isEmpty(), is(true));
+        assertThat(waitingForDataRegistry.waiting.isEmpty(), equalTo(true));
     }
 
     @Test
@@ -162,7 +161,7 @@ public class BarcodeWidgetTest {
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
-        assertThat(waitingForDataRegistry.waiting.contains(formIndex), is(true));
+        assertThat(waitingForDataRegistry.waiting.contains(formIndex), equalTo(true));
     }
 
     @Test
@@ -172,7 +171,7 @@ public class BarcodeWidgetTest {
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
-        assertThat(ShadowToast.getTextOfLatestToast(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.error_front_camera_unavailable)));
+        assertThat(ShadowToast.getTextOfLatestToast(), equalTo(widgetTestActivity.getString(org.odk.collect.strings.R.string.error_front_camera_unavailable)));
     }
 
     @Test
@@ -182,7 +181,7 @@ public class BarcodeWidgetTest {
         widget.setPermissionsProvider(permissionsProvider);
         widget.binding.barcodeButton.performClick();
 
-        assertThat(shadowActivity.getNextStartedActivity().getBooleanExtra(Appearances.FRONT, false), is(true));
+        assertThat(shadowActivity.getNextStartedActivity().getBooleanExtra(Appearances.FRONT, false), equalTo(true));
     }
 
     @Test
@@ -195,13 +194,13 @@ public class BarcodeWidgetTest {
 
         // Check initial value is not shown
         assertThat(widget.binding.barcodeAnswerText.getVisibility(), equalTo(View.GONE));
-        assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
+        assertThat(widget.binding.barcodeButton.getText(), equalTo(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
         assertThat(widget.getAnswer(), equalTo(new StringData("original contents")));
 
         // Check updates aren't shown
         widget.setData("updated contents");
         assertThat(widget.binding.barcodeAnswerText.getVisibility(), equalTo(View.GONE));
-        assertThat(widget.binding.barcodeButton.getText(), is(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
+        assertThat(widget.binding.barcodeButton.getText(), equalTo(widgetTestActivity.getString(org.odk.collect.strings.R.string.replace_barcode)));
         assertThat(widget.getAnswer(), equalTo(new StringData("updated contents")));
     }
 
