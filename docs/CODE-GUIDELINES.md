@@ -22,10 +22,10 @@ assertNull(ClassToTest.methodReturnsNull());
 Preferred style using Hamcrest:
 ```java
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
 ...
-assertThat(ClassToTest.methodToTest("input"), is("expected"));
-assertThat(ClassToTest.methodReturnsNull(), is(nullValue()));
+assertThat(ClassToTest.methodToTest("input"), equalTo("expected"));
+assertThat(ClassToTest.methodReturnsNull(), equalTo(null));
 ```
 
 ## XML style guidelines
