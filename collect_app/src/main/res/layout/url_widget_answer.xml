@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/margin_small"
-    android:paddingHorizontal="@dimen/margin_standard">
+    android:layout_height="wrap_content">
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/url_button"

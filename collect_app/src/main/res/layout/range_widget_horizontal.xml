@@ -17,10 +17,6 @@ limitations under the License.
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="@dimen/margin_large"
-    android:paddingBottom="@dimen/margin_large"
-    android:paddingStart="@dimen/margin_standard"
-    android:paddingEnd="@dimen/margin_standard"
     android:clipChildren="false"
     android:clipToPadding="false">
 

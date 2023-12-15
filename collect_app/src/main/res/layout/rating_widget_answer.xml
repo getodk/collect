@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:padding="@dimen/margin_small">
+    android:layout_height="match_parent">
 
     <RatingBar
         android:id="@+id/rating_bar1"

@@ -70,9 +70,9 @@ public class BearingWidget extends QuestionWidget implements WidgetDataReceiver 
         binding.widgetAnswerText.setDecimalType(false, answer);
 
         String answerText = prompt.getAnswerText();
+        binding.widgetAnswerText.setAnswer(answerText);
         if (answerText != null && !answerText.isEmpty()) {
             binding.bearingButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_bearing));
-            binding.widgetAnswerText.setAnswer(answerText);
         }
 
         return binding.getRoot();

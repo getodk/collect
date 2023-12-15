@@ -8,14 +8,11 @@
         android:id="@+id/choices_search_box"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/margin_extra_small"
         android:saveEnabled="false"
         android:visibility="gone" />
 
     <org.odk.collect.android.views.ChoicesRecyclerView
         android:id="@+id/choices_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_small" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

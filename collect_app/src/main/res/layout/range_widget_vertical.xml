@@ -18,8 +18,6 @@ limitations under the License.
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:paddingTop="15dp"
-    android:paddingBottom="15dp"
     android:clipChildren="false"
     android:clipToPadding="false">
 

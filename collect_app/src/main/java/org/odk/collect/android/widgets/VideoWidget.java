@@ -35,7 +35,6 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
@@ -78,11 +77,11 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.questionMediaManager = questionMediaManager;
 
-        captureButton = createSimpleButton(getContext(), R.id.capture_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), this);
+        captureButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.capture_video), this, false, R.id.capture_video);
 
-        chooseButton = createSimpleButton(getContext(), R.id.choose_video, questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), this);
+        chooseButton = createSimpleButton(getContext(), questionDetails.isReadOnly(), getContext().getString(org.odk.collect.strings.R.string.choose_video), this, true, R.id.choose_video);
 
-        playButton = createSimpleButton(getContext(), R.id.play_video, false, getContext().getString(org.odk.collect.strings.R.string.play_video), this);
+        playButton = createSimpleButton(getContext(), false, getContext().getString(org.odk.collect.strings.R.string.play_video), this, true, R.id.play_video);
         playButton.setVisibility(VISIBLE);
 
         // retrieve answer from data model and update ui
@@ -95,7 +94,7 @@ public class VideoWidget extends QuestionWidget implements FileWidget, ButtonCli
         answerLayout.addView(captureButton);
         answerLayout.addView(chooseButton);
         answerLayout.addView(playButton);
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
+        addAnswerView(answerLayout);
 
         hideButtonsIfNeeded();
     }

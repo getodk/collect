@@ -21,6 +21,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +33,6 @@ import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.formentry.questions.WidgetViewUtils;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.StringRequester;
@@ -100,14 +100,22 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     @Override
     protected void setUpLayout(Context context) {
+        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), this, false);
+
         widgetAnswerText.setAnswer(getFormEntryPrompt().getAnswerText());
-        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), this);
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        int marginTop = (int) getContext().getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_standard);
+        params.setMargins(0, marginTop, 0, 0);
+        widgetAnswerText.setLayoutParams(params);
 
         LinearLayout answerLayout = new LinearLayout(getContext());
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(widgetAnswerText);
-        addAnswerView(answerLayout, WidgetViewUtils.getStandardMargin(context));
+        addAnswerView(answerLayout);
     }
 
     private String getButtonText() {

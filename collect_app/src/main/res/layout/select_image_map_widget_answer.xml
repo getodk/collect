@@ -4,14 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingStart="@dimen/margin_standard"
     android:paddingEnd="@dimen/margin_extra_large">
 
     <org.odk.collect.android.views.CustomWebView
         android:id="@+id/image_map"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_small" />
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/selected_elements"

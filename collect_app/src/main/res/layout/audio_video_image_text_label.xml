@@ -13,6 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@id/media_buttons"
+        android:layout_marginEnd="@dimen/margin_standard"
         android:orientation="vertical">
 
         <FrameLayout
@@ -25,9 +26,6 @@
                 style="@style/TextAppearance.Collect.Headline6"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/margin_standard"
-                android:layout_marginTop="@dimen/margin_extra_small"
-                android:layout_marginRight="@dimen/margin_standard"
                 android:orientation="vertical"
                 tools:text="This is a question?" />
 
@@ -38,25 +36,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_standard"
-            android:paddingStart="@dimen/margin_standard"
-            android:paddingLeft="@dimen/margin_standard"
-            android:paddingEnd="@dimen/margin_standard"
-            android:paddingRight="@dimen/margin_standard"
-            android:paddingBottom="@dimen/margin_standard"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:src="@drawable/ic_baseline_mic_24"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/missingImage"
             style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:paddingStart="@dimen/margin_standard"
-            android:paddingLeft="@dimen/margin_standard"
-            android:paddingEnd="@dimen/margin_standard"
-            android:paddingRight="@dimen/margin_standard"
             android:visibility="gone"
             tools:text="media missing"
             tools:visibility="visible" />
@@ -70,9 +60,6 @@
         android:layout_alignParentEnd="true"
         android:gravity="end"
         android:orientation="vertical"
-        android:paddingTop="@dimen/margin_extra_small"
-        android:paddingEnd="@dimen/margin_standard"
-        android:paddingBottom="@dimen/margin_extra_small"
         android:visibility="gone"
         tools:visibility="visible">
 
