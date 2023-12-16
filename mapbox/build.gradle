@@ -53,7 +53,7 @@ dependencies {
     implementation Dependencies.timber
     implementation Dependencies.androidx_startup
 
-    testImplementation project(':testshared')
+    testImplementation project(':test-shared')
 
     testImplementation Dependencies.junit
     testImplementation Dependencies.mockito_inline
