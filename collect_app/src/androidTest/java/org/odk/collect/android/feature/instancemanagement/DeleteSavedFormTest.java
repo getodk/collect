@@ -6,6 +6,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
+import org.odk.collect.android.R;
+import org.odk.collect.android.support.pages.DeleteSavedFormPage;
 import org.odk.collect.android.support.rules.CollectTestRule;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.support.pages.MainMenuPage;
@@ -35,5 +37,19 @@ public class DeleteSavedFormTest {
                 .assertTextDoesNotExist("One Question")
                 .pressBack(new MainMenuPage())
                 .assertNumberOfFinalizedForms(0);
+    }
+
+    @Test
+    public void accessingSortMenuInDeleteSavedInstancesShouldNotCrashTheAppAfterRotatingTheDevice() {
+        rule.startAtMainMenu()
+                .copyForm("one-question.xml")
+                .startBlankForm("One Question")
+                .answerQuestion("what is your age", "30")
+                .swipeToEndScreen()
+                .clickFinalize()
+                .clickDeleteSavedForm()
+                .rotateToLandscape(new DeleteSavedFormPage())
+                .clickOnId(R.id.menu_sort)
+                .assertText(org.odk.collect.strings.R.string.sort_by);
     }
 }
