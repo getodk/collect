@@ -1,11 +1,11 @@
 import dependencies.Dependencies
 
 plugins {
-    id 'java-library'
-    id 'kotlin'
+    id("java-library")
+    id("kotlin")
 }
 
-apply from: '../config/quality.gradle'
+apply(from = "../config/quality.gradle")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -13,5 +13,5 @@ java {
 }
 
 dependencies {
-    implementation Dependencies.kotlin_stdlib
+    implementation(Dependencies.kotlin_stdlib)
 }
