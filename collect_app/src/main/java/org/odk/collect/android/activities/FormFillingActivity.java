@@ -249,7 +249,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     // these are only processed if we shut down and are restoring after an
     // external intent fires
 
-    public static final String KEY_INSTANCEPATH = "instancepath";
     public static final String KEY_XPATH = "xpath";
     public static final String KEY_XPATH_WAITING_FOR_DATA = "xpathwaiting";
 
@@ -285,7 +284,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private ODKView odkView;
     private final ControllableLifecyleOwner odkViewLifecycle = new ControllableLifecyleOwner();
 
-    private String instancePath;
     private String startingXPath;
     private String waitingXPath;
     private boolean newForm = true;
@@ -653,9 +651,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (savedInstanceState.containsKey(KEY_FORMPATH)) {
                 formPath = savedInstanceState.getString(KEY_FORMPATH);
             }
-            if (savedInstanceState.containsKey(KEY_INSTANCEPATH)) {
-                instancePath = savedInstanceState.getString(KEY_INSTANCEPATH);
-            }
             if (savedInstanceState.containsKey(KEY_XPATH)) {
                 startingXPath = savedInstanceState.getString(KEY_XPATH);
                 Timber.i("startingXPath is: %s", startingXPath);
@@ -775,9 +770,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         outState.putString(KEY_FORMPATH, formPath);
         FormController formController = getFormController();
         if (formController != null) {
-            if (formController.getInstanceFile() != null) {
-                outState.putString(KEY_INSTANCEPATH, getAbsoluteInstancePath());
-            }
             outState.putString(KEY_XPATH,
                     formController.getXPath(formController.getFormIndex()));
             FormIndex waiting = formController.getIndexWaitingForData();
@@ -1917,7 +1909,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         Instance instance = task.getInstance();
         Form form = task.getForm();
 
-        instancePath = task.getInstancePath();
         formPath = form.getFormFilePath();
 
         if (formController != null) {
