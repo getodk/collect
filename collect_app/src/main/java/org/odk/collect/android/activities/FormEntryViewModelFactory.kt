@@ -22,6 +22,7 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ApplicationConstants
+import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
 import org.odk.collect.async.Scheduler
@@ -49,6 +50,7 @@ class FormEntryViewModelFactory(
     private val fusedLocationClient: LocationClient,
     private val permissionsProvider: PermissionsProvider,
     private val autoSendSettingsProvider: AutoSendSettingsProvider,
+    private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
     private val qrCodeCreator: QRCodeCreator,
     private val htmlPrinter: HtmlPrinter
@@ -66,7 +68,8 @@ class FormEntryViewModelFactory(
                 System::currentTimeMillis,
                 scheduler,
                 formSessionRepository,
-                sessionId
+                sessionId,
+                formsRepositoryProvider.get(projectId)
             )
 
             FormSaveViewModel::class.java -> {

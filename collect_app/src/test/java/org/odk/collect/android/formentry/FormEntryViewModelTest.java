@@ -33,6 +33,8 @@ import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FakeFormController;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.androidshared.data.Consumable;
+import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.formstest.InMemFormsRepository;
 import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.FileNotFoundException;
@@ -49,6 +51,7 @@ public class FormEntryViewModelTest {
     private AuditEventLogger auditEventLogger;
     private FakeScheduler scheduler;
     private final FormSessionRepository formSessionRepository = new InMemFormSessionRepository();
+    private final FormsRepository formsRepository = new InMemFormsRepository();
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -62,7 +65,7 @@ public class FormEntryViewModelTest {
         scheduler = new FakeScheduler();
 
         formSessionRepository.set("blah", formController, mock());
-        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah");
+        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository);
     }
 
     @Test

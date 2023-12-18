@@ -184,7 +184,6 @@ import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.externalapp.ExternalAppUtils;
 import org.odk.collect.forms.Form;
-import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.forms.instances.Instance;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.material.MaterialProgressDialogFragment;
@@ -240,9 +239,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     private static final String TAG_MEDIA_LOADING_FRAGMENT = "media_loading_fragment";
 
-    // Identifies the gp of the form used to launch form entry
-    public static final String KEY_FORMPATH = "formpath";
-
     // Identifies whether this is a new form, or reloading a form after a screen
     // rotation (or similar)
     private static final String NEWFORM = "newform";
@@ -262,8 +258,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     // Random ID
     private static final int DELETE_REPEAT = 654321;
-
-    private String formPath;
     private String saveName;
 
     private Animation inAnimation;
@@ -308,7 +302,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Inject
     FormsRepositoryProvider formsRepositoryProvider;
-    private FormsRepository formsRepository;
 
     @Inject
     PropertyManager propertyManager;
@@ -430,6 +423,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 fusedLocatonClient,
                 permissionsProvider,
                 autoSendSettingsProvider,
+                formsRepositoryProvider,
                 instancesRepositoryProvider,
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter()
@@ -456,8 +450,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
 
         super.onCreate(savedInstanceState);
-
-        formsRepository = formsRepositoryProvider.get();
 
         setContentView(R.layout.form_entry);
         setupViewModels(viewModelFactory);
@@ -648,9 +640,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     private void setupFields(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(KEY_FORMPATH)) {
-                formPath = savedInstanceState.getString(KEY_FORMPATH);
-            }
             if (savedInstanceState.containsKey(KEY_XPATH)) {
                 startingXPath = savedInstanceState.getString(KEY_XPATH);
                 Timber.i("startingXPath is: %s", startingXPath);
@@ -767,7 +756,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
         outState.putString(KEY_SESSION_ID, sessionId);
 
-        outState.putString(KEY_FORMPATH, formPath);
         FormController formController = getFormController();
         if (formController != null) {
             outState.putString(KEY_XPATH,
@@ -1672,19 +1660,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         alertDialog = new MaterialAlertDialogBuilder(this)
                 .setSingleChoiceItems(languages, selected,
                         (dialog, whichButton) -> {
-                            scheduler.immediate(true, () -> {
-                                Form form = formsRepository.getOneByPath(formPath);
-                                if (form != null) {
-                                    formsRepository.save(new Form.Builder(form)
-                                            .language(languages[whichButton])
-                                            .build()
-                                    );
-                                }
-                            });
-
-                            getFormController().setLanguage(languages[whichButton]);
-                            dialog.dismiss();
+                            formEntryViewModel.changeLanguage(languages[whichButton]);
                             formEntryViewModel.updateAnswersForScreen(getAnswers(), false);
+
+                            dialog.dismiss();
                             onScreenRefresh();
                         })
                 .setTitle(getString(org.odk.collect.strings.R.string.change_language))
@@ -1908,8 +1887,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         final FormController formController = task.getFormController();
         Instance instance = task.getInstance();
         Form form = task.getForm();
-
-        formPath = form.getFormFilePath();
+        String formPath = form.getFormFilePath();
 
         if (formController != null) {
             formLoaderTask.setFormLoaderListener(null);
