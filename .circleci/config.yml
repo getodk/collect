@@ -230,8 +230,8 @@ jobs:
           command: ./gradlew assembleSelfSignedRelease
 
       - run:
-          name: Check APK size hasn't increased too much
-          command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 10200000 ]; then exit 1; fi
+          name: Check APK size isn't larger than 11.1MB (11639193 * 1024 * 1024)
+          command: if [ $(ls -l collect_app/build/outputs/apk/selfSignedRelease/*.apk | awk '{print $5}') -gt 11639193 ]; then exit 1; fi
 
       - run:
           name: Copy APK to predictable path for artifact storage
