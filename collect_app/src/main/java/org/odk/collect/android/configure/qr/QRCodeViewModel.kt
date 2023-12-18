@@ -43,8 +43,6 @@ class QRCodeViewModel(
     }
 
     private fun generateQRCode() {
-        val includedKeys = includedKeys
-
         scheduler.immediate(
             {
                 try {
