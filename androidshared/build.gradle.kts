@@ -65,6 +65,7 @@ dependencies {
     testImplementation(Dependencies.robolectric)
     testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.androidx_arch_core_testing)
+    testImplementation(Dependencies.androidx_fragment_testing)
 
     androidTestImplementation(Dependencies.androidx_test_ext_junit)
     androidTestImplementation(Dependencies.junit)

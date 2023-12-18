@@ -77,4 +77,5 @@ dependencies {
     testImplementation(Dependencies.robolectric)
     testImplementation(Dependencies.androidx_test_espresso_core)
     testImplementation(Dependencies.androidx_arch_core_testing)
+    testImplementation(Dependencies.androidx_fragment_testing)
 }
