@@ -40,6 +40,6 @@ dependencies {
 
     //noinspection FragmentGradleConfiguration
     debugImplementation(Dependencies.androidx_fragment_testing) {
-        exclude(group = "androidx.test", module = "monitor") //fixes issue https://github.com/android/android-test/issues/731
+        exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
     }
 }
