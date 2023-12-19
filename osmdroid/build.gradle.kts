@@ -38,9 +38,7 @@ dependencies {
     coreLibraryDesugaring(Dependencies.desugar)
 
     implementation(project(":shared"))
-    implementation(project(":androidshared")) {
-        exclude(group = "androidx.lifecycle")
-    }
+    implementation(project(":androidshared"))
     implementation(project(":icons"))
     implementation(project(":maps"))
     implementation(project(":location"))
