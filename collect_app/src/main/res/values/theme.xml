@@ -93,6 +93,10 @@
         <item name="materialButtonOutlinedIconStyle">@style/Collect.Button.OutlinedButton.Icon</item>
         <item name="materialIconButtonOutlinedStyle">@style/Collect.Button.IconButton.Outlined</item>
         <item name="borderlessButtonIconStyle">@style/Collect.Button.TextButton.Icon</item>
+        <item name="materialButtonStyle">@style/Collect.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Collect.Button.OutlinedButton</item>
+        <item name="borderlessButtonStyle">@style/Collect.Button.TextButton</item>
+        <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
 
         <!-- Custom theme text appearance for larger buttons -->
         <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge
@@ -116,12 +120,6 @@
 
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
-
-
-        <item name="materialButtonStyle">@style/Collect.Button</item>
-        <item name="materialButtonOutlinedStyle">@style/Collect.Button.OutlinedButton</item>
-        <item name="borderlessButtonStyle">@style/Collect.Button.TextButton</item>
-        <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
 
         <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->
         <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
