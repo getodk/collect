@@ -128,8 +128,7 @@ class PreviouslyDownloadedOnlyTest {
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                ErrorPage(),
-                cancelsNotification = true
+                ErrorPage()
             )
     }
 
