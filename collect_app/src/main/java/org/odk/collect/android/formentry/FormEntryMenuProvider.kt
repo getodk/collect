@@ -17,9 +17,9 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.system.PlayServicesChecker
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
+import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.audiorecorder.recording.AudioRecorder
-import org.odk.collect.material.enableIconsVisibility
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys

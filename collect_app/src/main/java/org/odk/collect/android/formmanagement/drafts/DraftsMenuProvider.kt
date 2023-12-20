@@ -7,7 +7,7 @@ import android.view.MenuItem
 import androidx.core.view.MenuProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
-import org.odk.collect.material.enableIconsVisibility
+import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.strings.R.plurals
 import org.odk.collect.strings.R.string
 

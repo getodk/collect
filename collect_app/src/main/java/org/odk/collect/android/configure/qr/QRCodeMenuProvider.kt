@@ -11,9 +11,9 @@ import org.odk.collect.android.R
 import org.odk.collect.android.utilities.FileProvider
 import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
+import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard
 import org.odk.collect.async.Scheduler
-import org.odk.collect.material.enableIconsVisibility
 import org.odk.collect.settings.SettingsProvider
 import timber.log.Timber
 

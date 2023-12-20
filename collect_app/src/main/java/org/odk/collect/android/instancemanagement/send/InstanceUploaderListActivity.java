@@ -64,10 +64,10 @@ import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.androidshared.ui.MenuExtKt;
 import org.odk.collect.androidshared.ui.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
-import org.odk.collect.material.MenuExtKt;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 

@@ -1,4 +1,4 @@
-package org.odk.collect.material
+package org.odk.collect.androidshared.ui
 
 import android.annotation.SuppressLint
 import android.view.Menu
