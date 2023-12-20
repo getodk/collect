@@ -18,7 +18,7 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.form.api.FormEntryController;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.javarosa.xpath.parser.XPathSyntaxException;
-import org.odk.collect.android.async.ViewModelWorker;
+import org.odk.collect.androidshared.async.TrackableWorker;
 import org.odk.collect.android.exception.ExternalDataException;
 import org.odk.collect.android.exception.JavaRosaException;
 import org.odk.collect.android.formentry.audit.AuditEvent;
@@ -67,13 +67,13 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final Map<FormIndex, List<SelectChoice>> choices = new HashMap<>();
 
-    private final ViewModelWorker worker;
+    private final TrackableWorker worker;
 
     @SuppressWarnings("WeakerAccess")
     public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId) {
         this.clock = clock;
         this.formSessionRepository = formSessionRepository;
-        worker = new ViewModelWorker(scheduler);
+        worker = new TrackableWorker(scheduler);
 
         this.sessionId = sessionId;
         formSessionObserver = observe(formSessionRepository.get(this.sessionId), formSession -> {

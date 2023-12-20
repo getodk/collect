@@ -1,4 +1,4 @@
-package org.odk.collect.android.async
+package org.odk.collect.androidshared.async
 
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
@@ -6,7 +6,7 @@ import org.odk.collect.async.Scheduler
 import java.util.function.Consumer
 import java.util.function.Supplier
 
-class ViewModelWorker(private val scheduler: Scheduler) {
+class TrackableWorker(private val scheduler: Scheduler) {
 
     private val _isWorking = MutableNonNullLiveData(false)
     val isWorking: NonNullLiveData<Boolean> = _isWorking
