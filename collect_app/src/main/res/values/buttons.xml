@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Widget.Collect.Button" parent="Widget.Material3.Button">
+    <style name="Collect.Button" parent="Widget.Material3.Button">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:textAppearance">?textAppearanceBodyMedium</item>
     </style>
 
-    <style name="Widget.Collect.Button.Icon" parent="Widget.Material3.Button.Icon">
+    <style name="Collect.Button.Icon" parent="Widget.Material3.Button.Icon">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:textAppearance">?textAppearanceBodyMedium</item>
     </style>
 
-    <style name="Widget.Collect.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
-        <item name="android:paddingTop">12dp</item>
-        <item name="android:paddingBottom">12dp</item>
-        <item name="android:textAppearance">?textAppearanceBodyMedium</item>
-        <item name="strokeColor">@color/color_on_surface_low_emphasis</item>
-    </style>
-
-    <style name="Widget.Collect.Button.OutlinedButton.Icon" parent="Widget.Material3.Button.OutlinedButton.Icon">
+    <style name="Collect.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:textAppearance">?textAppearanceBodyMedium</item>
         <item name="strokeColor">@color/color_on_surface_low_emphasis</item>
     </style>
 
-    <style name="Widget.Collect.Button.IconButton.Outlined" parent="Widget.Material3.Button.IconButton.Outlined">
+    <style name="Collect.Button.OutlinedButton.Icon" parent="Widget.Material3.Button.OutlinedButton.Icon">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textAppearance">?textAppearanceBodyMedium</item>
         <item name="strokeColor">@color/color_on_surface_low_emphasis</item>
     </style>
 
-    <style name="Widget.Collect.Button.TextButton" parent="Widget.Material3.Button.TextButton">
+    <style name="Collect.Button.IconButton.Outlined" parent="Widget.Material3.Button.IconButton.Outlined">
+        <item name="strokeColor">@color/color_on_surface_low_emphasis</item>
+    </style>
+
+    <style name="Collect.Button.TextButton" parent="Widget.Material3.Button.TextButton">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:textAppearance">?textAppearanceBodyMedium</item>
     </style>
 
-    <style name="Widget.Collect.Button.TextButton.Icon" parent="Widget.Material3.Button.TextButton.Icon">
+    <style name="Collect.Button.TextButton.Icon" parent="Widget.Material3.Button.TextButton.Icon">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
         <item name="android:textAppearance">?textAppearanceBodyMedium</item>
