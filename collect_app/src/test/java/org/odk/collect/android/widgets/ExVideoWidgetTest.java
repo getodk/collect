@@ -86,8 +86,8 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
         settingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
 
-        assertThat((int) getWidget().binding.captureVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_MEDIUM)));
-        assertThat((int) getWidget().binding.playVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_MEDIUM)));
+        assertThat((int) getWidget().binding.captureVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_LARGE)));
+        assertThat((int) getWidget().binding.playVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_LARGE)));
     }
 
     @Test
