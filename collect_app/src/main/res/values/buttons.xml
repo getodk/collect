@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Widget.Collect.Button" parent="Widget.Material3.Button">
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:textAppearance">?textAppearanceBodyLarge</item>
+    </style>
+
     <style name="Collect.Button" parent="Widget.Material3.Button">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>

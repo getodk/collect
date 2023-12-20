@@ -97,6 +97,7 @@
         <item name="materialButtonOutlinedStyle">@style/Collect.Button.OutlinedButton</item>
         <item name="borderlessButtonStyle">@style/Collect.Button.TextButton</item>
         <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+        <item name="widgetMaterialButtonStyle">@style/Widget.Collect.Button</item>
 
         <!-- Custom theme text appearance for larger buttons -->
         <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge
