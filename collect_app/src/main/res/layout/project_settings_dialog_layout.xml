@@ -49,11 +49,12 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/general_settings_button"
-        style="?materialButtonOutlinedStyle"
+        style="?materialButtonOutlinedIconStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="38dp"
         android:text="@string/settings"
+        app:icon="@drawable/ic_baseline_settings_24"
         app:layout_constraintStart_toStartOf="@id/current_project"
         app:layout_constraintTop_toBottomOf="@id/current_project" />
 

@@ -305,8 +305,6 @@
   <string name="location_providers_disabled_dialog_message">Ця анкета хоче відслідковувати ваше розташування але розташування вимкнене. Будь ласка, увімкніть його в налаштуваннях Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Перейти в налаштування</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Відслідковувати розташування</string>
   <string name="background_location_disabled">Ця анкета хоче відслідковувати ваше розташування але відслідковування вимкнене. Будь ласка, увімкніть його в %1$s меню.</string>
   <string name="background_location_enabled">Ця анкета відслідковує ваше розташування. Ви можете вимкнути відслідковування в %1$s меню.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

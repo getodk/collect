@@ -167,7 +167,7 @@ class PermissionsProviderTest {
             activity,
             org.odk.collect.strings.R.string.record_audio_runtime_permission_denied_title,
             org.odk.collect.strings.R.string.record_audio_runtime_permission_denied_desc,
-            R.drawable.ic_mic,
+            org.odk.collect.icons.R.drawable.ic_baseline_mic_24,
             permissionListener
         )
 

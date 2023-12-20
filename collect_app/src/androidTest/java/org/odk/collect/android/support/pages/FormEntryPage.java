@@ -363,7 +363,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public CancelRecordingDialog clickRecordAudio() {
-        clickOnString(org.odk.collect.strings.R.string.record_audio);
+        clickOnString(org.odk.collect.strings.R.string.record_audio_on);
         return new CancelRecordingDialog(formName);
     }
 

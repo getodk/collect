@@ -27,10 +27,10 @@ import org.robolectric.fakes.RoboMenuItem
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
-class QRCodeMenuDelegateTest {
+class QRCodeMenuProviderTest {
     private lateinit var activity: FragmentActivity
     private lateinit var intentLauncher: IntentLauncher
-    private lateinit var menuDelegate: QRCodeMenuDelegate
+    private lateinit var menuProvider: QRCodeMenuProvider
 
     private val qrCodeGenerator = mock<QRCodeGenerator>()
     private val appConfigurationGenerator = mock<AppConfigurationGenerator>()
@@ -41,11 +41,11 @@ class QRCodeMenuDelegateTest {
     fun setup() {
         activity = Robolectric.setupActivity(FragmentActivity::class.java)
         intentLauncher = IntentLauncherImpl
-        setupMenuDelegate()
+        setupMenuProvider()
     }
 
-    private fun setupMenuDelegate() {
-        menuDelegate = QRCodeMenuDelegate(
+    private fun setupMenuProvider() {
+        menuProvider = QRCodeMenuProvider(
             activity,
             intentLauncher,
             qrCodeGenerator,
@@ -58,13 +58,13 @@ class QRCodeMenuDelegateTest {
 
     @Test
     fun clickingOnImportQRCode_startsExternalImagePickerIntent() {
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_item_scan_sd_card))
+        menuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_item_scan_sd_card))
         val intentForResult = Shadows.shadowOf(activity).nextStartedActivityForResult
 
         assertThat(intentForResult, notNullValue())
         assertThat(
             intentForResult.requestCode,
-            equalTo(QRCodeMenuDelegate.SELECT_PHOTO)
+            equalTo(QRCodeMenuProvider.SELECT_PHOTO)
         )
         assertThat(
             intentForResult.intent.action,
@@ -76,8 +76,8 @@ class QRCodeMenuDelegateTest {
     @Test
     fun clickingOnImportQRCode_whenPickerActivityNotAvailable_showsToast() {
         intentLauncher = ErrorIntentLauncher()
-        setupMenuDelegate()
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_item_scan_sd_card))
+        setupMenuProvider()
+        menuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_item_scan_sd_card))
 
         assertThat(
             Shadows.shadowOf(activity).nextStartedActivityForResult,
@@ -90,7 +90,7 @@ class QRCodeMenuDelegateTest {
     fun clickingOnShare_beforeQRCodeIsGenerated_doesNothing() {
         whenever(qrCodeGenerator.generateQRCode(any(), any())).thenReturn("qr.png")
         whenever(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"))
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_item_share))
+        menuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_item_share))
 
         assertThat(Shadows.shadowOf(activity).nextStartedActivity, nullValue())
     }
@@ -100,7 +100,7 @@ class QRCodeMenuDelegateTest {
         whenever(qrCodeGenerator.generateQRCode(any(), any())).thenReturn("qr.png")
         whenever(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"))
         fakeScheduler.runBackground()
-        menuDelegate.onOptionsItemSelected(RoboMenuItem(R.id.menu_item_share))
+        menuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_item_share))
         val intent = Shadows.shadowOf(activity).nextStartedActivity
 
         assertThat(intent, notNullValue())

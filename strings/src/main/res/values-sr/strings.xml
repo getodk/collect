@@ -308,8 +308,6 @@
   <string name="location_providers_disabled_dialog_message">Ovaj formular želi da prati vašu lokaciju ali provajderi lokacije su isključeni. Molim uključite ih u podešavanjima Androida.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Idi na podešavanja.</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Prati lokaciju</string>
   <string name="background_location_disabled">Ovaj formular želi da prati vašu lokaciju ali je ona isključena. Molim uključite lokaciju u %1$s meniju iznad.</string>
   <string name="background_location_enabled">Ovaj formular bilježi tvoju lokaciju. Možeš onemogućiti praćenje u %1$s meniju iznad.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

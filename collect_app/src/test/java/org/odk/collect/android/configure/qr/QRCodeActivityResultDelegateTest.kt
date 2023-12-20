@@ -14,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.R
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.projects.Project.Saved
@@ -65,7 +64,7 @@ class QRCodeActivityResultDelegateTest {
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.register("qr", "data")
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.SUCCESS)
-        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+        delegate.onActivityResult(QRCodeMenuProvider.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
 
     @Test
@@ -79,7 +78,7 @@ class QRCodeActivityResultDelegateTest {
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.register("qr", "data")
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
-        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+        delegate.onActivityResult(QRCodeMenuProvider.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
 
     @Test
@@ -88,7 +87,7 @@ class QRCodeActivityResultDelegateTest {
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.register("qr", "data")
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.GD_PROJECT)
-        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+        delegate.onActivityResult(QRCodeMenuProvider.SELECT_PHOTO, Activity.RESULT_OK, data)
 
         assertThat(ShadowToast.getTextOfLatestToast(), equalTo(context.getString(org.odk.collect.strings.R.string.settings_with_gd_protocol)))
     }
@@ -104,7 +103,7 @@ class QRCodeActivityResultDelegateTest {
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.failsWith(QRCodeDecoder.QRCodeInvalidException())
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
-        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+        delegate.onActivityResult(QRCodeMenuProvider.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
 
     @Test
@@ -118,20 +117,20 @@ class QRCodeActivityResultDelegateTest {
         val data = intentWithData("file://qr", "qr")
         fakeQRDecoder.failsWith(QRCodeDecoder.QRCodeNotFoundException())
         whenever(settingsImporter.fromJSON("data", project)).thenReturn(SettingsImportingResult.INVALID_SETTINGS)
-        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, data)
+        delegate.onActivityResult(QRCodeMenuProvider.SELECT_PHOTO, Activity.RESULT_OK, data)
     }
 
     @Test
     fun forSelectPhoto_whenDataIsNull_doesNothing() {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
-        delegate.onActivityResult(QRCodeMenuDelegate.SELECT_PHOTO, Activity.RESULT_OK, null)
+        delegate.onActivityResult(QRCodeMenuProvider.SELECT_PHOTO, Activity.RESULT_OK, null)
     }
 
     @Test
     fun forSelectPhoto_whenResultCancelled_doesNothing() {
         val delegate = QRCodeActivityResultDelegate(context, settingsImporter, fakeQRDecoder, project)
         delegate.onActivityResult(
-            QRCodeMenuDelegate.SELECT_PHOTO,
+            QRCodeMenuProvider.SELECT_PHOTO,
             Activity.RESULT_CANCELED,
             Intent()
         )

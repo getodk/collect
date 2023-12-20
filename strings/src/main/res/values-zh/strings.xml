@@ -194,8 +194,6 @@
   <string name="pause_recording">暂停</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">恢复</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">录制音频</string>
   <string name="background_audio_permission_explanation">此窗体在后台录制音频。您必须授予使用麦克风的权限。否则，您将无法打开此表单。</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">此表单请求后台音频录制。禁用它将停止录制并丢弃现有音频。是否确实要继续？</string>
@@ -372,8 +370,6 @@
   <string name="location_providers_disabled_dialog_message">此表单希望跟踪您的位置，但位置提供程序被禁用。请在Android设置中启用。</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">转到设置</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">跟踪位置</string>
   <string name="background_location_disabled">此表单希望跟踪您的位置，但已禁用跟踪. 请在菜单 %1$s 上启用他</string>
   <string name="background_location_enabled">此表单跟踪您的位置. 您可以在上面的菜单 %1$s 中禁用跟踪。</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

@@ -64,6 +64,7 @@ import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.androidshared.ui.MenuExtKt;
 import org.odk.collect.androidshared.ui.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
@@ -289,6 +290,8 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
 
         getMenuInflater().inflate(R.menu.form_list_menu, menu);
+        MenuExtKt.enableIconsVisibility(menu);
+
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);

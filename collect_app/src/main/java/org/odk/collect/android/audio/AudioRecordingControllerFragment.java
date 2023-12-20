@@ -116,7 +116,7 @@ public class AudioRecordingControllerFragment extends Fragment {
     }
 
     private void renderRecordingProblem(String string) {
-        binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_mic_off_24));
+        binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), org.odk.collect.icons.R.drawable.ic_baseline_mic_off_24));
         binding.timeCode.setText(string);
         binding.volumeBar.setVisibility(GONE);
         binding.controls.setVisibility(GONE);
@@ -139,7 +139,7 @@ public class AudioRecordingControllerFragment extends Fragment {
         binding.controls.setVisibility(VISIBLE);
 
         if (session.getPaused()) {
-            binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), org.odk.collect.audiorecorder.R.drawable.ic_baseline_mic_24));
+            binding.pauseRecording.setIcon(ContextCompat.getDrawable(requireContext(), org.odk.collect.icons.R.drawable.ic_baseline_mic_24));
             binding.pauseRecording.setContentDescription(getString(org.odk.collect.strings.R.string.resume_recording));
             binding.pauseRecording.setOnClickListener(v -> audioRecorder.resume());
 
@@ -151,7 +151,7 @@ public class AudioRecordingControllerFragment extends Fragment {
                 audioRecorder.pause();
             });
 
-            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), org.odk.collect.audiorecorder.R.drawable.ic_baseline_mic_24));
+            binding.recordingIcon.setImageDrawable(ContextCompat.getDrawable(requireContext(), org.odk.collect.icons.R.drawable.ic_baseline_mic_24));
         }
     }
 }

@@ -220,8 +220,6 @@
   <string name="pause_recording">Tauko</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Jatka</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">Taustaäänitys</string>
   <string name="background_audio_permission_explanation">Tämä lomake tallentaa taustalla ääntä. Sinun pitää antaa lupa käyttää mikrofonia. Jos et anna lupaa, et voi avata lomaketta.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">Tämä lomake pyytää lupaa tallentaa taustalla ääntä. Kytkeminen pois lopettaa tallennuksen ja poistaa olemassa olevan äänityksen. Haluatko varmasti tehdä näin?</string>
@@ -398,8 +396,6 @@
   <string name="location_providers_disabled_dialog_message">Tämä lomake haluaa seurata sijaintiasi mutta sijaintipalvelut (location providers) eivät ole käytettävissä. Ole hyvä ja aktivoi ne Androidin asetuksissa.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Asetuksiin</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Sijainnin seuranta</string>
   <string name="background_location_disabled">Tämä lomake haluaa seurata sijaintiasi, mutta seuranta on poissa päältä. Ole hyvä ja laita se päälle valikossa %1$s yllä.</string>
   <string name="background_location_enabled">Tämä lomake seuraa sijaintiasi. Voit laittaa seurannan pois päältä valikossa %1$s yllä.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

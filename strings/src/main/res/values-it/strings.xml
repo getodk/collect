@@ -218,8 +218,6 @@
   <string name="pause_recording">Metti in pausa</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">Riprendi</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">Registra un audio</string>
   <string name="background_audio_permission_explanation">Questo formulario registra l\'audio in sottofondo. Devi concedere l\'autorizzazione per utilizzare il microfono. In caso contrario, non sarà possibile aprire questo formulario.</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">Questo formulario richiede la registrazione dell\'audio in background. Disabilitarlo interromperà la registrazione e scarterà l\'audio esistente. Sei sicuro di voler procedere?</string>
@@ -396,8 +394,6 @@
   <string name="location_providers_disabled_dialog_message">Questo formulario vuole monitorare la tua posizione ma i fornitori di servizi di localizzazione sono disabilitati. Si prega di abilitare nelle impostazioni di Android.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Vai a impostazioni</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Registra la posizione</string>
   <string name="background_location_disabled">Questo modulo vuole tracciare la tua posizione ma il tracciamento è disabilitato. Abilita nel %1$s menu sopra.</string>
   <string name="background_location_enabled">Questo modulo tiene traccia della tua posizione. Puoi disabilitare il monitoraggio nel menu %1$s in alto.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

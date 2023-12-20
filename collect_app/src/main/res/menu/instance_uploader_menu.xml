@@ -17,11 +17,13 @@ limitations under the License.
 
     <item
         android:id="@+id/menu_preferences"
+        android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/project_settings"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_change_view"
+        android:icon="@drawable/ic_baseline_visibility_24"
         android:title="@string/change_view"
         app:showAsAction="never" />
 

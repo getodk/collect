@@ -342,8 +342,6 @@
   <string name="location_providers_disabled_dialog_message">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని స్థాన ప్రొవైడర్లు నిలిపివేయబడ్డారు. దయచేసి Android సెట్టింగ్‌లలో ప్రారంభించండి.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">సెట్టింగులకు వెళ్లండి</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">మీ ప్రదేశాన్ని ట్రాక్ చేయండి</string>
   <string name="background_location_disabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేయాలనుకుంటుంది కాని ట్రాకింగ్ నిలిపివేయబడింది. దయచేసి పై మెను %1$sలో ప్రారంభించండి.</string>
   <string name="background_location_enabled">ఈ ఫారం మీ స్థానాన్ని ట్రాక్ చేస్తుంది. పై మెను%1$sలో మీరు ట్రాకింగ్‌ను నిలిపివేయవచ్చు.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

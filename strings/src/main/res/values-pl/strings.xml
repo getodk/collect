@@ -340,8 +340,6 @@
   <string name="location_providers_disabled_dialog_message">Ten formularz chce śledzić twoją lokalizację, ale usługi dostawców systemu lokalizacji są wyłączone. Włącz je w ustawieniach Androida.</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">Przejdź do ustawień</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">Śledź lokalizację</string>
   <string name="background_location_disabled">Ten formularz chce śledzić twoją lokalizację, jednak funkcja śledzenia jest wyłączona. Włącz ją wybierając %1$s w menu powyżej.</string>
   <string name="background_location_enabled">Ten formularz śledzi twoją lokalizację. Możesz wyłączyć funkcję śledzenia poprzez %1$s w menu powyżej.</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->

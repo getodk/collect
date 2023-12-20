@@ -188,8 +188,6 @@
   <string name="pause_recording">一時停止</string>
   <!--Description text for button that that resumes recording sound-->
   <string name="resume_recording">再開</string>
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
-  <string name="record_audio">オーディオの録音</string>
   <string name="background_audio_permission_explanation">このフォームはバックグラウンドでオーディオを録音します。 マイクの使用を許可する必要があります。 そうしないと、このフォームを開くことができません。</string>
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <string name="stop_recording_confirmation">このフォームはバックグラウンドオーディオ録音を要求します。 無効にすると、録音が停止し、既存のオーディオが破棄されます。 続行してもよろしいですか?</string>
@@ -363,8 +361,6 @@
   <string name="location_providers_disabled_dialog_message">このフォームは場所を追跡しようとしますが、位置情報プロバイダーが無効になっています。 Android の設定で有効にしてください。</string>
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
   <string name="go_to_settings">設定に移動</string>
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
-  <string name="track_location">位置情報を追跡</string>
   <string name="background_location_disabled">このフォームは位置を追跡しようとしますが、追跡が無効になっています。 上の %1$s メニューで有効にしてください。</string>
   <string name="background_location_enabled">このフォームは位置を追跡します。 上の %1$s メニューで追跡を無効にすることができます。</string>
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
