@@ -70,10 +70,7 @@ class NotificationDrawer {
             destination.assertOnPage()
         }
 
-        device.openNotification()
         assertNoNotification(appName)
-        device.pressBack()
-
         return page
     }
 
@@ -115,8 +112,10 @@ class NotificationDrawer {
 
     private fun assertNoNotification(appName: String) {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.openNotification()
         val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
         assertThat("Expected no notification for app: $appName", result, equalTo(false))
+        device.pressBack()
     }
 
     private fun assertText(device: UiDevice, text: String): UiObject2 {
