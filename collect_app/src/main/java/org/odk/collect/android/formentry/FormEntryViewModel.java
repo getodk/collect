@@ -219,7 +219,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     public void moveBackward(HashMap<FormIndex, IAnswerData> answers) {
-        worker.immediate((Supplier<Void>) () -> {
+        worker.immediate((Supplier<Boolean>) () -> {
             boolean updateSuccess = saveScreenAnswersToFormController(answers, false);
             if (updateSuccess) {
                 try {
@@ -231,9 +231,11 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 updateIndex();
             }
 
-            return null;
-        }, ignored -> {
-            formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+            return updateSuccess;
+        }, updateSuccess -> {
+            if (updateSuccess) {
+                formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+            }
         });
     }
 

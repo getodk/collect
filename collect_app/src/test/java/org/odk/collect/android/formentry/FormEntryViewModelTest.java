@@ -324,6 +324,19 @@ public class FormEntryViewModelTest {
         assertThat(formController.getStepPosition(), equalTo(0));
     }
 
+    /**
+     * We don't want to flush the log before answers are actually committed.
+     */
+    @Test
+    public void moveBackward_whenThereIsAnErrorSaving_doesNotFlushAuditLog() throws Exception {
+        formController.setSaveError(new JavaRosaException(new IOException("OH NO")));
+
+        viewModel.moveBackward(new HashMap<>());
+        scheduler.flush();
+
+        verify(auditEventLogger, never()).flush();
+    }
+
     @Test
     public void moveBackward_setsLoadingToTrueWhileBackgroundWorkHappens() throws Exception {
         assertThat(getOrAwaitValue(viewModel.isLoading()), equalTo(false));
