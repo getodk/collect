@@ -1,13 +1,11 @@
 package org.odk.collect.android.formentry
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -21,6 +19,7 @@ import org.odk.collect.androidshared.system.PlayServicesChecker
 import org.odk.collect.androidshared.ui.DialogFragmentUtils.showIfNotShowing
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard.allowClick
 import org.odk.collect.audiorecorder.recording.AudioRecorder
+import org.odk.collect.material.enableIconsVisibility
 import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 import org.odk.collect.settings.keys.ProtectedProjectKeys
@@ -36,13 +35,9 @@ class FormEntryMenuProvider(
     private val settingsProvider: SettingsProvider,
     private val formEntryMenuClickListener: FormEntryMenuClickListener
 ) : MenuProvider {
-    @SuppressLint("RestrictedApi")
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.form_menu, menu)
-
-        if (menu is MenuBuilder) {
-            menu.setOptionalIconsVisible(true)
-        }
+        menu.enableIconsVisibility()
     }
 
     override fun onPrepareMenu(menu: Menu) {

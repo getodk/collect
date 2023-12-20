@@ -1,14 +1,13 @@
 package org.odk.collect.android.formmanagement.drafts
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
+import org.odk.collect.material.enableIconsVisibility
 import org.odk.collect.strings.R.plurals
 import org.odk.collect.strings.R.string
 
@@ -19,13 +18,9 @@ class DraftsMenuProvider(
 
     var draftsCount: Int? = null
 
-    @SuppressLint("RestrictedApi")
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menuInflater.inflate(R.menu.drafts, menu)
-
-        if (menu is MenuBuilder) {
-            menu.setOptionalIconsVisible(true)
-        }
+        menu.enableIconsVisibility()
     }
 
     override fun onPrepareMenu(menu: Menu) {

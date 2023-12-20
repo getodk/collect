@@ -1,6 +1,5 @@
 package org.odk.collect.android.projects
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import com.google.zxing.client.android.BeepManager
 import com.google.zxing.integration.android.IntentIntegrator
@@ -31,6 +29,7 @@ import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.androidshared.utils.CompressionUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
+import org.odk.collect.material.enableIconsVisibility
 import org.odk.collect.permissions.PermissionListener
 import org.odk.collect.permissions.PermissionsProvider
 import org.odk.collect.projects.ProjectsRepository
@@ -169,12 +168,9 @@ class QrCodeProjectCreatorDialog :
         )
     }
 
-    @SuppressLint("RestrictedApi")
     private fun configureMenu() {
         val menu = binding.toolbar.menu
-        if (menu is MenuBuilder) {
-            menu.setOptionalIconsVisible(true)
-        }
+        menu.enableIconsVisibility()
 
         menu.removeItem(R.id.menu_item_share)
 
