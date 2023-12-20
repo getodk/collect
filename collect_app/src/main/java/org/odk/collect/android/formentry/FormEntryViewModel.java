@@ -141,14 +141,14 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             try {
                 formController.newRepeat();
             } catch (RuntimeException e) {
-                error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                error.postValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
             }
 
             if (!formController.indexIsInFieldList()) {
                 try {
                     formController.stepToNextScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                    error.postValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
                 }
             }
 
@@ -170,7 +170,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 try {
                     this.formController.stepToNextScreenEvent();
                 } catch (JavaRosaException exception) {
-                    error.setValue(new FormError.NonFatal(exception.getCause().getMessage()));
+                    error.postValue(new FormError.NonFatal(exception.getCause().getMessage()));
                 }
             }
 
@@ -225,7 +225,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 try {
                     formController.stepToPreviousScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.setValue(new FormError.NonFatal(e.getCause().getMessage()));
+                    error.postValue(new FormError.NonFatal(e.getCause().getMessage()));
                 }
 
                 updateIndex();
@@ -329,7 +329,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 try {
                     formController.stepToNextScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                    error.postValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
                 }
             }
 
