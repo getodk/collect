@@ -105,6 +105,12 @@ public class FakeFormController extends StubFormController {
         return prompts.get(index);
     }
 
+    @Nullable
+    @Override
+    public FormEntryPrompt getQuestionPrompt() {
+        return currentPrompts.get(0);
+    }
+
     @NonNull
     @Override
     public ValidationResult validateAnswers(boolean markCompleted, boolean moveToInvalidIndex) throws JavaRosaException {

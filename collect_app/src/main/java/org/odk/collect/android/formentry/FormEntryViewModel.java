@@ -378,8 +378,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     private void preloadSelectChoices() throws RepeatsInFieldListException, FileNotFoundException, XPathSyntaxException {
         int event = formController.getEvent();
         if (event == FormEntryController.EVENT_QUESTION) {
-            FormEntryPrompt[] prompts = formController.getQuestionPrompts();
-            for (FormEntryPrompt prompt : prompts) {
+            FormEntryPrompt prompt = formController.getQuestionPrompt();
+
+            if (prompt != null) {
                 List<SelectChoice> selectChoices = SelectChoiceUtils.loadSelectChoices(prompt, formController);
                 choices.put(prompt.getIndex(), selectChoices);
             }
