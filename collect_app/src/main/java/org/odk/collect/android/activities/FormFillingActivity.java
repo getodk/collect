@@ -567,6 +567,24 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
         });
 
+        formEntryViewModel.getValidationResult().observe(this, consumable -> {
+            if (consumable.isConsumed()) {
+                return;
+            }
+            ValidationResult validationResult = consumable.getValue();
+            if (validationResult instanceof FailedValidationResult failedValidationResult) {
+                String errorMessage = failedValidationResult.getCustomErrorMessage();
+                if (errorMessage == null) {
+                    errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
+                }
+                getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
+                swipeHandler.setBeenSwiped(false);
+            } else if (validationResult instanceof SuccessValidationResult) {
+                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
+            }
+            consumable.consume();
+        });
+
         formSaveViewModel = viewModelProvider.get(FormSaveViewModel.class);
         formSaveViewModel.getSaveResult().observe(this, this::handleSaveResult);
         formSaveViewModel.isSavingAnswerFile().observe(this, isSavingAnswerFile -> {
@@ -1190,27 +1208,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 odkViewLifecycle
         );
 
-        ODKView view = new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this));
-
-        formEntryViewModel.getValidationResult().observe(this, consumable -> {
-            if (consumable.isConsumed()) {
-                return;
-            }
-            ValidationResult validationResult = consumable.getValue();
-            if (validationResult instanceof FailedValidationResult failedValidationResult) {
-                String errorMessage = failedValidationResult.getCustomErrorMessage();
-                if (errorMessage == null) {
-                    errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
-                }
-                getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
-                swipeHandler.setBeenSwiped(false);
-            } else if (validationResult instanceof SuccessValidationResult) {
-                SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
-            }
-            consumable.consume();
-        });
-
-        return view;
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this));
     }
 
     @Override
