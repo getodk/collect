@@ -3,8 +3,6 @@ package org.odk.collect.android.formentry;
 import static org.odk.collect.android.javarosawrapper.FormIndexUtils.getRepeatGroupIndex;
 import static org.odk.collect.androidshared.livedata.LiveDataUtils.observe;
 
-import android.os.Looper;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -306,6 +304,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         formSessionObserver.cancel();
     }
 
+    /**
+     * Use {@link #refresh()} instead.
+     */
     @Deprecated
     public void refreshSync() {
         updateIndex();
@@ -344,12 +345,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
 
             AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
-
-            if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
-                currentIndex.setValue(formController.getFormIndex());
-            } else {
-                currentIndex.postValue(formController.getFormIndex());
-            }
+            currentIndex.postValue(formController.getFormIndex());
         }
     }
 
