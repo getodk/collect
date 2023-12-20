@@ -404,7 +404,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             if (childView instanceof ViewGroup) {
                 adjustButtonFontSize((ViewGroup) childView);
             } else if (childView instanceof Button) {
-                ((Button) childView).setTextSize(QuestionFontSizeUtils.getFontSize(settings, FontSize.BODY_MEDIUM));
+                ((Button) childView).setTextSize(QuestionFontSizeUtils.getFontSize(settings, FontSize.BODY_LARGE));
             }
         }
     }

@@ -11,7 +11,8 @@ public final class QuestionFontSizeUtils {
     public enum FontSize {
         HEADLINE_6,
         SUBTITLE_1,
-        BODY_MEDIUM
+        BODY_MEDIUM,
+        BODY_LARGE
     }
 
     public static final int DEFAULT_FONT_SIZE = 21;
@@ -22,6 +23,7 @@ public final class QuestionFontSizeUtils {
 
     private static final int BODY_MEDIUM_DIFF = -7;
 
+    private static final int BODY_LARGE_DIFF = -5;
 
     private QuestionFontSizeUtils() {
 
@@ -41,6 +43,10 @@ public final class QuestionFontSizeUtils {
 
             case BODY_MEDIUM -> {
                 return settingsValue + BODY_MEDIUM_DIFF;
+            }
+
+            case BODY_LARGE -> {
+                return settingsValue + BODY_LARGE_DIFF;
             }
 
             default -> throw new IllegalArgumentException();
