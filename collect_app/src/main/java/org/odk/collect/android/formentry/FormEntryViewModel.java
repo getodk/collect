@@ -293,7 +293,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         if (selectChoices != null) {
             return selectChoices;
         } else {
-            // Not all select choices are loaded preemptively yet
+            // Choice lists from some questions aren't preloaded yet
             return SelectChoiceUtils.loadSelectChoices(prompt, formController);
         }
     }
