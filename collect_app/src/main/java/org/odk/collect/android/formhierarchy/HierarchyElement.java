@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.logic;
+package org.odk.collect.android.formhierarchy;
 
 import android.graphics.drawable.Drawable;
 
@@ -23,7 +23,7 @@ import org.javarosa.core.model.FormIndex;
 
 /**
  * Represents a question or repeat to be shown in
- * {@link org.odk.collect.android.activities.FormHierarchyActivity}.
+ * {@link FormHierarchyActivity}.
  */
 public class HierarchyElement {
     /**

@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package org.odk.collect.android.adapters;
+package org.odk.collect.android.formhierarchy;
 
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import org.odk.collect.android.logic.HierarchyElement;
 
 import java.util.List;
 

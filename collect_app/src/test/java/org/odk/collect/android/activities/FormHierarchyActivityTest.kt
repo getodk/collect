@@ -11,6 +11,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.odk.collect.android.formhierarchy.FormHierarchyActivity
 import org.odk.collect.android.support.CollectHelpers
 
 @RunWith(AndroidJUnit4::class)

@@ -1,10 +1,9 @@
-package org.odk.collect.android.adapters
+package org.odk.collect.android.formhierarchy
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import org.odk.collect.android.databinding.HierarchyElementBinding
-import org.odk.collect.android.logic.HierarchyElement
 import org.odk.collect.android.utilities.HtmlUtils
 
 class HierarchyListItemView(context: Context) : FrameLayout(context) {

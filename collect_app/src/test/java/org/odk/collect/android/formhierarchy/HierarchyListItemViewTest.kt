@@ -1,4 +1,4 @@
-package org.odk.collect.android.adapters
+package org.odk.collect.android.formhierarchy
 
 import android.app.Application
 import android.graphics.drawable.Drawable
@@ -12,7 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.odk.collect.android.R
-import org.odk.collect.android.logic.HierarchyElement
 
 @RunWith(AndroidJUnit4::class)
 class HierarchyListItemViewTest {

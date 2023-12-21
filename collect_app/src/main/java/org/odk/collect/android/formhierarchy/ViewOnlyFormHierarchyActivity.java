@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.odk.collect.android.activities;
+package org.odk.collect.android.formhierarchy;
 
 import android.os.Bundle;
 import android.view.View;
