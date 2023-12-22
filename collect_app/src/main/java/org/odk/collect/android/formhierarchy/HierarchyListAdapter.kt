@@ -23,7 +23,10 @@ class HierarchyListAdapter(
     private val listener: OnElementClickListener
 ) : RecyclerView.Adapter<HierarchyListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(HierarchyListItemView(parent.context))
+        val item = HierarchyListItemView(parent.context).apply {
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        }
+        return ViewHolder(item)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
