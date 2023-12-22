@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -94,7 +95,12 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     private List<HierarchyElement> elementsToDisplay;
 
     /**
-     * The label shown at the top of a hierarchy screen for a repeat instance. Set by
+     * The icon shown at the top of a hierarchy screen for groups of questions.
+     */
+    private ImageView groupIcon;
+
+    /**
+     * The label shown at the top of a hierarchy screen for groups of questions. Set by
      * {@link #getCurrentPath()}.
      */
     private TextView groupPathTextView;
@@ -244,6 +250,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
         setTitle(formController.getFormTitle());
 
+        groupIcon = findViewById(R.id.group_icon);
         groupPathTextView = findViewById(R.id.pathtext);
 
         jumpBeginningButton = findViewById(R.id.jumpBeginningButton);
@@ -597,8 +604,10 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
             if (event == FormEntryController.EVENT_BEGINNING_OF_FORM && !shouldShowRepeatGroupPicker()) {
                 // The beginning of form has no valid prompt to display.
+                groupIcon.setVisibility(View.GONE);
                 groupPathTextView.setVisibility(View.GONE);
             } else {
+                groupIcon.setVisibility(View.VISIBLE);
                 groupPathTextView.setVisibility(View.VISIBLE);
                 groupPathTextView.setText(getCurrentPath());
             }
