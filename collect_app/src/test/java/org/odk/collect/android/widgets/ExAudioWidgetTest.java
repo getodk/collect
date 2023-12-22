@@ -27,8 +27,6 @@ import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.FileRequester;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.robolectric.shadows.ShadowToast;
 

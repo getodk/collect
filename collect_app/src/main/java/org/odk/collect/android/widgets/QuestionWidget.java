@@ -47,8 +47,6 @@ import org.odk.collect.android.utilities.AnimationUtils;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
@@ -174,7 +172,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private void setupQuestionLabel() {
         audioVideoImageTextLabel.setTag(getClipID(formEntryPrompt));
-        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6));
+        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), QuestionFontSizeUtils.getFontSize(settings, FontSize.QUESTION_TITLE));
         audioVideoImageTextLabel.setMediaUtils(mediaUtils);
 
         String imageURI = this instanceof SelectImageMapWidget ? null : formEntryPrompt.getImageText();

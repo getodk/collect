@@ -46,8 +46,6 @@ import org.odk.collect.android.listeners.WidgetValueChangedListener;
 import org.odk.collect.android.support.CollectHelpers;
 import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.base.GeneralSelectMultiWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;

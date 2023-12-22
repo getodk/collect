@@ -45,7 +45,6 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.adapters.RankingListAdapter;
 import org.odk.collect.android.fragments.viewmodels.RankingViewModel;
 import org.odk.collect.android.utilities.RankingItemTouchHelperCallback;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 
 import java.util.ArrayList;
 import java.util.List;

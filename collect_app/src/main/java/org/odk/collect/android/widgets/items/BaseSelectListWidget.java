@@ -17,7 +17,6 @@ import org.odk.collect.android.databinding.SelectListWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.SelectItemClickListener;
 import org.odk.collect.android.utilities.Appearances;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;

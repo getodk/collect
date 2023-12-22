@@ -44,7 +44,6 @@ import org.odk.collect.android.dynamicpreload.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.utilities.HtmlUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.bitmap.ImageFileUtils;
 import org.odk.collect.android.utilities.SelectOneWidgetUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
