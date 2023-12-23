@@ -48,6 +48,6 @@ public class ExPrinterWidgetTest extends QuestionWidgetTest<ExPrinterWidget, IAn
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().launchIntentButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.printButton.getVisibility(), is(View.GONE));
     }
 }

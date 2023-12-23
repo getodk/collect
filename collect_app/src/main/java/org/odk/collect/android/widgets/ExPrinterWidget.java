@@ -14,23 +14,24 @@
 
 package org.odk.collect.android.widgets;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createSimpleButton;
-
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.analytics.Analytics;
 import org.odk.collect.android.analytics.AnalyticsEvents;
+import org.javarosa.form.api.FormEntryPrompt;
+import org.odk.collect.android.databinding.ExPrinterWidgetBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
@@ -118,30 +119,84 @@ import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
  * @author mitchellsundt@gmail.com
  */
 @SuppressLint("ViewConstructor")
-public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceiver, ButtonClickListener {
-
-    final Button launchIntentButton;
+public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceiver {
+    ExPrinterWidgetBinding binding;
     private final WaitingForDataRegistry waitingForDataRegistry;
 
     public ExPrinterWidget(Context context, QuestionDetails prompt, WaitingForDataRegistry waitingForDataRegistry) {
         super(context, prompt);
-        render();
-
         this.waitingForDataRegistry = waitingForDataRegistry;
-
-        String v = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
-        String buttonText = (v != null) ? v : context.getString(org.odk.collect.strings.R.string.launch_printer);
-        launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), buttonText, this, false);
-
-        // finish complex layout
-        LinearLayout printLayout = new LinearLayout(getContext());
-        printLayout.setOrientation(LinearLayout.VERTICAL);
-        printLayout.addView(launchIntentButton);
-        addAnswerView(printLayout);
+        render();
     }
 
-    protected void firePrintingActivity(String intentName) throws ActivityNotFoundException {
+    @Override
+    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+        binding = ExPrinterWidgetBinding.inflate(((Activity) context).getLayoutInflater());
+        binding.printButton.setOnClickListener(v -> onButtonClick());
+        String customButtonText = getFormEntryPrompt().getSpecialFormQuestionText("buttonText");
+        if (customButtonText != null) {
+            binding.printButton.setText(customButtonText);
+            binding.printButton.setContentDescription(customButtonText);
+        }
 
+        if (questionDetails.isReadOnly()) {
+            binding.printButton.setVisibility(View.GONE);
+        }
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void clearAnswer() {
+        widgetValueChanged();
+    }
+
+    @Override
+    public IAnswerData getAnswer() {
+        return getFormEntryPrompt().getAnswerValue();
+    }
+
+    @Override
+    public void setData(Object answer) {
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void setOnLongClickListener(OnLongClickListener l) {
+        binding.printButton.setOnLongClickListener(l);
+    }
+
+    @Override
+    public void cancelLongPress() {
+        super.cancelLongPress();
+        binding.printButton.cancelLongPress();
+    }
+
+    private void onButtonClick() {
+        String appearance = getFormEntryPrompt().getAppearanceHint();
+        String[] attrs = appearance.split(":");
+        final String intentName = (attrs.length < 2 || attrs[1].length() == 0)
+                ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
+        final String errorString;
+        String v = getFormEntryPrompt().getSpecialFormQuestionText("noPrinterErrorString");
+        errorString = (v != null) ? v : getContext().getString(org.odk.collect.strings.R.string.no_printer);
+        try {
+            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
+            firePrintingActivity(intentName);
+            Analytics.log(AnalyticsEvents.ZEBRA_PRINTER_STARTED, "form");
+        } catch (ActivityNotFoundException e) {
+            waitingForDataRegistry.cancelWaitingForData();
+            Toast.makeText(getContext(),
+                    errorString, Toast.LENGTH_SHORT)
+                    .show();
+        }
+    }
+
+    private void firePrintingActivity(String intentName) throws ActivityNotFoundException {
         String s = getFormEntryPrompt().getAnswerText();
 
         Intent i = new Intent(intentName);
@@ -184,56 +239,5 @@ public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceive
         Intent bcastIntent = new Intent(intentName + ".data");
         bcastIntent.putExtra("DATA", printDataBundle);
         getContext().sendBroadcast(bcastIntent);
-    }
-
-    @Override
-    public void clearAnswer() {
-        widgetValueChanged();
-    }
-
-    @Override
-    public IAnswerData getAnswer() {
-        return getFormEntryPrompt().getAnswerValue();
-    }
-
-    @Override
-    public void setData(Object answer) {
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return !event.isAltPressed() && super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void setOnLongClickListener(OnLongClickListener l) {
-        launchIntentButton.setOnLongClickListener(l);
-    }
-
-    @Override
-    public void cancelLongPress() {
-        super.cancelLongPress();
-        launchIntentButton.cancelLongPress();
-    }
-
-    @Override
-    public void onButtonClick(int buttonId) {
-        String appearance = getFormEntryPrompt().getAppearanceHint();
-        String[] attrs = appearance.split(":");
-        final String intentName = (attrs.length < 2 || attrs[1].length() == 0)
-                ? "org.opendatakit.sensors.ZebraPrinter" : attrs[1];
-        final String errorString;
-        String v = getFormEntryPrompt().getSpecialFormQuestionText("noPrinterErrorString");
-        errorString = (v != null) ? v : getContext().getString(org.odk.collect.strings.R.string.no_printer);
-        try {
-            waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
-            firePrintingActivity(intentName);
-            Analytics.log(AnalyticsEvents.ZEBRA_PRINTER_STARTED, "form");
-        } catch (ActivityNotFoundException e) {
-            waitingForDataRegistry.cancelWaitingForData();
-            Toast.makeText(getContext(),
-                    errorString, Toast.LENGTH_SHORT)
-                    .show();
-        }
     }
 }
