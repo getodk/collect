@@ -184,7 +184,7 @@ public class FormEntryPage extends Page<FormEntryPage> {
     }
 
     public FormEntryPage clickRankingButton() {
-        onView(withId(R.id.simple_button)).perform(click());
+        onView(withId(R.id.rank_items_button)).perform(click());
         return this;
     }
 
