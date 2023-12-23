@@ -5,7 +5,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TableLayout
 import android.widget.TextView
 import androidx.annotation.IdRes
@@ -25,16 +24,6 @@ object WidgetViewUtils {
             setTextSize(TypedValue.COMPLEX_UNIT_DIP, answerFontSize.toFloat())
             setPadding(20, 20, 20, 20)
             setText(text)
-        }
-    }
-
-    @JvmStatic
-    fun createAnswerImageView(context: Context): ImageView {
-        return ImageView(context).apply {
-            id = View.generateViewId()
-            tag = "ImageView"
-            setPadding(10, 10, 10, 10)
-            adjustViewBounds = true
         }
     }
 

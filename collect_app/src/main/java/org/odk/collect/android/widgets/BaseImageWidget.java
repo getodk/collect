@@ -16,8 +16,6 @@
 
 package org.odk.collect.android.widgets;
 
-import static org.odk.collect.android.formentry.questions.WidgetViewUtils.createAnswerImageView;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -69,6 +67,8 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
         this.questionMediaManager = questionMediaManager;
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.tmpImageFilePath = tmpImageFilePath;
+
+        binaryName = getFormEntryPrompt().getAnswerText();
     }
 
     @Override
@@ -148,24 +148,6 @@ public abstract class BaseImageWidget extends QuestionWidget implements FileWidg
                 });
             }
         }
-    }
-
-    protected void setUpLayout() {
-        errorTextView = new TextView(getContext());
-        errorTextView.setId(View.generateViewId());
-        errorTextView.setText(org.odk.collect.strings.R.string.selected_invalid_image);
-
-        answerLayout = new LinearLayout(getContext());
-        answerLayout.setOrientation(LinearLayout.VERTICAL);
-
-        binaryName = getFormEntryPrompt().getAnswerText();
-
-        imageView = createAnswerImageView(getContext());
-        imageView.setOnClickListener(v -> {
-            if (imageClickHandler != null) {
-                imageClickHandler.clickImage("viewImage");
-            }
-        });
     }
 
     /**

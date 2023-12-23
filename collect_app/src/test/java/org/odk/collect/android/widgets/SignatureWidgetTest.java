@@ -78,7 +78,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().signButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.signButton.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
         readOnlyOverride = true;
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        assertThat(getSpyWidget().signButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.signButton.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -206,7 +206,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        Intent intent = getIntentLaunchedByClick(R.id.sign_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
         assertExtraEquals(DrawActivity.REF_IMAGE, Uri.fromFile(file), intent);
@@ -228,7 +228,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        Intent intent = getIntentLaunchedByClick(R.id.sign_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
@@ -236,7 +236,7 @@ public class SignatureWidgetTest extends FileWidgetTest<SignatureWidget> {
 
     @Test
     public void whenThereIsNoAnswer_doNotPassUriToDrawActivity() {
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        Intent intent = getIntentLaunchedByClick(R.id.sign_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_SIGNATURE, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));

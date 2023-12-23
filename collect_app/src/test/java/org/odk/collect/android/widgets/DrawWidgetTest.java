@@ -85,7 +85,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
     public void usingReadOnlyOptionShouldMakeAllClickableElementsDisabled() {
         when(formEntryPrompt.isReadOnly()).thenReturn(true);
 
-        assertThat(getSpyWidget().drawButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.drawButton.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
         readOnlyOverride = true;
         when(formEntryPrompt.isReadOnly()).thenReturn(false);
 
-        assertThat(getSpyWidget().drawButton.getVisibility(), is(View.GONE));
+        assertThat(getSpyWidget().binding.drawButton.getVisibility(), is(View.GONE));
     }
 
     @Test
@@ -212,7 +212,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        Intent intent = getIntentLaunchedByClick(R.id.draw_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_DRAW, intent);
         assertExtraEquals(DrawActivity.REF_IMAGE, Uri.fromFile(file), intent);
@@ -234,7 +234,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
                 .withAnswerDisplayText(DrawWidgetTest.DEFAULT_IMAGE_ANSWER)
                 .build();
 
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        Intent intent = getIntentLaunchedByClick(R.id.draw_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_DRAW, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
@@ -242,7 +242,7 @@ public class DrawWidgetTest extends FileWidgetTest<DrawWidget> {
 
     @Test
     public void whenThereIsNoAnswer_doNotPassUriToDrawActivity() {
-        Intent intent = getIntentLaunchedByClick(R.id.simple_button);
+        Intent intent = getIntentLaunchedByClick(R.id.draw_button);
         assertComponentEquals(activity, DrawActivity.class, intent);
         assertExtraEquals(DrawActivity.OPTION, DrawActivity.OPTION_DRAW, intent);
         assertThat(intent.hasExtra(DrawActivity.REF_IMAGE), is(false));
