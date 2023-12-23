@@ -52,12 +52,13 @@ public class StringWidget extends QuestionWidget {
                 this::widgetValueChanged
         );
 
-        setUpLayout(context);
+        render();
     }
 
-    protected void setUpLayout(Context context) {
+    @Override
+    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
         setDisplayValueFromModel();
-        addAnswerView(widgetAnswerText);
+        return widgetAnswerText;
     }
 
     @Override

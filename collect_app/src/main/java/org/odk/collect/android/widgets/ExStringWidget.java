@@ -21,15 +21,18 @@ import static org.odk.collect.android.utilities.ApplicationConstants.RequestCode
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import org.javarosa.core.model.data.StringData;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.dynamicpreload.ExternalAppsUtils;
 import org.odk.collect.android.R;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
@@ -91,7 +94,6 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
 
     public ExStringWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails);
-        render();
 
         this.waitingForDataRegistry = waitingForDataRegistry;
         this.stringRequester = stringRequester;
@@ -99,7 +101,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
     }
 
     @Override
-    protected void setUpLayout(Context context) {
+    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
         launchIntentButton = createSimpleButton(getContext(), getFormEntryPrompt().isReadOnly(), getButtonText(), this, false);
 
         widgetAnswerText.setAnswer(getFormEntryPrompt().getAnswerText());
@@ -115,7 +117,7 @@ public class ExStringWidget extends StringWidget implements WidgetDataReceiver, 
         answerLayout.setOrientation(LinearLayout.VERTICAL);
         answerLayout.addView(launchIntentButton);
         answerLayout.addView(widgetAnswerText);
-        addAnswerView(answerLayout);
+        return answerLayout;
     }
 
     private String getButtonText() {

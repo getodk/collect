@@ -41,7 +41,6 @@ public class ExIntegerWidget extends ExStringWidget {
 
     public ExIntegerWidget(Context context, QuestionDetails questionDetails, WaitingForDataRegistry waitingForDataRegistry, StringRequester stringRequester) {
         super(context, questionDetails, waitingForDataRegistry, stringRequester);
-        render();
 
         boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
         Integer answer = StringWidgetUtils.getIntegerAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());

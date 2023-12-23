@@ -30,7 +30,6 @@ public class StringNumberWidget extends StringWidget {
 
     public StringNumberWidget(Context context, QuestionDetails questionDetails) {
         super(context, questionDetails);
-        render();
 
         boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
         String answer = questionDetails.getPrompt().getAnswerValue() == null
