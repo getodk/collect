@@ -18,6 +18,8 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.google.android.material.radiobutton.MaterialRadioButton;
 
 import org.javarosa.core.model.SelectChoice;
@@ -27,6 +29,7 @@ import org.javarosa.core.model.data.helper.Selection;
 import org.javarosa.core.reference.InvalidReferenceException;
 import org.javarosa.core.reference.ReferenceManager;
 import org.javarosa.form.api.FormEntryCaption;
+import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.dynamicpreload.ExternalSelectChoice;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.utilities.HtmlUtils;
@@ -42,7 +45,6 @@ import timber.log.Timber;
 
 @SuppressLint("ViewConstructor")
 public class LikertWidget extends QuestionWidget {
-
     LinearLayout view;
     private RadioButton checkedButton;
     private final LinearLayout.LayoutParams linearLayoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1);
@@ -56,16 +58,18 @@ public class LikertWidget extends QuestionWidget {
 
     public LikertWidget(Context context, QuestionDetails questionDetails, SelectChoiceLoader selectChoiceLoader) {
         super(context, questionDetails);
-        render();
-
         items = ItemsWidgetUtils.loadItemsAndHandleErrors(this, questionDetails.getPrompt(), selectChoiceLoader);
 
         setMainViewLayoutParameters();
         setStructures();
-
         setButtonListener();
         setSavedButton();
-        addAnswerView(view);
+        render();
+    }
+
+    @Override
+    protected View onCreateAnswerView(@NonNull Context context, @NonNull FormEntryPrompt prompt, int answerFontSize) {
+        return view;
     }
 
     public void setMainViewLayoutParameters() {
