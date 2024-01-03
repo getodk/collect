@@ -1,22 +1,22 @@
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
+import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.maps.layers.ReferenceLayer
 
 class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val layerTitle: TextView = itemView.findViewById(R.id.layer_name)
     val layerDetails: TextView = itemView.findViewById(R.id.layer_details)
-    val headerSection: RelativeLayout = itemView.findViewById(R.id.header_section)
+
     val expandableSection: LinearLayout = itemView.findViewById(R.id.expandable_section)
     val expandButton: ImageView = itemView.findViewById(R.id.expand_button)
+    val deleteButton: Button = itemView.findViewById(R.id.delete_button)
 
 
 }
@@ -24,14 +24,15 @@ class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
 
 class OfflineMapLayersAdapter(
         private val layers: MutableList<ReferenceLayer>,
-        private val selectedLayer: Int,
-        private val listener: (ReferenceLayer) -> Unit
+        private val onSelectLayerListener: (ReferenceLayer) -> Unit,
+        private val onDeleteLayerListener: (ReferenceLayer) -> Unit
 ) : RecyclerView.Adapter<OfflineMapLayersViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfflineMapLayersViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.offline_map_item_layout, parent, false)
         return OfflineMapLayersViewHolder(itemView)
     }
+
 
     override fun onBindViewHolder(holder: OfflineMapLayersViewHolder, position: Int) {
         val layer = layers[position]
@@ -49,13 +50,22 @@ class OfflineMapLayersAdapter(
             )
         }
 
+        holder.deleteButton.setOnClickListener {
+            onDeleteLayerListener.invoke(layer)
+        }
+
 
         holder.itemView.setOnClickListener {
-            listener.invoke(layer)
+            onSelectLayerListener.invoke(layer)
+
         }
     }
 
     override fun getItemCount(): Int {
         return layers.size
     }
+
+
 }
+
+

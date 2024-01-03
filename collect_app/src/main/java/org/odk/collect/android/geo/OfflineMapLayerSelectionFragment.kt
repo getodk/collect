@@ -2,6 +2,7 @@ package org.odk.collect.android.geo
 
 import OfflineMapLayersAdapter
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,11 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.activity.OnBackPressedDispatcher
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +19,8 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.androidshared.livedata.NonNullLiveData
+import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
+import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.geo.R
 import org.odk.collect.maps.layers.ReferenceLayer
 import org.odk.collect.maps.layers.ReferenceLayerRepository
@@ -32,16 +30,7 @@ import javax.annotation.Nullable
 import javax.inject.Inject
 
 
-data class OfflineMapLayerItem(
-        val name: String,
-        val filePath: String,
-        var isSelected: Boolean = false
-)
-
 class OfflineMapLayerSelectionFragment(
-        private val selectionMapData: MapLayerSelectionData, // Declaration of selectionMapData
-        private val itemList: List<OfflineMapLayerItem>,
-        private val onBackPressedDispatcher: (() -> OnBackPressedDispatcher)? = null
 ) : BottomSheetDialogFragment() {
 
     private val PICKFILE_RESULT_CODE = 1
@@ -49,9 +38,6 @@ class OfflineMapLayerSelectionFragment(
     @Inject
     lateinit var referenceLayerRepository: ReferenceLayerRepository
 
-    private val selectedViewModel by viewModels<SelectedMapItemViewModel>()
-    private val featureIdsByItemId: MutableMap<Long, Int> = mutableMapOf()
-    private val itemsByFeatureId: MutableMap<Int, OfflineMapLayerItem> = mutableMapOf()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -79,12 +65,18 @@ class OfflineMapLayerSelectionFragment(
             }
         }
 
-        val selectedLayerIndex = 0
-        val adapter = OfflineMapLayersAdapter(supportedLayers, selectedLayerIndex) { referenceLayer ->
-            onFeatureClicked(referenceLayer)
+        val adapter = OfflineMapLayersAdapter(
+                layers = supportedLayers,
+                onSelectLayerListener = { referenceLayer ->
+                    onFeatureClicked(referenceLayer)
+
+                },
+                onDeleteLayerListener = { referenceLayer ->
+                    onDeleteLayer(referenceLayer)
 
 
-        }
+                }
+        )
         recyclerView.adapter = adapter
 
 
@@ -94,8 +86,32 @@ class OfflineMapLayerSelectionFragment(
         }
     }
 
+    private fun onDeleteLayer(referenceLayer: ReferenceLayer) {
+        val dialogView = LayoutInflater.from(context).inflate(org.odk.collect.android.R.layout.delete_layer_dialog_layout, null)
 
-    fun updatePreference(path: String) {
+        val dialog = AlertDialog.Builder(context)
+                .setView(dialogView)
+                .create()
+
+        dialogView.findViewById<Button>(org.odk.collect.android.R.id.cancelButton).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(org.odk.collect.android.R.id.deleteButton).setOnClickListener {
+
+            dialog.dismiss()
+            FileUtils.deleteAndReport(referenceLayer.file)
+        }
+
+        dialog.show()
+
+    }
+
+    fun refreshLayers(newLayers: MutableList<ReferenceLayer>) {
+
+    }
+
+    private fun updatePreference(path: String) {
         val sharedPreferences = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
         with(sharedPreferences!!.edit()) {
             putString("reference_layer", path)
@@ -107,11 +123,8 @@ class OfflineMapLayerSelectionFragment(
         val path = referenceLayer.file.absolutePath
         val cftor = MapConfiguratorProvider.getConfigurator()
         cftor.supportsLayer(referenceLayer.file)
-
         cftor.getDisplayName(File(path))
-
         updatePreference(path)
-
     }
 
     @Deprecated("Deprecated in Java")
@@ -123,85 +136,27 @@ class OfflineMapLayerSelectionFragment(
         val selectedFileUri = data.data ?: return
         val fileName = FileUtils.getFileNameFromContentUri(requireContext().contentResolver, selectedFileUri)
         if (fileName == null || !fileName.trim { it <= ' ' }.lowercase(Locale.getDefault()).endsWith(".mbtiles")) {
-            // Show bad file format toast
-//            showShortToast(requireContext(), getString(android.R.string.mb_tiles_import_bad_file_format))
+            showShortToast(requireContext(), "Import failed. Invalid file format.")
             return
         }
         try {
             val destFile = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), fileName)
             FileUtils.saveLayersFromUri(selectedFileUri, destFile, requireContext())
-//            showLongToast(requireContext(), getString(R.string.mb_tiles_import_was_successful))
+            showLongToast(requireContext(), "Import successful. You can select the layer from the layer switcher.")
 
         } catch (e: Exception) {
             e.printStackTrace()
-//            showShortToast(requireContext(), getString(R.string.mb_tiles_import_failed))
+            showShortToast(requireContext(), "An error occurred during import. Please try again.")
         }
     }
 
     companion object {
-
-        val selectionMapData = object : MapLayerSelectionData {
-
-            override fun isLoading(): NonNullLiveData<Boolean> {
-                TODO("Not yet implemented")
-            }
-
-            override fun getMapTitle(): LiveData<String?> {
-                TODO("Not yet implemented")
-            }
-
-            override fun getItemType(): String {
-                TODO("Not yet implemented")
-            }
-
-            override fun getItemCount(): NonNullLiveData<Int> {
-                TODO("Not yet implemented")
-            }
-
-            override fun getItems(): LiveData<List<OfflineMapLayerItem>>? {
-                TODO("Not yet implemented")
-            }
-
-            override fun onItemSelectionChanged(item: OfflineMapLayerItem) {
-                TODO("Not yet implemented")
-            }
-        }
-
-        val itemList = listOf(
-                OfflineMapLayerItem("Map 1", "/path/to/map1", false),
-                OfflineMapLayerItem("Map 2", "/path/to/map2", false),
-                // Add more OfflineMapLayerItem instances as needed
-        )
-
         fun showBottomSheet(supportFragmentManager: FragmentManager) {
-            val bottomSheetFragment = OfflineMapLayerSelectionFragment(selectionMapData, itemList)
+            val bottomSheetFragment = OfflineMapLayerSelectionFragment()
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 
-
-    }
-}
-
-internal class SelectedMapItemViewModel : ViewModel() {
-    private var selectedItem: OfflineMapLayerItem? = null
-
-    fun getSelectedItem(): OfflineMapLayerItem? {
-        return selectedItem
-    }
-
-    fun setSelectedItem(item: OfflineMapLayerItem?) {
-        selectedItem = item
     }
 
 
-}
-
-
-interface MapLayerSelectionData {
-    fun isLoading(): NonNullLiveData<Boolean>
-    fun getMapTitle(): LiveData<String?>
-    fun getItemType(): String
-    fun getItemCount(): NonNullLiveData<Int>
-    fun getItems(): LiveData<List<OfflineMapLayerItem>>?
-    fun onItemSelectionChanged(item: OfflineMapLayerItem)
 }
