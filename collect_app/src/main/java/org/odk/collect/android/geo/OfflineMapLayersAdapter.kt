@@ -18,7 +18,6 @@ class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
     val expandButton: ImageView = itemView.findViewById(R.id.expand_button)
     val deleteButton: Button = itemView.findViewById(R.id.delete_button)
 
-
 }
 
 
@@ -32,7 +31,6 @@ class OfflineMapLayersAdapter(
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.offline_map_item_layout, parent, false)
         return OfflineMapLayersViewHolder(itemView)
     }
-
 
     override fun onBindViewHolder(holder: OfflineMapLayersViewHolder, position: Int) {
         val layer = layers[position]

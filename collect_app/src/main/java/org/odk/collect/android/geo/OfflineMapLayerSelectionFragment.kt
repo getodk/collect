@@ -11,10 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
@@ -32,6 +37,10 @@ import javax.inject.Inject
 
 class OfflineMapLayerSelectionFragment(
 ) : BottomSheetDialogFragment() {
+
+
+    private val viewModel: OfflineMapLayerViewModel by viewModels()
+
 
     private val PICKFILE_RESULT_CODE = 1
 
@@ -98,9 +107,8 @@ class OfflineMapLayerSelectionFragment(
         }
 
         dialogView.findViewById<Button>(org.odk.collect.android.R.id.deleteButton).setOnClickListener {
-
             dialog.dismiss()
-            FileUtils.deleteAndReport(referenceLayer.file)
+            viewModel.deleteLayer(referenceLayer.file)
         }
 
         dialog.show()
@@ -157,6 +165,19 @@ class OfflineMapLayerSelectionFragment(
         }
 
     }
+}
 
+class OfflineMapLayerViewModel : ViewModel() {
 
+    fun deleteLayer(file: File) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                FileUtils.deleteAndReport(file)
+
+            } catch (e: Exception) {
+                // Handle any exceptions, e.g., post an error message
+                e.printStackTrace();
+            }
+        }
+    }
 }

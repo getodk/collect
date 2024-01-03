@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     tools:ignore="MissingDefaultResource">
 
     <TextView
@@ -24,14 +24,11 @@
         android:text="East Park layer is currently available in all projects and used by the following projects:"
         tools:ignore="HardcodedText" />
 
-    <!-- This is a simplistic representation of the list. You may need to create a RecyclerView for a dynamic list. -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <!-- Add more projects here -->
 
     </LinearLayout>
 
