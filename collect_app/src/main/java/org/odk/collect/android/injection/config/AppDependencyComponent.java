@@ -12,6 +12,7 @@ import org.odk.collect.android.activities.FormFillingActivity;
 import org.odk.collect.android.activities.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
+import org.odk.collect.android.geo.OfflineMapLayerSelectionFragment;
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderActivity;
 import org.odk.collect.android.instancemanagement.send.InstanceUploaderListActivity;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;
@@ -265,6 +266,8 @@ public interface AppDependencyComponent {
     void inject(FormUriActivity formUriActivity);
 
     void inject(MapsPreferencesFragment mapsPreferencesFragment);
+
+    void inject(OfflineMapLayerSelectionFragment offlineMapLayerSelectionFragment);
 
     void inject(FormsDownloadResultDialog formsDownloadResultDialog);
 

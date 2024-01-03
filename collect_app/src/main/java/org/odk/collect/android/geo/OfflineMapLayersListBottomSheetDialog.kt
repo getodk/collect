@@ -2,15 +2,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.odk.collect.androidshared.livedata.NonNullLiveData
-import org.odk.collect.geo.selection.MapLayerSelectionData
-import org.odk.collect.geo.selection.OfflineMapLayerItem
-import org.odk.collect.geo.selection.OfflineMapLayerSelectionFragment
-import org.odk.collect.geo.R
+import org.odk.collect.android.geo.MapLayerSelectionData
+import org.odk.collect.android.geo.OfflineMapLayerItem
+import org.odk.collect.android.geo.OfflineMapLayerSelectionFragment
 
 class OfflineMapLayersListBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -26,8 +24,7 @@ class OfflineMapLayersListBottomSheetDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val selectionMapData = object : MapLayerSelectionData {
-            // Implement required methods
-            // ...
+
             override fun isLoading(): NonNullLiveData<Boolean> {
                 TODO("Not yet implemented")
             }

@@ -1,30 +1,31 @@
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RadioButton
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
+import org.odk.collect.maps.layers.ReferenceLayer
 
-// Example data class representing an Offline Map Layer
-
-
-// Example ViewHolder for the adapter
 class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val layerTitle: TextView = itemView.findViewById(R.id.layerTitle)
-    val radioButton: RadioButton = itemView.findViewById(R.id.layerRadioButton)
-    // Other views in your layout
+    val layerTitle: TextView = itemView.findViewById(R.id.layer_name)
+    val layerDetails: TextView = itemView.findViewById(R.id.layer_details)
+    val headerSection: RelativeLayout = itemView.findViewById(R.id.header_section)
+    val expandableSection: LinearLayout = itemView.findViewById(R.id.expandable_section)
+    val expandButton: ImageView = itemView.findViewById(R.id.expand_button)
+
+
 }
 
-// Example Adapter for Offline Map Layers
+
 class OfflineMapLayersAdapter(
-        private val layers: List<OfflineMapLayer>,
+        private val layers: MutableList<ReferenceLayer>,
         private val selectedLayer: Int,
-        private val listener: (Int) -> Unit // Lambda listener to handle item clicks
+        private val listener: (ReferenceLayer) -> Unit
 ) : RecyclerView.Adapter<OfflineMapLayersViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfflineMapLayersViewHolder {
@@ -35,18 +36,22 @@ class OfflineMapLayersAdapter(
     override fun onBindViewHolder(holder: OfflineMapLayersViewHolder, position: Int) {
         val layer = layers[position]
 
-        holder.layerTitle.text = layer.title
+        holder.layerTitle.text = layer.id
+        holder.layerDetails.text = layer.file.path.toString()
+        holder.expandButton.setOnClickListener {
+            val isCurrentlyVisible = holder.expandableSection.visibility == View.VISIBLE
+            holder.expandableSection.visibility = if (isCurrentlyVisible) View.GONE else View.VISIBLE
 
-
-        // Apply color to selected item
-        if (position == selectedLayer) {
-            val colorAccent = ContextCompat.getColor(holder.itemView.context, R.color.colorOnPrimary)
-            holder.layerTitle.setTextColor(colorAccent)
+            // Change the expand/collapse icon accordingly
+            holder.expandButton.setImageResource(
+                    if (isCurrentlyVisible) R.drawable.ic_arrow_drop_down
+                    else R.drawable.ic_arrow_drop_down
+            )
         }
 
-        // Handle item click
+
         holder.itemView.setOnClickListener {
-            listener.invoke(position)
+            listener.invoke(layer)
         }
     }
 

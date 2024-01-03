@@ -1,6 +1,5 @@
 package org.odk.collect.android.injection.config
 
-import OfflineMapLayersListBottomSheetDialog
 import android.app.Application
 import android.content.Context
 import android.location.LocationManager
@@ -8,6 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import org.odk.collect.async.Scheduler
 import org.odk.collect.geo.GeoDependencyModule
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator
+import org.odk.collect.android.geo.OfflineMapLayerSelectionFragment
 import org.odk.collect.location.LocationClient
 import org.odk.collect.location.satellites.GpsStatusSatelliteInfoClient
 import org.odk.collect.location.satellites.SatelliteInfoClient
@@ -27,7 +27,7 @@ class CollectGeoDependencyModule(
         return object : ReferenceLayerSettingsNavigator {
             override fun navigateToReferenceLayerSettings(activity: FragmentActivity) {
                 // Create a few OfflineMapLayer items
-                OfflineMapLayersListBottomSheetDialog.showBottomSheet(activity.supportFragmentManager)
+                OfflineMapLayerSelectionFragment.showBottomSheet(activity.supportFragmentManager)
             }
         }
     }

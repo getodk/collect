@@ -17,9 +17,12 @@ package org.odk.collect.android.utilities;
 import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 import static java.util.Arrays.asList;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
@@ -197,6 +200,39 @@ public final class FileUtils {
         fields.put(GEOMETRY_XPATH, getOverallFirstGeoPoint(formDef));
         return fields;
     }
+
+    public static Intent openFilePickerForMbtiles() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        //intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "application/x-sqlite3" });
+        return intent;
+    }
+
+    public static String getFileNameFromContentUri(ContentResolver contentResolver, Uri contentUri) {
+        String[] projection = {MediaStore.MediaColumns.DISPLAY_NAME};
+
+        try (Cursor cursor = contentResolver.query(contentUri, projection, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
+                return cursor.getString(columnIndex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;  // File name not found
+    }
+
+    public static void saveLayersFromUri(Uri uri, File destFile, Context context){
+        try (InputStream fileInputStream = context.getContentResolver().openInputStream(uri);
+             OutputStream fileOutputStream = new FileOutputStream(destFile)) {
+            IOUtils.copy(fileInputStream, fileOutputStream);
+        } catch (IOException e) {
+            Timber.e(e);
+        }
+    }
+
 
     /**
      * Returns an XPath path representing the first geopoint of this form definition or null if the

@@ -602,6 +602,15 @@
     <!-- Text of button user can press to get help when setting up Reference Layers -->
     <string name="get_help_with_reference_layers">Get help with Reference Layers</string>
 
+    <!-- Toast text shown MB tiles import failed -->
+    <string name="mb_tiles_import_failed">An error occurred during import. Please try again.</string>
+
+    <!-- Toast text shown file imported as MB tiles was invalid -->
+    <string name="mb_tiles_import_bad_file_format">Import failed. Invalid file format.</string>
+
+    <!-- Text of button user can press to open map layers data from local storage in Reference layers -->
+    <string name="open_map_data_from_file_system">Open .mbtiles from Local Storage</string>
+
     <!-- Description for button that zooms to the user's current location on a map -->
     <string name="show_my_location">Show my location</string>
 
