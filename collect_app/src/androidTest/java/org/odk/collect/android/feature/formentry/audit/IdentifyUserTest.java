@@ -106,6 +106,17 @@ public class IdentifyUserTest {
     }
 
     @Test
+    public void minimizingAndReopeningApp_remainsOnIdentityPrompt() {
+        rule.startAtMainMenu()
+                .copyForm(IDENTIFY_USER_AUDIT_FORM)
+                .clickFillBlankForm()
+                .clickOnFormWithIdentityPrompt("Identify User")
+                .enterIdentity("Blah")
+                .minimizeAndReopenApp(new IdentifyUserPromptPage("Identify User"))
+                .assertText("Blah");
+    }
+
+    @Test
     public void openingForm_andPressingCloseCross_returnsToMainMenu() {
         rule.startAtMainMenu()
                 .copyForm(IDENTIFY_USER_AUDIT_FORM)
