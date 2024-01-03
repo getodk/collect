@@ -23,6 +23,7 @@ class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
 
 class OfflineMapLayersAdapter(
         private val layers: MutableList<ReferenceLayer>,
+        private val selectedLayerId: String,
         private val onSelectLayerListener: (ReferenceLayer) -> Unit,
         private val onDeleteLayerListener: (ReferenceLayer) -> Unit
 ) : RecyclerView.Adapter<OfflineMapLayersViewHolder>() {
@@ -47,6 +48,7 @@ class OfflineMapLayersAdapter(
                     else R.drawable.ic_arrow_drop_down
             )
         }
+
 
         holder.deleteButton.setOnClickListener {
             onDeleteLayerListener.invoke(layer)

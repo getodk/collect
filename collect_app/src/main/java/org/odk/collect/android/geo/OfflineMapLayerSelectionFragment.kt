@@ -29,6 +29,7 @@ import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.geo.R
 import org.odk.collect.maps.layers.ReferenceLayer
 import org.odk.collect.maps.layers.ReferenceLayerRepository
+import org.odk.collect.settings.SettingsProvider
 import java.io.File
 import java.util.Locale
 import javax.annotation.Nullable
@@ -46,6 +47,9 @@ class OfflineMapLayerSelectionFragment(
 
     @Inject
     lateinit var referenceLayerRepository: ReferenceLayerRepository
+
+    @Inject
+    lateinit var settingsProvider: SettingsProvider
 
 
     override fun onCreateView(
@@ -68,22 +72,21 @@ class OfflineMapLayerSelectionFragment(
 
         val cftor = MapConfiguratorProvider.getConfigurator()
         val supportedLayers: MutableList<ReferenceLayer> = ArrayList()
+
         for (layer in referenceLayerRepository.getAll()) {
             if (cftor.supportsLayer(layer.file)) {
                 supportedLayers.add(layer)
             }
         }
+        val referenceLayer = settingsProvider.getUnprotectedSettings().getString("reference_layer")
 
         val adapter = OfflineMapLayersAdapter(
                 layers = supportedLayers,
                 onSelectLayerListener = { referenceLayer ->
                     onFeatureClicked(referenceLayer)
-
                 },
                 onDeleteLayerListener = { referenceLayer ->
                     onDeleteLayer(referenceLayer)
-
-
                 }
         )
         recyclerView.adapter = adapter
@@ -127,12 +130,13 @@ class OfflineMapLayerSelectionFragment(
         }
     }
 
+    private fun getReferenceLayerPreference(): String? {
+        val sharedPreferences = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
+        return sharedPreferences?.getString("reference_layer", null)
+    }
+
     private fun onFeatureClicked(referenceLayer: ReferenceLayer) {
-        val path = referenceLayer.file.absolutePath
-        val cftor = MapConfiguratorProvider.getConfigurator()
-        cftor.supportsLayer(referenceLayer.file)
-        cftor.getDisplayName(File(path))
-        updatePreference(path)
+        settingsProvider.getUnprotectedSettings().save("reference_layer", referenceLayer.id)
     }
 
     @Deprecated("Deprecated in Java")
@@ -163,7 +167,6 @@ class OfflineMapLayerSelectionFragment(
             val bottomSheetFragment = OfflineMapLayerSelectionFragment()
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
-
     }
 }
 
