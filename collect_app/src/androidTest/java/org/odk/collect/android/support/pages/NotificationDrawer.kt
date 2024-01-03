@@ -54,8 +54,7 @@ class NotificationDrawer {
     fun <D : Page<D>> clickAction(
         appName: String,
         actionText: String,
-        destination: D,
-        cancelsNotification: Boolean = false
+        destination: D
     ): D {
         val device = waitForNotification(appName)
 
@@ -67,16 +66,11 @@ class NotificationDrawer {
             throw AssertionError("Could not find \"$actionText\"")
         }
 
-        if (cancelsNotification) {
-            device.openNotification()
-            assertNoNotification(appName)
-            device.pressBack()
-        }
-
         val page = waitFor {
             destination.assertOnPage()
         }
 
+        assertNoNotification(appName)
         return page
     }
 
@@ -118,8 +112,10 @@ class NotificationDrawer {
 
     private fun assertNoNotification(appName: String) {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.openNotification()
         val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
         assertThat("Expected no notification for app: $appName", result, equalTo(false))
+        device.pressBack()
     }
 
     private fun assertText(device: UiDevice, text: String): UiObject2 {

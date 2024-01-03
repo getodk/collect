@@ -94,8 +94,7 @@ class MatchExactlyTest {
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                ErrorPage(),
-                cancelsNotification = true
+                ErrorPage()
             ).assertText(org.odk.collect.strings.R.string.form_update_error)
             .assertText("Demo project")
             .assertText("The server https://server.example.com returned status code 500. If you keep having this problem, report it to the person who asked you to collect data.")

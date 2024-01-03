@@ -75,8 +75,7 @@ class AutoSendTest {
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                ErrorPage(),
-                cancelsNotification = true
+                ErrorPage()
             )
     }
 
@@ -129,8 +128,7 @@ class AutoSendTest {
             .clickAction(
                 "ODK Collect",
                 "Show details",
-                ErrorPage(),
-                cancelsNotification = true
+                ErrorPage()
             )
     }
 }
