@@ -1,71 +1,94 @@
+package org.odk.collect.android.geo
+
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
-import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.maps.layers.ReferenceLayer
-
-class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val layerTitle: TextView = itemView.findViewById(R.id.layer_name)
-    val layerDetails: TextView = itemView.findViewById(R.id.layer_details)
-
-    val expandableSection: LinearLayout = itemView.findViewById(R.id.expandable_section)
-    val expandButton: ImageView = itemView.findViewById(R.id.expand_button)
-    val deleteButton: Button = itemView.findViewById(R.id.delete_button)
-
-}
-
+import java.io.File
 
 class OfflineMapLayersAdapter(
         private val layers: MutableList<ReferenceLayer>,
-        private val selectedLayerId: String,
+        private var referenceLayerId: String,
         private val onSelectLayerListener: (ReferenceLayer) -> Unit,
         private val onDeleteLayerListener: (ReferenceLayer) -> Unit
-) : RecyclerView.Adapter<OfflineMapLayersViewHolder>() {
+) : RecyclerView.Adapter<OfflineMapLayersAdapter.OfflineMapLayersViewHolder>() {
+
+    private var selectedPosition = layers.indexOfFirst { it.id == referenceLayerId }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OfflineMapLayersViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.offline_map_item_layout, parent, false)
         return OfflineMapLayersViewHolder(itemView)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: OfflineMapLayersViewHolder, position: Int) {
         val layer = layers[position]
 
-        holder.layerTitle.text = layer.id
-        holder.layerDetails.text = layer.file.path.toString()
-        holder.expandButton.setOnClickListener {
-            val isCurrentlyVisible = holder.expandableSection.visibility == View.VISIBLE
-            holder.expandableSection.visibility = if (isCurrentlyVisible) View.GONE else View.VISIBLE
+        if (layer.id == "none") {
+            holder.layerTitle.text = "None"
+            holder.layerDetails.text = ""
+            holder.deleteButton.visibility = View.GONE // Hide the delete button for 'None' option
+            holder.expandButton.visibility = View.GONE // Hide the expand button for 'None' option
+        } else {
+            holder.layerTitle.text = layer.id
+            holder.layerDetails.text = layer.file.path.toString()
+            holder.expandButton.setImageResource(R.drawable.ic_arrow_drop_down)
+            holder.expandButton.setOnClickListener {
+                val isCurrentlyVisible = holder.expandableSection.visibility == View.VISIBLE
+                holder.expandableSection.visibility = if (isCurrentlyVisible) View.GONE else View.VISIBLE
+                holder.expandButton.animate().rotation(if (isCurrentlyVisible) 0f else 180f).start()
+            }
 
-            // Change the expand/collapse icon accordingly
-            holder.expandButton.setImageResource(
-                    if (isCurrentlyVisible) R.drawable.ic_arrow_drop_down
-                    else R.drawable.ic_arrow_drop_down
-            )
-        }
+            holder.deleteButton.setOnClickListener {
+                onDeleteLayerListener.invoke(layer)
 
+            }
 
-        holder.deleteButton.setOnClickListener {
-            onDeleteLayerListener.invoke(layer)
-        }
+            holder.itemView.findViewById<RadioButton>(R.id.radio_button).isChecked = (layer.id == referenceLayerId)
 
-
-        holder.itemView.setOnClickListener {
-            onSelectLayerListener.invoke(layer)
-
+            holder.itemView.setOnClickListener {
+                val latestPosition = holder.adapterPosition
+                if (latestPosition != RecyclerView.NO_POSITION && selectedPosition != latestPosition) {
+                    val previousSelectedPosition = selectedPosition
+                    selectedPosition = latestPosition
+                    referenceLayerId = layers[latestPosition].id
+                    notifyItemChanged(previousSelectedPosition)
+                    notifyItemChanged(selectedPosition)
+                    onSelectLayerListener(layers[latestPosition])
+                }
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return layers.size
+    override fun getItemCount(): Int = layers.size
+
+    fun removeLayer(position: Int) {
+        if (position >= 0 && position < layers.size) {
+            layers.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
 
+    fun addLayer(newLayer: ReferenceLayer) {
+        layers.add(newLayer)
+        notifyItemInserted(layers.size - 1)
+    }
 
+    class OfflineMapLayersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val layerTitle: TextView = itemView.findViewById(R.id.layer_name)
+        val layerDetails: TextView = itemView.findViewById(R.id.layer_details)
+        val expandableSection: LinearLayout = itemView.findViewById(R.id.expandable_section)
+        val expandButton: ImageView = itemView.findViewById(R.id.expand_button)
+        val deleteButton: Button = itemView.findViewById(R.id.delete_button)
+        val saveButton: Button = itemView.findViewById(org.odk.collect.geo.R.id.save_button)
+    }
 }
-
-
