@@ -48,6 +48,8 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
     private lateinit var adapter: OfflineMapLayersAdapter
     private val supportedLayers: MutableList<ReferenceLayer> = ArrayList()
 
+    private var selectedLayerId = "";
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_offline_map_selection, container, false)
@@ -84,6 +86,15 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
         view.findViewById<Button>(R.id.add_layer_button).setOnClickListener {
             val intent = FileUtils.openFilePickerForMbtiles()
             startActivityForResult(intent, PICKFILE_RESULT_CODE)
+        }
+
+        view.findViewById<Button>(R.id.save_button).setOnClickListener {
+            settingsProvider.getUnprotectedSettings().save("reference_layer", selectedLayerId)
+        }
+
+
+        view.findViewById<Button>(R.id.cancel_button).setOnClickListener {
+
         }
     }
 
@@ -126,7 +137,7 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
     }
 
     private fun onFeatureClicked(referenceLayer: ReferenceLayer) {
-        settingsProvider.getUnprotectedSettings().save("reference_layer", referenceLayer.id)
+        this.selectedLayerId = referenceLayer.id;
         adapter.notifyDataSetChanged()
     }
 
