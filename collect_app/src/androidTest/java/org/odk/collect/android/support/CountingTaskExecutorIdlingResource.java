@@ -24,8 +24,6 @@ public class CountingTaskExecutorIdlingResource extends CountingTaskExecutorRule
 
     @Override
     protected void onIdle() {
-        if (resourceCallback != null) {
-            resourceCallback.onTransitionToIdle();
-        }
+        resourceCallback.onTransitionToIdle();
     }
 }

@@ -511,14 +511,13 @@ class FormMapViewModelTest {
         assertThat(viewModel.getMappableItems().value, equalTo(null))
 
         scheduler.runBackground()
-        scheduler.runForeground()
         assertThat(viewModel.isLoading().value, equalTo(false))
     }
 
     private fun createAndLoadViewModel(form: Form): FormMapViewModel {
         val viewModel = createViewModel(form)
         viewModel.load()
-        scheduler.flush()
+        scheduler.runBackground()
         return viewModel
     }
 

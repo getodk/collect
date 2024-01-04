@@ -7,7 +7,6 @@ import org.javarosa.core.model.instance.TreeReference
 import org.javarosa.core.services.transport.payload.ByteArrayPayload
 import org.javarosa.form.api.FormEntryCaption
 import org.javarosa.form.api.FormEntryPrompt
-import org.odk.collect.android.exception.JavaRosaException
 import org.odk.collect.android.formentry.audit.AuditEventLogger
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.javarosawrapper.InstanceMetadata
@@ -17,7 +16,7 @@ import org.odk.collect.entities.Entity
 import java.io.File
 import java.util.stream.Stream
 
-open class StubFormController : FormController {
+open class DummyFormController : FormController {
     override fun getFormDef(): FormDef? = null
 
     override fun getMediaFolder(): File? = null
@@ -76,7 +75,6 @@ open class StubFormController : FormController {
 
     override fun answerQuestion(index: FormIndex?, data: IAnswerData?): Int = -1
 
-    @Throws(JavaRosaException::class)
     override fun validateAnswers(markCompleted: Boolean, moveToInvalidIndex: Boolean): ValidationResult = SuccessValidationResult
 
     override fun saveAnswer(index: FormIndex?, data: IAnswerData?): Boolean = false
@@ -89,10 +87,8 @@ open class StubFormController : FormController {
 
     override fun stepOverGroup(): Int = -1
 
-    @Throws(JavaRosaException::class)
     override fun stepToPreviousScreenEvent(): Int = -1
 
-    @Throws(JavaRosaException::class)
     override fun stepToNextScreenEvent(): Int = -1
 
     override fun stepToOuterScreenEvent(): Int = -1
@@ -107,7 +103,6 @@ open class StubFormController : FormController {
         evaluateConstraints: Boolean
     ): ValidationResult = SuccessValidationResult
 
-    @Throws(JavaRosaException::class)
     override fun saveAllScreenAnswers(
         answers: HashMap<FormIndex, IAnswerData>?,
         evaluateConstraints: Boolean

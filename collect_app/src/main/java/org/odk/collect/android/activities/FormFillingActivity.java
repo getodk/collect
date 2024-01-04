@@ -113,6 +113,7 @@ import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.SwipeHandler;
 import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
@@ -877,7 +878,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
             activityDisplayed();
-            formEntryViewModel.refreshSync();
+            formEntryViewModel.refresh();
             return;
         }
 
@@ -1144,6 +1145,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
 
         switch (event) {
+            case FormEntryController.EVENT_BEGINNING_OF_FORM:
+                return createViewForFormBeginning(formController);
             case FormEntryController.EVENT_END_OF_FORM:
                 return createViewForFormEnd(formController);
             case FormEntryController.EVENT_QUESTION:
@@ -1151,6 +1154,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             case FormEntryController.EVENT_REPEAT:
                 // should only be a group here if the event_group is a field-list
                 try {
+                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), System.currentTimeMillis());
+
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
@@ -1227,6 +1232,26 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         if (odkView != null) {
             odkView = null;
         }
+    }
+
+    /**
+     * Steps to the next screen and creates a view for it. Always sets {@code advancingPage} to true
+     * to auto-play media.
+     */
+    private SwipeHandler.View createViewForFormBeginning(FormController formController) {
+        int event = FormEntryController.EVENT_BEGINNING_OF_FORM;
+        try {
+            event = formController.stepToNextScreenEvent();
+        } catch (JavaRosaException e) {
+            Timber.d(e);
+            if (e.getMessage().equals(e.getCause().getMessage())) {
+                createErrorDialog(new FormError.NonFatal(e.getMessage()));
+            } else {
+                createErrorDialog(new FormError.NonFatal(e.getMessage() + "\n\n" + e.getCause().getMessage()));
+            }
+        }
+
+        return createView(event, true);
     }
 
     /**
@@ -2082,7 +2107,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             boolean pendingActivityResult = task.hasPendingActivityResult();
                             if (pendingActivityResult) {
                                 formControllerAvailable(formController);
-                                formEntryViewModel.refreshSync();
+                                formEntryViewModel.refresh();
                                 onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                             } else {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());

@@ -61,7 +61,8 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(true).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
-        scheduler.flush()
+        scheduler.runBackground()
+        scheduler.runBackground()
         assertThat(result.value, `is`(true))
     }
 
@@ -71,7 +72,8 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(false).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
-        scheduler.flush()
+        scheduler.runBackground()
+        scheduler.runBackground()
         assertThat(result.value, `is`(false))
     }
 
@@ -449,7 +451,8 @@ class BlankFormListViewModelTest {
         )
 
         if (runAllBackgroundTasks) {
-            scheduler.flush()
+            scheduler.runBackground()
+            scheduler.runBackground()
         }
     }
 
