@@ -20,7 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.odk.collect.android.audio.AudioFileAppender;
 import org.odk.collect.android.javarosawrapper.FormController;
-import org.odk.collect.android.utilities.DummyFormController;
+import org.odk.collect.android.utilities.StubFormController;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.androidtest.FakeLifecycleOwner;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -218,7 +218,7 @@ public class RecordingHandlerTest {
         assertThat(questionMediaManager.getAnswerFile(newRecording.getName()).exists(), is(false));
     }
 
-    private class TestFormController extends DummyFormController {
+    private class TestFormController extends StubFormController {
         @Override
         public FormDef getFormDef() {
             return formDef;

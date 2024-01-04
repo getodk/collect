@@ -48,17 +48,34 @@ public class AuditEventLogger {
         this.formController = formController;
     }
 
+    /**
+     * @deprecated use {@link #logEventSynchronized(AuditEvent.AuditEventType, FormIndex, boolean, String, long, String)} instead
+     */
+    @Deprecated
     public void logEvent(AuditEvent.AuditEventType eventType, boolean writeImmediatelyToDisk, long currentTime) {
         logEvent(eventType, null, writeImmediatelyToDisk, null, currentTime, null);
     }
 
-    /*
-     * Log a new event
+    /**
+     * @deprecated use {@link #logEventSynchronized(AuditEvent.AuditEventType, FormIndex, boolean, String, long, String)} instead
      */
+    @Deprecated
     public void logEvent(AuditEvent.AuditEventType eventType, FormIndex formIndex,
                          boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
         checkAndroidUIThread();
+        internalLog(eventType, formIndex, writeImmediatelyToDisk, questionAnswer, currentTime, changeReason);
+    }
 
+    /**
+     * Logs events to the audit log. Can safely be used on a background thread, but should not be
+     * used on the UI thread.
+     */
+    public synchronized void logEventSynchronized(AuditEvent.AuditEventType eventType, FormIndex formIndex,
+                         boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
+        internalLog(eventType, formIndex, writeImmediatelyToDisk, questionAnswer, currentTime, changeReason);
+    }
+
+    private void internalLog(AuditEvent.AuditEventType eventType, FormIndex formIndex, boolean writeImmediatelyToDisk, String questionAnswer, long currentTime, String changeReason) {
         if (!isAuditEnabled() || shouldBeIgnored(eventType)) {
             return;
         }

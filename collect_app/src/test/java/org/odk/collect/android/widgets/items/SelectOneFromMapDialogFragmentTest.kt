@@ -122,7 +122,7 @@ class SelectOneFromMapDialogFragmentTest {
             }
         )
 
-        scheduler.runBackground()
+        scheduler.flush()
 
         scenario.onFragment {
             Espresso.pressBack()
@@ -166,7 +166,7 @@ class SelectOneFromMapDialogFragmentTest {
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
 
             val data = fragment.selectionMapData
-            scheduler.runBackground()
+            scheduler.flush()
 
             assertThat(data.getMapTitle().value, equalTo(prompt.longText))
             assertThat(data.getItemCount().value, equalTo(prompt.selectChoices.size))
@@ -230,7 +230,7 @@ class SelectOneFromMapDialogFragmentTest {
             }
         )
 
-        scheduler.runBackground()
+        scheduler.flush()
 
         scenario.onFragment {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)

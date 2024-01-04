@@ -24,7 +24,7 @@ object AuditUtils {
                             null
                         }
 
-                    auditEventLogger.logEvent(
+                    auditEventLogger.logEventSynchronized(
                         AuditEvent.AuditEventType.QUESTION,
                         question.index,
                         true,

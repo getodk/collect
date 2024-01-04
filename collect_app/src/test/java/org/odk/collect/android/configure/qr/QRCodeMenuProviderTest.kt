@@ -99,7 +99,7 @@ class QRCodeMenuProviderTest {
     fun clickingOnShare_whenQRCodeIsGenerated_startsShareIntent() {
         whenever(qrCodeGenerator.generateQRCode(any(), any())).thenReturn("qr.png")
         whenever(fileProvider.getURIForFile("qr.png")).thenReturn(Uri.parse("uri"))
-        fakeScheduler.runBackground()
+        fakeScheduler.flush()
         menuProvider.onMenuItemSelected(RoboMenuItem(R.id.menu_item_share))
         val intent = Shadows.shadowOf(activity).nextStartedActivity
 
