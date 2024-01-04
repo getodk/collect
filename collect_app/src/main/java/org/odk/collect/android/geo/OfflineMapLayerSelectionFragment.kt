@@ -13,17 +13,16 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.odk.collect.android.activities.ReferenceLayerImportActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
-import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.geo.R
 import org.odk.collect.maps.layers.ReferenceLayer
@@ -92,7 +91,6 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
             settingsProvider.getUnprotectedSettings().save("reference_layer", selectedLayerId)
         }
 
-
         view.findViewById<Button>(R.id.cancel_button).setOnClickListener {
 
         }
@@ -131,9 +129,7 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
                 adapter.notifyItemRemoved(position)
             }
         }
-
         dialog.show()
-
     }
 
     private fun onFeatureClicked(referenceLayer: ReferenceLayer) {
@@ -152,14 +148,24 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
             }
             try {
                 val destFile = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), fileName)
-                FileUtils.saveLayersFromUri(selectedFileUri, destFile, requireContext())
-                showLongToast(requireContext(), "Import successful. You can select the layer from the layer switcher.")
+                val fileNames = arrayListOf(destFile.path)
+                val currentProject = "CurrentProjectIdentifier"
+
+                val intent = Intent(activity, ReferenceLayerImportActivity::class.java).apply {
+                    putStringArrayListExtra(ReferenceLayerImportActivity.EXTRA_FILE_NAMES, fileNames)
+                    putExtra(ReferenceLayerImportActivity.EXTRA_CURRENT_PROJECT, currentProject)
+                }
+                startActivity(intent)
+
+//                val destFile = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), fileName)
+//                FileUtils.saveLayersFromUri(selectedFileUri, destFile, requireContext())
+//                showLongToast(requireContext(), "Import successful. You can select the layer from the layer switcher.")
                 // Update the layers list and refresh the adapter
-                initializeLayersList()
-                adapter.notifyDataSetChanged()
+//                initializeLayersList()
+//                adapter.notifyDataSetChanged()
             } catch (e: Exception) {
                 e.printStackTrace()
-                showShortToast(requireContext(), "An error occurred during import. Please try again.")
+//                showShortToast(requireContext(), "An error occurred during import. Please try again.")
             }
         }
     }
