@@ -87,6 +87,7 @@ public class WidgetFactory {
     private final AudioPlayer audioPlayer;
     private final RecordingRequesterProvider recordingRequesterProvider;
     private final FormEntryViewModel formEntryViewModel;
+    private final PrinterWidgetViewModel printerWidgetViewModel;
     private final AudioRecorder audioRecorder;
     private final LifecycleOwner viewLifecycle;
     private final FileRequester fileRequester;
@@ -103,6 +104,7 @@ public class WidgetFactory {
                          AudioPlayer audioPlayer,
                          RecordingRequesterProvider recordingRequesterProvider,
                          FormEntryViewModel formEntryViewModel,
+                         PrinterWidgetViewModel printerWidgetViewModel,
                          AudioRecorder audioRecorder,
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
@@ -117,6 +119,7 @@ public class WidgetFactory {
         this.audioPlayer = audioPlayer;
         this.recordingRequesterProvider = recordingRequesterProvider;
         this.formEntryViewModel = formEntryViewModel;
+        this.printerWidgetViewModel = printerWidgetViewModel;
         this.audioRecorder = audioRecorder;
         this.viewLifecycle = viewLifecycle;
         this.fileRequester = fileRequester;
@@ -184,7 +187,7 @@ public class WidgetFactory {
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
                         } else if (appearance.equals(Appearances.PRINTER)) {
-                            questionWidget = new PrinterWidget(activity, questionDetails, scheduler, questionMediaManager, new QRCodeCreatorImpl(), new HtmlPrinter());
+                            questionWidget = new PrinterWidget(activity, questionDetails, printerWidgetViewModel, scheduler, questionMediaManager, new QRCodeCreatorImpl(), new HtmlPrinter());
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {

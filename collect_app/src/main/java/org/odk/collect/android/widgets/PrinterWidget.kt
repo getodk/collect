@@ -7,10 +7,8 @@ import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
@@ -30,13 +28,12 @@ import java.io.ByteArrayOutputStream
 class PrinterWidget(
     context: Context,
     questionDetails: QuestionDetails,
+    private val viewModel: PrinterWidgetViewModel,
     private val scheduler: Scheduler,
     private val questionMediaManager: QuestionMediaManager,
     private val qrCodeCreator: QRCodeCreator,
     private val htmlPrinter: HtmlPrinter
 ) : QuestionWidget(context, questionDetails) {
-
-    private val viewModel = ViewModelProvider(getContext() as ComponentActivity)[PrinterWidgetViewModel::class.java]
 
     init {
         render()

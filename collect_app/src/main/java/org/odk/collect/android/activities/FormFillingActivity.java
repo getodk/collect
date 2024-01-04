@@ -161,6 +161,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
+import org.odk.collect.android.widgets.PrinterWidgetViewModel;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
 import org.odk.collect.android.widgets.items.SelectOneFromMapDialogFragment;
@@ -381,6 +382,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private IdentityPromptViewModel identityPromptViewModel;
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
+    private PrinterWidgetViewModel printerWidgetViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
     private FormEndViewModel formEndViewModel;
 
@@ -549,6 +551,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         });
 
         formEntryViewModel = viewModelProvider.get(FormEntryViewModel.class);
+        printerWidgetViewModel = viewModelProvider.get(PrinterWidgetViewModel.class);
 
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             formIndexAnimationHandler.handle(index);
@@ -1208,7 +1211,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 odkViewLifecycle
         );
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this), scheduler);
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, printerWidgetViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this), scheduler);
     }
 
     @Override

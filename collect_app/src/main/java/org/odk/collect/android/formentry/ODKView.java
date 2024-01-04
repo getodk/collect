@@ -66,6 +66,7 @@ import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
+import org.odk.collect.android.widgets.PrinterWidgetViewModel;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.android.utilities.QuestionMediaManager;
@@ -142,7 +143,22 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
-    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorder audioRecorder, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester, AudioHelper audioHelper, Scheduler scheduler) {
+    public ODKView(
+            ComponentActivity context,
+            final FormEntryPrompt[] questionPrompts,
+            FormEntryCaption[] groups,
+            boolean advancingPage,
+            QuestionMediaManager questionMediaManager,
+            WaitingForDataRegistry waitingForDataRegistry,
+            AudioPlayer audioPlayer,
+            AudioRecorder audioRecorder,
+            FormEntryViewModel formEntryViewModel,
+            PrinterWidgetViewModel printerWidgetViewModel,
+            InternalRecordingRequester internalRecordingRequester,
+            ExternalAppRecordingRequester externalAppRecordingRequester,
+            AudioHelper audioHelper,
+            Scheduler scheduler
+    ) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
 
@@ -178,6 +194,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                         externalAppRecordingRequester
                 ),
                 formEntryViewModel,
+                printerWidgetViewModel,
                 audioRecorder,
                 viewLifecycle,
                 new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
