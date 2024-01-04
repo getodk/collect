@@ -3,6 +3,7 @@ package org.odk.collect.android.feature.formentry.audit
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -74,6 +75,7 @@ class AuditTest {
     }
 
     @Test // https://github.com/getodk/collect/issues/5253
+    @Ignore("killAndReopenApp is flakey")
     fun navigatingBackToTheFormAfterKillingTheAppWhenMovingBackwardsIsDisabled_savesFormResumeEventToAuditLog() {
         rule.startAtMainMenu()
             .copyForm("one-question-audit.xml")

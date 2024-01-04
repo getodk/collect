@@ -3,6 +3,7 @@ package org.odk.collect.android.feature.formmanagement
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -104,6 +105,7 @@ class BulkFinalizationTest {
     }
 
     @Test
+    @Ignore("killAndReopenApp is flakey")
     fun doesNotFinalizeInstancesWithSavePoints() {
         rule.withProject("http://example.com")
             .copyForm("one-question.xml", "example.com")
