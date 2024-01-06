@@ -99,7 +99,7 @@ the specific language governing permissions and limitations under the License.
 
         <activity android:name=".activities.FirstLaunchActivity"></activity>
 
-        <activity android:name=".activities.ReferenceLayerImportActivity">
+        <activity android:name=".geo.ReferenceLayerImportActivity">
 
         </activity>
 

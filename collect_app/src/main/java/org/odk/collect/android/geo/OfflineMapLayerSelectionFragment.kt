@@ -199,17 +199,20 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
                 showShortToast(requireContext(), "Import failed. Invalid file format.")
                 return
             }
-            try {
-                val destFile = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), fileName)
-                FileUtils.saveLayersFromUri(selectedFileUri, destFile, requireContext())
-                showLongToast(requireContext(), "Import successful. You can select the layer from the layer switcher.")
-                // Update the layers list and refresh the adapter
-                initializeLayersList()
-                adapter.notifyDataSetChanged()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                showShortToast(requireContext(), "An error occurred during import. Please try again.")
+
+            // Assuming 'currentProject' holds the name of the project you want to import to.
+            val currentProject = "your_project_name_here"
+
+            // Create an intent to start ReferenceLayerImportActivity
+            val intent = Intent(context, ReferenceLayerImportActivity::class.java).apply {
+                // Put the selected file URI and current project name as extras
+                putExtra(ReferenceLayerImportActivity.EXTRA_FILE_URI, selectedFileUri.toString())
+                putExtra(ReferenceLayerImportActivity.EXTRA_CURRENT_PROJECT, currentProject)
             }
+
+            // Start ReferenceLayerImportActivity
+            startActivity(intent)
+
         }
     }
 
