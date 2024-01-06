@@ -5,7 +5,12 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import org.odk.collect.android.databinding.ActivityReferenceLayerImportBinding
+import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.storage.StorageSubdirectory
+import org.odk.collect.android.utilities.FileUtils
+import java.io.File
 import java.io.InputStream
 
 class ReferenceLayerImportActivity : AppCompatActivity() {
@@ -24,6 +29,15 @@ class ReferenceLayerImportActivity : AppCompatActivity() {
         binding = ActivityReferenceLayerImportBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set the Toolbar to act as the ActionBar for this Activity window
+        setSupportActionBar(binding.toolbar)
+
+        // Enable the Up button
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Set the title of the ActionBar
+        supportActionBar?.title = "Add layers"
+
         // Retrieve the file URI and current project from the intent
         fileUri = intent.getStringExtra(EXTRA_FILE_URI)?.let { Uri.parse(it) }
         currentProject = intent.getStringExtra(EXTRA_CURRENT_PROJECT)
@@ -33,7 +47,7 @@ class ReferenceLayerImportActivity : AppCompatActivity() {
 
         // Populate the ListView with the file name (if available)
         fileUri?.let {
-            val fileName = it.lastPathSegment ?: "Unknown"
+            val fileName = FileUtils.getFileNameFromContentUri(contentResolver, fileUri)
             val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_single_choice, listOf(fileName))
             binding.layersList.adapter = adapter
         }
@@ -48,17 +62,28 @@ class ReferenceLayerImportActivity : AppCompatActivity() {
         }
     }
 
+    // Handle the back arrow click
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     private fun importLayer(uri: Uri, currentProject: String) {
         try {
-            val inputStream: InputStream? = contentResolver.openInputStream(uri)
-            if (inputStream != null) {
-                // TODO: Process the inputStream as needed for your application
+            // Assuming FileUtils.getFileNameFromContentUri returns the file name as a String.
+            val fileName = FileUtils.getFileNameFromContentUri(contentResolver, uri)
 
-                // Make sure to close the inputStream when done
-                inputStream.close()
+            if (fileName != null && fileName.isNotEmpty()) {
+                // Create a destination file in your app's private storage
+                val destFile = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), fileName)
+
+                // Assuming FileUtils.saveLayersFromUri copies the content from the URI to the destination file
+                FileUtils.saveLayersFromUri(uri, destFile, this)
+
                 Toast.makeText(this, "Import successful. You can select the layer from the layer switcher.", Toast.LENGTH_LONG).show()
+                finish()
             } else {
-                Toast.makeText(this, "Unable to open file.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Invalid file name.", Toast.LENGTH_SHORT).show()
             }
         } catch (e: Exception) {
             e.printStackTrace()

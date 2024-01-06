@@ -2,55 +2,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add layers"
-        android:textAppearance="?attr/textAppearanceHeadline6"
-        tools:ignore="HardcodedText" />
-
-    <ListView
-        android:id="@+id/layers_list"
+    <!-- Toolbar at the top without padding and white background -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:choiceMode="multipleChoice" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select layer access"
-        tools:ignore="HardcodedText" />
-
-    <RadioGroup
-        android:id="@+id/layer_access_group"
+    <!-- Rest of the layout with padding -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <RadioButton
-            android:id="@+id/all_projects_radio_button"
+        <ListView
+            android:id="@+id/layers_list"
             android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:choiceMode="multipleChoice" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All projects"
+            android:text="Select layer access"
             tools:ignore="HardcodedText" />
 
-        <RadioButton
-            android:id="@+id/current_project_radio_button"
+        <RadioGroup
+            android:id="@+id/layer_access_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Current project only"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/all_projects_radio_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="All projects"
+                tools:ignore="HardcodedText" />
+
+            <RadioButton
+                android:id="@+id/current_project_radio_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Current project only"
+                tools:ignore="HardcodedText" />
+
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/add_layer_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add layer"
             tools:ignore="HardcodedText" />
-
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/add_layer_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add layer"
-        tools:ignore="HardcodedText" />
+    </LinearLayout>
 </LinearLayout>
