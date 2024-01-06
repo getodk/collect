@@ -57,14 +57,13 @@ class OfflineMapLayersAdapter(
             }
         }
 
+        holder.itemView.findViewById<RadioButton>(R.id.radio_button).apply {
+            isClickable = false
+            isFocusable = false
+        }
+
         holder.deleteButton.setOnClickListener {
             onDeleteLayerListener.invoke(layer)
-//            if (selectedPosition == position) {
-//                referenceLayerId = "none" // Reset to 'None' after deletion
-//                selectedPosition = 0 // Reset position to 'None'
-//            }
-//            notifyItemRemoved(position)
-//            layers.removeAt(position)
         }
 
         // Set the radio button's checked state based on the current selection

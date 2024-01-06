@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add layers"
+        android:textAppearance="?attr/textAppearanceHeadline6"
+        tools:ignore="HardcodedText" />
+
+    <ListView
+        android:id="@+id/layers_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:choiceMode="multipleChoice" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select layer access"
+        tools:ignore="HardcodedText" />
+
+    <RadioGroup
+        android:id="@+id/layer_access_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/all_projects_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All projects"
+            tools:ignore="HardcodedText" />
+
+        <RadioButton
+            android:id="@+id/current_project_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Current project only"
+            tools:ignore="HardcodedText" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/add_layer_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add layer"
+        tools:ignore="HardcodedText" />
+</LinearLayout>

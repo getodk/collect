@@ -13,16 +13,17 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.odk.collect.android.activities.ReferenceLayerImportActivity
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
+import org.odk.collect.androidshared.ui.ToastUtils.showLongToast
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.geo.R
 import org.odk.collect.maps.layers.ReferenceLayer
@@ -37,6 +38,13 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
 
     private val viewModel: OfflineMapLayerViewModel by viewModels()
     private val PICKFILE_RESULT_CODE = 1
+    private var selectedLayerPosition: Int = RecyclerView.NO_POSITION
+
+
+    // Define a constant for the 'none' layer's ID
+
+    private val NONE_LAYER_ID = "none"
+
 
     @Inject
     lateinit var referenceLayerRepository: ReferenceLayerRepository
@@ -47,7 +55,7 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
     private lateinit var adapter: OfflineMapLayersAdapter
     private val supportedLayers: MutableList<ReferenceLayer> = ArrayList()
 
-    private var selectedLayerId = "";
+    private var selectedLayerId = NONE_LAYER_ID;
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -67,8 +75,21 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
         // Initialize the layers list
         initializeLayersList()
 
-        val referenceLayerId = settingsProvider.getUnprotectedSettings().getString("reference_layer")
-                ?: ""
+        val referenceLayerIdFromSettings = settingsProvider.getUnprotectedSettings().getString("reference_layer")
+        // If referenceLayerIdFromSettings is null or empty, use NONE_LAYER_ID
+        val referenceLayerId = if (referenceLayerIdFromSettings.isNullOrEmpty()) NONE_LAYER_ID else referenceLayerIdFromSettings
+
+        // Set 'none' as the default selected layer if none is currently selected
+        if (selectedLayerId.isEmpty()) {
+            selectedLayerId = NONE_LAYER_ID
+            selectedLayerPosition = 0
+        }
+
+        // Set 'none' as the default selected layer if none is currently selected
+        if (selectedLayerId.isEmpty()) {
+            selectedLayerId = NONE_LAYER_ID
+            selectedLayerPosition = 0
+        }
 
         adapter = OfflineMapLayersAdapter(
                 layers = supportedLayers,
@@ -89,16 +110,19 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
 
         view.findViewById<Button>(R.id.save_button).setOnClickListener {
             settingsProvider.getUnprotectedSettings().save("reference_layer", selectedLayerId)
+            showShortToast(requireContext(), "Layer $selectedLayerId applied.")
+            dismiss()
         }
 
-        view.findViewById<Button>(R.id.cancel_button).setOnClickListener {
 
+        view.findViewById<Button>(R.id.cancel_button).setOnClickListener {
+            dismiss()
         }
     }
 
     private fun initializeLayersList() {
         val cftor = MapConfiguratorProvider.getConfigurator()
-        val noneReferenceLayer = ReferenceLayer(id = "none", file = File(""))
+        val noneReferenceLayer = ReferenceLayer(id = NONE_LAYER_ID, file = File(""))
 
         supportedLayers.clear()
         supportedLayers.add(noneReferenceLayer)
@@ -123,18 +147,47 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
         dialogView.findViewById<Button>(org.odk.collect.android.R.id.deleteButton).setOnClickListener {
             dialog.dismiss()
             viewModel.deleteLayer(referenceLayer.file)
+            settingsProvider.getUnprotectedSettings().save("reference_layer", NONE_LAYER_ID)
+
+
+            // Update the selected layer to 'none'
+            selectedLayerId = NONE_LAYER_ID
+            selectedLayerPosition = supportedLayers.indexOfFirst { it.id == NONE_LAYER_ID } // Ensure 'none' is found correctly
+
             val position = supportedLayers.indexOf(referenceLayer)
             if (position != -1) {
                 supportedLayers.removeAt(position)
                 adapter.notifyItemRemoved(position)
             }
+
+            // Notify the adapter to refresh the list and update the selection
+            adapter.notifyDataSetChanged()
+            dismiss()
         }
+
         dialog.show()
+
     }
 
-    private fun onFeatureClicked(referenceLayer: ReferenceLayer) {
-        this.selectedLayerId = referenceLayer.id;
-        adapter.notifyDataSetChanged()
+    private fun onFeatureClicked(clickedLayer: ReferenceLayer) {
+        this.selectedLayerId = clickedLayer.id;
+        // Find the new position of the clicked layer
+        val newPosition = supportedLayers.indexOf(clickedLayer)
+
+        // Update the UI only if the position has changed
+        if (selectedLayerPosition != newPosition) {
+            // Notify the change of the previous selected item
+            if (selectedLayerPosition != RecyclerView.NO_POSITION) {
+                adapter.notifyItemChanged(selectedLayerPosition)
+            }
+
+            // Update the position and notify the change of the new selected item
+            selectedLayerPosition = newPosition
+            adapter.notifyItemChanged(selectedLayerPosition)
+
+            // Provide feedback to the user
+            showShortToast(requireContext(), "Layer ${clickedLayer.id} selected.")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, @Nullable data: Intent?) {
@@ -148,24 +201,14 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
             }
             try {
                 val destFile = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), fileName)
-                val fileNames = arrayListOf(destFile.path)
-                val currentProject = "CurrentProjectIdentifier"
-
-                val intent = Intent(activity, ReferenceLayerImportActivity::class.java).apply {
-                    putStringArrayListExtra(ReferenceLayerImportActivity.EXTRA_FILE_NAMES, fileNames)
-                    putExtra(ReferenceLayerImportActivity.EXTRA_CURRENT_PROJECT, currentProject)
-                }
-                startActivity(intent)
-
-//                val destFile = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.LAYERS), fileName)
-//                FileUtils.saveLayersFromUri(selectedFileUri, destFile, requireContext())
-//                showLongToast(requireContext(), "Import successful. You can select the layer from the layer switcher.")
+                FileUtils.saveLayersFromUri(selectedFileUri, destFile, requireContext())
+                showLongToast(requireContext(), "Import successful. You can select the layer from the layer switcher.")
                 // Update the layers list and refresh the adapter
-//                initializeLayersList()
-//                adapter.notifyDataSetChanged()
+                initializeLayersList()
+                adapter.notifyDataSetChanged()
             } catch (e: Exception) {
                 e.printStackTrace()
-//                showShortToast(requireContext(), "An error occurred during import. Please try again.")
+                showShortToast(requireContext(), "An error occurred during import. Please try again.")
             }
         }
     }
