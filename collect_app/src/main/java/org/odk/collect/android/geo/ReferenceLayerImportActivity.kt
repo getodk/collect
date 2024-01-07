@@ -1,17 +1,17 @@
 package org.odk.collect.android.geo
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import org.odk.collect.android.databinding.ActivityReferenceLayerImportBinding
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.utilities.FileUtils
 import java.io.File
-import java.io.InputStream
+
 
 class ReferenceLayerImportActivity : AppCompatActivity() {
 
@@ -81,7 +81,8 @@ class ReferenceLayerImportActivity : AppCompatActivity() {
                 FileUtils.saveLayersFromUri(uri, destFile, this)
 
                 Toast.makeText(this, "Import successful. You can select the layer from the layer switcher.", Toast.LENGTH_LONG).show()
-                finish()
+                handleOperationAndReturnResult()
+
             } else {
                 Toast.makeText(this, "Invalid file name.", Toast.LENGTH_SHORT).show()
             }
@@ -89,5 +90,16 @@ class ReferenceLayerImportActivity : AppCompatActivity() {
             e.printStackTrace()
             Toast.makeText(this, "An error occurred during import. Please try again.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun handleOperationAndReturnResult() {
+        val resultData = "some_result_data"
+
+        val returnIntent = Intent()
+        returnIntent.putExtra("result_key", resultData)
+
+        setResult(RESULT_OK, returnIntent)
+
+        finish()
     }
 }
