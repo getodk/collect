@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
@@ -21,6 +22,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
 import org.odk.collect.geo.R
@@ -58,6 +60,9 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
 
     private var selectedLayerId = NONE_LAYER_ID;
 
+    @Inject
+    lateinit var projectsDataService: ProjectsDataService
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_offline_map_selection, container, false)
@@ -72,7 +77,6 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = view.findViewById<RecyclerView>(R.id.offlineMapLayerRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
-
 
 
         val referenceLayerIdFromSettings = settingsProvider.getUnprotectedSettings().getString("reference_layer")
@@ -142,12 +146,41 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
         }
     }
 
+    fun setLayerUsageText(textView: TextView, layerName: String, projectsUsingLayer: List<String>) {
+
+        val message: String = when {
+            projectsUsingLayer.size > 1 -> {
+                "$layerName layer is currently available in all projects and used by the following projects: ${projectsUsingLayer.joinToString(", ")}"
+            }
+
+            projectsUsingLayer.size == 1 -> {
+                "$layerName layer is currently available one project and used by ${projectsUsingLayer.first()}"
+            }
+
+            else -> {
+                "$layerName layer is not currently used by any projects"
+            }
+        }
+
+        textView.text = message
+    }
+
+
     private fun onDeleteLayer(referenceLayer: ReferenceLayer) {
         val dialogView = LayoutInflater.from(context).inflate(org.odk.collect.android.R.layout.delete_layer_dialog_layout, null)
 
         val dialog = AlertDialog.Builder(context)
                 .setView(dialogView)
                 .create()
+
+
+        val textView = dialogView.findViewById<TextView>(org.odk.collect.android.R.id.dialogMessage)
+
+        val layerName = referenceLayer.id
+        val currentProject = projectsDataService.getCurrentProject().name
+        val projectsUsingLayer = listOf(currentProject)
+
+        setLayerUsageText(textView, layerName, projectsUsingLayer)
 
         dialogView.findViewById<Button>(org.odk.collect.android.R.id.cancelButton).setOnClickListener {
             dialog.dismiss()
@@ -173,9 +206,7 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
             adapter.notifyDataSetChanged()
             dismiss()
         }
-
         dialog.show()
-
     }
 
     private fun onFeatureClicked(clickedLayer: ReferenceLayer) {
@@ -215,8 +246,8 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
                 return
             }
 
-            // Assuming 'currentProject' holds the name of the project you want to import to.
-            val currentProject = "your_project_name_here"
+
+            val currentProject = projectsDataService.getCurrentProject().uuid
 
             // Create an intent to start ReferenceLayerImportActivity
             val intent = Intent(context, ReferenceLayerImportActivity::class.java).apply {
@@ -225,7 +256,7 @@ class OfflineMapLayerSelectionFragment : BottomSheetDialogFragment() {
                 putExtra(ReferenceLayerImportActivity.EXTRA_CURRENT_PROJECT, currentProject)
             }
 
-            startActivityForResult(intent,REQUEST_CODE_IMPORT_LAYER)
+            startActivityForResult(intent, REQUEST_CODE_IMPORT_LAYER)
 
         }
     }
