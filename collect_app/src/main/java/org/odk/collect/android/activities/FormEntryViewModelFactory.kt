@@ -12,6 +12,7 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel.RecordAudioAct
 import org.odk.collect.android.formentry.FormEndViewModel
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.FormSessionRepository
+import org.odk.collect.android.formentry.PrinterWidgetViewModel
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager
@@ -23,7 +24,6 @@ import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
-import org.odk.collect.android.widgets.PrinterWidgetViewModel
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient

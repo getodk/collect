@@ -2,33 +2,23 @@ package org.odk.collect.android.widgets
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import com.google.android.material.button.MaterialButton
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.QuestionMediaManager
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
-import org.odk.collect.androidshared.livedata.NonNullLiveData
-import org.odk.collect.async.Scheduler
+import org.odk.collect.android.widgets.interfaces.Printer
 import org.odk.collect.material.MaterialProgressDialogFragment
-import org.odk.collect.printer.HtmlPrinter
-import org.odk.collect.qrcode.QRCodeCreator
-import java.io.ByteArrayOutputStream
 
 class PrinterWidget(
     context: Context,
     questionDetails: QuestionDetails,
-    private val viewModel: PrinterWidgetViewModel,
+    private val printer: Printer,
     private val questionMediaManager: QuestionMediaManager
 ) : QuestionWidget(context, questionDetails) {
 
@@ -37,7 +27,7 @@ class PrinterWidget(
 
         MaterialProgressDialogFragment.showOn(
             context as AppCompatActivity,
-            viewModel.isLoading,
+            printer.isLoading(),
             context.supportFragmentManager
         ) {
             MaterialProgressDialogFragment().also { dialog ->
@@ -66,67 +56,7 @@ class PrinterWidget(
 
     private fun print() {
         formEntryPrompt.answerText?.let {
-            viewModel.parseAndPrint(it, questionMediaManager, context)
+            printer.parseAndPrint(it, questionMediaManager, context)
         }
-    }
-}
-
-class PrinterWidgetViewModel(
-    private val scheduler: Scheduler,
-    private val qrCodeCreator: QRCodeCreator,
-    private val htmlPrinter: HtmlPrinter
-) : ViewModel() {
-    private val _isLoading = MutableNonNullLiveData(false)
-    val isLoading: NonNullLiveData<Boolean> = _isLoading
-
-    fun parseAndPrint(
-        htmlDocument: String,
-        questionMediaManager: QuestionMediaManager,
-        context: Context
-    ) {
-        scheduler.immediate(
-            background = {
-                _isLoading.postValue(true)
-
-                val document = Jsoup.parse(htmlDocument)
-
-                parseImages(document, questionMediaManager)
-                parseQRCodes(document, qrCodeCreator)
-
-                document.html()
-            },
-            foreground = { content ->
-                htmlPrinter.print(context, content)
-                _isLoading.value = false
-            }
-        )
-    }
-
-    private fun parseImages(document: Document, questionMediaManager: QuestionMediaManager) {
-        for (imgElement in document.getElementsByTag("img")) {
-            val file = questionMediaManager.getAnswerFile(imgElement.attributes().get("src"))
-            if (file != null && file.exists()) {
-                imgElement.attr("src", "file://${file.absolutePath}")
-            }
-        }
-    }
-
-    private fun parseQRCodes(document: Document, qrCodeCreator: QRCodeCreator) {
-        for (qrcodeElement in document.getElementsByTag("qrcode")) {
-            val newElement = document.createElement("img").apply {
-                attributes().addAll(qrcodeElement.attributes())
-                val qrCodeData = bitmapToBase64(qrCodeCreator.create(qrcodeElement.text()))
-                attr("src", "data:image/png;base64,$qrCodeData")
-            }
-            qrcodeElement.replaceWith(newElement)
-        }
-    }
-
-    private fun bitmapToBase64(bitmap: Bitmap): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 }
