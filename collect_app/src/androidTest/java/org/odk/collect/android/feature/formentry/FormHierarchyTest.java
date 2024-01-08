@@ -65,7 +65,7 @@ public class FormHierarchyTest {
                 .atPositionOnView(2, R.id.primary_text))
                 .check(matches(withText("Guest details")));
         onView(withRecyclerView(R.id.list)
-                .atPositionOnView(2, R.id.secondary_text))
+                .atPositionOnView(2, R.id.group_label))
                 .check(matches(withText("Repeatable Group")));
 
         page.clickOnText("Guest details");

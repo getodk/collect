@@ -19,32 +19,36 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 class HierarchyListAdapter(
-    private val hierarchyElements: List<HierarchyElement>,
+    private val hierarchyItems: List<HierarchyItem>,
     private val listener: OnElementClickListener
 ) : RecyclerView.Adapter<HierarchyListAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val item = HierarchyListItemView(parent.context).apply {
+        val item = HierarchyListItemView(parent.context, viewType).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
         return ViewHolder(item)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return hierarchyItems[position].hierarchyItemType.id
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(hierarchyElements[position], listener)
+        holder.bind(hierarchyItems[position], listener)
     }
 
     override fun getItemCount(): Int {
-        return hierarchyElements.size
+        return hierarchyItems.size
     }
 
     class ViewHolder(private val view: HierarchyListItemView) : RecyclerView.ViewHolder(view) {
-        fun bind(element: HierarchyElement, listener: OnElementClickListener) {
+        fun bind(element: HierarchyItem, listener: OnElementClickListener) {
             view.setElement(element)
             view.setOnClickListener { listener.onElementClick(element) }
         }
     }
 
     interface OnElementClickListener {
-        fun onElementClick(element: HierarchyElement?)
+        fun onElementClick(element: HierarchyItem?)
     }
 }

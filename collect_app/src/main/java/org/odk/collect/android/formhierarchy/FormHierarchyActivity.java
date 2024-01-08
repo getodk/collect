@@ -28,7 +28,6 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -92,7 +91,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
      * The questions and repeats at the current level.
      * Recreated every time {@link #refreshView()} is called.
      */
-    private List<HierarchyElement> elementsToDisplay;
+    private List<HierarchyItem> elementsToDisplay;
 
     /**
      * The icon shown at the top of a hierarchy screen for groups of questions.
@@ -270,11 +269,11 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 int position = 0;
                 // Iterate over all the elements currently displayed looking for a match with the
                 // startIndex which can either represent a question or a field list.
-                for (HierarchyElement hierarchyElement : elementsToDisplay) {
-                    FormIndex indexToCheck = hierarchyElement.getFormIndex();
+                for (HierarchyItem hierarchyItem : elementsToDisplay) {
+                    FormIndex indexToCheck = hierarchyItem.getFormIndex();
                     if (startIndex.equals(indexToCheck)
                             || (formController.indexIsInFieldList(startIndex) && indexToCheck.toString().startsWith(startIndex.toString()))) {
-                        position = elementsToDisplay.indexOf(hierarchyElement);
+                        position = elementsToDisplay.indexOf(hierarchyItem);
                         break;
                     }
                 }
@@ -578,7 +577,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     /**
      * Rebuilds the view to reflect the elements that should be displayed based on the
      * FormController's current index. This index is either set prior to the activity opening or
-     * mutated by {@link #onElementClick(HierarchyElement)} if a repeat instance was tapped.
+     * mutated by {@link #onElementClick(HierarchyItem)} if a repeat instance was tapped.
      */
     public void refreshView() {
         refreshView(false);
@@ -658,8 +657,13 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                         String label = fp.getShortText();
                         String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
                         elementsToDisplay.add(
-                                new HierarchyElement(FormEntryPromptUtils.styledQuestionText(label, fp.isRequired()), answerDisplay, null,
-                                        HierarchyElement.Type.QUESTION, fp.getIndex()));
+                            new HierarchyItem(
+                                fp.getIndex(),
+                                HierarchyItemType.QUESTION,
+                                FormEntryPromptUtils.styledQuestionText(label, fp.isRequired()),
+                                answerDisplay
+                            )
+                        );
                         break;
                     }
                     case FormEntryController.EVENT_GROUP: {
@@ -686,11 +690,14 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                         visibleGroupRef = currentRef;
 
                         FormEntryCaption caption = formController.getCaptionPrompt();
-                        HierarchyElement groupElement = new HierarchyElement(
-                                HtmlUtils.textToHtml(caption.getShortText()), getString(org.odk.collect.strings.R.string.group_label),
-                                ContextCompat.getDrawable(this, R.drawable.ic_folder_open),
-                                HierarchyElement.Type.VISIBLE_GROUP, caption.getIndex());
-                        elementsToDisplay.add(groupElement);
+
+                        elementsToDisplay.add(
+                            new HierarchyItem(
+                                caption.getIndex(),
+                                HierarchyItemType.VISIBLE_GROUP,
+                                HtmlUtils.textToHtml(caption.getShortText())
+                            )
+                        );
 
                         // Skip to the next item outside the group.
                         event = formController.stepOverGroup();
@@ -739,17 +746,21 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                                 }
                             }
 
-                            HierarchyElement instance = new HierarchyElement(
-                                    HtmlUtils.textToHtml(repeatLabel), null,
-                                    null, HierarchyElement.Type.REPEAT_INSTANCE, fc.getIndex());
-                            elementsToDisplay.add(instance);
+                            elementsToDisplay.add(
+                                new HierarchyItem(
+                                    fc.getIndex(),
+                                    HierarchyItemType.REPEAT_INSTANCE,
+                                    HtmlUtils.textToHtml(repeatLabel)
+                                )
+                            );
                         } else if (fc.getMultiplicity() == 0) {
-                            // Display the repeat header for the group.
-                            HierarchyElement group = new HierarchyElement(
-                                    HtmlUtils.textToHtml(fc.getShortText()), getString(org.odk.collect.strings.R.string.repeatable_group_label),
-                                    ContextCompat.getDrawable(this, R.drawable.ic_repeat),
-                                    HierarchyElement.Type.REPEATABLE_GROUP, fc.getIndex());
-                            elementsToDisplay.add(group);
+                            elementsToDisplay.add(
+                                new HierarchyItem(
+                                    fc.getIndex(),
+                                    HierarchyItemType.REPEATABLE_GROUP,
+                                    HtmlUtils.textToHtml(fc.getShortText())
+                                )
+                            );
                         }
 
                         break;
@@ -787,16 +798,16 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
      */
     private boolean isDisplayingSingleGroup() {
         return elementsToDisplay.size() == 1
-                && elementsToDisplay.get(0).getType() == HierarchyElement.Type.VISIBLE_GROUP;
+                && elementsToDisplay.get(0).getHierarchyItemType() == HierarchyItemType.VISIBLE_GROUP;
     }
 
     /**
      * Handles clicks on a specific row in the hierarchy view.
      */
-    public void onElementClick(HierarchyElement element) {
-        FormIndex index = element.getFormIndex();
+    public void onElementClick(HierarchyItem item) {
+        FormIndex index = item.getFormIndex();
 
-        switch (element.getType()) {
+        switch (item.getHierarchyItemType()) {
             case QUESTION:
                 onQuestionClicked(index);
                 break;

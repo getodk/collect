@@ -11,29 +11,28 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/margin_small"
-        app:layout_constraintTop_toTopOf="@id/primary_text"
-        app:layout_constraintBottom_toBottomOf="@id/secondary_text"
         app:layout_constraintStart_toStartOf="parent"
-        tools:src="@drawable/ic_folder_open" />
+        app:layout_constraintBottom_toBottomOf="@id/primary_text"
+        app:layout_constraintTop_toTopOf="@id/group_label"
+        app:srcCompat="@drawable/ic_folder_open" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/group_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:text="@string/group_label"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/primary_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.QuestionTitle"
-        app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Text widgets" />
-
-    <TextView
-        android:id="@+id/secondary_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        app:layout_constraintStart_toStartOf="@id/primary_text"
-        app:layout_constraintTop_toBottomOf="@id/primary_text"
-        tools:text="Group" />
+        app:layout_constraintStart_toStartOf="@id/group_label"
+        app:layout_constraintTop_toBottomOf="@id/group_label"
+        tools:text="Household" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,14 @@
 package org.odk.collect.android.formhierarchy
 
 import android.app.Application
-import android.graphics.drawable.Drawable
 import android.view.View
-import androidx.core.content.ContextCompat
+import android.widget.ImageView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.android.material.textview.MaterialTextView
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.`is`
+import org.hamcrest.Matchers.equalTo
+import org.javarosa.core.model.FormIndex
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -16,70 +17,103 @@ import org.odk.collect.android.R
 @RunWith(AndroidJUnit4::class)
 class HierarchyListItemViewTest {
 
-    private val context = ApplicationProvider.getApplicationContext<Application>()
+    private val context: Application =
+        ApplicationProvider.getApplicationContext<Application>().also {
+            it.setTheme(com.google.android.material.R.style.Theme_Material3_Light)
+        }
 
     @Test
-    fun `When icon is not specified should be gone`() {
-        val view = HierarchyListItemView(context)
+    fun `Question item should contain only primary text and secondary text`() {
+        val view = HierarchyListItemView(context, HierarchyItemType.QUESTION.id)
 
-        view.setElement(getHierarchyElement(null, "", ""))
+        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.QUESTION, "foo", "bar"))
 
-        assertThat(view.binding.icon.visibility, `is`(View.GONE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.secondary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.secondary_text).text.toString(), equalTo("bar"))
+
+        assertThat(view.findViewById<ImageView>(R.id.icon), equalTo(null))
     }
 
     @Test
-    fun `When icon is specified should be visible`() {
-        val view = HierarchyListItemView(context)
+    fun `When secondary text is not set the textview should be gone`() {
+        val view = HierarchyListItemView(context, HierarchyItemType.QUESTION.id)
 
-        val icon = ContextCompat.getDrawable(context, R.drawable.ic_folder_open)
-        view.setElement(getHierarchyElement(icon, "", ""))
+        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.QUESTION, "foo"))
 
-        assertThat(view.binding.icon.drawable, `is`(icon))
-        assertThat(view.binding.icon.visibility, `is`(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.secondary_text).visibility, equalTo(View.GONE))
     }
 
     @Test
-    fun `Primary text should be visible`() {
-        val view = HierarchyListItemView(context)
+    fun `When secondary text is blank the textview should be gone`() {
+        val view = HierarchyListItemView(context, HierarchyItemType.QUESTION.id)
 
-        view.setElement(getHierarchyElement(null, "Primary text", ""))
+        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.QUESTION, "foo", " "))
 
-        assertThat(view.binding.primaryText.visibility, `is`(View.VISIBLE))
-        assertThat(view.binding.primaryText.text.toString(), `is`("Primary text"))
-    }
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
 
-    @Test
-    fun `When secondary text is not specified should be gone`() {
-        val view = HierarchyListItemView(context)
-
-        // Empty value
-        view.setElement(getHierarchyElement(null, "", ""))
-        assertThat(view.binding.secondaryText.visibility, `is`(View.GONE))
-
-        // Null value
-        view.setElement(getHierarchyElement(null, "", null))
-        assertThat(view.binding.secondaryText.visibility, `is`(View.GONE))
-    }
-
-    @Test
-    fun `When secondary text is specified should be visible`() {
-        val view = HierarchyListItemView(context)
-
-        view.setElement(getHierarchyElement(null, "", "Secondary text"))
-
-        assertThat(view.binding.secondaryText.visibility, `is`(View.VISIBLE))
-        assertThat(view.binding.secondaryText.text.toString(), `is`("Secondary text"))
+        assertThat(view.findViewById<MaterialTextView>(R.id.secondary_text).visibility, equalTo(View.GONE))
     }
 
     @Test
     fun `When secondary text is html should be styled`() {
-        val view = HierarchyListItemView(context)
+        val view = HierarchyListItemView(context, HierarchyItemType.QUESTION.id)
 
-        view.setElement(getHierarchyElement(null, "", "<h1>Secondary text</h1>"))
+        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.QUESTION, "foo", "<h1>bar</h1>"))
 
-        assertThat(view.binding.secondaryText.text.toString(), `is`("Secondary text"))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.secondary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.secondary_text).text.toString(), equalTo("bar"))
     }
 
-    private fun getHierarchyElement(icon: Drawable?, primaryText: String, secondaryText: String?) =
-        HierarchyElement(primaryText, secondaryText, icon, HierarchyElement.Type.QUESTION, mock())
+    @Test
+    fun `Group item should contain group label, primary text and icon`() {
+        val view = HierarchyListItemView(context, HierarchyItemType.VISIBLE_GROUP.id)
+
+        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.VISIBLE_GROUP, "foo"))
+
+        assertThat(view.findViewById<ImageView>(R.id.icon).visibility, equalTo(View.VISIBLE))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.group_label).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.group_label).text.toString(), equalTo(context.getString(org.odk.collect.strings.R.string.group_label)))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
+    }
+
+    @Test
+    fun `Repeatable group item should contain group label, primary text and icon`() {
+        val view = HierarchyListItemView(context, HierarchyItemType.REPEATABLE_GROUP.id)
+
+        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.REPEATABLE_GROUP, "foo"))
+
+        assertThat(view.findViewById<ImageView>(R.id.icon).visibility, equalTo(View.VISIBLE))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.group_label).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.group_label).text.toString(), equalTo(context.getString(org.odk.collect.strings.R.string.repeatable_group_label)))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
+    }
+
+    @Test
+    fun `Repeatable group instance item should contain only primary text`() {
+        val view = HierarchyListItemView(context, HierarchyItemType.REPEAT_INSTANCE.id)
+
+        view.setElement(HierarchyItem(mock<FormIndex>(), HierarchyItemType.REPEAT_INSTANCE, "foo"))
+
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).visibility, equalTo(View.VISIBLE))
+        assertThat(view.findViewById<MaterialTextView>(R.id.primary_text).text.toString(), equalTo("foo"))
+
+        assertThat(view.findViewById<ImageView>(R.id.icon), equalTo(null))
+        assertThat(view.findViewById<MaterialTextView>(R.id.secondary_text), equalTo(null))
+    }
 }
