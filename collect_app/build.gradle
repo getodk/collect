@@ -176,6 +176,12 @@ android {
             exclude 'lib/x86_64/libmapbox-common.so'
             exclude 'lib/x86_64/libc++_shared.so'
         }
+
+        /* Exclude large properties files used by BouncyCastle's Picnic implementation (which
+           Collect doesn't use). */
+        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL5.bin.properties'
+        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL3.bin.properties'
+        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL1.bin.properties'
     }
 
     compileOptions {
