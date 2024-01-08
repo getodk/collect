@@ -85,7 +85,6 @@ import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.PlaybackFailedException;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.permissions.PermissionListener;
@@ -156,8 +155,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             PrinterWidgetViewModel printerWidgetViewModel,
             InternalRecordingRequester internalRecordingRequester,
             ExternalAppRecordingRequester externalAppRecordingRequester,
-            AudioHelper audioHelper,
-            Scheduler scheduler
+            AudioHelper audioHelper
     ) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
@@ -199,8 +197,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 viewLifecycle,
                 new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
                 new StringRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
-                formController,
-                scheduler
+                formController
         );
 
         widgets = new ArrayList<>();

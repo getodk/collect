@@ -29,10 +29,7 @@ class PrinterWidget(
     context: Context,
     questionDetails: QuestionDetails,
     private val viewModel: PrinterWidgetViewModel,
-    private val scheduler: Scheduler,
-    private val questionMediaManager: QuestionMediaManager,
-    private val qrCodeCreator: QRCodeCreator,
-    private val htmlPrinter: HtmlPrinter
+    private val questionMediaManager: QuestionMediaManager
 ) : QuestionWidget(context, questionDetails) {
 
     init {
@@ -69,22 +66,23 @@ class PrinterWidget(
 
     private fun print() {
         formEntryPrompt.answerText?.let {
-            viewModel.parseAndPrint(scheduler, it, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            viewModel.parseAndPrint(it, questionMediaManager, context)
         }
     }
 }
 
-class PrinterWidgetViewModel : ViewModel() {
+class PrinterWidgetViewModel(
+    private val scheduler: Scheduler,
+    private val qrCodeCreator: QRCodeCreator,
+    private val htmlPrinter: HtmlPrinter
+) : ViewModel() {
     private val _isLoading = MutableNonNullLiveData(false)
     val isLoading: NonNullLiveData<Boolean> = _isLoading
 
     fun parseAndPrint(
-        scheduler: Scheduler,
         htmlDocument: String,
         questionMediaManager: QuestionMediaManager,
-        qrCodeCreator: QRCodeCreator,
-        context: Context,
-        htmlPrinter: HtmlPrinter
+        context: Context
     ) {
         scheduler.immediate(
             background = {

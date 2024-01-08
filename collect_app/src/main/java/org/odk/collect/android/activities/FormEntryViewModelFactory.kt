@@ -29,6 +29,8 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.printer.HtmlPrinter
+import org.odk.collect.qrcode.QRCodeCreator
 import org.odk.collect.settings.SettingsProvider
 import java.util.function.BiConsumer
 
@@ -47,7 +49,9 @@ class FormEntryViewModelFactory(
     private val fusedLocationClient: LocationClient,
     private val permissionsProvider: PermissionsProvider,
     private val autoSendSettingsProvider: AutoSendSettingsProvider,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val qrCodeCreator: QRCodeCreator,
+    private val htmlPrinter: HtmlPrinter
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -134,7 +138,7 @@ class FormEntryViewModelFactory(
                 autoSendSettingsProvider
             )
 
-            PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel()
+            PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
 
             else -> throw IllegalArgumentException()
         } as T

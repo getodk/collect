@@ -31,7 +31,7 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
     private val qrCodeCreator = mock<QRCodeCreator>()
     private val htmlPrinter = mock<HtmlPrinter>()
 
-    override fun createWidget() = PrinterWidget(activity, QuestionDetails(formEntryPrompt), PrinterWidgetViewModel(), scheduler, questionMediaManager, qrCodeCreator, htmlPrinter)
+    override fun createWidget() = PrinterWidget(activity, QuestionDetails(formEntryPrompt), PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter), questionMediaManager)
 
     @Test
     fun `clicking the button should trigger printing html document if answer exists`() {
@@ -100,9 +100,9 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
 
         @Test
         fun `printing an empty string does not crash`() {
-            val printerWidgetViewModel = PrinterWidgetViewModel()
+            val printerWidgetViewModel = PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
             val html = ""
-            printerWidgetViewModel.parseAndPrint(scheduler, html, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            printerWidgetViewModel.parseAndPrint(html, questionMediaManager, context)
             scheduler.runBackground()
             scheduler.runForeground()
 
@@ -114,9 +114,9 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
 
         @Test
         fun `parsing a broken HTML with unclosed tags does not crash`() {
-            val printerWidgetViewModel = PrinterWidgetViewModel()
+            val printerWidgetViewModel = PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
             val html = "<h1>This is an <b>unclosed tag<p>Broken HTML example</h1>"
-            printerWidgetViewModel.parseAndPrint(scheduler, html, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            printerWidgetViewModel.parseAndPrint(html, questionMediaManager, context)
             scheduler.runBackground()
             scheduler.runForeground()
 
@@ -134,9 +134,9 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
 
         @Test
         fun `printing a partial HTML without html, head and body tags adds it`() {
-            val printerWidgetViewModel = PrinterWidgetViewModel()
+            val printerWidgetViewModel = PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
             val html = "blah"
-            printerWidgetViewModel.parseAndPrint(scheduler, html, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            printerWidgetViewModel.parseAndPrint(html, questionMediaManager, context)
             scheduler.runBackground()
             scheduler.runForeground()
 
@@ -153,9 +153,9 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
 
         @Test
         fun `printing an HTML with css keeps it`() {
-            val printerWidgetViewModel = PrinterWidgetViewModel()
+            val printerWidgetViewModel = PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
             val html = "<html lang=\"en\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"> <title>Embedded CSS Example</title> <style> body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; } h1 { color: blue; } p { font-size: 16px; line-height: 1.5; } </style> </head> <body> <h1>Hello, World!</h1> <p>This is a sample HTML document with embedded CSS.</p> </body> </html>"
-            printerWidgetViewModel.parseAndPrint(scheduler, html, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            printerWidgetViewModel.parseAndPrint(html, questionMediaManager, context)
             scheduler.runBackground()
             scheduler.runForeground()
 
@@ -180,9 +180,9 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         fun `printing an HTML with images sets the src attribute to an absolute path of an image`() {
             val tempFile = File.createTempFile("photo", ".png")
             whenever(questionMediaManager.getAnswerFile("photo.png")).thenReturn(tempFile)
-            val printerWidgetViewModel = PrinterWidgetViewModel()
+            val printerWidgetViewModel = PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
             val html = "<img width=\"150\" height=\"150\" src=\"photo.png\">"
-            printerWidgetViewModel.parseAndPrint(scheduler, html, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            printerWidgetViewModel.parseAndPrint(html, questionMediaManager, context)
             scheduler.runBackground()
             scheduler.runForeground()
 
@@ -200,9 +200,9 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         @Test
         fun `printing an HTML with a non-existing image does not modify the src attribute`() {
             whenever(questionMediaManager.getAnswerFile("photo.png")).thenReturn(null)
-            val printerWidgetViewModel = PrinterWidgetViewModel()
+            val printerWidgetViewModel = PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
             val html = "<img width=\"150\" height=\"150\" src=\"photo.png\">"
-            printerWidgetViewModel.parseAndPrint(scheduler, html, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            printerWidgetViewModel.parseAndPrint(html, questionMediaManager, context)
             scheduler.runBackground()
             scheduler.runForeground()
 
@@ -220,9 +220,9 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
         @Test
         fun `printing an HTML converts qrcode tags to img ones`() {
             whenever(qrCodeCreator.create(any())).thenReturn(Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888))
-            val printerWidgetViewModel = PrinterWidgetViewModel()
+            val printerWidgetViewModel = PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
             val html = "<qrcode width=\"150\" height=\"150\">blah</qrcode>"
-            printerWidgetViewModel.parseAndPrint(scheduler, html, questionMediaManager, qrCodeCreator, context, htmlPrinter)
+            printerWidgetViewModel.parseAndPrint(html, questionMediaManager, context)
             scheduler.runBackground()
             scheduler.runForeground()
 
