@@ -216,6 +216,7 @@
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="no_app">The requested application is missing. Please manually enter the reading.</string>
     <string name="null_intent_value">The external application did not provide expected information.</string>
+    <!-- Name of the button displayed in the PrinterWidget to trigger printing -->
     <string name="print">Print</string>
     <string name="launch_printer">Initiate Printing</string>
     <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
