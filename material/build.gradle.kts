@@ -62,5 +62,4 @@ dependencies {
     testImplementation(Dependencies.hamcrest)
     testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.robolectric)
-    testImplementation(Dependencies.androidx_fragment_testing)
 }

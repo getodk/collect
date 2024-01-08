@@ -61,5 +61,4 @@ dependencies {
     testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.androidx_test_espresso_core)
     testImplementation(Dependencies.robolectric)
-    testImplementation(Dependencies.androidx_fragment_testing)
 }
