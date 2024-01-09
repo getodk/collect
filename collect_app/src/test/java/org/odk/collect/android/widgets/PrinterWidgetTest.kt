@@ -52,17 +52,6 @@ class PrinterWidgetTest : QuestionWidgetTest<PrinterWidget, IAnswerData>() {
     }
 
     @Test
-    fun `the widget should always return null as the answer`() {
-        whenever(formEntryPrompt.answerText).thenReturn("blah")
-        whenever(formEntryPrompt.answerValue).thenReturn(StringData("blah"))
-
-        val widget = createWidget()
-        widget.findViewById<MaterialButton>(R.id.printer_button).performClick()
-
-        assertThat(widget.answer, equalTo(null))
-    }
-
-    @Test
     override fun widgetShouldBeRegisteredForContextMenu() {
         val viewsRegisterForContextMenu = (activity as WidgetTestActivity).viewsRegisterForContextMenu
 

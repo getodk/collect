@@ -48,7 +48,7 @@ class PrinterWidget(
 
     override fun setOnLongClickListener(listener: OnLongClickListener?) = Unit
 
-    override fun getAnswer(): IAnswerData? = null
+    override fun getAnswer(): IAnswerData? = formEntryPrompt.answerValue
 
     override fun clearAnswer() = Unit
 
