@@ -25,6 +25,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -38,6 +39,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(Dependencies.desugar)
+
     implementation(project(":strings"))
     implementation(project(":androidshared"))
     implementation(project(":icons"))
@@ -47,9 +50,10 @@ dependencies {
     implementation(Dependencies.karumi_dexter)
     implementation(Dependencies.timber)
 
+    debugImplementation(project(":fragmentstest"))
+
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
-    testImplementation(project(":fragmentstest"))
     testImplementation(project(":strings"))
     testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.androidx_test_espresso_core)
