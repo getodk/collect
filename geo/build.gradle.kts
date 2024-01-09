@@ -51,7 +51,7 @@ dependencies {
     implementation(project(":strings"))
     implementation(project(":location"))
     implementation(project(":androidshared"))
-    implementation(project(":externalapp"))
+    implementation(project(":external-app"))
     implementation(project(":async"))
     implementation(project(":analytics"))
     implementation(project(":permissions"))

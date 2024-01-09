@@ -46,7 +46,7 @@ dependencies {
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":permissions"))
-    implementation(project(":externalapp"))
+    implementation(project(":external-app"))
     implementation(project(":analytics"))
 
     implementation(Dependencies.camerax_core)
