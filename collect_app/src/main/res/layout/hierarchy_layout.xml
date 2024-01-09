@@ -16,9 +16,9 @@
         android:layout_marginStart="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_small"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_folder_open"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+        tools:srcCompat="@drawable/ic_folder_open"
         tools:visibility="visible" />
 
     <TextView

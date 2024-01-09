@@ -28,6 +28,7 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -609,6 +610,12 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 groupIcon.setVisibility(View.VISIBLE);
                 groupPathTextView.setVisibility(View.VISIBLE);
                 groupPathTextView.setText(getCurrentPath());
+
+                if (formController.indexContainsRepeatableGroup() || shouldShowRepeatGroupPicker()) {
+                    groupIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_repeat));
+                } else {
+                    groupIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_folder_open));
+                }
             }
 
             // Refresh the current event in case we did step forward.
