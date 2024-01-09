@@ -4,7 +4,6 @@ import com.google.android.material.button.MaterialButton
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.javarosa.core.model.data.IAnswerData
-import org.javarosa.core.model.data.StringData
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
