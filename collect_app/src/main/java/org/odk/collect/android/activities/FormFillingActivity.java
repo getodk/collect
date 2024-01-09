@@ -695,7 +695,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 if (formController != null) {
                     formControllerAvailable(formController);
                     activityDisplayed();
-                    formEntryViewModel.refresh();
+                    formEntryViewModel.refreshSync();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
