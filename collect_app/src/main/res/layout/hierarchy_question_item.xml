@@ -22,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_standard"
         android:textAppearance="?textAppearanceBodyLarge"
-        android:textColor="?colorPrimary"
         app:layout_constraintStart_toStartOf="@id/primary_text"
         app:layout_constraintTop_toBottomOf="@id/primary_text"
         tools:text="Adam" />
