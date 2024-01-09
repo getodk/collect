@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -23,32 +21,31 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.async"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
-    implementation(project(":strings"))
-    implementation(Dependencies.android_material)
-    testImplementation(Dependencies.junit)
+    coreLibraryDesugaring(Dependencies.desugar)
+
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.androidx_core_ktx)
+    implementation(Dependencies.kotlinx_coroutines_android)
+    implementation(Dependencies.androidx_work_runtime)
+
     testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.robolectric)
+    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.androidx_work_testing)
+    testImplementation(Dependencies.mockito_kotlin)
 }

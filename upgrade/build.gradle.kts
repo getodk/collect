@@ -4,13 +4,12 @@ import dependencies.Versions
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-kapt")
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -37,18 +36,15 @@ android {
         }
     }
 
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.upgrade"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
-    implementation(project(":strings"))
-    implementation(Dependencies.android_material)
+    implementation(Dependencies.androidx_core_ktx)
+    implementation(project(":shared"))
+
+    testImplementation(project(":test-shared"))
+    testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
 }

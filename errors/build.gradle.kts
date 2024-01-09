@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -40,15 +38,20 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    namespace = "org.odk.collect.errors"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
     implementation(project(":strings"))
+    implementation(project(":androidshared"))
+    implementation(Dependencies.androidx_core_ktx)
+    implementation(Dependencies.androidx_appcompat)
+    implementation(Dependencies.androidx_recyclerview)
     implementation(Dependencies.android_material)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
+
+    testImplementation(project(":androidtest"))
+    testImplementation(project(":test-shared"))
     testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
+    testImplementation(Dependencies.androidx_test_espresso_core)
 }

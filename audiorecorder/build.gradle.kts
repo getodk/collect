@@ -5,14 +5,11 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
-    id("androidx.navigation.safeargs.kotlin")
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.entities"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -29,37 +26,39 @@ android {
     }
 
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
+        unitTests.isIncludeAndroidResources = true
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.audiorecorder"
 }
 
 dependencies {
-    coreLibraryDesugaring(Dependencies.desugar)
-
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(project(":icons"))
     implementation(project(":strings"))
-    implementation(project(":shared"))
+    implementation(project(":async"))
     implementation(project(":androidshared"))
-
     implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.androidx_core_ktx)
     implementation(Dependencies.androidx_appcompat)
-    implementation(Dependencies.android_material)
-    implementation(Dependencies.androidx_navigation_fragment_ktx)
-    implementation(Dependencies.androidx_navigation_ui)
+    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
     implementation(Dependencies.dagger)
     kapt(Dependencies.dagger_compiler)
+    implementation(Dependencies.timber)
 
+    testImplementation(project(":androidtest"))
+    testImplementation(project(":test-shared"))
+    testImplementation(project(":servicetest"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.robolectric)
+    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.androidx_test_core_ktx)
+    testImplementation(Dependencies.androidx_test_rules)
+    testImplementation(Dependencies.androidx_arch_core_testing)
+    testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(Dependencies.hamcrest)
 }

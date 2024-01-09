@@ -4,13 +4,12 @@ import dependencies.Versions
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-kapt")
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -31,24 +30,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.imageloader"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
-    implementation(project(":strings"))
-    implementation(Dependencies.android_material)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
+    implementation(Dependencies.glide)
+    implementation(Dependencies.caverock_androidsvg)
+    kapt(Dependencies.glide_compiler)
 }

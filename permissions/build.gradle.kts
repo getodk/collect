@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -36,19 +34,26 @@ android {
             isIncludeAndroidResources = true
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.permissions"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
     implementation(project(":strings"))
+    implementation(project(":androidshared"))
+    implementation(project(":icons"))
+    implementation(Dependencies.androidx_core_ktx)
+    implementation(Dependencies.androidx_fragment_ktx)
     implementation(Dependencies.android_material)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
+    implementation(Dependencies.karumi_dexter)
+    implementation(Dependencies.timber)
+
+    testImplementation(project(":androidtest"))
+    testImplementation(project(":test-shared"))
+    testImplementation(project(":fragmentstest"))
+    testImplementation(project(":strings"))
     testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.androidx_test_espresso_core)
+    testImplementation(Dependencies.androidx_test_espresso_intents)
+    testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.robolectric)
 }

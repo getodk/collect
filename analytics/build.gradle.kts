@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -23,6 +21,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -31,24 +30,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.analytics"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
-    implementation(project(":strings"))
-    implementation(Dependencies.android_material)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
+    implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.androidx_core_ktx)
+    implementation(Dependencies.firebase_crashlytics)
+    implementation(Dependencies.firebase_analytics) {
+        exclude(group = "com.google.guava")
+    }
 }

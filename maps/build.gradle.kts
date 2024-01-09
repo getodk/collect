@@ -4,13 +4,13 @@ import dependencies.Versions
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -27,6 +27,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -40,15 +41,21 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    namespace = "org.odk.collect.maps"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
-    implementation(project(":strings"))
-    implementation(Dependencies.android_material)
+    coreLibraryDesugaring(Dependencies.desugar)
+
+    implementation(project(":shared"))
+    implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.androidx_fragment_ktx)
+    implementation(Dependencies.androidx_preference_ktx)
+    implementation(Dependencies.timber)
+
     testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
     testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.hamcrest)
     testImplementation(Dependencies.robolectric)
 }

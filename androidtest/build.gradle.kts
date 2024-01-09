@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.metadata"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -20,34 +18,29 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
         }
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+    namespace = "org.odk.collect.androidtest"
 }
 
 dependencies {
-    implementation(project(":permissions"))
-    implementation(project(":settings"))
-    implementation(project(":shared"))
+    coreLibraryDesugaring(Dependencies.desugar)
 
-    implementation(Dependencies.javarosa) {
-        exclude(group = "joda-time")
-        exclude(group = "org.hamcrest", module = "hamcrest-all")
-    }
+    implementation(Dependencies.junit)
+    implementation(Dependencies.androidx_test_core_ktx)
+    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
+    implementation(Dependencies.androidx_lifecycle_runtime_ktx)
+    implementation(Dependencies.androidx_test_espresso_core)
+    implementation(Dependencies.androidx_appcompat)
+    implementation(Dependencies.androidx_test_espresso_intents)
     implementation(Dependencies.timber)
-
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.mockito_kotlin)
 }

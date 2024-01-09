@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.qrcode"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -20,34 +18,23 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
         }
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.servicetest"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
+    coreLibraryDesugaring(Dependencies.desugar)
 
-    implementation(Dependencies.zxing_android_embedded)
-
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.robolectric)
+    implementation(Dependencies.androidx_lifecycle_runtime_ktx)
+    implementation(Dependencies.robolectric)
 }

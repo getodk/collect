@@ -5,15 +5,16 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
-    id("androidx.navigation.safeargs.kotlin")
 }
 
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.entities"
-
     compileSdk = Versions.android_compile_sdk
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         minSdk = Versions.android_min_sdk
@@ -35,31 +36,38 @@ android {
     }
 
     testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
+        unitTests.isIncludeAndroidResources = true
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.androidshared"
 }
 
 dependencies {
     coreLibraryDesugaring(Dependencies.desugar)
 
+    implementation(project(":icons"))
     implementation(project(":strings"))
     implementation(project(":shared"))
-    implementation(project(":androidshared"))
-
+    implementation(project(":async"))
     implementation(Dependencies.kotlin_stdlib)
-    implementation(Dependencies.androidx_appcompat)
+    implementation(Dependencies.androidx_core_ktx)
+    implementation(Dependencies.androidx_lifecycle_livedata_ktx)
     implementation(Dependencies.android_material)
-    implementation(Dependencies.androidx_navigation_fragment_ktx)
-    implementation(Dependencies.androidx_navigation_ui)
-    implementation(Dependencies.dagger)
-    kapt(Dependencies.dagger_compiler)
+    implementation(Dependencies.androidx_fragment_ktx)
+    implementation(Dependencies.androidx_preference_ktx)
+    implementation(Dependencies.timber)
+    implementation(Dependencies.androidx_exinterface)
+    implementation(Dependencies.play_services_location)
 
+    testImplementation(project(":test-shared"))
     testImplementation(Dependencies.junit)
+    testImplementation(Dependencies.androidx_test_ext_junit)
+    testImplementation(Dependencies.androidx_test_espresso_core)
     testImplementation(Dependencies.robolectric)
+    testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(Dependencies.androidx_arch_core_testing)
+
+    androidTestImplementation(Dependencies.androidx_test_ext_junit)
+    androidTestImplementation(Dependencies.junit)
+
+    debugImplementation(project(":fragmentstest"))
 }

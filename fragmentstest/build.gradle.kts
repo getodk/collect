@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -31,24 +29,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    testOptions {
-        unitTests {
-            isIncludeAndroidResources = true
-        }
-    }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.fragmentstest"
 }
 
 dependencies {
-    implementation(project(":androidshared"))
-    implementation(project(":strings"))
+    implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.androidx_test_espresso_core)
     implementation(Dependencies.android_material)
-    testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
-    testImplementation(Dependencies.mockito_kotlin)
-    testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
+
+    //noinspection FragmentGradleConfiguration
+    debugApi(Dependencies.androidx_fragment_testing) {
+        exclude(group = "androidx.test", module = "monitor") // fixes issue https://github.com/android/android-test/issues/731
+    }
 }

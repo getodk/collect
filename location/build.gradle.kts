@@ -9,8 +9,6 @@ plugins {
 apply(from = "../config/quality.gradle")
 
 android {
-    namespace = "org.odk.collect.crashhandler"
-
     compileSdk = Versions.android_compile_sdk
 
     defaultConfig {
@@ -27,6 +25,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -36,19 +35,27 @@ android {
             isIncludeAndroidResources = true
         }
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "org.odk.collect.location"
 }
 
 dependencies {
+    coreLibraryDesugaring(Dependencies.desugar)
+
     implementation(project(":androidshared"))
+    implementation(project(":icons"))
     implementation(project(":strings"))
-    implementation(Dependencies.android_material)
+    implementation(project(":analytics"))
+    implementation(Dependencies.kotlin_stdlib)
+    implementation(Dependencies.androidx_core_ktx)
+    implementation(Dependencies.play_services_location)
+    implementation(Dependencies.timber)
+    implementation(Dependencies.androidx_appcompat)
+
+    testImplementation(project(":androidtest"))
+    testImplementation(project(":test-shared"))
+    testImplementation(project(":servicetest"))
     testImplementation(Dependencies.junit)
-    testImplementation(Dependencies.hamcrest)
     testImplementation(Dependencies.mockito_kotlin)
+    testImplementation(Dependencies.hamcrest)
     testImplementation(Dependencies.androidx_test_ext_junit)
-    testImplementation(Dependencies.robolectric)
 }
