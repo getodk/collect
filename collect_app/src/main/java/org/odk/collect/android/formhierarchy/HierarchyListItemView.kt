@@ -3,12 +3,12 @@ package org.odk.collect.android.formhierarchy
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import com.google.android.material.textview.MaterialTextView
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.HtmlUtils
 
-class HierarchyListItemView(context: Context, viewType: Int) : ConstraintLayout(context) {
+class HierarchyListItemView(context: Context, viewType: Int) : FrameLayout(context) {
     init {
         when (viewType) {
             HierarchyItemType.QUESTION.id -> LayoutInflater.from(context).inflate(R.layout.hierarchy_question_item, this, true)
