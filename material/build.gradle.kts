@@ -53,7 +53,7 @@ dependencies {
     implementation(Dependencies.androidx_fragment_ktx)
     implementation(Dependencies.kotlin_stdlib)
 
-    debugImplementation(project(":fragmentstest"))
+    debugImplementation(project(":fragments-test"))
 
     testImplementation(project(":test-shared"))
     testImplementation(Dependencies.junit)

@@ -69,5 +69,5 @@ dependencies {
     androidTestImplementation(Dependencies.androidx_test_ext_junit)
     androidTestImplementation(Dependencies.junit)
 
-    debugImplementation(project(":fragmentstest"))
+    debugImplementation(project(":fragments-test"))
 }

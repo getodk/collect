@@ -67,7 +67,8 @@ dependencies {
     implementation(Dependencies.dagger)
     kapt(Dependencies.dagger_compiler)
 
-    debugImplementation(project(":fragmentstest"))
+    debugImplementation(project(":fragments-test"))
+
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
     testImplementation(Dependencies.junit)
