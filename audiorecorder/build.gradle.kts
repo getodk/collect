@@ -55,7 +55,7 @@ dependencies {
 
     testImplementation(project(":androidtest"))
     testImplementation(project(":test-shared"))
-    testImplementation(project(":servicetest"))
+    testImplementation(project(":service-test"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.robolectric)
     testImplementation(Dependencies.androidx_test_ext_junit)

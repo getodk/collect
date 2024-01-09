@@ -40,7 +40,7 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":androidshared"))
     implementation(project(":androidtest"))
-    implementation(project(":servicetest"))
+    implementation(project(":service-test"))
     implementation(Dependencies.androidx_recyclerview)
     implementation(Dependencies.kotlin_stdlib)
     implementation(Dependencies.androidx_core_ktx)
