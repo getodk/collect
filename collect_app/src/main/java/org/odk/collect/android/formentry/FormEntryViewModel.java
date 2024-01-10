@@ -118,12 +118,9 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return;
         }
 
-        worker.immediate((Supplier<Void>) () -> {
-            jumpBackIndex = formController.getFormIndex();
-            jumpToNewRepeat();
-            updateIndex(true);
-            return null;
-        }, ignored -> {});
+        jumpBackIndex = formController.getFormIndex();
+        jumpToNewRepeat();
+        refresh();
     }
 
     public void jumpToNewRepeat() {
@@ -135,26 +132,23 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return;
         }
 
-        worker.immediate((Supplier<Void>) () -> {
-            jumpBackIndex = null;
+        jumpBackIndex = null;
 
+        try {
+            formController.newRepeat();
+        } catch (RuntimeException e) {
+            error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+        }
+
+        if (!formController.indexIsInFieldList()) {
             try {
-                formController.newRepeat();
-            } catch (RuntimeException e) {
-                error.postValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                formController.stepToNextScreenEvent();
+            } catch (JavaRosaException e) {
+                error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
             }
+        }
 
-            if (!formController.indexIsInFieldList()) {
-                try {
-                    formController.stepToNextScreenEvent();
-                } catch (JavaRosaException e) {
-                    error.postValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
-                }
-            }
-
-            updateIndex(true);
-            return null;
-        }, ignored -> {});
+        refresh();
     }
 
     public void cancelRepeatPrompt() {
@@ -162,21 +156,18 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return;
         }
 
-        worker.immediate((Supplier<Void>) () -> {
-            if (jumpBackIndex != null) {
-                formController.jumpToIndex(jumpBackIndex);
-                jumpBackIndex = null;
-            } else {
-                try {
-                    this.formController.stepToNextScreenEvent();
-                } catch (JavaRosaException exception) {
-                    error.postValue(new FormError.NonFatal(exception.getCause().getMessage()));
-                }
+        if (jumpBackIndex != null) {
+            formController.jumpToIndex(jumpBackIndex);
+            jumpBackIndex = null;
+        } else {
+            try {
+                this.formController.stepToNextScreenEvent();
+            } catch (JavaRosaException exception) {
+                error.setValue(new FormError.NonFatal(exception.getCause().getMessage()));
             }
+        }
 
-            updateIndex(true);
-            return null;
-        }, ignored -> {});
+        refresh();
     }
 
     public void errorDisplayed() {
@@ -206,14 +197,13 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 } catch (JavaRosaException e) {
                     error.postValue(new FormError.NonFatal(e.getCause().getMessage()));
                 }
-
-                updateIndex(true);
             }
 
             return updateSuccess;
         }, updateSuccess -> {
             if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+                refresh();
             }
         });
     }
@@ -227,14 +217,13 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 } catch (JavaRosaException e) {
                     error.postValue(new FormError.NonFatal(e.getCause().getMessage()));
                 }
-
-                updateIndex(true);
             }
 
             return updateSuccess;
         }, updateSuccess -> {
             if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
+                refresh();
             }
         });
     }
@@ -306,22 +295,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         formSessionObserver.cancel();
     }
 
-    /**
-     * Use {@link #refresh()} instead.
-     */
-    @Deprecated
-    public void refreshSync() {
-        updateIndex(false);
-    }
-
     public void refresh() {
-        worker.immediate((Supplier<Void>) () -> {
-            updateIndex(true);
-            return null;
-        }, ignored -> {});
-    }
-
-    private void updateIndex(boolean isAsync) {
         choices.clear();
 
         if (formController != null) {
@@ -329,7 +303,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 try {
                     formController.stepToNextScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.postValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                    error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
                 }
             }
 
@@ -347,11 +321,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
 
             AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
-            if (isAsync) {
-                currentIndex.postValue(formController.getFormIndex());
-            } else {
-                currentIndex.setValue(formController.getFormIndex());
-            }
+            currentIndex.setValue(formController.getFormIndex());
         }
     }
 
@@ -369,13 +339,12 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                         error.postValue(new FormError.NonFatal(e.getMessage()));
                     }
 
-                    // JavaRosa moves to the index where the contraint failed
-                    if (result instanceof FailedValidationResult) {
-                        updateIndex(true);
-                    }
-
                     return result;
                 }, result -> {
+                    // JavaRosa moves to the index where the contraint failed
+                    if (result instanceof FailedValidationResult) {
+                        refresh();
+                    }
                     validationResult.setValue(new Consumable<>(result));
                 }
         );

@@ -695,7 +695,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 if (formController != null) {
                     formControllerAvailable(formController);
                     activityDisplayed();
-                    formEntryViewModel.refreshSync();
+                    formEntryViewModel.refresh();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
@@ -877,7 +877,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
             activityDisplayed();
-            formEntryViewModel.refreshSync();
+            formEntryViewModel.refresh();
             return;
         }
 
@@ -2082,7 +2082,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             boolean pendingActivityResult = task.hasPendingActivityResult();
                             if (pendingActivityResult) {
                                 formControllerAvailable(formController);
-                                formEntryViewModel.refreshSync();
+                                formEntryViewModel.refresh();
                                 onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                             } else {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
