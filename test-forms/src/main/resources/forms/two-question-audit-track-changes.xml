@@ -9,6 +9,7 @@
             <instance>
                 <data id="one_question_audit" orx:version="1">
                     <age />
+                    <name />
                     <meta>
                         <audit />
                     </meta>
@@ -20,6 +21,9 @@
     <h:body>
         <input ref="/data/age">
             <label>What is your age?</label>
+        </input>
+        <input ref="/data/name">
+            <label>What is your name?</label>
         </input>
     </h:body>
 </h:html>
