@@ -304,6 +304,17 @@ public class AudioWidgetTest {
     }
 
     @Test
+    public void clickingCaptureButton_clearsError() {
+        FormEntryPrompt prompt = promptWithAnswer(null);
+        AudioWidget widget = createWidget(prompt);
+        widget.displayError("Required question!");
+
+        assertThat(widget.errorLayout.getVisibility(), equalTo(VISIBLE));
+        widget.binding.captureButton.performClick();
+        assertThat(widget.errorLayout.getVisibility(), equalTo(GONE));
+    }
+
+    @Test
     public void whenRecordingRequesterStopsRecording_enablesButtons() {
         AudioWidget widget = createWidget(promptWithAnswer(null));
 
