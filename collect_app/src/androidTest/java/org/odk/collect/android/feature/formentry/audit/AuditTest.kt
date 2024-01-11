@@ -61,7 +61,7 @@ class AuditTest {
     }
 
     @Test // https://github.com/getodk/collect/issues/5551
-    fun navigatingToSettings_savesAnswersFormCurrentScreenToAuditLog() {
+    fun navigatingToSettings_savesAnswersFromCurrentScreenToAuditLog() {
         rule.startAtMainMenu()
             .copyForm("two-question-audit-track-changes.xml")
             .startBlankForm("One Question Audit Track Changes")
@@ -75,7 +75,7 @@ class AuditTest {
     }
 
     @Test // https://github.com/getodk/collect/issues/5900
-    fun navigatingToNextQuestion_savesAnswersFormCurrentScreenToAuditLog() {
+    fun navigatingToNextQuestion_savesAnswersFromCurrentScreenToAuditLog() {
         rule.startAtMainMenu()
             .copyForm("two-question-audit-track-changes.xml")
             .startBlankForm("One Question Audit Track Changes")
