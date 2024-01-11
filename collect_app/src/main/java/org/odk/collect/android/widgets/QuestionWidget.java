@@ -172,7 +172,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private void setupQuestionLabel() {
         audioVideoImageTextLabel.setTag(getClipID(formEntryPrompt));
-        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), QuestionFontSizeUtils.getFontSize(settings, FontSize.QUESTION_TITLE));
+        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), QuestionFontSizeUtils.getFontSize(settings, FontSize.TITLE_LARGE));
         audioVideoImageTextLabel.setMediaUtils(mediaUtils);
 
         String imageURI = this instanceof SelectImageMapWidget ? null : formEntryPrompt.getImageText();

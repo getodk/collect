@@ -32,7 +32,7 @@
         <item name="android:textColor">@color/color_on_surface_medium_emphasis</item>
     </style>
 
-    <style name="TextAppearance.QuestionTitle" parent="TextAppearance.Material3.BodyLarge">
+    <style name="TextAppearance.Collect.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textSize">20sp</item>
     </style>
 

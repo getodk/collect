@@ -72,7 +72,7 @@
         </item>
         <item name="textAppearanceHeadlineSmall">@style/TextAppearance.Material3.HeadlineSmall
         </item>
-        <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Collect.TitleLarge</item>
         <item name="textAppearanceTitleMedium">@style/TextAppearance.Material3.TitleMedium</item>
         <item name="textAppearanceTitleSmall">@style/TextAppearance.Material3.TitleSmall</item>
         <item name="textAppearanceBodyLarge">?textAppearanceBody1</item>

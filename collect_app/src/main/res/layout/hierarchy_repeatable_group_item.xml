@@ -30,7 +30,7 @@
         android:id="@+id/primary_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.QuestionTitle"
+        android:textAppearance="?textAppearanceTitleLarge"
         app:layout_constraintStart_toStartOf="@id/group_label"
         app:layout_constraintTop_toBottomOf="@id/group_label"
         tools:text="Households" />
