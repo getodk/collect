@@ -695,7 +695,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 if (formController != null) {
                     formControllerAvailable(formController);
                     activityDisplayed();
-                    formEntryViewModel.refresh();
+                    formEntryViewModel.refreshSync();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
@@ -2046,7 +2046,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                         // happens because if audit logging is enabled, the refresh logs a question event
                         // and we want that to show up after initialization events.
                         activityDisplayed();
-                        formEntryViewModel.refresh();
+                        formEntryViewModel.refreshSync();
 
                         if (warningMsg != null) {
                             showLongToast(this, warningMsg);
@@ -2074,7 +2074,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 if (formIndex != null) {
                                     formController.jumpToIndex(formIndex);
                                     formControllerAvailable(formController);
-                                    formEntryViewModel.refresh();
+                                    formEntryViewModel.refreshSync();
                                     return;
                                 }
                             }
