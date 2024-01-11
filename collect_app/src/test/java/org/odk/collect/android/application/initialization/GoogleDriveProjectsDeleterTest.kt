@@ -1,25 +1,39 @@
 package org.odk.collect.android.application.initialization
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
+import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.DeleteProjectResult
 import org.odk.collect.android.projects.ProjectDeleter
-import org.odk.collect.projects.InMemProjectsRepository
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.InMemSettingsProvider
+import org.odk.collect.projects.ProjectsRepository
+import org.odk.collect.settings.SettingsProvider
 import org.odk.collect.settings.keys.ProjectKeys
 
+@RunWith(AndroidJUnit4::class)
 class GoogleDriveProjectsDeleterTest {
-    private val projectsRepository = InMemProjectsRepository()
-    private val settingsProvider = InMemSettingsProvider()
+    private lateinit var projectsRepository: ProjectsRepository
+    private lateinit var settingsProvider: SettingsProvider
     private val projectDeleter = mock<ProjectDeleter>()
+    private lateinit var googleDriveProjectsDeleter: GoogleDriveProjectsDeleter
 
-    private val googleDriveProjectsDeleter = GoogleDriveProjectsDeleter(projectsRepository, settingsProvider, projectDeleter)
+    @Before
+    fun setup() {
+        val component = DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
+        projectsRepository = component.projectsRepository()
+        settingsProvider = component.settingsProvider()
+        googleDriveProjectsDeleter = GoogleDriveProjectsDeleter(projectsRepository, settingsProvider, projectDeleter)
+    }
 
     @Test
     fun `GoogleDriveProjectsDeleter should have null key`() {
