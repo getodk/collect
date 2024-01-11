@@ -69,7 +69,7 @@ public class FormEntryViewModelTest {
     public void refresh_whenEventIsBeginningOfForm_stepsForwards() {
         formController.setCurrentEvent(FormEntryController.EVENT_BEGINNING_OF_FORM);
 
-        viewModel.refreshSync();
+        viewModel.refresh();
         scheduler.flush();
         assertThat(formController.getStepPosition(), equalTo(1));
     }
@@ -79,7 +79,7 @@ public class FormEntryViewModelTest {
         formController.setCurrentEvent(FormEntryController.EVENT_BEGINNING_OF_FORM);
         formController.setNextStepError(new JavaRosaException(new IOException("OH NO")));
 
-        viewModel.refreshSync();
+        viewModel.refresh();
         scheduler.flush();
         assertThat(viewModel.getError().getValue(), equalTo(new FormError.NonFatal("OH NO")));
     }
@@ -378,7 +378,7 @@ public class FormEntryViewModelTest {
         formController.setQuestionPrompts(asList(prompt));
 
         int loadCount = Measure.withMeasure(asList("LoadSelectChoices"), () -> {
-            viewModel.refreshSync();
+            viewModel.refresh();
             scheduler.runBackground();
         });
         assertThat(loadCount, equalTo(1));
