@@ -120,7 +120,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
         jumpBackIndex = formController.getFormIndex();
         jumpToNewRepeat();
-        refresh();
+        refreshSync();
     }
 
     public void jumpToNewRepeat() {
@@ -148,7 +148,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        refresh();
+        refreshSync();
     }
 
     public void cancelRepeatPrompt() {
@@ -167,7 +167,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        refresh();
+        refreshSync();
     }
 
     public void errorDisplayed() {
@@ -203,7 +203,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }, updateSuccess -> {
             if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                refresh();
+                refreshSync();
             }
         });
     }
@@ -223,7 +223,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }, updateSuccess -> {
             if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                refresh();
+                refreshSync();
             }
         });
     }
@@ -295,7 +295,22 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         formSessionObserver.cancel();
     }
 
+    /**
+     * Use {@link #refresh()} instead.
+     */
+    @Deprecated
+    public void refreshSync() {
+        updateIndex(false);
+    }
+
     public void refresh() {
+        worker.immediate((Supplier<Void>) () -> {
+            updateIndex(true);
+            return null;
+        }, ignored -> {});
+    }
+
+    private void updateIndex(boolean isAsync) {
         choices.clear();
 
         if (formController != null) {
@@ -303,10 +318,13 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 try {
                     formController.stepToNextScreenEvent();
                 } catch (JavaRosaException e) {
-                    error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                    if (isAsync) {
+                        error.postValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                    } else {
+                        error.setValue(new FormError.NonFatal(e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                    }
                 }
             }
-
             try {
                 /*
                  We can't load for field lists as their choices might change on screen (before
@@ -321,7 +339,11 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
 
             AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
-            currentIndex.setValue(formController.getFormIndex());
+            if (isAsync) {
+                currentIndex.postValue(formController.getFormIndex());
+            } else {
+                currentIndex.setValue(formController.getFormIndex());
+            }
         }
     }
 
@@ -343,7 +365,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 }, result -> {
                     // JavaRosa moves to the index where the contraint failed
                     if (result instanceof FailedValidationResult) {
-                        refresh();
+                        refreshSync();
                     }
                     validationResult.setValue(new Consumable<>(result));
                 }

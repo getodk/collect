@@ -695,7 +695,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 if (formController != null) {
                     formControllerAvailable(formController);
                     activityDisplayed();
-                    formEntryViewModel.refresh();
+                    formEntryViewModel.refreshSync();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
@@ -877,7 +877,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
             activityDisplayed();
-            formEntryViewModel.refresh();
+            formEntryViewModel.refreshSync();
             return;
         }
 
@@ -2046,7 +2046,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                         // happens because if audit logging is enabled, the refresh logs a question event
                         // and we want that to show up after initialization events.
                         activityDisplayed();
-                        formEntryViewModel.refresh();
+                        formEntryViewModel.refreshSync();
 
                         if (warningMsg != null) {
                             showLongToast(this, warningMsg);
@@ -2074,7 +2074,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 if (formIndex != null) {
                                     formController.jumpToIndex(formIndex);
                                     formControllerAvailable(formController);
-                                    formEntryViewModel.refresh();
+                                    formEntryViewModel.refreshSync();
                                     return;
                                 }
                             }
@@ -2082,7 +2082,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             boolean pendingActivityResult = task.hasPendingActivityResult();
                             if (pendingActivityResult) {
                                 formControllerAvailable(formController);
-                                formEntryViewModel.refresh();
+                                formEntryViewModel.refreshSync();
                                 onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                             } else {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
