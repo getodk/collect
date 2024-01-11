@@ -8,7 +8,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.interfaces.Printer
-import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
+import org.odk.collect.androidshared.async.TrackableWorker
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 import org.odk.collect.async.Scheduler
 import org.odk.collect.printer.HtmlPrinter
@@ -20,7 +20,7 @@ class PrinterWidgetViewModel(
     private val qrCodeCreator: QRCodeCreator,
     private val htmlPrinter: HtmlPrinter
 ) : ViewModel(), Printer {
-    private val _isLoading = MutableNonNullLiveData(false)
+    private val trackableWorker = TrackableWorker(scheduler)
 
     @Override
     override fun parseAndPrint(
@@ -28,10 +28,8 @@ class PrinterWidgetViewModel(
         questionMediaManager: QuestionMediaManager,
         context: Context
     ) {
-        scheduler.immediate(
+        trackableWorker.immediate(
             background = {
-                _isLoading.postValue(true)
-
                 val document = Jsoup.parse(htmlDocument)
 
                 parseImages(document, questionMediaManager)
@@ -41,13 +39,12 @@ class PrinterWidgetViewModel(
             },
             foreground = { content ->
                 htmlPrinter.print(context, content)
-                _isLoading.value = false
             }
         )
     }
 
     override fun isLoading(): NonNullLiveData<Boolean> {
-        return _isLoading
+        return trackableWorker.isWorking
     }
 
     private fun parseImages(document: Document, questionMediaManager: QuestionMediaManager) {
