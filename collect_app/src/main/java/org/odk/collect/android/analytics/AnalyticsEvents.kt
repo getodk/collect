@@ -131,11 +131,6 @@ object AnalyticsEvents {
     const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
-     * Tracks how often "cellular_only" option is used in auto send
-     */
-    const val CELLULAR_ONLY = "CellularOnly"
-
-    /**
      * Tracks how often non finalized forms are edited
      */
     const val EDIT_NON_FINALIZED_FORM = "EditNonFinalizedForm"
