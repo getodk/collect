@@ -120,7 +120,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
         jumpBackIndex = formController.getFormIndex();
         jumpToNewRepeat();
-        refreshSync();
+        updateIndex(false);
     }
 
     public void jumpToNewRepeat() {
@@ -148,7 +148,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        refreshSync();
+        updateIndex(false);
     }
 
     public void cancelRepeatPrompt() {
@@ -167,7 +167,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             }
         }
 
-        refreshSync();
+        updateIndex(false);
     }
 
     public void errorDisplayed() {
@@ -203,7 +203,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }, updateSuccess -> {
             if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                refreshSync();
+                updateIndex(false);
             }
         });
     }
@@ -223,7 +223,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
         }, updateSuccess -> {
             if (updateSuccess) {
                 formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                refreshSync();
+                updateIndex(false);
             }
         });
     }
@@ -365,7 +365,7 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                 }, result -> {
                     // JavaRosa moves to the index where the contraint failed
                     if (result instanceof FailedValidationResult) {
-                        refreshSync();
+                        updateIndex(false);
                     }
                     validationResult.setValue(new Consumable<>(result));
                 }
