@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.settings;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -27,7 +26,6 @@ import org.odk.collect.android.support.pages.QRCodePage;
 import org.odk.collect.android.support.rules.TestRuleChain;
 import org.odk.collect.android.views.BarcodeViewDecoder;
 import org.odk.collect.async.Scheduler;
-import org.odk.collect.qrcode.QRCodeCreator;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,7 +51,7 @@ public class ConfigureWithQRCodeTest {
                 }
 
                 @Override
-                public QRCodeGenerator providesQRCodeGenerator(Context context, QRCodeCreator qrCodeCreator) {
+                public QRCodeGenerator providesQRCodeGenerator() {
                     return stubQRCodeGenerator;
                 }
 

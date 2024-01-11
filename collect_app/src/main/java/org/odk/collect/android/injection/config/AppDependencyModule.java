@@ -122,10 +122,8 @@ import org.odk.collect.metadata.SettingsInstallIDProvider;
 import org.odk.collect.permissions.ContextCompatPermissionChecker;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
-import org.odk.collect.printer.HtmlPrinter;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
-import org.odk.collect.qrcode.QRCodeCreator;
 import org.odk.collect.qrcode.QRCodeDecoder;
 import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.qrcode.QRCodeDecoderImpl;
@@ -266,13 +264,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public QRCodeCreator providesQRCodeCreator() {
-        return new QRCodeCreatorImpl();
-    }
-
-    @Provides
-    public QRCodeGenerator providesQRCodeGenerator(Context context, QRCodeCreator qrCodeCreator) {
-        return new CachingQRCodeGenerator(qrCodeCreator);
+    public QRCodeGenerator providesQRCodeGenerator() {
+        return new CachingQRCodeGenerator(new QRCodeCreatorImpl());
     }
 
     @Provides
@@ -641,10 +634,5 @@ public class AppDependencyModule {
     @Provides
     public FormLoaderTask.FormEntryControllerFactory formEntryControllerFactory(SettingsProvider settingsProvider) {
         return new CollectFormEntryControllerFactory();
-    }
-
-    @Provides
-    public HtmlPrinter providesHtmlPrinter() {
-        return new HtmlPrinter();
     }
 }

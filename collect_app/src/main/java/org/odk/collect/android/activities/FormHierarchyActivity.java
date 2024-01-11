@@ -73,7 +73,7 @@ import org.odk.collect.location.LocationClient;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.printer.HtmlPrinter;
-import org.odk.collect.qrcode.QRCodeCreator;
+import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
@@ -181,12 +181,6 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
 
-    @Inject
-    public QRCodeCreator qrCodeCreator;
-
-    @Inject
-    public HtmlPrinter htmlPrinter;
-
     protected final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
@@ -219,8 +213,8 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 permissionsProvider,
                 autoSendSettingsProvider,
                 instancesRepositoryProvider,
-                qrCodeCreator,
-                htmlPrinter
+                new QRCodeCreatorImpl(),
+                new HtmlPrinter()
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

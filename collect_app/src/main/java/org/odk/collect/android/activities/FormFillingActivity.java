@@ -193,7 +193,7 @@ import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.printer.HtmlPrinter;
-import org.odk.collect.qrcode.QRCodeCreator;
+import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -369,13 +369,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
-
-    @Inject
-    public QRCodeCreator qrCodeCreator;
-
-    @Inject
-    public HtmlPrinter htmlPrinter;
-
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -440,8 +433,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 permissionsProvider,
                 autoSendSettingsProvider,
                 instancesRepositoryProvider,
-                qrCodeCreator,
-                htmlPrinter
+                new QRCodeCreatorImpl(),
+                new HtmlPrinter()
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
