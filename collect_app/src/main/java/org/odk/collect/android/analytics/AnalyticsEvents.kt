@@ -32,12 +32,6 @@ object AnalyticsEvents {
     const val SUBMISSION = "Submission"
 
     /**
-     * Track form definitions with the saveIncomplete attribute. The action should be saveIncomplete
-     * and the label should be a hash of the form definition.
-     */
-    const val SAVE_INCOMPLETE = "WidgetAttribute"
-
-    /**
      * Tracks if any forms are being used as part of a workflow where instances are imported
      * from disk
      */
