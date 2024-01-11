@@ -50,7 +50,7 @@ class MainMenuFragment(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
+        val viewModelProvider = ViewModelProvider(requireActivity(), viewModelFactory)
         mainMenuViewModel = viewModelProvider[MainMenuViewModel::class.java]
         currentProjectViewModel = viewModelProvider[CurrentProjectViewModel::class.java]
         permissionsViewModel = viewModelProvider[RequestPermissionsViewModel::class.java]
