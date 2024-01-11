@@ -27,7 +27,7 @@ class GoogleDriveProjectsDeleter(
                 if (result == DeleteProjectResult.UnsentInstances || result == DeleteProjectResult.RunningBackgroundJobs) {
                     unprotectedSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
                     unprotectedSettings.save(ProjectKeys.KEY_SERVER_URL, "https://example.com")
-                    it.isOldGoogleDriveProject = true
+                    projectsRepository.save(it.copy(isOldGoogleDriveProject = true))
                 }
             }
         }
