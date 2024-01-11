@@ -146,13 +146,6 @@ object AnalyticsEvents {
     const val EDIT_FINALIZED_FORM = "EditFinalizedForm"
 
     /**
-     * Tracks how often the Text Number widget appears in forms and how often it's used with the
-     * `thousand-sep` appearance.
-     */
-    const val TEXT_NUMBER_WIDGET = "TextNumberWidget"
-    const val TEXT_NUMBER_WIDGET_WITH_THOUSANDS_SEPARATOR = "TextNumberWidgetWithThousandsSeparator"
-
-    /**
      * Tracks how often form-level auto-delete setting is used
      */
     const val FORM_LEVEL_AUTO_DELETE = "FormLevelAutoDelete"
