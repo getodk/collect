@@ -30,6 +30,7 @@ import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
 import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -523,6 +524,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         loadForm();
 
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
+
+        MaterialProgressDialogFragment.showOn(this, printerWidgetViewModel.isLoading(), getSupportFragmentManager(), () -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage(getLocalizedString(this, org.odk.collect.strings.R.string.loading));
+            return dialog;
+        });
     }
 
     private void setupViewModels(FormEntryViewModelFactory formEntryViewModelFactory) {

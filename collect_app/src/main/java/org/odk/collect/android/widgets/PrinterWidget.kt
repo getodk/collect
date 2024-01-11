@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import org.javarosa.core.model.data.IAnswerData
 import org.javarosa.form.api.FormEntryPrompt
@@ -13,7 +12,6 @@ import org.odk.collect.android.R
 import org.odk.collect.android.formentry.questions.QuestionDetails
 import org.odk.collect.android.utilities.QuestionMediaManager
 import org.odk.collect.android.widgets.interfaces.Printer
-import org.odk.collect.material.MaterialProgressDialogFragment
 
 class PrinterWidget(
     context: Context,
@@ -24,16 +22,6 @@ class PrinterWidget(
 
     init {
         render()
-
-        MaterialProgressDialogFragment.showOn(
-            context as AppCompatActivity,
-            printer.isLoading(),
-            context.supportFragmentManager
-        ) {
-            MaterialProgressDialogFragment().also { dialog ->
-                dialog.message = context.getString(org.odk.collect.strings.R.string.loading)
-            }
-        }
     }
 
     override fun onCreateAnswerView(context: Context, prompt: FormEntryPrompt, answerFontSize: Int): View {
