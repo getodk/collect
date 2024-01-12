@@ -8,20 +8,24 @@ import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import org.odk.collect.androidshared.utils.CompressionUtils
 
-class QRCodeEncoderImpl : QRCodeEncoder {
-    @Throws(QRCodeEncoder.MaximumCharactersLimitException::class)
-    override fun encode(data: String): Bitmap {
+class QRCodeCreatorImpl : QRCodeCreator {
+    @Throws(QRCodeCreator.MaximumCharactersLimitException::class)
+    override fun createEncoded(data: String): Bitmap {
         val compressedData = CompressionUtils.compress(data)
+        return create(compressedData)
+    }
 
+    @Throws(QRCodeCreator.MaximumCharactersLimitException::class)
+    override fun create(data: String): Bitmap {
         // Maximum capacity for QR Codes is 4,296 characters (Alphanumeric)
-        if (compressedData.length > 4000) {
-            throw QRCodeEncoder.MaximumCharactersLimitException()
+        if (data.length > 4000) {
+            throw QRCodeCreator.MaximumCharactersLimitException()
         }
 
         val hints: Map<EncodeHintType, ErrorCorrectionLevel> = mapOf(EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.L)
 
         val bitMatrix = QRCodeWriter().encode(
-            compressedData,
+            data,
             BarcodeFormat.QR_CODE,
             QR_CODE_SIDE_LENGTH,
             QR_CODE_SIDE_LENGTH,
@@ -48,9 +52,12 @@ class QRCodeEncoderImpl : QRCodeEncoder {
     }
 }
 
-interface QRCodeEncoder {
+interface QRCodeCreator {
     @Throws(MaximumCharactersLimitException::class)
-    fun encode(data: String): Bitmap
+    fun create(data: String): Bitmap
+
+    @Throws(MaximumCharactersLimitException::class)
+    fun createEncoded(data: String): Bitmap
 
     class MaximumCharactersLimitException : Exception()
 }

@@ -1,6 +1,5 @@
 package org.odk.collect.android.feature.settings;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -52,7 +51,7 @@ public class ConfigureWithQRCodeTest {
                 }
 
                 @Override
-                public QRCodeGenerator providesQRCodeGenerator(Context context) {
+                public QRCodeGenerator providesQRCodeGenerator() {
                     return stubQRCodeGenerator;
                 }
 

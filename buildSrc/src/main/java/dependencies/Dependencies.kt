@@ -67,6 +67,7 @@ object Dependencies {
     const val camerax_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
     const val camerax_camera2 = "androidx.camera:camera-camera2:${Versions.camerax}"
     const val camerax_video = "androidx.camera:camera-video:${Versions.camerax}"
+    const val jsoup = "org.jsoup:jsoup:1.16.2"
 
     // Test dependencies
     const val junit = "junit:junit:4.13.2"

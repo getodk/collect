@@ -172,4 +172,9 @@ object AnalyticsEvents {
      */
     const val BULK_FINALIZE_ENCRYPTED_FORM = "BulkFinalizeEncryptedForm"
     const val BULK_FINALIZE_SAVE_POINT = "BulkFinalizeSavePoint"
+
+    /**
+     * Tracks how often printing with the old ExPrinterWidget is triggered
+     */
+    const val ZEBRA_PRINTER_STARTED = "ZebraPrinterStarted"
 }

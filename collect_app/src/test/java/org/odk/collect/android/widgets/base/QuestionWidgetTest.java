@@ -49,7 +49,6 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
     @NonNull
     public abstract W createWidget();
 
-    @NonNull
     public abstract A getNextAnswer();
 
     public A getInitialAnswer() {

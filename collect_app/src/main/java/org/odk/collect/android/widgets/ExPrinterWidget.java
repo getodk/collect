@@ -27,6 +27,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.analytics.Analytics;
+import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.widgets.interfaces.ButtonClickListener;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
@@ -226,6 +228,7 @@ public class ExPrinterWidget extends QuestionWidget implements WidgetDataReceive
         try {
             waitingForDataRegistry.waitForData(getFormEntryPrompt().getIndex());
             firePrintingActivity(intentName);
+            Analytics.log(AnalyticsEvents.ZEBRA_PRINTER_STARTED, "form");
         } catch (ActivityNotFoundException e) {
             waitingForDataRegistry.cancelWaitingForData();
             Toast.makeText(getContext(),

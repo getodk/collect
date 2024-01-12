@@ -12,6 +12,7 @@ import org.odk.collect.android.formentry.BackgroundAudioViewModel.RecordAudioAct
 import org.odk.collect.android.formentry.FormEndViewModel
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.formentry.FormSessionRepository
+import org.odk.collect.android.formentry.PrinterWidgetViewModel
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationHelper
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationManager
@@ -28,6 +29,8 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
 import org.odk.collect.permissions.PermissionsChecker
 import org.odk.collect.permissions.PermissionsProvider
+import org.odk.collect.printer.HtmlPrinter
+import org.odk.collect.qrcode.QRCodeCreator
 import org.odk.collect.settings.SettingsProvider
 import java.util.function.BiConsumer
 
@@ -46,7 +49,9 @@ class FormEntryViewModelFactory(
     private val fusedLocationClient: LocationClient,
     private val permissionsProvider: PermissionsProvider,
     private val autoSendSettingsProvider: AutoSendSettingsProvider,
-    private val instancesRepositoryProvider: InstancesRepositoryProvider
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val qrCodeCreator: QRCodeCreator,
+    private val htmlPrinter: HtmlPrinter
 ) : AbstractSavedStateViewModelFactory(owner, null) {
 
     override fun <T : ViewModel> create(
@@ -132,6 +137,8 @@ class FormEntryViewModelFactory(
                 settingsProvider,
                 autoSendSettingsProvider
             )
+
+            PrinterWidgetViewModel::class.java -> PrinterWidgetViewModel(scheduler, qrCodeCreator, htmlPrinter)
 
             else -> throw IllegalArgumentException()
         } as T
