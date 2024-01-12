@@ -19,7 +19,6 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.OPEN_MAP_KIT_RESPONSE;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -1491,8 +1490,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            Analytics.log(SAVE_INCOMPLETE, "form");
-
                             saveForm(false, false, null, false);
                             autoSaved = true;
                         }

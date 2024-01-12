@@ -32,12 +32,6 @@ object AnalyticsEvents {
     const val SUBMISSION = "Submission"
 
     /**
-     * Track form definitions with the saveIncomplete attribute. The action should be saveIncomplete
-     * and the label should be a hash of the form definition.
-     */
-    const val SAVE_INCOMPLETE = "WidgetAttribute"
-
-    /**
      * Tracks if any forms are being used as part of a workflow where instances are imported
      * from disk
      */
@@ -131,11 +125,6 @@ object AnalyticsEvents {
     const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
-     * Tracks how often "cellular_only" option is used in auto send
-     */
-    const val CELLULAR_ONLY = "CellularOnly"
-
-    /**
      * Tracks how often non finalized forms are edited
      */
     const val EDIT_NON_FINALIZED_FORM = "EditNonFinalizedForm"
@@ -144,13 +133,6 @@ object AnalyticsEvents {
      * Tracks how often finalized forms are edited
      */
     const val EDIT_FINALIZED_FORM = "EditFinalizedForm"
-
-    /**
-     * Tracks how often the Text Number widget appears in forms and how often it's used with the
-     * `thousand-sep` appearance.
-     */
-    const val TEXT_NUMBER_WIDGET = "TextNumberWidget"
-    const val TEXT_NUMBER_WIDGET_WITH_THOUSANDS_SEPARATOR = "TextNumberWidgetWithThousandsSeparator"
 
     /**
      * Tracks how often form-level auto-delete setting is used
