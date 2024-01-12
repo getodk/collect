@@ -662,7 +662,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
 
                         FormEntryPrompt fp = formController.getQuestionPrompt();
                         String label = fp.getShortText();
-                        String answerDisplay = FormEntryPromptUtils.getAnswerText(fp, this, formController);
+                        String answerDisplay = QuestionAnswerProcessor.getQuestionAnswer(fp, this, formController);
                         elementsToDisplay.add(
                             new HierarchyItem(
                                 fp.getIndex(),
