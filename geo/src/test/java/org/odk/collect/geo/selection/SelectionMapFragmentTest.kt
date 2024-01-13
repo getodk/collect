@@ -838,6 +838,41 @@ class SelectionMapFragmentTest {
         assertThat(actualResult, equalTo(null))
     }
 
+    @Test // https://github.com/getodk/collect/issues/5540
+    fun `recreating the map with already selected item when skipSummary is true does not close the map`() {
+        val items = listOf(
+            Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
+            Fixtures.actionMappableSelectItem().copy(id = 1, points = listOf(MapPoint(41.0, 0.0)), selected = true)
+        )
+        whenever(data.getMappableItems()).thenReturn(MutableLiveData(items))
+
+        val scenario = launcherRule.launchInContainer(
+            SelectionMapFragment::class.java,
+            factory = FragmentFactoryBuilder()
+                .forClass(SelectionMapFragment::class.java) {
+                    SelectionMapFragment(
+                        data,
+                        skipSummary = true,
+                        onBackPressedDispatcher = { onBackPressedDispatcher }
+                    )
+                }.build()
+        )
+        map.ready()
+        scenario.recreate()
+        var actualResult: Bundle? = null
+        scenario.onFragment {
+            it.parentFragmentManager.setFragmentResultListener(
+                SelectionMapFragment.REQUEST_SELECT_ITEM,
+                it
+            ) { _: String?, result: Bundle ->
+                actualResult = result
+            }
+        }
+        map.ready()
+
+        assertThat(actualResult, equalTo(null))
+    }
+
     private fun MappableSelectItem.toMapPoint(): MapPoint {
         return MapPoint(this.points[0].latitude, this.points[0].longitude)
     }
