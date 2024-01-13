@@ -265,7 +265,7 @@ class SelectionMapFragment(
         }
     }
 
-    private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true) {
+    private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true, selectedByUser: Boolean = true) {
         val item = itemsByFeatureId[featureId]
         val selectedItem = selectedItemViewModel.getSelectedItem()
 
@@ -274,7 +274,14 @@ class SelectionMapFragment(
                 resetIcon(selectedItem)
             }
 
-            if (!skipSummary) {
+            if (skipSummary && selectedByUser) {
+                parentFragmentManager.setFragmentResult(
+                    REQUEST_SELECT_ITEM,
+                    Bundle().also {
+                        it.putLong(RESULT_SELECTED_ITEM, item.id)
+                    }
+                )
+            } else {
                 if (item.points.size > 1) {
                     map.zoomToBoundingBox(item.points, 0.8, true)
                 } else {
@@ -305,13 +312,6 @@ class SelectionMapFragment(
                 )
 
                 selectedItemViewModel.setSelectedItem(item)
-            } else {
-                parentFragmentManager.setFragmentResult(
-                    REQUEST_SELECT_ITEM,
-                    Bundle().also {
-                        it.putLong(RESULT_SELECTED_ITEM, item.id)
-                    }
-                )
             }
         }
     }
@@ -337,7 +337,7 @@ class SelectionMapFragment(
                 onFeatureClicked(featureId)
             }
         } else if (previouslySelectedItem != null) {
-            onFeatureClicked(previouslySelectedItem, maintainZoom = false)
+            onFeatureClicked(previouslySelectedItem, maintainZoom = false, selectedByUser = false)
         } else if (!map.hasCenter()) {
             if (zoomToFitItems && points.isNotEmpty()) {
                 map.zoomToBoundingBox(points, 0.8, false)
