@@ -315,7 +315,7 @@ public class WidgetFactory {
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.MAP)) {
-            questionWidget = new SelectOneFromMapWidget(activity, questionDetails);
+            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, isQuick);
         } else {
             questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController, formEntryViewModel);
         }
