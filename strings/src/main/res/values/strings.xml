@@ -216,7 +216,7 @@
     <string name="activity_not_found">No activity found to handle: %s</string>
     <string name="no_app">The requested application is missing. Please manually enter the reading.</string>
     <string name="null_intent_value">The external application did not provide expected information.</string>
-    <!-- Name of the button displayed in the PrinterWidget to trigger printing -->
+    <!-- Text on button that is part of print questions. Tapping the button prints the value of the question. -->
     <string name="print">Print</string>
     <string name="launch_printer">Initiate Printing</string>
     <string name="no_printer">The requested printer is not installed. Please install the printer.</string>
@@ -1247,18 +1247,22 @@
 
     <!-- Message displayed when the list of blank forms is empty -->
     <string name="empty_list_of_blank_forms_title">No blank forms</string>
+    <!-- Subtext displayed when the list of blank forms is empty -->
     <string name="empty_list_of_blank_forms_subtitle">Download form to get started</string>
 
     <!-- Message displayed when the list of drafts is empty -->
     <string name="empty_list_of_drafts_title">Nothing in drafts</string>
+    <!-- Subtext displayed when the list of drafts is empty -->
     <string name="empty_list_of_drafts_subtitle">When you save as draft, forms will appear here</string>
 
     <!-- Message displayed when the list of ready to send forms is empty -->
     <string name="empty_list_of_finalized_forms_title">Nothing ready to send</string>
+    <!-- Subtext displayed when the list of ready to send forms is empty -->
     <string name="empty_list_of_finalized_forms_subtitle">When you finalize drafts, they will appear here</string>
 
     <!-- Message displayed when the list of sent forms is empty -->
     <string name="empty_list_of_sent_forms_title">Nothing in sent</string>
+    <!-- Subtext of message displayed when the list of sent forms is empty -->
     <string name="empty_list_of_sent_forms_subtitle">When you send finalized forms, they will appear here</string>
 
     <!-- Message displayed when the list of forms to download is empty -->
@@ -1267,6 +1271,8 @@
 
     <!-- Message displayed when the list of forms to delete is empty -->
     <string name="empty_list_of_forms_to_delete_title">No forms to delete</string>
-    <string name="empty_list_of_blank_forms_to_delete_subtitle">When you have downloaded blank forms they will appear here</string>
-    <string name="empty_list_of_saved_forms_to_delete_subtitle">Once you have saved forms they will appear here</string>
+    <!-- Subtext displayed when the list of blank forms to delete is empty -->
+    <string name="empty_list_of_blank_forms_to_delete_subtitle">When you have downloaded blank forms, they will appear here</string>
+    <!-- Subtext displayed when the list of filled forms to delete is empty -->
+    <string name="empty_list_of_saved_forms_to_delete_subtitle">When you have saved forms, they will appear here</string>
 </resources>
