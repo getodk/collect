@@ -22,7 +22,6 @@ import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.multiclicksafe.setMultiClickSafeOnClickListener
 import org.odk.collect.geo.GeoDependencyComponentProvider
-import org.odk.collect.geo.R
 import org.odk.collect.geo.ReferenceLayerSettingsNavigator
 import org.odk.collect.geo.databinding.SelectionMapLayoutBinding
 import org.odk.collect.maps.MapFragment
@@ -197,7 +196,7 @@ class SelectionMapFragment(
 
         map.setGpsLocationEnabled(true)
 
-        map.setFeatureClickListener(::onFeatureClicked)
+        map.setFeatureClickListener(::onFeatureSelected)
         map.setClickListener { onClick() }
 
         selectionMapData.getMappableItems().observe(viewLifecycleOwner) {
@@ -265,7 +264,7 @@ class SelectionMapFragment(
         }
     }
 
-    private fun onFeatureClicked(featureId: Int, maintainZoom: Boolean = true, selectedByUser: Boolean = true) {
+    private fun onFeatureSelected(featureId: Int, maintainZoom: Boolean = true, selectedByUser: Boolean = true) {
         val item = itemsByFeatureId[featureId]
         val selectedItem = selectedItemViewModel.getSelectedItem()
 
@@ -334,10 +333,10 @@ class SelectionMapFragment(
         if (selectedItem != null) {
             val featureId = featureIdsByItemId[selectedItem.id]
             if (featureId != null) {
-                onFeatureClicked(featureId, selectedByUser = false)
+                onFeatureSelected(featureId, selectedByUser = false)
             }
         } else if (previouslySelectedItem != null) {
-            onFeatureClicked(previouslySelectedItem, maintainZoom = false, selectedByUser = false)
+            onFeatureSelected(previouslySelectedItem, maintainZoom = false, selectedByUser = false)
         } else if (!map.hasCenter()) {
             if (zoomToFitItems && points.isNotEmpty()) {
                 map.zoomToBoundingBox(points, 0.8, false)
