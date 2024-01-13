@@ -334,7 +334,7 @@ class SelectionMapFragment(
         if (selectedItem != null) {
             val featureId = featureIdsByItemId[selectedItem.id]
             if (featureId != null) {
-                onFeatureClicked(featureId)
+                onFeatureClicked(featureId, selectedByUser = false)
             }
         } else if (previouslySelectedItem != null) {
             onFeatureClicked(previouslySelectedItem, maintainZoom = false, selectedByUser = false)
