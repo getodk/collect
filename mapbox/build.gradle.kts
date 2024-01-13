@@ -35,6 +35,8 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(Dependencies.desugar)
+
     implementation(project(":androidshared"))
     implementation(project(":icons"))
     implementation(project(":location"))
