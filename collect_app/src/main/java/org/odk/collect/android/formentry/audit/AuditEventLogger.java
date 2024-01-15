@@ -116,12 +116,24 @@ public class AuditEventLogger {
         }
     }
 
-    /*
-     * Finalizes and writes events
+    /**
+     * @deprecated use {@link #flushSynchronized()} instead.
      */
+    @Deprecated
     public void flush() {
         checkAndroidUIThread();
+        internalFlush();
+    }
 
+    /*
+     * Finalizes and writes events. Can safely be used on a background thread, but should not be
+     * used on the UI thread.
+     */
+    public void flushSynchronized() {
+        internalFlush();
+    }
+
+    private void internalFlush() {
         if (isAuditEnabled()) {
             finalizeEvents();
             writeEvents();

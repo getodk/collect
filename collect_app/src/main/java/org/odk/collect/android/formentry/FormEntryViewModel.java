@@ -194,17 +194,16 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             if (updateSuccess) {
                 try {
                     formController.stepToNextScreenEvent();
+                    formController.getAuditEventLogger().flushSynchronized(); // Close events waiting for an end time
+                    updateIndex(true);
                 } catch (JavaRosaException e) {
                     error.postValue(new FormError.NonFatal(e.getCause().getMessage()));
                 }
             }
 
-            return updateSuccess;
-        }, updateSuccess -> {
-            if (updateSuccess) {
-                formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                updateIndex(false);
-            }
+            return null;
+        }, ignored -> {
+
         });
     }
 
