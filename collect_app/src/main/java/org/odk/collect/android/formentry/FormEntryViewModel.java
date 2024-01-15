@@ -213,17 +213,16 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             if (updateSuccess) {
                 try {
                     formController.stepToPreviousScreenEvent();
+                    formController.getAuditEventLogger().flushSynchronized(); // Close events waiting for an end time
+                    updateIndex(true);
                 } catch (JavaRosaException e) {
                     error.postValue(new FormError.NonFatal(e.getCause().getMessage()));
                 }
             }
 
             return updateSuccess;
-        }, updateSuccess -> {
-            if (updateSuccess) {
-                formController.getAuditEventLogger().flush(); // Close events waiting for an end time
-                updateIndex(false);
-            }
+        }, ignored -> {
+
         });
     }
 
@@ -360,12 +359,13 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
                         error.postValue(new FormError.NonFatal(e.getMessage()));
                     }
 
-                    return result;
-                }, result -> {
                     // JavaRosa moves to the index where the contraint failed
                     if (result instanceof FailedValidationResult) {
-                        updateIndex(false);
+                        updateIndex(true);
                     }
+
+                    return result;
+                }, result -> {
                     validationResult.setValue(new Consumable<>(result));
                 }
         );
