@@ -156,18 +156,21 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
             return;
         }
 
-        if (jumpBackIndex != null) {
-            formController.jumpToIndex(jumpBackIndex);
-            jumpBackIndex = null;
-        } else {
-            try {
-                this.formController.stepToNextScreenEvent();
-            } catch (JavaRosaException exception) {
-                error.setValue(new FormError.NonFatal(exception.getCause().getMessage()));
+        worker.immediate((Supplier<Void>) () -> {
+            if (jumpBackIndex != null) {
+                formController.jumpToIndex(jumpBackIndex);
+                jumpBackIndex = null;
+            } else {
+                try {
+                    this.formController.stepToNextScreenEvent();
+                } catch (JavaRosaException exception) {
+                    error.postValue(new FormError.NonFatal(exception.getCause().getMessage()));
+                }
             }
-        }
 
-        updateIndex(false);
+            updateIndex(true);
+            return null;
+        }, ignored -> {});
     }
 
     public void errorDisplayed() {
