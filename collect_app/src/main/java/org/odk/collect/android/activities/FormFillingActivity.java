@@ -1874,7 +1874,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
             }
         } else {
-            if (formController == null) {
+            if (formController == null && !identityPromptViewModel.requiresIdentityToContinue().getValue()) {
                 // there is no formController -- fire MainMenu activity?
                 Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask is null");
                 startActivity(new Intent(this, MainMenuActivity.class));
@@ -2052,7 +2052,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     showFormLoadErrorAndExit(getString(org.odk.collect.strings.R.string.loading_form_failed));
                 }
 
-                formControllerAvailable(formController);
                 identityPromptViewModel.formLoaded(formController);
                 identityPromptViewModel.requiresIdentityToContinue().observe(this, requiresIdentity -> {
                     if (!requiresIdentity) {
@@ -2064,6 +2063,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 && new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
                             registerReceiver(locationProvidersReceiver, new IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION));
                         }
+
+                        formControllerAvailable(formController);
 
                         // onResume ran before the form was loaded. Let the viewModel know that the activity
                         // is about to be displayed and configured. Do this before the refresh actually
