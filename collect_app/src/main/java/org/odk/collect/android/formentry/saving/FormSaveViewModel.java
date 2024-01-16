@@ -21,6 +21,7 @@ import org.odk.collect.android.dao.helpers.InstancesDaoHelper;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.formentry.FormSession;
 import org.odk.collect.android.formentry.audit.AuditEvent;
+import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.tasks.SaveFormToDisk;
@@ -254,6 +255,8 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
                     } else {
                         formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.FORM_EXIT, true, clock.get());
                     }
+                } else {
+                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), clock.get());
                 }
 
                 saveResult.setValue(new SaveResult(SaveResult.State.SAVED, saveRequest, taskResult.getSaveErrorMessage()));
