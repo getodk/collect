@@ -6,6 +6,6 @@
         <attr name="materialButtonOutlinedIconStyle" format="reference" />
         <attr name="materialButtonIconStyle" format="reference" />
         <attr name="borderlessButtonIconStyle" format="reference" />
-        <attr name="widgetMaterialButtonStyle" format="reference" />
+        <attr name="widgetButtonStyle" format="reference" />
     </declare-styleable>
 </resources>
