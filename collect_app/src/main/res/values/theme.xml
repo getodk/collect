@@ -93,10 +93,16 @@
         <item name="materialButtonOutlinedIconStyle">@style/Widget.Collect.Button.OutlinedButton.Icon</item>
         <item name="materialIconButtonOutlinedStyle">@style/Widget.Collect.Button.IconButton.Outlined</item>
         <item name="borderlessButtonIconStyle">@style/Widget.Collect.Button.TextButton.Icon</item>
+        <item name="materialButtonStyle">@style/Widget.Collect.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Collect.Button.OutlinedButton</item>
+        <item name="borderlessButtonStyle">@style/Widget.Collect.Button.TextButton</item>
+        <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
+
+        <!-- Custom style for buttons used in question widgets -->
+        <item name="widgetButtonQuestionWidgetStyle">@style/Widget.Collect.Button.QuestionWidget</item>
 
         <!-- Custom theme text appearance for larger buttons -->
-        <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge
-        </item>
+        <item name="textAppearanceLabelExtraLarge">@style/TextAppearance.Collect.LabelExtraLarge</item>
 
         <!-- Needed to make scrollbars always visible -->
         <item name="android:scrollbars">vertical</item>
@@ -116,12 +122,6 @@
 
         <!-- Use locale for text direction in views -->
         <item name="android:textDirection">locale</item>
-
-
-        <item name="materialButtonStyle">@style/Widget.Collect.Button</item>
-        <item name="materialButtonOutlinedStyle">@style/Widget.Collect.Button.OutlinedButton</item>
-        <item name="borderlessButtonStyle">@style/Widget.Collect.Button.TextButton</item>
-        <item name="materialAlertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
 
         <!-- Sets up theme correction for anything using `AlertDialog.Builder` -->
         <item name="alertDialogTheme">@style/Theme.Collect.Dialog.Alert</item>
