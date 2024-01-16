@@ -20,10 +20,6 @@ object Dependencies {
     const val androidx_fragment_ktx = "androidx.fragment:fragment-ktx:${Versions.androidx_fragment}"
     const val android_material = "com.google.android.material:material:1.9.0"
     const val android_flexbox = "com.google.android.flexbox:flexbox:3.0.0"
-    const val google_api_client_android = "com.google.api-client:google-api-client-android:2.2.0"
-    const val google_api_services_drive = "com.google.apis:google-api-services-drive:v3-rev20230822-2.0.0"
-    const val google_api_services_sheets = "com.google.apis:google-api-services-sheets:v4-rev20230815-2.0.0"
-    const val play_services_auth = "com.google.android.gms:play-services-auth:20.7.0"
     const val play_services_maps = "com.google.android.gms:play-services-maps:18.2.0"
     const val play_services_location = "com.google.android.gms:play-services-location:21.0.1"
     const val play_services_oss_licenses = "com.google.android.gms:play-services-oss-licenses:17.0.1"
@@ -71,6 +67,7 @@ object Dependencies {
     const val camerax_lifecycle = "androidx.camera:camera-lifecycle:${Versions.camerax}"
     const val camerax_camera2 = "androidx.camera:camera-camera2:${Versions.camerax}"
     const val camerax_video = "androidx.camera:camera-video:${Versions.camerax}"
+    const val jsoup = "org.jsoup:jsoup:1.16.2"
 
     // Test dependencies
     const val junit = "junit:junit:4.13.2"

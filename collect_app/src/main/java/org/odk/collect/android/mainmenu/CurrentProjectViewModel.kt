@@ -23,7 +23,7 @@ class CurrentProjectViewModel(
 
     fun refresh() {
         if (currentProject.value != projectsDataService.getCurrentProject()) {
-            _currentProject.postValue(projectsDataService.getCurrentProject())
+            _currentProject.value = projectsDataService.getCurrentProject()
         }
     }
 

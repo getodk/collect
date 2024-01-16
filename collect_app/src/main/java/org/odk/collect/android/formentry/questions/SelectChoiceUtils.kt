@@ -2,6 +2,7 @@ package org.odk.collect.android.formentry.questions
 
 import org.javarosa.core.model.SelectChoice
 import org.javarosa.form.api.FormEntryPrompt
+import org.javarosa.measure.Measure
 import org.javarosa.xpath.parser.XPathSyntaxException
 import org.odk.collect.android.dynamicpreload.ExternalDataUtil
 import org.odk.collect.android.exception.ExternalDataException
@@ -16,10 +17,12 @@ object SelectChoiceUtils {
     @JvmStatic
     @Throws(FileNotFoundException::class, XPathSyntaxException::class, ExternalDataException::class)
     fun loadSelectChoices(prompt: FormEntryPrompt, formController: FormController): List<SelectChoice> {
+        Measure.log("LoadSelectChoices")
+
         return when {
             isFastExternalItemsetUsed(prompt) -> readFastExternalItems(prompt, formController)
             isSearchPulldataItemsetUsed(prompt) -> readSearchPulldataItems(prompt, formController)
-            else -> prompt.selectChoices
+            else -> prompt.selectChoices ?: emptyList()
         }
     }
 

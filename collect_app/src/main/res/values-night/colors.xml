@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6dd2ff</color>
+    <color name="colorPrimary">#4cbcf0</color>
     <color name="colorOnPrimary">#003547</color>
     <color name="colorPrimaryContainer">#004d65</color>
     <color name="colorOnPrimaryContainer">#bfe9ff</color>
     <color name="colorPrimaryInverse">#006689</color>
 
     <color name="colorError">#ba1a1a</color>
-    <color name="colorOnError">#ffffff</color>
+    <!-- <color name="colorOnError">#ffffff</color> -->
     <color name="colorErrorContainer">#ffb4ab</color>
     <color name="colorOnErrorContainer">#690005</color>
 
-    <color name="colorBackground">#001f2a</color>
-    <color name="colorOnBackground">#bfe9ff</color>
+    <color name="colorBackground">#001117</color>
+    <color name="colorOnBackground">#d3e5ef</color>
 
-    <color name="colorSurface">#001f2a</color>
+    <color name="colorSurface">#001117</color>
     <color name="colorSurfaceVariant">#40484c</color>
-    <color name="colorOnSurface">#bfe9ff</color>
+    <color name="colorOnSurface">#d3e5ef</color>
     <color name="colorOnSurfaceVariant">#c0c8cd</color>
-    <color name="colorSurfaceContainerLow">#00141E</color>
-    <color name="elevationOverlayColor">#6dd2ff</color>
+    <color name="colorSurfaceContainerLow">#293134</color>
+    <color name="elevationOverlayColor">#4cbcf0</color>
     <color name="colorSurfaceInverse">#BFE9FF</color>
     <color name="colorOnSurfaceInverse">#001F2A</color>
 

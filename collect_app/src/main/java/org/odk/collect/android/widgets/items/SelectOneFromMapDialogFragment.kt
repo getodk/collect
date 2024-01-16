@@ -165,7 +165,7 @@ internal class SelectChoicesMapData(
                                 prompt.getSelectChoiceText(selectChoice),
                                 properties,
                                 MappableSelectItem.IconifiedText(
-                                    org.odk.collect.geo.R.drawable.ic_save,
+                                    org.odk.collect.icons.R.drawable.ic_save,
                                     resources.getString(org.odk.collect.strings.R.string.select_item)
                                 ),
                                 selectChoice.index == selectedIndex,

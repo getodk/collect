@@ -73,17 +73,18 @@ private data class JsonProject(
     val name: String,
     val icon: String,
     val color: String,
-    val createdAt: Long = 0 // Account for projects without timestamps (in older versions)
+    val createdAt: Long = 0, // Account for projects without timestamps (in older versions)
+    val isOldGoogleDriveProject: Boolean
 )
 
 private fun JsonProject.toProject(): Project.Saved {
-    return Project.Saved(this.uuid, this.name, this.icon, this.color)
+    return Project.Saved(this.uuid, this.name, this.icon, this.color, this.isOldGoogleDriveProject)
 }
 
 private fun Project.New.toJson(uuid: String, createdAt: Long): JsonProject {
-    return JsonProject(uuid, this.name, this.icon, this.color, createdAt)
+    return JsonProject(uuid, this.name, this.icon, this.color, createdAt, false)
 }
 
 private fun Project.Saved.toJson(createdAt: Long): JsonProject {
-    return JsonProject(uuid, this.name, this.icon, this.color, createdAt)
+    return JsonProject(uuid, this.name, this.icon, this.color, createdAt, this.isOldGoogleDriveProject)
 }

@@ -81,13 +81,11 @@ We encourage everyone to participate in the review process to get familiar with 
 - Is the code easy to understand and to maintain?
 - Is there sufficient detail to inform any changes to documentation?
 
-A maintainer does a thorough code review and when satisfied with the code, accepts and may label the pull request as `needs testing` to indicate the need for a manual [black-box testing](https://en.wikipedia.org/wiki/Black-box_testing) pass. A pull request may have `needs testing` removed and added again several times until the behavior is thoroughly verified. Once the behavior has been verified, the pull request is labelled as `behavior verified`.
+A maintainer does a thorough code review and when satisfied with the code, accepts and merges. Typically, manual testing is a requirement and then the needs testing label should be added after merging. Only in rare cases do we merge pull requests that are deemed safe enough to skip additional testing.
 
 ## Merging pull requests
 
-Pull requests can be merged by maintainers once they are accepted or once they have been accepted and have been labelled as `behavior verified` unless:
-
-* [CI](https://app.circleci.com/pipelines/github/getodk/collect) is currently failing
+Pull requests can be merged by maintainers once they are accepted unless [CI](https://app.circleci.com/pipelines/github/getodk/collect) is currently failing.
 
 If a PR is being merged to a release branch rather than `master`, any strings added as part of the changes should also be added to `master` (with `tools:ignore="UnusedResources"`) as a follow-up PR so that they can be translated.
 

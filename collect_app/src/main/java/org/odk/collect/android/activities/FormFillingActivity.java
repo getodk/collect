@@ -19,7 +19,6 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 import static android.view.animation.AnimationUtils.loadAnimation;
 import static org.javarosa.form.api.FormEntryController.EVENT_PROMPT_NEW_REPEAT;
 import static org.odk.collect.android.analytics.AnalyticsEvents.OPEN_MAP_KIT_RESPONSE;
-import static org.odk.collect.android.analytics.AnalyticsEvents.SAVE_INCOMPLETE;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.BACKWARDS;
 import static org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction.FORWARDS;
 import static org.odk.collect.android.utilities.AnimationUtils.areAnimationsEnabled;
@@ -30,6 +29,7 @@ import static org.odk.collect.androidshared.ui.ToastUtils.showLongToast;
 import static org.odk.collect.androidshared.ui.ToastUtils.showShortToast;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_NAVIGATION;
 import static org.odk.collect.settings.keys.ProtectedProjectKeys.KEY_MOVING_BACKWARDS;
+import static org.odk.collect.strings.localization.LocalizedApplicationKt.getLocalizedString;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -45,14 +45,12 @@ import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
-import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -102,7 +100,7 @@ import org.odk.collect.android.formentry.FormAnimation;
 import org.odk.collect.android.formentry.FormAnimationType;
 import org.odk.collect.android.formentry.FormEndView;
 import org.odk.collect.android.formentry.FormEndViewModel;
-import org.odk.collect.android.formentry.FormEntryMenuDelegate;
+import org.odk.collect.android.formentry.FormEntryMenuProvider;
 import org.odk.collect.android.formentry.FormEntryViewModel;
 import org.odk.collect.android.formentry.FormError;
 import org.odk.collect.android.formentry.FormIndexAnimationHandler;
@@ -110,12 +108,12 @@ import org.odk.collect.android.formentry.FormIndexAnimationHandler.Direction;
 import org.odk.collect.android.formentry.FormLoadingDialogFragment;
 import org.odk.collect.android.formentry.FormSessionRepository;
 import org.odk.collect.android.formentry.ODKView;
+import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.QuitFormDialog;
 import org.odk.collect.android.formentry.RecordingHandler;
 import org.odk.collect.android.formentry.RecordingWarningDialogFragment;
 import org.odk.collect.android.formentry.SwipeHandler;
 import org.odk.collect.android.formentry.audit.AuditEvent;
-import org.odk.collect.android.formentry.audit.AuditUtils;
 import org.odk.collect.android.formentry.audit.ChangesReasonPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentifyUserPromptDialogFragment;
 import org.odk.collect.android.formentry.audit.IdentityPromptViewModel;
@@ -161,7 +159,6 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
-import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -176,12 +173,12 @@ import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
 import org.odk.collect.android.widgets.utilities.ViewModelAudioPlayer;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 import org.odk.collect.androidshared.system.IntentLauncher;
+import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.system.ProcessRestoreDetector;
 import org.odk.collect.androidshared.ui.DialogFragmentUtils;
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder;
 import org.odk.collect.androidshared.ui.SnackbarUtils;
 import org.odk.collect.androidshared.ui.ToastUtils;
-import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.AudioClipViewModel;
 import org.odk.collect.audiorecorder.recording.AudioRecorder;
@@ -195,6 +192,8 @@ import org.odk.collect.metadata.PropertyManager;
 import org.odk.collect.permissions.PermissionListener;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.printer.HtmlPrinter;
+import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
@@ -292,12 +291,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private boolean newForm = true;
 
     MediaLoadingFragment mediaLoadingFragment;
-    private FormEntryMenuDelegate menuDelegate;
     private FormIndexAnimationHandler formIndexAnimationHandler;
     private WaitingForDataRegistry waitingForDataRegistry;
     private InternalRecordingRequester internalRecordingRequester;
     private ExternalAppRecordingRequester externalAppRecordingRequester;
     private FormEntryViewModelFactory viewModelFactory;
+    private AudioClipViewModel audioClipViewModel;
 
     @Override
     public void allowSwiping(boolean doSwipe) {
@@ -370,7 +369,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
-
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -385,6 +383,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private IdentityPromptViewModel identityPromptViewModel;
     private FormSaveViewModel formSaveViewModel;
     private FormEntryViewModel formEntryViewModel;
+    private PrinterWidgetViewModel printerWidgetViewModel;
     private BackgroundAudioViewModel backgroundAudioViewModel;
     private FormEndViewModel formEndViewModel;
 
@@ -411,16 +410,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // Workaround for https://issuetracker.google.com/issues/37124582. Some widgets trigger
-        // this issue by including WebViews
-        if (Build.VERSION.SDK_INT >= 24) {
-            try {
-                new WebView(this);
-            } catch (Exception | Error e) {
-                // Don't crash if WebView not available
-            }
-        }
-
         Collect.getInstance().getComponent().inject(this);
 
         if (savedInstanceState == null) {
@@ -443,7 +432,9 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 fusedLocatonClient,
                 permissionsProvider,
                 autoSendSettingsProvider,
-                instancesRepositoryProvider
+                instancesRepositoryProvider,
+                new QRCodeCreatorImpl(),
+                new HtmlPrinter()
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()
@@ -486,15 +477,28 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         initToolbar();
 
         formIndexAnimationHandler = new FormIndexAnimationHandler(this);
-        menuDelegate = new FormEntryMenuDelegate(
+        FormEntryMenuProvider menuProvider = new FormEntryMenuProvider(
                 this,
                 () -> getAnswers(),
                 formEntryViewModel,
                 audioRecorder,
                 backgroundLocationViewModel,
                 backgroundAudioViewModel,
-                settingsProvider
+                settingsProvider,
+                new FormEntryMenuProvider.FormEntryMenuClickListener() {
+                    @Override
+                    public void changeLanguage() {
+                        createLanguageDialog();
+                    }
+
+                    @Override
+                    public void save() {
+                        saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
+                    }
+                }
         );
+
+        addMenuProvider(menuProvider, this);
 
         nextButton = findViewById(R.id.form_forward_button);
         nextButton.setOnClickListener(v -> {
@@ -519,6 +523,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         loadForm();
 
         getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
+
+        MaterialProgressDialogFragment.showOn(this, printerWidgetViewModel.isLoading(), getSupportFragmentManager(), () -> {
+            MaterialProgressDialogFragment dialog = new MaterialProgressDialogFragment();
+            dialog.setMessage(getLocalizedString(this, org.odk.collect.strings.R.string.loading));
+            return dialog;
+        });
     }
 
     private void setupViewModels(FormEntryViewModelFactory formEntryViewModelFactory) {
@@ -550,6 +560,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         });
 
         formEntryViewModel = viewModelProvider.get(FormEntryViewModel.class);
+        printerWidgetViewModel = viewModelProvider.get(PrinterWidgetViewModel.class);
 
         formEntryViewModel.getCurrentIndex().observe(this, index -> {
             formIndexAnimationHandler.handle(index);
@@ -574,15 +585,11 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             }
             ValidationResult validationResult = consumable.getValue();
             if (validationResult instanceof FailedValidationResult failedValidationResult) {
-                try {
-                    createConstraintToast(failedValidationResult.getIndex(), failedValidationResult.getStatus());
-                    if (getFormController().indexIsInFieldList() && getFormController().getQuestionPrompts().length > 1) {
-                        getCurrentViewIfODKView().highlightWidget(failedValidationResult.getIndex());
-                    }
-                } catch (RepeatsInFieldListException e) {
-                    createErrorDialog(new FormError.NonFatal(e.getMessage()));
+                String errorMessage = failedValidationResult.getCustomErrorMessage();
+                if (errorMessage == null) {
+                    errorMessage = getString(failedValidationResult.getDefaultErrorMessage());
                 }
-
+                getCurrentViewIfODKView().setErrorForQuestionWithIndex(failedValidationResult.getIndex(), errorMessage);
                 swipeHandler.setBeenSwiped(false);
             } else if (validationResult instanceof SuccessValidationResult) {
                 SnackbarUtils.showLongSnackbar(findViewById(R.id.llParent), getString(org.odk.collect.strings.R.string.success_form_validation), findViewById(R.id.buttonholder));
@@ -626,6 +633,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     }
                 });
             }
+        });
+
+        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
+        audioClipViewModel = new ViewModelProvider(this, factory).get(AudioClipViewModel.class);
+        audioClipViewModel.isLoading().observe(this, (isLoading) -> {
+            findViewById(R.id.loading_screen).setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
     }
 
@@ -694,7 +707,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 if (formController != null) {
                     formControllerAvailable(formController);
                     activityDisplayed();
-                    formEntryViewModel.refresh();
+                    formEntryViewModel.refreshSync();
                 } else {
                     Timber.w("Reloading form and restoring state.");
                     formLoaderTask = new FormLoaderTask(instancePath, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
@@ -876,7 +889,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         // button or another question to jump to so we need to rebuild the view.
         if (requestCode == RequestCodes.HIERARCHY_ACTIVITY || requestCode == RequestCodes.CHANGE_SETTINGS) {
             activityDisplayed();
-            formEntryViewModel.refresh();
+            formEntryViewModel.refreshSync();
             return;
         }
 
@@ -1031,42 +1044,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menuDelegate.onCreateOptionsMenu(getMenuInflater(), menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        menuDelegate.onPrepareOptionsMenu(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (!MultiClickGuard.allowClick(getClass().getName())) {
-            return true;
-        }
-
-        if (menuDelegate.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        // These actions should move into the `FormEntryMenuDelegate`
-        if (item.getItemId() == R.id.menu_languages) {
-            createLanguageDialog();
-            return true;
-        } else if (item.getItemId() == R.id.menu_save) {
-            // don't exit
-            saveForm(false, InstancesDaoHelper.isInstanceComplete(getFormController()), null, true);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     // The method saves questions one by one in order to support calculations in field-list groups
     private void saveAnswersForFieldList(FormEntryPrompt[] mutableQuestionsBeforeSave, List<ImmutableDisplayableQuestion> immutableQuestionsBeforeSave) {
         FormController formController = getFormController();
@@ -1179,8 +1156,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         }
 
         switch (event) {
-            case FormEntryController.EVENT_BEGINNING_OF_FORM:
-                return createViewForFormBeginning(formController);
             case FormEntryController.EVENT_END_OF_FORM:
                 return createViewForFormEnd(formController);
             case FormEntryController.EVENT_QUESTION:
@@ -1188,8 +1163,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             case FormEntryController.EVENT_REPEAT:
                 // should only be a group here if the event_group is a field-list
                 try {
-                    AuditUtils.logCurrentScreen(formController, formController.getAuditEventLogger(), System.currentTimeMillis());
-
                     FormEntryCaption[] groups = formController
                             .getGroupsForCurrentIndex();
                     FormEntryPrompt[] prompts = formController.getQuestionPrompts();
@@ -1242,13 +1215,12 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
     private ODKView createODKView(boolean advancingPage, FormEntryPrompt[] prompts, FormEntryCaption[] groups) {
         odkViewLifecycle.start();
 
-        AudioClipViewModel.Factory factory = new AudioClipViewModel.Factory(MediaPlayer::new, scheduler);
         ViewModelAudioPlayer viewModelAudioPlayer = new ViewModelAudioPlayer(
-                new ViewModelProvider(this, factory).get(AudioClipViewModel.class),
+                audioClipViewModel,
                 odkViewLifecycle
         );
 
-        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this));
+        return new ODKView(this, prompts, groups, advancingPage, formSaveViewModel, waitingForDataRegistry, viewModelAudioPlayer, audioRecorder, formEntryViewModel, printerWidgetViewModel, internalRecordingRequester, externalAppRecordingRequester, audioHelperFactory.create(this));
     }
 
     @Override
@@ -1267,26 +1239,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
         if (odkView != null) {
             odkView = null;
         }
-    }
-
-    /**
-     * Steps to the next screen and creates a view for it. Always sets {@code advancingPage} to true
-     * to auto-play media.
-     */
-    private SwipeHandler.View createViewForFormBeginning(FormController formController) {
-        int event = FormEntryController.EVENT_BEGINNING_OF_FORM;
-        try {
-            event = formController.stepToNextScreenEvent();
-        } catch (JavaRosaException e) {
-            Timber.d(e);
-            if (e.getMessage().equals(e.getCause().getMessage())) {
-                createErrorDialog(new FormError.NonFatal(e.getMessage()));
-            } else {
-                createErrorDialog(new FormError.NonFatal(e.getMessage() + "\n\n" + e.getCause().getMessage()));
-            }
-        }
-
-        return createView(event, true);
     }
 
     /**
@@ -1506,11 +1458,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             outAnimation.setDuration(0);
         }
 
-        // drop keyboard before transition...
-        if (currentView != null) {
-            softKeyboardController.hideSoftKeyboard(currentView);
-        }
-
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
@@ -1543,8 +1490,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     List<TreeElement> attrs = p.getBindAttributes();
                     for (int i = 0; i < attrs.size(); i++) {
                         if (!autoSaved && "saveIncomplete".equals(attrs.get(i).getName())) {
-                            Analytics.log(SAVE_INCOMPLETE, "form");
-
                             saveForm(false, false, null, false);
                             autoSaved = true;
                         }
@@ -1554,42 +1499,6 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 createErrorDialog(new FormError.NonFatal(e.getMessage()));
             }
         }
-    }
-
-    /**
-     * Creates and displays a dialog displaying the violated constraint.
-     */
-    private void createConstraintToast(FormIndex index, int saveStatus) {
-        FormController formController = getFormController();
-        String constraintText;
-        switch (saveStatus) {
-            case FormEntryController.ANSWER_CONSTRAINT_VIOLATED:
-                constraintText = formController
-                        .getQuestionPromptConstraintText(index);
-                if (constraintText == null) {
-                    constraintText = formController.getQuestionPrompt(index)
-                            .getSpecialFormQuestionText("constraintMsg");
-                    if (constraintText == null) {
-                        constraintText = getString(org.odk.collect.strings.R.string.invalid_answer_error);
-                    }
-                }
-                break;
-            case FormEntryController.ANSWER_REQUIRED_BUT_EMPTY:
-                constraintText = formController
-                        .getQuestionPromptRequiredText(index);
-                if (constraintText == null) {
-                    constraintText = formController.getQuestionPrompt(index)
-                            .getSpecialFormQuestionText("requiredMsg");
-                    if (constraintText == null) {
-                        constraintText = getString(org.odk.collect.strings.R.string.required_answer_error);
-                    }
-                }
-                break;
-            default:
-                return;
-        }
-
-        ToastUtils.showShortToastInMiddle(this, constraintText);
     }
 
     /**
@@ -1685,8 +1594,8 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      * isntancs as complete. If updatedSaveName is non-null, the instances
      * content provider is updated with the new name
      */
-    private boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
-                             boolean current) {
+    public boolean saveForm(boolean exit, boolean complete, String updatedSaveName,
+                            boolean current) {
         // save current answer
         if (current) {
             if (!formEntryViewModel.updateAnswersForScreen(getAnswers(), complete)) {
@@ -1830,7 +1739,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      * Creates and displays a dialog allowing the user to set the language for
      * the form.
      */
-    private void createLanguageDialog() {
+    public void createLanguageDialog() {
         FormController formController = getFormController();
         final String[] languages = formController.getLanguages();
         int selected = -1;
@@ -2147,7 +2056,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                         // happens because if audit logging is enabled, the refresh logs a question event
                         // and we want that to show up after initialization events.
                         activityDisplayed();
-                        formEntryViewModel.refresh();
+                        formEntryViewModel.refreshSync();
 
                         if (warningMsg != null) {
                             showLongToast(this, warningMsg);
@@ -2175,7 +2084,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 if (formIndex != null) {
                                     formController.jumpToIndex(formIndex);
                                     formControllerAvailable(formController);
-                                    formEntryViewModel.refresh();
+                                    formEntryViewModel.refreshSync();
                                     return;
                                 }
                             }
@@ -2183,7 +2092,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             boolean pendingActivityResult = task.hasPendingActivityResult();
                             if (pendingActivityResult) {
                                 formControllerAvailable(formController);
-                                formEntryViewModel.refresh();
+                                formEntryViewModel.refreshSync();
                                 onActivityResult(task.getRequestCode(), task.getResultCode(), task.getIntent());
                             } else {
                                 formController.getAuditEventLogger().logEvent(AuditEvent.AuditEventType.HIERARCHY, true, System.currentTimeMillis());
@@ -2470,7 +2379,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                             @Override
                             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                                 if (!odkView.isDisplayed(changedWidget)) {
-                                    odkView.scrollTo(changedWidget);
+                                    odkView.scrollToTopOf(changedWidget);
                                 }
                                 odkView.removeOnLayoutChangeListener(this);
                             }

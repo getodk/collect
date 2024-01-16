@@ -12,6 +12,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_item_scan_sd_card"
+        android:icon="@drawable/ic_baseline_qr_code_2_add_24"
         android:title="@string/import_qrcode_sd"
         app:showAsAction="never" />
     <item

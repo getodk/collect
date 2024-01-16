@@ -40,6 +40,7 @@ public class FormLanguageTest {
                 .clickOptionsIcon()
                 .clickOnString(org.odk.collect.strings.R.string.change_language)
                 .clickOnText("French (fr)")
+                .closeSoftKeyboard()
                 .pressBack(new SaveOrDiscardFormDialog<>(new MainMenuPage()))
                 .clickDiscardForm()
 

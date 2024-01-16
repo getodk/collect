@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_standard"
-            android:text="@string/google_drive_deprecation_message"
+            android:text="@string/google_drive_removed_message"
             android:textAppearance="?textAppearanceBody2"
             android:textColor="?colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"

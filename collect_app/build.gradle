@@ -176,6 +176,12 @@ android {
             exclude 'lib/x86_64/libmapbox-common.so'
             exclude 'lib/x86_64/libc++_shared.so'
         }
+
+        /* Exclude large properties files used by BouncyCastle's Picnic implementation (which
+           Collect doesn't use). */
+        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL5.bin.properties'
+        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL3.bin.properties'
+        exclude 'org/bouncycastle/pqc/crypto/picnic/lowmcL1.bin.properties'
     }
 
     compileOptions {
@@ -238,14 +244,14 @@ dependencies {
     implementation project(':projects')
     implementation project(':location')
     implementation project(':geo')
-    implementation project(':imageloader')
+    implementation project(':image-loader')
     implementation project(':errors')
     implementation project(':upgrade')
     implementation project(':permissions')
     implementation(project(':settings')) {
         exclude group: 'joda-time'
     }
-    implementation project(':externalapp')
+    implementation project(':external-app')
     implementation project(':maps')
     implementation project(':osmdroid')
     implementation project(':entities')
@@ -254,6 +260,8 @@ dependencies {
     implementation project(':qr-code')
     implementation project(':metadata')
     implementation project(':google-maps')
+    implementation project(':draw')
+    implementation project(':printer')
 
     if (getSecrets().getProperty('MAPBOX_DOWNLOADS_TOKEN', '') != '') {
         implementation project(':mapbox')
@@ -272,7 +280,6 @@ dependencies {
     implementation Dependencies.android_material
     implementation Dependencies.android_flexbox
 
-    implementation Dependencies.play_services_auth
     implementation Dependencies.play_services_maps
     implementation Dependencies.play_services_location
     implementation Dependencies.play_services_oss_licenses
@@ -289,7 +296,6 @@ dependencies {
     implementation Dependencies.persian_joda_time
     implementation Dependencies.myanmar_calendar
     implementation Dependencies.bikram_sambat
-    implementation Dependencies.rarepebble_colorpicker
     implementation Dependencies.commons_io
     implementation (Dependencies.opencsv) {
         exclude group: 'commons-logging'
@@ -300,19 +306,7 @@ dependencies {
         exclude group: 'org.slf4j'
         exclude group: 'org.hamcrest', module: 'hamcrest-all'
     }
-    implementation(Dependencies.google_api_client_android) {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-    implementation(Dependencies.google_api_services_drive) {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-    implementation(Dependencies.google_api_services_sheets) {
-        exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.google.guava'
-    }
-
+    implementation Dependencies.gson
     implementation Dependencies.timber
     implementation Dependencies.slf4j_api
     implementation Dependencies.slf4j_timber
@@ -320,6 +314,8 @@ dependencies {
     implementation Dependencies.zxing_android_embedded
 
     implementation Dependencies.danlew_android_joda
+
+    implementation(Dependencies.jsoup)
 
     // Android Architecture Components:
     implementation Dependencies.androidx_lifecycle_runtime_ktx
@@ -353,7 +349,7 @@ dependencies {
     testImplementation Dependencies.mockito_kotlin
 
     testImplementation project(':androidtest')
-    testImplementation(project(path: ':testshared')) {
+    testImplementation(project(path: ':test-shared')) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
     testImplementation(project(":shadows"))
@@ -390,7 +386,7 @@ dependencies {
     androidTestImplementation Dependencies.uiautomator
 
     debugImplementation project(':fragmentstest')
-    debugImplementation(project(':testshared')) {
+    debugImplementation(project(':test-shared',)) {
         exclude group: 'org.robolectric' // Some tests in `collect_app` don't work with newer Robolectric
     }
 

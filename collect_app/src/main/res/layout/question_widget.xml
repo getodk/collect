@@ -3,7 +3,8 @@
     android:id="@+id/question_widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/margin_small"
+    android:paddingHorizontal="@dimen/margin_standard"
+    android:paddingVertical="@dimen/margin_small"
     android:orientation="vertical">
 
     <org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel
@@ -14,7 +15,8 @@
     <FrameLayout
         android:id="@+id/help_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_standard">
 
         <include layout="@layout/help_layout" />
 
@@ -26,4 +28,6 @@
         android:layout_height="wrap_content">
 
     </RelativeLayout>
+
+    <include layout="@layout/question_error_layout" />
 </LinearLayout>

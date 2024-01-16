@@ -33,7 +33,7 @@ object InstanceListItemView {
             when (instance.status) {
                 Instance.STATUS_INVALID, Instance.STATUS_INCOMPLETE -> {
                     pill.visibility = View.VISIBLE
-                    pill.setIcon(R.drawable.baseline_rule_24)
+                    pill.setIcon(org.odk.collect.icons.R.drawable.ic_baseline_rule_24)
                     pill.setText(string.draft_errors)
                     pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorErrorContainer))
                     pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))

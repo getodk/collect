@@ -22,10 +22,10 @@ assertNull(ClassToTest.methodReturnsNull());
 Preferred style using Hamcrest:
 ```java
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
 ...
-assertThat(ClassToTest.methodToTest("input"), is("expected"));
-assertThat(ClassToTest.methodReturnsNull(), is(nullValue()));
+assertThat(ClassToTest.methodToTest("input"), equalTo("expected"));
+assertThat(ClassToTest.methodReturnsNull(), equalTo(null));
 ```
 
 ## XML style guidelines
@@ -63,6 +63,10 @@ Always use [string resources](https://developer.android.com/guide/topics/resourc
 If a new string is added that is used as a date format (with `SimpleDateFormat`), it should be added to `DateFormatsTest` to ensure that translations do not cause crashes.
 
 Strings that represent very rare failure cases or that are meant more for ODK developers to use for troubleshooting rather than directly for users may be written as literal strings. This reduces the burden on translators and makes it easier for developers to troubleshoot edge cases without having to look up translations.
+
+## Icons
+
+Icons (usually defined using Android XML drawables) should be placed in the `icons` module so they can be shared between other modules without being duplicated. Icons should usually come from the set of Material Icons which are easiest to acquire from Android Studio's "Vector Asset" tool.
 
 ## Dependency injection
 

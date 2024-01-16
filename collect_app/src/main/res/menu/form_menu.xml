@@ -34,31 +34,33 @@
 
     <item
         android:id="@+id/menu_validate"
+        android:icon="@drawable/ic_baseline_rule_24"
         android:title="@string/validate"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/track_location"
-        android:checkable="true"
-        android:title="@string/track_location"
+        android:icon="@drawable/ic_baseline_location_on_24"
+        android:title="@string/track_location_on"
         android:visible="false"
-        app:actionViewClass="android.widget.CheckBox"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_record_audio"
-        android:checkable="true"
-        android:title="@string/record_audio"
+        android:icon="@drawable/ic_baseline_mic_24"
+        android:title="@string/record_audio_on"
         android:visible="false"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_languages"
+        android:icon="@drawable/ic_baseline_language_24"
         android:title="@string/change_language"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_preferences"
+        android:icon="@drawable/ic_baseline_settings_24"
         android:title="@string/project_settings"
         app:showAsAction="never" />
 

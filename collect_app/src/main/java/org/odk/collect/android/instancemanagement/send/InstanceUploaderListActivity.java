@@ -21,7 +21,6 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
 import static org.odk.collect.androidshared.ui.MultiSelectViewModelKt.updateSelectAll;
-import static org.odk.collect.settings.keys.ProjectKeys.KEY_PROTOCOL;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -60,18 +59,16 @@ import org.odk.collect.android.databinding.InstanceUploaderListBinding;
 import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory;
-import org.odk.collect.android.gdrive.GoogleSheetsUploaderActivity;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
-import org.odk.collect.androidshared.system.PlayServicesChecker;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
+import org.odk.collect.androidshared.ui.MenuExtKt;
 import org.odk.collect.androidshared.ui.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;
-import org.odk.collect.settings.keys.ProjectKeys;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
 import java.util.Arrays;
@@ -283,24 +280,9 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     }
 
     private void uploadSelectedFiles(long[] instanceIds) {
-        String server = settingsProvider.getUnprotectedSettings().getString(KEY_PROTOCOL);
-
-        if (server.equalsIgnoreCase(ProjectKeys.PROTOCOL_GOOGLE_SHEETS)) {
-            // if it's Sheets, start the Sheets uploader
-            // first make sure we have a google account selected
-            if (new PlayServicesChecker().isGooglePlayServicesAvailable(this)) {
-                Intent i = new Intent(this, GoogleSheetsUploaderActivity.class);
-                i.putExtra(FormFillingActivity.KEY_INSTANCES, instanceIds);
-                startActivityForResult(i, INSTANCE_UPLOADER);
-            } else {
-                new PlayServicesChecker().showGooglePlayServicesAvailabilityErrorDialog(this);
-            }
-        } else {
-            // otherwise, do the normal aggregate/other thing.
-            Intent i = new Intent(this, InstanceUploaderActivity.class);
-            i.putExtra(FormFillingActivity.KEY_INSTANCES, instanceIds);
-            startActivityForResult(i, INSTANCE_UPLOADER);
-        }
+        Intent i = new Intent(this, InstanceUploaderActivity.class);
+        i.putExtra(FormFillingActivity.KEY_INSTANCES, instanceIds);
+        startActivityForResult(i, INSTANCE_UPLOADER);
     }
 
     @Override
@@ -308,6 +290,8 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
         getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
 
         getMenuInflater().inflate(R.menu.form_list_menu, menu);
+        MenuExtKt.enableIconsVisibility(menu);
+
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);
         final MenuItem searchItem = menu.findItem(R.id.menu_filter);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);

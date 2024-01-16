@@ -12,11 +12,6 @@ public class ServerSettingsPage extends Page<ServerSettingsPage> {
         return this;
     }
 
-    public ServerSettingsPage clickOnServerType() {
-        onView(withText(getTranslatedString(org.odk.collect.strings.R.string.type))).perform(click());
-        return this;
-    }
-
     public ServerSettingsPage clickServerUsername() {
         onView(withText(getTranslatedString(org.odk.collect.strings.R.string.username))).perform(click());
         return this;

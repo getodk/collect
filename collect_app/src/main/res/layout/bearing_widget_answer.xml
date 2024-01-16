@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="@dimen/margin_small"
-    android:paddingHorizontal="@dimen/margin_standard">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/bearing_button"
@@ -12,12 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/answer_text"
-        style="@style/Widget.Collect.TextView.WidgetAnswer"
-        android:gravity="start"
-        android:inputType="numberDecimal"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
-
+    <org.odk.collect.android.views.WidgetAnswerText
+        android:id="@+id/widget_answer_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"/>
 </LinearLayout>

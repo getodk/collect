@@ -23,7 +23,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.odk.collect.android.R
 import org.odk.collect.android.databinding.SelectOneFromMapDialogLayoutBinding
 import org.odk.collect.android.formentry.FormEntryViewModel
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -123,7 +122,7 @@ class SelectOneFromMapDialogFragmentTest {
             }
         )
 
-        scheduler.runBackground()
+        scheduler.flush()
 
         scenario.onFragment {
             Espresso.pressBack()
@@ -167,7 +166,7 @@ class SelectOneFromMapDialogFragmentTest {
             val fragment = binding.selectionMap.getFragment<SelectionMapFragment>()
 
             val data = fragment.selectionMapData
-            scheduler.runBackground()
+            scheduler.flush()
 
             assertThat(data.getMapTitle().value, equalTo(prompt.longText))
             assertThat(data.getItemCount().value, equalTo(prompt.selectChoices.size))
@@ -192,7 +191,7 @@ class SelectOneFromMapDialogFragmentTest {
                             "A",
                             emptyList(),
                             IconifiedText(
-                                org.odk.collect.geo.R.drawable.ic_save,
+                                org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         ),
@@ -211,7 +210,7 @@ class SelectOneFromMapDialogFragmentTest {
                             "B",
                             emptyList(),
                             IconifiedText(
-                                org.odk.collect.geo.R.drawable.ic_save,
+                                org.odk.collect.icons.R.drawable.ic_save,
                                 application.getString(org.odk.collect.strings.R.string.select_item)
                             )
                         )
@@ -231,7 +230,7 @@ class SelectOneFromMapDialogFragmentTest {
             }
         )
 
-        scheduler.runBackground()
+        scheduler.flush()
 
         scenario.onFragment {
             val binding = SelectOneFromMapDialogLayoutBinding.bind(it.view!!)

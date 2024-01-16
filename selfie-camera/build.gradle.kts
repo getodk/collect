@@ -16,7 +16,6 @@ android {
 
     defaultConfig {
         minSdk = Versions.android_min_sdk
-        targetSdk = Versions.android_target_sdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -29,6 +28,7 @@ android {
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -41,10 +41,12 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(Dependencies.desugar)
+
     implementation(project(":androidshared"))
     implementation(project(":strings"))
     implementation(project(":permissions"))
-    implementation(project(":externalapp"))
+    implementation(project(":external-app"))
     implementation(project(":analytics"))
 
     implementation(Dependencies.camerax_core)

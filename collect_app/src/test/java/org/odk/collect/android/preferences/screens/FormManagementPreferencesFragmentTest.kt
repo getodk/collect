@@ -20,7 +20,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.injection.config.AppDependencyModule
@@ -73,36 +72,6 @@ class FormManagementPreferencesFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         generalSettings = TestSettingsProvider.getUnprotectedSettings()
         adminSettings = TestSettingsProvider.getProtectedSettings()
-    }
-
-    @Test
-    fun `When Google Drive used as server shows update mode as manual and disable prefs`() {
-        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-        generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
-
-        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
-        scenario.onFragment { f: FormManagementPreferencesFragment ->
-            assertThat(
-                f.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.summary,
-                `is`(context.getString(org.odk.collect.strings.R.string.manual))
-            )
-            assertThat(
-                generalSettings.getString(ProjectKeys.KEY_FORM_UPDATE_MODE),
-                `is`(FormUpdateMode.MATCH_EXACTLY.getValue(context))
-            )
-            assertThat(
-                f.findPreference<Preference>(ProjectKeys.KEY_FORM_UPDATE_MODE)!!.isEnabled,
-                `is`(false)
-            )
-            assertThat(
-                f.findPreference<Preference>(ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK)!!.isEnabled,
-                `is`(false)
-            )
-            assertThat(
-                f.findPreference<Preference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)!!.isEnabled,
-                `is`(false)
-            )
-        }
     }
 
     @Test
@@ -171,21 +140,6 @@ class FormManagementPreferencesFragmentTest {
     @Test
     fun `When 'Manual Updates' enabled and 'Automatic Download' enabled shows 'Automatic Download' as not checked`() {
         generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MANUAL.getValue(context))
-        generalSettings.save(ProjectKeys.KEY_AUTOMATIC_UPDATE, true)
-        val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
-        scenario.onFragment { f: FormManagementPreferencesFragment ->
-            val automaticDownload = f.findPreference<CheckBoxPreference>(ProjectKeys.KEY_AUTOMATIC_UPDATE)
-            assertThat(automaticDownload!!.isChecked, `is`(false))
-            assertThat(
-                generalSettings.getBoolean(ProjectKeys.KEY_AUTOMATIC_UPDATE),
-                `is`(true)
-            )
-        }
-    }
-
-    @Test
-    fun `When Google Drive used as server and 'Automatic Download' enabled shows 'Automatic Download' as not checked`() {
-        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
         generalSettings.save(ProjectKeys.KEY_AUTOMATIC_UPDATE, true)
         val scenario = launcherRule.launch(FormManagementPreferencesFragment::class.java)
         scenario.onFragment { f: FormManagementPreferencesFragment ->

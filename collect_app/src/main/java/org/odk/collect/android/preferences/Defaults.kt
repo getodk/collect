@@ -34,9 +34,6 @@ object Defaults {
             hashMap[ProjectKeys.KEY_METADATA_USERNAME] = ""
             hashMap[ProjectKeys.KEY_METADATA_PHONENUMBER] = ""
             hashMap[ProjectKeys.KEY_METADATA_EMAIL] = ""
-            // google_preferences.xml
-            hashMap[ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT] = ""
-            hashMap[ProjectKeys.KEY_GOOGLE_SHEETS_URL] = ""
             // identity_preferences.xml
             hashMap[ProjectKeys.KEY_ANALYTICS] = true
             // server_preferences.xml

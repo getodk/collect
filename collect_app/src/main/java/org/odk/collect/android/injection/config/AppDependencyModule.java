@@ -13,9 +13,6 @@ import android.webkit.MimeTypeMap;
 
 import androidx.work.WorkManager;
 
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
-import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 
 import org.javarosa.core.reference.ReferenceManager;
@@ -43,7 +40,6 @@ import org.odk.collect.android.configure.qr.AppConfigurationGenerator;
 import org.odk.collect.android.configure.qr.CachingQRCodeGenerator;
 import org.odk.collect.android.configure.qr.QRCodeGenerator;
 import org.odk.collect.android.database.itemsets.DatabaseFastExternalItemsetsRepository;
-import org.odk.collect.android.draw.PenColorPickerViewModel;
 import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formentry.AppStateFormSessionRepository;
@@ -59,10 +55,6 @@ import org.odk.collect.android.formmanagement.FormsDataService;
 import org.odk.collect.android.formmanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.ServerFormDownloader;
 import org.odk.collect.android.formmanagement.ServerFormsDetailsFetcher;
-import org.odk.collect.android.gdrive.GoogleAccountCredentialGoogleAccountPicker;
-import org.odk.collect.android.gdrive.GoogleAccountPicker;
-import org.odk.collect.android.gdrive.GoogleAccountsManager;
-import org.odk.collect.android.gdrive.GoogleApiProvider;
 import org.odk.collect.android.geo.MapFragmentFactoryImpl;
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider;
 import org.odk.collect.android.instancemanagement.autosend.InstanceAutoSendFetcher;
@@ -133,8 +125,8 @@ import org.odk.collect.permissions.PermissionsProvider;
 import org.odk.collect.projects.ProjectsRepository;
 import org.odk.collect.projects.SharedPreferencesProjectsRepository;
 import org.odk.collect.qrcode.QRCodeDecoder;
+import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.qrcode.QRCodeDecoderImpl;
-import org.odk.collect.qrcode.QRCodeEncoderImpl;
 import org.odk.collect.settings.ODKAppSettingsImporter;
 import org.odk.collect.settings.ODKAppSettingsMigrator;
 import org.odk.collect.settings.SettingsProvider;
@@ -272,8 +264,8 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public QRCodeGenerator providesQRCodeGenerator(Context context) {
-        return new CachingQRCodeGenerator(new QRCodeEncoderImpl());
+    public QRCodeGenerator providesQRCodeGenerator() {
+        return new CachingQRCodeGenerator(new QRCodeCreatorImpl());
     }
 
     @Provides
@@ -365,18 +357,6 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public GoogleApiProvider providesGoogleApiProvider(Context context) {
-        return new GoogleApiProvider(context);
-    }
-
-    @Provides
-    public GoogleAccountPicker providesGoogleAccountPicker(Context context) {
-        return new GoogleAccountCredentialGoogleAccountPicker(GoogleAccountCredential
-                .usingOAuth2(context, singletonList(DriveScopes.DRIVE))
-                .setBackOff(new ExponentialBackOff()));
-    }
-
-    @Provides
     ScreenUtils providesScreenUtils(Context context) {
         return new ScreenUtils(context);
     }
@@ -394,7 +374,7 @@ public class AppDependencyModule {
 
     @Provides
     public SoftKeyboardController provideSoftKeyboardController() {
-        return new SoftKeyboardController();
+        return SoftKeyboardController.INSTANCE;
     }
 
     @Provides
@@ -529,9 +509,9 @@ public class AppDependencyModule {
     }
 
     @Provides
-    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Context context, Notifier notifier, GoogleAccountsManager googleAccountsManager, GoogleApiProvider googleApiProvider, PermissionsProvider permissionsProvider, InstancesDataService instancesDataService, PropertyManager propertyManager) {
+    public InstanceAutoSender providesInstanceAutoSender(AutoSendSettingsProvider autoSendSettingsProvider, Notifier notifier, InstancesDataService instancesDataService, PropertyManager propertyManager) {
         InstanceAutoSendFetcher instanceAutoSendFetcher = new InstanceAutoSendFetcher(autoSendSettingsProvider);
-        return new InstanceAutoSender(instanceAutoSendFetcher, context, notifier, googleAccountsManager, googleApiProvider, permissionsProvider, instancesDataService, propertyManager);
+        return new InstanceAutoSender(instanceAutoSendFetcher, notifier, instancesDataService, propertyManager);
     }
 
     @Provides
@@ -633,11 +613,6 @@ public class AppDependencyModule {
     @Provides
     public ImageLoader providesImageLoader() {
         return new GlideImageLoader();
-    }
-
-    @Provides
-    public PenColorPickerViewModel.Factory providesPenColorPickerViewModel(SettingsProvider settingsProvider) {
-        return new PenColorPickerViewModel.Factory(settingsProvider.getMetaSettings());
     }
 
     @Provides

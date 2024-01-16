@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
 import org.odk.collect.analytics.Analytics.Companion.log
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.mainmenu.MainMenuActivity
@@ -22,7 +21,7 @@ class QRCodeActivityResultDelegate(
     private val project: Saved
 ) {
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == QRCodeMenuDelegate.SELECT_PHOTO && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == QRCodeMenuProvider.SELECT_PHOTO && resultCode == Activity.RESULT_OK && data != null) {
             val imageUri = data.data
             if (imageUri != null) {
                 val imageStream: InputStream? = try {

@@ -3,6 +3,7 @@
     <style name="Widget.AndroidShared.Toolbar.Surface.HighEmphasisControls" parent="Widget.MaterialComponents.Toolbar.Surface">
         <!-- Note: this theme overlay will only work if the style is applied directly to a Toolbar. -->
         <item name="android:theme">@style/ThemeOverlay.AndroidShared.Toolbar.Surface.HighEmphasisControls</item>
+        <item name="buttonGravity">center_vertical</item>
     </style>
 
     <style name="ThemeOverlay.AndroidShared.Toolbar.Surface.HighEmphasisControls" parent="">

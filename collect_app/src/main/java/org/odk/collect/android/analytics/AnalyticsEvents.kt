@@ -32,12 +32,6 @@ object AnalyticsEvents {
     const val SUBMISSION = "Submission"
 
     /**
-     * Track form definitions with the saveIncomplete attribute. The action should be saveIncomplete
-     * and the label should be a hash of the form definition.
-     */
-    const val SAVE_INCOMPLETE = "WidgetAttribute"
-
-    /**
      * Tracks if any forms are being used as part of a workflow where instances are imported
      * from disk
      */
@@ -83,11 +77,6 @@ object AnalyticsEvents {
      * Tracks how often projects are created by manually entering details.
      */
     const val MANUAL_CREATE_PROJECT = "ProjectCreateManual"
-
-    /**
-     * Tracks how often a Google account is used to configure a manually created project
-     */
-    const val GOOGLE_ACCOUNT_PROJECT = "ProjectCreateGoogle"
 
     /**
      * Tracks how often projects with the same connection settings as an existing one are attempted
@@ -136,11 +125,6 @@ object AnalyticsEvents {
     const val INSTANCE_PROVIDER_DELETE = "InstanceProviderDelete"
 
     /**
-     * Tracks how often "cellular_only" option is used in auto send
-     */
-    const val CELLULAR_ONLY = "CellularOnly"
-
-    /**
      * Tracks how often non finalized forms are edited
      */
     const val EDIT_NON_FINALIZED_FORM = "EditNonFinalizedForm"
@@ -149,13 +133,6 @@ object AnalyticsEvents {
      * Tracks how often finalized forms are edited
      */
     const val EDIT_FINALIZED_FORM = "EditFinalizedForm"
-
-    /**
-     * Tracks how often the Text Number widget appears in forms and how often it's used with the
-     * `thousand-sep` appearance.
-     */
-    const val TEXT_NUMBER_WIDGET = "TextNumberWidget"
-    const val TEXT_NUMBER_WIDGET_WITH_THOUSANDS_SEPARATOR = "TextNumberWidgetWithThousandsSeparator"
 
     /**
      * Tracks how often form-level auto-delete setting is used
@@ -177,4 +154,9 @@ object AnalyticsEvents {
      */
     const val BULK_FINALIZE_ENCRYPTED_FORM = "BulkFinalizeEncryptedForm"
     const val BULK_FINALIZE_SAVE_POINT = "BulkFinalizeSavePoint"
+
+    /**
+     * Tracks how often printing with the old ExPrinterWidget is triggered
+     */
+    const val ZEBRA_PRINTER_STARTED = "ZebraPrinterStarted"
 }

@@ -19,6 +19,7 @@ import static org.odk.collect.settings.keys.MetaKeys.KEY_GOOGLE_BUG_154855417_FI
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import org.odk.collect.android.BuildConfig;
 import org.odk.collect.android.dynamicpreload.ExternalDataManager;
 import org.odk.collect.android.injection.DaggerUtils;
 import org.odk.collect.android.injection.config.AppDependencyComponent;
+import org.odk.collect.android.injection.config.CollectDrawDependencyModule;
 import org.odk.collect.android.injection.config.CollectGeoDependencyModule;
 import org.odk.collect.android.injection.config.CollectGoogleMapsDependencyModule;
 import org.odk.collect.android.injection.config.CollectOsmDroidDependencyModule;
@@ -45,6 +47,9 @@ import org.odk.collect.audiorecorder.AudioRecorderDependencyComponent;
 import org.odk.collect.audiorecorder.AudioRecorderDependencyComponentProvider;
 import org.odk.collect.audiorecorder.DaggerAudioRecorderDependencyComponent;
 import org.odk.collect.crashhandler.CrashHandler;
+import org.odk.collect.draw.DaggerDrawDependencyComponent;
+import org.odk.collect.draw.DrawDependencyComponent;
+import org.odk.collect.draw.DrawDependencyComponentProvider;
 import org.odk.collect.entities.DaggerEntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponent;
 import org.odk.collect.entities.EntitiesDependencyComponentProvider;
@@ -92,7 +97,8 @@ public class Collect extends Application implements
         ObjectProviderHost,
         EntitiesDependencyComponentProvider,
         SelfieCameraDependencyComponentProvider,
-        GoogleMapsDependencyComponentProvider {
+        GoogleMapsDependencyComponentProvider,
+        DrawDependencyComponentProvider {
 
     public static String defaultSysLanguage;
     private static Collect singleton;
@@ -110,6 +116,7 @@ public class Collect extends Application implements
     private EntitiesDependencyComponent entitiesDependencyComponent;
     private SelfieCameraDependencyComponent selfieCameraDependencyComponent;
     private GoogleMapsDependencyComponent googleMapsDependencyComponent;
+    private DrawDependencyComponent drawDependencyComponent;
 
     /**
      * @deprecated we shouldn't have to reference a static singleton of the application. Code doing this
@@ -164,14 +171,17 @@ public class Collect extends Application implements
      */
     private void setupStrictMode() {
         if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+            StrictMode.ThreadPolicy.Builder policyBuilder = new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
-                    .permitDiskReads()  // shared preferences are being read on main thread
-                    .penaltyLog()
-                    .build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                    .detectAll()
-                    .penaltyLog()
+                    .permitDiskReads()  // shared preferences are being read on main thread (`GetAndSubmitFormTest`)
+                    .permitDiskWrites() // files are being created on the fly (`GetAndSubmitFormTest`)
+                    .penaltyDeath();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                policyBuilder.permitUnbufferedIo(); // `ObjectInputStream#readObject` calls
+            }
+
+            StrictMode.setThreadPolicy(policyBuilder
                     .build());
         }
     }
@@ -191,6 +201,10 @@ public class Collect extends Application implements
 
         selfieCameraDependencyComponent = DaggerSelfieCameraDependencyComponent.builder()
                 .selfieCameraDependencyModule(new CollectSelfieCameraDependencyModule(applicationComponent::permissionsChecker))
+                .build();
+
+        drawDependencyComponent = DaggerDrawDependencyComponent.builder()
+                .drawDependencyModule(new CollectDrawDependencyModule(applicationComponent))
                 .build();
 
         // Mapbox dependencies
@@ -358,5 +372,11 @@ public class Collect extends Application implements
         }
 
         return googleMapsDependencyComponent;
+    }
+
+    @NonNull
+    @Override
+    public DrawDependencyComponent getDrawDependencyComponent() {
+        return drawDependencyComponent;
     }
 }

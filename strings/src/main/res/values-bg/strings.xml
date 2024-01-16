@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:oat="http://schema.getodk.org/odkAndroidTools">
   <!--Text for the topmost button on the main screen. It should be short and action-oriented.-->
   <!--Text for an action button on the main screen.-->
   <!--Text for an action button on the main screen.-->
@@ -77,13 +77,15 @@
     # FORM FEATURES
     ##############################################-->
   <!--Name of button displayed when a screen contains multiple questions populated by an external app: https://docs.getodk.org/launch-apps-from-collect/#launching-external-apps-to-populate-multiple-fields-->
+  <!--Name of the button displayed in the PrinterWidget to trigger printing-->
   <!--Dialog heading for saving annotated image-->
   <!--Text for button that deletes a file that is the answer to a question-->
   <!--Text for button that starts recording sound-->
   <!--Text for button that lets the user choose a sound file on their device-->
   <!--Description text for button that that pauses recording sound-->
   <!--Description text for button that that resumes recording sound-->
-  <!--Text next to checkbox to allow the user to toggle audio recording on and off-->
+  <!--Displayed in the form filling menu when a form has background audio recording enabled-->
+  <!--Displayed in the form filling menu when a form has background audio recording disabled-->
   <!--Text asking the user to confirm whether they want to stop recording or not (which deletes the recording file)-->
   <!--Button text for the dialog confirming whether the user wants to disable background recording-->
   <!--Text warning that user after they're reenabled background audio recording that it won't start again until they re-open the form-->
@@ -117,7 +119,8 @@
    These strings are only being used to preserve compatibility with pre-existing
     tile caches, and are not shown in the UI.-->
   <!--Action to go to Android settings. Displayed when location providers are disabled.-->
-  <!--Label for a menu item that can be toggled to turn background location tracking on and off during form filling-->
+  <!--Displayed in the form filling menu when a form has background location enabled-->
+  <!--Displayed in the form filling menu when a form has background location disabled-->
   <!--Text of an option available when filling out a form. Tapping this option checks the form for constraint or required violations and navigates the user back to the first field with an error.-->
   <!--%1$s is the time taken so far in hh:mm:ss-->
   <!--%1$s is the accuracy required for a point to be automatically saved-->
@@ -186,8 +189,6 @@
   <!--Subtext of a settings section-->
   <!--Label for server type setting-->
   <!--Title of dialog for configuring server URL-->
-  <!--To use Google Drive, forms must set a submission URL. If they don't, this URL will be used.-->
-  <!--Description for Fallback submission URL setting-->
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <!--Text for navigation button showed at the bottom of a form that's being filled. Try to use a short word common for navigation.-->
   <!--Heading for the settings category about updating blank forms-->
@@ -212,13 +213,6 @@
      ##############################################-->
   <!--Name of a setting that determines whether users can navigate backwards in a form-->
   <!--Protected setting. When enabled, users are allowed to save forms while filling them. When disabled, users are only allowed to save forms when they reach their end-->
-  <!--##############################################
-     # GOOGLE DRIVE, GOOGLE SHEETS
-     ##############################################-->
-  <!--Title of the screen that lists forms in user's Google Drive-->
-  <!--Title of the screen that lists forms shared with Google Drive user-->
-  <!--Button for navigating across Google Drive folders-->
-  <!--Text shown in dialog when a Google Sheets form upload was canceled before completion-->
   <!--##############################################
      # ABOUT
      ##############################################-->
@@ -272,4 +266,27 @@
   <!--##############################################
     # Form saved Snackbar
     ##############################################-->
+  <!--##############################################
+    # Forms ready to send banner
+    ##############################################-->
+  <!--Message showed on main menu to inform users that the ability to edit finalized forms is going away-->
+  <!--Label for Drafts list option that attempts to finalize all the drafts the user is currently looking at. Finalizing a draft locks it so it can't be edited and makes it eligible for autosend-->
+  <!--Dialog title that asks if the user wants to finalize all drafts-->
+  <!--Explanation for how bulk finalize works shown in a dialog before the user confirms if they want to proceed or cancel-->
+  <!--Message shown after bulk finalization when finalizing all drafts has succeeded-->
+  <!--Message shown after bulk finalization when no drafts finalized successfully-->
+  <!--Message shown after bulk finalization when some drafts finalize successfully and others fail-->
+  <!--Message shown when some drafts finalize successfully but others need to be finalized manually-->
+  <!--Displayed above a draft that has constraints that aren't met or required questions that aren't answered or both. Should match the wording for the 'Check for errors' feature.-->
+  <!--Displayed above a draft that has no constraint violations and in which all required questions have been answered. Should match the wording for the 'Check for errors' feature.-->
+  <!--Title of section of features that the user can uncheck to hide from the Drafts screen-->
+  <!--Title for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--Message for dialog explaining the drafts marked with "Error" shown to the user the first time they view the Drafts screen-->
+  <!--Message displayed when the list of questions is empty-->
+  <!--Message displayed when the list of blank forms is empty-->
+  <!--Message displayed when the list of drafts is empty-->
+  <!--Message displayed when the list of ready to send forms is empty-->
+  <!--Message displayed when the list of sent forms is empty-->
+  <!--Message displayed when the list of forms to download is empty-->
+  <!--Message displayed when the list of forms to delete is empty-->
 </resources>

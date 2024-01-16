@@ -75,6 +75,6 @@ public class LocationTrackingAuditTest {
                 .copyForm("location-audit.xml")
                 .startBlankForm("Audit with Location")
                 .clickOptionsIcon()
-                .assertText(org.odk.collect.strings.R.string.track_location);
+                .assertText(org.odk.collect.strings.R.string.track_location_on);
     }
 }

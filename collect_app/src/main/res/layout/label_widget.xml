@@ -4,7 +4,7 @@
     android:id="@+id/question_widget_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/margin_small">
+    android:padding="@dimen/margin_standard">
 
     <org.odk.collect.android.formentry.questions.AudioVideoImageTextLabel
         android:id="@+id/question_label"
@@ -44,4 +44,12 @@
         tools:ignore="RtlHardcoded">
 
     </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/help_text">
+
+        <include layout="@layout/question_error_layout" />
+    </FrameLayout>
 </RelativeLayout>

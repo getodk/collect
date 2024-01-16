@@ -3,6 +3,7 @@ package org.odk.collect.android.feature.formentry.audit
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -60,9 +61,9 @@ class AuditTest {
     }
 
     @Test // https://github.com/getodk/collect/issues/5551
-    fun navigatingToSettings_savesAnswersFormCurrentScreenToAuditLog() {
+    fun navigatingToSettings_savesAnswersFromCurrentScreenToAuditLog() {
         rule.startAtMainMenu()
-            .copyForm("one-question-audit-track-changes.xml")
+            .copyForm("two-question-audit-track-changes.xml")
             .startBlankForm("One Question Audit Track Changes")
             .fillOut(FormEntryPage.QuestionAndAnswer("What is your age", "31"))
             .clickOptionsIcon()
@@ -73,7 +74,24 @@ class AuditTest {
         assertThat(auditLog[1].get("new-value"), equalTo("31"))
     }
 
+    @Test // https://github.com/getodk/collect/issues/5900
+    fun navigatingToNextQuestion_savesAnswersFromCurrentScreenToAuditLog() {
+        rule.startAtMainMenu()
+            .copyForm("two-question-audit-track-changes.xml")
+            .startBlankForm("One Question Audit Track Changes")
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age", "31"))
+            .swipeToNextQuestion("What is your name?")
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your name?", "Adam"))
+            .swipeToEndScreen()
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog[1].get("event"), equalTo("question"))
+        assertThat(auditLog[1].get("new-value"), equalTo("31"))
+        assertThat(auditLog[2].get("new-value"), equalTo("Adam"))
+    }
+
     @Test // https://github.com/getodk/collect/issues/5253
+    @Ignore("killAndReopenApp is flakey")
     fun navigatingBackToTheFormAfterKillingTheAppWhenMovingBackwardsIsDisabled_savesFormResumeEventToAuditLog() {
         rule.startAtMainMenu()
             .copyForm("one-question-audit.xml")

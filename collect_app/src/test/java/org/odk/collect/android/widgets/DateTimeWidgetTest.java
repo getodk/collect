@@ -26,6 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import static org.odk.collect.android.widgets.support.QuestionWidgetHelpers.mockValueChangedListener;
@@ -236,6 +237,19 @@ public class DateTimeWidgetTest {
 
         assertEquals(widget.getAnswer().getDisplayText(),
                 new DateTimeData(DateTimeUtils.getSelectedTime(((DateTime) answer).toLocalDateTime(), LocalDateTime.now()).toDate()).getDisplayText());
+    }
+
+    @Test
+    public void setData_callsValueChangeListener() {
+        DateTimeWidget widget = createWidget(promptWithQuestionDefAndAnswer(questionDef, null));
+        WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
+        widget.setValueChangedListener(valueChangedListener);
+
+        widget.setData(new LocalDateTime().withDate(2010, 5, 12));
+        verify(valueChangedListener, times(1)).widgetValueChanged(widget);
+
+        widget.setData(new DateTime().withDate(2010, 5, 12));
+        verify(valueChangedListener, times(2)).widgetValueChanged(widget);
     }
 
     private DateTimeWidget createWidget(FormEntryPrompt prompt) {

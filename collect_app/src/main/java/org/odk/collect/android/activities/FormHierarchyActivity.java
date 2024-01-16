@@ -72,6 +72,8 @@ import org.odk.collect.audiorecorder.recording.AudioRecorder;
 import org.odk.collect.location.LocationClient;
 import org.odk.collect.permissions.PermissionsChecker;
 import org.odk.collect.permissions.PermissionsProvider;
+import org.odk.collect.printer.HtmlPrinter;
+import org.odk.collect.qrcode.QRCodeCreatorImpl;
 import org.odk.collect.settings.SettingsProvider;
 import org.odk.collect.strings.localization.LocalizedActivity;
 
@@ -210,7 +212,9 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 fusedLocationClient,
                 permissionsProvider,
                 autoSendSettingsProvider,
-                instancesRepositoryProvider
+                instancesRepositoryProvider,
+                new QRCodeCreatorImpl(),
+                new HtmlPrinter()
         );
 
         this.getSupportFragmentManager().setFragmentFactory(new FragmentFactoryBuilder()

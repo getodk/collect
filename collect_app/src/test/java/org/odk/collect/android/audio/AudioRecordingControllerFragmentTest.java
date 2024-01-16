@@ -154,7 +154,7 @@ public class AudioRecordingControllerFragmentTest {
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchInContainer(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(org.odk.collect.audiorecorder.R.drawable.ic_baseline_mic_24));
+            assertThat(shadowOf(fragment.binding.pauseRecording.getIcon()).getCreatedFromResId(), is(org.odk.collect.icons.R.drawable.ic_baseline_mic_24));
             assertThat(fragment.binding.pauseRecording.getContentDescription(), is(fragment.getString(org.odk.collect.strings.R.string.resume_recording)));
         });
     }
@@ -191,7 +191,7 @@ public class AudioRecordingControllerFragmentTest {
 
         FragmentScenario<AudioRecordingControllerFragment> scenario = launcherRule.launchInContainer(AudioRecordingControllerFragment.class);
         scenario.onFragment(fragment -> {
-            assertThat(shadowOf(fragment.binding.recordingIcon.getDrawable()).getCreatedFromResId(), is(org.odk.collect.audiorecorder.R.drawable.ic_baseline_mic_24));
+            assertThat(shadowOf(fragment.binding.recordingIcon.getDrawable()).getCreatedFromResId(), is(org.odk.collect.icons.R.drawable.ic_baseline_mic_24));
         });
     }
 

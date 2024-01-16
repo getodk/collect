@@ -3,6 +3,7 @@
     <item
         android:id="@+id/bulk_finalize"
         android:showAsAction="never"
+        android:icon="@drawable/ic_baseline_done_all_24"
         android:title="@string/finalize_all_drafts">
     </item>
 </menu>

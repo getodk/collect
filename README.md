@@ -144,16 +144,6 @@ When you first run Collect, it is set to download forms from [https://demo.getod
 
 Certain functions in ODK Collect depend on cloud services that require API keys or authorization steps to work.  Here are the steps you need to take in order to use these functions in your development builds.
 
-**Google Drive and Sheets APIs**: When the "Google Drive, Google Sheets" option is selected in the "Server" settings, ODK Collect uses these APIs to store submitted form data in Google Sheets and submitted media in Google Drive.  To enable these APIs:
-  1. Create and configure a Google API project for Google Sign-in using the "Configure Project" button found [here](https://developers.google.com/identity/sign-in/android/start).
-      1. Choose whatever you'd like for the project and product name
-      1. Select "Android" for "What are you calling from?"
-      1. Enter "org.odk.collect.android" for package name
-      1. Enter your debug key's SHA1 certificate fingerprint as the SHA1 (more info on that [here](https://developers.google.com/android/guides/client-auth))
-      1. Copy the displayed "Client ID" into `client_id` (under `oauth_client`) in `google-services.json`
-  1. [Enable the Google Drive API](https://console.developers.google.com/apis/api/drive.googleapis.com).
-  1. [Enable the Google Sheets API](https://console.developers.google.com/apis/api/sheets.googleapis.com).
-
 **Google Maps API**: When the "Google Maps SDK" option is selected in the "User interface" settings, ODK Collect uses the Google Maps API for displaying maps in the geospatial widgets (GeoPoint, GeoTrace, and GeoShape).  To enable this API:
   1. [Get a Google Maps API key](https://developers.google.com/maps/documentation/android-api/signup).  Note that this requires a credit card number, though the card will not be charged immediately; some free API usage is permitted.  You should carefully read the terms before providing a credit card number.
   1. Edit or create `secrets.properties` and set the `GOOGLE_MAPS_API_KEY` property to your API key.  You should end up with a line that looks like this:

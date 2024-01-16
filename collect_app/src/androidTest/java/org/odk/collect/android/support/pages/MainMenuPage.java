@@ -14,6 +14,7 @@ import static org.hamcrest.core.StringContains.containsString;
 
 import org.odk.collect.android.R;
 import org.odk.collect.android.support.StorageUtils;
+import org.odk.collect.android.support.TestScheduler;
 import org.odk.collect.android.support.WaitFor;
 
 import java.io.IOException;
@@ -180,14 +181,17 @@ public class MainMenuPage extends Page<MainMenuPage> {
                 .pressBack(new MainMenuPage());
     }
 
-    public MainMenuPage enableAutoSend() {
-        return openProjectSettingsDialog()
+    public MainMenuPage enableAutoSend(TestScheduler scheduler) {
+        MainMenuPage mainMenuPage = openProjectSettingsDialog()
                 .clickSettings()
                 .clickFormManagement()
                 .clickOnString(org.odk.collect.strings.R.string.autosend)
                 .clickOnString(org.odk.collect.strings.R.string.wifi_cellular_autosend)
                 .pressBack(new ProjectSettingsPage())
                 .pressBack(new MainMenuPage());
+
+        scheduler.runDeferredTasks(); // Run autosend scheduled after enabling
+        return mainMenuPage;
     }
 
     public MainMenuPage addAndSwitchToProject(String serverUrl) {

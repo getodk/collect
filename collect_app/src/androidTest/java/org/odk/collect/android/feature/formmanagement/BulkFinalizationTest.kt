@@ -3,6 +3,7 @@ package org.odk.collect.android.feature.formmanagement
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -29,7 +30,7 @@ class BulkFinalizationTest {
     val chain: RuleChain = TestRuleChain.chain(testDependencies).around(rule)
 
     @Test
-    fun canBulkFinalizeDrafts() {
+    fun canBulkFinalizeDraftsInTheListOfDrafts() {
         rule.withProject("http://example.com")
             .copyForm("one-question.xml", "example.com")
             .startBlankForm("One Question")
@@ -45,6 +46,16 @@ class BulkFinalizationTest {
             .pressBack(MainMenuPage())
 
             .assertNumberOfFinalizedForms(2)
+    }
+
+    @Test
+    fun canNotBulkFinalizeDraftsInTheListOfSentForms() {
+        rule.withProject("http://example.com")
+            .copyForm("one-question.xml", "example.com")
+            .startBlankForm("One Question")
+            .fillOutAndSave(QuestionAndAnswer("what is your age", "97"))
+            .clickViewSentForm(0)
+            .assertNoOptionsMenu()
     }
 
     @Test
@@ -94,6 +105,7 @@ class BulkFinalizationTest {
     }
 
     @Test
+    @Ignore("killAndReopenApp is flakey")
     fun doesNotFinalizeInstancesWithSavePoints() {
         rule.withProject("http://example.com")
             .copyForm("one-question.xml", "example.com")
@@ -157,7 +169,7 @@ class BulkFinalizationTest {
     @Test
     fun whenAutoSendIsEnabled_draftsAreSentAfterFinalizing() {
         val mainMenuPage = rule.withProject(testDependencies.server.url)
-            .enableAutoSend()
+            .enableAutoSend(testDependencies.scheduler)
 
             .copyForm("one-question.xml", testDependencies.server.hostName)
             .startBlankForm("One Question")

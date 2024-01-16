@@ -41,6 +41,7 @@ class ApplicationInitializer(
         ).initialize()
         mapsInitializer.initialize()
         JavaRosaInitializer(propertyManager).initialize()
+        SystemThemeMismatchFixInitializer(context).initialize()
     }
 
     private fun initializeFrameworks() {

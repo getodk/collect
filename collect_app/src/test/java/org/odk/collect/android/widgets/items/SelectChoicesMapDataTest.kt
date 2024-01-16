@@ -151,6 +151,9 @@ class SelectChoicesMapDataTest {
         assertThat(data.getMappableItems().value, equalTo(null))
 
         scheduler.runBackground()
+        assertThat(data.isLoading().value, equalTo(true))
+
+        scheduler.runForeground()
         assertThat(data.isLoading().value, equalTo(false))
     }
 
@@ -264,7 +267,7 @@ class SelectChoicesMapDataTest {
     private fun loadDataForPrompt(prompt: FormEntryPrompt): SelectChoicesMapData {
         val resources = ApplicationProvider.getApplicationContext<Application>().resources
         val data = SelectChoicesMapData(resources, scheduler, prompt, null)
-        scheduler.runBackground()
+        scheduler.flush()
         return data
     }
 }

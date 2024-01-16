@@ -39,18 +39,6 @@ class CollectSettingsChangeHandlerTest {
     }
 
     @Test
-    fun `when changed key is PROTOCOL schedules updates`() {
-        handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_PROTOCOL)
-        verify(formUpdateScheduler).scheduleUpdates("projectId")
-    }
-
-    @Test
-    fun `when changed key is PROTOCOL clears sync status`() {
-        handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_PROTOCOL)
-        verify(formsDataService).clear("projectId")
-    }
-
-    @Test
     fun `when changed key is SERVER_URL clears forms data`() {
         handler.onSettingChanged("projectId", "anything", ProjectKeys.KEY_SERVER_URL)
         verify(formsDataService).clear("projectId")

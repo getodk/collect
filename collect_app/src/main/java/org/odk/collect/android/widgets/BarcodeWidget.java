@@ -15,6 +15,7 @@
 package org.odk.collect.android.widgets;
 
 import static org.odk.collect.android.utilities.Appearances.FRONT;
+import static org.odk.collect.android.utilities.Appearances.hasAppearance;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -73,6 +74,7 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
             binding.barcodeAnswerText.setText(answer);
         }
 
+        updateVisibility();
         return binding.getRoot();
     }
 
@@ -81,6 +83,8 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
         binding.barcodeAnswerText.setText(null);
         binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.get_barcode));
         widgetValueChanged();
+
+        updateVisibility();
     }
 
     @Override
@@ -92,9 +96,20 @@ public class BarcodeWidget extends QuestionWidget implements WidgetDataReceiver 
     @Override
     public void setData(Object answer) {
         String response = (String) answer;
+
         binding.barcodeAnswerText.setText(stripInvalidCharacters(response));
         binding.barcodeButton.setText(getContext().getString(org.odk.collect.strings.R.string.replace_barcode));
+        updateVisibility();
+
         widgetValueChanged();
+    }
+
+    private void updateVisibility() {
+        if (hasAppearance(getFormEntryPrompt(), Appearances.HIDDEN_ANSWER)) {
+            binding.barcodeAnswerText.setVisibility(GONE);
+        } else {
+            binding.barcodeAnswerText.setVisibility(binding.barcodeAnswerText.getText().toString().isBlank() ? GONE : VISIBLE);
+        }
     }
 
     // Remove control characters, invisible characters and unused code points.

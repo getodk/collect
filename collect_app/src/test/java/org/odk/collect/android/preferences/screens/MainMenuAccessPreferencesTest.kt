@@ -303,15 +303,4 @@ class MainMenuAccessPreferencesTest {
             assertThat(adminSettings.getBoolean(ProtectedProjectKeys.KEY_GET_BLANK), `is`(true))
         }
     }
-
-    @Test
-    fun `When match exactly enabled and google used as protocol the Get Blank Form option is enabled`() {
-        generalSettings.save(ProjectKeys.KEY_FORM_UPDATE_MODE, FormUpdateMode.MATCH_EXACTLY.getValue(context))
-
-        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-        val scenario = launcherRule.launch(MainMenuAccessPreferencesFragment::class.java)
-        scenario.onFragment { fragment: MainMenuAccessPreferencesFragment ->
-            assertThat(fragment.findPreference<CheckBoxPreference>(ProtectedProjectKeys.KEY_GET_BLANK)!!.isEnabled, `is`(true))
-        }
-    }
 }

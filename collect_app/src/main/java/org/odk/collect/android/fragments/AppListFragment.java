@@ -163,7 +163,7 @@ public abstract class AppListFragment extends ListFragment {
             new FormListSortingBottomSheetDialog(
                     requireContext(),
                     sortingOptions,
-                    selectedSortingOrder,
+                    getSelectedSortingOrder(),
                     selectedOption -> {
                         saveSelectedSortingOrder(selectedOption);
                         updateAdapter();

@@ -90,5 +90,10 @@ class SelectOneFromMapWidget(context: Context, questionDetails: QuestionDetails)
         } else {
             ""
         }
+        if (binding.answer.text.isBlank()) {
+            binding.answer.visibility = GONE
+        } else {
+            binding.answer.visibility = VISIBLE
+        }
     }
 }

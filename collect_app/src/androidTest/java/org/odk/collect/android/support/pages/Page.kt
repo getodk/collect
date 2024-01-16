@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoActivityResumedException
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
@@ -30,6 +30,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withSubstring
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
@@ -41,6 +42,7 @@ import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.StringContains.containsString
 import org.hamcrest.core.StringEndsWith.endsWith
 import org.junit.Assert
+import org.junit.Assert.fail
 import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
@@ -94,6 +96,15 @@ abstract class Page<T : Page<T>> {
     fun <D : Page<D>> pressBack(destination: D): D {
         Espresso.pressBack()
         return destination.assertOnPage()
+    }
+
+    fun pressBackKillingApp() {
+        try {
+            Espresso.pressBack()
+            fail("App was not killed!")
+        } catch (e: NoActivityResumedException) {
+            // App killed as expected
+        }
     }
 
     fun assertTexts(vararg texts: String): T {
@@ -302,11 +313,6 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
-    fun clearTheText(text: String?): T {
-        onView(withText(text)).perform(ViewActions.clearText())
-        return this as T
-    }
-
     fun checkIsTextDisplayedOnDialog(text: String?): T {
         onView(withId(android.R.id.message)).check(matches(withText(containsString(text))))
         return this as T
@@ -350,6 +356,11 @@ abstract class Page<T : Page<T>> {
 
     fun scrollToAndClickText(text: Int): T {
         onView(withText(getTranslatedString(text))).perform(scrollTo(), click())
+        return this as T
+    }
+
+    fun scrollToAndClickSubtext(text: Int): T {
+        onView(withSubstring(getTranslatedString(text))).perform(scrollTo(), click())
         return this as T
     }
 

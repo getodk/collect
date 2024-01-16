@@ -10,7 +10,6 @@ import android.view.View.VISIBLE
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.odk.collect.android.R
 import org.odk.collect.android.activities.AboutActivity
 import org.odk.collect.android.activities.ActivityUtils
 import org.odk.collect.android.databinding.ProjectSettingsDialogLayoutBinding
@@ -45,17 +44,16 @@ class ProjectSettingsDialog(private val viewModelFactory: ViewModelProvider.Fact
             requireActivity(),
             viewModelFactory
         )[CurrentProjectViewModel::class.java]
+        currentProjectViewModel.refresh()
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = ProjectSettingsDialogLayoutBinding.inflate(LayoutInflater.from(context))
 
-        currentProjectViewModel.currentProject.observe(this) { project ->
-            binding.currentProject.setupView(project, settingsProvider.getUnprotectedSettings())
-            binding.currentProject.contentDescription =
-                getString(org.odk.collect.strings.R.string.using_project, project.name)
-            inflateListOfInActiveProjects(requireContext(), project)
-        }
+        val project = currentProjectViewModel.currentProject.value
+        binding.currentProject.setupView(project, settingsProvider.getUnprotectedSettings())
+        binding.currentProject.contentDescription = getString(org.odk.collect.strings.R.string.using_project, project.name)
+        inflateListOfInActiveProjects(requireContext(), project)
 
         binding.closeIcon.setOnClickListener {
             dismiss()

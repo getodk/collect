@@ -54,14 +54,4 @@ public class ServerSettingsTest {
                 .assertMessage("All downloads succeeded!")
                 .clickOKOnDialog(new MainMenuPage());
     }
-
-    @Test
-    public void selectingServerTypeIsDisabled() {
-        new MainMenuPage().assertOnPage()
-                .openProjectSettingsDialog()
-                .clickSettings()
-                .clickServerSettings()
-                .clickOnServerType()
-                .assertTextDoesNotExist(org.odk.collect.strings.R.string.cancel);
-    }
 }

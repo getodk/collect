@@ -18,8 +18,6 @@ import static org.odk.collect.android.injection.DaggerUtils.getComponent;
 import static org.odk.collect.android.utilities.ApplicationConstants.RequestCodes;
 import static org.odk.collect.settings.keys.ProjectKeys.KEY_EXTERNAL_APP_RECORDING;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -33,6 +31,7 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -142,7 +141,21 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
      * @param groups          the group hierarchy that this question or field list is in
      * @param advancingPage   whether this view is being created after a forward swipe through the
      */
-    public ODKView(ComponentActivity context, final FormEntryPrompt[] questionPrompts, FormEntryCaption[] groups, boolean advancingPage, QuestionMediaManager questionMediaManager, WaitingForDataRegistry waitingForDataRegistry, AudioPlayer audioPlayer, AudioRecorder audioRecorder, FormEntryViewModel formEntryViewModel, InternalRecordingRequester internalRecordingRequester, ExternalAppRecordingRequester externalAppRecordingRequester, AudioHelper audioHelper) {
+    public ODKView(
+            ComponentActivity context,
+            final FormEntryPrompt[] questionPrompts,
+            FormEntryCaption[] groups,
+            boolean advancingPage,
+            QuestionMediaManager questionMediaManager,
+            WaitingForDataRegistry waitingForDataRegistry,
+            AudioPlayer audioPlayer,
+            AudioRecorder audioRecorder,
+            FormEntryViewModel formEntryViewModel,
+            PrinterWidgetViewModel printerWidgetViewModel,
+            InternalRecordingRequester internalRecordingRequester,
+            ExternalAppRecordingRequester externalAppRecordingRequester,
+            AudioHelper audioHelper
+    ) {
         super(context);
         viewLifecycle = ((ScreenContext) context).getViewLifecycle();
 
@@ -178,6 +191,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                         externalAppRecordingRequester
                 ),
                 formEntryViewModel,
+                printerWidgetViewModel,
                 audioRecorder,
                 viewLifecycle,
                 new FileRequesterImpl(intentLauncher, externalAppIntentProvider, formController),
@@ -309,6 +323,14 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         View divider = new View(getContext());
         divider.setBackgroundResource(new ThemeUtils(getContext()).getDivider());
         divider.setMinimumHeight(3);
+
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        int marginVertical = (int) getContext().getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_small);
+        params.setMargins(0, marginVertical, 0, marginVertical);
+        divider.setLayoutParams(params);
 
         return divider;
     }
@@ -473,7 +495,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         return qw.getLocalVisibleRect(scrollBounds);
     }
 
-    public void scrollTo(@Nullable QuestionWidget qw) {
+    public void scrollToTopOf(@Nullable QuestionWidget qw) {
         if (qw != null && widgets.contains(qw)) {
             findViewById(R.id.odk_view_container).scrollTo(0, qw.getTop());
         }
@@ -610,37 +632,20 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
         }
     }
 
-    /**
-     * Highlights the question at the given {@link FormIndex} in red for 2.5 seconds, scrolls the
-     * view to display that question at the top and gives it focus.
-     */
-    public void highlightWidget(FormIndex formIndex) {
-        QuestionWidget qw = getQuestionWidget(formIndex);
-
-        if (qw != null) {
-            // postDelayed is needed because otherwise scrolling may not work as expected in case when
-            // answers are validated during form finalization.
-            new Handler().postDelayed(() -> {
-                qw.setFocus(getContext());
-                scrollTo(qw);
-
-                ValueAnimator va = new ValueAnimator();
-                va.setIntValues(new ThemeUtils(getContext()).getColorError(), getDrawingCacheBackgroundColor());
-                va.setEvaluator(new ArgbEvaluator());
-                va.addUpdateListener(valueAnimator -> qw.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
-                va.setDuration(2500);
-                va.start();
-            }, 100);
-        }
-    }
-
-    private QuestionWidget getQuestionWidget(FormIndex formIndex) {
-        for (QuestionWidget qw : widgets) {
-            if (formIndex.equals(qw.getFormEntryPrompt().getIndex())) {
-                return qw;
+    public void setErrorForQuestionWithIndex(FormIndex formIndex, String errorMessage) {
+        for (QuestionWidget questionWidget : getWidgets()) {
+            if (formIndex.equals(questionWidget.getFormEntryPrompt().getIndex())) {
+                questionWidget.displayError(errorMessage);
+                // postDelayed is needed because otherwise scrolling may not work as expected in case when
+                // answers are validated during form finalization.
+                postDelayed(() -> {
+                    questionWidget.setFocus(getContext());
+                    scrollToTopOf(questionWidget);
+                }, 400);
+            } else {
+                questionWidget.hideError();
             }
         }
-        return null;
     }
 
     /**

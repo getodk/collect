@@ -61,8 +61,7 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(true).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
-        scheduler.runBackground()
-        scheduler.runBackground()
+        scheduler.flush()
         assertThat(result.value, `is`(true))
     }
 
@@ -72,16 +71,13 @@ class BlankFormListViewModelTest {
         generalSettings.save(ProjectKeys.KEY_SERVER_URL, "https://sample.com")
         doReturn(false).whenever(formsDataService).matchFormsWithServer(projectId)
         val result = viewModel.syncWithServer()
-        scheduler.runBackground()
-        scheduler.runBackground()
+        scheduler.flush()
         assertThat(result.value, `is`(false))
     }
 
     @Test
     fun `isMatchExactlyEnabled returns correct value based on settings`() {
         createViewModel()
-
-        generalSettings.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_SERVER)
 
         assertThat(viewModel.isMatchExactlyEnabled(), `is`(false))
 
@@ -453,8 +449,7 @@ class BlankFormListViewModelTest {
         )
 
         if (runAllBackgroundTasks) {
-            scheduler.runBackground()
-            scheduler.runBackground()
+            scheduler.flush()
         }
     }
 

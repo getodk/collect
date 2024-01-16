@@ -27,6 +27,7 @@ import org.odk.collect.androidshared.system.IntentLauncher
 import org.odk.collect.androidshared.ui.DialogFragmentUtils
 import org.odk.collect.androidshared.ui.ToastUtils
 import org.odk.collect.androidshared.ui.ToastUtils.showShortToast
+import org.odk.collect.androidshared.ui.enableIconsVisibility
 import org.odk.collect.androidshared.utils.CompressionUtils
 import org.odk.collect.material.MaterialFullScreenDialogFragment
 import org.odk.collect.permissions.PermissionListener
@@ -168,7 +169,10 @@ class QrCodeProjectCreatorDialog :
     }
 
     private fun configureMenu() {
-        binding.toolbar.menu.removeItem(R.id.menu_item_share)
+        val menu = binding.toolbar.menu
+        menu.enableIconsVisibility()
+
+        menu.removeItem(R.id.menu_item_share)
 
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {

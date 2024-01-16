@@ -16,13 +16,12 @@ class CollectSettingsChangeHandler(
     override fun onSettingChanged(projectId: String, newValue: Any?, changedKey: String) {
         propertyManager.reload()
 
-        if (changedKey == ProjectKeys.KEY_SERVER_URL || changedKey == ProjectKeys.KEY_PROTOCOL) {
+        if (changedKey == ProjectKeys.KEY_SERVER_URL) {
             formsDataService.clear(projectId)
         }
 
         if (changedKey == ProjectKeys.KEY_FORM_UPDATE_MODE ||
-            changedKey == ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK ||
-            changedKey == ProjectKeys.KEY_PROTOCOL
+            changedKey == ProjectKeys.KEY_PERIODIC_FORM_UPDATES_CHECK
         ) {
             formUpdateScheduler.scheduleUpdates(projectId)
         }

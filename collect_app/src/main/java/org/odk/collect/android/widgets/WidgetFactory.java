@@ -26,9 +26,8 @@ import androidx.lifecycle.LifecycleOwner;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.form.api.FormEntryPrompt;
-import org.odk.collect.analytics.Analytics;
-import org.odk.collect.android.analytics.AnalyticsEvents;
 import org.odk.collect.android.formentry.FormEntryViewModel;
+import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -84,6 +83,7 @@ public class WidgetFactory {
     private final AudioPlayer audioPlayer;
     private final RecordingRequesterProvider recordingRequesterProvider;
     private final FormEntryViewModel formEntryViewModel;
+    private final PrinterWidgetViewModel printerWidgetViewModel;
     private final AudioRecorder audioRecorder;
     private final LifecycleOwner viewLifecycle;
     private final FileRequester fileRequester;
@@ -98,6 +98,7 @@ public class WidgetFactory {
                          AudioPlayer audioPlayer,
                          RecordingRequesterProvider recordingRequesterProvider,
                          FormEntryViewModel formEntryViewModel,
+                         PrinterWidgetViewModel printerWidgetViewModel,
                          AudioRecorder audioRecorder,
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
@@ -111,6 +112,7 @@ public class WidgetFactory {
         this.audioPlayer = audioPlayer;
         this.recordingRequesterProvider = recordingRequesterProvider;
         this.formEntryViewModel = formEntryViewModel;
+        this.printerWidgetViewModel = printerWidgetViewModel;
         this.audioRecorder = audioRecorder;
         this.viewLifecycle = viewLifecycle;
         this.fileRequester = fileRequester;
@@ -176,15 +178,13 @@ public class WidgetFactory {
                         String query = prompt.getQuestion().getAdditionalAttribute(null, "query");
                         if (query != null) {
                             questionWidget = getSelectOneWidget(appearance, questionDetails);
+                        } else if (appearance.equals(Appearances.PRINTER)) {
+                            questionWidget = new PrinterWidget(activity, questionDetails, printerWidgetViewModel, questionMediaManager);
                         } else if (appearance.startsWith(Appearances.PRINTER)) {
                             questionWidget = new ExPrinterWidget(activity, questionDetails, waitingForDataRegistry);
                         } else if (appearance.startsWith(Appearances.EX)) {
                             questionWidget = new ExStringWidget(activity, questionDetails, waitingForDataRegistry, stringRequester);
                         } else if (appearance.contains(Appearances.NUMBERS)) {
-                            Analytics.log(AnalyticsEvents.TEXT_NUMBER_WIDGET, "form");
-                            if (Appearances.useThousandSeparator(prompt)) {
-                                Analytics.log(AnalyticsEvents.TEXT_NUMBER_WIDGET_WITH_THOUSANDS_SEPARATOR, "form");
-                            }
                             questionWidget = new StringNumberWidget(activity, questionDetails);
                         } else if (appearance.equals(Appearances.URL)) {
                             questionWidget = new UrlWidget(activity, questionDetails, new ExternalWebPageHelper());

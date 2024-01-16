@@ -9,10 +9,6 @@ object ProjectKeys {
     const val KEY_USERNAME = "username"
     const val KEY_PASSWORD = "password"
 
-    // google_preferences.xml
-    const val KEY_SELECTED_GOOGLE_ACCOUNT = "selected_google_account"
-    const val KEY_GOOGLE_SHEETS_URL = "google_sheets_url"
-
     // user_interface_preferences.xml
     const val KEY_APP_THEME = "appTheme"
     const val KEY_APP_LANGUAGE = "app_language"

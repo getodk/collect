@@ -5,6 +5,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.CoreMatchers.nullValue
@@ -31,7 +32,7 @@ class NotificationDrawer {
     fun assertNotification(
         appName: String,
         title: String,
-        subtext: String,
+        subtext: String? = null,
         body: String? = null
     ): NotificationDrawer {
         val device = waitForNotification(appName)
@@ -39,20 +40,13 @@ class NotificationDrawer {
         val titleElement = device.findObject(By.text(title))
         assertThat(titleElement, not(nullValue()))
 
-        var subtextElement = device.findObject(By.text(subtext))
-        if (subtextElement == null) {
-            device.findObject(By.text(appName)).click() // Expand notification to show subtext
-            subtextElement = device.findObject(By.text(subtext))
+        if (subtext != null) {
+            assertExpandedText(device, appName, subtext)
         }
 
-        assertThat(subtextElement.text, `is`(subtext))
-
-        body?.let {
-            val bodyElement = device.findObject(By.text(body))
-            assertThat(bodyElement, not(nullValue()))
+        if (body != null) {
+            assertExpandedText(device, appName, body)
         }
-
-        assertExpandedText(device, appName, subtext)
 
         return this
     }
@@ -72,9 +66,12 @@ class NotificationDrawer {
             throw AssertionError("Could not find \"$actionText\"")
         }
 
-        return waitFor {
+        val page = waitFor {
             destination.assertOnPage()
         }
+
+        assertNoNotification(appName)
+        return page
     }
 
     fun <D : Page<D>> clickNotification(
@@ -111,6 +108,14 @@ class NotificationDrawer {
         device.wait(Until.gone(By.text("Notifications")), 1000L)
 
         isOpen = false
+    }
+
+    private fun assertNoNotification(appName: String) {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.openNotification()
+        val result = device.wait(Until.hasObject(By.textStartsWith(appName)), 0L)
+        assertThat("Expected no notification for app: $appName", result, equalTo(false))
+        device.pressBack()
     }
 
     private fun assertText(device: UiDevice, text: String): UiObject2 {

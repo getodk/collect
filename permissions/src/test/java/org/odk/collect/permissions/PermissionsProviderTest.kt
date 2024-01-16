@@ -167,7 +167,7 @@ class PermissionsProviderTest {
             activity,
             org.odk.collect.strings.R.string.record_audio_runtime_permission_denied_title,
             org.odk.collect.strings.R.string.record_audio_runtime_permission_denied_desc,
-            R.drawable.ic_mic,
+            org.odk.collect.icons.R.drawable.ic_baseline_mic_24,
             permissionListener
         )
 
@@ -216,53 +216,6 @@ class PermissionsProviderTest {
             org.odk.collect.strings.R.string.camera_runtime_permission_denied_title,
             org.odk.collect.strings.R.string.camera_runtime_permission_denied_desc,
             R.drawable.ic_photo_camera,
-            permissionListener
-        )
-        verifyNoMoreInteractions(permissionsDialogCreator)
-    }
-
-    @Test
-    fun `isGetAccountsPermissionGranted() when get accounts permission is granted returns true`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)).thenReturn(true)
-
-        assertThat(permissionsProvider.isGetAccountsPermissionGranted, `is`(true))
-    }
-
-    @Test
-    fun `isGetAccountsPermissionGranted() when get accounts permission is not granted returns false`() {
-        whenever(permissionsChecker.isPermissionGranted(Manifest.permission.GET_ACCOUNTS)).thenReturn(false)
-
-        assertThat(permissionsProvider.isGetAccountsPermissionGranted, `is`(false))
-    }
-
-    @Test
-    fun `requestGetAccountsPermission() when get accounts permission is granted calls PermissionListener#granted`() {
-        permissionsApi.setGrantedPermission(Manifest.permission.GET_ACCOUNTS)
-
-        permissionsProvider.requestGetAccountsPermission(activity, permissionListener)
-
-        verify(permissionListener).granted()
-        verifyNoMoreInteractions(permissionListener)
-        verifyNoInteractions(permissionsDialogCreator)
-    }
-
-    @Test
-    fun `requestGetAccountsPermission() when get accounts permission is denied calls PermissionListener#denied`() {
-        permissionsProvider.requestGetAccountsPermission(activity, permissionListener)
-
-        verify(permissionListener).denied()
-        verifyNoMoreInteractions(permissionListener)
-    }
-
-    @Test
-    fun `requestGetAccountsPermission() when get accounts permission is denied calls PermissionsDialogCreator#showAdditionalExplanation`() {
-        permissionsProvider.requestGetAccountsPermission(activity, permissionListener)
-
-        verify(permissionsDialogCreator).showAdditionalExplanation(
-            activity,
-            org.odk.collect.strings.R.string.get_accounts_runtime_permission_denied_title,
-            org.odk.collect.strings.R.string.get_accounts_runtime_permission_denied_desc,
-            R.drawable.ic_get_accounts,
             permissionListener
         )
         verifyNoMoreInteractions(permissionsDialogCreator)

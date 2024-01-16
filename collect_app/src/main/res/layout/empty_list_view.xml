@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_standard"
-    android:background="?colorSurfaceContainerLow">
+    android:background="?colorSurface">
 
     <ImageView
         android:id="@+id/icon"

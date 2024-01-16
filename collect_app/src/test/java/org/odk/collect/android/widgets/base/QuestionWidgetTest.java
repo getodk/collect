@@ -49,7 +49,6 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
     @NonNull
     public abstract W createWidget();
 
-    @NonNull
     public abstract A getNextAnswer();
 
     public A getInitialAnswer() {
@@ -130,7 +129,7 @@ public abstract class QuestionWidgetTest<W extends Widget, A extends IAnswerData
     public void callingClearShouldCallValueChangeListeners() {
         when(formEntryPrompt.getAnswerText()).thenReturn(getInitialAnswer().getDisplayText());
 
-        QuestionWidget widget = (QuestionWidget) getSpyWidget();
+        QuestionWidget widget = (QuestionWidget) getWidget();
         WidgetValueChangedListener valueChangedListener = mockValueChangedListener(widget);
         widget.clearAnswer();
         verify(valueChangedListener).widgetValueChanged(widget);

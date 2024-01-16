@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import org.odk.collect.android.R
 import org.odk.collect.android.formmanagement.FormDownloadException
 import org.odk.collect.android.formmanagement.ServerFormDetails
 import org.odk.collect.android.notifications.builders.FormUpdatesAvailableNotificationBuilder
@@ -37,7 +36,8 @@ class NotificationManagerNotifier(
                 FORM_UPDATE_NOTIFICATION_ID,
                 FormUpdatesAvailableNotificationBuilder.build(
                     application,
-                    getProjectName(projectId)
+                    getProjectName(projectId),
+                    FORM_UPDATE_NOTIFICATION_ID
                 )
             )
             metaPrefs.save(MetaKeys.LAST_UPDATED_NOTIFICATION, updateId)
@@ -50,7 +50,8 @@ class NotificationManagerNotifier(
             FormUpdatesDownloadedNotificationBuilder.build(
                 application,
                 result,
-                getProjectName(projectId)
+                getProjectName(projectId),
+                FORM_UPDATE_NOTIFICATION_ID
             )
         )
     }
@@ -64,7 +65,8 @@ class NotificationManagerNotifier(
                 FormsSyncFailedNotificationBuilder.build(
                     application,
                     exception,
-                    getProjectName(projectId)
+                    getProjectName(projectId),
+                    FORM_SYNC_NOTIFICATION_ID
                 )
             )
         }
@@ -76,7 +78,8 @@ class NotificationManagerNotifier(
             FormsSubmissionNotificationBuilder.build(
                 application,
                 result,
-                getProjectName(projectId)
+                getProjectName(projectId),
+                AUTO_SEND_RESULT_NOTIFICATION_ID
             )
         )
     }

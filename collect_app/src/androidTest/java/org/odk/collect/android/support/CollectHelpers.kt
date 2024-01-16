@@ -8,7 +8,6 @@ import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.injection.config.DaggerAppDependencyComponent
 import org.odk.collect.projects.Project
-import org.odk.collect.settings.keys.ProjectKeys
 
 object CollectHelpers {
     fun overrideAppDependencyModule(appDependencyModule: AppDependencyModule): AppDependencyComponent {
@@ -37,24 +36,5 @@ object CollectHelpers {
             DaggerUtils.getComponent(ApplicationProvider.getApplicationContext<Application>())
         component.projectsRepository().save(Project.DEMO_PROJECT)
         component.currentProjectProvider().setCurrentProject(Project.DEMO_PROJECT_ID)
-    }
-
-    @JvmStatic
-    fun addGDProject(gdProject: Project.New, accountName: String, testDependencies: TestDependencies) {
-        testDependencies.googleAccountPicker.setDeviceAccount(accountName)
-        testDependencies.googleApi.setAccount(accountName)
-
-        val project = DaggerUtils
-            .getComponent(ApplicationProvider.getApplicationContext<Application>())
-            .projectsRepository()
-            .save(gdProject)
-
-        DaggerUtils
-            .getComponent(ApplicationProvider.getApplicationContext<Application>())
-            .settingsProvider().getUnprotectedSettings(project.uuid)
-            .also {
-                it.save(ProjectKeys.KEY_PROTOCOL, ProjectKeys.PROTOCOL_GOOGLE_SHEETS)
-                it.save(ProjectKeys.KEY_SELECTED_GOOGLE_ACCOUNT, accountName)
-            }
     }
 }

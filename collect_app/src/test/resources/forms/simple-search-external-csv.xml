@@ -11,7 +11,6 @@
             </instance>
             <bind nodeset="/simple-search-external-csv/fruit1" type="select1" />
             <bind nodeset="/simple-search-external-csv/note_fruit" readonly="true()" type="string" />
-            <submission action="https://docs.google.com/spreadsheets/d/1lxzQR336UOy2LtHjIIhXKPFJzq_cIusfdwWq24H7q90/edit?usp=sharing" method="post"/>
         </model>
     </h:head>
     <h:body>

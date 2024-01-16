@@ -19,6 +19,7 @@ import android.content.Context;
 
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
+import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.utilities.StringWidgetUtils;
 
 /**
@@ -31,7 +32,9 @@ public class DecimalWidget extends StringWidget {
         super(context, questionDetails);
         render();
 
-        StringWidgetUtils.adjustEditTextAnswerToDecimalWidget(answerText, questionDetails.getPrompt());
+        boolean useThousandSeparator = Appearances.useThousandSeparator(questionDetails.getPrompt());
+        Double answer = StringWidgetUtils.getDoubleAnswerValueFromIAnswerData(questionDetails.getPrompt().getAnswerValue());
+        widgetAnswerText.setDecimalType(useThousandSeparator, answer);
     }
 
     @Override
