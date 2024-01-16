@@ -77,6 +77,7 @@ import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -360,7 +361,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
 
-            int fontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.SUBTITLE_1);
+            int fontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.SUBTITLE_1);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
 
             tv.setVisibility(VISIBLE);

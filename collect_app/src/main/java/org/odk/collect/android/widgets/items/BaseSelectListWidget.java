@@ -20,6 +20,7 @@ import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.SearchQueryViewModel;
 
 import static org.odk.collect.android.formentry.media.FormMediaUtils.getPlayableAudioURI;

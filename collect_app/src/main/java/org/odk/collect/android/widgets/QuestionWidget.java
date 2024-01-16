@@ -51,6 +51,7 @@ import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.ThemeUtils;
 import org.odk.collect.android.widgets.interfaces.Widget;
 import org.odk.collect.android.widgets.items.SelectImageMapWidget;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.utils.ScreenUtils;
 import org.odk.collect.imageloader.ImageLoader;
 import org.odk.collect.permissions.PermissionsProvider;
@@ -140,7 +141,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     public void render() {
         View answerView = onCreateAnswerView(getContext(),
                 questionDetails.getPrompt(),
-                QuestionFontSizeUtils.getFontSize(settings, FontSize.HEADLINE_6)
+                QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.HEADLINE_6)
         );
 
         if (answerView != null) {
@@ -172,7 +173,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
 
     private void setupQuestionLabel() {
         audioVideoImageTextLabel.setTag(getClipID(formEntryPrompt));
-        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), QuestionFontSizeUtils.getFontSize(settings, FontSize.TITLE_LARGE));
+        audioVideoImageTextLabel.setText(formEntryPrompt.getLongText(), formEntryPrompt.isRequired(), QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.TITLE_LARGE));
         audioVideoImageTextLabel.setMediaUtils(mediaUtils);
 
         String imageURI = this instanceof SelectImageMapWidget ? null : formEntryPrompt.getImageText();
@@ -250,7 +251,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
     }
 
     private TextView configureGuidanceTextView(TextView guidanceTextView, String guidance) {
-        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, FontSize.SUBTITLE_1));
+        guidanceTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.SUBTITLE_1));
         guidanceTextView.setHorizontallyScrolling(false);
 
         guidanceTextView.setText(HtmlUtils.textToHtml(guidance));
@@ -288,7 +289,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
         String s = prompt.getHelpText();
 
         if (s != null && !s.equals("")) {
-            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, FontSize.SUBTITLE_1));
+            helpText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.SUBTITLE_1));
             // wrap to the widget of vi
             helpText.setHorizontallyScrolling(false);
             if (prompt.getLongText() == null || prompt.getLongText().isEmpty()) {
@@ -402,7 +403,7 @@ public abstract class QuestionWidget extends FrameLayout implements Widget {
             if (childView instanceof ViewGroup) {
                 adjustButtonFontSize((ViewGroup) childView);
             } else if (childView instanceof Button) {
-                ((Button) childView).setTextSize(QuestionFontSizeUtils.getFontSize(settings, FontSize.BODY_LARGE));
+                ((Button) childView).setTextSize(QuestionFontSizeUtils.getFontSize(settings, QuestionFontSizeUtils.FontSize.BODY_LARGE));
             }
         }
     }
