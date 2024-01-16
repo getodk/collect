@@ -164,4 +164,43 @@ class AuditTest {
         assertThat(auditLog[13].get("event"), equalTo("form save"))
         assertThat(auditLog[14].get("event"), equalTo("form exit"))
     }
+
+    @Test // https://github.com/getodk/collect/issues/5915
+    fun changingTheAnswerAfterSavingAFormOnTheSamePage_shouldLogTheNewAnswer() {
+        rule.startAtMainMenu()
+            .copyForm("two-question-audit-track-changes.xml")
+            .startBlankForm("One Question Audit Track Changes")
+            .clickSave()
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your age?", "31"))
+            .swipeToNextQuestion("What is your name?")
+            .clickSave()
+            .fillOut(FormEntryPage.QuestionAndAnswer("What is your name?", "Adam"))
+            .swipeToEndScreen()
+            .clickSaveAsDraft()
+
+        val auditLog = StorageUtils.getAuditLogForFirstInstance()
+        assertThat(auditLog.size, equalTo(10))
+
+        assertThat(auditLog[0].get("event"), equalTo("form start"))
+
+        assertThat(auditLog[1].get("event"), equalTo("question"))
+        assertThat(auditLog[1].get("new-value"), equalTo(""))
+
+        assertThat(auditLog[2].get("event"), equalTo("form save"))
+
+        assertThat(auditLog[3].get("event"), equalTo("question"))
+        assertThat(auditLog[3].get("new-value"), equalTo("31"))
+
+        assertThat(auditLog[4].get("event"), equalTo("question"))
+        assertThat(auditLog[4].get("new-value"), equalTo(""))
+
+        assertThat(auditLog[5].get("event"), equalTo("form save"))
+
+        assertThat(auditLog[6].get("event"), equalTo("question"))
+        assertThat(auditLog[6].get("new-value"), equalTo("Adam"))
+
+        assertThat(auditLog[7].get("event"), equalTo("end screen"))
+        assertThat(auditLog[8].get("event"), equalTo("form save"))
+        assertThat(auditLog[9].get("event"), equalTo("form exit"))
+    }
 }
