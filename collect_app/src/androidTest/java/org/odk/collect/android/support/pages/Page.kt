@@ -483,10 +483,6 @@ abstract class Page<T : Page<T>> {
 
         // kill
         device.pressRecentApps()
-        device.findObject(UiSelector().textContains("Select text and images to copy"))?.apply {
-            wait250ms()
-            device.pressBack() // the first time we open the list of recent apps, a tooltip might be displayed and we need to close it
-        }
         device
             .findObject(UiSelector().descriptionContains("Collect"))
             .swipeUp(10).also {

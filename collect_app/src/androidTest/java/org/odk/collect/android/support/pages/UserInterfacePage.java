@@ -1,14 +1,10 @@
 package org.odk.collect.android.support.pages;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
-import static org.odk.collect.android.support.matchers.CustomMatchers.withIndex;
-
-import androidx.test.espresso.NoMatchingViewException;
-import androidx.test.espresso.action.ViewActions;
+import static org.hamcrest.Matchers.equalTo;
 
 public class UserInterfacePage extends Page<UserInterfacePage> {
 
@@ -24,15 +20,7 @@ public class UserInterfacePage extends Page<UserInterfacePage> {
     }
 
     public MainMenuPage clickOnSelectedLanguage(String language) {
-        try {
-            onView(withText(language)).perform(click());
-        } catch (NoMatchingViewException e) {
-            for (int i = 0; i < 10; i++) {
-                onView(withIndex(withId(android.R.id.text1), 1)).perform(ViewActions.swipeUp());
-            }
-            clickOnSelectedLanguage(language);
-        }
-
+        onData(equalTo(language)).perform(click());
         return new MainMenuPage().assertOnPage();
     }
 
