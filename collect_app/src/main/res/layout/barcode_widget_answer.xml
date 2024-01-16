@@ -6,7 +6,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/barcode_button"
-        style="?attr/widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonQuestionWidgetStyle"
         android:text="@string/get_barcode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

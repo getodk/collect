@@ -6,7 +6,7 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/capture_button"
-        style="?attr/widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonQuestionWidgetStyle"
         android:text="@string/capture_audio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -14,7 +14,7 @@
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/choose_button"
         android:layout_marginTop="@dimen/margin_small"
-        style="?attr/widgetButtonQuestionWidgetStyle"
+        style="?widgetButtonQuestionWidgetStyle"
         android:text="@string/choose_sound"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
