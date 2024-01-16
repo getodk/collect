@@ -184,19 +184,23 @@ class AuditTest {
         assertThat(auditLog[0].get("event"), equalTo("form start"))
 
         assertThat(auditLog[1].get("event"), equalTo("question"))
+        assertThat(auditLog[1].get("node"), equalTo("/data/age"))
         assertThat(auditLog[1].get("new-value"), equalTo(""))
 
         assertThat(auditLog[2].get("event"), equalTo("form save"))
 
         assertThat(auditLog[3].get("event"), equalTo("question"))
+        assertThat(auditLog[3].get("node"), equalTo("/data/age"))
         assertThat(auditLog[3].get("new-value"), equalTo("31"))
 
         assertThat(auditLog[4].get("event"), equalTo("question"))
+        assertThat(auditLog[4].get("node"), equalTo("/data/name"))
         assertThat(auditLog[4].get("new-value"), equalTo(""))
 
         assertThat(auditLog[5].get("event"), equalTo("form save"))
 
         assertThat(auditLog[6].get("event"), equalTo("question"))
+        assertThat(auditLog[6].get("node"), equalTo("/data/name"))
         assertThat(auditLog[6].get("new-value"), equalTo("Adam"))
 
         assertThat(auditLog[7].get("event"), equalTo("end screen"))
