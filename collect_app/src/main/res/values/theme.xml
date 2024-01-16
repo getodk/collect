@@ -8,7 +8,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorPrimary</item>
-        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:colorBackground">@color/colorSurface</item>
         <item name="colorError">@color/colorError</item>
 
         <!-- MaterialComponents attributes (needed if parent="Theme.AppCompat"). -->
@@ -17,7 +17,7 @@
         <item name="colorSurface">@color/colorSurface</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorOnSecondary">@color/colorOnPrimary</item>
-        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnBackground">@color/colorOnSurface</item>
         <!--
             colorOnError should refer to @color/colorOnError
             This is a temporary fix and we can get rid of it when setting cursor error color is possible https://github.com/material-components/material-components-android/issues/3345
@@ -87,6 +87,7 @@
         </item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Material3.LargeComponent
         </item>
+        <item name="elevationOverlayEnabled">true</item>
 
         <!-- Material3 polyfill attributes (needed in Material Components yet). -->
         <item name="materialButtonIconStyle">@style/Widget.Collect.Button.Icon</item>

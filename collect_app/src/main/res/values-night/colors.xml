@@ -11,9 +11,6 @@
     <color name="colorErrorContainer">#ffb4ab</color>
     <color name="colorOnErrorContainer">#690005</color>
 
-    <color name="colorBackground">#001117</color>
-    <color name="colorOnBackground">#d3e5ef</color>
-
     <color name="colorSurface">#001117</color>
     <color name="colorSurfaceVariant">#40484c</color>
     <color name="colorOnSurface">#d3e5ef</color>
