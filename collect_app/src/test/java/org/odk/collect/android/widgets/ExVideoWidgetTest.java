@@ -26,6 +26,7 @@ import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.FileRequester;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.robolectric.shadows.ShadowToast;
 
@@ -84,8 +85,8 @@ public class ExVideoWidgetTest extends FileWidgetTest<ExVideoWidget> {
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
         settingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
 
-        assertThat((int) getWidget().binding.captureVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_LARGE)));
-        assertThat((int) getWidget().binding.playVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_LARGE)));
+        assertThat((int) getWidget().binding.captureVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE)));
+        assertThat((int) getWidget().binding.playVideoButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE)));
     }
 
     @Test

@@ -49,6 +49,7 @@ import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.base.GeneralSelectOneWidgetTest;
 import org.odk.collect.android.widgets.support.FormEntryPromptSelectChoiceLoader;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.audioclips.Clip;
 
@@ -111,7 +112,7 @@ public class SelectOneWidgetTest extends GeneralSelectOneWidgetTest<SelectOneWid
     @Test
     public void whenAutocompleteAppearanceExist_shouldTextSizeBeSetProperly() {
         when(formEntryPrompt.getAppearanceHint()).thenReturn("autocomplete");
-        assertThat((int) getSpyWidget().binding.choicesSearchBox.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.HEADLINE_6)));
+        assertThat((int) getSpyWidget().binding.choicesSearchBox.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.HEADLINE_6)));
     }
 
     @Test

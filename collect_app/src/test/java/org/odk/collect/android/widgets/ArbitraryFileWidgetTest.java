@@ -24,6 +24,7 @@ import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.widgets.base.FileWidgetTest;
 import org.odk.collect.android.widgets.support.FakeQuestionMediaManager;
 import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.androidshared.system.IntentLauncher;
 
 public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget> {
@@ -63,8 +64,8 @@ public class ArbitraryFileWidgetTest extends FileWidgetTest<ArbitraryFileWidget>
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
         settingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
 
-        assertThat((int) getWidget().binding.arbitraryFileButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_LARGE)));
-        assertThat((int) getWidget().binding.arbitraryFileAnswerText.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.HEADLINE_6)));
+        assertThat((int) getWidget().binding.arbitraryFileButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE)));
+        assertThat((int) getWidget().binding.arbitraryFileAnswerText.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.HEADLINE_6)));
     }
 
     @Test
