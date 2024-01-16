@@ -9,6 +9,6 @@
     </declare-styleable>
 
     <declare-styleable name="CollectCustomAttributes">
-        <attr name="widgetButtonStyle" format="reference" />
+        <attr name="widgetButtonQuestionWidgetStyle" format="reference" />
     </declare-styleable>
 </resources>

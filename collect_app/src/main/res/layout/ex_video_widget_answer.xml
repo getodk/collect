@@ -6,14 +6,14 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/capture_video_button"
-        style="?attr/widgetButtonStyle"
+        style="?attr/widgetButtonQuestionWidgetStyle"
         android:text="@string/launch_app"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/play_video_button"
-        style="?attr/widgetButtonStyle"
+        style="?attr/widgetButtonQuestionWidgetStyle"
         android:text="@string/play_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

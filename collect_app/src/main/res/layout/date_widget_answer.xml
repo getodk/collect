@@ -5,7 +5,7 @@
 
     <org.odk.collect.androidshared.ui.multiclicksafe.MultiClickSafeButton
         android:id="@+id/date_button"
-        style="?attr/widgetButtonStyle"
+        style="?attr/widgetButtonQuestionWidgetStyle"
         android:text="@string/select_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
