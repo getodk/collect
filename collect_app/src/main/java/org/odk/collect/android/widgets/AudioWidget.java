@@ -107,6 +107,7 @@ public class AudioWidget extends QuestionWidget implements FileWidget, WidgetDat
         binding = AudioWidgetAnswerBinding.inflate(LayoutInflater.from(context));
 
         binding.captureButton.setOnClickListener(v -> {
+            hideError();
             binding.audioPlayer.waveform.clear();
             recordingRequester.requestRecording(getFormEntryPrompt());
         });
