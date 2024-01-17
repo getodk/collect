@@ -7,7 +7,7 @@ import android.widget.CheckBox
 import android.widget.FrameLayout
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.BlankFormListItemBinding
-import org.odk.collect.androidshared.ui.MultiSelectAdapter
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale

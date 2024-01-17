@@ -1,4 +1,4 @@
-package org.odk.collect.androidshared.ui
+package org.odk.collect.androidshared.ui.multiselect
 
 import android.content.Context
 import android.os.Bundle

@@ -5,6 +5,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.Rule
 import org.junit.Test
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
 
 class MultiSelectViewModelTest {
 

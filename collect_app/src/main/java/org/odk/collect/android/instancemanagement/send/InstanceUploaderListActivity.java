@@ -20,7 +20,7 @@ import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrde
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_DATE_DESC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_ASC;
 import static org.odk.collect.android.utilities.ApplicationConstants.SortingOrder.BY_NAME_DESC;
-import static org.odk.collect.androidshared.ui.MultiSelectViewModelKt.updateSelectAll;
+import static org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModelKt.updateSelectAll;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -65,7 +65,7 @@ import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.androidshared.network.NetworkStateProvider;
 import org.odk.collect.androidshared.ui.MenuExtKt;
-import org.odk.collect.androidshared.ui.MultiSelectViewModel;
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel;
 import org.odk.collect.androidshared.ui.ToastUtils;
 import org.odk.collect.androidshared.ui.multiclicksafe.MultiClickGuard;
 import org.odk.collect.settings.SettingsProvider;

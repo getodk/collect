@@ -30,7 +30,7 @@ import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.ListFragmentStateAdapter
-import org.odk.collect.androidshared.ui.MultiSelectViewModel
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.InstancesRepository

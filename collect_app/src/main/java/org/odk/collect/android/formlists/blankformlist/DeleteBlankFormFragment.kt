@@ -14,9 +14,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
-import org.odk.collect.androidshared.ui.MultiSelectAdapter
-import org.odk.collect.androidshared.ui.MultiSelectControlsFragment
-import org.odk.collect.androidshared.ui.MultiSelectViewModel
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
+import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
 
 class DeleteBlankFormFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
