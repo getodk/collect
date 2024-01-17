@@ -2056,7 +2056,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                         // happens because if audit logging is enabled, the refresh logs a question event
                         // and we want that to show up after initialization events.
                         activityDisplayed();
-                        formEntryViewModel.refreshSync();
+                        formEntryViewModel.refresh();
 
                         if (warningMsg != null) {
                             showLongToast(this, warningMsg);
@@ -2084,7 +2084,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                                 if (formIndex != null) {
                                     formController.jumpToIndex(formIndex);
                                     formControllerAvailable(formController);
-                                    formEntryViewModel.refreshSync();
+                                    formEntryViewModel.refresh();
                                     return;
                                 }
                             }
