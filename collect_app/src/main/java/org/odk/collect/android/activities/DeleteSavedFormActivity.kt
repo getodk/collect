@@ -86,11 +86,11 @@ class DeleteSavedFormActivity : LocalizedActivity() {
 
     private fun setUpViewPager(viewModel: BlankFormListViewModel) {
         val fragments = if (viewModel.isMatchExactlyEnabled()) {
-            listOf(SavedFormListFragment::class.java.name)
+            listOf(SavedFormListFragment::class.java)
         } else {
             listOf(
-                SavedFormListFragment::class.java.name,
-                DeleteBlankFormFragment::class.java.name
+                SavedFormListFragment::class.java,
+                DeleteBlankFormFragment::class.java
             )
         }
 

@@ -102,7 +102,7 @@ class QRCodeTabsActivity : LocalizedActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         viewPager.adapter = ListFragmentStateAdapter(
             this,
-            listOf(QRCodeScannerFragment::class.java.name, ShowQRCodeFragment::class.java.name)
+            listOf(QRCodeScannerFragment::class.java, ShowQRCodeFragment::class.java)
         )
 
         TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
