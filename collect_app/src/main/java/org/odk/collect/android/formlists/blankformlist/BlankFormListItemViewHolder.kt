@@ -3,15 +3,16 @@ package org.odk.collect.android.formlists.blankformlist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.FrameLayout
-import androidx.recyclerview.widget.RecyclerView
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.BlankFormListItemBinding
+import org.odk.collect.androidshared.ui.MultiSelectAdapter
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class BlankFormListItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+class BlankFormListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHolder<BlankFormListItem>(
     BlankFormListItemBinding.inflate(
         LayoutInflater.from(parent.context),
         parent,
@@ -57,5 +58,17 @@ class BlankFormListItemViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
 
     fun setTrailingView(layoutId: Int) {
         FrameLayout.inflate(itemView.context, layoutId, binding.trailingView)
+    }
+
+    override fun setItem(item: BlankFormListItem) {
+        blankFormListItem = item
+    }
+
+    override fun getId(): Long {
+        return blankFormListItem!!.databaseId
+    }
+
+    override fun getCheckbox(): CheckBox {
+        return itemView.findViewById(R.id.checkbox)
     }
 }

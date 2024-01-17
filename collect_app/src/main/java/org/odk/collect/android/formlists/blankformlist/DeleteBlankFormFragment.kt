@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.MultiSelectAdapter
 import org.odk.collect.androidshared.ui.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 
@@ -60,18 +61,19 @@ class DeleteBlankFormFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = DeleteBlankFormLayoutBinding.bind(view)
         val recyclerView = binding.list
-        val adapter = SelectableBlankFormListAdapter { databaseId ->
-            multiSelectViewModel.toggle(databaseId)
+        val adapter = MultiSelectAdapter(multiSelectViewModel) { parent ->
+            BlankFormListItemViewHolder(parent).also {
+                it.setTrailingView(R.layout.checkbox)
+            }
         }
 
         recyclerView.adapter = adapter
         blankFormListViewModel.formsToDisplay.observe(viewLifecycleOwner) {
-            adapter.formItems = it
+            adapter.data = it
+            multiSelectViewModel.data = it.map(BlankFormListItem::databaseId).toSet()
 
             binding.empty.isVisible = it.isEmpty()
             binding.buttons.isVisible = it.isNotEmpty()
-
-            multiSelectViewModel.data = it.map(BlankFormListItem::databaseId).toSet()
         }
 
         multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
