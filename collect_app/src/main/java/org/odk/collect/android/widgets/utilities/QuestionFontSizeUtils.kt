@@ -11,6 +11,7 @@ object QuestionFontSizeUtils {
     private const val SUBTITLE_1_DIFF = -5
     private const val BODY_MEDIUM_DIFF = -7
     private const val BODY_LARGE_DIFF = -5
+    private const val TITLE_LARGE_DIFF = -1
 
     @JvmStatic
     fun getFontSize(settings: Settings, fontSize: FontSize?): Int {
@@ -21,6 +22,7 @@ object QuestionFontSizeUtils {
             FontSize.SUBTITLE_1 -> settingsValue + SUBTITLE_1_DIFF
             FontSize.BODY_MEDIUM -> settingsValue + BODY_MEDIUM_DIFF
             FontSize.BODY_LARGE -> settingsValue + BODY_LARGE_DIFF
+            FontSize.TITLE_LARGE -> settingsValue + TITLE_LARGE_DIFF
             else -> throw IllegalArgumentException()
         }
     }
@@ -39,6 +41,6 @@ object QuestionFontSizeUtils {
     }
 
     enum class FontSize {
-        HEADLINE_6, SUBTITLE_1, BODY_MEDIUM, BODY_LARGE
+        HEADLINE_6, SUBTITLE_1, BODY_MEDIUM, BODY_LARGE, TITLE_LARGE
     }
 }

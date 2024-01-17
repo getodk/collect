@@ -21,9 +21,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/text_label"
-                style="@style/TextAppearance.Collect.Headline6"
+                android:textAppearance="?textAppearanceTitleLarge"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"

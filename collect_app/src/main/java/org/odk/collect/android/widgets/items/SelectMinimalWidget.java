@@ -8,11 +8,11 @@ import org.javarosa.core.model.SelectChoice;
 import org.javarosa.form.api.FormEntryPrompt;
 import org.odk.collect.android.databinding.SelectMinimalWidgetAnswerBinding;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.QuestionWidget;
 import org.odk.collect.android.widgets.interfaces.MultiChoiceWidget;
 import org.odk.collect.android.widgets.interfaces.SelectChoiceLoader;
 import org.odk.collect.android.widgets.interfaces.WidgetDataReceiver;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
 
 import java.util.List;

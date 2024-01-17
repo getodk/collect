@@ -9,7 +9,7 @@ import org.odk.collect.android.activities.DeleteSavedFormActivity;
 import org.odk.collect.android.activities.FirstLaunchActivity;
 import org.odk.collect.android.activities.FormDownloadListActivity;
 import org.odk.collect.android.activities.FormFillingActivity;
-import org.odk.collect.android.activities.FormHierarchyActivity;
+import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
 import org.odk.collect.android.activities.FormMapActivity;
 import org.odk.collect.android.activities.InstanceChooserList;
 import org.odk.collect.android.adapters.InstanceUploaderAdapter;

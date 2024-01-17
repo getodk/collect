@@ -16,7 +16,7 @@
         tools:text="00:07" />
 
     <org.odk.collect.android.audio.Waveform
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:id="@+id/waveform"
         android:layout_width="match_parent"
         android:layout_height="80dp" />

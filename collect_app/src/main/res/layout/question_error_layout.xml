@@ -21,7 +21,7 @@
         android:id="@+id/error_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_extra_small"
         android:layout_marginEnd="@dimen/margin_standard"
         android:textColor="?colorError"
         android:layout_gravity="center_vertical"

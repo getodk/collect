@@ -16,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.odk.collect.android.external.FormsContract
+import org.odk.collect.android.formhierarchy.FormHierarchyActivity
 import org.odk.collect.android.formmanagement.FormFillingIntentFactory
 import org.odk.collect.android.injection.config.AppDependencyComponent
 import org.odk.collect.android.injection.config.AppDependencyModule

@@ -28,7 +28,6 @@ import org.odk.collect.android.widgets.support.FakeWaitingForDataRegistry;
 import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.FileRequester;
 import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.androidshared.system.IntentLauncher;
 import org.robolectric.shadows.ShadowToast;
 
@@ -88,7 +87,7 @@ public class ExAudioWidgetTest extends FileWidgetTest<ExAudioWidget> {
     public void whenFontSizeChanged_CustomFontSizeShouldBeUsed() {
         settingsProvider.getUnprotectedSettings().save(KEY_FONT_SIZE, "30");
 
-        assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.BODY_LARGE)));
+        assertThat((int) getWidget().binding.launchExternalAppButton.getTextSize(), is(QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.BODY_LARGE)));
     }
 
     @Test

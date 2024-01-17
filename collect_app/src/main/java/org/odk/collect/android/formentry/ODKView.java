@@ -66,8 +66,6 @@ import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.HtmlUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
-import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils.FontSize;
 import org.odk.collect.android.utilities.QuestionMediaManager;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.ThemeUtils;
@@ -79,6 +77,7 @@ import org.odk.collect.android.widgets.utilities.AudioPlayer;
 import org.odk.collect.android.widgets.utilities.ExternalAppRecordingRequester;
 import org.odk.collect.android.widgets.utilities.FileRequesterImpl;
 import org.odk.collect.android.widgets.utilities.InternalRecordingRequester;
+import org.odk.collect.android.widgets.utilities.QuestionFontSizeUtils;
 import org.odk.collect.android.widgets.utilities.RecordingRequesterProvider;
 import org.odk.collect.android.widgets.utilities.StringRequesterImpl;
 import org.odk.collect.android.widgets.utilities.WaitingForDataRegistry;
@@ -328,7 +327,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         );
-        int marginVertical = (int) getContext().getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_small);
+        int marginVertical = (int) getContext().getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_extra_small);
         params.setMargins(0, marginVertical, 0, marginVertical);
         divider.setLayoutParams(params);
 
@@ -362,7 +361,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
             TextView tv = findViewById(R.id.group_text);
             tv.setText(path);
 
-            int fontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), FontSize.SUBTITLE_1);
+            int fontSize = QuestionFontSizeUtils.getFontSize(settingsProvider.getUnprotectedSettings(), QuestionFontSizeUtils.FontSize.SUBTITLE_1);
             tv.setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
 
             tv.setVisibility(VISIBLE);

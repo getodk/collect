@@ -10,7 +10,7 @@
         android:background="?selectableItemBackground"
         android:button="@null"
         android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
-        android:drawablePadding="@dimen/margin_small"
+        android:drawablePadding="@dimen/margin_extra_small"
         android:orientation="vertical"
         android:translationX="-5dp"
         android:text="@string/trigger"

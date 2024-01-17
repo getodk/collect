@@ -17,10 +17,10 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.odk.collect.android.R
 import org.odk.collect.android.TestSettingsProvider.getSettingsProvider
-import org.odk.collect.android.activities.FormHierarchyActivity
 import org.odk.collect.android.formentry.FormEntryMenuProvider.FormEntryMenuClickListener
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel
 import org.odk.collect.android.formentry.questions.AnswersProvider
+import org.odk.collect.android.formhierarchy.FormHierarchyActivity
 import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.utilities.ApplicationConstants

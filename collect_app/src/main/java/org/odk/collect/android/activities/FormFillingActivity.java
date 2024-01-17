@@ -127,6 +127,8 @@ import org.odk.collect.android.formentry.saving.FormSaveViewModel;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileErrorDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveAnswerFileProgressDialogFragment;
 import org.odk.collect.android.formentry.saving.SaveFormProgressDialogFragment;
+import org.odk.collect.android.formhierarchy.FormHierarchyActivity;
+import org.odk.collect.android.formhierarchy.ViewOnlyFormHierarchyActivity;
 import org.odk.collect.android.fragments.MediaLoadingFragment;
 import org.odk.collect.android.fragments.dialogs.CustomDatePickerDialog;
 import org.odk.collect.android.fragments.dialogs.CustomTimePickerDialog;

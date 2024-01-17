@@ -286,7 +286,7 @@ public class DrawActivity extends LocalizedActivity {
      * saving
      */
     private void createQuitDrawDialog() {
-        int dividerHeight = getResources().getDimensionPixelSize(org.odk.collect.androidshared.R.dimen.margin_small);
+        int dividerHeight = getResources().getDimensionPixelSize(org.odk.collect.androidshared.R.dimen.margin_extra_small);
         ListView actionListView = new ListView(this);
         actionListView.setPadding(0, dividerHeight, 0, 0);
         actionListView.setDivider(new ColorDrawable(Color.TRANSPARENT));

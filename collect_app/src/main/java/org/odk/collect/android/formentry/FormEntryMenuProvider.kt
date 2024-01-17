@@ -10,9 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
-import org.odk.collect.android.activities.FormHierarchyActivity
 import org.odk.collect.android.formentry.backgroundlocation.BackgroundLocationViewModel
 import org.odk.collect.android.formentry.questions.AnswersProvider
+import org.odk.collect.android.formhierarchy.FormHierarchyActivity
 import org.odk.collect.android.preferences.screens.ProjectPreferencesActivity
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.androidshared.system.PlayServicesChecker
