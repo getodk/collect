@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="@dimen/margin_small"
+    android:paddingHorizontal="@dimen/margin_extra_small"
     android:paddingVertical="@dimen/margin_extra_extra_small">
 
     <ImageView
@@ -21,7 +21,7 @@
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_extra_small"
         android:textAppearance="?textAppearanceLabelLarge"
         android:textColor="?colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"

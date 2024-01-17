@@ -14,7 +14,7 @@
         android:id="@+id/error_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:text="@string/invalid_osm_data"
         android:visibility="gone"/>
 
@@ -22,7 +22,7 @@
         android:id="@+id/osm_file_header_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:text="@string/edited_osm_file"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -33,7 +33,7 @@
         android:id="@+id/osm_file_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:paddingHorizontal="@dimen/margin_large"
         android:textSize="18sp"
         android:textStyle="italic"

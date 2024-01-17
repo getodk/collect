@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:paddingVertical="@dimen/margin_small"
+    android:paddingVertical="@dimen/margin_extra_small"
     android:paddingStart="@dimen/margin_standard"
     android:paddingEnd="@dimen/margin_standard"
     tools:ignore="RtlSymmetry">
@@ -31,7 +31,7 @@
             style="@style/TextAppearance.Collect.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginStart="@dimen/margin_extra_small"
             android:text="@string/recording"
             android:textColor="?colorOnSurface"/>
 

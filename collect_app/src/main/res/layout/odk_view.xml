@@ -27,7 +27,7 @@ limitations under the License.
             android:id="@+id/group_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_extra_small"
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:visibility="gone"
             style="@style/TextAppearance.Collect.Subtitle1.MediumEmphasis"
@@ -41,7 +41,7 @@ limitations under the License.
             android:visibility="gone"
             android:gravity="center"
             android:layout_margin="@dimen/margin_standard"
-            android:padding="@dimen/margin_small"/>
+            android:padding="@dimen/margin_extra_small"/>
 
         <LinearLayout
             android:id="@+id/widgets"

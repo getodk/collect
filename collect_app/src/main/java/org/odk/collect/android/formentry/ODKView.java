@@ -327,7 +327,7 @@ public class ODKView extends SwipeHandler.View implements OnLongClickListener, W
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
         );
-        int marginVertical = (int) getContext().getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_small);
+        int marginVertical = (int) getContext().getResources().getDimension(org.odk.collect.androidshared.R.dimen.margin_extra_small);
         params.setMargins(0, marginVertical, 0, marginVertical);
         divider.setLayoutParams(params);
 
