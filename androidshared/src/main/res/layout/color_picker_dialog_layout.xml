@@ -297,7 +297,7 @@
                 android:id="@+id/current_color"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="@dimen/margin_extra_small"
+                android:padding="@dimen/margin_extra_extra_small"
                 android:background="@drawable/color_circle"
                 android:textColor="@android:color/white"
                 android:textAllCaps="true"

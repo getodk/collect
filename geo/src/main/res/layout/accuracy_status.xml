@@ -48,7 +48,7 @@
         android:id="@+id/strength"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_marginTop="@dimen/margin_extra_extra_small"
         android:progress="20"
         app:indicatorColor="?colorOnPrimary"
         app:layout_constraintEnd_toEndOf="parent"

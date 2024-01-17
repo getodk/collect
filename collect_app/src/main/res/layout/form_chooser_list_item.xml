@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="@dimen/margin_extra_small"
+        android:layout_marginBottom="@dimen/margin_extra_extra_small"
         tools:visibility="visible" />
 
     <FrameLayout

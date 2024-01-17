@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingHorizontal="@dimen/margin_small"
-    android:paddingVertical="@dimen/margin_extra_small">
+    android:paddingVertical="@dimen/margin_extra_extra_small">
 
     <ImageView
         android:id="@+id/icon"

@@ -15,7 +15,7 @@
         android:id="@+id/selected_elements"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_small"
+        android:layout_marginTop="@dimen/margin_extra_extra_small"
         android:textAppearance="?textAppearanceBody2"
         tools:text="Selected image" />
 </LinearLayout>

@@ -16,6 +16,6 @@ limitations under the License.
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <stroke
-        android:width="@dimen/margin_extra_small"
+        android:width="@dimen/margin_extra_extra_small"
         android:color="?colorSecondary" />
 </shape>
