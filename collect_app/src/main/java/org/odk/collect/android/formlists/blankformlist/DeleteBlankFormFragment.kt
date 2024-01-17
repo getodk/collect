@@ -14,7 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
-import org.odk.collect.androidshared.ui.updateSelectAll
+import org.odk.collect.androidshared.ui.setupControls
 
 class DeleteBlankFormFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -23,8 +23,6 @@ class DeleteBlankFormFragment(
 
     private lateinit var blankFormListViewModel: BlankFormListViewModel
     private lateinit var multiSelectViewModel: MultiSelectViewModel
-
-    private var allSelected = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -55,32 +53,29 @@ class DeleteBlankFormFragment(
             binding.empty.isVisible = it.isEmpty()
             binding.buttons.isVisible = it.isNotEmpty()
 
-            updateAllSelected(binding, adapter)
+            multiSelectViewModel.data = it.map(BlankFormListItem::databaseId).toSet()
         }
 
         multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
-            binding.deleteSelected.isEnabled = it.isNotEmpty()
             adapter.selected = it
-
-            updateAllSelected(binding, adapter)
         }
 
-        binding.selectAll.setOnClickListener {
-            if (allSelected) {
-                multiSelectViewModel.unselectAll()
-            } else {
-                adapter.formItems.forEach {
-                    multiSelectViewModel.select(it.databaseId)
-                }
-            }
-        }
-
-        binding.deleteSelected.setOnClickListener {
+        setupControls(
+            binding.buttons,
+            getString(org.odk.collect.strings.R.string.delete_file),
+            multiSelectViewModel,
+            viewLifecycleOwner
+        ) {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(org.odk.collect.strings.R.string.delete_file)
-                .setMessage(getString(org.odk.collect.strings.R.string.delete_confirm, adapter.selected.size.toString()))
+                .setMessage(
+                    getString(
+                        org.odk.collect.strings.R.string.delete_confirm,
+                        it.size.toString()
+                    )
+                )
                 .setPositiveButton(getString(org.odk.collect.strings.R.string.delete_yes)) { _, _ ->
-                    blankFormListViewModel.deleteForms(*adapter.selected.toLongArray())
+                    blankFormListViewModel.deleteForms(*it.toLongArray())
                     multiSelectViewModel.unselectAll()
                 }
                 .setNegativeButton(getString(org.odk.collect.strings.R.string.delete_no), null)
@@ -90,13 +85,5 @@ class DeleteBlankFormFragment(
         val blankFormListMenuProvider =
             BlankFormListMenuProvider(requireActivity(), blankFormListViewModel)
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
-    }
-
-    private fun updateAllSelected(
-        binding: DeleteBlankFormLayoutBinding,
-        adapter: SelectableBlankFormListAdapter
-    ) {
-        allSelected =
-            updateSelectAll(binding.selectAll, adapter.formItems.size, adapter.selected.size)
     }
 }
