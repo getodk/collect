@@ -13,8 +13,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
+import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
-import org.odk.collect.androidshared.ui.setupControls
 
 class DeleteBlankFormFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
@@ -29,6 +30,23 @@ class DeleteBlankFormFragment(
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
         blankFormListViewModel = viewModelProvider[BlankFormListViewModel::class.java]
         multiSelectViewModel = viewModelProvider[MultiSelectViewModel::class.java]
+
+        childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
+            .forClass(MultiSelectControlsFragment::class) {
+                MultiSelectControlsFragment(
+                    getString(org.odk.collect.strings.R.string.delete_file),
+                    multiSelectViewModel
+                )
+            }
+            .build()
+
+        childFragmentManager.setFragmentResultListener(
+            MultiSelectControlsFragment.REQUEST_ACTION,
+            this
+        ) { _, result ->
+            val selected = result.getLongArray(MultiSelectControlsFragment.RESULT_SELECTED)!!
+            onDeleteSelected(selected)
+        }
     }
 
     override fun onCreateView(
@@ -60,30 +78,25 @@ class DeleteBlankFormFragment(
             adapter.selected = it
         }
 
-        setupControls(
-            binding.buttons,
-            getString(org.odk.collect.strings.R.string.delete_file),
-            multiSelectViewModel,
-            viewLifecycleOwner
-        ) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(org.odk.collect.strings.R.string.delete_file)
-                .setMessage(
-                    getString(
-                        org.odk.collect.strings.R.string.delete_confirm,
-                        it.size.toString()
-                    )
-                )
-                .setPositiveButton(getString(org.odk.collect.strings.R.string.delete_yes)) { _, _ ->
-                    blankFormListViewModel.deleteForms(*it.toLongArray())
-                    multiSelectViewModel.unselectAll()
-                }
-                .setNegativeButton(getString(org.odk.collect.strings.R.string.delete_no), null)
-                .show()
-        }
-
         val blankFormListMenuProvider =
             BlankFormListMenuProvider(requireActivity(), blankFormListViewModel)
         menuHost.addMenuProvider(blankFormListMenuProvider, viewLifecycleOwner, State.RESUMED)
+    }
+
+    private fun onDeleteSelected(selected: LongArray) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(org.odk.collect.strings.R.string.delete_file)
+            .setMessage(
+                getString(
+                    org.odk.collect.strings.R.string.delete_confirm,
+                    selected.size.toString()
+                )
+            )
+            .setPositiveButton(getString(org.odk.collect.strings.R.string.delete_yes)) { _, _ ->
+                blankFormListViewModel.deleteForms(*selected)
+                multiSelectViewModel.unselectAll()
+            }
+            .setNegativeButton(getString(org.odk.collect.strings.R.string.delete_no), null)
+            .show()
     }
 }

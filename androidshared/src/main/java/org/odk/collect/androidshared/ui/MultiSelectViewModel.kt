@@ -1,7 +1,6 @@
 package org.odk.collect.androidshared.ui
 
 import android.widget.Button
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,36 +70,4 @@ fun updateSelectAll(button: Button, itemCount: Int, selectedCount: Int): Boolean
     }
 
     return allSelected
-}
-
-fun setupControls(
-    controls: MultiSelectControlsView,
-    actionText: String,
-    multiSelectViewModel: MultiSelectViewModel,
-    lifecycleOwner: LifecycleOwner,
-    onAction: (Set<Long>) -> Unit
-) {
-    controls.actionText = actionText
-
-    multiSelectViewModel.getSelected().observe(lifecycleOwner) {
-        controls.selected = it
-    }
-
-    multiSelectViewModel.isAllSelected().observe(lifecycleOwner) {
-        controls.isAllSelected = it
-    }
-
-    controls.listener = object : MultiSelectControlsView.Listener {
-        override fun onSelectAll() {
-            multiSelectViewModel.selectAll()
-        }
-
-        override fun onClearAll() {
-            multiSelectViewModel.unselectAll()
-        }
-
-        override fun onAction(selected: Set<Long>) {
-            onAction(selected)
-        }
-    }
 }

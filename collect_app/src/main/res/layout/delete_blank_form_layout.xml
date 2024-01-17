@@ -20,12 +20,12 @@
         app:subtitle="@string/empty_list_of_blank_forms_to_delete_subtitle"
         app:title="@string/empty_list_of_forms_to_delete_title" />
 
-    <org.odk.collect.androidshared.ui.MultiSelectControlsView
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/buttons"
+        android:name="org.odk.collect.androidshared.ui.MultiSelectControlsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
