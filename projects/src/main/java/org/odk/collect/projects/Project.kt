@@ -16,7 +16,7 @@ sealed class Project {
         override val name: String,
         override val icon: String,
         override val color: String,
-        var isOldGoogleDriveProject: Boolean = false
+        val isOldGoogleDriveProject: Boolean = false
     ) : Project() {
 
         constructor(uuid: String, project: New) : this(
