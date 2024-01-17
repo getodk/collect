@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
+    android:paddingVertical="@dimen/margin_small"
+    android:paddingHorizontal="@dimen/margin_large"
     android:orientation="horizontal"
     android:background="?attr/selectableItemBackground">
 
@@ -16,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-2dp"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="@dimen/margin_small"
         android:saveEnabled="false" />
 
     <LinearLayout
