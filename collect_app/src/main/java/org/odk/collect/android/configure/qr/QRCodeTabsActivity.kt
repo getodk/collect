@@ -10,6 +10,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.utilities.FileProvider
 import org.odk.collect.androidshared.system.IntentLauncher
+import org.odk.collect.androidshared.ui.ListFragmentStateAdapter
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler
 import org.odk.collect.permissions.PermissionListener
@@ -99,8 +100,10 @@ class QRCodeTabsActivity : LocalizedActivity() {
 
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        val adapter = QRCodeTabsAdapter(this)
-        viewPager.adapter = adapter
+        viewPager.adapter = ListFragmentStateAdapter(
+            this,
+            listOf(QRCodeScannerFragment::class.java.name, ShowQRCodeFragment::class.java.name)
+        )
 
         TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
             tab.text = fragmentTitleList[position]
