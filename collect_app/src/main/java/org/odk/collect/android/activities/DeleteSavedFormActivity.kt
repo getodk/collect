@@ -20,15 +20,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.odk.collect.android.adapters.DeleteFormsTabsAdapter
 import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
 import org.odk.collect.android.formmanagement.FormsDataService
+import org.odk.collect.android.fragments.SavedFormListFragment
 import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
+import org.odk.collect.androidshared.ui.ListFragmentStateAdapter
 import org.odk.collect.androidshared.ui.MultiSelectViewModel
 import org.odk.collect.androidshared.utils.AppBarUtils.setupAppBarLayout
 import org.odk.collect.async.Scheduler
@@ -84,11 +85,21 @@ class DeleteSavedFormActivity : LocalizedActivity() {
     }
 
     private fun setUpViewPager(viewModel: BlankFormListViewModel) {
-        val viewPager = binding.viewPager.apply {
-            adapter = DeleteFormsTabsAdapter(
-                this@DeleteSavedFormActivity,
-                viewModel.isMatchExactlyEnabled()
+        val fragments = if (viewModel.isMatchExactlyEnabled()) {
+            listOf(SavedFormListFragment::class.java.name)
+        } else {
+            listOf(
+                SavedFormListFragment::class.java.name,
+                DeleteBlankFormFragment::class.java.name
             )
+        }
+
+        val viewPager = binding.viewPager.also {
+            it.adapter =
+                ListFragmentStateAdapter(
+                    this,
+                    fragments
+                )
         }
 
         TabLayoutMediator(binding.tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
