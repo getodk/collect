@@ -1861,7 +1861,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                 }
             }
         } else {
-            if (formController == null) {
+            if (formController == null && !identityPromptViewModel.requiresIdentityToContinue().getValue()) {
                 // there is no formController -- fire MainMenu activity?
                 Timber.w("Starting MainMenuActivity because formController is null/formLoaderTask is null");
                 startActivity(new Intent(this, MainMenuActivity.class));

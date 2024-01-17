@@ -478,6 +478,20 @@ abstract class Page<T : Page<T>> {
         return this as T
     }
 
+    fun <D : Page<D>?> minimizeAndReopenApp(destination: D): D {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        // minimize
+        device.pressHome()
+
+        // reopen
+        InstrumentationRegistry.getInstrumentation().targetContext.apply {
+            val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)!!
+            startActivity(intent)
+        }
+        return destination!!.assertOnPage()
+    }
+
     fun <D : Page<D>?> killAndReopenApp(destination: D): D {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
