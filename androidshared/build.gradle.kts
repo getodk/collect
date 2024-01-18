@@ -59,6 +59,7 @@ dependencies {
     implementation(Dependencies.play_services_location)
 
     testImplementation(project(":test-shared"))
+    testImplementation(project(":androidtest"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.androidx_test_ext_junit)
     testImplementation(Dependencies.androidx_test_espresso_core)

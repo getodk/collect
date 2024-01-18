@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 
-class MultiSelectAdapter<T>(
+class MultiSelectAdapter<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     private val multiSelectViewModel: MultiSelectViewModel<*>,
-    private val viewHolderFactory: (ViewGroup) -> ViewHolder<T>
-) : RecyclerView.Adapter<MultiSelectAdapter.ViewHolder<T>>() {
+    private val viewHolderFactory: (ViewGroup) -> VH
+) : RecyclerView.Adapter<VH>() {
 
     var selected: Set<Long> = emptySet()
         set(value) {
@@ -22,11 +22,11 @@ class MultiSelectAdapter<T>(
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return viewHolderFactory(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder<T>, position: Int) {
+    override fun onBindViewHolder(holder: VH, position: Int) {
         val item = data[position]
         holder.setItem(item.item)
 

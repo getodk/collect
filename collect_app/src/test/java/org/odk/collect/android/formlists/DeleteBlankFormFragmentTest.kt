@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.testing.FragmentScenario
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
@@ -78,51 +79,6 @@ class DeleteBlankFormFragmentTest {
                 DeleteBlankFormFragment(viewModelFactory, menuHost)
             }.build()
     )
-
-    @Test
-    fun `selected forms are checked`() {
-        launchFragment()
-        formsToDisplay.value = listOf(
-            blankFormListItem(databaseId = 1, formName = "Form 1"),
-            blankFormListItem(databaseId = 2, formName = "Form 2")
-        )
-
-        multiSelectViewModel.select(2)
-
-        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
-        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
-    }
-
-    @Test
-    fun `clicking forms selects them`() {
-        launchFragment()
-        formsToDisplay.value = listOf(
-            blankFormListItem(databaseId = 1, formName = "Form 1"),
-            blankFormListItem(databaseId = 2, formName = "Form 2"),
-            blankFormListItem(databaseId = 3, formName = "Form 3")
-        )
-
-        onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
-        onView(recyclerView()).perform(clickOnItemWith(withText("Form 3")))
-
-        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1, 3)))
-    }
-
-    @Test
-    fun `clicking selected forms unselects them`() {
-        launchFragment()
-        formsToDisplay.value = listOf(
-            blankFormListItem(databaseId = 1, formName = "Form 1"),
-            blankFormListItem(databaseId = 2, formName = "Form 2")
-        )
-
-        onView(recyclerView()).perform(clickOnItemWith(withText("Form 1")))
-        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
-
-        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
-
-        assertThat(multiSelectViewModel.getSelected().value, equalTo(setOf<Long>(1)))
-    }
 
     @Test
     fun `clicking select all selects all forms`() {
@@ -276,13 +232,30 @@ class DeleteBlankFormFragmentTest {
         assertThat(menuProviders[0].second, instanceOf(BlankFormListMenuProvider::class.java))
     }
 
-    private fun launchFragment() {
+    @Test
+    fun `recreating maintains selection`() {
+        val fragmentScenario = launchFragment()
+        formsToDisplay.value = listOf(
+            blankFormListItem(databaseId = 1, formName = "Form 1"),
+            blankFormListItem(databaseId = 2, formName = "Form 2")
+        )
+
+        onView(recyclerView()).perform(clickOnItemWith(withText("Form 2")))
+
+        fragmentScenario.recreate()
+        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.form_title)).check(matches(withText("Form 2")))
+        onView(withRecyclerView(R.id.list).atPositionOnView(1, R.id.checkbox)).check(matches(isChecked()))
+    }
+
+    private fun launchFragment(): FragmentScenario<*> {
         val fragmentScenario =
             fragmentScenarioLauncherRule.launchInContainer(DeleteBlankFormFragment::class.java)
 
         fragmentScenario.onFragment {
             multiSelectViewModel = it.multiSelectViewModel
         }
+
+        return fragmentScenario
     }
 
     private fun blankFormListItem(databaseId: Long = 1, formName: String = "Form 1") =
