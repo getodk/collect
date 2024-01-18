@@ -89,6 +89,10 @@ private class MultiSelectControlsView(context: Context) :
     private val binding =
         MultiSelectControlsLayoutBinding.inflate(LayoutInflater.from(context), this, true)
 
+    init {
+        render()
+    }
+
     private fun render() {
         if (isAllSelected) {
             binding.selectAll.setText(org.odk.collect.strings.R.string.clear_all)

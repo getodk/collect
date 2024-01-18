@@ -28,7 +28,7 @@ class DeleteBlankFormFragment(
 ) : Fragment() {
 
     private lateinit var blankFormListViewModel: BlankFormListViewModel
-    lateinit var multiSelectViewModel: MultiSelectViewModel<BlankFormListItem>
+    private lateinit var multiSelectViewModel: MultiSelectViewModel<BlankFormListItem>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
