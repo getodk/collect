@@ -64,10 +64,6 @@ class BlankFormListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHo
         blankFormListItem = item
     }
 
-    override fun getId(): Long {
-        return blankFormListItem!!.databaseId
-    }
-
     override fun getCheckbox(): CheckBox {
         return itemView.findViewById(R.id.checkbox)
     }

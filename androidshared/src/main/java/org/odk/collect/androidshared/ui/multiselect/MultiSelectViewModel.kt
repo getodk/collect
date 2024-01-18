@@ -4,19 +4,23 @@ import android.widget.Button
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
 
-class MultiSelectViewModel : ViewModel() {
-
-    var data = emptySet<Long>()
-        set(value) {
-            field = value
-            updateAllSelected()
-        }
+class MultiSelectViewModel<T>(
+    private val data: LiveData<List<MultiSelectItem<T>>> = MutableLiveData(emptyList())
+) : ViewModel() {
 
     private val selected = MutableNonNullLiveData(emptySet<Long>())
-    private val isAllSelected = MutableLiveData(false)
+    private val isAllSelected = LiveDataUtils.zip(data, selected).map { (data, selected) ->
+        data.isNotEmpty() && data.size == selected.size
+    }
+
+    fun getData(): LiveData<List<MultiSelectItem<T>>> {
+        return data
+    }
 
     fun select(item: Long) {
         updateSelected(selected.value + item)
@@ -35,7 +39,7 @@ class MultiSelectViewModel : ViewModel() {
     }
 
     fun selectAll() {
-        updateSelected(data)
+        updateSelected(data.value?.map { it.id }?.toSet() ?: emptySet())
     }
 
     fun isAllSelected(): LiveData<Boolean> {
@@ -52,11 +56,6 @@ class MultiSelectViewModel : ViewModel() {
 
     private fun updateSelected(new: Set<Long>) {
         selected.value = new
-        updateAllSelected()
-    }
-
-    private fun updateAllSelected() {
-        isAllSelected.value = data.isNotEmpty() && data.size == selected.value.size
     }
 }
 

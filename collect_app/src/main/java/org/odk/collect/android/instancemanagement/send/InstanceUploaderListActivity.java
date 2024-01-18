@@ -127,7 +127,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     private ProgressBar progressBar;
     private String filterText;
 
-    private MultiSelectViewModel multiSelectViewModel;
+    private MultiSelectViewModel<Object> multiSelectViewModel;
     private ReadyToSendViewModel readyToSendViewModel;
     private boolean allSelected;
 

@@ -11,7 +11,7 @@ import org.odk.collect.androidshared.databinding.MultiSelectControlsLayoutBindin
 
 class MultiSelectControlsFragment(
     private val actionText: String,
-    private val multiSelectViewModel: MultiSelectViewModel
+    private val multiSelectViewModel: MultiSelectViewModel<*>
 ) : Fragment() {
 
     override fun onCreateView(
