@@ -114,7 +114,7 @@ If you have finished testing a pull request, please use a template from [Testing
     ```
     ./gradlew connectedAndroidTest
     ```
-    **Note:** You can see the emulator setup used on CI in  `.circleci/config.yml`.
+    **Note:** You can see the emulator setup used on CI in `.circleci/config.yml`, or alternatively [run within a container](https://github.com/getodk/collect/blob/master/docs/CONTAINER-BASED-TESTING.md).
 
 ## Customizing the development environment
 
