@@ -88,16 +88,10 @@ class FormUriActivity : ComponentActivity() {
         setContentView(R.layout.circular_progress_indicator)
 
         formUriViewModel.error.observe(this) {
-            if (it == null) {
-                if (savedInstanceState != null) {
-                    if (!savedInstanceState.getBoolean(FORM_FILLING_ALREADY_STARTED)) {
-                        startForm()
-                    }
-                } else {
-                    startForm()
-                }
-            } else {
+            if (it != null) {
                 displayErrorDialog(it)
+            } else if (savedInstanceState?.getBoolean(FORM_FILLING_ALREADY_STARTED) != true) {
+                startForm()
             }
         }
     }
