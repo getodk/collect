@@ -401,7 +401,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When attempting to edit a form with multiple non-deleted form definitions then display alert dialog`() {
+    fun `When attempting to edit a form with multiple form definitions then display alert dialog`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(projectsDataService.getCurrentProject()).thenReturn(project)
@@ -447,12 +447,12 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `When attempting to edit a form with a soft deleted form definition then display alert dialog`() {
+    fun `When attempting to edit a form with only one non-deleted form definitions then start form`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(projectsDataService.getCurrentProject()).thenReturn(project)
 
-        val form = formsRepository.save(
+        val form1 = formsRepository.save(
             FormUtils.buildForm(
                 "1",
                 "1",
@@ -460,8 +460,16 @@ class FormUriActivityTest {
                 FormUtils.createXFormBody("1", "1", "Form 1")
             ).build()
         )
+        val form2 = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                FormUtils.createXFormBody("1", "1", "Form 2")
+            ).build()
+        )
 
-        formsRepository.softDelete(form.dbId)
+        formsRepository.softDelete(form1.dbId)
 
         val instance = instancesRepository.save(
             Instance.Builder()
@@ -472,7 +480,7 @@ class FormUriActivityTest {
                 .build()
         )
 
-        val scenario = launcherRule.launchForResult<FormUriActivity>(
+        launcherRule.launchForResult<FormUriActivity>(
             getSavedIntent(
                 project.uuid,
                 instance.dbId
@@ -480,13 +488,7 @@ class FormUriActivityTest {
         )
         fakeScheduler.flush()
 
-        val expectedMessage = context.getString(
-            org.odk.collect.strings.R.string.parent_form_not_present,
-            "${instance.formId}\n${
-            context.getString(org.odk.collect.strings.R.string.version)
-            } ${instance.formVersion}"
-        )
-        assertErrorDialogAndClickCancelButton(scenario, expectedMessage)
+        assertStartSavedFormIntent(project.uuid, instance.dbId, true)
     }
 
     @Test

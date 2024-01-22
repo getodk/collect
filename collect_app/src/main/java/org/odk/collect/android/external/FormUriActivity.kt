@@ -238,7 +238,8 @@ private class FormUriViewModel(
                 resources.getString(string.instance_deleted_message)
             } else {
                 val candidateForms = formsRepositoryProvider.get()
-                    .getAllNotDeletedByFormIdAndVersion(instance.formId, instance.formVersion)
+                    .getAllByFormIdAndVersion(instance.formId, instance.formVersion)
+
                 if (candidateForms.isEmpty()) {
                     val version = if (instance.formVersion == null) {
                         ""
@@ -247,7 +248,7 @@ private class FormUriViewModel(
                     }
 
                     resources.getString(string.parent_form_not_present, "${instance.formId}$version")
-                } else if (candidateForms.size > 1) {
+                } else if (candidateForms.filter { !it.isDeleted }.size > 1) {
                     resources.getString(string.survey_multiple_forms_error)
                 } else {
                     null
