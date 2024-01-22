@@ -633,7 +633,7 @@ class FormUriActivityTest {
     }
 
     @Test
-    fun `Form filling should be started again after recreating the activity before starting`() {
+    fun `Form filling should not be started again after recreating the activity before starting`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
         whenever(projectsDataService.getCurrentProject()).thenReturn(project)
