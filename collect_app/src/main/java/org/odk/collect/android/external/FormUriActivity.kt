@@ -244,7 +244,7 @@ private class FormUriViewModel(
                 resources.getString(string.instance_deleted_message)
             } else {
                 val candidateForms = formsRepositoryProvider.get()
-                    .getAllByFormIdAndVersion(instance.formId, instance.formVersion)
+                    .getAllNotDeletedByFormIdAndVersion(instance.formId, instance.formVersion)
                 if (candidateForms.isEmpty()) {
                     val version = if (instance.formVersion == null) {
                         ""

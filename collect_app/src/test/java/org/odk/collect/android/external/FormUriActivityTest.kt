@@ -447,6 +447,49 @@ class FormUriActivityTest {
     }
 
     @Test
+    fun `When attempting to edit a form with a soft deleted form definition then display alert dialog`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val form = formsRepository.save(
+            FormUtils.buildForm(
+                "1",
+                "1",
+                TempFiles.createTempDir().absolutePath,
+                FormUtils.createXFormBody("1", "1", "Form 1")
+            ).build()
+        )
+
+        formsRepository.softDelete(form.dbId)
+
+        val instance = instancesRepository.save(
+            Instance.Builder()
+                .formId("1")
+                .formVersion("1")
+                .instanceFilePath(TempFiles.createTempFile(TempFiles.createTempDir()).absolutePath)
+                .status(Instance.STATUS_INCOMPLETE)
+                .build()
+        )
+
+        val scenario = launcherRule.launchForResult<FormUriActivity>(
+            getSavedIntent(
+                project.uuid,
+                instance.dbId
+            )
+        )
+        fakeScheduler.flush()
+
+        val expectedMessage = context.getString(
+            org.odk.collect.strings.R.string.parent_form_not_present,
+            "${instance.formId}\n${
+            context.getString(org.odk.collect.strings.R.string.version)
+            } ${instance.formVersion}"
+        )
+        assertErrorDialogAndClickCancelButton(scenario, expectedMessage)
+    }
+
+    @Test
     fun `When attempting to edit an encrypted form then display alert dialog`() {
         val project = Project.Saved("123", "First project", "A", "#cccccc")
         projectsRepository.save(project)
