@@ -4,7 +4,9 @@ import android.widget.Button
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
+import androidx.lifecycle.viewmodel.CreationExtras
 import org.odk.collect.androidshared.livedata.LiveDataUtils
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData
@@ -56,6 +58,13 @@ class MultiSelectViewModel<T>(
 
     private fun updateSelected(new: Set<Long>) {
         selected.value = new
+    }
+
+    class Factory<T>(private val data: LiveData<List<MultiSelectItem<T>>>) : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <VM : ViewModel> create(modelClass: Class<VM>, extras: CreationExtras): VM {
+            return MultiSelectViewModel(data) as VM
+        }
     }
 }
 

@@ -10,10 +10,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle.State
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
@@ -29,25 +27,16 @@ class DeleteBlankFormFragment(
 ) : Fragment() {
 
     private val blankFormListViewModel: BlankFormListViewModel by viewModels { viewModelFactory }
-    private lateinit var multiSelectViewModel: MultiSelectViewModel<BlankFormListItem>
+    private val multiSelectViewModel: MultiSelectViewModel<BlankFormListItem> by viewModels {
+        MultiSelectViewModel.Factory(
+            blankFormListViewModel.formsToDisplay.map {
+                it.map { blankForm -> MultiSelectItem(blankForm.databaseId, blankForm) }
+            }
+        )
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        multiSelectViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras
-                ): T {
-                    return MultiSelectViewModel(
-                        blankFormListViewModel.formsToDisplay.map {
-                            it.map { blankForm -> MultiSelectItem(blankForm.databaseId, blankForm) }
-                        }
-                    ) as T
-                }
-            }
-        )[MultiSelectViewModel::class.java] as MultiSelectViewModel<BlankFormListItem>
 
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MultiSelectControlsFragment::class) {

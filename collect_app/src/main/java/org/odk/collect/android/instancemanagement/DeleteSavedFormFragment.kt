@@ -20,7 +20,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
@@ -41,26 +40,16 @@ class DeleteSavedFormFragment(
 ) : Fragment() {
 
     private val savedFormListViewModel: SavedFormListViewModel by viewModels { viewModelFactory }
-    private lateinit var multiSelectViewModel: MultiSelectViewModel<Instance>
+    private val multiSelectViewModel: MultiSelectViewModel<Instance> by viewModels {
+        MultiSelectViewModel.Factory(
+            savedFormListViewModel.formsToDisplay.map {
+                it.map { instance -> MultiSelectItem(instance.dbId, instance) }
+            }
+        )
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        multiSelectViewModel = ViewModelProvider(
-            this,
-            object : ViewModelProvider.Factory {
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras
-                ): T {
-                    return MultiSelectViewModel(
-                        savedFormListViewModel.formsToDisplay.map {
-                            it.map { instance -> MultiSelectItem(instance.dbId, instance) }
-                        }
-                    ) as T
-                }
-            }
-        )[MultiSelectViewModel::class.java] as MultiSelectViewModel<Instance>
 
         childFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(MultiSelectControlsFragment::class) {
@@ -164,7 +153,10 @@ private class InstanceListMenuProvider(private val context: Context) : MenuProvi
     }
 }
 
-class SavedFormListViewModel(private val scheduler: Scheduler, private val instancesDataService: InstancesDataService) : ViewModel() {
+class SavedFormListViewModel(
+    private val scheduler: Scheduler,
+    private val instancesDataService: InstancesDataService
+) : ViewModel() {
 
     val formsToDisplay: LiveData<List<Instance>> = instancesDataService.instances
 
