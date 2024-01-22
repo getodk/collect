@@ -7,6 +7,7 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
+import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
@@ -30,6 +31,7 @@ class InstancesDataService(
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
     val sendableCount: LiveData<Int> = appState.getLive(SENDABLE_COUNT_KEY, 0)
     val sentCount: LiveData<Int> = appState.getLive(SENT_COUNT_KEY, 0)
+    val instances: LiveData<List<Instance>> = appState.getLive("instances", emptyList())
 
     fun update() {
         val instancesRepository = instancesRepositoryProvider.get()
@@ -51,6 +53,7 @@ class InstancesDataService(
         appState.setLive(EDITABLE_COUNT_KEY, editableInstances)
         appState.setLive(SENDABLE_COUNT_KEY, sendableInstances)
         appState.setLive(SENT_COUNT_KEY, sentInstances)
+        appState.setLive("instances", instancesRepository.all)
 
         onUpdate()
     }
@@ -120,6 +123,14 @@ class InstancesDataService(
         instanceSubmitScheduler.scheduleSubmit(projectsDataService.getCurrentProject().uuid)
 
         return result.copy(successCount = instances.size - result.failureCount)
+    }
+
+    fun deleteInstance(instanceId: Long) {
+        InstanceDeleter(instancesRepositoryProvider.get(), formsRepositoryProvider.get()).delete(
+            instanceId
+        )
+
+        update()
     }
 
     companion object {

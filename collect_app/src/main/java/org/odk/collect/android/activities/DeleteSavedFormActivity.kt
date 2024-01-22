@@ -24,8 +24,10 @@ import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
 import org.odk.collect.android.formmanagement.FormsDataService
-import org.odk.collect.android.fragments.SavedFormListFragment
+import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.injection.DaggerUtils
+import org.odk.collect.android.instancemanagement.DeleteSavedFormFragment
+import org.odk.collect.android.instancemanagement.SavedFormListViewModel
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -50,6 +52,9 @@ class DeleteSavedFormActivity : LocalizedActivity() {
     @Inject
     lateinit var scheduler: Scheduler
 
+    @Inject
+    lateinit var instanceDataService: InstancesDataService
+
     private lateinit var binding: TabsLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +69,8 @@ class DeleteSavedFormActivity : LocalizedActivity() {
             formsDataService,
             scheduler,
             projectDependencyProvider.generalSettings,
-            projectId
+            projectId,
+            instanceDataService
         )
 
         val viewModelProvider = ViewModelProvider(this, viewModelFactory)
@@ -73,6 +79,9 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         supportFragmentManager.fragmentFactory = FragmentFactoryBuilder()
             .forClass(DeleteBlankFormFragment::class) {
                 DeleteBlankFormFragment(viewModelFactory, this)
+            }
+            .forClass(DeleteSavedFormFragment::class.java) {
+                DeleteSavedFormFragment(viewModelFactory, this)
             }
             .build()
 
@@ -85,10 +94,10 @@ class DeleteSavedFormActivity : LocalizedActivity() {
 
     private fun setUpViewPager(viewModel: BlankFormListViewModel) {
         val fragments = if (viewModel.isMatchExactlyEnabled()) {
-            listOf(SavedFormListFragment::class.java)
+            listOf(DeleteSavedFormFragment::class.java)
         } else {
             listOf(
-                SavedFormListFragment::class.java,
+                DeleteSavedFormFragment::class.java,
                 DeleteBlankFormFragment::class.java
             )
         }
@@ -116,7 +125,8 @@ class DeleteSavedFormActivity : LocalizedActivity() {
         private val formsDataService: FormsDataService,
         private val scheduler: Scheduler,
         private val generalSettings: Settings,
-        private val projectId: String
+        private val projectId: String,
+        private val instancesDataService: InstancesDataService
     ) :
         ViewModelProvider.Factory {
 
@@ -130,6 +140,11 @@ class DeleteSavedFormActivity : LocalizedActivity() {
                     generalSettings,
                     projectId,
                     showAllVersions = true
+                )
+
+                SavedFormListViewModel::class.java -> SavedFormListViewModel(
+                    scheduler,
+                    instancesDataService
                 )
 
                 else -> throw IllegalArgumentException()

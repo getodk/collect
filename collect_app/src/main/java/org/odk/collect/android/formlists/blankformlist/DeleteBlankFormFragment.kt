@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -27,13 +28,11 @@ class DeleteBlankFormFragment(
     private val menuHost: MenuHost
 ) : Fragment() {
 
-    private lateinit var blankFormListViewModel: BlankFormListViewModel
+    private val blankFormListViewModel: BlankFormListViewModel by viewModels { viewModelFactory }
     private lateinit var multiSelectViewModel: MultiSelectViewModel<BlankFormListItem>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val viewModelProvider = ViewModelProvider(this, viewModelFactory)
-        blankFormListViewModel = viewModelProvider[BlankFormListViewModel::class.java]
         multiSelectViewModel = ViewModelProvider(
             this,
             object : ViewModelProvider.Factory {
