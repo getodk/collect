@@ -33,10 +33,10 @@ class TestScheduler : Scheduler, CoroutineDispatcher() {
         return wrappedScheduler.repeat({ foreground.run() }, repeatPeriod)
     }
 
-    override fun <T> immediate(foreground: Supplier<T>, background: Consumer<T>) {
+    override fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>) {
         increment()
-        wrappedScheduler.immediate(foreground) { t: T ->
-            background.accept(t)
+        wrappedScheduler.immediate(background) { t: T ->
+            foreground.accept(t)
             decrement()
         }
     }
