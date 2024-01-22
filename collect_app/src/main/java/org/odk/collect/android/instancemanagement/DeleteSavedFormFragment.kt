@@ -116,7 +116,9 @@ class DeleteSavedFormFragment(
             )
             .setPositiveButton(getString(string.delete_yes)) { _, _ ->
                 savedFormListViewModel.deleteForms(selected)
+                multiSelectViewModel.unselectAll()
             }
+            .setNegativeButton(getString(string.delete_no), null)
             .show()
     }
 }
