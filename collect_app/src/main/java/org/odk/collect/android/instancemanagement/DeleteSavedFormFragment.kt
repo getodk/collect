@@ -36,7 +36,7 @@ import org.odk.collect.strings.R.string
 
 class DeleteSavedFormFragment(
     private val viewModelFactory: ViewModelProvider.Factory,
-    private val menuHost: MenuHost
+    private val menuHost: MenuHost? = null
 ) : Fragment() {
 
     private val savedFormListViewModel: SavedFormListViewModel by viewModels { viewModelFactory }
@@ -94,7 +94,11 @@ class DeleteSavedFormFragment(
             adapter.data = it
         }
 
-        menuHost.addMenuProvider(
+        multiSelectViewModel.getSelected().observe(viewLifecycleOwner) {
+            adapter.selected = it
+        }
+
+        menuHost?.addMenuProvider(
             InstanceListMenuProvider(requireContext()),
             viewLifecycleOwner,
             Lifecycle.State.RESUMED
@@ -113,15 +117,20 @@ class DeleteSavedFormFragment(
             .setPositiveButton(getString(string.delete_yes)) { _, _ ->
                 savedFormListViewModel.deleteForms(selected)
             }
-            .setNegativeButton(getString(string.delete_no), null)
             .show()
     }
 }
 
 private class InstanceItemView(context: Context) : FrameLayout(context) {
 
-    val textView = TextView(context).also { addView(it) }
-    val checkBox = CheckBox(context).also { addView(it) }
+    val textView = TextView(context).also {
+        it.id = R.id.form_title
+        addView(it)
+    }
+    val checkBox = CheckBox(context).also {
+        it.id = R.id.checkbox
+        addView(it)
+    }
 }
 
 private class InstanceItemViewHolder(context: Context) :
