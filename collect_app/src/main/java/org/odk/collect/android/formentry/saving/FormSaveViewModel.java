@@ -406,6 +406,11 @@ public class FormSaveViewModel extends ViewModel implements MaterialProgressDial
         return instance != null ? instance.getLastStatusChangeDate() : null;
     }
 
+    @Nullable
+    public Instance getInstance() {
+        return instance;
+    }
+
     public static class SaveResult {
         private final State state;
         private final String message;

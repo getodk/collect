@@ -1,5 +1,6 @@
 package org.odk.collect.async
 
+import kotlinx.coroutines.flow.Flow
 import java.util.function.Consumer
 import java.util.function.Supplier
 
@@ -22,9 +23,9 @@ interface Scheduler {
     fun <T> immediate(background: Supplier<T>, foreground: Consumer<T>)
 
     /**
-     * Run work in the foreground. Cancelled if application closed.
+     * Run work in the foreground or background. Cancelled if application closed.
      */
-    fun immediate(foreground: Runnable)
+    fun immediate(background: Boolean = false, runnable: Runnable)
 
     /**
      * Schedule a task to run in the background even if the app isn't running. The task
@@ -74,4 +75,10 @@ interface Scheduler {
     fun repeat(foreground: Runnable, repeatPeriod: Long): Cancellable
 
     fun cancelAllDeferred()
+
+    fun <T> flowOnBackground(flow: Flow<T>): Flow<T>
+}
+
+fun <T> Flow<T>.flowOnBackground(scheduler: Scheduler): Flow<T> {
+    return scheduler.flowOnBackground(this)
 }

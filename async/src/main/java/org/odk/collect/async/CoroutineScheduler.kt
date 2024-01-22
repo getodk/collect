@@ -2,6 +2,8 @@ package org.odk.collect.async
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,9 +20,15 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         }
     }
 
-    override fun immediate(foreground: Runnable) {
-        CoroutineScope(foregroundContext).launch {
-            foreground.run()
+    override fun immediate(background: Boolean, runnable: Runnable) {
+        val context = if (background) {
+            backgroundContext
+        } else {
+            foregroundContext
+        }
+
+        CoroutineScope(context).launch {
+            runnable.run()
         }
     }
 
@@ -35,6 +43,10 @@ open class CoroutineScheduler(private val foregroundContext: CoroutineContext, p
         }
 
         return ScopeCancellable(repeatScope)
+    }
+
+    override fun <T> flowOnBackground(flow: Flow<T>): Flow<T> {
+        return flow.flowOn(backgroundContext)
     }
 
     override fun cancelAllDeferred() {

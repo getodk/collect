@@ -2,6 +2,8 @@ package org.odk.collect.android.formmanagement
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.odk.collect.android.formmanagement.matchexactly.ServerFormsSynchronizer
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider
@@ -21,8 +23,8 @@ class FormsDataService(
     private val clock: Supplier<Long>
 ) {
 
-    fun getForms(projectId: String): LiveData<List<Form>> {
-        return getFormsLiveData(projectId)
+    fun getForms(projectId: String): Flow<List<Form>> {
+        return getFormsFlow(projectId)
     }
 
     fun isSyncing(projectId: String): LiveData<Boolean> {
@@ -172,11 +174,11 @@ class FormsDataService(
 
     private fun syncWithDb(projectId: String) {
         val projectDependencies = projectDependencyProviderFactory.create(projectId)
-        getFormsLiveData(projectId).postValue(projectDependencies.formsRepository.all)
+        getFormsFlow(projectId).value = projectDependencies.formsRepository.all
     }
 
-    private fun getFormsLiveData(projectId: String): MutableLiveData<List<Form>> {
-        return appState.get("forms:$projectId", MutableLiveData(emptyList()))
+    private fun getFormsFlow(projectId: String): MutableStateFlow<List<Form>> {
+        return appState.get("forms:$projectId", MutableStateFlow(emptyList()))
     }
 
     private fun getSyncingLiveData(projectId: String) =

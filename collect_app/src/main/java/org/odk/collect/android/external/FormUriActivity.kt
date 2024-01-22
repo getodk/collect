@@ -1,11 +1,21 @@
 package org.odk.collect.android.external
 
+import android.content.ContentResolver
 import android.content.Intent
+import android.content.res.Resources
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.analytics.Analytics
+import org.odk.collect.android.R
 import org.odk.collect.android.activities.FormFillingActivity
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.injection.DaggerUtils
@@ -16,9 +26,10 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
-import org.odk.collect.forms.Form
+import org.odk.collect.async.Scheduler
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
+import org.odk.collect.strings.R.string
 import java.io.File
 import javax.inject.Inject
 
@@ -43,6 +54,9 @@ class FormUriActivity : ComponentActivity() {
     @Inject
     lateinit var settingsProvider: SettingsProvider
 
+    @Inject
+    lateinit var scheduler: Scheduler
+
     private var formFillingAlreadyStarted = false
 
     private val openForm =
@@ -51,130 +65,35 @@ class FormUriActivity : ComponentActivity() {
             finish()
         }
 
+    private val formUriViewModel by viewModels<FormUriViewModel> {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
+                return FormUriViewModel(
+                    intent.data,
+                    scheduler,
+                    projectsRepository,
+                    projectsDataService,
+                    contentResolver,
+                    formsRepositoryProvider,
+                    instanceRepositoryProvider,
+                    resources
+                ) as T
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         DaggerUtils.getComponent(this).inject(this)
+        setContentView(R.layout.circular_progress_indicator)
 
-        when {
-            !assertProjectListNotEmpty() -> Unit
-            !assertCurrentProjectUsed() -> Unit
-            !assertValidUri() -> Unit
-            !assertFormExists() -> Unit
-            !assertFormNotEncrypted() -> Unit
-            !assertFormFillingNotAlreadyStarted(savedInstanceState) -> Unit
-            else -> startForm()
-        }
-    }
-
-    private fun assertProjectListNotEmpty(): Boolean {
-        val projects = projectsRepository.getAll()
-        return if (projects.isEmpty()) {
-            displayErrorDialog(getString(org.odk.collect.strings.R.string.app_not_configured))
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun assertCurrentProjectUsed(): Boolean {
-        val projects = projectsRepository.getAll()
-        val firstProject = projects.first()
-        val uriProjectId = intent.data?.getQueryParameter("projectId")
-        val projectId = uriProjectId ?: firstProject.uuid
-
-        return if (projectId != projectsDataService.getCurrentProject().uuid) {
-            displayErrorDialog(getString(org.odk.collect.strings.R.string.wrong_project_selected_for_form))
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun assertValidUri(): Boolean {
-        val isUriValid = intent.data?.let {
-            val uriMimeType = contentResolver.getType(it)
-            if (uriMimeType == null) {
-                return@let false
-            } else {
-                return@let uriMimeType == FormsContract.CONTENT_ITEM_TYPE || uriMimeType == InstancesContract.CONTENT_ITEM_TYPE
+        formUriViewModel.error.observe(this) {
+            if (it != null) {
+                displayErrorDialog(it)
+            } else if (savedInstanceState?.getBoolean(FORM_FILLING_ALREADY_STARTED) != true) {
+                startForm()
             }
-        } ?: false
-
-        return if (!isUriValid) {
-            displayErrorDialog(getString(org.odk.collect.strings.R.string.unrecognized_uri))
-            false
-        } else {
-            true
         }
-    }
-
-    private fun assertFormExists(): Boolean {
-        val uri = intent.data!!
-        val uriMimeType = contentResolver.getType(uri)
-
-        val doesFormExist = if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-            formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
-                File(it.formFilePath).exists()
-            } ?: false
-        } else {
-            instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
-                if (!File(it.instanceFilePath).exists()) {
-                    Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE)
-                    InstanceDeleter(instanceRepositoryProvider.get(), formsRepositoryProvider.get()).delete(it.dbId)
-                    displayErrorDialog(getString(org.odk.collect.strings.R.string.instance_deleted_message))
-                    return false
-                }
-
-                val candidateForms = formsRepositoryProvider.get().getAllByFormIdAndVersion(it.formId, it.formVersion)
-
-                if (candidateForms.isEmpty()) {
-                    val version = if (it.formVersion == null) {
-                        ""
-                    } else {
-                        "\n${getString(org.odk.collect.strings.R.string.version)} ${it.formVersion}"
-                    }
-
-                    displayErrorDialog(getString(org.odk.collect.strings.R.string.parent_form_not_present, "${it.formId}$version"))
-                    return false
-                } else if (candidateForms.count { form: Form -> !form.isDeleted } > 1) {
-                    displayErrorDialog(getString(org.odk.collect.strings.R.string.survey_multiple_forms_error))
-                    return false
-                }
-
-                true
-            } ?: false
-        }
-
-        return if (!doesFormExist) {
-            displayErrorDialog(getString(org.odk.collect.strings.R.string.bad_uri))
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun assertFormNotEncrypted(): Boolean {
-        val uri = intent.data!!
-        val uriMimeType = contentResolver.getType(uri)
-
-        return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
-            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
-            if (instance!!.canEditWhenComplete()) {
-                true
-            } else {
-                displayErrorDialog(getString(org.odk.collect.strings.R.string.encrypted_form))
-                false
-            }
-        } else {
-            true
-        }
-    }
-
-    private fun assertFormFillingNotAlreadyStarted(savedInstanceState: Bundle?): Boolean {
-        if (savedInstanceState != null) {
-            formFillingAlreadyStarted = savedInstanceState.getBoolean(FORM_FILLING_ALREADY_STARTED)
-        }
-        return !formFillingAlreadyStarted
     }
 
     private fun startForm() {
@@ -185,7 +104,10 @@ class FormUriActivity : ComponentActivity() {
                 data = intent.data
                 intent.extras?.let { sourceExtras -> putExtras(sourceExtras) }
                 if (!canFormBeEdited()) {
-                    putExtra(ApplicationConstants.BundleKeys.FORM_MODE, ApplicationConstants.FormModes.VIEW_SENT)
+                    putExtra(
+                        ApplicationConstants.BundleKeys.FORM_MODE,
+                        ApplicationConstants.FormModes.VIEW_SENT
+                    )
                 }
             }
         )
@@ -194,7 +116,7 @@ class FormUriActivity : ComponentActivity() {
     private fun displayErrorDialog(message: String) {
         MaterialAlertDialogBuilder(this)
             .setMessage(message)
-            .setPositiveButton(org.odk.collect.strings.R.string.ok) { _, _ -> finish() }
+            .setPositiveButton(string.ok) { _, _ -> finish() }
             .setOnCancelListener { finish() }
             .create()
             .show()
@@ -221,5 +143,132 @@ class FormUriActivity : ComponentActivity() {
 
     companion object {
         private const val FORM_FILLING_ALREADY_STARTED = "FORM_FILLING_ALREADY_STARTED"
+    }
+}
+
+private class FormUriViewModel(
+    private val uri: Uri?,
+    scheduler: Scheduler,
+    private val projectsRepository: ProjectsRepository,
+    private val projectsDataService: ProjectsDataService,
+    private val contentResolver: ContentResolver,
+    private val formsRepositoryProvider: FormsRepositoryProvider,
+    private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val resources: Resources
+) : ViewModel() {
+
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
+    init {
+        scheduler.immediate(
+            background = {
+                assertProjectListNotEmpty() ?: assertCurrentProjectUsed() ?: assertValidUri()
+                    ?: assertFormExists() ?: assertFormNotEncrypted()
+            },
+            foreground = {
+                _error.value = it
+            }
+        )
+    }
+
+    private fun assertProjectListNotEmpty(): String? {
+        val projects = projectsRepository.getAll()
+        return if (projects.isEmpty()) {
+            resources.getString(string.app_not_configured)
+        } else {
+            null
+        }
+    }
+
+    private fun assertCurrentProjectUsed(): String? {
+        val projects = projectsRepository.getAll()
+        val firstProject = projects.first()
+        val uriProjectId = uri?.getQueryParameter("projectId")
+        val projectId = uriProjectId ?: firstProject.uuid
+
+        return if (projectId != projectsDataService.getCurrentProject().uuid) {
+            resources.getString(string.wrong_project_selected_for_form)
+        } else {
+            null
+        }
+    }
+
+    private fun assertValidUri(): String? {
+        val isUriValid = uri?.let {
+            val uriMimeType = contentResolver.getType(it)
+            if (uriMimeType == null) {
+                false
+            } else {
+                uriMimeType == FormsContract.CONTENT_ITEM_TYPE || uriMimeType == InstancesContract.CONTENT_ITEM_TYPE
+            }
+        } ?: false
+
+        return if (!isUriValid) {
+            resources.getString(string.unrecognized_uri)
+        } else {
+            null
+        }
+    }
+
+    private fun assertFormExists(): String? {
+        val uriMimeType = contentResolver.getType(uri!!)
+
+        return if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+            val formExists =
+                formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))?.let {
+                    File(it.formFilePath).exists()
+                } ?: false
+
+            if (formExists) {
+                null
+            } else {
+                resources.getString(string.bad_uri)
+            }
+        } else {
+            val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            if (instance == null) {
+                resources.getString(string.bad_uri)
+            } else if (!File(instance.instanceFilePath).exists()) {
+                Analytics.log(AnalyticsEvents.OPEN_DELETED_INSTANCE)
+                InstanceDeleter(
+                    instancesRepositoryProvider.get(),
+                    formsRepositoryProvider.get()
+                ).delete(instance.dbId)
+                resources.getString(string.instance_deleted_message)
+            } else {
+                val candidateForms = formsRepositoryProvider.get()
+                    .getAllByFormIdAndVersion(instance.formId, instance.formVersion)
+
+                if (candidateForms.isEmpty()) {
+                    val version = if (instance.formVersion == null) {
+                        ""
+                    } else {
+                        "\n${resources.getString(string.version)} ${instance.formVersion}"
+                    }
+
+                    resources.getString(string.parent_form_not_present, "${instance.formId}$version")
+                } else if (candidateForms.filter { !it.isDeleted }.size > 1) {
+                    resources.getString(string.survey_multiple_forms_error)
+                } else {
+                    null
+                }
+            }
+        }
+    }
+
+    private fun assertFormNotEncrypted(): String? {
+        val uriMimeType = contentResolver.getType(uri!!)
+
+        return if (uriMimeType == InstancesContract.CONTENT_ITEM_TYPE) {
+            val instance = instancesRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))
+            if (instance!!.canEditWhenComplete()) {
+                null
+            } else {
+                resources.getString(string.encrypted_form)
+            }
+        } else {
+            null
+        }
     }
 }

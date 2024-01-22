@@ -1,5 +1,19 @@
 package org.odk.collect.android.database.forms;
 
+import static android.provider.BaseColumns._ID;
+import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
+import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromForm;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.DELETED_DATE;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
+import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
+import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +21,7 @@ import android.database.CursorWindow;
 import android.database.sqlite.SQLiteBlobTooBigException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.StrictMode;
 
 import org.jetbrains.annotations.NotNull;
 import org.odk.collect.android.database.DatabaseConnection;
@@ -26,20 +41,6 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
-
-import static android.provider.BaseColumns._ID;
-import static org.odk.collect.android.database.DatabaseConstants.FORMS_TABLE_NAME;
-import static org.odk.collect.android.database.DatabaseObjectMapper.getFormFromCurrentCursorPosition;
-import static org.odk.collect.android.database.DatabaseObjectMapper.getValuesFromForm;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.DATE;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.DELETED_DATE;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_FILE_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.FORM_MEDIA_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JRCACHE_FILE_PATH;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_FORM_ID;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.JR_VERSION;
-import static org.odk.collect.android.database.forms.DatabaseFormColumns.MD5_HASH;
-import static org.odk.collect.shared.PathUtils.getRelativeFilePath;
 
 import timber.log.Timber;
 
@@ -102,6 +103,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public List<Form> getAll() {
+        StrictMode.noteSlowCall("Accessing readable DB");
         return queryForForms(null, null);
     }
 
@@ -116,17 +118,21 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Override
     public List<Form> getAllByFormId(String formId) {
+        StrictMode.noteSlowCall("Accessing readable DB");
         return queryForForms(JR_FORM_ID + "=?", new String[]{formId});
     }
 
     @Override
     public List<Form> getAllNotDeletedByFormId(String jrFormId) {
+        StrictMode.noteSlowCall("Accessing readable DB");
         return queryForForms(JR_FORM_ID + "=? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId});
     }
 
 
     @Override
     public List<Form> getAllNotDeletedByFormIdAndVersion(String jrFormId, @Nullable String jrVersion) {
+        StrictMode.noteSlowCall("Accessing readable DB");
+
         if (jrVersion != null) {
             return queryForForms(DELETED_DATE + " IS NULL AND " + JR_FORM_ID + "=? AND " + JR_VERSION + "=?", new String[]{jrFormId, jrVersion});
         } else {
@@ -204,6 +210,7 @@ public class DatabaseFormsRepository implements FormsRepository {
 
     @Nullable
     private Form queryForForm(String selection, String[] selectionArgs) {
+        StrictMode.noteSlowCall("Accessing readable DB");
         List<Form> forms = queryForForms(selection, selectionArgs);
         return !forms.isEmpty() ? forms.get(0) : null;
     }
@@ -237,6 +244,8 @@ public class DatabaseFormsRepository implements FormsRepository {
     }
 
     private void deleteForms(String selection, String[] selectionArgs) {
+        StrictMode.noteSlowCall("Accessing readable DB");
+
         List<Form> forms = queryForForms(selection, selectionArgs);
         for (Form form : forms) {
             deleteFilesForForm(form);

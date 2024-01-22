@@ -18,4 +18,13 @@ class TrackableWorker(private val scheduler: Scheduler) {
             foreground.accept(result)
         }
     }
+
+    fun immediate(background: Runnable) {
+        immediate(
+            background = {
+                background.run()
+            },
+            foreground = {}
+        )
+    }
 }

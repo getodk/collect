@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.os.StrictMode;
 
 import org.odk.collect.android.database.DatabaseConnection;
 import org.odk.collect.android.database.DatabaseConstants;
@@ -83,6 +84,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAll() {
+        StrictMode.noteSlowCall("Accessing readable DB");
+
         try (Cursor cursor = query(null, null, null, null)) {
             return getInstancesFromCursor(cursor, instancesPath);
         }
@@ -90,6 +93,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllNotDeleted() {
+        StrictMode.noteSlowCall("Accessing readable DB");
+
         try (Cursor cursor = query(null, DELETED_DATE + " IS NULL ", null, null)) {
             return getInstancesFromCursor(cursor, instancesPath);
         }
@@ -112,6 +117,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllByFormId(String formId) {
+        StrictMode.noteSlowCall("Accessing readable DB");
+
         try (Cursor c = query(null, JR_FORM_ID + " = ?", new String[]{formId}, null)) {
             return getInstancesFromCursor(c, instancesPath);
         }
@@ -119,6 +126,8 @@ public final class DatabaseInstancesRepository implements InstancesRepository {
 
     @Override
     public List<Instance> getAllNotDeletedByFormIdAndVersion(String jrFormId, String jrVersion) {
+        StrictMode.noteSlowCall("Accessing readable DB");
+
         if (jrVersion != null) {
             try (Cursor cursor = query(null, JR_FORM_ID + " = ? AND " + JR_VERSION + " = ? AND " + DELETED_DATE + " IS NULL", new String[]{jrFormId, jrVersion}, null)) {
                 return getInstancesFromCursor(cursor, instancesPath);

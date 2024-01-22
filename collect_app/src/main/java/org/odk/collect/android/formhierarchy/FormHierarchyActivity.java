@@ -60,6 +60,7 @@ import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.FormEntryPromptUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.HtmlUtils;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
@@ -186,6 +187,9 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
 
+    @Inject
+    public FormsRepositoryProvider formsRepositoryProvider;
+
     protected final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
         @Override
         public void handleOnBackPressed() {
@@ -217,6 +221,7 @@ public class FormHierarchyActivity extends LocalizedActivity implements DeleteRe
                 fusedLocationClient,
                 permissionsProvider,
                 autoSendSettingsProvider,
+                formsRepositoryProvider,
                 instancesRepositoryProvider,
                 new QRCodeCreatorImpl(),
                 new HtmlPrinter()

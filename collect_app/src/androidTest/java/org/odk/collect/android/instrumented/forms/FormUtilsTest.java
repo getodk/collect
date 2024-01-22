@@ -2,6 +2,11 @@ package org.odk.collect.android.instrumented.forms;
 
 import static org.mockito.Mockito.mock;
 import static org.odk.collect.android.support.StorageUtils.copyFormToStorage;
+import static java.util.Collections.emptyList;
+
+import android.net.Uri;
+
+import androidx.test.core.app.ApplicationProvider;
 
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.reference.RootTranslator;
@@ -11,6 +16,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.support.CollectHelpers;
@@ -18,6 +24,8 @@ import org.odk.collect.android.support.rules.ResetStateRule;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.FormUtils;
+import org.odk.collect.android.utilities.FormsRepositoryProvider;
+import org.odk.collect.forms.Form;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +47,7 @@ public class FormUtilsTest {
     @Before
     public void setUp() throws IOException {
         CollectHelpers.addDemoProject();
-        copyFormToStorage(BASIC_FORM);
+        copyFormToStorage(BASIC_FORM, emptyList(), true);
     }
 
     /* Verify that each host string matches only a single root translator, allowing for them to
@@ -48,9 +56,12 @@ public class FormUtilsTest {
     @Test
     public void sessionRootTranslatorOrderDoesNotMatter() throws Exception {
         final String formPath = new StoragePathProvider().getOdkDirPath(StorageSubdirectory.FORMS) + File.separator + BASIC_FORM;
+        final Form form = new FormsRepositoryProvider(ApplicationProvider.getApplicationContext()).get().getOneByPath(formPath);
+        final Uri formUri = FormsContract.getUri("DEMO", form.getDbId());
+
         // Load the form in order to populate the ReferenceManager
-        FormLoaderTask formLoaderTask = new FormLoaderTask(formPath, null, null, formEntryControllerFactory, mock());
-        formLoaderTask.executeSynchronously(formPath);
+        FormLoaderTask formLoaderTask = new FormLoaderTask(formUri, FormsContract.CONTENT_ITEM_TYPE, null, null, formEntryControllerFactory, mock());
+        formLoaderTask.executeSynchronously();
 
         final File formXml = new File(formPath);
         final File formMediaDir = FileUtils.getFormMediaDir(formXml);
