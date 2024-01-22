@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <h:html xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:jr="http://openrosa.org/javarosa" xmlns:odk="http://www.opendatakit.org/xforms" xmlns:orx="http://openrosa.org/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <h:head>
-        <h:title>external select 10</h:title>
+        <h:title>external select</h:title>
         <model>
             <instance>
-                <external_select_10 id="external_select_10">
+                <external_select id="external_select">
                     <first/>
                     <meta>
                         <instanceID/>
                     </meta>
-                </external_select_10>
+                </external_select>
             </instance>
-            <instance id="csv" src="jr://file-csv/external_data_10.csv"/>
-            <bind nodeset="/external_select_10/first" type="select1"/>
-            <bind calculate="concat('uuid:', uuid())" nodeset="/external_select_10/meta/instanceID" readonly="true()" type="string"/>
+            <instance id="xml" src="jr://file/external_data.xml"/>
+            <bind nodeset="/external_select/first" type="select1"/>
+            <bind calculate="concat('uuid:', uuid())" nodeset="/external_select/meta/instanceID" readonly="true()" type="string"/>
         </model>
     </h:head>
     <h:body>
-        <select1 ref="/external_select_10/first">
+        <select1 ref="/external_select/first">
             <label>First</label>
-            <itemset nodeset="instance('csv')/root/item">
+            <itemset nodeset="instance('xml')/root/item">
                 <value ref="name"/>
                 <label ref="label"/>
             </itemset>

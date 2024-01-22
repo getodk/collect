@@ -1,0 +1,14 @@
+<root>
+    <item>
+        <name>one</name>
+        <label>One</label>
+    </item>
+    <item>
+        <name>two</name>
+        <label>Two</label>
+    </item>
+    <item>
+        <name>three</name>
+        <label>Three</label>
+    </item>
+</root>
