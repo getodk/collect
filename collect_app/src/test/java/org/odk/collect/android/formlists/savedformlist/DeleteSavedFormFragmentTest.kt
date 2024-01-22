@@ -1,4 +1,4 @@
-package org.odk.collect.android.instancemanagement
+package org.odk.collect.android.formlists.savedformlist
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData

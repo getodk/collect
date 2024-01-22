@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import org.odk.collect.android.activities.DeleteSavedFormActivity
+import org.odk.collect.android.activities.DeleteFormsActivity
 import org.odk.collect.android.activities.FormDownloadListActivity
 import org.odk.collect.android.activities.InstanceChooserList
 import org.odk.collect.android.activities.WebViewActivity
@@ -186,7 +186,7 @@ class MainMenuFragment(
         }
 
         binding.manageForms.setOnClickListener {
-            startActivity(Intent(requireContext(), DeleteSavedFormActivity::class.java))
+            startActivity(Intent(requireContext(), DeleteFormsActivity::class.java))
         }
 
         mainMenuViewModel.sendableInstancesCount.observe(viewLifecycleOwner) { finalized: Int ->

@@ -23,11 +23,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import org.odk.collect.android.databinding.TabsLayoutBinding
 import org.odk.collect.android.formlists.blankformlist.BlankFormListViewModel
 import org.odk.collect.android.formlists.blankformlist.DeleteBlankFormFragment
+import org.odk.collect.android.formlists.savedformlist.DeleteSavedFormFragment
+import org.odk.collect.android.formlists.savedformlist.SavedFormListViewModel
 import org.odk.collect.android.formmanagement.FormsDataService
-import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.injection.DaggerUtils
-import org.odk.collect.android.instancemanagement.DeleteSavedFormFragment
-import org.odk.collect.android.instancemanagement.SavedFormListViewModel
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.projects.ProjectDependencyProviderFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
@@ -39,7 +39,7 @@ import org.odk.collect.shared.settings.Settings
 import org.odk.collect.strings.localization.LocalizedActivity
 import javax.inject.Inject
 
-class DeleteSavedFormActivity : LocalizedActivity() {
+class DeleteFormsActivity : LocalizedActivity() {
     @Inject
     lateinit var projectDependencyProviderFactory: ProjectDependencyProviderFactory
 

@@ -1,7 +1,7 @@
 package org.odk.collect.android.instancemanagement.autosend
 
-import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.InstanceSubmitter
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.SubmitException
 import org.odk.collect.android.notifications.Notifier
 import org.odk.collect.android.projects.ProjectDependencyProvider

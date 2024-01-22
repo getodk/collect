@@ -1,36 +1,27 @@
-package org.odk.collect.android.instancemanagement
+package org.odk.collect.android.formlists.savedformlist
 
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.map
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.odk.collect.android.R
 import org.odk.collect.android.databinding.DeleteBlankFormLayoutBinding
-import org.odk.collect.android.formlists.sorting.FormListSortingBottomSheetDialog
-import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.androidshared.ui.FragmentFactoryBuilder
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectControlsFragment
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectItem
 import org.odk.collect.androidshared.ui.multiselect.MultiSelectViewModel
-import org.odk.collect.async.Scheduler
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.strings.R.string
 
@@ -99,7 +90,7 @@ class DeleteSavedFormFragment(
         }
 
         menuHost?.addMenuProvider(
-            InstanceListMenuProvider(requireContext()),
+            SavedFormListListMenuProvider(requireContext()),
             viewLifecycleOwner,
             Lifecycle.State.RESUMED
         )
@@ -146,34 +137,5 @@ private class InstanceItemViewHolder(context: Context) :
 
     override fun getCheckbox(): CheckBox {
         return view.checkBox
-    }
-}
-
-private class InstanceListMenuProvider(private val context: Context) : MenuProvider {
-    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.form_list_menu, menu)
-    }
-
-    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        FormListSortingBottomSheetDialog(
-            context,
-            emptyList(),
-            0
-        ) {}.show()
-        return true
-    }
-}
-
-class SavedFormListViewModel(
-    private val scheduler: Scheduler,
-    private val instancesDataService: InstancesDataService
-) : ViewModel() {
-
-    val formsToDisplay: LiveData<List<Instance>> = instancesDataService.instances
-
-    fun deleteForms(databaseIds: LongArray) {
-        scheduler.immediate(background = true) {
-            databaseIds.forEach { instancesDataService.deleteInstance(it) }
-        }
     }
 }

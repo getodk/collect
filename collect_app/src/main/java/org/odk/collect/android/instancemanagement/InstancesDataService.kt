@@ -1,4 +1,4 @@
-package org.odk.collect.android.formmanagement
+package org.odk.collect.android.instancemanagement
 
 import androidx.lifecycle.LiveData
 import org.odk.collect.analytics.Analytics
@@ -7,7 +7,7 @@ import org.odk.collect.android.application.Collect
 import org.odk.collect.android.backgroundwork.InstanceSubmitScheduler
 import org.odk.collect.android.entities.EntitiesRepositoryProvider
 import org.odk.collect.android.formentry.FormEntryUseCases
-import org.odk.collect.android.instancemanagement.InstanceDeleter
+import org.odk.collect.android.formmanagement.CollectFormEntryControllerFactory
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory

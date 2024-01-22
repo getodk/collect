@@ -2,8 +2,8 @@ package org.odk.collect.android.formmanagement.drafts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.odk.collect.android.formmanagement.FinalizeAllResult
-import org.odk.collect.android.formmanagement.InstancesDataService
+import org.odk.collect.android.instancemanagement.FinalizeAllResult
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.androidshared.data.Consumable
 import org.odk.collect.androidshared.livedata.MutableNonNullLiveData
 import org.odk.collect.androidshared.livedata.NonNullLiveData

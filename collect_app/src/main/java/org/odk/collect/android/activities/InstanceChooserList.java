@@ -46,7 +46,7 @@ import org.odk.collect.android.entities.EntitiesRepositoryProvider;
 import org.odk.collect.android.external.FormUriActivity;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.formlists.sorting.FormListSortingOption;
-import org.odk.collect.android.formmanagement.InstancesDataService;
+import org.odk.collect.android.instancemanagement.InstancesDataService;
 import org.odk.collect.android.formmanagement.drafts.BulkFinalizationViewModel;
 import org.odk.collect.android.formmanagement.drafts.DraftsMenuProvider;
 import org.odk.collect.android.injection.DaggerUtils;

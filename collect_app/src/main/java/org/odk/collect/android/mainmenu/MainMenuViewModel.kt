@@ -4,8 +4,8 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import org.odk.collect.android.formmanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.InstanceDiskSynchronizer
+import org.odk.collect.android.instancemanagement.InstancesDataService
 import org.odk.collect.android.instancemanagement.autosend.AutoSendSettingsProvider
 import org.odk.collect.android.instancemanagement.autosend.shouldFormBeSentAutomatically
 import org.odk.collect.android.instancemanagement.canBeEdited
