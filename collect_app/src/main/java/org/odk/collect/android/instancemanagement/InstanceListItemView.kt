@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.material.color.MaterialColors
 import org.odk.collect.android.R
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.androidshared.system.ContextUtils.getThemeAttributeValue
@@ -35,7 +36,7 @@ object InstanceListItemView {
                     pill.visibility = View.VISIBLE
                     pill.setIcon(org.odk.collect.icons.R.drawable.ic_baseline_rule_24)
                     pill.setText(string.draft_errors)
-                    pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorErrorContainer))
+                    pill.setPillBackgroundColor(MaterialColors.getColor(pill, com.google.android.material.R.attr.colorErrorContainer))
                     pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
                     pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnErrorContainer))
                 }
@@ -43,7 +44,7 @@ object InstanceListItemView {
                     pill.visibility = View.VISIBLE
                     pill.setIcon(R.drawable.baseline_check_24)
                     pill.setText(string.draft_no_errors)
-                    pill.setPillBackgroundColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorSurfaceContainerHighest))
+                    pill.setPillBackgroundColor(MaterialColors.getColor(pill, com.google.android.material.R.attr.colorSurfaceContainerHighest))
                     pill.setTextColor(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
                     pill.setIconTint(getThemeAttributeValue(context, com.google.android.material.R.attr.colorOnSurface))
                 }
