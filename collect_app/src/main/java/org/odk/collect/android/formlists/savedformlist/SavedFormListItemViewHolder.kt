@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import org.odk.collect.android.R
@@ -13,7 +12,7 @@ import org.odk.collect.androidshared.ui.multiselect.MultiSelectAdapter
 import org.odk.collect.forms.instances.Instance
 import java.util.Date
 
-class SavedForListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHolder<Instance>(
+class SavedFormListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHolder<Instance>(
     LayoutInflater.from(parent.context)
         .inflate(R.layout.form_chooser_list_item_multiple_choice, parent, false)
 ) {
@@ -21,7 +20,7 @@ class SavedForListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHol
     private val formSubtitle: TextView = itemView.findViewById(R.id.form_subtitle)
     private val checkbox: CheckBox = itemView.findViewById(R.id.checkbox)
     private val statusIcon: ImageView = itemView.findViewById(R.id.image)
-    private val selectView: FrameLayout = itemView.findViewById(R.id.selectView)
+    private var selectView: View = itemView
 
     override fun setItem(item: Instance) {
         val lastStatusChangeDate = item.lastStatusChangeDate
@@ -42,5 +41,10 @@ class SavedForListItemViewHolder(parent: ViewGroup) : MultiSelectAdapter.ViewHol
 
     override fun getSelectArea(): View {
         return selectView
+    }
+
+    fun setOnDetailsClickListener(listener: () -> Unit) {
+        selectView = itemView.findViewById(R.id.selectView)
+        selectView.setOnClickListener { listener() }
     }
 }
