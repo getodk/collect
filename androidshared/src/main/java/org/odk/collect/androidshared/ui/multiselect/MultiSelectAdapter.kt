@@ -37,7 +37,7 @@ class MultiSelectAdapter<T, VH : MultiSelectAdapter.ViewHolder<T>>(
             }
         }
 
-        holder.itemView.setOnClickListener {
+        holder.getSelectArea().setOnClickListener {
             checkbox.performClick()
         }
     }
@@ -49,5 +49,8 @@ class MultiSelectAdapter<T, VH : MultiSelectAdapter.ViewHolder<T>>(
     abstract class ViewHolder<T>(view: View) : RecyclerView.ViewHolder(view) {
         abstract fun setItem(item: T)
         abstract fun getCheckbox(): CheckBox
+        open fun getSelectArea(): View {
+            return itemView
+        }
     }
 }
