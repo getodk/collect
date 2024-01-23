@@ -36,6 +36,8 @@ import org.odk.collect.async.Cancellable;
 import org.odk.collect.async.Scheduler;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.FormsRepository;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.Settings;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -68,15 +70,17 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
 
     private final Cancellable formSessionObserver;
     private final FormsRepository formsRepository;
+    private final Settings settings;
 
     private final Map<FormIndex, List<SelectChoice>> choices = new HashMap<>();
 
     private final TrackableWorker worker;
 
     @SuppressWarnings("WeakerAccess")
-    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId, FormsRepository formsRepository) {
+    public FormEntryViewModel(Supplier<Long> clock, Scheduler scheduler, FormSessionRepository formSessionRepository, String sessionId, FormsRepository formsRepository, Settings settings) {
         this.clock = clock;
         this.formSessionRepository = formSessionRepository;
+        this.settings = settings;
         worker = new TrackableWorker(scheduler);
 
         this.sessionId = sessionId;
@@ -381,6 +385,10 @@ public class FormEntryViewModel extends ViewModel implements SelectChoiceLoader 
     }
 
     private void preloadSelectChoices() throws RepeatsInFieldListException, FileNotFoundException, XPathSyntaxException {
+        if (!settings.getBoolean(ProjectKeys.KEY_EXPERIMENTAL_SELECT_CHOICE_PRELOADING)) {
+            return;
+        }
+
         int event = formController.getEvent();
         if (event == FormEntryController.EVENT_QUESTION) {
             FormEntryPrompt prompt = formController.getQuestionPrompt();

@@ -69,7 +69,8 @@ class FormEntryViewModelFactory(
                 scheduler,
                 formSessionRepository,
                 sessionId,
-                formsRepositoryProvider.get(projectId)
+                formsRepositoryProvider.get(projectId),
+                settingsProvider.getUnprotectedSettings()
             )
 
             FormSaveViewModel::class.java -> {

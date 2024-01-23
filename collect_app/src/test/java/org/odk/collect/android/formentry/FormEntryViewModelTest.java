@@ -35,6 +35,9 @@ import org.odk.collect.android.support.MockFormEntryPromptBuilder;
 import org.odk.collect.androidshared.data.Consumable;
 import org.odk.collect.forms.FormsRepository;
 import org.odk.collect.formstest.InMemFormsRepository;
+import org.odk.collect.settings.keys.ProjectKeys;
+import org.odk.collect.shared.settings.InMemSettings;
+import org.odk.collect.shared.settings.Settings;
 import org.odk.collect.testshared.FakeScheduler;
 
 import java.io.FileNotFoundException;
@@ -55,6 +58,7 @@ public class FormEntryViewModelTest {
 
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+    private final Settings settings = new InMemSettings();
 
     @Before
     public void setup() {
@@ -65,7 +69,9 @@ public class FormEntryViewModelTest {
         scheduler = new FakeScheduler();
 
         formSessionRepository.set("blah", formController, mock());
-        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository);
+
+        settings.save(ProjectKeys.KEY_EXPERIMENTAL_SELECT_CHOICE_PRELOADING, true);
+        viewModel = new FormEntryViewModel(() -> 0L, scheduler, formSessionRepository, "blah", formsRepository, settings);
     }
 
     @Test

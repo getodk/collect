@@ -67,4 +67,6 @@ object ProjectKeys {
     const val BASEMAP_SOURCE_OSM = "osm"
     const val BASEMAP_SOURCE_USGS = "usgs"
     const val BASEMAP_SOURCE_CARTO = "carto"
+
+    const val KEY_EXPERIMENTAL_SELECT_CHOICE_PRELOADING = "select_choice_preloading"
 }

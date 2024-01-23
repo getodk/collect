@@ -14,4 +14,9 @@
         android:key="dev_tools"
         app:persistent="false"/>
 
+    <SwitchPreferenceCompat
+        android:title="Select choice preloading"
+        android:key="select_choice_preloading"
+        app:iconSpaceReserved="false" />
+
 </PreferenceScreen>
