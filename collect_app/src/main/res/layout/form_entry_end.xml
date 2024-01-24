@@ -90,7 +90,7 @@ the specific language governing permissions and limitations under the License.
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_as_draft"
-                style="?materialButtonOutlinedStyle"
+                style="?materialButtonOutlinedIconStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/save_as_draft"
@@ -99,11 +99,13 @@ the specific language governing permissions and limitations under the License.
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/finalize"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:icon="@drawable/ic_save_menu_24"
+                app:iconGravity="textStart" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/finalize"
-                style="?materialButtonStyle"
+                style="?materialButtonIconStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/finalize"
@@ -112,7 +114,9 @@ the specific language governing permissions and limitations under the License.
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/save_as_draft"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:icon="@drawable/ic_send_24"
+                app:iconGravity="textStart" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
