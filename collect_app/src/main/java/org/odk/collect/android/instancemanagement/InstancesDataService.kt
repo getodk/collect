@@ -1,6 +1,7 @@
 package org.odk.collect.android.instancemanagement
 
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.Flow
 import org.odk.collect.analytics.Analytics
 import org.odk.collect.android.analytics.AnalyticsEvents
 import org.odk.collect.android.application.Collect
@@ -31,7 +32,7 @@ class InstancesDataService(
     val editableCount: LiveData<Int> = appState.getLive(EDITABLE_COUNT_KEY, 0)
     val sendableCount: LiveData<Int> = appState.getLive(SENDABLE_COUNT_KEY, 0)
     val sentCount: LiveData<Int> = appState.getLive(SENT_COUNT_KEY, 0)
-    val instances: LiveData<List<Instance>> = appState.getLive("instances", emptyList())
+    val instances: Flow<List<Instance>> = appState.getFlow("instances", emptyList())
 
     fun update() {
         val instancesRepository = instancesRepositoryProvider.get()
@@ -53,7 +54,7 @@ class InstancesDataService(
         appState.setLive(EDITABLE_COUNT_KEY, editableInstances)
         appState.setLive(SENDABLE_COUNT_KEY, sendableInstances)
         appState.setLive(SENT_COUNT_KEY, sentInstances)
-        appState.setLive("instances", instancesRepository.all)
+        appState.setFlow("instances", instancesRepository.all)
 
         onUpdate()
     }
