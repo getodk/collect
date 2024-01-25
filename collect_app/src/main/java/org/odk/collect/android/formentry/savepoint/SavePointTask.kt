@@ -26,7 +26,7 @@ class SavePointTask(
 
         return try {
             val payload = formController.getFilledInFormXml()
-            val savepoint = SavePointManager.getSavepointFile(formController.getInstanceFile()!!.name)
+            val savepoint = SavePointUtils.getSavepointFile(formController.getInstanceFile()!!.name)
 
             if (priority == lastPriorityUsed) {
                 SaveFormToDisk.writeFile(payload, savepoint.absolutePath)

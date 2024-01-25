@@ -5,7 +5,7 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.forms.Form
 import java.io.File
 
-object SavePointManager {
+object SavePointUtils {
     @JvmStatic
     fun getInstancePathIfSavePointExists(form: Form): String? {
         val filePrefix = form.formFilePath.substringAfterLast('/').substringBeforeLast('.') + "_"

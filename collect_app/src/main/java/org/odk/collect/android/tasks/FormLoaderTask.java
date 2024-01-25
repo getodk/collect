@@ -45,7 +45,7 @@ import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
-import org.odk.collect.android.formentry.savepoint.SavePointManager;
+import org.odk.collect.android.formentry.savepoint.SavePointUtils;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
@@ -167,7 +167,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
              * Savepoints for forms that were explicitly saved will be recovered when that
              * explicitly saved instance is edited via edit-saved-form.
              */
-            instancePath = SavePointManager.getInstancePathIfSavePointExists(form);
+            instancePath = SavePointUtils.getInstancePathIfSavePointExists(form);
         }
 
         if (form.getFormFilePath() == null) {
@@ -364,7 +364,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             File instanceXml = new File(instancePath);
 
             // Use the savepoint file only if it's newer than the last manual save
-            final File savepointFile = SavePointManager.getSavepointFile(instanceXml.getName());
+            final File savepointFile = SavePointUtils.getSavepointFile(instanceXml.getName());
             if (savepointFile.exists()
                     && savepointFile.lastModified() > instanceXml.lastModified()) {
                 usedSavepoint = true;
