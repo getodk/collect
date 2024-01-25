@@ -31,4 +31,10 @@ object SavePointManager {
         }
         return null
     }
+
+    @JvmStatic
+    fun getSavepointFile(instanceName: String): File {
+        val cacheDir = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE))
+        return File(cacheDir, "$instanceName.save")
+    }
 }

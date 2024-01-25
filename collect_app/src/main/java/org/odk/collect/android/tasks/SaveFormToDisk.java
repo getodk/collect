@@ -44,6 +44,7 @@ import org.odk.collect.android.application.Collect;
 import org.odk.collect.android.database.instances.DatabaseInstanceColumns;
 import org.odk.collect.android.exception.EncryptionException;
 import org.odk.collect.android.external.InstancesContract;
+import org.odk.collect.android.formentry.savepoint.SavePointManager;
 import org.odk.collect.android.formentry.saving.FormSaver;
 import org.odk.collect.android.javarosawrapper.FailedValidationResult;
 import org.odk.collect.android.javarosawrapper.FormController;
@@ -313,14 +314,6 @@ public class SaveFormToDisk {
     }
 
     /**
-     * Return the savepoint file for a given instance.
-     */
-    public static File getSavepointFile(String instanceName) {
-        File tempDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
-        return new File(tempDir, instanceName + ".save");
-    }
-
-    /**
      * Return the formIndex file for a given instance.
      */
     public static File getFormIndexFile(String instanceName) {
@@ -329,7 +322,7 @@ public class SaveFormToDisk {
     }
 
     public static void removeSavepointFiles(String instanceName) {
-        File savepointFile = getSavepointFile(instanceName);
+        File savepointFile = SavePointManager.getSavepointFile(instanceName);
         File formIndexFile = getFormIndexFile(instanceName);
         FileUtils.deleteAndReport(savepointFile);
         FileUtils.deleteAndReport(formIndexFile);
