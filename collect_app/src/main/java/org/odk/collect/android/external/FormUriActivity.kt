@@ -163,8 +163,11 @@ private class FormUriViewModel(
     init {
         scheduler.immediate(
             background = {
-                assertProjectListNotEmpty() ?: assertCurrentProjectUsed() ?: assertValidUri()
-                    ?: assertFormExists() ?: assertFormNotEncrypted()
+                assertProjectListNotEmpty()
+                    ?: assertCurrentProjectUsed()
+                    ?: assertValidUri()
+                    ?: assertFormExists()
+                    ?: assertFormNotEncrypted()
             },
             foreground = {
                 _error.value = it
