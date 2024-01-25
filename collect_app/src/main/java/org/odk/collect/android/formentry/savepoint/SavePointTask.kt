@@ -18,26 +18,16 @@ class SavePointTask(
 
     override fun doInBackground(vararg params: Unit): String? {
         if (priority < lastPriorityUsed) {
-            Timber.w("Savepoint thread (p=%d) was cancelled (a) because another one is waiting (p=%d)", priority, lastPriorityUsed)
             return null
         }
 
-        val start = System.currentTimeMillis()
-
         return try {
-            val temp = SaveFormToDisk.getSavepointFile(formController.getInstanceFile()!!.name)
             val payload = formController.getFilledInFormXml()
+            val savepoint = SaveFormToDisk.getSavepointFile(formController.getInstanceFile()!!.name)
 
-            if (priority < lastPriorityUsed) {
-                Timber.w("Savepoint thread (p=%d) was cancelled (b) because another one is waiting (p=%d)", priority, lastPriorityUsed)
-                return null
+            if (priority == lastPriorityUsed) {
+                SaveFormToDisk.writeFile(payload, savepoint.absolutePath)
             }
-
-            // write out xml
-            SaveFormToDisk.writeFile(payload, temp.absolutePath)
-
-            val end = System.currentTimeMillis()
-            Timber.i("Savepoint ms: %s to %s", (end - start).toString(), temp.toString())
 
             null
         } catch (e: Exception) {
