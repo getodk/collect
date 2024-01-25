@@ -45,11 +45,10 @@ import org.odk.collect.android.dynamicpreload.ExternalDataUseCases;
 import org.odk.collect.android.external.FormsContract;
 import org.odk.collect.android.external.InstancesContract;
 import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
+import org.odk.collect.android.formentry.savepoint.SavePointManager;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalizableFormDefCache;
 import org.odk.collect.android.utilities.FileUtils;
@@ -172,7 +171,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
              * Savepoints for forms that were explicitly saved will be recovered when that
              * explicitly saved instance is edited via edit-saved-form.
              */
-            instancePath = getInstancePathIfSavePointExists();
+            instancePath = SavePointManager.getInstancePathIfSavePointExists(form);
         }
 
         if (form.getFormFilePath() == null) {
@@ -572,51 +571,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             }
             ida.close();
         }
-    }
-
-    private String getInstancePathIfSavePointExists() {
-        final String filePrefix = form.getFormFilePath().substring(
-                form.getFormFilePath().lastIndexOf('/') + 1,
-                form.getFormFilePath().lastIndexOf('.'))
-                + "_";
-        final String fileSuffix = ".xml.save";
-        File cacheDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
-        File[] files = cacheDir.listFiles(pathname -> {
-            String name = pathname.getName();
-            return name.startsWith(filePrefix)
-                    && name.endsWith(fileSuffix);
-        });
-
-        if (files != null) {
-            /**
-             * See if any of these savepoints are for a filled-in form that has never
-             * been explicitly saved by the user.
-             */
-            for (File candidate : files) {
-                String instanceDirName = candidate.getName()
-                        .substring(
-                                0,
-                                candidate.getName().length()
-                                        - fileSuffix.length());
-                File instanceDir = new File(
-                        new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator
-                                + instanceDirName);
-                File instanceFile = new File(instanceDir,
-                        instanceDirName + ".xml");
-                if (instanceDir.exists()
-                        && instanceDir.isDirectory()
-                        && !instanceFile.exists()) {
-                    // yes! -- use this savepoint file
-                    return instanceFile
-                            .getAbsolutePath();
-                }
-            }
-
-        } else {
-            Timber.e(new Error("Couldn't access cache directory when looking for save points!"));
-        }
-
-        return null;
     }
 
     public FormDef getFormDef() {
