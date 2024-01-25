@@ -172,7 +172,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
              * Savepoints for forms that were explicitly saved will be recovered when that
              * explicitly saved instance is edited via edit-saved-form.
              */
-            instancePath = loadSavePoint();
+            instancePath = getInstancePathIfSavePointExists();
         }
 
         if (form.getFormFilePath() == null) {
@@ -574,7 +574,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         }
     }
 
-    private String loadSavePoint() {
+    private String getInstancePathIfSavePointExists() {
         final String filePrefix = form.getFormFilePath().substring(
                 form.getFormFilePath().lastIndexOf('/') + 1,
                 form.getFormFilePath().lastIndexOf('.'))
