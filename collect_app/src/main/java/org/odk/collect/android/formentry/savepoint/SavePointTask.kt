@@ -1,11 +1,14 @@
 package org.odk.collect.android.formentry.savepoint
 
 import org.odk.collect.android.javarosawrapper.FormController
-import org.odk.collect.android.listeners.SavePointListener
 import org.odk.collect.android.tasks.SaveFormToDisk
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerAsyncTaskMimic
 import timber.log.Timber
+
+interface SavePointListener {
+    fun onSavePointError(errorMessage: String?)
+}
 
 class SavePointTask(
     private var listener: SavePointListener?,
