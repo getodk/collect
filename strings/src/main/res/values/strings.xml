@@ -1275,4 +1275,13 @@
     <string name="empty_list_of_blank_forms_to_delete_subtitle">When you have downloaded blank forms, they will appear here</string>
     <!-- Subtext displayed when the list of filled forms to delete is empty -->
     <string name="empty_list_of_saved_forms_to_delete_subtitle">When you have saved forms, they will appear here</string>
+
+    <!--
+    ##############################################
+    # Savepoint recovery dialog
+    ##############################################
+    -->
+    <string name="recover_message">\'There is a work to recover for the previous version of this form saved on\' EEE, MMM dd, yyyy \'at\' HH:mm. \'Do you want to recover?\'</string>
+    <string name="recover">Recover</string>
+    <string name="do_not_recover">Don\'t recover</string>
 </resources>
