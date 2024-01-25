@@ -16,13 +16,14 @@
  * the License.
  */
 
-package org.odk.collect.android.tasks;
+package org.odk.collect.android.formentry.savepoint;
 
 import android.os.AsyncTask;
 
 import org.javarosa.core.services.transport.payload.ByteArrayPayload;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.listeners.SavePointListener;
+import org.odk.collect.android.tasks.SaveFormToDisk;
 
 import java.io.File;
 

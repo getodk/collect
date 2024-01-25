@@ -315,7 +315,7 @@ public class SaveFormToDisk {
     /**
      * Return the savepoint file for a given instance.
      */
-    static File getSavepointFile(String instanceName) {
+    public static File getSavepointFile(String instanceName) {
         File tempDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
         return new File(tempDir, instanceName + ".save");
     }
@@ -502,7 +502,7 @@ public class SaveFormToDisk {
     /**
      * Writes payload contents to the disk.
      */
-    static void writeFile(ByteArrayPayload payload, String path) throws IOException {
+    public static void writeFile(ByteArrayPayload payload, String path) throws IOException {
         File file = new File(path);
         if (file.exists() && !file.delete()) {
             throw new IOException("Cannot overwrite " + path + ". Perhaps the file is locked?");
