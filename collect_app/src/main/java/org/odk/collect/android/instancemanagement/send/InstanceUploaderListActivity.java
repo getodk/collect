@@ -289,7 +289,7 @@ public class InstanceUploaderListActivity extends LocalizedActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.instance_uploader_menu, menu);
 
-        getMenuInflater().inflate(R.menu.form_list_menu, menu);
+        getMenuInflater().inflate(R.menu.blank_form_list_menu, menu);
         MenuExtKt.enableIconsVisibility(menu);
 
         final MenuItem sortItem = menu.findItem(R.id.menu_sort);

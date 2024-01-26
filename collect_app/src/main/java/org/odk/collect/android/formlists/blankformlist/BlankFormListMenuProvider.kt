@@ -35,7 +35,7 @@ class BlankFormListMenuProvider(
     }
 
     override fun onCreateMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.form_list_menu, menu)
+        inflater.inflate(R.menu.blank_form_list_menu, menu)
 
         menu.findItem(R.id.menu_filter).apply {
             setOnActionExpandListener(object : MenuItem.OnActionExpandListener {

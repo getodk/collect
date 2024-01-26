@@ -220,7 +220,7 @@ class BlankFormListMenuProviderTest {
 
     private fun createdMenu(): Menu {
         val menu: SupportMenu = MenuBuilder(activity)
-        menuInflater.inflate(R.menu.form_list_menu, menu)
+        menuInflater.inflate(R.menu.blank_form_list_menu, menu)
         return menu
     }
 }

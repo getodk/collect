@@ -87,7 +87,7 @@ class DeleteSavedFormFragment(
         }
 
         menuHost?.addMenuProvider(
-            SavedFormListListMenuProvider(requireContext()),
+            SavedFormListListMenuProvider(requireContext(), savedFormListViewModel),
             viewLifecycleOwner,
             Lifecycle.State.RESUMED
         )
