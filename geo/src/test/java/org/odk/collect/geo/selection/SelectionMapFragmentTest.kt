@@ -804,7 +804,7 @@ class SelectionMapFragmentTest {
         scenario.moveToState(Lifecycle.State.DESTROYED)
     }
 
-    @Test // https://github.com/getodk/collect/issues/5540
+    @Test
     fun `opening the map with already selected item when skipSummary is true does not close the map`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
@@ -838,7 +838,7 @@ class SelectionMapFragmentTest {
         assertThat(actualResult, equalTo(null))
     }
 
-    @Test // https://github.com/getodk/collect/issues/5540
+    @Test
     fun `recreating the map with already selected item when skipSummary is true does not close the map`() {
         val items = listOf(
             Fixtures.actionMappableSelectItem().copy(id = 0, points = listOf(MapPoint(40.0, 0.0))),
