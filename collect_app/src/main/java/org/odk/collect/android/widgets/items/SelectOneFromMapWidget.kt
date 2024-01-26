@@ -26,15 +26,11 @@ import org.odk.collect.permissions.PermissionListener
 class SelectOneFromMapWidget(
     context: Context,
     questionDetails: QuestionDetails,
-    private val autoAdvance: Boolean
+    private val autoAdvance: Boolean,
+    private val autoAdvanceListener: AdvanceToNextListener
 ) : QuestionWidget(context, questionDetails), WidgetDataReceiver {
 
-    lateinit var autoAdvanceListener: AdvanceToNextListener
-
     init {
-        if (context is AdvanceToNextListener) {
-            autoAdvanceListener = context
-        }
         render()
     }
 

@@ -31,6 +31,7 @@ import org.odk.collect.android.formentry.PrinterWidgetViewModel;
 import org.odk.collect.android.formentry.questions.QuestionDetails;
 import org.odk.collect.android.geo.MapConfiguratorProvider;
 import org.odk.collect.android.javarosawrapper.FormController;
+import org.odk.collect.android.listeners.AdvanceToNextListener;
 import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.utilities.Appearances;
 import org.odk.collect.android.utilities.ExternalWebPageHelper;
@@ -89,6 +90,7 @@ public class WidgetFactory {
     private final FileRequester fileRequester;
     private final StringRequester stringRequester;
     private final FormController formController;
+    private final AdvanceToNextListener advanceToNextListener;
 
     public WidgetFactory(Activity activity,
                          boolean readOnlyOverride,
@@ -103,7 +105,9 @@ public class WidgetFactory {
                          LifecycleOwner viewLifecycle,
                          FileRequester fileRequester,
                          StringRequester stringRequester,
-                         FormController formController) {
+                         FormController formController,
+                         AdvanceToNextListener advanceToNextListener
+    ) {
         this.activity = activity;
         this.readOnlyOverride = readOnlyOverride;
         this.useExternalRecorder = useExternalRecorder;
@@ -118,6 +122,7 @@ public class WidgetFactory {
         this.fileRequester = fileRequester;
         this.stringRequester = stringRequester;
         this.formController = formController;
+        this.advanceToNextListener = advanceToNextListener;
     }
 
     public QuestionWidget createWidgetFromPrompt(FormEntryPrompt prompt, PermissionsProvider permissionsProvider) {
@@ -315,7 +320,7 @@ public class WidgetFactory {
         } else if (appearance.contains(Appearances.IMAGE_MAP)) {
             questionWidget = new SelectOneImageMapWidget(activity, questionDetails, isQuick, formEntryViewModel);
         } else if (appearance.contains(Appearances.MAP)) {
-            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, isQuick);
+            questionWidget = new SelectOneFromMapWidget(activity, questionDetails, isQuick, advanceToNextListener);
         } else {
             questionWidget = new SelectOneWidget(activity, questionDetails, isQuick, formController, formEntryViewModel);
         }
