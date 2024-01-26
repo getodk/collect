@@ -40,6 +40,7 @@ import org.odk.collect.android.application.initialization.MapsInitializer
 import org.odk.collect.android.injection.config.AppDependencyModule
 import org.odk.collect.android.projects.ProjectsDataService
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -47,6 +48,7 @@ import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.androidtest.RecordedIntentsRule
 import org.odk.collect.async.Scheduler
+import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
 import org.odk.collect.formstest.FormUtils
 import org.odk.collect.formstest.InMemFormsRepository
@@ -61,6 +63,8 @@ import org.odk.collect.shared.TempFiles
 import org.odk.collect.shared.strings.UUIDGenerator
 import org.odk.collect.testshared.FakeScheduler
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @RunWith(AndroidJUnit4::class)
 class FormUriActivityTest {
@@ -825,6 +829,149 @@ class FormUriActivityTest {
         )
     }
 
+    @Test
+    fun `starting an updated version of a form when there is a savepoint for the previous version of the form should prompt user and start the old form if they accept`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val formV1 = formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+        val savePoint = createSavePointForForm(formV1)
+        val formV2 = formsRepository.save(
+            FormUtils.buildForm("1", "2", TempFiles.createTempDir().absolutePath).build()
+        )
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
+        fakeScheduler.flush()
+
+        assertSavePointRecoveryDialog(savePoint, project.uuid, formV1.dbId, true)
+    }
+
+    @Test
+    fun `starting an updated version of a form when there is a savepoint for the previous version of the form should prompt user and start the new form if they reject`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val formV1 = formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+        val savePoint = createSavePointForForm(formV1)
+        val formV2 = formsRepository.save(
+            FormUtils.buildForm("1", "2", TempFiles.createTempDir().absolutePath).build()
+        )
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
+        fakeScheduler.flush()
+
+        assertSavePointRecoveryDialog(savePoint, project.uuid, formV2.dbId, false)
+    }
+
+    @Test
+    fun `starting an updated version of a form when there is a savepoint for the previous version of the form should remove the savepoint if the user rejects`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val formV1 = formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+        val savePoint = createSavePointForForm(formV1)
+        val formV2 = formsRepository.save(
+            FormUtils.buildForm("1", "2", TempFiles.createTempDir().absolutePath).build()
+        )
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
+        fakeScheduler.flush()
+        assertSavePointRecoveryDialog(savePoint, project.uuid, formV2.dbId, false)
+
+        assertThat(savePoint.exists(), equalTo(false))
+    }
+
+    @Test
+    fun `starting an updated version of a form when there is a savepoint for both the new and the previous version of the form should not prompt user to recover but start the newer form`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val formV1 = formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+        createSavePointForForm(formV1)
+        val formV2 = formsRepository.save(
+            FormUtils.buildForm("1", "2", TempFiles.createTempDir().absolutePath).build()
+        )
+        createSavePointForForm(formV2)
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV2.dbId))
+        fakeScheduler.flush()
+
+        assertStartBlankFormIntent(project.uuid, formV2.dbId)
+    }
+
+    @Test
+    fun `starting an old version of a form when there is a savepoint for both the new and the previous version of the form should not prompt user to recover but start the old form`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val formV1 = formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+        createSavePointForForm(formV1)
+        val formV2 = formsRepository.save(
+            FormUtils.buildForm("1", "2", TempFiles.createTempDir().absolutePath).build()
+        )
+        createSavePointForForm(formV2)
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV1.dbId))
+        fakeScheduler.flush()
+
+        assertStartBlankFormIntent(project.uuid, formV1.dbId)
+    }
+
+    @Test
+    fun `starting an updated version of a form when there is a savepoint for more than one of the older versions of the form should prompt user and successfully recover the newest from the old form versions if they accept`() {
+        val project = Project.Saved("123", "First project", "A", "#cccccc")
+        projectsRepository.save(project)
+        whenever(projectsDataService.getCurrentProject()).thenReturn(project)
+
+        val formV1 = formsRepository.save(
+            FormUtils.buildForm("1", "1", TempFiles.createTempDir().absolutePath).build()
+        )
+        createSavePointForForm(formV1)
+        val formV2 = formsRepository.save(
+            FormUtils.buildForm("1", "2", TempFiles.createTempDir().absolutePath).build()
+        )
+        val savePoint = createSavePointForForm(formV2)
+        val formV3 = formsRepository.save(
+            FormUtils.buildForm("1", "3", TempFiles.createTempDir().absolutePath).build()
+        )
+
+        launcherRule.launch<FormUriActivity>(getBlankFormIntent(project.uuid, formV3.dbId))
+        fakeScheduler.flush()
+
+        assertSavePointRecoveryDialog(savePoint, project.uuid, formV2.dbId, true)
+    }
+
+    private fun createSavePointForForm(form: Form): File {
+        val filePrefix = form.formFilePath.substringAfterLast('/').substringBeforeLast('.') + "_"
+        val fileSuffix = ".xml.save"
+
+        val cacheDir = File(StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE))
+
+        File(
+            StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES),
+            filePrefix
+        ).mkdir()
+
+        return File(cacheDir, "$filePrefix$fileSuffix").also {
+            it.writeText("blah")
+        }
+    }
+
     private fun getBlankFormIntent(projectId: String?, dbId: Long) =
         Intent(context, FormUriActivity::class.java).apply {
             data = if (projectId == null) {
@@ -879,6 +1026,20 @@ class FormUriActivityTest {
         scenario.onActivity {
             assertThat(scenario.result.resultCode, `is`(Activity.RESULT_CANCELED))
         }
+    }
+
+    private fun assertSavePointRecoveryDialog(savePoint: File, projectId: String, formDbID: Long, recover: Boolean) {
+        onView(withText(SimpleDateFormat(context.getString(org.odk.collect.strings.R.string.recover_message), Locale.getDefault()).format(savePoint.lastModified()))).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(org.odk.collect.strings.R.string.recover)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(org.odk.collect.strings.R.string.do_not_recover)).inRoot(isDialog()).check(matches(isDisplayed()))
+
+        if (recover) {
+            onView(withText(org.odk.collect.strings.R.string.recover)).perform(click())
+        } else {
+            onView(withText(org.odk.collect.strings.R.string.do_not_recover)).perform(click())
+        }
+
+        assertStartBlankFormIntent(projectId, formDbID)
     }
 
     private fun assertStartBlankFormIntent(projectId: String?, dbId: Long) {
