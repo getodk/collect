@@ -1,7 +1,5 @@
 package org.odk.collect.android.support.pages
 
-import org.odk.collect.android.R
-
 class SaveOrIgnoreDrawingDialog<D : Page<D>>(
     private val drawingName: String,
     private val destination: D
@@ -14,12 +12,10 @@ class SaveOrIgnoreDrawingDialog<D : Page<D>>(
     }
 
     fun clickSaveChanges(): D {
-        clickOnString(org.odk.collect.strings.R.string.keep_changes)
-        return destination.assertOnPage()
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.keep_changes, destination)
     }
 
     fun clickDiscardChanges(): D {
-        clickOnString(org.odk.collect.strings.R.string.discard_changes)
-        return destination.assertOnPage()
+        return clickOnButtonInDialog(org.odk.collect.strings.R.string.discard_changes, destination)
     }
 }
