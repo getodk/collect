@@ -1281,7 +1281,8 @@
     # Savepoint recovery dialog
     ##############################################
     -->
-    <string name="recover_message">\'There is a work to recover for the previous version of this form saved on\' EEE, MMM dd, yyyy \'at\' HH:mm. \'Do you want to recover?\'</string>
+    <string name="savepoint_recovery_dialog_title">Recover your work?</string>
+    <string name="savepoint_recovery_dialog_message">\'Collect closed unexpectedly on \'EEE, MMM dd, yyyy \'at\' HH:mm\' and saved your work.\n\nWould you like to recover or discard it?\'</string>
     <string name="recover">Recover</string>
-    <string name="do_not_recover">Don\'t recover</string>
+    <string name="do_not_recover">Discard</string>
 </resources>

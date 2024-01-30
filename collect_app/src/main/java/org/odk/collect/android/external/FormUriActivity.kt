@@ -165,7 +165,8 @@ class FormUriActivity : ComponentActivity() {
 
     private fun displaySavePointRecoveryDialog(savePoint: SavePoint) {
         MaterialAlertDialogBuilder(this)
-            .setMessage(SimpleDateFormat(getString(string.recover_message), Locale.getDefault()).format(savePoint.file.lastModified()))
+            .setTitle(string.savepoint_recovery_dialog_title)
+            .setMessage(SimpleDateFormat(getString(string.savepoint_recovery_dialog_message), Locale.getDefault()).format(savePoint.file.lastModified()))
             .setPositiveButton(string.recover) { _, _ ->
                 intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, savePoint.form.dbId)
                 startForm()

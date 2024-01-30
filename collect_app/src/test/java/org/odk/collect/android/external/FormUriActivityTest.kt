@@ -1029,7 +1029,8 @@ class FormUriActivityTest {
     }
 
     private fun assertSavePointRecoveryDialog(savePoint: File, projectId: String, formDbID: Long, recover: Boolean) {
-        onView(withText(SimpleDateFormat(context.getString(org.odk.collect.strings.R.string.recover_message), Locale.getDefault()).format(savePoint.lastModified()))).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(org.odk.collect.strings.R.string.savepoint_recovery_dialog_title)).inRoot(isDialog()).check(matches(isDisplayed()))
+        onView(withText(SimpleDateFormat(context.getString(org.odk.collect.strings.R.string.savepoint_recovery_dialog_message), Locale.getDefault()).format(savePoint.lastModified()))).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withText(org.odk.collect.strings.R.string.recover)).inRoot(isDialog()).check(matches(isDisplayed()))
         onView(withText(org.odk.collect.strings.R.string.do_not_recover)).inRoot(isDialog()).check(matches(isDisplayed()))
 
