@@ -395,9 +395,9 @@ public class JavaRosaFormController implements FormController {
         }
     }
 
-    public ValidationResult validateAnswers(boolean markCompleted, boolean moveToInvalidIndex) throws JavaRosaException {
+    public ValidationResult validateAnswers(boolean moveToInvalidIndex) throws JavaRosaException {
         try {
-            ValidateOutcome validateOutcome = getFormDef().validate(markCompleted);
+            ValidateOutcome validateOutcome = getFormDef().validate();
             if (validateOutcome != null) {
                 if (moveToInvalidIndex) {
                     this.jumpToIndex(validateOutcome.failedPrompt);

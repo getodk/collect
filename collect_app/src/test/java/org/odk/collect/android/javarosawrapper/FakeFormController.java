@@ -113,7 +113,7 @@ public class FakeFormController extends StubFormController {
 
     @NonNull
     @Override
-    public ValidationResult validateAnswers(boolean markCompleted, boolean moveToInvalidIndex) throws JavaRosaException {
+    public ValidationResult validateAnswers(boolean moveToInvalidIndex) throws JavaRosaException {
         if (validationError != null) {
             throw validationError;
         } else {
