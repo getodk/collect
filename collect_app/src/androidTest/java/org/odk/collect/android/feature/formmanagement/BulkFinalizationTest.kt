@@ -113,7 +113,7 @@ class BulkFinalizationTest {
 
             .clickDrafts()
             .clickOnForm("One Question")
-            .killAndReopenApp(MainMenuPage())
+            .killAndReopenApp(rule, MainMenuPage())
 
             .clickDrafts(false)
             .clickFinalizeAll(1)

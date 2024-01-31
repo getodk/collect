@@ -1,5 +1,6 @@
 package org.odk.collect.android.support.pages
 
+import android.app.Activity
 import android.app.Application
 import android.content.pm.ActivityInfo
 import android.view.View
@@ -47,12 +48,14 @@ import org.odk.collect.android.BuildConfig
 import org.odk.collect.android.R
 import org.odk.collect.android.application.Collect
 import org.odk.collect.android.storage.StoragePathProvider
+import org.odk.collect.android.support.ActivityHelpers.getLaunchIntent
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.WaitFor.wait250ms
 import org.odk.collect.android.support.WaitFor.waitFor
 import org.odk.collect.android.support.actions.RotateAction
 import org.odk.collect.android.support.matchers.CustomMatchers.withIndex
 import org.odk.collect.androidshared.ui.ToastUtils.popRecordedToasts
+import org.odk.collect.androidtest.ActivityScenarioLauncherRule
 import org.odk.collect.strings.localization.getLocalizedQuantityString
 import org.odk.collect.strings.localization.getLocalizedString
 import org.odk.collect.testshared.EspressoHelpers
@@ -492,7 +495,7 @@ abstract class Page<T : Page<T>> {
         return destination!!.assertOnPage()
     }
 
-    fun <D : Page<D>?> killAndReopenApp(destination: D): D {
+    fun <D : Page<D>> killAndReopenApp(rule: ActivityScenarioLauncherRule, destination: D): D {
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         // kill
@@ -504,11 +507,8 @@ abstract class Page<T : Page<T>> {
             }
 
         // reopen
-        InstrumentationRegistry.getInstrumentation().targetContext.apply {
-            val intent = packageManager.getLaunchIntentForPackage(BuildConfig.APPLICATION_ID)!!
-            startActivity(intent)
-        }
-        return destination!!.assertOnPage()
+        rule.launch<Activity>(getLaunchIntent())
+        return destination.assertOnPage()
     }
 
     fun assertNoOptionsMenu(): T {
