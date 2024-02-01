@@ -7,13 +7,16 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.core.AllOf.allOf;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import org.hamcrest.Matcher;
+import org.odk.collect.android.BuildConfig;
 
 public final class ActivityHelpers {
 
@@ -47,5 +50,15 @@ public final class ActivityHelpers {
 
         onView(allOf(withId(android.R.id.content), isDisplayed())).perform(getActivityViewAction);
         return currentActivity[0];
+    }
+
+    public static Intent getLaunchIntent() {
+        Intent launchIntentForPackage = InstrumentationRegistry.getInstrumentation()
+                .getTargetContext()
+                .getPackageManager()
+                .getLaunchIntentForPackage(BuildConfig.APPLICATION_ID);
+
+        launchIntentForPackage.addCategory(Intent.CATEGORY_LAUNCHER);
+        return launchIntentForPackage;
     }
 }
