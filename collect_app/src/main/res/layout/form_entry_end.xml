@@ -82,6 +82,8 @@ the specific language governing permissions and limitations under the License.
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
+            android:divider="@drawable/margin_standard_list_divider"
+            android:showDividers="middle"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,32 +95,20 @@ the specific language governing permissions and limitations under the License.
                 style="?materialButtonOutlinedIconStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/margin_extra_small"
                 android:layout_weight="1"
                 android:text="@string/save_as_draft"
                 app:icon="@drawable/ic_save_menu_24"
-                app:iconGravity="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/finalize"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_goneMarginEnd="0dp" />
+                app:iconGravity="textStart" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/finalize"
                 style="?materialButtonIconStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/margin_extra_small"
                 android:layout_weight="1"
                 android:text="@string/finalize"
                 app:icon="@drawable/ic_send_24"
-                app:iconGravity="textStart"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/save_as_draft"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_goneMarginStart="0dp" />
+                app:iconGravity="textStart" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
