@@ -25,6 +25,7 @@ import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.MediaUtils
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.async.Scheduler
 import org.odk.collect.audiorecorder.recording.AudioRecorder
 import org.odk.collect.location.LocationClient
@@ -52,6 +53,7 @@ class FormEntryViewModelFactory(
     private val autoSendSettingsProvider: AutoSendSettingsProvider,
     private val formsRepositoryProvider: FormsRepositoryProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
+    private val savepointsRepositoryProvider: SavepointsRepositoryProvider,
     private val qrCodeCreator: QRCodeCreator,
     private val htmlPrinter: HtmlPrinter
 ) : AbstractSavedStateViewModelFactory(owner, null) {
@@ -83,7 +85,8 @@ class FormEntryViewModelFactory(
                     projectsDataService,
                     formSessionRepository.get(sessionId),
                     entitiesRepositoryProvider.get(projectId),
-                    instancesRepositoryProvider.get(projectId)
+                    instancesRepositoryProvider.get(projectId),
+                    savepointsRepositoryProvider.get(projectId)
                 )
             }
 
