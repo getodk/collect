@@ -1273,4 +1273,14 @@
     <string name="empty_list_of_blank_forms_to_delete_subtitle">When you have downloaded blank forms, they will appear here</string>
     <!-- Subtext displayed when the list of filled forms to delete is empty -->
     <string name="empty_list_of_saved_forms_to_delete_subtitle">When you have saved forms, they will appear here</string>
+
+    <!--
+    ##############################################
+    # Savepoint recovery dialog
+    ##############################################
+    -->
+    <string name="savepoint_recovery_dialog_title">Recover your work?</string>
+    <string name="savepoint_recovery_dialog_message">\'Collect closed unexpectedly on \'EEE, MMM dd, yyyy \'at\' HH:mm\' and saved your work.\n\nWould you like to recover or discard it?\'</string>
+    <string name="recover">Recover</string>
+    <string name="do_not_recover">Discard</string>
 </resources>

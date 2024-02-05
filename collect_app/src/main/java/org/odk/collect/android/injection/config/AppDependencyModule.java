@@ -93,6 +93,7 @@ import org.odk.collect.android.utilities.ImageCompressionController;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
 import org.odk.collect.android.utilities.ProjectResetter;
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.utilities.WebCredentialsUtils;
 import org.odk.collect.android.version.VersionInformation;
@@ -471,6 +472,11 @@ public class AppDependencyModule {
     @Provides
     public InstancesRepositoryProvider providesInstancesRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
         return new InstancesRepositoryProvider(context, storagePathProvider);
+    }
+
+    @Provides
+    public SavepointsRepositoryProvider providesSavepointsRepositoryProvider(Context context, StoragePathProvider storagePathProvider) {
+        return new SavepointsRepositoryProvider(context, storagePathProvider);
     }
 
     @Provides
