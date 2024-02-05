@@ -48,8 +48,6 @@ import org.odk.collect.android.fastexternalitemset.ItemsetDbAdapter;
 import org.odk.collect.android.javarosawrapper.FormController;
 import org.odk.collect.android.javarosawrapper.JavaRosaFormController;
 import org.odk.collect.android.listeners.FormLoaderListener;
-import org.odk.collect.android.storage.StoragePathProvider;
-import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ExternalizableFormDefCache;
 import org.odk.collect.android.utilities.FileUtils;
@@ -60,6 +58,8 @@ import org.odk.collect.async.Scheduler;
 import org.odk.collect.async.SchedulerAsyncTaskMimic;
 import org.odk.collect.forms.Form;
 import org.odk.collect.forms.instances.Instance;
+import org.odk.collect.forms.savepoints.Savepoint;
+import org.odk.collect.forms.savepoints.SavepointsRepository;
 import org.odk.collect.shared.strings.Md5;
 
 import java.io.File;
@@ -97,6 +97,8 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
     private FormDef formDef;
     private Form form;
     private Instance instance;
+    private Savepoint savepoint;
+    private final SavepointsRepository savepointsRepository;
 
     @Override
     protected void onPreExecute() {
@@ -139,13 +141,14 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
 
     FECWrapper data;
 
-    public FormLoaderTask(Uri uri, String uriMimeType, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler) {
+    public FormLoaderTask(Uri uri, String uriMimeType, String xpath, String waitingXPath, FormEntryControllerFactory formEntryControllerFactory, Scheduler scheduler, SavepointsRepository savepointsRepository) {
         super(scheduler);
         this.uri = uri;
         this.uriMimeType = uriMimeType;
         this.xpath = xpath;
         this.waitingXPath = waitingXPath;
         this.formEntryControllerFactory = formEntryControllerFactory;
+        this.savepointsRepository = savepointsRepository;
     }
 
     /**
@@ -163,6 +166,7 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             List<Form> candidateForms = new FormsRepositoryProvider(Collect.getInstance()).get().getAllByFormIdAndVersion(instance.getFormId(), instance.getFormVersion());
 
             form = candidateForms.get(0);
+            savepoint = savepointsRepository.get(form.getDbId(), instance.getDbId());
         } else if (uriMimeType != null && uriMimeType.equals(FormsContract.CONTENT_ITEM_TYPE)) {
             form = new FormsRepositoryProvider(Collect.getInstance()).get().get(ContentUriHelper.getIdFromUri(uri));
             if (form == null) {
@@ -171,13 +175,8 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
                 return null;
             }
 
-            /**
-             * This is the fill-blank-form code path.See if there is a savepoint for this form
-             * that has never been explicitly saved by the user. If there is, open this savepoint(resume this filled-in form).
-             * Savepoints for forms that were explicitly saved will be recovered when that
-             * explicitly saved instance is edited via edit-saved-form.
-             */
-            instancePath = loadSavePoint();
+            savepoint = savepointsRepository.get(form.getDbId(), null);
+            instancePath = savepoint != null ? savepoint.getInstanceFilePath() : null;
         }
 
         if (form.getFormFilePath() == null) {
@@ -373,14 +372,16 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
         if (instancePath != null) {
             File instanceXml = new File(instancePath);
 
-            // Use the savepoint file only if it's newer than the last manual save
-            final File savepointFile = SaveFormToDisk.getSavepointFile(instanceXml.getName());
-            if (savepointFile.exists()
-                    && savepointFile.lastModified() > instanceXml.lastModified()) {
-                usedSavepoint = true;
-                instanceXml = savepointFile;
-                Timber.w("Loading instance from savepoint file: %s",
-                        savepointFile.getAbsolutePath());
+            if (savepoint != null) {
+                // Use the savepoint file only if it's newer than the last manual save
+                final File savepointFile = new File(savepoint.getSavepointFilePath());
+                if (savepointFile.exists()
+                        && savepointFile.lastModified() > instanceXml.lastModified()) {
+                    usedSavepoint = true;
+                    instanceXml = savepointFile;
+                    Timber.w("Loading instance from savepoint file: %s",
+                            savepointFile.getAbsolutePath());
+                }
             }
 
             if (instanceXml.exists()) {
@@ -577,51 +578,6 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             }
             ida.close();
         }
-    }
-
-    private String loadSavePoint() {
-        final String filePrefix = form.getFormFilePath().substring(
-                form.getFormFilePath().lastIndexOf('/') + 1,
-                form.getFormFilePath().lastIndexOf('.'))
-                + "_";
-        final String fileSuffix = ".xml.save";
-        File cacheDir = new File(new StoragePathProvider().getOdkDirPath(StorageSubdirectory.CACHE));
-        File[] files = cacheDir.listFiles(pathname -> {
-            String name = pathname.getName();
-            return name.startsWith(filePrefix)
-                    && name.endsWith(fileSuffix);
-        });
-
-        if (files != null) {
-            /**
-             * See if any of these savepoints are for a filled-in form that has never
-             * been explicitly saved by the user.
-             */
-            for (File candidate : files) {
-                String instanceDirName = candidate.getName()
-                        .substring(
-                                0,
-                                candidate.getName().length()
-                                        - fileSuffix.length());
-                File instanceDir = new File(
-                        new StoragePathProvider().getOdkDirPath(StorageSubdirectory.INSTANCES) + File.separator
-                                + instanceDirName);
-                File instanceFile = new File(instanceDir,
-                        instanceDirName + ".xml");
-                if (instanceDir.exists()
-                        && instanceDir.isDirectory()
-                        && !instanceFile.exists()) {
-                    // yes! -- use this savepoint file
-                    return instanceFile
-                            .getAbsolutePath();
-                }
-            }
-
-        } else {
-            Timber.e(new Error("Couldn't access cache directory when looking for save points!"));
-        }
-
-        return null;
     }
 
     public FormDef getFormDef() {

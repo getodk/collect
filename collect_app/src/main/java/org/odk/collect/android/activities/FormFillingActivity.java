@@ -362,6 +362,10 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
 
     @Inject
     public InstancesRepositoryProvider instancesRepositoryProvider;
+
+    @Inject
+    public SavepointsRepositoryProvider savepointsRepositoryProvider;
+
     private final LocationProvidersReceiver locationProvidersReceiver = new LocationProvidersReceiver();
 
     private SwipeHandler swipeHandler;
@@ -716,7 +720,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             uriMimeType = getContentResolver().getType(uri);
         }
 
-        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler);
+        formLoaderTask = new FormLoaderTask(uri, uriMimeType, startingXPath, waitingXPath, formEntryControllerFactory, scheduler, savepointsRepositoryProvider.get());
         formLoaderTask.setFormLoaderListener(this);
         showIfNotShowing(FormLoadingDialogFragment.class, getSupportFragmentManager());
         formLoaderTask.execute();
@@ -749,7 +753,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
                     formDbId,
                     instanceDbId,
                     storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE),
-                    new SavepointsRepositoryProvider(this, storagePathProvider).get(),
+                    savepointsRepositoryProvider.get(),
                     scheduler
             );
             savePointTask.execute();
