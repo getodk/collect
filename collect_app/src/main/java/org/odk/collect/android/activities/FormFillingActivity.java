@@ -735,7 +735,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      */
     private void nonblockingCreateSavePointData() {
         try {
-            SavePointTask savePointTask = new SavePointTask(this, getFormController());
+            SavePointTask savePointTask = new SavePointTask(this, getFormController(), scheduler);
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
