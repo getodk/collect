@@ -4,11 +4,18 @@ import org.odk.collect.android.javarosawrapper.FormController
 import org.odk.collect.android.listeners.SavePointListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerAsyncTaskMimic
+import org.odk.collect.forms.savepoints.Savepoint
+import org.odk.collect.forms.savepoints.SavepointsRepository
 import timber.log.Timber
+import java.io.File
 
 class SavePointTask(
     private var listener: SavePointListener?,
     private val formController: FormController,
+    private val formDbId: Long,
+    private val instanceDbId: Long?,
+    private val cacheDir: String,
+    private val savepointsRepository: SavepointsRepository,
     val scheduler: Scheduler
 ) : SchedulerAsyncTaskMimic<Unit, Unit, String?>(scheduler) {
     private var priority: Int = ++lastPriorityUsed
@@ -21,11 +28,12 @@ class SavePointTask(
         }
 
         return try {
-            val temp = SaveFormToDisk.getSavepointFile(formController.getInstanceFile()!!.name)
-            val payload = formController.getFilledInFormXml()
+            val savepointFile = File(cacheDir, "${formController.getInstanceFile()!!.name}.save")
+            val savepoint = Savepoint(formDbId, instanceDbId, savepointFile.absolutePath, formController.getInstanceFile()!!.absolutePath)
 
             if (priority == lastPriorityUsed) {
-                SaveFormToDisk.writeFile(payload, temp.absolutePath)
+                SaveFormToDisk.writeFile(formController.getFilledInFormXml(), savepointFile.absolutePath)
+                savepointsRepository.save(savepoint)
             }
 
             null

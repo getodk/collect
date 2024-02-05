@@ -149,6 +149,7 @@ import org.odk.collect.android.logic.ImmutableDisplayableQuestion;
 import org.odk.collect.android.mainmenu.MainMenuActivity;
 import org.odk.collect.android.projects.ProjectsDataService;
 import org.odk.collect.android.storage.StoragePathProvider;
+import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
 import org.odk.collect.android.tasks.SavePointTask;
@@ -159,6 +160,7 @@ import org.odk.collect.android.utilities.ExternalAppIntentProvider;
 import org.odk.collect.android.utilities.FormsRepositoryProvider;
 import org.odk.collect.android.utilities.InstancesRepositoryProvider;
 import org.odk.collect.android.utilities.MediaUtils;
+import org.odk.collect.android.utilities.SavepointsRepositoryProvider;
 import org.odk.collect.android.utilities.ScreenContext;
 import org.odk.collect.android.utilities.SoftKeyboardController;
 import org.odk.collect.android.widgets.DateTimeWidget;
@@ -735,7 +737,21 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
      */
     private void nonblockingCreateSavePointData() {
         try {
-            SavePointTask savePointTask = new SavePointTask(this, getFormController(), scheduler);
+            Long formDbId = formSessionRepository.get(sessionId).getValue().getForm().getDbId();
+            Long instanceDbId = null;
+            Instance instance = formSessionRepository.get(sessionId).getValue().getInstance();
+            if (instance != null) {
+                instanceDbId = instance.getDbId();
+            }
+            SavePointTask savePointTask = new SavePointTask(
+                    this,
+                    getFormController(),
+                    formDbId,
+                    instanceDbId,
+                    storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE),
+                    new SavepointsRepositoryProvider(this, storagePathProvider).get(),
+                    scheduler
+            );
             savePointTask.execute();
 
             if (!allowMovingBackwards) {
