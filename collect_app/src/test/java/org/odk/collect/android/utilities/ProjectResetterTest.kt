@@ -22,6 +22,7 @@ import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.forms.Form
 import org.odk.collect.forms.instances.Instance
+import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.metadata.InstallIDProvider
 import org.odk.collect.metadata.PropertyManager
 import org.odk.collect.projects.Project
@@ -38,6 +39,7 @@ class ProjectResetterTest {
     private lateinit var settingsProvider: SettingsProvider
     private lateinit var formsRepositoryProvider: FormsRepositoryProvider
     private lateinit var instancesRepositoryProvider: InstancesRepositoryProvider
+    private lateinit var savepointsRepositoryProvider: SavepointsRepositoryProvider
     private lateinit var currentProjectId: String
     private lateinit var anotherProjectId: String
 
@@ -63,6 +65,7 @@ class ProjectResetterTest {
         settingsProvider = component.settingsProvider()
         formsRepositoryProvider = component.formsRepositoryProvider()
         instancesRepositoryProvider = component.instancesRepositoryProvider()
+        savepointsRepositoryProvider = component.savepointsRepositoryProvider()
     }
 
     @Test
@@ -225,20 +228,24 @@ class ProjectResetterTest {
     }
 
     @Test
-    fun `Reset cache clears cache for project`() {
+    fun `Reset cache clears cache and savepoints db for current project`() {
+        setupTestSavepointsDatabase(currentProjectId)
         saveTestCacheFiles(currentProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_CACHE))
 
+        assertEquals(0, savepointsRepositoryProvider.get(currentProjectId).getAll().size)
         assertFolderEmpty(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, currentProjectId))
     }
 
     @Test
-    fun `Reset cache does not clear cache for another projects`() {
+    fun `Reset cache does not clear cache and savepoints db for another projects`() {
+        setupTestSavepointsDatabase(anotherProjectId)
         saveTestCacheFiles(anotherProjectId)
 
         resetAppState(listOf(ProjectResetter.ResetAction.RESET_CACHE))
 
+        assertEquals(1, savepointsRepositoryProvider.get(anotherProjectId).getAll().size)
         assertTestCacheFiles(anotherProjectId)
     }
 
@@ -288,6 +295,13 @@ class ProjectResetterTest {
                 .build()
         )
         assertEquals(1, instancesRepositoryProvider.get(uuid).all.size)
+    }
+
+    private fun setupTestSavepointsDatabase(uuid: String) {
+        SavepointsRepositoryProvider(ApplicationProvider.getApplicationContext(), storagePathProvider).get(uuid).save(
+            Savepoint(1, 1, "blah", "blah")
+        )
+        assertEquals(1, savepointsRepositoryProvider.get(uuid).getAll().size)
     }
 
     private fun createTestItemsetsDatabaseFile(uuid: String) {

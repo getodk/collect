@@ -27,7 +27,8 @@ class ProjectResetter(
     private val propertyManager: PropertyManager,
     private val settingsProvider: SettingsProvider,
     private val instancesRepositoryProvider: InstancesRepositoryProvider,
-    private val formsRepositoryProvider: FormsRepositoryProvider
+    private val formsRepositoryProvider: FormsRepositoryProvider,
+    private val savepointsRepositoryProvider: SavepointsRepositoryProvider
 ) {
 
     private var failedResetActions = mutableListOf<Int>()
@@ -85,6 +86,7 @@ class ProjectResetter(
     }
 
     private fun resetCache() {
+        savepointsRepositoryProvider.get().deleteAll()
         if (!deleteFolderContent(storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE))) {
             failedResetActions.add(ResetAction.RESET_CACHE)
         }
