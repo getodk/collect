@@ -28,8 +28,6 @@ import org.odk.collect.android.utilities.FormsRepositoryProvider
 import org.odk.collect.android.utilities.InstancesRepositoryProvider
 import org.odk.collect.android.utilities.SavepointsRepositoryProvider
 import org.odk.collect.async.Scheduler
-import org.odk.collect.forms.Form
-import org.odk.collect.forms.instances.Instance
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.projects.ProjectsRepository
 import org.odk.collect.settings.SettingsProvider
@@ -120,16 +118,25 @@ class FormUriActivity : ComponentActivity() {
         val uri = intent.data!!
         val uriMimeType = contentResolver.getType(uri)
 
-        lateinit var form: Form
-        var instance: Instance? = null
-        if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-            form = formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))!!
-        } else {
-            instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))!!
-            form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(instance.formId, instance.formVersion)!!
-        }
+        return if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+            val selectedForm = formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))!!
 
-        return savepointsRepositoryProvider.get().get(form.dbId, instance?.dbId)
+            formsRepositoryProvider.get().getAllByFormId(selectedForm.formId)
+                .sortedByDescending { it.date }
+                .forEach { form ->
+                    val savepoint = savepointsRepositoryProvider.get().get(form.dbId, null)
+                    if (savepoint != null) {
+                        intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, savepoint.formDbId)
+                        return savepoint
+                    }
+                }
+            null
+        } else {
+            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))!!
+            val form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(instance.formId, instance.formVersion)!!
+
+            savepointsRepositoryProvider.get().get(form.dbId, instance.dbId)
+        }
     }
 
     private fun displaySavePointRecoveryDialog(savepoint: Savepoint) {
