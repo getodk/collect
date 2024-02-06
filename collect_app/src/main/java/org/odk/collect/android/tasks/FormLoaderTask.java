@@ -373,15 +373,10 @@ public class FormLoaderTask extends SchedulerAsyncTaskMimic<Void, String, FormLo
             File instanceXml = new File(instancePath);
 
             if (savepoint != null) {
-                // Use the savepoint file only if it's newer than the last manual save
                 final File savepointFile = new File(savepoint.getSavepointFilePath());
-                if (savepointFile.exists()
-                        && savepointFile.lastModified() > instanceXml.lastModified()) {
-                    usedSavepoint = true;
-                    instanceXml = savepointFile;
-                    Timber.w("Loading instance from savepoint file: %s",
-                            savepointFile.getAbsolutePath());
-                }
+                usedSavepoint = true;
+                instanceXml = savepointFile;
+                Timber.w("Loading instance from savepoint file: %s", savepointFile.getAbsolutePath());
             }
 
             if (instanceXml.exists()) {

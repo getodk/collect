@@ -125,7 +125,7 @@ class FormUriActivity : ComponentActivity() {
                 .sortedByDescending { it.date }
                 .forEach { form ->
                     val savepoint = savepointsRepositoryProvider.get().get(form.dbId, null)
-                    if (savepoint != null) {
+                    if (savepoint != null && File(savepoint.savepointFilePath).exists()) {
                         intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, savepoint.formDbId)
                         return savepoint
                     }
@@ -135,7 +135,15 @@ class FormUriActivity : ComponentActivity() {
             val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))!!
             val form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(instance.formId, instance.formVersion)!!
 
-            savepointsRepositoryProvider.get().get(form.dbId, instance.dbId)
+            val savepoint = savepointsRepositoryProvider.get().get(form.dbId, instance.dbId)
+            if (savepoint != null &&
+                File(savepoint.savepointFilePath).exists() &&
+                File(savepoint.savepointFilePath).lastModified() > File(instance.instanceFilePath).lastModified()
+            ) {
+                savepoint
+            } else {
+                null
+            }
         }
     }
 
