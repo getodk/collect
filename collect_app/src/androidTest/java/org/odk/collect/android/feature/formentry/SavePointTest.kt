@@ -7,10 +7,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
+import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
-import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -34,7 +34,8 @@ class SavePointTest {
             .let { simulateBatteryDeath() }
 
         // Start blank form and check save point is loaded
-        rule.fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
+        rule.fillNewFormWithSavepoint("two-question-audit.xml")
+            .clickRecover("Two Question")
             .assertText("Alexei")
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
@@ -78,7 +79,8 @@ class SavePointTest {
             .let { simulateBatteryDeath() }
 
         // Edit instance and check save point is loaded
-        rule.editForm("two-question-audit.xml", "Two Question")
+        rule.editFormWithSavepoint("two-question-audit.xml")
+            .clickRecover("Two Question")
             .assertText("Alexei")
             .assertText("52")
             .assertTextDoesNotExist("46")
@@ -113,7 +115,8 @@ class SavePointTest {
             .let { simulateProcessDeath() }
 
         // Start blank form and check save point is loaded
-        rule.fillNewForm("two-question-audit.xml", FormHierarchyPage("Two Question"))
+        rule.fillNewFormWithSavepoint("two-question-audit.xml")
+            .clickRecover("Two Question")
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
@@ -153,7 +156,8 @@ class SavePointTest {
             .let { simulateProcessDeath() }
 
         // Edit instance and check save point is loaded
-        rule.editForm("two-question-audit.xml", "Two Question")
+        rule.editFormWithSavepoint("two-question-audit.xml")
+            .clickRecover("Two Question")
             .assertText("Alexei")
             .assertText("52")
             .pressBack(FormEntryPage("Two Question"))
@@ -232,9 +236,7 @@ class SavePointTest {
     /**
      * Simulate a "process death" case where an app in the background is killed
      */
-    private fun simulateProcessDeath(): FormEntryActivityTestRule {
-        return rule.navigateAwayFromActivity()
-            .destroyActivity()
-            .simulateProcessRestart()
+    private fun simulateProcessDeath() {
+        CollectHelpers.killApp()
     }
 }
