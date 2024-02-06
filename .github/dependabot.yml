@@ -1,0 +1,740 @@
+updates:
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/analytics"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/androidshared" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/androidtest"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/async" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/audioclips"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/audiorecorder" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/buildSrc"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/collect_app" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/crash-handler" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/draw"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/entities" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/errors"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/external-app" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/forms"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/formstest" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/fragmentstest" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/geo" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/google-maps"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/icons" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/image-loader"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/location" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/mapbox"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/maps" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/material"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/metadata" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/nbistubs" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/osmdroid"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/permissions" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/printer"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/projects" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/qr-code"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/selfie-camera" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/servicetest" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+  
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/settings"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/shadows" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/shared" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/strings" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+  
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/test-forms"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/test-shared" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "gradle"
+    commit-message:
+      prefix: "Gradle"
+    directory: "/upgrade" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/analytics"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/androidshared" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/androidtest"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/async" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/audioclips"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/audiorecorder" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/buildSrc"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/collect_app" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/crash-handler" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/draw"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/entities" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/errors"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/external-app" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/forms"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/formstest" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/fragmentstest" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/geo" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/google-maps"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/icons" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/image-loader"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/location" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/mapbox"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/maps" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/material"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/metadata" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/nbistubs" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/osmdroid"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/permissions" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/printer"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/projects" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/qr-code"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/selfie-camera" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/servicetest" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+  
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/settings"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/shadows" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/shared" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/strings" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+  
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/test-forms"
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/test-shared" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+  - package-ecosystem: "maven"
+    commit-message:
+      prefix: "Maven"
+    directory: "/upgrade" 
+    schedule:
+      day: "saturday"
+      interval: "weekly"
+      time: "03:00"
+
+version: 2
