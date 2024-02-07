@@ -1,7 +1,6 @@
 package org.odk.collect.android.tasks
 
 import org.odk.collect.android.javarosawrapper.FormController
-import org.odk.collect.android.listeners.SavePointListener
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerAsyncTaskMimic
 import org.odk.collect.forms.savepoints.Savepoint
@@ -57,4 +56,8 @@ class SavePointTask(
     companion object {
         private var lastPriorityUsed: Int = 0
     }
+}
+
+interface SavePointListener {
+    fun onSavePointError(errorMessage: String?)
 }
