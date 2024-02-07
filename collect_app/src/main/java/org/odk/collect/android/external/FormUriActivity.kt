@@ -22,6 +22,7 @@ import org.odk.collect.android.injection.DaggerUtils
 import org.odk.collect.android.instancemanagement.InstanceDeleter
 import org.odk.collect.android.instancemanagement.canBeEdited
 import org.odk.collect.android.projects.ProjectsDataService
+import org.odk.collect.android.savepoints.SavepointFinder
 import org.odk.collect.android.utilities.ApplicationConstants
 import org.odk.collect.android.utilities.ContentUriHelper
 import org.odk.collect.android.utilities.FormsRepositoryProvider
@@ -63,6 +64,9 @@ class FormUriActivity : ComponentActivity() {
 
     @Inject
     lateinit var scheduler: Scheduler
+
+    @Inject
+    lateinit var savepointsFinder: SavepointFinder
 
     private var formFillingAlreadyStarted = false
 
@@ -116,34 +120,19 @@ class FormUriActivity : ComponentActivity() {
 
     private fun getSavePoint(): Savepoint? {
         val uri = intent.data!!
-        val uriMimeType = contentResolver.getType(uri)
+        val uriMimeType = contentResolver.getType(uri)!!
 
-        return if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
-            val selectedForm = formsRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))!!
-
-            formsRepositoryProvider.get().getAllByFormId(selectedForm.formId)
-                .sortedByDescending { it.date }
-                .forEach { form ->
-                    val savepoint = savepointsRepositoryProvider.get().get(form.dbId, null)
-                    if (savepoint != null && File(savepoint.savepointFilePath).exists()) {
-                        intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, savepoint.formDbId)
-                        return savepoint
-                    }
-                }
-            null
-        } else {
-            val instance = instanceRepositoryProvider.get().get(ContentUriHelper.getIdFromUri(uri))!!
-            val form = formsRepositoryProvider.get().getLatestByFormIdAndVersion(instance.formId, instance.formVersion)!!
-
-            val savepoint = savepointsRepositoryProvider.get().get(form.dbId, instance.dbId)
-            if (savepoint != null &&
-                File(savepoint.savepointFilePath).exists() &&
-                File(savepoint.savepointFilePath).lastModified() > File(instance.instanceFilePath).lastModified()
-            ) {
-                savepoint
-            } else {
-                null
+        return savepointsFinder.getSavepoint(
+            uri,
+            uriMimeType,
+            formsRepositoryProvider.get(),
+            instanceRepositoryProvider.get(),
+            savepointsRepositoryProvider.get()
+        )?.let {
+            if (uriMimeType == FormsContract.CONTENT_ITEM_TYPE) {
+                intent.data = FormsContract.getUri(projectsDataService.getCurrentProject().uuid, it.formDbId)
             }
+            it
         }
     }
 
