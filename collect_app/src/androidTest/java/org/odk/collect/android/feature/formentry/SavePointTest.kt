@@ -11,6 +11,7 @@ import org.odk.collect.android.support.CollectHelpers
 import org.odk.collect.android.support.StorageUtils
 import org.odk.collect.android.support.pages.AppClosedPage
 import org.odk.collect.android.support.pages.FormEntryPage
+import org.odk.collect.android.support.pages.FormHierarchyPage
 import org.odk.collect.android.support.pages.SaveOrDiscardFormDialog
 import org.odk.collect.android.support.rules.FormEntryActivityTestRule
 import org.odk.collect.android.support.rules.TestRuleChain
@@ -35,7 +36,7 @@ class SavePointTest {
 
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
-            .clickRecover("Two Question")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertTextDoesNotExist("46")
             .pressBack(FormEntryPage("Two Question"))
@@ -80,7 +81,7 @@ class SavePointTest {
 
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
-            .clickRecover("Two Question")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertText("52")
             .assertTextDoesNotExist("46")
@@ -116,7 +117,7 @@ class SavePointTest {
 
         // Start blank form and check save point is loaded
         rule.fillNewFormWithSavepoint("two-question-audit.xml")
-            .clickRecover("Two Question")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .pressBack(FormEntryPage("Two Question"))
             .closeSoftKeyboard()
@@ -157,7 +158,7 @@ class SavePointTest {
 
         // Edit instance and check save point is loaded
         rule.editFormWithSavepoint("two-question-audit.xml")
-            .clickRecover("Two Question")
+            .clickRecover(FormHierarchyPage("Two Question"))
             .assertText("Alexei")
             .assertText("52")
             .pressBack(FormEntryPage("Two Question"))

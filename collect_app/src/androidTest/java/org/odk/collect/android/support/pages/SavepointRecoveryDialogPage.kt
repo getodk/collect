@@ -19,11 +19,11 @@ class SavepointRecoveryDialogPage : Page<SavepointRecoveryDialogPage>() {
         return this
     }
 
-    fun clickRecover(formName: String): FormHierarchyPage {
-        return this.clickOnButtonInDialog(R.string.recover, FormHierarchyPage(formName))
+    fun <D : Page<D>> clickRecover(destination: D): D {
+        return this.clickOnButtonInDialog(R.string.recover, destination)
     }
 
-    fun clickDoNotRecover(formName: String): FormHierarchyPage {
-        return this.clickOnButtonInDialog(R.string.do_not_recover, FormHierarchyPage(formName))
+    fun <D : Page<D>> clickDoNotRecover(destination: D): D {
+        return this.clickOnButtonInDialog(R.string.do_not_recover, destination)
     }
 }
