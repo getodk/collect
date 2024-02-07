@@ -1,7 +1,7 @@
 package org.odk.collect.android.utilities
 
 import android.content.Context
-import org.odk.collect.android.database.savepoints.SavepointsDatabaseRepository
+import org.odk.collect.android.database.savepoints.DatabaseSavepointsRepository
 import org.odk.collect.android.storage.StoragePathProvider
 import org.odk.collect.android.storage.StorageSubdirectory
 import org.odk.collect.forms.savepoints.SavepointsRepository
@@ -17,6 +17,6 @@ class SavepointsRepositoryProvider(
         val cachePath = storagePathProvider.getOdkDirPath(StorageSubdirectory.CACHE, projectId)
         val instancesPath = storagePathProvider.getOdkDirPath(StorageSubdirectory.INSTANCES, projectId)
 
-        return SavepointsDatabaseRepository(context, dbPath, cachePath, instancesPath)
+        return DatabaseSavepointsRepository(context, dbPath, cachePath, instancesPath)
     }
 }

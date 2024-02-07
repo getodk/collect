@@ -8,15 +8,15 @@ import org.odk.collect.android.database.DatabaseConnection
 import org.odk.collect.android.database.DatabaseConstants
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_NAME
 import org.odk.collect.android.database.DatabaseConstants.SAVEPOINTS_DATABASE_VERSION
-import org.odk.collect.android.database.savepoints.SavepointDatabaseObjectMapper.getSavepointFromCurrentCursorPosition
-import org.odk.collect.android.database.savepoints.SavepointDatabaseObjectMapper.getValuesFromSavepoint
-import org.odk.collect.android.database.savepoints.SavepointsDatabaseColumns.FORM_DB_ID
-import org.odk.collect.android.database.savepoints.SavepointsDatabaseColumns.INSTANCE_DB_ID
+import org.odk.collect.android.database.savepoints.DatabaseSavepointObjectMapper.getSavepointFromCurrentCursorPosition
+import org.odk.collect.android.database.savepoints.DatabaseSavepointObjectMapper.getValuesFromSavepoint
+import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.FORM_DB_ID
+import org.odk.collect.android.database.savepoints.DatabaseSavepointsColumns.INSTANCE_DB_ID
 import org.odk.collect.forms.savepoints.Savepoint
 import org.odk.collect.forms.savepoints.SavepointsRepository
 import java.io.File
 
-class SavepointsDatabaseRepository(
+class DatabaseSavepointsRepository(
     context: Context,
     dbPath: String,
     private val cachePath: String,

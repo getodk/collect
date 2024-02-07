@@ -2,7 +2,7 @@ package org.odk.collect.android.database.savepoints
 
 import android.provider.BaseColumns
 
-object SavepointsDatabaseColumns : BaseColumns {
+object DatabaseSavepointsColumns : BaseColumns {
     /**
      * The form db id of the blank form that the savepoint belongs to.
      */
