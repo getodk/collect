@@ -151,8 +151,8 @@ import org.odk.collect.android.storage.StoragePathProvider;
 import org.odk.collect.android.storage.StorageSubdirectory;
 import org.odk.collect.android.tasks.FormLoaderTask;
 import org.odk.collect.android.tasks.SaveFormIndexTask;
-import org.odk.collect.android.tasks.SavePointListener;
-import org.odk.collect.android.tasks.SavePointTask;
+import org.odk.collect.android.savepoints.SavepointListener;
+import org.odk.collect.android.savepoints.SavepointTask;
 import org.odk.collect.android.utilities.ApplicationConstants;
 import org.odk.collect.android.utilities.ContentUriHelper;
 import org.odk.collect.android.utilities.ControllableLifecyleOwner;
@@ -226,7 +226,7 @@ import timber.log.Timber;
 @SuppressWarnings("PMD.CouplingBetweenObjects")
 public class FormFillingActivity extends LocalizedActivity implements AnimationListener,
         FormLoaderListener, AdvanceToNextListener, SwipeHandler.OnSwipeListener,
-        SavePointListener, NumberPickerDialog.NumberPickerListener,
+        SavepointListener, NumberPickerDialog.NumberPickerListener,
         RankingWidgetDialog.RankingListener, SaveFormIndexTask.SaveFormIndexListener,
         WidgetValueChangedListener, ScreenContext, FormLoadingDialogFragment.FormLoadingDialogFragmentListener,
         AudioControllerView.SwipableParent, FormIndexAnimationHandler.Listener,
@@ -748,7 +748,7 @@ public class FormFillingActivity extends LocalizedActivity implements AnimationL
             if (instance != null) {
                 instanceDbId = instance.getDbId();
             }
-            SavePointTask savePointTask = new SavePointTask(
+            SavepointTask savePointTask = new SavepointTask(
                     this,
                     getFormController(),
                     formDbId,

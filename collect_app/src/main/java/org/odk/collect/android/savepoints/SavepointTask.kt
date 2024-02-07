@@ -1,6 +1,7 @@
-package org.odk.collect.android.tasks
+package org.odk.collect.android.savepoints
 
 import org.odk.collect.android.javarosawrapper.FormController
+import org.odk.collect.android.tasks.SaveFormToDisk
 import org.odk.collect.async.Scheduler
 import org.odk.collect.async.SchedulerAsyncTaskMimic
 import org.odk.collect.forms.savepoints.Savepoint
@@ -8,8 +9,8 @@ import org.odk.collect.forms.savepoints.SavepointsRepository
 import timber.log.Timber
 import java.io.File
 
-class SavePointTask(
-    private var listener: SavePointListener?,
+class SavepointTask(
+    private var listener: SavepointListener?,
     private val formController: FormController,
     private val formDbId: Long,
     private val instanceDbId: Long?,
@@ -58,6 +59,6 @@ class SavePointTask(
     }
 }
 
-interface SavePointListener {
+interface SavepointListener {
     fun onSavePointError(errorMessage: String?)
 }
