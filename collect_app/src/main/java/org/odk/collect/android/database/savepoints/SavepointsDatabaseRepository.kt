@@ -87,6 +87,10 @@ class SavepointsDatabaseRepository(
     }
 
     override fun deleteAll() {
+        getAll().forEach {
+            File(it.savepointFilePath).delete()
+        }
+
         databaseConnection
             .writeableDatabase
             .delete(DatabaseConstants.SAVEPOINTS_TABLE_NAME, null, null)
