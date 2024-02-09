@@ -6,9 +6,9 @@ import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.TextAppearanceSpan
 import android.view.LayoutInflater
 import android.view.View
-import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.text.inSpans
 import androidx.core.text.underline
@@ -83,13 +83,16 @@ class FormEndView(
                 }
             },
             builderAction = {
-                color(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent)) {
-                    underline {
-                        bold {
-                            append(context.getLocalizedString(org.odk.collect.strings.R.string.form_edits_warning_learn_more))
+                inSpans(
+                    span = TextAppearanceSpan(context, com.google.android.material.R.style.TextAppearance_Material3_TitleMedium),
+                    builderAction = {
+                        color(ContextUtils.getThemeAttributeValue(context, com.google.android.material.R.attr.colorAccent)) {
+                            underline {
+                                append(context.getLocalizedString(org.odk.collect.strings.R.string.form_edits_warning_learn_more))
+                            }
                         }
                     }
-                }
+                )
             }
         )
     }
