@@ -52,7 +52,8 @@ the specific language governing permissions and limitations under the License.
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/margin">
+                android:paddingHorizontal="@dimen/margin_standard"
+                android:paddingVertical="@dimen/margin_large">
 
                 <ImageView
                     android:id="@+id/instance_name_info_icon"
@@ -67,7 +68,7 @@ the specific language governing permissions and limitations under the License.
                     android:id="@+id/form_edits_warning_title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin"
+                    android:layout_marginStart="@dimen/margin_standard"
                     android:textAppearance="?textAppearanceTitleMedium"
                     android:textColor="?colorOnSurface"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +80,7 @@ the specific language governing permissions and limitations under the License.
                     android:id="@+id/form_edits_warning_message"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin"
+                    android:layout_marginTop="@dimen/margin_standard"
                     android:textAppearance="?textAppearanceBodyLarge"
                     android:textColor="?colorOnSurface"
                     app:layout_constraintStart_toStartOf="@id/form_edits_warning_title"
