@@ -115,9 +115,6 @@
   <string name="too_complex_form">یہ فارم اس فون کے لئے بہت پیچیدہ ہے۔ اس کو سادہ کرنے کی کوشش کریں، یا پھر فورم پہ مدد حاصل کریں۔</string>
   <string name="survey_internal_error">اندرونی خرابی: فوری طور پر سیٹ اپ ناکام ہوگیا</string>
   <string name="save_enter_data_description">آپ ‎%s‏ کے آخر پر ہیں۔</string>
-  <string name="form_edits_warning_only_finalize_enabled">فارم کو فائنل کرنے کے بعد آپ اس میں مزید ترامیم نہیں کر سکیں گے۔</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">ایک دفعہ فائنل کرنے کے بعد آپ ترامیم نہیں کر سکیں گے۔ اگر آپ نے تبدیلیاں کرنی ہیں، تو فارم کو پہلے ڈرافٹ میں محفوظ کریں، اور اس وقت تک وہاں رکھیں جب تک آپ اسے بھیجنے کے لئے تیار نہ ہوں۔</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">ایک دفعہ بھیجنے کے بعد آپ ترامیم نہیں کر سکیں گے۔ اگر آپ نے تبدیلیاں کرنی ہیں، تو فارم کو پہلے ڈرافٹ میں محفوظ کریں، اور اس وقت تک وہاں رکھیں جب تک آپ اسے بھیجنے کے لئے تیار نہ ہوں۔</string>
   <string name="save_as_draft">ڈرافٹ میں محفوظ کریں</string>
   <string name="finalize">فائنل کریں</string>
   <string name="send">بھیجیں</string>

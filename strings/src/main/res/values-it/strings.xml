@@ -115,9 +115,6 @@
   <string name="too_complex_form">Questo modulo è troppo complesso per questo dispositivo. Prova a semplificare le espressioni o chiedi aiuto sul forum. </string>
   <string name="survey_internal_error">Errore interno: invio suggerimento fallito.</string>
   <string name="save_enter_data_description">Ti trovi alla fine di \"%s\".</string>
-  <string name="form_edits_warning_only_finalize_enabled">Non sarai in grado di apportare modifiche una volta finalizzato.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Non sarai in grado di apportare modifiche una volta finalizzato. Se devi apportare modifiche, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Non sarai in grado di apportare modifiche una volta inviato. Se devi apportare modifiche, \"Salva come bozza\" finché non sei pronto per l\'invio.</string>
   <string name="save_as_draft">Salva come bozza</string>
   <string name="finalize">Finalizzare</string>
   <string name="send">Invia</string>

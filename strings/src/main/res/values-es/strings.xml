@@ -115,9 +115,6 @@
   <string name="too_complex_form">Este formulario es muy complejo para este dispositivo. Intente simplificar las expresiones o busque ayuda en el Foro.</string>
   <string name="survey_internal_error">Error interno: Ha fallado la entrada de datos.</string>
   <string name="save_enter_data_description">Esta al final de \"%s\".</string>
-  <string name="form_edits_warning_only_finalize_enabled">No podrá realizar ediciones una vez que finalice.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">No podrá realizar ediciones una vez que finalice. Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">No podrá realizar ediciones una vez que envíe. Si necesita hacer cambios, \"Guardar como borrador\" hasta que esté listo para enviar.</string>
   <string name="save_as_draft">Guardar como borrador</string>
   <string name="finalize">Finalizar</string>
   <string name="send">Enviar</string>

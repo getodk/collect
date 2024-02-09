@@ -115,9 +115,6 @@
   <string name="too_complex_form">Formulir ini terlalu rumit untuk perangkat ini. Coba sederhanakan ekspresi atau minta bantuan di forum.</string>
   <string name="survey_internal_error">Kesalahan internal: langkah menuju risalah tidak berhasil.</string>
   <string name="save_enter_data_description">Anda berada di akhir dari formulir\n\"%s\".</string>
-  <string name="form_edits_warning_only_finalize_enabled">Anda tidak akan dapat melakukan perubahan setelah anda memfinalisasi.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Anda tidak akan dapat melakukan perubahan setelah anda memfinalisasi. Jika anda perlu melakukan perubahan, \"Simpan sebagai draf\" hingga anda siap mengirim.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Anda tidak akan dapat melakukan perubahan setelah anda kirim. Jika anda perlu melakukan perubahan, \"Simpan sebagai draf\" hingga anda siap mengirim.</string>
   <string name="save_as_draft">Simpan sebagai draf</string>
   <string name="finalize">Finalisasi</string>
   <string name="send">Kirim</string>

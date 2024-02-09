@@ -140,10 +140,18 @@ class FormEndViewTest {
             equalTo(View.VISIBLE)
         )
         assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text,
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
             equalTo(
                 context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_only_finalize_enabled
+                    org.odk.collect.strings.R.string.form_edits_warning_title
+                )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                context.getString(
+                    org.odk.collect.strings.R.string.form_edits_warning_learn_more
                 )
             )
         )
@@ -174,11 +182,17 @@ class FormEndViewTest {
             equalTo(View.VISIBLE)
         )
         assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text,
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
             equalTo(
                 context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_save_as_draft_and_finalize_enabled
+                    org.odk.collect.strings.R.string.form_edits_warning_title
                 )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_edits_warning_message)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
             )
         )
     }
@@ -196,11 +210,17 @@ class FormEndViewTest {
             equalTo(View.VISIBLE)
         )
         assertThat(
-            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text,
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_title).text,
             equalTo(
                 context.getString(
-                    org.odk.collect.strings.R.string.form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled
+                    org.odk.collect.strings.R.string.form_edits_warning_title_auto_send_enabled
                 )
+            )
+        )
+        assertThat(
+            view.findViewById<MaterialTextView>(R.id.form_edits_warning_message).text.toString(),
+            equalTo(
+                "${context.getString(org.odk.collect.strings.R.string.form_edits_warning_message)} ${context.getString(org.odk.collect.strings.R.string.form_edits_warning_learn_more)}"
             )
         )
     }

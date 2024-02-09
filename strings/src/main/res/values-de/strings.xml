@@ -115,9 +115,6 @@
   <string name="too_complex_form">Dieses Formular ist zu komplex für dieses Gerät. Versuche Ausdrücke zu vereinfachen oder bitte im Forum um Hilfe.</string>
   <string name="survey_internal_error">Interner Fehler: Sprung zur Eingabe fehlgeschlagen.</string>
   <string name="save_enter_data_description">Sie sind am Ende von \"%s\" angelangt.</string>
-  <string name="form_edits_warning_only_finalize_enabled">Nach dem Abschließen sind keine Änderungen mehr möglich.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_enabled">Nach dem Abschließen sind keine Änderungen mehr möglich. Wenn noch Änderungen nötig sind, \"Als Entwurf speichern\" bis es bereit zum Senden ist.</string>
-  <string name="form_edits_warning_save_as_draft_and_finalize_with_auto_send_enabled">Nach dem Senden sind keine Änderungen mehr möglich. Wenn noch Änderungen nötig sind, \"Als Entwurf speichern\" bis es bereit zum Senden ist.</string>
   <string name="save_as_draft">Als Entwurf speichern</string>
   <string name="finalize">Abschließen</string>
   <string name="send">Senden</string>
