@@ -36,6 +36,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:lineHeight" tools:targetApi="p">24sp</item>
         <item name="lineHeight">24sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="TextAppearance.Collect.Button" parent="TextAppearance.MaterialComponents.Button">
