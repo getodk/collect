@@ -5,7 +5,7 @@ def reportsDir = "${project.buildDir}/reports"
 
 apply plugin: 'checkstyle'
 
-checkstyle.toolVersion = '10.12.4'
+checkstyle.toolVersion = '10.13.0'
 
 tasks.register("checkstyle", Checkstyle) {
     configFile file("$configDir/checkstyle.xml")
@@ -17,6 +17,13 @@ tasks.register("checkstyle", Checkstyle) {
     include '**/*.java'
     exclude '**/gen/**'
     classpath = files()
+}
+
+// https://github.com/gradle/gradle/issues/27035
+configurations.checkstyle {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+        select("com.google.guava:guava:0")
+    }
 }
 
 //------------------------Pmd------------------------//
